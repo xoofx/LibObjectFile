@@ -10,7 +10,7 @@
 
         public ElfSymbolBind Bind { get; set; }
         
-        public ElfSection Section { get; set; }
+        public ElfSectionLink Section { get; set; }
 
         public string Name { get; set; }
 

@@ -275,9 +275,9 @@ namespace LibObjectFile.Elf
                     section.Offset = offset;
 
                     var link = section.Link;
-                    if (link != null)
+                    if (link.Section != null)
                     {
-                        if (link.Parent != ObjectFile)
+                        if (link.Section.Parent != ObjectFile)
                         {
                             throw new InvalidOperationException($"The linked section `{link}` used by section `{link}` is not part of the existing section for the current object file");
                         }
@@ -354,7 +354,7 @@ namespace LibObjectFile.Elf
             _encoder.Encode(out shdr.sh_addr, (uint)section.VirtualAddress);
             _encoder.Encode(out shdr.sh_offset, (uint)section.Offset);
             _encoder.Encode(out shdr.sh_size, (uint)section.GetSize(ObjectFile.FileClass));
-            _encoder.Encode(out shdr.sh_link, section.Link?.Index ?? 0);
+            _encoder.Encode(out shdr.sh_link, section.Link.GetSectionIndex());
             _encoder.Encode(out shdr.sh_info, section.GetInfoIndexInternal(this)); // TODO support sh_info
             _encoder.Encode(out shdr.sh_addralign, (uint)section.Alignment);
             _encoder.Encode(out shdr.sh_entsize, (uint)section.GetFixedEntrySize(ObjectFile.FileClass));
@@ -374,7 +374,7 @@ namespace LibObjectFile.Elf
             _encoder.Encode(out shdr.sh_addr, section.VirtualAddress);
             _encoder.Encode(out shdr.sh_offset, section.Offset);
             _encoder.Encode(out shdr.sh_size, section.GetSize(ObjectFile.FileClass));
-            _encoder.Encode(out shdr.sh_link, section.Link?.Index ?? 0);
+            _encoder.Encode(out shdr.sh_link, section.Link.GetSectionIndex());
             _encoder.Encode(out shdr.sh_info, section.GetInfoIndexInternal(this));
             _encoder.Encode(out shdr.sh_addralign, section.Alignment);
             _encoder.Encode(out shdr.sh_entsize, section.GetFixedEntrySize(ObjectFile.FileClass));

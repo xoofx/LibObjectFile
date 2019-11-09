@@ -30,10 +30,8 @@ namespace LibObjectFile.Elf
 
         public virtual ulong GetFixedEntrySize(ElfFileClass fileClass) => 0;
 
-        public ElfSection Link { get; set; }
-
+        public ElfSectionLink Link { get; set; }
         
-
         public ElfObjectFile Parent { get; internal set; }
 
         public uint Index { get; internal set; }
