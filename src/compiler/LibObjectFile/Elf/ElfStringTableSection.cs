@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 
@@ -15,29 +16,44 @@ namespace LibObjectFile.Elf
             Type = ElfSectionType.StringTable;
             _table = new MemoryStream();
             _map = new Dictionary<string, uint>();
+            // Always create an empty string
+            GetOrCreateIndex(string.Empty);
         }
 
-        public override ulong Size => (uint)_table.Position;
+        public override ulong GetSize(ElfFileClass fileClass) => (uint) _table.Position;
 
-        public override void Write(Stream stream)
+        protected override void Write(ElfWriter writer)
         {
-            stream.Write(_table.GetBuffer(), 0, (int)Size);
+            writer.Stream.Write(_table.GetBuffer(), 0, (int)_table.Position);
         }
 
         public uint GetOrCreateIndex(string text)
         {
+            // Same as empty string
+            if (text == null) return 0;
+
             if (_map.TryGetValue(text, out uint index))
             {
                 return index;
             }
 
-            index = (uint)Size;
+            index = (uint) _table.Position;
             _map.Add(text, index);
-            var reservedBytes = Encoding.UTF8.GetByteCount(text) + 1;
-            Span<byte> span = stackalloc byte[reservedBytes];
-            Encoding.UTF8.GetEncoder().GetBytes(text, span, true);
-            span[reservedBytes - 1] = 0;
-            _table.Write(span);
+
+            if (text.Length == 0)
+            {
+                Debug.Assert(index == 0);
+                _table.WriteByte(0);
+            }
+            else
+            {
+                var reservedBytes = Encoding.UTF8.GetByteCount(text) + 1;
+                Span<byte> span = stackalloc byte[reservedBytes];
+                Encoding.UTF8.GetEncoder().GetBytes(text, span, true);
+                span[reservedBytes - 1] = 0;
+                _table.Write(span);
+            }
+
             return index;
         }
 

@@ -16,13 +16,13 @@ namespace LibObjectFile.Elf
 
         public Stream Stream { get; set; }
 
-        public override ulong Size => Stream != null ? (ulong) Stream.Length : 0;
+        public override ulong GetSize(ElfFileClass fileClass) => Stream != null ? (ulong) Stream.Length : 0;
 
-        public override void Write(Stream stream)
+        protected override void Write(ElfWriter writer)
         {
             if (Stream == null) return;
             Stream.Position = 0;
-            Stream.CopyTo(stream);
+            Stream.CopyTo(writer.Stream);
         }
     }
 }

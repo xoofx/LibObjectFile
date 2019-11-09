@@ -41,6 +41,96 @@ namespace LibObjectFile.Elf
             }
         }
 
+        public override void Encode(out Elf32_Half dest, ushort value)
+        {
+            _encoder.Encode(out dest, value);
+        }
+
+        public override void Encode(out Elf64_Half dest, ushort value)
+        {
+            _encoder.Encode(out dest, value);
+        }
+
+        public override void Encode(out Elf32_Word dest, uint value)
+        {
+            _encoder.Encode(out dest, value);
+        }
+
+        public override void Encode(out Elf64_Word dest, uint value)
+        {
+            _encoder.Encode(out dest, value);
+        }
+
+        public override void Encode(out Elf32_Sword dest, int value)
+        {
+            _encoder.Encode(out dest, value);
+        }
+
+        public override void Encode(out Elf64_Sword dest, int value)
+        {
+            _encoder.Encode(out dest, value);
+        }
+
+        public override void Encode(out Elf32_Xword dest, ulong value)
+        {
+            _encoder.Encode(out dest, value);
+        }
+
+        public override void Encode(out Elf32_Sxword dest, long value)
+        {
+            _encoder.Encode(out dest, value);
+        }
+
+        public override void Encode(out Elf64_Xword dest, ulong value)
+        {
+            _encoder.Encode(out dest, value);
+        }
+
+        public override void Encode(out Elf64_Sxword dest, long value)
+        {
+            _encoder.Encode(out dest, value);
+        }
+
+        public override void Encode(out Elf32_Addr dest, uint value)
+        {
+            _encoder.Encode(out dest, value);
+        }
+
+        public override void Encode(out Elf64_Addr dest, ulong value)
+        {
+            _encoder.Encode(out dest, value);
+        }
+
+        public override void Encode(out Elf32_Off dest, uint offset)
+        {
+            _encoder.Encode(out dest, offset);
+        }
+
+        public override void Encode(out Elf64_Off dest, ulong offset)
+        {
+            _encoder.Encode(out dest, offset);
+        }
+
+        public override void Encode(out Elf32_Section dest, ushort index)
+        {
+            _encoder.Encode(out dest, index);
+        }
+
+        public override void Encode(out Elf64_Section dest, ushort index)
+        {
+            _encoder.Encode(out dest, index);
+        }
+
+        public override void Encode(out Elf32_Versym dest, ushort value)
+        {
+            _encoder.Encode(out dest, value);
+        }
+
+        public override void Encode(out Elf64_Versym dest, ushort value)
+        {
+            _encoder.Encode(out dest, value);
+        }
+
         private unsafe void WriteHeader32()
         {
             var hdr = new Elf32_Ehdr();
@@ -171,14 +261,32 @@ namespace LibObjectFile.Elf
 
                 // Section names is serialized right after the SectionHeaderTable
                 SectionHeaderNames.Offset = offset;
-                offset += SectionHeaderNames.Size;
+                offset += SectionHeaderNames.GetSize(ObjectFile.FileClass);
+
+                // Prepare all section before writing (e.g allowing sections to calculate their names)
+                foreach (var section in ObjectFile.Sections)
+                {
+                    section.PrepareWriteInternal(this);
+                }
 
                 // Calculate offsets of all sections in the stream
                 foreach (var section in ObjectFile.Sections)
                 {
                     section.Offset = offset;
+
+                    var link = section.Link;
+                    if (link != null)
+                    {
+                        if (link.Parent != ObjectFile)
+                        {
+                            throw new InvalidOperationException($"The linked section `{link}` used by section `{link}` is not part of the existing section for the current object file");
+                        }
+                    }
+
+                    // a NoBits section doesn't occupy any space in the file
                     if (section.Type == ElfSectionType.NoBits) continue;
-                    offset += section.Size;
+
+                    offset += section.GetSize(ObjectFile.FileClass);
                 }
             }
         }
@@ -190,11 +298,13 @@ namespace LibObjectFile.Elf
             WriteSectionTable();
 
             // Write all sections right after the section table
-            SectionHeaderNames.Write(Stream);
+            SectionHeaderNames.WriteInternal(this);
             foreach (var section in ObjectFile.Sections)
             {
+                // a NoBits section doesn't occupy any space in the file
                 if (section.Type == ElfSectionType.NoBits) continue;
-                section.Write(Stream);
+
+                section.WriteInternal(this);
             }
         }
 
@@ -243,11 +353,11 @@ namespace LibObjectFile.Elf
             _encoder.Encode(out shdr.sh_flags, GetSectionFlags(section.Flags));
             _encoder.Encode(out shdr.sh_addr, (uint)section.VirtualAddress);
             _encoder.Encode(out shdr.sh_offset, (uint)section.Offset);
-            _encoder.Encode(out shdr.sh_size, (uint)section.Size);
-            _encoder.Encode(out shdr.sh_link, 0); // TODO support sh_link
-            _encoder.Encode(out shdr.sh_info, 0); // TODO support sh_info
+            _encoder.Encode(out shdr.sh_size, (uint)section.GetSize(ObjectFile.FileClass));
+            _encoder.Encode(out shdr.sh_link, section.Link?.Index ?? 0);
+            _encoder.Encode(out shdr.sh_info, section.GetInfoIndexInternal(this)); // TODO support sh_info
             _encoder.Encode(out shdr.sh_addralign, (uint)section.Alignment);
-            _encoder.Encode(out shdr.sh_entsize, (uint)section.FixedEntrySize);
+            _encoder.Encode(out shdr.sh_entsize, (uint)section.GetFixedEntrySize(ObjectFile.FileClass));
             unsafe
             {
                 var span = new ReadOnlySpan<byte>(&shdr, sizeof(Elf32_Shdr));
@@ -263,11 +373,11 @@ namespace LibObjectFile.Elf
             _encoder.Encode(out shdr.sh_flags, GetSectionFlags(section.Flags));
             _encoder.Encode(out shdr.sh_addr, section.VirtualAddress);
             _encoder.Encode(out shdr.sh_offset, section.Offset);
-            _encoder.Encode(out shdr.sh_size, section.Size);
-            _encoder.Encode(out shdr.sh_link, 0); // TODO support sh_link
-            _encoder.Encode(out shdr.sh_info, 0); // TODO support sh_info
+            _encoder.Encode(out shdr.sh_size, section.GetSize(ObjectFile.FileClass));
+            _encoder.Encode(out shdr.sh_link, section.Link?.Index ?? 0);
+            _encoder.Encode(out shdr.sh_info, section.GetInfoIndexInternal(this));
             _encoder.Encode(out shdr.sh_addralign, section.Alignment);
-            _encoder.Encode(out shdr.sh_entsize, section.FixedEntrySize);
+            _encoder.Encode(out shdr.sh_entsize, section.GetFixedEntrySize(ObjectFile.FileClass));
             unsafe
             {
                 var span = new ReadOnlySpan<byte>(&shdr, sizeof(Elf64_Shdr));

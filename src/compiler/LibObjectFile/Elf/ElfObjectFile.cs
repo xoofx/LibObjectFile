@@ -6,6 +6,7 @@ namespace LibObjectFile.Elf
     public sealed class ElfObjectFile
     {
         private readonly List<ElfSection> _sections;
+        private const int MinSectionIndex = 2;
 
         public ElfObjectFile()
         {
@@ -41,6 +42,7 @@ namespace LibObjectFile.Elf
             }
 
             section.Parent = this;
+            section.Index = (uint)(MinSectionIndex + _sections.Count);
             _sections.Add(section);
         }
 
@@ -51,7 +53,15 @@ namespace LibObjectFile.Elf
             {
                 throw new InvalidOperationException($"Cannot remove the section as it is not part of this {nameof(ElfObjectFile)} instance");
             }
-            _sections.Remove(section);
+            var i = _sections.IndexOf(section);
+            _sections.RemoveAt(i);
+
+            // Update indices for other sections
+            for (; i < _sections.Count; i++)
+            {
+                _sections[i].Index = (uint)(MinSectionIndex + i);
+            }
+
             section.Parent = null;
         }
     }

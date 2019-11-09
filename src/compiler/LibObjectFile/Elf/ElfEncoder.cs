@@ -1,6 +1,6 @@
 ﻿namespace LibObjectFile.Elf
 {
-    internal interface ElfEncoder
+    public interface ElfEncoder
     {
         void Encode(out RawElf.Elf32_Half dest, ushort value);
         

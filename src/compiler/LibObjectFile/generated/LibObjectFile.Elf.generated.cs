@@ -12,7 +12,7 @@ namespace LibObjectFile.Elf
 {
     using System.Runtime.InteropServices;
     
-    internal static partial class RawElf
+    public static partial class RawElf
     {
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public unsafe partial struct Elf32_Ehdr

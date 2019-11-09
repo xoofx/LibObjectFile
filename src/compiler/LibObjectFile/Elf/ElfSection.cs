@@ -22,17 +22,17 @@ namespace LibObjectFile.Elf
 
         public string Name { get; set; }
 
-        public abstract ulong Size { get; }
+        public abstract ulong GetSize(ElfFileClass fileClass);
 
         public ulong VirtualAddress { get; set; }
 
         public ulong Alignment { get; set; }
 
-        public virtual ulong FixedEntrySize => 0;
+        public virtual ulong GetFixedEntrySize(ElfFileClass fileClass) => 0;
 
         public ElfSection Link { get; set; }
 
-        public ElfSection Info { get; set; }
+        
 
         public ElfObjectFile Parent { get; internal set; }
 
@@ -48,6 +48,38 @@ namespace LibObjectFile.Elf
         /// </summary>
         internal uint NameStringIndex { get; set; }
 
-        public abstract void Write(Stream stream);
+        internal void WriteInternal(ElfWriter writer)
+        {
+            if (Parent == null) throw new InvalidOperationException($"Cannot write this section instance `{this}` without being attached to a `{nameof(ElfObjectFile)}`");
+            Write(writer);
+        }
+
+        internal void PrepareWriteInternal(ElfWriter writer)
+        {
+            if (Parent == null) throw new InvalidOperationException($"Cannot prepare for write this section instance `{this}` without being attached to a `{nameof(ElfObjectFile)}`");
+            PrepareWrite(writer);
+        }
+        
+        protected abstract void Write(ElfWriter writer);
+
+        protected virtual void PrepareWrite(ElfWriter writer)
+        {
+        }
+        
+        internal uint GetInfoIndexInternal(ElfWriter writer)
+        {
+            if (Parent == null) throw new InvalidOperationException($"Cannot prepare for write this section instance `{this}` without being attached to a `{nameof(ElfObjectFile)}`");
+            return GetInfoIndex(writer);
+        }
+        
+        protected virtual uint GetInfoIndex(ElfWriter writer)
+        {
+            return 0;
+        }
+
+        public override string ToString()
+        {
+            return $"Section [{Index}] `{Name}` ";
+        }
     }
 }

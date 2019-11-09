@@ -95,7 +95,6 @@ namespace StarkPlatform.NativeCompiler.CodeGen
                 DefaultNamespace = "LibObjectFile.Elf",
                 DefaultOutputFilePath = "/LibObjectFile.Elf.generated.cs",
                 DefaultDllImportNameAndArguments = "NotUsed",
-                GenerateAsInternal = true,
                 MappingRules =
                 {
                     map => map.MapMacroToConst("^EI.*", "uint8_t"),
