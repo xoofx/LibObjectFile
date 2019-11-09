@@ -144,61 +144,64 @@ namespace StarkPlatform.NativeCompiler.CodeGen
 
             AssertCompilation(csCompilation);
 
+            ProcessElfEnum(cppOptions, csCompilation, "EM_", "ElfArch");
+            ProcessElfEnum(cppOptions, csCompilation, "ELFOSABI_", "ElfOSAbi");
+            
+            csCompilation.DumpTo(GetCodeWriter(Path.Combine("LibObjectFile", "generated")));
+        }
 
+        private static void ProcessElfEnum(CSharpConverterOptions cppOptions, CSharpCompilation csCompilation, string enumPrefix, string enumClassName)
+        {
             var ns = csCompilation.Members.OfType<CSharpGeneratedFile>().First().Members.OfType<CSharpNamespace>().First();
 
             var rawElfClass = ns.Members.OfType<CSharpClass>().First();
 
-            var machines = rawElfClass.Members.OfType<CSharpField>().Where(x => (x.Modifiers & CSharpModifiers.Const) != 0 && x.Name.StartsWith("EM_")).ToList();
+            var enumRawFields = rawElfClass.Members.OfType<CSharpField>().Where(x => (x.Modifiers & CSharpModifiers.Const) != 0 && x.Name.StartsWith(enumPrefix)).ToList();
 
-            var elfArchClass = new CSharpStruct("ElfArch")
+            var enumClass = new CSharpStruct(enumClassName)
             {
                 Modifiers = CSharpModifiers.Partial | CSharpModifiers.ReadOnly
             };
-            ns.Members.Add(elfArchClass);
+            ns.Members.Add(enumClass);
 
-            var machineToArchFields = new List<(CSharpField, CSharpField)>();
-
-            foreach (var machine in machines)
+            foreach (var enumRawField in enumRawFields)
             {
-                var machineName = machine.Name;
+                var rawName = enumRawField.Name;
 
                 // Don't add EM_NUM
-                if (machineName == "EM_NUM") continue;
+                if (rawName == "EM_NUM") continue;
 
-                var csArchName = machineName.Substring(3); // discard EM_
-                switch (csArchName)
+                var csFieldName = rawName.Substring(enumPrefix.Length); // discard EM_
+                switch (csFieldName)
                 {
-                    case "386": csArchName = "I386"; break;
-                    case "88K": csArchName = "M88K"; break;
-                    case "860": csArchName = "I860"; break;
-                    case "960": csArchName = "I960"; break;
+                    case "386": csFieldName = "I386"; break;
+                    case "88K": csFieldName = "M88K"; break;
+                    case "860": csFieldName = "I860"; break;
+                    case "960": csFieldName = "I960"; break;
                     default:
                         // assume Motorola
-                        if (csArchName.StartsWith("68"))
+                        if (csFieldName.StartsWith("68"))
                         {
-                            csArchName = $"M{csArchName}";
+                            csFieldName = $"M{csFieldName}";
                         }
                         break;
                 }
 
-                if (char.IsDigit(csArchName[0]))
+                if (char.IsDigit(csFieldName[0]))
                 {
-                    throw new InvalidOperationException($"The machine name `{machineName}` starts with a number and needs to be modified");
+                    throw new InvalidOperationException($"The enum name `{rawName}` starts with a number and needs to be modified");
                 }
 
-                var archField = new CSharpField(csArchName)
+                var enumField = new CSharpField(csFieldName)
                 {
-                    Modifiers = CSharpModifiers.Static | CSharpModifiers.ReadOnly, 
-                    FieldType = elfArchClass, 
+                    Modifiers = CSharpModifiers.Static | CSharpModifiers.ReadOnly,
+                    FieldType = enumClass,
                     Visibility = CSharpVisibility.Public,
-                    Comment = machine.Comment,
-                    InitValue = $"new {elfArchClass.Name}({cppOptions.DefaultClassLib}.{machineName})"
+                    Comment = enumRawField.Comment,
+                    InitValue = $"new {enumClass.Name}({cppOptions.DefaultClassLib}.{rawName})"
                 };
 
-                machineToArchFields.Add((machine, archField));
-
-                elfArchClass.Members.Add(archField);
+                enumClass.Members.Add(enumField);
             }
 
             var toStringInternal = new CSharpMethod()
@@ -207,27 +210,28 @@ namespace StarkPlatform.NativeCompiler.CodeGen
                 Visibility = CSharpVisibility.Private,
                 ReturnType = CSharpPrimitiveType.String
             };
-            elfArchClass.Members.Add(toStringInternal);
+            enumClass.Members.Add(toStringInternal);
 
             toStringInternal.Body = (writer, element) =>
             {
+                var values = new HashSet<object>();
                 writer.WriteLine("switch (Value)");
                 writer.OpenBraceBlock();
-                foreach (var machineAndArch in machineToArchFields)
+                foreach (var rawField in enumRawFields)
                 {
-                    var machineField = machineAndArch.Item1;
-                    var archField = machineAndArch.Item2;
-                    var cppField = ((CppField) machineField.CppElement);
-                    var descriptionText = cppField.Comment?.ToString().Replace("\"", "\\\"") ?? machineField.Name;
+                    var cppField = ((CppField)rawField.CppElement);
+                    if (!values.Add(cppField.InitValue.Value))
+                    {
+                        continue;
+                    }
+                    var descriptionText = cppField.Comment?.ToString().Replace("\"", "\\\"") ?? rawField.Name;
                     descriptionText = descriptionText.Replace("\r\n", "").Replace("\n", "");
-                    writer.WriteLine($"case {cppOptions.DefaultClassLib}.{machineField.Name}: return \"{descriptionText}\";");
+                    writer.WriteLine($"case {cppOptions.DefaultClassLib}.{rawField.Name}: return \"{descriptionText}\";");
                 }
 
-                writer.WriteLine($"default: return \"Unknown Arch\";");
+                writer.WriteLine($"default: return \"Unknown {enumClassName}\";");
                 writer.CloseBraceBlock();
             };
-
-            csCompilation.DumpTo(GetCodeWriter(Path.Combine("LibObjectFile", "generated")));
         }
 
         private static void GenerateCore()

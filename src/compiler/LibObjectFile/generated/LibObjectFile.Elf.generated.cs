@@ -1860,7 +1860,7 @@ namespace LibObjectFile.Elf
         public const byte ELFOSABI_NONE = 0;
         
         /// <summary>
-        /// Alias.
+        /// UNIX System V ABI
         /// </summary>
         public const byte ELFOSABI_SYSV = 0;
         
@@ -1880,7 +1880,7 @@ namespace LibObjectFile.Elf
         public const byte ELFOSABI_GNU = 3;
         
         /// <summary>
-        /// Compatibility alias.
+        /// Object uses GNU ELF extensions.
         /// </summary>
         public const byte ELFOSABI_LINUX = 3;
         
@@ -2413,14 +2413,10 @@ namespace LibObjectFile.Elf
         public const uint SHN_UNDEF = 0;
         
         /// <summary>
-        /// Start of reserved indices
+        /// Start of reserved indices *k/
+        /// #define SHN_LOPROC	0xff00		/* Start of processor-specific
         /// </summary>
         public const uint SHN_LORESERVE = 65280;
-        
-        /// <summary>
-        /// Start of processor-specific
-        /// </summary>
-        public const uint SHN_LOPROC = 65280;
         
         /// <summary>
         /// Order section before all others (Solaris).
@@ -6659,8 +6655,114 @@ namespace LibObjectFile.Elf
                 case RawElf.EM_TILEPRO: return "Tilera TILEPro";
                 case RawElf.EM_MICROBLAZE: return "Xilinx MicroBlaze";
                 case RawElf.EM_TILEGX: return "Tilera TILE-Gx";
+                case RawElf.EM_NUM: return "EM_NUM";
                 case RawElf.EM_ALPHA: return "EM_ALPHA";
-                default: return "Unknown Arch";
+                default: return "Unknown ElfArch";
+            }
+        }
+    }
+    
+    public readonly partial struct ElfOSAbi
+    {
+        /// <summary>
+        /// UNIX System V ABI
+        /// </summary>
+        public static readonly ElfOSAbi NONE = new ElfOSAbi(RawElf.ELFOSABI_NONE);
+        
+        /// <summary>
+        /// UNIX System V ABI
+        /// </summary>
+        public static readonly ElfOSAbi SYSV = new ElfOSAbi(RawElf.ELFOSABI_SYSV);
+        
+        /// <summary>
+        /// HP-UX
+        /// </summary>
+        public static readonly ElfOSAbi HPUX = new ElfOSAbi(RawElf.ELFOSABI_HPUX);
+        
+        /// <summary>
+        /// NetBSD.
+        /// </summary>
+        public static readonly ElfOSAbi NETBSD = new ElfOSAbi(RawElf.ELFOSABI_NETBSD);
+        
+        /// <summary>
+        /// Object uses GNU ELF extensions.
+        /// </summary>
+        public static readonly ElfOSAbi GNU = new ElfOSAbi(RawElf.ELFOSABI_GNU);
+        
+        /// <summary>
+        /// Object uses GNU ELF extensions.
+        /// </summary>
+        public static readonly ElfOSAbi LINUX = new ElfOSAbi(RawElf.ELFOSABI_LINUX);
+        
+        /// <summary>
+        /// Sun Solaris.
+        /// </summary>
+        public static readonly ElfOSAbi SOLARIS = new ElfOSAbi(RawElf.ELFOSABI_SOLARIS);
+        
+        /// <summary>
+        /// IBM AIX.
+        /// </summary>
+        public static readonly ElfOSAbi AIX = new ElfOSAbi(RawElf.ELFOSABI_AIX);
+        
+        /// <summary>
+        /// SGI Irix.
+        /// </summary>
+        public static readonly ElfOSAbi IRIX = new ElfOSAbi(RawElf.ELFOSABI_IRIX);
+        
+        /// <summary>
+        /// FreeBSD.
+        /// </summary>
+        public static readonly ElfOSAbi FREEBSD = new ElfOSAbi(RawElf.ELFOSABI_FREEBSD);
+        
+        /// <summary>
+        /// Compaq TRU64 UNIX.
+        /// </summary>
+        public static readonly ElfOSAbi TRU64 = new ElfOSAbi(RawElf.ELFOSABI_TRU64);
+        
+        /// <summary>
+        /// Novell Modesto.
+        /// </summary>
+        public static readonly ElfOSAbi MODESTO = new ElfOSAbi(RawElf.ELFOSABI_MODESTO);
+        
+        /// <summary>
+        /// OpenBSD.
+        /// </summary>
+        public static readonly ElfOSAbi OPENBSD = new ElfOSAbi(RawElf.ELFOSABI_OPENBSD);
+        
+        /// <summary>
+        /// ARM EABI
+        /// </summary>
+        public static readonly ElfOSAbi ARM_AEABI = new ElfOSAbi(RawElf.ELFOSABI_ARM_AEABI);
+        
+        /// <summary>
+        /// ARM
+        /// </summary>
+        public static readonly ElfOSAbi ARM = new ElfOSAbi(RawElf.ELFOSABI_ARM);
+        
+        /// <summary>
+        /// Standalone (embedded) application
+        /// </summary>
+        public static readonly ElfOSAbi STANDALONE = new ElfOSAbi(RawElf.ELFOSABI_STANDALONE);
+        
+        private string ToStringInternal()
+        {
+            switch (Value)
+            {
+                case RawElf.ELFOSABI_NONE: return "UNIX System V ABI";
+                case RawElf.ELFOSABI_HPUX: return "HP-UX";
+                case RawElf.ELFOSABI_NETBSD: return "NetBSD.";
+                case RawElf.ELFOSABI_GNU: return "Object uses GNU ELF extensions.";
+                case RawElf.ELFOSABI_SOLARIS: return "Sun Solaris.";
+                case RawElf.ELFOSABI_AIX: return "IBM AIX.";
+                case RawElf.ELFOSABI_IRIX: return "SGI Irix.";
+                case RawElf.ELFOSABI_FREEBSD: return "FreeBSD.";
+                case RawElf.ELFOSABI_TRU64: return "Compaq TRU64 UNIX.";
+                case RawElf.ELFOSABI_MODESTO: return "Novell Modesto.";
+                case RawElf.ELFOSABI_OPENBSD: return "OpenBSD.";
+                case RawElf.ELFOSABI_ARM_AEABI: return "ARM EABI";
+                case RawElf.ELFOSABI_ARM: return "ARM";
+                case RawElf.ELFOSABI_STANDALONE: return "Standalone (embedded) application";
+                default: return "Unknown ElfOSAbi";
             }
         }
     }

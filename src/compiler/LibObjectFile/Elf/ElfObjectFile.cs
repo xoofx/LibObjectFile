@@ -11,7 +11,7 @@ namespace LibObjectFile.Elf
         {
             _sections = new List<ElfSection>();
             Class = ElfClass.Is64;
-            OSAbi = ElfOSAbi.Default;
+            OSAbi = ElfOSAbi.NONE;
             Encoding = ElfEncoding.Lsb;
             FileType = ElfObjectFileType.Relocatable;
             Arch = ElfArch.X86_64;

@@ -1,85 +1,44 @@
-﻿namespace LibObjectFile.Elf
+﻿using System;
+
+namespace LibObjectFile.Elf
 {
-    public enum ElfOSAbi
+    public readonly partial struct ElfOSAbi : IEquatable<ElfOSAbi>
     {
-        /// <summary>
-        /// UNIX System V ABI
-        /// </summary>
-        Default = 0,
+        public ElfOSAbi(byte value)
+        {
+            Value = value;
+        }
 
-        /// <summary>
-        /// Alias.
-        /// </summary>
-        UnixSystemV = Default,
+        public readonly byte Value;
 
-        /// <summary>
-        /// HP-UX
-        /// </summary>
-        HPUX = 1,
+        public override string ToString()
+        {
+            return $"{ToStringInternal()} (0x{Value:X4})";
+        }
 
-        /// <summary>
-        /// NetBSD.
-        /// </summary>
-        NetBSD = 2,
+        public bool Equals(ElfOSAbi other)
+        {
+            return Value == other.Value;
+        }
 
-        /// <summary>
-        /// Object uses GNU ELF extensions.
-        /// </summary>
-        Gnu = 3,
+        public override bool Equals(object obj)
+        {
+            return obj is ElfOSAbi other && Equals(other);
+        }
 
-        /// <summary>
-        /// Compatibility alias.
-        /// </summary>
-        Linux = 3,
+        public override int GetHashCode()
+        {
+            return Value.GetHashCode();
+        }
 
-        /// <summary>
-        /// Sun Solaris.
-        /// </summary>
-        Solaris = 6,
+        public static bool operator ==(ElfOSAbi left, ElfOSAbi right)
+        {
+            return left.Equals(right);
+        }
 
-        /// <summary>
-        /// IBM AIX.
-        /// </summary>
-        AIX = 7,
-
-        /// <summary>
-        /// SGI Irix.
-        /// </summary>
-        IRIX = 8,
-
-        /// <summary>
-        /// FreeBSD.
-        /// </summary>
-        FreeBSD = 9,
-
-        /// <summary>
-        /// Compaq TRU64 UNIX.
-        /// </summary>
-        TRU64 = 10,
-
-        /// <summary>
-        /// Novell Modesto.
-        /// </summary>
-        Modesto = 11,
-
-        /// <summary>
-        /// OpenBSD.
-        /// </summary>
-        OpenBSD = 12,
-
-        /// <summary>
-        /// ARM EABI
-        /// </summary>
-        ARMEABI = 64,
-
-        /// <summary>
-        /// ARM
-        /// </summary>
-        ARM = 97,
-
-        /// <summary>
-        /// Standalone (embedded) application
-        /// </summary>
-        Standalone = 255,
+        public static bool operator !=(ElfOSAbi left, ElfOSAbi right)
+        {
+            return !left.Equals(right);
+        }
     }
 }

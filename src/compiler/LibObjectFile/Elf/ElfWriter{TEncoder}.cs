@@ -422,46 +422,9 @@ namespace LibObjectFile.Elf
 
             ident[EI_VERSION] = EV_CURRENT;
 
-            ident[EI_OSABI] = GetOSABI(ObjectFile.OSAbi);
+            ident[EI_OSABI] = ObjectFile.OSAbi.Value;
 
             ident[EI_ABIVERSION] = 0;
-        }
-
-        private static byte GetOSABI(ElfOSAbi osabi)
-        {
-            switch (osabi)
-            {
-                case ElfOSAbi.Default:
-                    return ELFOSABI_NONE;
-                case ElfOSAbi.HPUX:
-                    return ELFOSABI_HPUX;
-                case ElfOSAbi.NetBSD:
-                    return ELFOSABI_NETBSD;
-                case ElfOSAbi.Gnu:
-                    return ELFOSABI_GNU;
-                case ElfOSAbi.Solaris:
-                    return ELFOSABI_SOLARIS;
-                case ElfOSAbi.AIX:
-                    return ELFOSABI_AIX;
-                case ElfOSAbi.IRIX:
-                    return ELFOSABI_IRIX;
-                case ElfOSAbi.FreeBSD:
-                    return ELFOSABI_FREEBSD;
-                case ElfOSAbi.TRU64:
-                    return ELFOSABI_TRU64;
-                case ElfOSAbi.Modesto:
-                    return ELFOSABI_MODESTO;
-                case ElfOSAbi.OpenBSD:
-                    return ELFOSABI_OPENBSD;
-                case ElfOSAbi.ARMEABI:
-                    return ELFOSABI_ARM_AEABI;
-                case ElfOSAbi.ARM:
-                    return ELFOSABI_ARM;
-                case ElfOSAbi.Standalone:
-                    return ELFOSABI_STANDALONE;
-                default:
-                    throw ThrowHelper.InvalidEnum(osabi);
-            }
         }
     }
 }

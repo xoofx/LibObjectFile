@@ -133,11 +133,11 @@ typedef struct
 
 #define EI_OSABI	7		/* OS ABI identification */
 #define ELFOSABI_NONE		0	/* UNIX System V ABI */
-#define ELFOSABI_SYSV		0	/* Alias.  */
+#define ELFOSABI_SYSV		0	/* UNIX System V ABI */
 #define ELFOSABI_HPUX		1	/* HP-UX */
 #define ELFOSABI_NETBSD		2	/* NetBSD.  */
 #define ELFOSABI_GNU		3	/* Object uses GNU ELF extensions.  */
-#define ELFOSABI_LINUX		ELFOSABI_GNU /* Compatibility alias.  */
+#define ELFOSABI_LINUX		ELFOSABI_GNU /* Object uses GNU ELF extensions.  */
 #define ELFOSABI_SOLARIS	6	/* Sun Solaris.  */
 #define ELFOSABI_AIX		7	/* IBM AIX.  */
 #define ELFOSABI_IRIX		8	/* SGI Irix.  */
@@ -297,7 +297,7 @@ typedef struct
 /* Special section indices.  */
 
 #define SHN_UNDEF	0		/* Undefined section */
-#define SHN_LORESERVE	0xff00		/* Start of reserved indices */
+#define SHN_LORESERVE	0xff00		/* Start of reserved indices *k/
 #define SHN_LOPROC	0xff00		/* Start of processor-specific */
 #define SHN_BEFORE	0xff00		/* Order section before all others (Solaris).  */
 #define SHN_AFTER	0xff01		/* Order section after all others (Solaris).  */
