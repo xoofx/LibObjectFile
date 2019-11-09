@@ -1,6 +1,6 @@
 ﻿namespace LibObjectFile.Elf
 {
-    public enum ElfClass
+    public enum ElfFileClass
     {
         None = 0,
         Is32 = 1,

@@ -1,6 +1,6 @@
 ﻿namespace LibObjectFile.Elf
 {
-    public enum ElfObjectFileType
+    public enum ElfFileType
     {
         /// <summary>
         /// No file type

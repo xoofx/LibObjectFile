@@ -18,7 +18,7 @@ namespace LibObjectFile.Elf
 
         public override void Write()
         {
-            if (ObjectFile.Class == ElfClass.None)
+            if (ObjectFile.FileClass == ElfFileClass.None)
             {
                 throw new InvalidOperationException("Cannot write an ELF Class = None");
             }
@@ -31,7 +31,7 @@ namespace LibObjectFile.Elf
 
         private void WriteHeader()
         {
-            if (ObjectFile.Class == ElfClass.Is32)
+            if (ObjectFile.FileClass == ElfFileClass.Is32)
             {
                 WriteHeader32();
             }
@@ -49,19 +49,19 @@ namespace LibObjectFile.Elf
             ushort e_type;
             switch (ObjectFile.FileType)
             {
-                case ElfObjectFileType.None:
+                case ElfFileType.None:
                     e_type = ET_NONE;
                     break;
-                case ElfObjectFileType.Relocatable:
+                case ElfFileType.Relocatable:
                     e_type = ET_REL;
                     break;
-                case ElfObjectFileType.Executable:
+                case ElfFileType.Executable:
                     e_type = ET_EXEC;
                     break;
-                case ElfObjectFileType.Dynamic:
+                case ElfFileType.Dynamic:
                     e_type = ET_DYN;
                     break;
-                case ElfObjectFileType.Core:
+                case ElfFileType.Core:
                     e_type = ET_CORE;
                     break;
                 default:
@@ -95,19 +95,19 @@ namespace LibObjectFile.Elf
             ushort e_type;
             switch (ObjectFile.FileType)
             {
-                case ElfObjectFileType.None:
+                case ElfFileType.None:
                     e_type = ET_NONE;
                     break;
-                case ElfObjectFileType.Relocatable:
+                case ElfFileType.Relocatable:
                     e_type = ET_REL;
                     break;
-                case ElfObjectFileType.Executable:
+                case ElfFileType.Executable:
                     e_type = ET_EXEC;
                     break;
-                case ElfObjectFileType.Dynamic:
+                case ElfFileType.Dynamic:
                     e_type = ET_DYN;
                     break;
-                case ElfObjectFileType.Core:
+                case ElfFileType.Core:
                     e_type = ET_CORE;
                     break;
                 default:
@@ -142,7 +142,7 @@ namespace LibObjectFile.Elf
 
         private unsafe void PrepareSections()
         {
-            ulong offset = ObjectFile.Class == ElfClass.Is32 ? (uint)sizeof(Elf32_Ehdr) : (uint)sizeof(Elf64_Ehdr);
+            ulong offset = ObjectFile.FileClass == ElfFileClass.Is32 ? (uint)sizeof(Elf32_Ehdr) : (uint)sizeof(Elf64_Ehdr);
             _offsetOfSectionHeaderTable = 0;
 
             // If we have any sections, prepare their offsets
@@ -160,7 +160,7 @@ namespace LibObjectFile.Elf
                 // The Section Header Table will be put just before all the sections
                 _offsetOfSectionHeaderTable = offset;
 
-                uint sizeOfSectionHeader = ObjectFile.Class == ElfClass.Is32 ? (uint)sizeof(Elf32_Shdr) : (uint)sizeof(Elf64_Shdr);
+                uint sizeOfSectionHeader = ObjectFile.FileClass == ElfFileClass.Is32 ? (uint)sizeof(Elf32_Shdr) : (uint)sizeof(Elf64_Shdr);
                 offset += (uint) GetTotalSectionCount() * sizeOfSectionHeader;
 
                 // Prepare all section names (to calculate the name indices and the size of the SectionNames)
@@ -177,6 +177,7 @@ namespace LibObjectFile.Elf
                 foreach (var section in ObjectFile.Sections)
                 {
                     section.Offset = offset;
+                    if (section.Type == ElfSectionType.NoBits) continue;
                     offset += section.Size;
                 }
             }
@@ -192,6 +193,7 @@ namespace LibObjectFile.Elf
             SectionHeaderNames.Write(Stream);
             foreach (var section in ObjectFile.Sections)
             {
+                if (section.Type == ElfSectionType.NoBits) continue;
                 section.Write(Stream);
             }
         }
@@ -205,7 +207,7 @@ namespace LibObjectFile.Elf
             }
             
             // Write NULL entry
-            if (ObjectFile.Class == ElfClass.Is32)
+            if (ObjectFile.FileClass == ElfFileClass.Is32)
             {
                 WriteNullSectionTableEntry32();
             }
@@ -223,7 +225,7 @@ namespace LibObjectFile.Elf
 
         private void WriteSectionTableEntry(ElfSection section)
         {
-            if (ObjectFile.Class == ElfClass.Is32)
+            if (ObjectFile.FileClass == ElfFileClass.Is32)
             {
                 WriteSectionTableEntry32(section);
             }
@@ -390,19 +392,19 @@ namespace LibObjectFile.Elf
             ident[EI_MAG2] = ELFMAG2;
             ident[EI_MAG3] = ELFMAG3;
 
-            switch (ObjectFile.Class)
+            switch (ObjectFile.FileClass)
             {
-                case ElfClass.None:
+                case ElfFileClass.None:
                     ident[EI_CLASS] = ELFCLASSNONE;
                     break;
-                case ElfClass.Is32:
+                case ElfFileClass.Is32:
                     ident[EI_CLASS] = ELFCLASS32;
                     break;
-                case ElfClass.Is64:
+                case ElfFileClass.Is64:
                     ident[EI_CLASS] = ELFCLASS64;
                     break;
                 default:
-                    throw ThrowHelper.InvalidEnum(ObjectFile.Class);
+                    throw ThrowHelper.InvalidEnum(ObjectFile.FileClass);
             }
 
             switch (ObjectFile.Encoding)

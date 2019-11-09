@@ -10,20 +10,20 @@ namespace LibObjectFile.Elf
         public ElfObjectFile()
         {
             _sections = new List<ElfSection>();
-            Class = ElfClass.Is64;
+            FileClass = ElfFileClass.Is64;
             OSAbi = ElfOSAbi.NONE;
             Encoding = ElfEncoding.Lsb;
-            FileType = ElfObjectFileType.Relocatable;
+            FileType = ElfFileType.Relocatable;
             Arch = ElfArch.X86_64;
         }
 
-        public ElfClass Class { get; set; }
+        public ElfFileClass FileClass { get; set; }
 
         public ElfEncoding Encoding { get; set; }
 
         public ElfOSAbi OSAbi { get; set; }
 
-        public ElfObjectFileType FileType { get; set; }
+        public ElfFileType FileType { get; set; }
 
         public ElfArch Arch { get; set; }
 

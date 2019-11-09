@@ -13,16 +13,14 @@ namespace LibObjectFile.Tests
         {
             var elf = new ElfObjectFile();
 
-            var codeSection = new ElfStreamSection().ConfigureAs(ElfSectionSpecialType.Text);
             var codeStream = new MemoryStream();
             codeStream.Write(Encoding.UTF8.GetBytes("This is a text"));
             codeStream.Position = 0;
-            codeSection.Stream = codeStream;
 
+            var codeSection = new ElfStreamSection(codeStream).ConfigureAs(ElfSectionSpecialType.Text);
             elf.AddSection(codeSection);
 
             var stream = new FileStream(Path.Combine(Environment.CurrentDirectory, "test.elf"), FileMode.Create);
-
             elf.Write(stream);
 
             stream.Flush();
