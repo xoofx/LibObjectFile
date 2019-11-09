@@ -1,0 +1,31 @@
+﻿namespace LibObjectFile.Elf
+{
+    public enum ElfSectionSpecialType
+    {
+        None,
+        Bss,
+        Comment,
+        Data,
+        Data1,
+        Debug,
+        Dynamic,
+        DynamicStringTable,
+        DynamicSymbolTable,
+        Fini,
+        Got,
+        Hash,
+        Init,
+        Interp,
+        Line,
+        Note,
+        Plt,
+        Relocation,
+        RelocationAddends,
+        ReadOnlyData,
+        ReadOnlyData1,
+        SectionHeaderStringTable,
+        StringTable,
+        SymbolTable,
+        Text,
+    }
+}
