@@ -20,7 +20,7 @@ namespace LibObjectFile.Elf
             GetOrCreateIndex(string.Empty);
         }
 
-        public override ulong GetSize(ElfFileClass fileClass) => (uint) _table.Position;
+        protected override ulong GetSize() => (uint) _table.Position;
 
         protected override void Write(ElfWriter writer)
         {

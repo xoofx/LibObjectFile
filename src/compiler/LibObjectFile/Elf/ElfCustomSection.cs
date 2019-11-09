@@ -16,7 +16,7 @@ namespace LibObjectFile.Elf
 
         public Stream Stream { get; set; }
 
-        public override ulong GetSize(ElfFileClass fileClass) => Stream != null ? (ulong) Stream.Length : 0;
+        protected override ulong GetSize() => Stream != null ? (ulong) Stream.Length : 0;
 
         protected override void Write(ElfWriter writer)
         {

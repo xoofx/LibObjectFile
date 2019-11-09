@@ -335,7 +335,7 @@ namespace LibObjectFile.Elf
 
                 // Section names is serialized right after the SectionHeaderTable
                 SectionHeaderNames.Offset = offset;
-                offset += SectionHeaderNames.GetSize(ObjectFile.FileClass);
+                offset += SectionHeaderNames.GetSizeInternal();
 
                 // Prepare all section before writing (e.g allowing sections to calculate their names)
                 foreach (var section in ObjectFile.Sections)
@@ -360,7 +360,7 @@ namespace LibObjectFile.Elf
                     // a NoBits section doesn't occupy any space in the file
                     if (section.Type == ElfSectionType.NoBits) continue;
 
-                    offset += section.GetSize(ObjectFile.FileClass);
+                    offset += section.GetSizeInternal();
                 }
             }
         }
@@ -443,11 +443,11 @@ namespace LibObjectFile.Elf
             _encoder.Encode(out shdr.sh_flags, GetSectionFlags(section.Flags));
             _encoder.Encode(out shdr.sh_addr, (uint)section.VirtualAddress);
             _encoder.Encode(out shdr.sh_offset, (uint)section.Offset);
-            _encoder.Encode(out shdr.sh_size, (uint)section.GetSize(ObjectFile.FileClass));
+            _encoder.Encode(out shdr.sh_size, (uint)section.GetSizeInternal());
             _encoder.Encode(out shdr.sh_link, section.Link.GetSectionIndex());
             _encoder.Encode(out shdr.sh_info, section.GetInfoIndexInternal(this)); // TODO support sh_info
             _encoder.Encode(out shdr.sh_addralign, (uint)section.Alignment);
-            _encoder.Encode(out shdr.sh_entsize, (uint)section.GetTableEntrySize(ObjectFile.FileClass));
+            _encoder.Encode(out shdr.sh_entsize, (uint)section.GetTableEntrySizeInternal());
             unsafe
             {
                 var span = new ReadOnlySpan<byte>(&shdr, sizeof(Elf32_Shdr));
@@ -463,11 +463,11 @@ namespace LibObjectFile.Elf
             _encoder.Encode(out shdr.sh_flags, GetSectionFlags(section.Flags));
             _encoder.Encode(out shdr.sh_addr, section.VirtualAddress);
             _encoder.Encode(out shdr.sh_offset, section.Offset);
-            _encoder.Encode(out shdr.sh_size, section.GetSize(ObjectFile.FileClass));
+            _encoder.Encode(out shdr.sh_size, section.GetSizeInternal());
             _encoder.Encode(out shdr.sh_link, section.Link.GetSectionIndex());
             _encoder.Encode(out shdr.sh_info, section.GetInfoIndexInternal(this));
             _encoder.Encode(out shdr.sh_addralign, section.Alignment);
-            _encoder.Encode(out shdr.sh_entsize, section.GetTableEntrySize(ObjectFile.FileClass));
+            _encoder.Encode(out shdr.sh_entsize, section.GetTableEntrySizeInternal());
             unsafe
             {
                 var span = new ReadOnlySpan<byte>(&shdr, sizeof(Elf64_Shdr));

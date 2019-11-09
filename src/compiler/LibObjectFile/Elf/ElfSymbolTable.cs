@@ -15,30 +15,14 @@ namespace LibObjectFile.Elf
 
         public List<ElfSymbolTableEntry> Entries { get;  }
 
-        public override unsafe ulong GetSize(ElfFileClass fileClass)
+        protected override unsafe ulong GetSize()
         {
-            switch (fileClass)
-            {
-                case ElfFileClass.Is32:
-                    return (ulong)((Entries.Count + 1) * sizeof(RawElf.Elf32_Sym));
-                case ElfFileClass.Is64:
-                    return (ulong)((Entries.Count + 1) * sizeof(RawElf.Elf64_Sym));
-                default:
-                    throw ThrowHelper.InvalidEnum(fileClass);
-            }
+            return Parent.FileClass == ElfFileClass.Is32 ? (ulong) ((Entries.Count + 1) * sizeof(RawElf.Elf32_Sym)) : (ulong) ((Entries.Count + 1) * sizeof(RawElf.Elf64_Sym));
         }
 
-        public override unsafe ulong GetTableEntrySize(ElfFileClass fileClass)
+        protected override unsafe ulong GetTableEntrySize()
         {
-            switch (fileClass)
-            {
-                case ElfFileClass.Is32:
-                    return (ulong)sizeof(RawElf.Elf32_Sym);
-                case ElfFileClass.Is64:
-                    return (ulong)sizeof(RawElf.Elf64_Sym);
-                default:
-                    throw ThrowHelper.InvalidEnum(fileClass);
-            }
+            return Parent.FileClass == ElfFileClass.Is32 ? (ulong) sizeof(RawElf.Elf32_Sym) : (ulong) sizeof(RawElf.Elf64_Sym);
         }
 
         protected override uint GetInfoIndex(ElfWriter writer)

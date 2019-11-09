@@ -12,20 +12,16 @@ namespace LibObjectFile.Elf
         }
         
         public List<ElfRelocation> Entries { get; }
+        
+        public ElfSectionLink Info { get; set; }
 
-        public override unsafe ulong GetSize(ElfFileClass fileClass)
+        protected override unsafe ulong GetSize()
         {
             bool isRela = this.Type == ElfSectionType.RelocationAddends;
-            
-            switch (fileClass)
-            {
-                case ElfFileClass.Is32:
-                    return (ulong)(Entries.Count * (isRela ? sizeof(RawElf.Elf32_Rela) : sizeof(RawElf.Elf32_Rel)));
-                case ElfFileClass.Is64:
-                    return (ulong)(Entries.Count * (isRela ? sizeof(RawElf.Elf64_Rela) : sizeof(RawElf.Elf64_Rel)));
-                default:
-                    throw ThrowHelper.InvalidEnum(fileClass);
-            }
+
+            return Parent.FileClass == ElfFileClass.Is32 ? 
+                (ulong)(Entries.Count * (isRela ? sizeof(RawElf.Elf32_Rela) : sizeof(RawElf.Elf32_Rel)))  :
+                (ulong)(Entries.Count * (isRela ? sizeof(RawElf.Elf64_Rela) : sizeof(RawElf.Elf64_Rel)));
         }
 
         protected override void Write(ElfWriter writer)
@@ -40,18 +36,18 @@ namespace LibObjectFile.Elf
             }
         }
 
-        public override unsafe ulong GetTableEntrySize(ElfFileClass fileClass)
+        protected override unsafe ulong GetTableEntrySize()
         {
             bool isRela = this.Type == ElfSectionType.RelocationAddends;
-            switch (fileClass)
-            {
-                case ElfFileClass.Is32:
-                    return (ulong)(isRela ? sizeof(RawElf.Elf32_Rela) : sizeof(RawElf.Elf32_Rel));
-                case ElfFileClass.Is64:
-                    return (ulong)(isRela ? sizeof(RawElf.Elf32_Rela) : sizeof(RawElf.Elf32_Rel));
-                default:
-                    throw ThrowHelper.InvalidEnum(fileClass);
-            }
+            return Parent.FileClass == ElfFileClass.Is32 ? 
+                (ulong) (isRela ? sizeof(RawElf.Elf32_Rela) : sizeof(RawElf.Elf32_Rel)) : 
+                (ulong) (isRela ? sizeof(RawElf.Elf64_Rela) : sizeof(RawElf.Elf64_Rel));
+        }
+
+        protected override uint GetInfoIndex(ElfWriter writer)
+        {
+            // TODO: Add check for Info
+            return Info.GetSectionIndex();
         }
 
         private void Write32(ElfWriter writer)

@@ -22,13 +22,9 @@ namespace LibObjectFile.Elf
 
         public string Name { get; set; }
 
-        public abstract ulong GetSize(ElfFileClass fileClass);
-
         public ulong VirtualAddress { get; set; }
 
         public ulong Alignment { get; set; }
-
-        public virtual ulong GetTableEntrySize(ElfFileClass fileClass) => 0;
 
         public ElfSectionLink Link { get; set; }
         
@@ -46,11 +42,27 @@ namespace LibObjectFile.Elf
         /// </summary>
         internal uint NameStringIndex { get; set; }
 
+        internal ulong GetSizeInternal()
+        {
+            return GetSize();
+        }
+
+        protected abstract ulong GetSize();
+
+        internal ulong GetTableEntrySizeInternal()
+        {
+            return GetTableEntrySize();
+        }
+
+        protected virtual ulong GetTableEntrySize() => 0;
+        
         internal void WriteInternal(ElfWriter writer)
         {
             if (Parent == null) throw new InvalidOperationException($"Cannot write this section instance `{this}` without being attached to a `{nameof(ElfObjectFile)}`");
             Write(writer);
         }
+
+        protected abstract void Write(ElfWriter writer);
 
         internal void PrepareWriteInternal(ElfWriter writer)
         {
@@ -58,8 +70,7 @@ namespace LibObjectFile.Elf
             PrepareWrite(writer);
         }
         
-        protected abstract void Write(ElfWriter writer);
-
+        
         protected virtual void PrepareWrite(ElfWriter writer)
         {
         }
