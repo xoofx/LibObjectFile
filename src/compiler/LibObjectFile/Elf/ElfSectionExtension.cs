@@ -60,12 +60,12 @@ namespace LibObjectFile.Elf
                 case ElfSectionSpecialType.Got:
                     section.Name = ".got";
                     section.Type = ElfSectionType.ProgBits;
-                    section.Flags = ElfSectionFlags.Alloc;
+                    section.Flags = ElfSectionFlags.None;
                     break;
                 case ElfSectionSpecialType.Hash:
                     section.Name = ".hash";
                     section.Type = ElfSectionType.SymbolHashTable;
-                    section.Flags = ElfSectionFlags.Alloc;
+                    section.Flags = ElfSectionFlags.None;
                     break;
                 case ElfSectionSpecialType.Init:
                     section.Name = ".init";
@@ -96,13 +96,13 @@ namespace LibObjectFile.Elf
                     if (relOrRelaName == null) throw new ArgumentNullException(nameof(relOrRelaName));
                     section.Name = ".rel" + relOrRelaName;
                     section.Type = ElfSectionType.Relocation;
-                    section.Flags = ElfSectionFlags.Alloc;
+                    section.Flags = ElfSectionFlags.None;
                     break;
                 case ElfSectionSpecialType.RelocationAddends:
                     if (relOrRelaName == null) throw new ArgumentNullException(nameof(relOrRelaName));
                     section.Name = ".rela" + relOrRelaName;
                     section.Type = ElfSectionType.RelocationAddends;
-                    section.Flags = ElfSectionFlags.Alloc;
+                    section.Flags = ElfSectionFlags.None;
                     break;
                 case ElfSectionSpecialType.ReadOnlyData:
                     section.Name = ".rodata";
@@ -122,12 +122,12 @@ namespace LibObjectFile.Elf
                 case ElfSectionSpecialType.StringTable:
                     section.Name = ".strtab";
                     section.Type = ElfSectionType.StringTable;
-                    section.Flags = ElfSectionFlags.Alloc;
+                    section.Flags = ElfSectionFlags.None;
                     break;
                 case ElfSectionSpecialType.SymbolTable:
                     section.Name = ".symtab";
                     section.Type = ElfSectionType.SymbolTable;
-                    section.Flags = ElfSectionFlags.Alloc;
+                    section.Flags = ElfSectionFlags.None;
                     break;
                 case ElfSectionSpecialType.Text:
                     section.Name = ".text";
