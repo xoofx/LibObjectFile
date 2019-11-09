@@ -126,6 +126,7 @@ namespace StarkPlatform.NativeCompiler.CodeGen
                     map => map.MapMacroToConst("^STN_.*", "uint8_t"),
                     map => map.MapMacroToConst("^STV_.*", "uint8_t"),
                     map => map.MapMacroToConst("^R_386_.*", "uint32_t"),
+                    map => map.MapMacroToConst("^R_X86_64_.*", "uint32_t"),
                     map => map.MapMacroToConst("^R_ARM_.*", "uint32_t"),
                     map => map.MapMacroToConst("^R_AARCH64_.*", "uint32_t"),
                     
@@ -145,9 +146,26 @@ namespace StarkPlatform.NativeCompiler.CodeGen
 
             ProcessElfEnum(cppOptions, csCompilation, "EM_", "ElfArch");
             ProcessElfEnum(cppOptions, csCompilation, "ELFOSABI_", "ElfOSAbi");
-            
+            ProcessElfEnum(cppOptions, csCompilation, "R_", "ElfRelocationType");
+
             csCompilation.DumpTo(GetCodeWriter(Path.Combine("LibObjectFile", "generated")));
         }
+
+        private static readonly Dictionary<string, string> MapRelocMachineToArch = new Dictionary<string, string>()
+        {
+            {"R_386_", "I386"},
+            {"R_X86_64_", "X86_64"},
+            {"R_ARM_", "ARM"},
+            {"R_AARCH64_", "AARCH64"},
+        };
+
+        private static readonly Dictionary<string, string> MapRelocMachineToMachine = new Dictionary<string, string>()
+        {
+            {"R_386_", "EM_386"},
+            {"R_X86_64_", "EM_X86_64"},
+            {"R_ARM_", "EM_ARM"},
+            {"R_AARCH64_", "EM_AARCH64"},
+        };
 
         private static void ProcessElfEnum(CSharpConverterOptions cppOptions, CSharpCompilation csCompilation, string enumPrefix, string enumClassName)
         {
@@ -163,27 +181,61 @@ namespace StarkPlatform.NativeCompiler.CodeGen
             };
             ns.Members.Add(enumClass);
 
+            bool isReloc = enumPrefix == "R_";
+
             foreach (var enumRawField in enumRawFields)
             {
                 var rawName = enumRawField.Name;
+
+                string relocArch = null;
+
+                if (isReloc)
+                {
+                    foreach (var mapReloc in MapRelocMachineToArch)
+                    {
+                        if (rawName.StartsWith(mapReloc.Key))
+                        {
+                            relocArch = mapReloc.Value;
+                            break;
+                        }
+                    }
+
+                    if (relocArch == null)
+                    {
+                        continue;
+                    }
+                }
 
                 // Don't add EM_NUM
                 if (rawName == "EM_NUM") continue;
 
                 var csFieldName = rawName.Substring(enumPrefix.Length); // discard EM_
-                switch (csFieldName)
+                if (csFieldName.StartsWith("386"))
                 {
-                    case "386": csFieldName = "I386"; break;
-                    case "88K": csFieldName = "M88K"; break;
-                    case "860": csFieldName = "I860"; break;
-                    case "960": csFieldName = "I960"; break;
-                    default:
-                        // assume Motorola
-                        if (csFieldName.StartsWith("68"))
-                        {
-                            csFieldName = $"M{csFieldName}";
-                        }
-                        break;
+                    csFieldName = $"I{csFieldName}";
+                }
+                else
+                {
+                    switch (csFieldName)
+                    {
+                        case "88K":
+                            csFieldName = "M88K";
+                            break;
+                        case "860":
+                            csFieldName = "I860";
+                            break;
+                        case "960":
+                            csFieldName = "I960";
+                            break;
+                        default:
+                            // assume Motorola
+                            if (csFieldName.StartsWith("68"))
+                            {
+                                csFieldName = $"M{csFieldName}";
+                            }
+
+                            break;
+                    }
                 }
 
                 if (char.IsDigit(csFieldName[0]))
@@ -197,7 +249,7 @@ namespace StarkPlatform.NativeCompiler.CodeGen
                     FieldType = enumClass,
                     Visibility = CSharpVisibility.Public,
                     Comment = enumRawField.Comment,
-                    InitValue = $"new {enumClass.Name}({cppOptions.DefaultClassLib}.{rawName})"
+                    InitValue = relocArch != null ? $"new {enumClass.Name}(ElfArch.{relocArch}, {cppOptions.DefaultClassLib}.{rawName})" :  $"new {enumClass.Name}({cppOptions.DefaultClassLib}.{rawName})"
                 };
 
                 enumClass.Members.Add(enumField);
@@ -214,7 +266,14 @@ namespace StarkPlatform.NativeCompiler.CodeGen
             toStringInternal.Body = (writer, element) =>
             {
                 var values = new HashSet<object>();
-                writer.WriteLine("switch (Value)");
+                if (isReloc)
+                {
+                    writer.WriteLine("switch (((ulong)Value << 16) | Arch.Value)");
+                }
+                else
+                {
+                    writer.WriteLine("switch (Value)");
+                }
                 writer.OpenBraceBlock();
                 foreach (var rawField in enumRawFields)
                 {
@@ -223,9 +282,32 @@ namespace StarkPlatform.NativeCompiler.CodeGen
                     {
                         continue;
                     }
-                    var descriptionText = cppField.Comment?.ToString().Replace("\"", "\\\"") ?? rawField.Name;
-                    descriptionText = descriptionText.Replace("\r\n", "").Replace("\n", "");
-                    writer.WriteLine($"case {cppOptions.DefaultClassLib}.{rawField.Name}: return \"{descriptionText}\";");
+
+                    if (isReloc)
+                    {
+                        string relocMachine = null;
+                        foreach (var mapReloc in MapRelocMachineToMachine)
+                        {
+                            if (rawField.Name.StartsWith(mapReloc.Key))
+                            {
+                                relocMachine = mapReloc.Value;
+                                break;
+                            }
+                        }
+
+                        if (relocMachine == null)
+                        {
+                            continue;
+                        }
+
+                        writer.WriteLine($"case (ulong)({cppOptions.DefaultClassLib}.{rawField.Name} << 16) | {cppOptions.DefaultClassLib}.{relocMachine} : return \"{rawField.Name}\";");
+                    }
+                    else
+                    {
+                        var descriptionText = cppField.Comment?.ToString().Replace("\"", "\\\"") ?? rawField.Name;
+                        descriptionText = descriptionText.Replace("\r\n", "").Replace("\n", "");
+                        writer.WriteLine($"case {cppOptions.DefaultClassLib}.{rawField.Name}: return \"{descriptionText}\";");
+                    }
                 }
 
                 writer.WriteLine($"default: return \"Unknown {enumClassName}\";");
