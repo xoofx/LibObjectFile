@@ -447,7 +447,7 @@ namespace LibObjectFile.Elf
             _encoder.Encode(out shdr.sh_link, section.Link.GetSectionIndex());
             _encoder.Encode(out shdr.sh_info, section.GetInfoIndexInternal(this)); // TODO support sh_info
             _encoder.Encode(out shdr.sh_addralign, (uint)section.Alignment);
-            _encoder.Encode(out shdr.sh_entsize, (uint)section.GetFixedEntrySize(ObjectFile.FileClass));
+            _encoder.Encode(out shdr.sh_entsize, (uint)section.GetTableEntrySize(ObjectFile.FileClass));
             unsafe
             {
                 var span = new ReadOnlySpan<byte>(&shdr, sizeof(Elf32_Shdr));
@@ -467,7 +467,7 @@ namespace LibObjectFile.Elf
             _encoder.Encode(out shdr.sh_link, section.Link.GetSectionIndex());
             _encoder.Encode(out shdr.sh_info, section.GetInfoIndexInternal(this));
             _encoder.Encode(out shdr.sh_addralign, section.Alignment);
-            _encoder.Encode(out shdr.sh_entsize, section.GetFixedEntrySize(ObjectFile.FileClass));
+            _encoder.Encode(out shdr.sh_entsize, section.GetTableEntrySize(ObjectFile.FileClass));
             unsafe
             {
                 var span = new ReadOnlySpan<byte>(&shdr, sizeof(Elf64_Shdr));

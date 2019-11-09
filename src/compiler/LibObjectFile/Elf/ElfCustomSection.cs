@@ -3,13 +3,13 @@ using System.IO;
 
 namespace LibObjectFile.Elf
 {
-    public class ElfStreamSection : ElfSection
+    public class ElfCustomSection : ElfSection
     {
-        public ElfStreamSection()
+        public ElfCustomSection()
         {
         }
 
-        public ElfStreamSection(Stream stream)
+        public ElfCustomSection(Stream stream)
         {
             Stream = stream ?? throw new ArgumentNullException(nameof(stream));
         }

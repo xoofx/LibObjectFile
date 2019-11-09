@@ -9,7 +9,7 @@ namespace LibObjectFile.Elf
         {
             ObjectFile = objectFile ?? throw new ArgumentNullException(nameof(objectFile));
             Stream = stream ?? throw new ArgumentNullException(nameof(stream));
-            SectionHeaderNames = new ElfStringTableSection().ConfigureAs(ElfSectionSpecialType.SectionHeaderStringTable);
+            SectionHeaderNames = new ElfStringTable().ConfigureAs(ElfSectionSpecialType.SectionHeaderStringTable);
             SectionHeaderNames.Parent = ObjectFile;
         }
 
@@ -22,7 +22,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Contains the names used for the sections
         /// </summary>
-        protected ElfStringTableSection SectionHeaderNames { get; }
+        protected ElfStringTable SectionHeaderNames { get; }
 
         public static ElfWriter Create(ElfObjectFile objectFile, Stream stream)
         {

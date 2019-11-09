@@ -6,12 +6,12 @@ using System.Text;
 
 namespace LibObjectFile.Elf
 {
-    public class ElfStringTableSection : ElfSection
+    public class ElfStringTable : ElfSection
     {
         private readonly MemoryStream _table;
         private readonly Dictionary<string, uint> _map;
 
-        public ElfStringTableSection()
+        public ElfStringTable()
         {
             Type = ElfSectionType.StringTable;
             _table = new MemoryStream();

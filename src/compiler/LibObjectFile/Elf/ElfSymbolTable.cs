@@ -4,11 +4,11 @@ using System.IO;
 
 namespace LibObjectFile.Elf
 {
-    public sealed class ElfSymbolTableSection : ElfSection
+    public sealed class ElfSymbolTable : ElfSection
     {
         private uint _localIndexPlusOne;
 
-        public ElfSymbolTableSection()
+        public ElfSymbolTable()
         {
             Entries = new List<ElfSymbolTableEntry>();
         }
@@ -28,7 +28,7 @@ namespace LibObjectFile.Elf
             }
         }
 
-        public override unsafe ulong GetFixedEntrySize(ElfFileClass fileClass)
+        public override unsafe ulong GetTableEntrySize(ElfFileClass fileClass)
         {
             switch (fileClass)
             {
@@ -46,12 +46,12 @@ namespace LibObjectFile.Elf
             return _localIndexPlusOne;
         }
 
-        private ElfStringTableSection GetSafeStringTable()
+        private ElfStringTable GetSafeStringTable()
         {
             if (Link.Section == null) throw new InvalidOperationException($"ElfSection.{nameof(Link)} cannot be null for this instance");
             if (Link.Section.Type != ElfSectionType.StringTable) throw new InvalidOperationException($"The type `{Link.Section.Type}` of ElfSection.{nameof(Link)} must be a {nameof(ElfSectionType.StringTable)}");
-            var stringTable = Link.Section as ElfStringTableSection;
-            if (stringTable == null) throw new InvalidOperationException($"The ElfSection.{nameof(Link)} must be an instance of {nameof(ElfStringTableSection)}");
+            var stringTable = Link.Section as ElfStringTable;
+            if (stringTable == null) throw new InvalidOperationException($"The ElfSection.{nameof(Link)} must be an instance of {nameof(ElfStringTable)}");
             return stringTable;
         }
 

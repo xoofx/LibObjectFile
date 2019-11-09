@@ -28,7 +28,7 @@ namespace LibObjectFile.Elf
 
         public ulong Alignment { get; set; }
 
-        public virtual ulong GetFixedEntrySize(ElfFileClass fileClass) => 0;
+        public virtual ulong GetTableEntrySize(ElfFileClass fileClass) => 0;
 
         public ElfSectionLink Link { get; set; }
         

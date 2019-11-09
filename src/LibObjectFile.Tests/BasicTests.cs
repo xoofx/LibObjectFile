@@ -17,7 +17,7 @@ namespace LibObjectFile.Tests
             codeStream.Write(Encoding.UTF8.GetBytes("This is a text"));
             codeStream.Position = 0;
 
-            var codeSection = new ElfStreamSection(codeStream).ConfigureAs(ElfSectionSpecialType.Text);
+            var codeSection = new ElfCustomSection(codeStream).ConfigureAs(ElfSectionSpecialType.Text);
             elf.AddSection(codeSection);
 
             var stream = new FileStream(Path.Combine(Environment.CurrentDirectory, "test.elf"), FileMode.Create);
@@ -26,7 +26,6 @@ namespace LibObjectFile.Tests
             stream.Flush();
             stream.Close();
         }
-
 
 
         [Test]
@@ -38,13 +37,13 @@ namespace LibObjectFile.Tests
             codeStream.Write(Encoding.UTF8.GetBytes("This is a text"));
             codeStream.Position = 0;
 
-            var codeSection = new ElfStreamSection(codeStream).ConfigureAs(ElfSectionSpecialType.Text);
+            var codeSection = new ElfCustomSection(codeStream).ConfigureAs(ElfSectionSpecialType.Text);
             elf.AddSection(codeSection);
 
-            var stringSection = new ElfStringTableSection().ConfigureAs(ElfSectionSpecialType.StringTable);
+            var stringSection = new ElfStringTable().ConfigureAs(ElfSectionSpecialType.StringTable);
             elf.AddSection(stringSection);
 
-            var symbolSection = new ElfSymbolTableSection().ConfigureAs(ElfSectionSpecialType.SymbolTable);
+            var symbolSection = new ElfSymbolTable().ConfigureAs(ElfSectionSpecialType.SymbolTable);
             elf.AddSection(symbolSection);
             symbolSection.Link = stringSection;
 
@@ -84,22 +83,22 @@ namespace LibObjectFile.Tests
 
             var codeStream = new MemoryStream();
             codeStream.Write(new byte[4096]);
-            var codeSection = new ElfStreamSection(codeStream).ConfigureAs(ElfSectionSpecialType.Text);
+            var codeSection = new ElfCustomSection(codeStream).ConfigureAs(ElfSectionSpecialType.Text);
             codeSection.VirtualAddress = 0x1000;
             codeSection.Alignment = 4096;
             elf.AddSection(codeSection);
 
             var dataStream = new MemoryStream();
             dataStream.Write(new byte[1024]);
-            var dataSection = new ElfStreamSection(dataStream).ConfigureAs(ElfSectionSpecialType.ReadOnlyData);
+            var dataSection = new ElfCustomSection(dataStream).ConfigureAs(ElfSectionSpecialType.ReadOnlyData);
             dataSection.VirtualAddress = 0x2000;
             dataSection.Alignment = 4096;
             elf.AddSection(dataSection);
 
-            var stringSection = new ElfStringTableSection().ConfigureAs(ElfSectionSpecialType.StringTable);
+            var stringSection = new ElfStringTable().ConfigureAs(ElfSectionSpecialType.StringTable);
             elf.AddSection(stringSection);
 
-            var symbolSection = new ElfSymbolTableSection().ConfigureAs(ElfSectionSpecialType.SymbolTable);
+            var symbolSection = new ElfSymbolTable().ConfigureAs(ElfSectionSpecialType.SymbolTable);
             elf.AddSection(symbolSection);
             symbolSection.Link = stringSection;
 
