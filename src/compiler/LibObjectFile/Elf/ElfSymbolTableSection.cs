@@ -89,10 +89,10 @@ namespace LibObjectFile.Elf
             var stringTable = GetSafeStringTable();
 
             // First entry is null
-            var sym32 = new RawElf.Elf32_Sym();
+            var sym = new RawElf.Elf32_Sym();
             unsafe
             {
-                var span = new ReadOnlySpan<byte>(&sym32, sizeof(RawElf.Elf32_Sym));
+                var span = new ReadOnlySpan<byte>(&sym, sizeof(RawElf.Elf32_Sym));
                 writer.Stream.Write(span);
             }
 
@@ -103,16 +103,17 @@ namespace LibObjectFile.Elf
 
                 VerifyEntry(ref entry, i);
 
-                sym32 = new RawElf.Elf32_Sym();
-                writer.Encode(out sym32.st_name, (ushort)stringTable.GetOrCreateIndex(entry.Name));
-                writer.Encode(out sym32.st_value, (uint)entry.Value);
-                writer.Encode(out sym32.st_size, (uint)entry.Size);
-                sym32.st_info = (byte)(((byte) entry.Bind << 4) | (byte) entry.Type);
-                writer.Encode(out sym32.st_shndx, (RawElf.Elf32_Half) entry.Section.GetSectionIndex());
+                sym = new RawElf.Elf32_Sym();
+                writer.Encode(out sym.st_name, (ushort)stringTable.GetOrCreateIndex(entry.Name));
+                writer.Encode(out sym.st_value, (uint)entry.Value);
+                writer.Encode(out sym.st_size, (uint)entry.Size);
+                sym.st_info = (byte)(((byte) entry.Bind << 4) | (byte) entry.Type);
+                sym.st_other = (byte) ((byte) entry.Visibility & 3);
+                writer.Encode(out sym.st_shndx, (RawElf.Elf32_Half) entry.Section.GetSectionIndex());
 
                 unsafe
                 {
-                    var span = new ReadOnlySpan<byte>(&sym32, sizeof(RawElf.Elf32_Sym));
+                    var span = new ReadOnlySpan<byte>(&sym, sizeof(RawElf.Elf32_Sym));
                     writer.Stream.Write(span);
                 }
             }
@@ -123,10 +124,10 @@ namespace LibObjectFile.Elf
             var stringTable = GetSafeStringTable();
 
             // First entry is null
-            var sym32 = new RawElf.Elf64_Sym();
+            var sym = new RawElf.Elf64_Sym();
             unsafe
             {
-                var span = new ReadOnlySpan<byte>(&sym32, sizeof(RawElf.Elf64_Sym));
+                var span = new ReadOnlySpan<byte>(&sym, sizeof(RawElf.Elf64_Sym));
                 writer.Stream.Write(span);
             }
 
@@ -135,16 +136,17 @@ namespace LibObjectFile.Elf
                 var entry = Entries[i];
                 VerifyEntry(ref entry, i);
 
-                var sym64 = new RawElf.Elf64_Sym();
-                writer.Encode(out sym64.st_name, stringTable.GetOrCreateIndex(entry.Name));
-                writer.Encode(out sym64.st_value, entry.Value);
-                writer.Encode(out sym64.st_size, entry.Size);
-                sym64.st_info = (byte)(((byte)entry.Bind << 4) | (byte)entry.Type);
-                writer.Encode(out sym64.st_shndx, (RawElf.Elf64_Half)entry.Section.GetSectionIndex());
+                sym = new RawElf.Elf64_Sym();
+                writer.Encode(out sym.st_name, stringTable.GetOrCreateIndex(entry.Name));
+                writer.Encode(out sym.st_value, entry.Value);
+                writer.Encode(out sym.st_size, entry.Size);
+                sym.st_info = (byte)(((byte)entry.Bind << 4) | (byte)entry.Type);
+                sym.st_other = (byte)((byte)entry.Visibility & 3);
+                writer.Encode(out sym.st_shndx, (RawElf.Elf64_Half)entry.Section.GetSectionIndex());
 
                 unsafe
                 {
-                    var span = new ReadOnlySpan<byte>(&sym64, sizeof(RawElf.Elf64_Sym));
+                    var span = new ReadOnlySpan<byte>(&sym, sizeof(RawElf.Elf64_Sym));
                     writer.Stream.Write(span);
                 }
             }

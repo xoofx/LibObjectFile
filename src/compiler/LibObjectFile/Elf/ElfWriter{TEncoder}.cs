@@ -8,6 +8,7 @@ namespace LibObjectFile.Elf
     internal abstract class ElfWriter<TEncoder> : ElfWriter where TEncoder : struct, ElfEncoder 
     {
         private TEncoder _encoder;
+        private ulong _offsetOfProgramHeaderTable;
         private ulong _offsetOfSectionHeaderTable;
         private ulong _startOfFile;
 
@@ -24,8 +25,9 @@ namespace LibObjectFile.Elf
             }
 
             _startOfFile = (ulong)Stream.Position;
-            PrepareSections();
+            PrepareProgramHeadersAndSections();
             WriteHeader();
+            WriteProgramHeaders();
             WriteSections();
         }
 
@@ -33,11 +35,11 @@ namespace LibObjectFile.Elf
         {
             if (ObjectFile.FileClass == ElfFileClass.Is32)
             {
-                WriteHeader32();
+                WriteSectionHeader32();
             }
             else
             {
-                WriteHeader64();
+                WriteSectionHeader64();
             }
         }
 
@@ -131,7 +133,60 @@ namespace LibObjectFile.Elf
             _encoder.Encode(out dest, value);
         }
 
-        private unsafe void WriteHeader32()
+        private unsafe ushort GetProgramHeaderSize()
+        {
+            return (ushort)(ObjectFile.FileClass == ElfFileClass.Is32 ? sizeof(Elf32_Phdr) : sizeof(Elf64_Phdr));
+        }
+
+        private ulong GetOffsetFromSectionOffset(ref ElfProgramHeader programHeader, int i)
+        {
+            if (programHeader.Offset.Section == null)
+            {
+                throw new InvalidOperationException($"The section of the program header #{i} cannot be null");
+            }
+
+            if (programHeader.Offset.Section.Parent != ObjectFile)
+            {
+                throw new InvalidOperationException($"The section of the program header #{i} is not part of the current {nameof(ObjectFile)}");
+            }
+
+            return programHeader.Offset.Section.Offset + programHeader.Offset.LocalOffset;
+        }
+
+        private unsafe void WriteProgramHeader32(ref ElfProgramHeader programHeader, int i)
+        {
+            var hdr = new Elf32_Phdr();
+
+            _encoder.Encode(out hdr.p_type, programHeader.Type.Value);
+            _encoder.Encode(out hdr.p_offset, (uint)GetOffsetFromSectionOffset(ref programHeader, i));
+            _encoder.Encode(out hdr.p_vaddr, (uint)programHeader.VirtualAddress);
+            _encoder.Encode(out hdr.p_paddr, (uint)programHeader.PhysicalAddress);
+            _encoder.Encode(out hdr.p_filesz, (uint)programHeader.SizeInFile);
+            _encoder.Encode(out hdr.p_memsz, (uint)programHeader.SizeInMemory);
+            _encoder.Encode(out hdr.p_flags, programHeader.Flags.Value);
+            _encoder.Encode(out hdr.p_align, (uint)programHeader.Align);
+
+            var span = new ReadOnlySpan<byte>(&hdr, sizeof(Elf32_Phdr));
+            Stream.Write(span);
+        }
+
+        private unsafe void WriteProgramHeader64(ref ElfProgramHeader programHeader, int i)
+        {
+            var hdr = new Elf64_Phdr();
+
+            _encoder.Encode(out hdr.p_type, programHeader.Type.Value);
+            _encoder.Encode(out hdr.p_offset, GetOffsetFromSectionOffset(ref programHeader, i));
+            _encoder.Encode(out hdr.p_vaddr, programHeader.VirtualAddress);
+            _encoder.Encode(out hdr.p_paddr, programHeader.PhysicalAddress);
+            _encoder.Encode(out hdr.p_filesz, programHeader.SizeInFile);
+            _encoder.Encode(out hdr.p_memsz, programHeader.SizeInMemory);
+            _encoder.Encode(out hdr.p_flags, programHeader.Flags.Value);
+            _encoder.Encode(out hdr.p_align, programHeader.Align);
+
+            var span = new ReadOnlySpan<byte>(&hdr, sizeof(Elf64_Phdr));
+            Stream.Write(span);
+        }
+        private unsafe void WriteSectionHeader32()
         {
             var hdr = new Elf32_Ehdr();
             InitIdent(hdr.e_ident);
@@ -167,6 +222,11 @@ namespace LibObjectFile.Elf
             _encoder.Encode(out hdr.e_entry, (uint)ObjectFile.EntryPointAddress);
             _encoder.Encode(out hdr.e_ehsize, (ushort) sizeof(Elf32_Ehdr));
 
+            // program headers
+            _encoder.Encode(out hdr.e_phoff, (uint)_offsetOfProgramHeaderTable);
+            _encoder.Encode(out hdr.e_phentsize, GetProgramHeaderSize());
+            _encoder.Encode(out hdr.e_phnum, (ushort) ObjectFile.ProgramHeaders.Count);
+
             // entries for sections
             _encoder.Encode(out hdr.e_shoff, (uint)_offsetOfSectionHeaderTable);
             _encoder.Encode(out hdr.e_shentsize, (ushort)sizeof(Elf32_Shdr));
@@ -177,7 +237,7 @@ namespace LibObjectFile.Elf
             Stream.Write(span);
         }
 
-        private unsafe void WriteHeader64()
+        private unsafe void WriteSectionHeader64()
         {
             var hdr = new Elf64_Ehdr();
             InitIdent(hdr.e_ident);
@@ -213,6 +273,11 @@ namespace LibObjectFile.Elf
             _encoder.Encode(out hdr.e_entry, ObjectFile.EntryPointAddress);
             _encoder.Encode(out hdr.e_ehsize, (ushort)sizeof(Elf64_Ehdr));
 
+            // program headers
+            _encoder.Encode(out hdr.e_phoff, _offsetOfProgramHeaderTable);
+            _encoder.Encode(out hdr.e_phentsize, GetProgramHeaderSize());
+            _encoder.Encode(out hdr.e_phnum, (ushort)ObjectFile.ProgramHeaders.Count);
+
             // entries for sections
             _encoder.Encode(out hdr.e_shoff, _offsetOfSectionHeaderTable);
             _encoder.Encode(out hdr.e_shentsize, (ushort)sizeof(Elf64_Shdr));
@@ -230,10 +295,19 @@ namespace LibObjectFile.Elf
             return (uint)ObjectFile.Sections.Count + 1 + 1;
         }
 
-        private unsafe void PrepareSections()
+        private unsafe void PrepareProgramHeadersAndSections()
         {
             ulong offset = ObjectFile.FileClass == ElfFileClass.Is32 ? (uint)sizeof(Elf32_Ehdr) : (uint)sizeof(Elf64_Ehdr);
+            _offsetOfProgramHeaderTable = 0;
             _offsetOfSectionHeaderTable = 0;
+
+            // Write program headers
+            if (ObjectFile.ProgramHeaders.Count > 0)
+            {
+                uint sizeOfHeader = GetProgramHeaderSize();
+                _offsetOfProgramHeaderTable = offset;
+                offset += (ulong)ObjectFile.ProgramHeaders.Count * sizeOfHeader;
+            }
 
             // If we have any sections, prepare their offsets
             if (ObjectFile.Sections.Count > 0)
@@ -287,6 +361,22 @@ namespace LibObjectFile.Elf
                     if (section.Type == ElfSectionType.NoBits) continue;
 
                     offset += section.GetSize(ObjectFile.FileClass);
+                }
+            }
+        }
+
+        private void WriteProgramHeaders()
+        {
+            for (int i = 0; i < ObjectFile.ProgramHeaders.Count; i++)
+            {
+                var header = ObjectFile.ProgramHeaders[i];
+                if (ObjectFile.FileClass == ElfFileClass.Is32)
+                {
+                    WriteProgramHeader32(ref header, i);
+                }
+                else
+                {
+                    WriteProgramHeader64(ref header, i);
                 }
             }
         }

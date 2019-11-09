@@ -10,6 +10,7 @@ namespace LibObjectFile.Elf
 
         public ElfObjectFile()
         {
+            ProgramHeaders = new List<ElfProgramHeader>();
             _sections = new List<ElfSection>();
             FileClass = ElfFileClass.Is64;
             OSAbi = ElfOSAbi.NONE;
@@ -29,6 +30,8 @@ namespace LibObjectFile.Elf
         public ElfArch Arch { get; set; }
 
         public ulong EntryPointAddress { get; set; }
+
+        public List<ElfProgramHeader> ProgramHeaders { get; }
 
         public IReadOnlyList<ElfSection> Sections => _sections;
 
