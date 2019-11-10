@@ -7,12 +7,25 @@ namespace LibObjectFile.Elf
     {
         private uint _localIndexPlusOne;
 
-        public ElfSymbolTable()
+        public ElfSymbolTable() : base(ElfSectionType.SymbolTable)
         {
-            Entries = new List<ElfSymbolTableEntry>();
+            Entries = new List<ElfSymbol>();
         }
 
-        public List<ElfSymbolTableEntry> Entries { get;  }
+        public override ElfSectionType Type
+        {
+            get => base.Type;
+            set
+            {
+                if (value != ElfSectionType.SymbolTable)
+                {
+                    throw new ArgumentException($"Invalid type `{Type}` of the section [{Index}] `{nameof(ElfSymbolTable)}`. Only `{ElfSectionType.SymbolTable}` is valid");
+                }
+                base.Type = value;
+            }
+        }
+
+        public List<ElfSymbol> Entries { get;  }
 
         protected override unsafe ulong GetSize()
         {

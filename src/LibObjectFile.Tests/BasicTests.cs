@@ -47,7 +47,7 @@ namespace LibObjectFile.Tests
             elf.AddSection(symbolSection);
             symbolSection.Link = stringSection;
 
-            symbolSection.Entries.Add(new ElfSymbolTableEntry()
+            symbolSection.Entries.Add(new ElfSymbol()
             {
                 Name = "local_symbol",
                 Bind = ElfSymbolBind.Local,
@@ -58,7 +58,7 @@ namespace LibObjectFile.Tests
                 Value = 0x7896
             });
 
-            symbolSection.Entries.Add(new ElfSymbolTableEntry()
+            symbolSection.Entries.Add(new ElfSymbol()
             {
                 Name = "GlobalSymbol",
                 Bind = ElfSymbolBind.Global,
@@ -101,7 +101,7 @@ namespace LibObjectFile.Tests
             elf.AddSection(symbolSection);
             symbolSection.Link = stringSection;
 
-            symbolSection.Entries.Add(new ElfSymbolTableEntry()
+            symbolSection.Entries.Add(new ElfSymbol()
             {
                 Name = "local_symbol",
                 Bind = ElfSymbolBind.Local,
@@ -112,7 +112,7 @@ namespace LibObjectFile.Tests
                 Value = 0x7896
             });
 
-            symbolSection.Entries.Add(new ElfSymbolTableEntry()
+            symbolSection.Entries.Add(new ElfSymbol()
             {
                 Name = "GlobalSymbol",
                 Bind = ElfSymbolBind.Global,
@@ -181,7 +181,7 @@ namespace LibObjectFile.Tests
             elf.AddSection(symbolSection);
             symbolSection.Link = stringSection;
 
-            symbolSection.Entries.Add(new ElfSymbolTableEntry()
+            symbolSection.Entries.Add(new ElfSymbol()
             {
                 Name = "local_symbol",
                 Bind = ElfSymbolBind.Local,
@@ -192,7 +192,7 @@ namespace LibObjectFile.Tests
                 Value = 0x7896
             });
 
-            symbolSection.Entries.Add(new ElfSymbolTableEntry()
+            symbolSection.Entries.Add(new ElfSymbol()
             {
                 Name = "GlobalSymbol",
                 Bind = ElfSymbolBind.Global,

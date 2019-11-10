@@ -14,6 +14,26 @@ namespace LibObjectFile.Elf
             Stream = stream ?? throw new ArgumentNullException(nameof(stream));
         }
 
+        public override ElfSectionType Type
+        {
+            get => base.Type;
+            set
+            {
+                // Don't allow relocation or symbol table to enforce proper usage
+                if (value == ElfSectionType.Relocation || value == ElfSectionType.RelocationAddends)
+                {
+                    throw new ArgumentException($"Invalid type `{Type}` of the section [{Index}]. Must be used on a `{nameof(ElfRelocationTable)}` instead");
+                }
+
+                if (value == ElfSectionType.SymbolTable)
+                {
+                    throw new ArgumentException($"Invalid type `{Type}` of the section [{Index}]. Must be used on a `{nameof(ElfSymbolTable)}` instead");
+                }
+                
+                base.Type = value;
+            }
+        }
+        
         public Stream Stream { get; set; }
 
         protected override ulong GetSize() => Stream != null ? (ulong) Stream.Length : 0;

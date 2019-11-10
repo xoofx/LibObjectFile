@@ -1,6 +1,6 @@
 ﻿namespace LibObjectFile.Elf
 {
-    public struct ElfSymbolTableEntry
+    public struct ElfSymbol
     {
         public ulong Value { get; set; }
 

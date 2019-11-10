@@ -3,17 +3,29 @@ using System.Collections.Generic;
 
 namespace LibObjectFile.Elf
 {
-    public class ElfRelocationTable : ElfSection
+    public sealed class ElfRelocationTable : ElfSection
     {
-        public ElfRelocationTable()
+        public ElfRelocationTable() : base(ElfSectionType.RelocationAddends)
         {
             Entries = new List<ElfRelocation>();
-            Type = ElfSectionType.RelocationAddends;
         }
 
         public List<ElfRelocation> Entries { get; }
         
         public ElfSectionLink TargetSection { get; set; }
+        
+        public override ElfSectionType Type
+        {
+            get => base.Type;
+            set
+            {
+                if (value != ElfSectionType.Relocation && value != ElfSectionType.RelocationAddends)
+                {
+                    throw new ArgumentException($"Invalid type `{Type}` of the section [{Index}] `{nameof(ElfRelocationTable)}` while `{ElfSectionType.Relocation}` or `{ElfSectionType.RelocationAddends}` are expected");
+                }
+                base.Type = value;
+            }
+        }
 
         public bool IsRelocationWithAddends => this.Type == ElfSectionType.RelocationAddends;
 
@@ -45,17 +57,6 @@ namespace LibObjectFile.Elf
 
         protected override void PrepareWrite(ElfWriter writer)
         {
-            // Verify that this section is correctly configured
-            switch (Type)
-            {
-                case ElfSectionType.RelocationAddends:
-                case ElfSectionType.Relocation:
-                    break;
-                default:
-                    writer.Diagnostics.Error($"Invalid type `{Type}` of the section [{Index}] `{nameof(ElfRelocationTable)}` while `{ElfSectionType.Relocation}` or `{ElfSectionType.RelocationAddends}` are expected", this);
-                    return;
-            }
-
             if (TargetSection.Section == null)
             {
                 writer.Diagnostics.Error($"Invalid {nameof(TargetSection)} of the section [{Index}] `{nameof(ElfRelocationTable)}` that cannot be null and must point to a valid section", this);

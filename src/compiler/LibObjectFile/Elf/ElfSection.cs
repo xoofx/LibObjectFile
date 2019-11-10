@@ -6,9 +6,15 @@ namespace LibObjectFile.Elf
     public abstract class ElfSection
     {
         private ElfSectionSpecialType _specialType;
+        private ElfSectionType _type;
 
-        protected ElfSection()
+        protected ElfSection() : this(ElfSectionType.Null)
         {
+        }
+
+        protected ElfSection(ElfSectionType sectionType)
+        {
+            _type = sectionType;
             Alignment = 1;
         }
 
@@ -16,7 +22,11 @@ namespace LibObjectFile.Elf
             set => _specialType = value;
         }
 
-        public ElfSectionType Type { get; set; }
+        public virtual ElfSectionType Type
+        {
+            get => _type;
+            set => _type = value;
+        }
 
         public ElfSectionFlags Flags { get; set; }
 
@@ -65,6 +75,21 @@ namespace LibObjectFile.Elf
 
         internal void PrepareWriteInternal(ElfWriter writer)
         {
+            // Verify that Link is correctly setup for this section
+            switch (Type)
+            {
+                case ElfSectionType.DynamicLinking:
+                case ElfSectionType.DynamicLinkerSymbolTable:
+                case ElfSectionType.SymbolTable:
+                    Link.TryGetSectionSafe<ElfStringTable>(ElfSectionType.StringTable, this.GetType().Name, nameof(Link), this, writer.Diagnostics, out _);
+                    break;
+                case ElfSectionType.SymbolHashTable:
+                case ElfSectionType.Relocation:
+                case ElfSectionType.RelocationAddends:
+                    Link.TryGetSectionSafe<ElfSymbolTable>(ElfSectionType.SymbolTable, this.GetType().Name, nameof(Link), this, writer.Diagnostics, out _);
+                    break;
+            }
+
             PrepareWrite(writer);
         }
         
