@@ -40,7 +40,7 @@ namespace LibObjectFile.Elf
             return Parent.FileClass == ElfFileClass.Is32 ? (ulong) sizeof(RawElf.Elf32_Sym) : (ulong) sizeof(RawElf.Elf64_Sym);
         }
 
-        protected override uint GetInfoIndex(ElfWriter writer)
+        protected override uint GetInfoIndex()
         {
             return _localIndexPlusOne;
         }

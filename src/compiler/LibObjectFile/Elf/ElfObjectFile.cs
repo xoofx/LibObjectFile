@@ -36,7 +36,7 @@ namespace LibObjectFile.Elf
 
         public ElfFileType FileType { get; set; }
 
-        public uint Flags { get; set; }
+        public ElfHeaderFlags Flags { get; set; }
 
         public ElfArch Arch { get; set; }
 

@@ -108,7 +108,7 @@ namespace LibObjectFile.Elf
             }
         }
 
-        protected override uint GetInfoIndex(ElfWriter writer)
+        protected override uint GetInfoIndex()
         {
             return TargetSection.GetSectionIndex();
         }

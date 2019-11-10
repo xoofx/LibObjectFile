@@ -205,6 +205,7 @@ namespace LibObjectFile.Elf
 
             _encoder.Encode(out hdr.e_entry, (uint)ObjectFile.EntryPointAddress);
             _encoder.Encode(out hdr.e_ehsize, Layout.SizeOfElfHeader);
+            _encoder.Encode(out hdr.e_flags, (uint)ObjectFile.Flags);
 
             // program headers
             _encoder.Encode(out hdr.e_phoff, (uint)Layout.OffsetOfProgramHeaderTable);
@@ -255,6 +256,7 @@ namespace LibObjectFile.Elf
 
             _encoder.Encode(out hdr.e_entry, ObjectFile.EntryPointAddress);
             _encoder.Encode(out hdr.e_ehsize, Layout.SizeOfElfHeader);
+            _encoder.Encode(out hdr.e_flags, (uint)ObjectFile.Flags);
 
             // program headers
             _encoder.Encode(out hdr.e_phoff, Layout.OffsetOfProgramHeaderTable);
@@ -458,7 +460,7 @@ namespace LibObjectFile.Elf
             _encoder.Encode(out shdr.sh_offset, (uint)section.Offset);
             _encoder.Encode(out shdr.sh_size, (uint)section.GetSizeInternal());
             _encoder.Encode(out shdr.sh_link, section.Link.GetSectionIndex());
-            _encoder.Encode(out shdr.sh_info, section.GetInfoIndexInternal(this)); // TODO support sh_info
+            _encoder.Encode(out shdr.sh_info, section.GetInfoIndexInternal());
             _encoder.Encode(out shdr.sh_addralign, (uint)section.Alignment);
             _encoder.Encode(out shdr.sh_entsize, (uint)section.GetTableEntrySizeInternal());
             Write(shdr);
@@ -474,7 +476,7 @@ namespace LibObjectFile.Elf
             _encoder.Encode(out shdr.sh_offset, section.Offset);
             _encoder.Encode(out shdr.sh_size, section.GetSizeInternal());
             _encoder.Encode(out shdr.sh_link, section.Link.GetSectionIndex());
-            _encoder.Encode(out shdr.sh_info, section.GetInfoIndexInternal(this));
+            _encoder.Encode(out shdr.sh_info, section.GetInfoIndexInternal());
             _encoder.Encode(out shdr.sh_addralign, section.Alignment);
             _encoder.Encode(out shdr.sh_entsize, section.GetTableEntrySizeInternal());
             Write(shdr);

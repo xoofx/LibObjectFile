@@ -102,12 +102,12 @@ namespace LibObjectFile.Elf
         {
         }
         
-        internal uint GetInfoIndexInternal(ElfWriter writer)
+        internal uint GetInfoIndexInternal()
         {
-            return GetInfoIndex(writer);
+            return GetInfoIndex();
         }
         
-        protected virtual uint GetInfoIndex(ElfWriter writer)
+        protected virtual uint GetInfoIndex()
         {
             return 0;
         }

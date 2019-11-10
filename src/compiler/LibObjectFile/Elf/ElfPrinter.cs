@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Buffers;
 using System.IO;
+using System.Text;
 
 namespace LibObjectFile.Elf
 {
@@ -10,9 +11,13 @@ namespace LibObjectFile.Elf
         {
             if (writer == null) throw new ArgumentNullException(nameof(writer));
             PrintElfHeader(elf, writer);
+            PrintSectionHeaders(elf, writer);
+            PrintSectionGroups(elf, writer);
+            PrintProgramHeaders(elf, writer);
+            PrintDynamicSections(elf, writer);
         }
 
-        public static void PrintElfHeader(this ElfObjectFile elf, TextWriter writer)
+        public static void PrintElfHeader(ElfObjectFile elf, TextWriter writer)
         {
             if (writer == null) throw new ArgumentNullException(nameof(writer));
 
@@ -38,7 +43,7 @@ namespace LibObjectFile.Elf
             writer.WriteLine($"  Entry point address:               0x{elf.EntryPointAddress:x}");
             writer.WriteLine($"  Start of program headers:          {elf.Layout.OffsetOfProgramHeaderTable} (bytes into file)");
             writer.WriteLine($"  Start of section headers:          {elf.Layout.OffsetOfSectionHeaderTable} (bytes into file)");
-            writer.WriteLine($"  Flags:                             0x{elf.Flags:x}");
+            writer.WriteLine($"  Flags:                             {elf.Flags}");
             writer.WriteLine($"  Size of this header:               {elf.Layout.SizeOfElfHeader} (bytes)");
             writer.WriteLine($"  Size of program headers:           {elf.Layout.SizeOfProgramHeaderEntry} (bytes)");
             writer.WriteLine($"  Number of program headers:         {elf.ProgramHeaders.Count}");
@@ -46,6 +51,151 @@ namespace LibObjectFile.Elf
             writer.WriteLine($"  Number of section headers:         {(elf.Sections.Count == 0 ? 0 : elf.Sections.Count + 2)}");
             writer.WriteLine($"  Section header string table index: {elf.SectionHeaderStringTable.Index}");
         }
+
+        public static void PrintSectionHeaders(ElfObjectFile elf, TextWriter writer)
+        {
+            if (writer == null) throw new ArgumentNullException(nameof(writer));
+            if (elf.Sections.Count == 0) return;
+
+            writer.WriteLine();
+            writer.WriteLine(elf.Sections.Count > 1 ? "Section Headers:" : "Section Header:");
+
+            writer.WriteLine("  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al");
+            writer.WriteLine("  [ 0]                   NULL            0000000000000000 000000 000000 00      0   0  0");
+            for (int i = 0; i < elf.Sections.Count; i++)
+            {
+                var section = elf.Sections[i];
+                writer.WriteLine($"  [{section.Index,2:#0}] {section.GetFullName(),-17} {GetElfSectionType(section.Type),-15} {section.VirtualAddress:x16} {section.Offset:x6} {section.GetSizeInternal():x6} {section.GetTableEntrySizeInternal():x2} {GetElfSectionFlags(section.Flags),3} {section.Link.GetSectionIndex(),2} {section.GetInfoIndexInternal(),3} {section.Alignment,2}");
+            }
+
+            {
+                var section = elf.SectionHeaderStringTableInternal;
+                writer.WriteLine($"  [{section.Index,2:#0}] {section.GetFullName(),-17} {GetElfSectionType(section.Type),-15} {section.VirtualAddress:x16} {section.Offset:x6} {section.GetSizeInternal():x6} {section.GetTableEntrySizeInternal():x2} {GetElfSectionFlags(section.Flags),3} {section.Link.GetSectionIndex(),2} {section.GetInfoIndexInternal(),3} {section.Alignment,2}");
+            }
+            writer.WriteLine(@"Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  l (large), p (processor specific)");
+        }
+
+        public static void PrintSectionGroups(ElfObjectFile elf, TextWriter writer)
+        {
+            writer.WriteLine();
+            writer.WriteLine("There are no section groups in this file.");
+            // TODO
+        }
+
+        public static void PrintProgramHeaders(ElfObjectFile elf, TextWriter writer)
+        {
+            writer.WriteLine();
+            writer.WriteLine(elf.ProgramHeaders.Count > 1 ? "Program Headers:" : "Program Header:");
+
+            writer.WriteLine("  Type           Offset   VirtAddr           PhysAddr           FileSiz  MemSiz   Flg Align");
+            for (int i = 0; i < elf.ProgramHeaders.Count; i++)
+            {
+                var phdr = elf.ProgramHeaders[i];
+                writer.WriteLine($"  {GetElfSegmentType(phdr.Type),-14} 0x{GetElfSegmentOffset(phdr.Offset):x6} 0x{phdr.VirtualAddress:x16} 0x{phdr.PhysicalAddress:x16} 0x{phdr.SizeInFile:x6} 0x{phdr.SizeInMemory:x6} {GetElfSegmentFlags(phdr.Flags),3} 0x{phdr.Align:x4}");
+            }
+        }
+
+        public static void PrintDynamicSections(ElfObjectFile elf, TextWriter writer)
+        {
+            writer.WriteLine();
+            writer.WriteLine("There is no dynamic section in this file.");
+            // TODO
+        }
+
+        private static string GetElfSegmentFlags(ElfSegmentFlags flags)
+        {
+            if (flags.Value == 0) return string.Empty;
+
+            var builder = new StringBuilder();
+            builder.Append((flags.Value & RawElf.PF_R) != 0 ? 'R' : ' ');
+            builder.Append((flags.Value & RawElf.PF_W) != 0 ? 'W' : ' ');
+            builder.Append((flags.Value & RawElf.PF_X) != 0 ? 'X' : ' ');
+            // TODO: other flags
+            return builder.ToString();
+        }
+
+        private static ulong GetElfSegmentOffset(ElfSectionOffset offset)
+        {
+            return (offset.Section?.Offset ?? 0) + offset.LocalOffset;
+        }
+
+        public static string GetElfSegmentType(ElfSegmentType segmentType)
+        {
+            return segmentType.Value switch
+            {
+                RawElf.PT_NULL => "NULL",
+                RawElf.PT_LOAD => "LOAD",
+                RawElf.PT_DYNAMIC => "DYNAMIC",
+                RawElf.PT_INTERP => "INTERP",
+                RawElf.PT_NOTE => "NOTE",
+                RawElf.PT_SHLIB => "SHLIB",
+                RawElf.PT_PHDR => "PHDR",
+                RawElf.PT_TLS => "TLS",
+                RawElf.PT_GNU_EH_FRAME => "GNU_EH_FRAME",
+                RawElf.PT_GNU_STACK => "GNU_STACK",
+                RawElf.PT_GNU_RELRO => "GNU_RELRO",
+                _ => $"<unknown>: {segmentType.Value:x}"
+            };
+        }
+
+        private static string GetElfSectionFlags(ElfSectionFlags flags)
+        {
+            if (flags == ElfSectionFlags.None) return string.Empty;
+
+            var builder = new StringBuilder();
+            if ((flags & ElfSectionFlags.Write) != 0) builder.Append('W');
+            if ((flags & ElfSectionFlags.Alloc) != 0) builder.Append('A');
+            if ((flags & ElfSectionFlags.Executable) != 0) builder.Append('X');
+            if ((flags & ElfSectionFlags.Merge) != 0) builder.Append('M');
+            if ((flags & ElfSectionFlags.Strings) != 0) builder.Append('S');
+            if ((flags & ElfSectionFlags.InfoLink) != 0) builder.Append('I');
+            if ((flags & ElfSectionFlags.LinkOrder) != 0) builder.Append('L');
+            if ((flags & ElfSectionFlags.OsNonConforming) != 0) builder.Append('O');
+            if ((flags & ElfSectionFlags.Group) != 0) builder.Append('G');
+            if ((flags & ElfSectionFlags.Tls) != 0) builder.Append('T');
+            if ((flags & ElfSectionFlags.Compressed) != 0) builder.Append('C');
+
+            // TODO: unknown, OS specific, Exclude...etc.
+            return builder.ToString();
+        }
+
+        private static string GetElfSectionType(ElfSectionType sectionType)
+        {
+            switch (sectionType)
+            {
+                case ElfSectionType.Null:
+                    return "NULL";
+                case ElfSectionType.ProgBits:
+                    return "PROGBITS";
+                case ElfSectionType.SymbolTable:
+                    return "SYMTAB";
+                case ElfSectionType.StringTable:
+                    return "STRTAB";
+                case ElfSectionType.RelocationAddends:
+                    return "RELA";
+                case ElfSectionType.SymbolHashTable:
+                    return "HASH";
+                case ElfSectionType.DynamicLinking:
+                    return "DYNAMIC";
+                case ElfSectionType.Note:
+                    return "NOTE";
+                case ElfSectionType.NoBits:
+                    return "NOBITS";
+                case ElfSectionType.Relocation:
+                    return "REL";
+                case ElfSectionType.Shlib:
+                    return "SHLIB";
+                case ElfSectionType.DynamicLinkerSymbolTable:
+                    return "DYNSYM";
+                default:
+                    return $"{(uint)sectionType:x8}: <unknown>";
+            }
+        }
+
 
         private static string GetElfFileClass(ElfFileClass fileClass)
         {
