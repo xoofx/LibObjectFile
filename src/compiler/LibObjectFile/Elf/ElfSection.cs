@@ -1,11 +1,9 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
+﻿using System.Diagnostics;
 
 namespace LibObjectFile.Elf
 {
     [DebuggerDisplay("{ToString(),nq}")]
-    public abstract class ElfSection
+    public abstract class ElfSection : IElfSectionView
     {
         private ElfSectionSpecialType _specialType;
         private ElfSectionType _type;

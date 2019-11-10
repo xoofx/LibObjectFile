@@ -86,6 +86,9 @@ namespace LibObjectFile.Elf
         {
             _table.SetLength(0);
             _map.Clear();
+
+            // Always create an empty string
+            GetOrCreateIndex(string.Empty);
         }
     }
 }

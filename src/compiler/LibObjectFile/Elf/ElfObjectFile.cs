@@ -6,7 +6,9 @@ namespace LibObjectFile.Elf
     public sealed class ElfObjectFile
     {
         private readonly List<ElfSection> _sections;
-        private const int MinSectionIndex = 2;
+        private const int MinSectionIndex = 1;
+
+        public const int IdentSizeInBytes = RawElf.EI_NIDENT;
 
         public ElfObjectFile()
         {
@@ -17,15 +19,24 @@ namespace LibObjectFile.Elf
             Encoding = ElfEncoding.Lsb;
             FileType = ElfFileType.Relocatable;
             Arch = ElfArch.X86_64;
+            Version = RawElf.EV_CURRENT;
+            Layout = new ElfObjectLayout();
+            SectionHeaderStringTableInternal = new ElfStringTable(256) {  Parent = this }.ConfigureAs(ElfSectionSpecialType.SectionHeaderStringTable);
         }
 
         public ElfFileClass FileClass { get; set; }
 
         public ElfEncoding Encoding { get; set; }
 
+        public byte Version { get; set; }
+
         public ElfOSAbi OSAbi { get; set; }
 
+        public byte AbiVersion { get; set; }
+
         public ElfFileType FileType { get; set; }
+
+        public uint Flags { get; set; }
 
         public ElfArch Arch { get; set; }
 
@@ -35,7 +46,13 @@ namespace LibObjectFile.Elf
 
         public IReadOnlyList<ElfSection> Sections => _sections;
 
-        public void AddSection(ElfSection section)
+        public IElfSectionView SectionHeaderStringTable => SectionHeaderStringTableInternal;
+
+        internal ElfStringTable SectionHeaderStringTableInternal { get; }
+
+        public ElfObjectLayout Layout { get; }
+
+        public TSection AddSection<TSection>(TSection section) where TSection : ElfSection
         {
             if (section == null) throw new ArgumentNullException(nameof(section));
             if (section.Parent != null)
@@ -47,6 +64,10 @@ namespace LibObjectFile.Elf
             section.Parent = this;
             section.Index = (uint)(MinSectionIndex + _sections.Count);
             _sections.Add(section);
+
+            // Always moved after the other sections
+            SectionHeaderStringTableInternal.Index = section.Index + 1;
+            return section;
         }
 
         public void RemoveSection(ElfSection section)
@@ -56,7 +77,8 @@ namespace LibObjectFile.Elf
             {
                 throw new InvalidOperationException($"Cannot remove the section as it is not part of this {nameof(ElfObjectFile)} instance");
             }
-            var i = _sections.IndexOf(section);
+
+            var i = (int)section.Index - MinSectionIndex;
             _sections.RemoveAt(i);
 
             // Update indices for other sections
@@ -66,6 +88,26 @@ namespace LibObjectFile.Elf
             }
 
             section.Parent = null;
+
+            // Always moved after the other sections
+            SectionHeaderStringTableInternal.Index--;
+        }
+
+        public sealed class ElfObjectLayout
+        {
+            internal ElfObjectLayout()
+            {
+            }
+
+            public ushort SizeOfElfHeader { get; internal set; }
+
+            public ulong OffsetOfProgramHeaderTable { get; internal set; }
+
+            public ushort SizeOfProgramHeaderEntry { get; internal set; }
+
+            public ulong OffsetOfSectionHeaderTable { get; internal set; }
+
+            public ushort SizeOfSectionHeaderEntry { get; internal set; }
         }
     }
 }

@@ -8,18 +8,11 @@ namespace LibObjectFile.Elf
         protected ElfWriter(ElfObjectFile objectFile, Stream stream) : base(stream)
         {
             ObjectFile = objectFile ?? throw new ArgumentNullException(nameof(objectFile));
-            SectionHeaderNames = new ElfStringTable().ConfigureAs(ElfSectionSpecialType.SectionHeaderStringTable);
-            SectionHeaderNames.Parent = ObjectFile;
         }
 
         public ElfObjectFile ObjectFile { get; }
 
         public abstract void Write();
-
-        /// <summary>
-        /// Contains the names used for the sections
-        /// </summary>
-        protected ElfStringTable SectionHeaderNames { get; }
 
         public static ElfWriter Create(ElfObjectFile objectFile, Stream stream)
         {

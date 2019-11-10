@@ -25,6 +25,8 @@ namespace LibObjectFile.Tests
 
             stream.Flush();
             stream.Close();
+
+            elf.Print(Console.Out);
         }
 
 
@@ -42,39 +44,45 @@ namespace LibObjectFile.Tests
 
             var stringSection = new ElfStringTable();
             elf.AddSection(stringSection);
-
-            var symbolSection = new ElfSymbolTable();
-            elf.AddSection(symbolSection);
-            symbolSection.Link = stringSection;
-
-            symbolSection.Entries.Add(new ElfSymbol()
-            {
-                Name = "local_symbol",
-                Bind = ElfSymbolBind.Local,
-                Section = codeSection,
-                Size = 16,
-                Type = ElfSymbolType.Function,
-                Visibility = ElfSymbolVisibility.Protected,
-                Value = 0x7896
-            });
-
-            symbolSection.Entries.Add(new ElfSymbol()
-            {
-                Name = "GlobalSymbol",
-                Bind = ElfSymbolBind.Global,
-                Section = codeSection,
-                Size = 4,
-                Type = ElfSymbolType.Function,
-                Value = 0x12345
-            });
             
+            var symbolSection = new ElfSymbolTable()
+            {
+                Link = stringSection,
+
+                Entries =
+                {
+                    new ElfSymbol()
+                    {
+                        Name = "local_symbol",
+                        Bind = ElfSymbolBind.Local,
+                        Section = codeSection,
+                        Size = 16,
+                        Type = ElfSymbolType.Function,
+                        Visibility = ElfSymbolVisibility.Protected,
+                        Value = 0x7896
+                    },
+                    new ElfSymbol()
+                    {
+                        Name = "GlobalSymbol",
+                        Bind = ElfSymbolBind.Global,
+                        Section = codeSection,
+                        Size = 4,
+                        Type = ElfSymbolType.Function,
+                        Value = 0x12345
+                    }
+                }
+            };
+            elf.AddSection(symbolSection);
+
             var stream = new FileStream(Path.Combine(Environment.CurrentDirectory, "test2.elf"), FileMode.Create);
             elf.Write(stream);
 
             stream.Flush();
             stream.Close();
+
+            elf.Print(Console.Out);
         }
-        
+
         [Test]
         public void SimpleProgramHeaderAndCodeSectionAndSymbolSection()
         {
@@ -82,46 +90,58 @@ namespace LibObjectFile.Tests
 
             var codeStream = new MemoryStream();
             codeStream.Write(new byte[4096]);
-            var codeSection = new ElfCustomSection(codeStream).ConfigureAs(ElfSectionSpecialType.Text);
-            codeSection.VirtualAddress = 0x1000;
-            codeSection.Alignment = 4096;
-            elf.AddSection(codeSection);
+            
+            var codeSection = elf.AddSection(
+                new ElfCustomSection(codeStream)
+                {
+                    VirtualAddress = 0x1000,
+                    Alignment = 4096
+                }.ConfigureAs(ElfSectionSpecialType.Text)
+            );
+
 
             var dataStream = new MemoryStream();
             dataStream.Write(new byte[1024]);
-            var dataSection = new ElfCustomSection(dataStream).ConfigureAs(ElfSectionSpecialType.ReadOnlyData);
-            dataSection.VirtualAddress = 0x2000;
-            dataSection.Alignment = 4096;
-            elf.AddSection(dataSection);
 
-            var stringSection = new ElfStringTable();
-            elf.AddSection(stringSection);
+            var dataSection = elf.AddSection(
+                new ElfCustomSection(dataStream)
+                {
+                    VirtualAddress = 0x2000,
+                    Alignment = 4096
+                }.ConfigureAs(ElfSectionSpecialType.ReadOnlyData)
+            );
 
-            var symbolSection = new ElfSymbolTable();
-            elf.AddSection(symbolSection);
-            symbolSection.Link = stringSection;
+            var stringSection = elf.AddSection(new ElfStringTable());
 
-            symbolSection.Entries.Add(new ElfSymbol()
-            {
-                Name = "local_symbol",
-                Bind = ElfSymbolBind.Local,
-                Section = codeSection,
-                Size = 16,
-                Type = ElfSymbolType.Function,
-                Visibility = ElfSymbolVisibility.Protected,
-                Value = 0x7896
-            });
+            var symbolSection = elf.AddSection(
+                new ElfSymbolTable()
+                {
+                    Link = stringSection,
 
-            symbolSection.Entries.Add(new ElfSymbol()
-            {
-                Name = "GlobalSymbol",
-                Bind = ElfSymbolBind.Global,
-                Section = codeSection,
-                Size = 4,
-                Type = ElfSymbolType.Function,
-                Value = 0x12345
-            });
-
+                    Entries =
+                    {
+                        new ElfSymbol()
+                        {
+                            Name = "local_symbol",
+                            Bind = ElfSymbolBind.Local,
+                            Section = codeSection,
+                            Size = 16,
+                            Type = ElfSymbolType.Function,
+                            Visibility = ElfSymbolVisibility.Protected,
+                            Value = 0x7896
+                        },
+                        new ElfSymbol()
+                        {
+                            Name = "GlobalSymbol",
+                            Bind = ElfSymbolBind.Global,
+                            Section = codeSection,
+                            Size = 4,
+                            Type = ElfSymbolType.Function,
+                            Value = 0x12345
+                        }
+                    }
+                }
+            );
 
             elf.ProgramHeaders.Add(new ElfProgramHeader()
                 {
@@ -152,6 +172,8 @@ namespace LibObjectFile.Tests
 
             stream.Flush();
             stream.Close();
+
+            elf.Print(Console.Out);
         }
 
 
@@ -164,95 +186,117 @@ namespace LibObjectFile.Tests
 
             var codeStream = new MemoryStream();
             codeStream.Write(new byte[4096]);
-            var codeSection = new ElfCustomSection(codeStream).ConfigureAs(ElfSectionSpecialType.Text);
-            codeSection.VirtualAddress = 0x1000;
-            codeSection.Alignment = 4096;
-            elf.AddSection(codeSection);
+
+            var codeSection = elf.AddSection(
+                new ElfCustomSection(codeStream)
+                {
+                    VirtualAddress = 0x1000,
+                    Alignment = 4096
+                }.ConfigureAs(ElfSectionSpecialType.Text)
+            );
+
 
             var dataStream = new MemoryStream();
             dataStream.Write(new byte[1024]);
-            var dataSection = new ElfCustomSection(dataStream).ConfigureAs(ElfSectionSpecialType.ReadOnlyData);
-            dataSection.VirtualAddress = 0x2000;
-            dataSection.Alignment = 4096;
-            elf.AddSection(dataSection);
 
-            var stringSection = new ElfStringTable();
-            elf.AddSection(stringSection);
+            var dataSection = elf.AddSection(
+                new ElfCustomSection(dataStream)
+                {
+                    VirtualAddress = 0x2000,
+                    Alignment = 4096
+                }.ConfigureAs(ElfSectionSpecialType.ReadOnlyData)
+            );
 
-            var symbolSection = new ElfSymbolTable();
-            elf.AddSection(symbolSection);
-            symbolSection.Link = stringSection;
+            var stringSection = elf.AddSection(new ElfStringTable());
 
-            symbolSection.Entries.Add(new ElfSymbol()
-            {
-                Name = "local_symbol",
-                Bind = ElfSymbolBind.Local,
-                Section = codeSection,
-                Size = 16,
-                Type = ElfSymbolType.Function,
-                Visibility = ElfSymbolVisibility.Protected,
-                Value = 0x7896
-            });
+            var symbolSection = elf.AddSection(
+                new ElfSymbolTable()
+                {
+                    Link = stringSection,
 
-            symbolSection.Entries.Add(new ElfSymbol()
-            {
-                Name = "GlobalSymbol",
-                Bind = ElfSymbolBind.Global,
-                Section = codeSection,
-                Size = 4,
-                Type = ElfSymbolType.Function,
-                Value = 0x12345
-            });
+                    Entries =
+                    {
+                        new ElfSymbol()
+                        {
+                            Name = "local_symbol",
+                            Bind = ElfSymbolBind.Local,
+                            Section = codeSection,
+                            Size = 16,
+                            Type = ElfSymbolType.Function,
+                            Visibility = ElfSymbolVisibility.Protected,
+                            Value = 0x7896
+                        },
+                        new ElfSymbol()
+                        {
+                            Name = "GlobalSymbol",
+                            Bind = ElfSymbolBind.Global,
+                            Section = codeSection,
+                            Size = 4,
+                            Type = ElfSymbolType.Function,
+                            Value = 0x12345
+                        }
+                    }
+                }
+            );
 
+            elf.ProgramHeaders.Add(
+                new ElfProgramHeader()
+                {
+                    Type = ElfSegmentTypeCore.Load,
+                    Offset = new ElfSectionOffset(codeSection, 0),
+                    VirtualAddress = 0x1000,
+                    PhysicalAddress = 0x1000,
+                    Flags = ElfSegmentFlagsCore.Readable | ElfSegmentFlagsCore.Executable,
+                    SizeInFile = 4096,
+                    SizeInMemory = 4096,
+                    Align = 4096,
+                }
+            );
 
-            elf.ProgramHeaders.Add(new ElfProgramHeader()
-            {
-                Type = ElfSegmentTypeCore.Load,
-                Offset = new ElfSectionOffset(codeSection, 0),
-                VirtualAddress = 0x1000,
-                PhysicalAddress = 0x1000,
-                Flags = ElfSegmentFlagsCore.Readable | ElfSegmentFlagsCore.Executable,
-                SizeInFile = 4096,
-                SizeInMemory = 4096,
-                Align = 4096,
-            });
+            elf.ProgramHeaders.Add(
+                new ElfProgramHeader()
+                {
+                    Type = ElfSegmentTypeCore.Load,
+                    Offset = new ElfSectionOffset(dataSection, 0),
+                    VirtualAddress = 0x2000,
+                    PhysicalAddress = 0x2000,
+                    Flags = ElfSegmentFlagsCore.Readable | ElfSegmentFlagsCore.Writable,
+                    SizeInFile = 1024,
+                    SizeInMemory = 1024,
+                    Align = 4096,
+                }
+            );
 
-            elf.ProgramHeaders.Add(new ElfProgramHeader()
-            {
-                Type = ElfSegmentTypeCore.Load,
-                Offset = new ElfSectionOffset(dataSection, 0),
-                VirtualAddress = 0x2000,
-                PhysicalAddress = 0x2000,
-                Flags = ElfSegmentFlagsCore.Readable | ElfSegmentFlagsCore.Writable,
-                SizeInFile = 1024,
-                SizeInMemory = 1024,
-                Align = 4096,
-            });
+            var relocTable = elf.AddSection(
+                new ElfRelocationTable
+                {
+                    Link = symbolSection,
+                    TargetSection = codeSection,
+                    Entries =
+                    {
+                        new ElfRelocation()
+                        {
+                            SymbolIndex = 1,
+                            Type = ElfRelocationType.R_X86_64_32,
+                            Offset = 0
+                        },
+                        new ElfRelocation()
+                        {
+                            SymbolIndex = 2,
+                            Type = ElfRelocationType.R_X86_64_8,
+                            Offset = 0
+                        }
+                    }
+                }
+            );
 
-            var relocTable = new ElfRelocationTable();
-            elf.AddSection(relocTable);
-            relocTable.Link = symbolSection;
-            relocTable.TargetSection = codeSection;
-
-            relocTable.Entries.Add(new ElfRelocation()
-            {
-                SymbolIndex = 1,
-                Type = ElfRelocationType.R_X86_64_32,
-                Offset = 0
-            });
-
-            relocTable.Entries.Add(new ElfRelocation()
-            {
-                SymbolIndex = 2,
-                Type = ElfRelocationType.R_X86_64_8,
-                Offset = 0
-            });
-            
             var stream = new FileStream(Path.Combine(Environment.CurrentDirectory, "test4.elf"), FileMode.Create);
             elf.Write(stream);
 
             stream.Flush();
             stream.Close();
+
+            elf.Print(Console.Out);
         }
     }
 }
