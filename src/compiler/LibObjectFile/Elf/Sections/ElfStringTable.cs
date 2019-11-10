@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -13,10 +14,17 @@ namespace LibObjectFile.Elf
 
         public const string DefaultName = ".strtab";
 
-        public ElfStringTable() : base(ElfSectionType.StringTable)
+        public const int DefaultCapacity = 256;
+
+        public ElfStringTable() : this(DefaultCapacity)
         {
+        }
+
+        public ElfStringTable(int capacityInBytes) : base(ElfSectionType.StringTable)
+        {
+            if (capacityInBytes < 0) throw new ArgumentOutOfRangeException(nameof(capacityInBytes));
             Name = DefaultName;
-            _table = new MemoryStream();
+            _table = new MemoryStream(capacityInBytes);
             _map = new Dictionary<string, uint>();
             // Always create an empty string
             GetOrCreateIndex(string.Empty);
@@ -63,10 +71,12 @@ namespace LibObjectFile.Elf
             else
             {
                 var reservedBytes = Encoding.UTF8.GetByteCount(text) + 1;
-                Span<byte> span = stackalloc byte[reservedBytes];
+                var buffer = ArrayPool<byte>.Shared.Rent(reservedBytes);
+                var span = new Span<byte>(buffer);
                 Encoding.UTF8.GetEncoder().GetBytes(text, span, true);
                 span[reservedBytes - 1] = 0;
                 _table.Write(span);
+                ArrayPool<byte>.Shared.Return(buffer);
             }
 
             return index;
