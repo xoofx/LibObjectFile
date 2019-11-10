@@ -1,6 +1,8 @@
-﻿namespace LibObjectFile.Elf
+﻿using System.Runtime.CompilerServices;
+
+namespace LibObjectFile.Elf
 {
-    public interface ElfEncoder
+    public interface IElfEncoder
     {
         void Encode(out RawElf.Elf32_Half dest, ushort value);
         

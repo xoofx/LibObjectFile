@@ -5,7 +5,7 @@ namespace LibObjectFile.Elf
 {
     using static RawElf;
 
-    internal abstract class ElfWriter<TEncoder> : ElfWriter where TEncoder : struct, ElfEncoder 
+    internal abstract class ElfWriter<TEncoder> : ElfWriter where TEncoder : struct, IElfEncoder 
     {
         private TEncoder _encoder;
         private ulong _offsetOfProgramHeaderTable;
@@ -21,7 +21,8 @@ namespace LibObjectFile.Elf
         {
             if (ObjectFile.FileClass == ElfFileClass.None)
             {
-                throw new InvalidOperationException("Cannot write an ELF Class = None");
+                Diagnostics.Error("Cannot write an ELF Class = None");
+                throw new ObjectFileException($"Invalid {nameof(ElfObjectFile)}", Diagnostics);
             }
 
             _startOfFile = (ulong)Stream.Position;
@@ -138,27 +139,12 @@ namespace LibObjectFile.Elf
             return (ushort)(ObjectFile.FileClass == ElfFileClass.Is32 ? sizeof(Elf32_Phdr) : sizeof(Elf64_Phdr));
         }
 
-        private ulong GetOffsetFromSectionOffset(ref ElfProgramHeader programHeader, int i)
-        {
-            if (programHeader.Offset.Section == null)
-            {
-                throw new InvalidOperationException($"The section of the program header #{i} cannot be null");
-            }
-
-            if (programHeader.Offset.Section.Parent != ObjectFile)
-            {
-                throw new InvalidOperationException($"The section of the program header #{i} is not part of the current {nameof(ObjectFile)}");
-            }
-
-            return programHeader.Offset.Section.Offset + programHeader.Offset.LocalOffset;
-        }
-
-        private unsafe void WriteProgramHeader32(ref ElfProgramHeader programHeader, int i)
+        private void WriteProgramHeader32(ref ElfProgramHeader programHeader)
         {
             var hdr = new Elf32_Phdr();
 
             _encoder.Encode(out hdr.p_type, programHeader.Type.Value);
-            _encoder.Encode(out hdr.p_offset, (uint)GetOffsetFromSectionOffset(ref programHeader, i));
+            _encoder.Encode(out hdr.p_offset, (uint)programHeader.AbsoluteOffset);
             _encoder.Encode(out hdr.p_vaddr, (uint)programHeader.VirtualAddress);
             _encoder.Encode(out hdr.p_paddr, (uint)programHeader.PhysicalAddress);
             _encoder.Encode(out hdr.p_filesz, (uint)programHeader.SizeInFile);
@@ -166,16 +152,15 @@ namespace LibObjectFile.Elf
             _encoder.Encode(out hdr.p_flags, programHeader.Flags.Value);
             _encoder.Encode(out hdr.p_align, (uint)programHeader.Align);
 
-            var span = new ReadOnlySpan<byte>(&hdr, sizeof(Elf32_Phdr));
-            Stream.Write(span);
+            Write(hdr);
         }
 
-        private unsafe void WriteProgramHeader64(ref ElfProgramHeader programHeader, int i)
+        private void WriteProgramHeader64(ref ElfProgramHeader programHeader)
         {
             var hdr = new Elf64_Phdr();
 
             _encoder.Encode(out hdr.p_type, programHeader.Type.Value);
-            _encoder.Encode(out hdr.p_offset, GetOffsetFromSectionOffset(ref programHeader, i));
+            _encoder.Encode(out hdr.p_offset, programHeader.AbsoluteOffset);
             _encoder.Encode(out hdr.p_vaddr, programHeader.VirtualAddress);
             _encoder.Encode(out hdr.p_paddr, programHeader.PhysicalAddress);
             _encoder.Encode(out hdr.p_filesz, programHeader.SizeInFile);
@@ -183,8 +168,7 @@ namespace LibObjectFile.Elf
             _encoder.Encode(out hdr.p_flags, programHeader.Flags.Value);
             _encoder.Encode(out hdr.p_align, programHeader.Align);
 
-            var span = new ReadOnlySpan<byte>(&hdr, sizeof(Elf64_Phdr));
-            Stream.Write(span);
+            Write(hdr);
         }
         private unsafe void WriteSectionHeader32()
         {
@@ -233,8 +217,7 @@ namespace LibObjectFile.Elf
             _encoder.Encode(out hdr.e_shnum, (ushort)GetTotalSectionCount());
             _encoder.Encode(out hdr.e_shstrndx, (ushort)SectionHeaderNames.Index);
 
-            var span = new ReadOnlySpan<byte>(&hdr, sizeof(Elf32_Ehdr));
-            Stream.Write(span);
+            Write(hdr);
         }
 
         private unsafe void WriteSectionHeader64()
@@ -284,8 +267,7 @@ namespace LibObjectFile.Elf
             _encoder.Encode(out hdr.e_shnum, (ushort) GetTotalSectionCount());
             _encoder.Encode(out hdr.e_shstrndx, (ushort)SectionHeaderNames.Index);
 
-            var span = new ReadOnlySpan<byte>(&hdr, sizeof(Elf64_Ehdr));
-            Stream.Write(span);
+            Write(hdr);
         }
 
         private uint GetTotalSectionCount()
@@ -307,6 +289,20 @@ namespace LibObjectFile.Elf
                 uint sizeOfHeader = GetProgramHeaderSize();
                 _offsetOfProgramHeaderTable = offset;
                 offset += (ulong)ObjectFile.ProgramHeaders.Count * sizeOfHeader;
+
+                for(int i = 0; i < ObjectFile.ProgramHeaders.Count; i++)
+                {
+                    var programHeader = ObjectFile.ProgramHeaders[i];
+
+                    if (programHeader.Offset.Section == null)
+                    {
+                        Diagnostics.Error($"The section of the program header #{i} cannot be null", ObjectFile);
+                    }
+                    else if (programHeader.Offset.Section.Parent != ObjectFile)
+                    {
+                        Diagnostics.Error($"Invalid parent of the section for the Offset of the program header #{i}. It must have the same parent {nameof(ObjectFile)} than the current being written", ObjectFile);
+                    }
+                }
             }
 
             // If we have any sections, prepare their offsets
@@ -353,7 +349,7 @@ namespace LibObjectFile.Elf
                     {
                         if (link.Section.Parent != ObjectFile)
                         {
-                            throw new InvalidOperationException($"The linked section `{link}` used by section `{link}` is not part of the existing section for the current object file");
+                            Diagnostics.Error($"Invalid linked section `{link}` used by section `{section}` is not part of the existing section for the current object file");
                         }
                     }
 
@@ -363,20 +359,36 @@ namespace LibObjectFile.Elf
                     offset += section.GetSizeInternal();
                 }
             }
+
+            if (Diagnostics.HasErrors)
+            {
+                throw new ObjectFileException("Unexpected errors while trying to write this object file", Diagnostics);
+            }
         }
 
         private void WriteProgramHeaders()
         {
+            if (ObjectFile.ProgramHeaders.Count == 0)
+            {
+                return;
+            }
+
+            var offset = (ulong)Stream.Position - _startOfFile;
+            if (offset != _offsetOfProgramHeaderTable)
+            {
+                throw new InvalidOperationException("Internal error. Unexpected offset for ProgramHeaderTable");
+            }
+
             for (int i = 0; i < ObjectFile.ProgramHeaders.Count; i++)
             {
                 var header = ObjectFile.ProgramHeaders[i];
                 if (ObjectFile.FileClass == ElfFileClass.Is32)
                 {
-                    WriteProgramHeader32(ref header, i);
+                    WriteProgramHeader32(ref header);
                 }
                 else
                 {
-                    WriteProgramHeader64(ref header, i);
+                    WriteProgramHeader64(ref header);
                 }
             }
         }
@@ -403,7 +415,7 @@ namespace LibObjectFile.Elf
             var offset = (ulong)Stream.Position - _startOfFile;
             if (offset != _offsetOfSectionHeaderTable)
             {
-                throw new InvalidOperationException("Internal error. Unexpected offset for SectionTable");
+                throw new InvalidOperationException("Internal error. Unexpected offset for SectionHeaderTable");
             }
             
             // Write NULL entry
@@ -448,11 +460,7 @@ namespace LibObjectFile.Elf
             _encoder.Encode(out shdr.sh_info, section.GetInfoIndexInternal(this)); // TODO support sh_info
             _encoder.Encode(out shdr.sh_addralign, (uint)section.Alignment);
             _encoder.Encode(out shdr.sh_entsize, (uint)section.GetTableEntrySizeInternal());
-            unsafe
-            {
-                var span = new ReadOnlySpan<byte>(&shdr, sizeof(Elf32_Shdr));
-                Stream.Write(span);
-            }
+            Write(shdr);
         }
 
         private void WriteSectionTableEntry64(ElfSection section)
@@ -468,31 +476,17 @@ namespace LibObjectFile.Elf
             _encoder.Encode(out shdr.sh_info, section.GetInfoIndexInternal(this));
             _encoder.Encode(out shdr.sh_addralign, section.Alignment);
             _encoder.Encode(out shdr.sh_entsize, section.GetTableEntrySizeInternal());
-            unsafe
-            {
-                var span = new ReadOnlySpan<byte>(&shdr, sizeof(Elf64_Shdr));
-                Stream.Write(span);
-            }
+            Write(shdr);
         }
 
         private void WriteNullSectionTableEntry32()
         {
-            var shdr = new Elf32_Shdr();
-            unsafe
-            {
-                var span = new ReadOnlySpan<byte>(&shdr, sizeof(Elf32_Shdr));
-                Stream.Write(span);
-            }
+            Write(new Elf32_Shdr());
         }
 
         private void WriteNullSectionTableEntry64()
         {
-            var shdr = new Elf64_Shdr();
-            unsafe
-            {
-                var span = new ReadOnlySpan<byte>(&shdr, sizeof(Elf64_Shdr));
-                Stream.Write(span);
-            }
+            Write(new Elf64_Shdr());
         }
 
         private static uint GetSectionType(ElfSectionType sectionType)

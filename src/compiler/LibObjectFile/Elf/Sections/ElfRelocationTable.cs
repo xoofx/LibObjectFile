@@ -8,20 +8,20 @@ namespace LibObjectFile.Elf
         public ElfRelocationTable()
         {
             Entries = new List<ElfRelocation>();
-            Type = ElfSectionType.Relocation;
+            Type = ElfSectionType.RelocationAddends;
         }
-        
+
         public List<ElfRelocation> Entries { get; }
         
-        public ElfSectionLink Info { get; set; }
+        public ElfSectionLink TargetSection { get; set; }
+
+        public bool IsRelocationWithAddends => this.Type == ElfSectionType.RelocationAddends;
 
         protected override unsafe ulong GetSize()
         {
-            bool isRela = this.Type == ElfSectionType.RelocationAddends;
-
             return Parent.FileClass == ElfFileClass.Is32 ? 
-                (ulong)(Entries.Count * (isRela ? sizeof(RawElf.Elf32_Rela) : sizeof(RawElf.Elf32_Rel)))  :
-                (ulong)(Entries.Count * (isRela ? sizeof(RawElf.Elf64_Rela) : sizeof(RawElf.Elf64_Rel)));
+                (ulong)(Entries.Count * (IsRelocationWithAddends ? sizeof(RawElf.Elf32_Rela) : sizeof(RawElf.Elf32_Rel)))  :
+                (ulong)(Entries.Count * (IsRelocationWithAddends ? sizeof(RawElf.Elf64_Rela) : sizeof(RawElf.Elf64_Rel)));
         }
 
         protected override void Write(ElfWriter writer)
@@ -38,23 +38,52 @@ namespace LibObjectFile.Elf
 
         protected override unsafe ulong GetTableEntrySize()
         {
-            bool isRela = this.Type == ElfSectionType.RelocationAddends;
             return Parent.FileClass == ElfFileClass.Is32 ? 
-                (ulong) (isRela ? sizeof(RawElf.Elf32_Rela) : sizeof(RawElf.Elf32_Rel)) : 
-                (ulong) (isRela ? sizeof(RawElf.Elf64_Rela) : sizeof(RawElf.Elf64_Rel));
+                (ulong) (IsRelocationWithAddends ? sizeof(RawElf.Elf32_Rela) : sizeof(RawElf.Elf32_Rel)) : 
+                (ulong) (IsRelocationWithAddends ? sizeof(RawElf.Elf64_Rela) : sizeof(RawElf.Elf64_Rel));
+        }
+
+        protected override void PrepareWrite(ElfWriter writer)
+        {
+            // Verify that this section is correctly configured
+            switch (Type)
+            {
+                case ElfSectionType.RelocationAddends:
+                case ElfSectionType.Relocation:
+                    break;
+                default:
+                    writer.Diagnostics.Error($"Invalid type `{Type}` of the section [{Index}] `{nameof(ElfRelocationTable)}` while `{ElfSectionType.Relocation}` or `{ElfSectionType.RelocationAddends}` are expected", this);
+                    return;
+            }
+
+            if (TargetSection.Section == null)
+            {
+                writer.Diagnostics.Error($"Invalid {nameof(TargetSection)} of the section [{Index}] `{nameof(ElfRelocationTable)}` that cannot be null and must point to a valid section", this);
+            }
+            else if (TargetSection.Section.Parent != Parent)
+            {
+                writer.Diagnostics.Error($"Invalid parent for the {nameof(TargetSection)} of the section [{Index}] `{nameof(ElfRelocationTable)}`. It must point to the same {nameof(ElfObjectFile)} parent instance than this section parent", this);
+            }
+
+            // Write all entries
+            for (int i = 0; i < Entries.Count; i++)
+            {
+                var entry = Entries[i];
+                if (entry.Addend != 0 && !IsRelocationWithAddends)
+                {
+                    writer.Diagnostics.Error($"Invalid relocation entry {i} in section [{Index}] `{nameof(ElfRelocationTable)}`. The addend != 0 while the section is not a `{ElfSectionType.RelocationAddends}`", this);
+                }
+            }
         }
 
         protected override uint GetInfoIndex(ElfWriter writer)
         {
-            // TODO: Add check for Info
-            return Info.GetSectionIndex();
+            return TargetSection.GetSectionIndex();
         }
 
         private void Write32(ElfWriter writer)
         {
-            bool isRela = this.Type == ElfSectionType.RelocationAddends;
-
-            if (isRela)
+            if (IsRelocationWithAddends)
             {
                 // Write all entries
                 for (int i = 0; i < Entries.Count; i++)
@@ -85,21 +114,14 @@ namespace LibObjectFile.Elf
                     uint r_info = (entry.SymbolIndex << 8) | (entry.Type.Value & 0xFF);
                     writer.Encode(out sym.r_info, r_info);
                     writer.Encode(out sym.r_addend, (int)entry.Addend);
-
-                    unsafe
-                    {
-                        var span = new ReadOnlySpan<byte>(&sym, sizeof(RawElf.Elf32_Rela));
-                        writer.Stream.Write(span);
-                    }
+                    writer.Write(sym);
                 }
             }
         }
 
         private void Write64(ElfWriter writer)
         {
-            bool isRela = this.Type == ElfSectionType.RelocationAddends;
-
-            if (isRela)
+            if (IsRelocationWithAddends)
             {
                 // Write all entries
                 for (int i = 0; i < Entries.Count; i++)
@@ -110,12 +132,7 @@ namespace LibObjectFile.Elf
                     writer.Encode(out sym.r_offset, (uint)entry.Offset);
                     ulong r_info = ((ulong)entry.SymbolIndex << 32) | (entry.Type.Value);
                     writer.Encode(out sym.r_info, r_info);
-
-                    unsafe
-                    {
-                        var span = new ReadOnlySpan<byte>(&sym, sizeof(RawElf.Elf64_Rel));
-                        writer.Stream.Write(span);
-                    }
+                    writer.Write(sym);
                 }
             }
             else
@@ -130,12 +147,7 @@ namespace LibObjectFile.Elf
                     ulong r_info = ((ulong)entry.SymbolIndex << 32) | (entry.Type.Value );
                     writer.Encode(out sym.r_info, r_info);
                     writer.Encode(out sym.r_addend, entry.Addend);
-
-                    unsafe
-                    {
-                        var span = new ReadOnlySpan<byte>(&sym, sizeof(RawElf.Elf64_Rela));
-                        writer.Stream.Write(span);
-                    }
+                    writer.Write(sym);
                 }
             }
         }

@@ -58,7 +58,6 @@ namespace LibObjectFile.Elf
         
         internal void WriteInternal(ElfWriter writer)
         {
-            if (Parent == null) throw new InvalidOperationException($"Cannot write this section instance `{this}` without being attached to a `{nameof(ElfObjectFile)}`");
             Write(writer);
         }
 
@@ -66,7 +65,6 @@ namespace LibObjectFile.Elf
 
         internal void PrepareWriteInternal(ElfWriter writer)
         {
-            if (Parent == null) throw new InvalidOperationException($"Cannot prepare for write this section instance `{this}` without being attached to a `{nameof(ElfObjectFile)}`");
             PrepareWrite(writer);
         }
         
@@ -77,7 +75,6 @@ namespace LibObjectFile.Elf
         
         internal uint GetInfoIndexInternal(ElfWriter writer)
         {
-            if (Parent == null) throw new InvalidOperationException($"Cannot prepare for write this section instance `{this}` without being attached to a `{nameof(ElfObjectFile)}`");
             return GetInfoIndex(writer);
         }
         

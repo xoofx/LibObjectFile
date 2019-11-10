@@ -3,19 +3,16 @@ using System.IO;
 
 namespace LibObjectFile.Elf
 {
-    public abstract class ElfWriter : ElfEncoder
+    public abstract class ElfWriter : ObjectFileWriter, IElfEncoder
     {
-        protected ElfWriter(ElfObjectFile objectFile, Stream stream)
+        protected ElfWriter(ElfObjectFile objectFile, Stream stream) : base(stream)
         {
             ObjectFile = objectFile ?? throw new ArgumentNullException(nameof(objectFile));
-            Stream = stream ?? throw new ArgumentNullException(nameof(stream));
             SectionHeaderNames = new ElfStringTable().ConfigureAs(ElfSectionSpecialType.SectionHeaderStringTable);
             SectionHeaderNames.Parent = ObjectFile;
         }
 
         public ElfObjectFile ObjectFile { get; }
-
-        public Stream Stream { get; }
 
         public abstract void Write();
 

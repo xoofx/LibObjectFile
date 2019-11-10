@@ -1,6 +1,6 @@
 ﻿namespace LibObjectFile.Elf
 {
-    internal readonly struct ElfEncoderDirect : ElfEncoder
+    internal readonly struct ElfEncoderDirect : IElfEncoder
     {
         public void Encode(out RawElf.Elf32_Half dest, ushort value)
         {

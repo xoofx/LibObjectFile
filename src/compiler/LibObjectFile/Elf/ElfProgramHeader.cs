@@ -17,6 +17,8 @@
         public ElfSegmentFlags Flags { get; set; }
 
         public ulong Align { get; set; }
+        
+        internal ulong AbsoluteOffset => Offset.Section != null ? Offset.Section.Offset + Offset.LocalOffset : 0;
 
         public override string ToString()
         {

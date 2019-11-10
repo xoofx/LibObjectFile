@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace LibObjectFile.Elf
 {
@@ -30,15 +29,6 @@ namespace LibObjectFile.Elf
             return _localIndexPlusOne;
         }
 
-        private ElfStringTable GetSafeStringTable()
-        {
-            if (Link.Section == null) throw new InvalidOperationException($"ElfSection.{nameof(Link)} cannot be null for this instance");
-            if (Link.Section.Type != ElfSectionType.StringTable) throw new InvalidOperationException($"The type `{Link.Section.Type}` of ElfSection.{nameof(Link)} must be a {nameof(ElfSectionType.StringTable)}");
-            var stringTable = Link.Section as ElfStringTable;
-            if (stringTable == null) throw new InvalidOperationException($"The ElfSection.{nameof(Link)} must be an instance of {nameof(ElfStringTable)}");
-            return stringTable;
-        }
-
         protected override void Write(ElfWriter writer)
         {
             if (Parent.FileClass == ElfFileClass.Is32)
@@ -53,10 +43,23 @@ namespace LibObjectFile.Elf
 
         protected override void PrepareWrite(ElfWriter writer)
         {
-            var stringTable = GetSafeStringTable();
+            // Verify that the link is safe and configured as expected
+            if (!Link.TryGetSectionSafe<ElfStringTable>(ElfSectionType.StringTable, nameof(ElfSymbolTable), nameof(Link), this, writer.Diagnostics, out var stringTable))
+            {
+                return;
+            }
+
+            bool isAllowingLocal = true;
+
             for (int i = 0; i < Entries.Count; i++)
             {
                 var entry = Entries[i];
+
+                if (entry.Section.Section != null && entry.Section.Section.Parent != Parent)
+                {
+                    writer.Diagnostics.Error($"Invalid section for the symbol entry #{i} in the {nameof(ElfSymbolTable)} section [{Index}]. The section of the entry `{entry}` must the same than this symbol table section");
+                }
+
                 stringTable.GetOrCreateIndex(entry.Name);
 
                 // Update the last local index
@@ -64,28 +67,30 @@ namespace LibObjectFile.Elf
                 {
                     // + 1 For the plus one, another +1 for the entry 0
                     _localIndexPlusOne = (uint)(i + 1 + 1);
+                    if (!isAllowingLocal)
+                    {
+                        writer.Diagnostics.Error($"Invalid position for the LOCAL symbol entry #{i} in the {nameof(ElfSymbolTable)} section [{Index}]. A LOCAL symbol entry must be before any other symbol entry");
+                    }
+                }
+                else
+                {
+                    isAllowingLocal = false;
                 }
             }
         }
 
         private void Write32(ElfWriter writer)
         {
-            var stringTable = GetSafeStringTable();
+            var stringTable = (ElfStringTable)Link.Section;
 
             // First entry is null
             var sym = new RawElf.Elf32_Sym();
-            unsafe
-            {
-                var span = new ReadOnlySpan<byte>(&sym, sizeof(RawElf.Elf32_Sym));
-                writer.Stream.Write(span);
-            }
+            writer.Write(sym);
 
             // Write all entries
             for (int i = 0; i < Entries.Count; i++)
             {
                 var entry = Entries[i];
-
-                VerifyEntry(ref entry, i);
 
                 sym = new RawElf.Elf32_Sym();
                 writer.Encode(out sym.st_name, (ushort)stringTable.GetOrCreateIndex(entry.Name));
@@ -95,30 +100,21 @@ namespace LibObjectFile.Elf
                 sym.st_other = (byte) ((byte) entry.Visibility & 3);
                 writer.Encode(out sym.st_shndx, (RawElf.Elf32_Half) entry.Section.GetSectionIndex());
 
-                unsafe
-                {
-                    var span = new ReadOnlySpan<byte>(&sym, sizeof(RawElf.Elf32_Sym));
-                    writer.Stream.Write(span);
-                }
+                writer.Write(sym);
             }
         }
 
         private void Write64(ElfWriter writer)
         {
-            var stringTable = GetSafeStringTable();
+            var stringTable = (ElfStringTable)Link.Section;
 
             // First entry is null
             var sym = new RawElf.Elf64_Sym();
-            unsafe
-            {
-                var span = new ReadOnlySpan<byte>(&sym, sizeof(RawElf.Elf64_Sym));
-                writer.Stream.Write(span);
-            }
+            writer.Write(sym);
 
             for (int i = 0; i < Entries.Count; i++)
             {
                 var entry = Entries[i];
-                VerifyEntry(ref entry, i);
 
                 sym = new RawElf.Elf64_Sym();
                 writer.Encode(out sym.st_name, stringTable.GetOrCreateIndex(entry.Name));
@@ -128,17 +124,8 @@ namespace LibObjectFile.Elf
                 sym.st_other = (byte)((byte)entry.Visibility & 3);
                 writer.Encode(out sym.st_shndx, (RawElf.Elf64_Half)entry.Section.GetSectionIndex());
 
-                unsafe
-                {
-                    var span = new ReadOnlySpan<byte>(&sym, sizeof(RawElf.Elf64_Sym));
-                    writer.Stream.Write(span);
-                }
+                writer.Write(sym);
             }
         }
-
-        private void VerifyEntry(ref ElfSymbolTableEntry entry, int index)
-        {
-            if (entry.Section.Section != null && entry.Section.Section.Parent != Parent) throw new InvalidOperationException($"The {nameof(ElfObjectFile)} parent of the section of the entry #{index} {entry} must the same than this symbol table section");
-        }
-    }
+   }
 }

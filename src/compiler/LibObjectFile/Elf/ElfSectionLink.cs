@@ -92,5 +92,31 @@ namespace LibObjectFile.Elf
         {
             return new ElfSectionLink(section);
         }
+        
+        
+        public bool TryGetSectionSafe<TSection>(ElfSectionType sectionType, string className, string propertyName, object context, DiagnosticBag diagnostics, out TSection section) where TSection : ElfSection
+        {
+            section = null;
+
+            if (Section == null)
+            {
+                diagnostics.Error($"`{className}.{propertyName}` cannot be null for this instance", context);
+                return false;
+            }
+
+            if (Section.Type != sectionType)
+            {
+                diagnostics.Error($"The type `{Section.Type}` of `{className}.{propertyName}` must be a {sectionType}", context);
+                return false;
+            }
+            section = Section as TSection;
+
+            if (section == null)
+            {
+                diagnostics.Error($"The `{className}.{propertyName}` must be an instance of {typeof(TSection).Name}");
+                return false;
+            }
+            return true;
+        }
     }
 }

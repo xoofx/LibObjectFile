@@ -230,7 +230,7 @@ namespace LibObjectFile.Tests
             var relocTable = new ElfRelocationTable().ConfigureAs(ElfSectionSpecialType.Relocation, codeSection.Name);
             elf.AddSection(relocTable);
             relocTable.Link = symbolSection;
-            relocTable.Info = codeSection;
+            relocTable.TargetSection = codeSection;
 
             relocTable.Entries.Add(new ElfRelocation()
             {
