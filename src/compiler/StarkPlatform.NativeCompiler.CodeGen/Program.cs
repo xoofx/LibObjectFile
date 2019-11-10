@@ -125,11 +125,7 @@ namespace StarkPlatform.NativeCompiler.CodeGen
                     map => map.MapMacroToConst("^STT_.*", "uint8_t"),
                     map => map.MapMacroToConst("^STN_.*", "uint8_t"),
                     map => map.MapMacroToConst("^STV_.*", "uint8_t"),
-                    map => map.MapMacroToConst("^R_386_.*", "uint32_t"),
-                    map => map.MapMacroToConst("^R_X86_64_.*", "uint32_t"),
-                    map => map.MapMacroToConst("^R_ARM_.*", "uint32_t"),
-                    map => map.MapMacroToConst("^R_AARCH64_.*", "uint32_t"),
-                    
+                    map => map.MapMacroToConst("^R_.*", "uint32_t"),
                 }
             };
 
@@ -183,6 +179,8 @@ namespace StarkPlatform.NativeCompiler.CodeGen
 
             bool isReloc = enumPrefix == "R_";
 
+            var filteredFields = new List<CSharpField>();
+
             foreach (var enumRawField in enumRawFields)
             {
                 var rawName = enumRawField.Name;
@@ -206,10 +204,12 @@ namespace StarkPlatform.NativeCompiler.CodeGen
                     }
                 }
 
-                // Don't add EM_NUM
-                if (rawName == "EM_NUM") continue;
+                // NUM fields
+                if (rawName.EndsWith("_NUM")) continue;
+                
+                filteredFields.Add(enumRawField);
 
-                var csFieldName = rawName.Substring(enumPrefix.Length); // discard EM_
+                var csFieldName = isReloc ? rawName : rawName.Substring(enumPrefix.Length); // discard EM_
                 if (csFieldName.StartsWith("386"))
                 {
                     csFieldName = $"I{csFieldName}";
@@ -249,7 +249,9 @@ namespace StarkPlatform.NativeCompiler.CodeGen
                     FieldType = enumClass,
                     Visibility = CSharpVisibility.Public,
                     Comment = enumRawField.Comment,
-                    InitValue = relocArch != null ? $"new {enumClass.Name}(ElfArch.{relocArch}, {cppOptions.DefaultClassLib}.{rawName})" :  $"new {enumClass.Name}({cppOptions.DefaultClassLib}.{rawName})"
+                    InitValue = relocArch != null ? 
+                        $"new {enumClass.Name}(ElfArch.{relocArch}, {cppOptions.DefaultClassLib}.{rawName})" :  
+                        $"new {enumClass.Name}({cppOptions.DefaultClassLib}.{rawName})"
                 };
 
                 enumClass.Members.Add(enumField);
@@ -275,14 +277,9 @@ namespace StarkPlatform.NativeCompiler.CodeGen
                     writer.WriteLine("switch (Value)");
                 }
                 writer.OpenBraceBlock();
-                foreach (var rawField in enumRawFields)
+                foreach (var rawField in filteredFields)
                 {
                     var cppField = ((CppField)rawField.CppElement);
-                    if (!values.Add(cppField.InitValue.Value))
-                    {
-                        continue;
-                    }
-
                     if (isReloc)
                     {
                         string relocMachine = null;
@@ -300,11 +297,26 @@ namespace StarkPlatform.NativeCompiler.CodeGen
                             continue;
                         }
 
-                        writer.WriteLine($"case (ulong)({cppOptions.DefaultClassLib}.{rawField.Name} << 16) | {cppOptions.DefaultClassLib}.{relocMachine} : return \"{rawField.Name}\";");
+                        if (!values.Add(relocMachine + "$" + cppField.InitValue.Value))
+                        {
+                            continue;
+                        }
+                        
+                        writer.WriteLine($"case ((ulong){cppOptions.DefaultClassLib}.{rawField.Name} << 16) | {cppOptions.DefaultClassLib}.{relocMachine} : return \"{rawField.Name}\";");
                     }
                     else
                     {
-                        var descriptionText = cppField.Comment?.ToString().Replace("\"", "\\\"") ?? rawField.Name;
+                        if (!values.Add(cppField.InitValue.Value))
+                        {
+                            continue;
+                        }
+
+                        string descriptionText = rawField.Name;
+
+                        if (cppField.Comment != null)
+                        {
+                            descriptionText += " - " + cppField.Comment.ToString().Replace("\"", "\\\"");
+                        }
                         descriptionText = descriptionText.Replace("\r\n", "").Replace("\n", "");
                         writer.WriteLine($"case {cppOptions.DefaultClassLib}.{rawField.Name}: return \"{descriptionText}\";");
                     }

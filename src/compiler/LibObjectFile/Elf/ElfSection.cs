@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace LibObjectFile.Elf
 {
+    [DebuggerDisplay("{ToString(),nq}")]
     public abstract class ElfSection
     {
         private ElfSectionSpecialType _specialType;
@@ -92,7 +94,11 @@ namespace LibObjectFile.Elf
 
             PrepareWrite(writer);
         }
-        
+
+        public virtual string GetFullName()
+        {
+            return Name;
+        }
         
         protected virtual void PrepareWrite(ElfWriter writer)
         {
@@ -110,7 +116,7 @@ namespace LibObjectFile.Elf
 
         public override string ToString()
         {
-            return $"Section [{Index}] `{Name}` ";
+            return $"Section [{Index}] `{GetFullName()}` ";
         }
     }
 }

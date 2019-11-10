@@ -4,7 +4,7 @@ namespace LibObjectFile.Elf
 {
     public static class ElfSectionExtension
     {
-        public static TElfSection ConfigureAs<TElfSection>(this TElfSection section, ElfSectionSpecialType sectionSpecialType, string relOrRelaName = null) where TElfSection : ElfSection
+        public static TElfSection ConfigureAs<TElfSection>(this TElfSection section, ElfSectionSpecialType sectionSpecialType) where TElfSection : ElfSection
         {
             section.SpecialType = sectionSpecialType;
 
@@ -93,14 +93,12 @@ namespace LibObjectFile.Elf
                     section.Flags = ElfSectionFlags.None;
                     break;
                 case ElfSectionSpecialType.Relocation:
-                    if (relOrRelaName == null) throw new ArgumentNullException(nameof(relOrRelaName));
-                    section.Name = ".rel" + relOrRelaName;
+                    section.Name = ElfRelocationTable.DefaultName;
                     section.Type = ElfSectionType.Relocation;
                     section.Flags = ElfSectionFlags.None;
                     break;
                 case ElfSectionSpecialType.RelocationAddends:
-                    if (relOrRelaName == null) throw new ArgumentNullException(nameof(relOrRelaName));
-                    section.Name = ".rela" + relOrRelaName;
+                    section.Name = ElfRelocationTable.DefaultNameWithAddends;
                     section.Type = ElfSectionType.RelocationAddends;
                     section.Flags = ElfSectionFlags.None;
                     break;
@@ -120,12 +118,12 @@ namespace LibObjectFile.Elf
                     section.Flags = ElfSectionFlags.None;
                     break;
                 case ElfSectionSpecialType.StringTable:
-                    section.Name = ".strtab";
+                    section.Name = ElfStringTable.DefaultName;
                     section.Type = ElfSectionType.StringTable;
                     section.Flags = ElfSectionFlags.None;
                     break;
                 case ElfSectionSpecialType.SymbolTable:
-                    section.Name = ".symtab";
+                    section.Name = ElfSymbolTable.DefaultName;
                     section.Type = ElfSectionType.SymbolTable;
                     section.Flags = ElfSectionFlags.None;
                     break;

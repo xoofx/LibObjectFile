@@ -40,10 +40,10 @@ namespace LibObjectFile.Tests
             var codeSection = new ElfCustomSection(codeStream).ConfigureAs(ElfSectionSpecialType.Text);
             elf.AddSection(codeSection);
 
-            var stringSection = new ElfStringTable().ConfigureAs(ElfSectionSpecialType.StringTable);
+            var stringSection = new ElfStringTable();
             elf.AddSection(stringSection);
 
-            var symbolSection = new ElfSymbolTable().ConfigureAs(ElfSectionSpecialType.SymbolTable);
+            var symbolSection = new ElfSymbolTable();
             elf.AddSection(symbolSection);
             symbolSection.Link = stringSection;
 
@@ -94,10 +94,10 @@ namespace LibObjectFile.Tests
             dataSection.Alignment = 4096;
             elf.AddSection(dataSection);
 
-            var stringSection = new ElfStringTable().ConfigureAs(ElfSectionSpecialType.StringTable);
+            var stringSection = new ElfStringTable();
             elf.AddSection(stringSection);
 
-            var symbolSection = new ElfSymbolTable().ConfigureAs(ElfSectionSpecialType.SymbolTable);
+            var symbolSection = new ElfSymbolTable();
             elf.AddSection(symbolSection);
             symbolSection.Link = stringSection;
 
@@ -158,6 +158,8 @@ namespace LibObjectFile.Tests
         [Test]
         public void SimpleProgramHeaderAndCodeSectionAndSymbolSectionAndRelocation()
         {
+            var arch = ElfArch.X86_64;
+
             var elf = new ElfObjectFile();
 
             var codeStream = new MemoryStream();
@@ -174,10 +176,10 @@ namespace LibObjectFile.Tests
             dataSection.Alignment = 4096;
             elf.AddSection(dataSection);
 
-            var stringSection = new ElfStringTable().ConfigureAs(ElfSectionSpecialType.StringTable);
+            var stringSection = new ElfStringTable();
             elf.AddSection(stringSection);
 
-            var symbolSection = new ElfSymbolTable().ConfigureAs(ElfSectionSpecialType.SymbolTable);
+            var symbolSection = new ElfSymbolTable();
             elf.AddSection(symbolSection);
             symbolSection.Link = stringSection;
 
@@ -227,7 +229,7 @@ namespace LibObjectFile.Tests
                 Align = 4096,
             });
 
-            var relocTable = new ElfRelocationTable().ConfigureAs(ElfSectionSpecialType.Relocation, codeSection.Name);
+            var relocTable = new ElfRelocationTable();
             elf.AddSection(relocTable);
             relocTable.Link = symbolSection;
             relocTable.TargetSection = codeSection;
@@ -235,10 +237,17 @@ namespace LibObjectFile.Tests
             relocTable.Entries.Add(new ElfRelocation()
             {
                 SymbolIndex = 1,
-                Type = ElfRelocationType.X86_64_32,
-                Offset = 4
+                Type = ElfRelocationType.R_X86_64_32,
+                Offset = 0
             });
 
+            relocTable.Entries.Add(new ElfRelocation()
+            {
+                SymbolIndex = 2,
+                Type = ElfRelocationType.R_X86_64_8,
+                Offset = 0
+            });
+            
             var stream = new FileStream(Path.Combine(Environment.CurrentDirectory, "test4.elf"), FileMode.Create);
             elf.Write(stream);
 

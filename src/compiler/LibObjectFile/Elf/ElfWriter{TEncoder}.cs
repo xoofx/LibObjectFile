@@ -315,7 +315,7 @@ namespace LibObjectFile.Elf
                 SectionHeaderNames.GetOrCreateIndex(string.Empty);
 
                 SectionHeaderNames.Index = sectionIndex;
-                SectionHeaderNames.NameStringIndex = SectionHeaderNames.GetOrCreateIndex(SectionHeaderNames.Name);
+                SectionHeaderNames.NameStringIndex = SectionHeaderNames.GetOrCreateIndex(SectionHeaderNames.GetFullName());
 
                 // The Section Header Table will be put just before all the sections
                 _offsetOfSectionHeaderTable = offset;
@@ -326,7 +326,7 @@ namespace LibObjectFile.Elf
                 // Prepare all section names (to calculate the name indices and the size of the SectionNames)
                 foreach (var section in ObjectFile.Sections)
                 {
-                    section.NameStringIndex = SectionHeaderNames.GetOrCreateIndex(section.Name);
+                    section.NameStringIndex = SectionHeaderNames.GetOrCreateIndex(section.GetFullName());
                 }
 
                 // Section names is serialized right after the SectionHeaderTable

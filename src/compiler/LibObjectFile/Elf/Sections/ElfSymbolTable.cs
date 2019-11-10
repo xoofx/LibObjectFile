@@ -7,8 +7,11 @@ namespace LibObjectFile.Elf
     {
         private uint _localIndexPlusOne;
 
+        public const string DefaultName = ".symtab";
+
         public ElfSymbolTable() : base(ElfSectionType.SymbolTable)
         {
+            Name = DefaultName;
             Entries = new List<ElfSymbol>();
         }
 

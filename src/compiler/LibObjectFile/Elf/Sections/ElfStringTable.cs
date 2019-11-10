@@ -6,18 +6,33 @@ using System.Text;
 
 namespace LibObjectFile.Elf
 {
-    public class ElfStringTable : ElfSection
+    public sealed class ElfStringTable : ElfSection
     {
         private readonly MemoryStream _table;
         private readonly Dictionary<string, uint> _map;
 
-        public ElfStringTable()
+        public const string DefaultName = ".strtab";
+
+        public ElfStringTable() : base(ElfSectionType.StringTable)
         {
-            Type = ElfSectionType.StringTable;
+            Name = DefaultName;
             _table = new MemoryStream();
             _map = new Dictionary<string, uint>();
             // Always create an empty string
             GetOrCreateIndex(string.Empty);
+        }
+
+        public override ElfSectionType Type
+        {
+            get => base.Type;
+            set
+            {
+                if (value != ElfSectionType.StringTable)
+                {
+                    throw new ArgumentException($"Invalid type `{Type}` of the section [{Index}] `{nameof(ElfStringTable)}`. Only `{ElfSectionType.StringTable}` is valid");
+                }
+                base.Type = value;
+            }
         }
 
         protected override ulong GetSize() => (uint) _table.Position;

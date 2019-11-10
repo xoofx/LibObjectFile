@@ -5,8 +5,12 @@ namespace LibObjectFile.Elf
 {
     public sealed class ElfRelocationTable : ElfSection
     {
+        public const string DefaultName = ".rel";
+        public const string DefaultNameWithAddends = ".rela";
+
         public ElfRelocationTable() : base(ElfSectionType.RelocationAddends)
         {
+            Name = DefaultNameWithAddends;
             Entries = new List<ElfRelocation>();
         }
 
@@ -14,6 +18,20 @@ namespace LibObjectFile.Elf
         
         public ElfSectionLink TargetSection { get; set; }
         
+        public override string GetFullName()
+        {
+            if (TargetSection.Section == null)
+            {
+                return Name;
+            }
+            return $"{(Name ?? GetDefaultName(Type))}{TargetSection.Section.GetFullName()}";
+        }
+
+        private static string GetDefaultName(ElfSectionType type)
+        {
+            return type == ElfSectionType.Relocation? DefaultName : DefaultNameWithAddends;
+        }
+
         public override ElfSectionType Type
         {
             get => base.Type;
@@ -24,6 +42,7 @@ namespace LibObjectFile.Elf
                     throw new ArgumentException($"Invalid type `{Type}` of the section [{Index}] `{nameof(ElfRelocationTable)}` while `{ElfSectionType.Relocation}` or `{ElfSectionType.RelocationAddends}` are expected");
                 }
                 base.Type = value;
+                Name = GetDefaultName(value);
             }
         }
 
@@ -32,8 +51,8 @@ namespace LibObjectFile.Elf
         protected override unsafe ulong GetSize()
         {
             return Parent.FileClass == ElfFileClass.Is32 ? 
-                (ulong)(Entries.Count * (IsRelocationWithAddends ? sizeof(RawElf.Elf32_Rela) : sizeof(RawElf.Elf32_Rel)))  :
-                (ulong)(Entries.Count * (IsRelocationWithAddends ? sizeof(RawElf.Elf64_Rela) : sizeof(RawElf.Elf64_Rel)));
+                (ulong)Entries.Count * (IsRelocationWithAddends ? (ulong)sizeof(RawElf.Elf32_Rela) : (ulong)sizeof(RawElf.Elf32_Rel)):
+                (ulong)Entries.Count * (IsRelocationWithAddends ? (ulong)sizeof(RawElf.Elf64_Rela) : (ulong)sizeof(RawElf.Elf64_Rel));
         }
 
         protected override void Write(ElfWriter writer)
@@ -66,6 +85,8 @@ namespace LibObjectFile.Elf
                 writer.Diagnostics.Error($"Invalid parent for the {nameof(TargetSection)} of the section [{Index}] `{nameof(ElfRelocationTable)}`. It must point to the same {nameof(ElfObjectFile)} parent instance than this section parent", this);
             }
 
+            var symbolTable = Link.Section as ElfSymbolTable;
+
             // Write all entries
             for (int i = 0; i < Entries.Count; i++)
             {
@@ -73,6 +94,16 @@ namespace LibObjectFile.Elf
                 if (entry.Addend != 0 && !IsRelocationWithAddends)
                 {
                     writer.Diagnostics.Error($"Invalid relocation entry {i} in section [{Index}] `{nameof(ElfRelocationTable)}`. The addend != 0 while the section is not a `{ElfSectionType.RelocationAddends}`", this);
+                }
+
+                if (entry.Type.Arch != Parent.Arch)
+                {
+                    writer.Diagnostics.Error($"Invalid Arch `{entry.Type.Arch}` for relocation entry {i} in section [{Index}] `{nameof(ElfRelocationTable)}`. The arch doesn't match the arch `{Parent.Arch}`", this);
+                }
+
+                if (symbolTable != null && entry.SymbolIndex > (uint) symbolTable.Entries.Count)
+                {
+                    writer.Diagnostics.Error($"Out of range symbol index `{entry.SymbolIndex}` (max: {symbolTable.Entries.Count + 1} from symbol table {symbolTable}) for relocation entry {i} in section [{Index}] `{nameof(ElfRelocationTable)}`", this);
                 }
             }
         }
@@ -91,16 +122,12 @@ namespace LibObjectFile.Elf
                 {
                     var entry = Entries[i];
 
-                    var sym = new RawElf.Elf32_Rel();
+                    var sym = new RawElf.Elf32_Rela();
                     writer.Encode(out sym.r_offset, (uint)entry.Offset);
                     uint r_info = (entry.SymbolIndex << 8) | (entry.Type.Value & 0xFF);
                     writer.Encode(out sym.r_info, r_info);
-
-                    unsafe
-                    {
-                        var span = new ReadOnlySpan<byte>(&sym, sizeof(RawElf.Elf32_Rel));
-                        writer.Stream.Write(span);
-                    }
+                    writer.Encode(out sym.r_addend, (int)entry.Addend);
+                    writer.Write(sym);
                 }
             }
             else
@@ -110,11 +137,10 @@ namespace LibObjectFile.Elf
                 {
                     var entry = Entries[i];
 
-                    var sym = new RawElf.Elf32_Rela();
+                    var sym = new RawElf.Elf32_Rel();
                     writer.Encode(out sym.r_offset, (uint)entry.Offset);
                     uint r_info = (entry.SymbolIndex << 8) | (entry.Type.Value & 0xFF);
                     writer.Encode(out sym.r_info, r_info);
-                    writer.Encode(out sym.r_addend, (int)entry.Addend);
                     writer.Write(sym);
                 }
             }
@@ -129,10 +155,11 @@ namespace LibObjectFile.Elf
                 {
                     var entry = Entries[i];
 
-                    var sym = new RawElf.Elf64_Rel();
-                    writer.Encode(out sym.r_offset, (uint)entry.Offset);
+                    var sym = new RawElf.Elf64_Rela();
+                    writer.Encode(out sym.r_offset, entry.Offset);
                     ulong r_info = ((ulong)entry.SymbolIndex << 32) | (entry.Type.Value);
                     writer.Encode(out sym.r_info, r_info);
+                    writer.Encode(out sym.r_addend, entry.Addend);
                     writer.Write(sym);
                 }
             }
@@ -143,11 +170,10 @@ namespace LibObjectFile.Elf
                 {
                     var entry = Entries[i];
 
-                    var sym = new RawElf.Elf64_Rela();
-                    writer.Encode(out sym.r_offset, entry.Offset);
-                    ulong r_info = ((ulong)entry.SymbolIndex << 32) | (entry.Type.Value );
+                    var sym = new RawElf.Elf64_Rel();
+                    writer.Encode(out sym.r_offset, (uint)entry.Offset);
+                    ulong r_info = ((ulong)entry.SymbolIndex << 32) | (entry.Type.Value);
                     writer.Encode(out sym.r_info, r_info);
-                    writer.Encode(out sym.r_addend, entry.Addend);
                     writer.Write(sym);
                 }
             }
