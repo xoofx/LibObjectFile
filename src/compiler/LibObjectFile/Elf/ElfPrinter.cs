@@ -62,10 +62,14 @@ namespace LibObjectFile.Elf
         {
             if (elf == null) throw new ArgumentNullException(nameof(elf));
             if (writer == null) throw new ArgumentNullException(nameof(writer));
-            if (elf.Sections.Count == 0) return;
+            if (elf.Sections.Count == 0)
+            {
+                writer.WriteLine("There are no sections in this file.");
+                return;
+            }
 
             writer.WriteLine();
-            writer.WriteLine(elf.Sections.Count > 1 ? "Section Headers:" : "Section Header:");
+            writer.WriteLine(elf.Sections.Count > 0 ? "Section Headers:" : "Section Header:");
 
             writer.WriteLine("  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al");
             writer.WriteLine("  [ 0]                   NULL            0000000000000000 000000 000000 00      0   0  0");
@@ -99,7 +103,15 @@ namespace LibObjectFile.Elf
         {
             if (elf == null) throw new ArgumentNullException(nameof(elf));
             if (writer == null) throw new ArgumentNullException(nameof(writer));
+
             writer.WriteLine();
+
+            if (elf.ProgramHeaders.Count == 0)
+            {
+                writer.WriteLine("There are no program headers in this file.");
+                return;
+            }
+            
             writer.WriteLine(elf.ProgramHeaders.Count > 1 ? "Program Headers:" : "Program Header:");
 
             writer.WriteLine("  Type           Offset   VirtAddr           PhysAddr           FileSiz  MemSiz   Flg Align");
@@ -139,10 +151,14 @@ namespace LibObjectFile.Elf
             if (writer == null) throw new ArgumentNullException(nameof(writer));
 
             writer.WriteLine();
+
+            bool hasRelocations = false;
+
             foreach (var section in elf.Sections)
             {
                 if (section.Type == ElfSectionType.Relocation || section.Type == ElfSectionType.RelocationAddends)
                 {
+                    hasRelocations = true;
                     var relocTable = (ElfRelocationTable) section;
 
                     writer.WriteLine($"Relocation section '{section.GetFullName()}' at offset 0x{section.Offset:x} contains {relocTable.Entries.Count} entries:");
@@ -178,6 +194,11 @@ namespace LibObjectFile.Elf
                     }
 
                 }
+            }
+
+            if (!hasRelocations)
+            {
+                writer.WriteLine("There are no relocations in this file.");
             }
         }
 

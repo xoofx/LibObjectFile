@@ -20,13 +20,7 @@ namespace LibObjectFile.Tests
             var codeSection = new ElfCustomSection(codeStream).ConfigureAs(ElfSectionSpecialType.Text);
             elf.AddSection(codeSection);
 
-            var stream = new FileStream(Path.Combine(Environment.CurrentDirectory, "test.elf"), FileMode.Create);
-            elf.Write(stream);
-
-            stream.Flush();
-            stream.Close();
-
-            elf.Print(Console.Out);
+            AssertReadElf(elf, "test.elf");
         }
 
 
@@ -74,13 +68,7 @@ namespace LibObjectFile.Tests
             };
             elf.AddSection(symbolSection);
 
-            var stream = new FileStream(Path.Combine(Environment.CurrentDirectory, "test2.elf"), FileMode.Create);
-            elf.Write(stream);
-
-            stream.Flush();
-            stream.Close();
-
-            elf.Print(Console.Out);
+            AssertReadElf(elf, "test2.elf");
         }
 
         [Test]
@@ -167,13 +155,7 @@ namespace LibObjectFile.Tests
                 Align = 4096,
             });
 
-            var stream = new FileStream(Path.Combine(Environment.CurrentDirectory, "test3.elf"), FileMode.Create);
-            elf.Write(stream);
-
-            stream.Flush();
-            stream.Close();
-
-            elf.Print(Console.Out);
+            AssertReadElf(elf, "test3.elf");
         }
 
 
@@ -290,13 +272,27 @@ namespace LibObjectFile.Tests
                 }
             );
 
-            var stream = new FileStream(Path.Combine(Environment.CurrentDirectory, "test4.elf"), FileMode.Create);
+            AssertReadElf(elf, "test4.elf");
+        }
+
+        private static void AssertReadElf(ElfObjectFile elf, string fileName)
+        {
+            var stream = new FileStream(Path.Combine(Environment.CurrentDirectory, fileName), FileMode.Create);
             elf.Write(stream);
 
             stream.Flush();
             stream.Close();
 
-            elf.Print(Console.Out);
+            var stringWriter = new StringWriter();
+            elf.Print(stringWriter);
+
+            var result = stringWriter.ToString().Replace("\r\n", "\n");
+            var readelf = LinuxUtil.ReadElf(fileName);
+            Console.WriteLine("=== Expected:");
+            Console.WriteLine(readelf);
+            Console.WriteLine("=== Result:");
+            Console.WriteLine(result);
+            Assert.AreEqual(readelf, result);
         }
     }
 }
