@@ -71,6 +71,11 @@ namespace LibObjectFile.Elf
             {
                 var entry = Entries[i];
 
+                if (i == 0 && entry != ElfSymbol.Empty)
+                {
+                    writer.Diagnostics.Error($"Invalid entry #{i} in the {nameof(ElfSymbolTable)} section [{Index}]. The first entry must be null/undefined");
+                }
+
                 if (entry.Section.Section != null && entry.Section.Section.Parent != Parent)
                 {
                     writer.Diagnostics.Error($"Invalid section for the symbol entry #{i} in the {nameof(ElfSymbolTable)} section [{Index}]. The section of the entry `{entry}` must the same than this symbol table section");
