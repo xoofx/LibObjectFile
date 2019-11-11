@@ -48,12 +48,11 @@ namespace LibObjectFile.Elf
 
         public bool IsRelocationWithAddends => this.Type == ElfSectionType.RelocationAddends;
 
-        protected override unsafe ulong GetSize()
-        {
-            return Parent.FileClass == ElfFileClass.Is32 ? 
-                (ulong)Entries.Count * (IsRelocationWithAddends ? (ulong)sizeof(RawElf.Elf32_Rela) : (ulong)sizeof(RawElf.Elf32_Rel)):
-                (ulong)Entries.Count * (IsRelocationWithAddends ? (ulong)sizeof(RawElf.Elf64_Rela) : (ulong)sizeof(RawElf.Elf64_Rel));
-        }
+        public override unsafe ulong Size =>
+            Parent == null ? 0 :
+            Parent.FileClass == ElfFileClass.Is32
+                ? (ulong) Entries.Count * (IsRelocationWithAddends ? (ulong) sizeof(RawElf.Elf32_Rela) : (ulong) sizeof(RawElf.Elf32_Rel))
+                : (ulong) Entries.Count * (IsRelocationWithAddends ? (ulong) sizeof(RawElf.Elf64_Rela) : (ulong) sizeof(RawElf.Elf64_Rel));
 
         protected override void Write(ElfWriter writer)
         {

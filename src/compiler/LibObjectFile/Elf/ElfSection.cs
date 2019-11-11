@@ -42,6 +42,8 @@ namespace LibObjectFile.Elf
 
         public uint Index { get; internal set; }
 
+        public abstract ulong Size { get; }
+
         /// <summary>
         /// Gets or sets the offset from the beginning of the file
         /// </summary>
@@ -52,12 +54,6 @@ namespace LibObjectFile.Elf
         /// </summary>
         internal uint NameStringIndex { get; set; }
 
-        internal ulong GetSizeInternal()
-        {
-            return GetSize();
-        }
-
-        protected abstract ulong GetSize();
 
         internal ulong GetTableEntrySizeInternal()
         {

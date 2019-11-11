@@ -143,7 +143,7 @@ namespace LibObjectFile.Tests
                 }
             );
 
-            elf.ProgramHeaders.Add(new ElfProgramHeader()
+            elf.ProgramHeaders.Add(new ElfSegment()
                 {
                     Type = ElfSegmentTypeCore.Load,
                     Offset = new ElfSectionOffset(codeSection, 0),
@@ -155,7 +155,7 @@ namespace LibObjectFile.Tests
                     Align = 4096,
             });
 
-            elf.ProgramHeaders.Add(new ElfProgramHeader()
+            elf.ProgramHeaders.Add(new ElfSegment()
             {
                 Type = ElfSegmentTypeCore.Load,
                 Offset = new ElfSectionOffset(dataSection, 0),
@@ -240,7 +240,7 @@ namespace LibObjectFile.Tests
             );
 
             elf.ProgramHeaders.Add(
-                new ElfProgramHeader()
+                new ElfSegment()
                 {
                     Type = ElfSegmentTypeCore.Load,
                     Offset = new ElfSectionOffset(codeSection, 0),
@@ -254,7 +254,7 @@ namespace LibObjectFile.Tests
             );
 
             elf.ProgramHeaders.Add(
-                new ElfProgramHeader()
+                new ElfSegment()
                 {
                     Type = ElfSegmentTypeCore.Load,
                     Offset = new ElfSectionOffset(dataSection, 0),

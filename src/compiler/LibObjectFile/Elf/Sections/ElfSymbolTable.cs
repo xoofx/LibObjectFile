@@ -30,10 +30,9 @@ namespace LibObjectFile.Elf
 
         public List<ElfSymbol> Entries { get;  }
 
-        protected override unsafe ulong GetSize()
-        {
-            return Parent.FileClass == ElfFileClass.Is32 ? (ulong) ((Entries.Count + 1) * sizeof(RawElf.Elf32_Sym)) : (ulong) ((Entries.Count + 1) * sizeof(RawElf.Elf64_Sym));
-        }
+        public override unsafe ulong Size => 
+            Parent == null ? 0 :
+            Parent.FileClass == ElfFileClass.Is32 ? (ulong) ((Entries.Count + 1) * sizeof(RawElf.Elf32_Sym)) : (ulong) ((Entries.Count + 1) * sizeof(RawElf.Elf64_Sym));
 
         protected override unsafe ulong GetTableEntrySize()
         {

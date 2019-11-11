@@ -139,34 +139,34 @@ namespace LibObjectFile.Elf
             return (ushort)(ObjectFile.FileClass == ElfFileClass.Is32 ? sizeof(Elf32_Phdr) : sizeof(Elf64_Phdr));
         }
 
-        private void WriteProgramHeader32(ref ElfProgramHeader programHeader)
+        private void WriteProgramHeader32(ref ElfSegment segment)
         {
             var hdr = new Elf32_Phdr();
 
-            _encoder.Encode(out hdr.p_type, programHeader.Type.Value);
-            _encoder.Encode(out hdr.p_offset, (uint)programHeader.AbsoluteOffset);
-            _encoder.Encode(out hdr.p_vaddr, (uint)programHeader.VirtualAddress);
-            _encoder.Encode(out hdr.p_paddr, (uint)programHeader.PhysicalAddress);
-            _encoder.Encode(out hdr.p_filesz, (uint)programHeader.SizeInFile);
-            _encoder.Encode(out hdr.p_memsz, (uint)programHeader.SizeInMemory);
-            _encoder.Encode(out hdr.p_flags, programHeader.Flags.Value);
-            _encoder.Encode(out hdr.p_align, (uint)programHeader.Align);
+            _encoder.Encode(out hdr.p_type, segment.Type.Value);
+            _encoder.Encode(out hdr.p_offset, (uint)segment.AbsoluteOffset);
+            _encoder.Encode(out hdr.p_vaddr, (uint)segment.VirtualAddress);
+            _encoder.Encode(out hdr.p_paddr, (uint)segment.PhysicalAddress);
+            _encoder.Encode(out hdr.p_filesz, (uint)segment.SizeInFile);
+            _encoder.Encode(out hdr.p_memsz, (uint)segment.SizeInMemory);
+            _encoder.Encode(out hdr.p_flags, segment.Flags.Value);
+            _encoder.Encode(out hdr.p_align, (uint)segment.Align);
 
             Write(hdr);
         }
 
-        private void WriteProgramHeader64(ref ElfProgramHeader programHeader)
+        private void WriteProgramHeader64(ref ElfSegment segment)
         {
             var hdr = new Elf64_Phdr();
 
-            _encoder.Encode(out hdr.p_type, programHeader.Type.Value);
-            _encoder.Encode(out hdr.p_offset, programHeader.AbsoluteOffset);
-            _encoder.Encode(out hdr.p_vaddr, programHeader.VirtualAddress);
-            _encoder.Encode(out hdr.p_paddr, programHeader.PhysicalAddress);
-            _encoder.Encode(out hdr.p_filesz, programHeader.SizeInFile);
-            _encoder.Encode(out hdr.p_memsz, programHeader.SizeInMemory);
-            _encoder.Encode(out hdr.p_flags, programHeader.Flags.Value);
-            _encoder.Encode(out hdr.p_align, programHeader.Align);
+            _encoder.Encode(out hdr.p_type, segment.Type.Value);
+            _encoder.Encode(out hdr.p_offset, segment.AbsoluteOffset);
+            _encoder.Encode(out hdr.p_vaddr, segment.VirtualAddress);
+            _encoder.Encode(out hdr.p_paddr, segment.PhysicalAddress);
+            _encoder.Encode(out hdr.p_filesz, segment.SizeInFile);
+            _encoder.Encode(out hdr.p_memsz, segment.SizeInMemory);
+            _encoder.Encode(out hdr.p_flags, segment.Flags.Value);
+            _encoder.Encode(out hdr.p_align, segment.Align);
 
             Write(hdr);
         }
@@ -338,7 +338,7 @@ namespace LibObjectFile.Elf
                     // a NoBits section doesn't occupy any space in the file
                     if (section.Type == ElfSectionType.NoBits) continue;
 
-                    offset += section.GetSizeInternal();
+                    offset += section.Size;
                 }
                 
                 ObjectFile.SectionHeaderStringTableInternal.Reset();
@@ -352,7 +352,7 @@ namespace LibObjectFile.Elf
 
                 // Section names is serialized right after the SectionHeaderTable
                 ObjectFile.SectionHeaderStringTableInternal.Offset = offset;
-                offset += ObjectFile.SectionHeaderStringTableInternal.GetSizeInternal();
+                offset += ObjectFile.SectionHeaderStringTableInternal.Size;
 
                 // The Section Header Table will be put just after all the sections
                 Layout.OffsetOfSectionHeaderTable = offset;
@@ -458,7 +458,7 @@ namespace LibObjectFile.Elf
             _encoder.Encode(out shdr.sh_flags, GetSectionFlags(section.Flags));
             _encoder.Encode(out shdr.sh_addr, (uint)section.VirtualAddress);
             _encoder.Encode(out shdr.sh_offset, (uint)section.Offset);
-            _encoder.Encode(out shdr.sh_size, (uint)section.GetSizeInternal());
+            _encoder.Encode(out shdr.sh_size, (uint)section.Size);
             _encoder.Encode(out shdr.sh_link, section.Link.GetSectionIndex());
             _encoder.Encode(out shdr.sh_info, section.GetInfoIndexInternal());
             _encoder.Encode(out shdr.sh_addralign, (uint)section.Alignment);
@@ -474,7 +474,7 @@ namespace LibObjectFile.Elf
             _encoder.Encode(out shdr.sh_flags, GetSectionFlags(section.Flags));
             _encoder.Encode(out shdr.sh_addr, section.VirtualAddress);
             _encoder.Encode(out shdr.sh_offset, section.Offset);
-            _encoder.Encode(out shdr.sh_size, section.GetSizeInternal());
+            _encoder.Encode(out shdr.sh_size, section.Size);
             _encoder.Encode(out shdr.sh_link, section.Link.GetSectionIndex());
             _encoder.Encode(out shdr.sh_info, section.GetInfoIndexInternal());
             _encoder.Encode(out shdr.sh_addralign, section.Alignment);

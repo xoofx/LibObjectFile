@@ -17,5 +17,7 @@
         ElfObjectFile Parent { get; }
 
         uint Index { get; }
+
+        ulong Size { get; }
     }
 }

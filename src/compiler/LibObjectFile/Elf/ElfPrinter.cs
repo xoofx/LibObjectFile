@@ -65,12 +65,12 @@ namespace LibObjectFile.Elf
             for (int i = 0; i < elf.Sections.Count; i++)
             {
                 var section = elf.Sections[i];
-                writer.WriteLine($"  [{section.Index,2:#0}] {section.GetFullName(),-17} {GetElfSectionType(section.Type),-15} {section.VirtualAddress:x16} {section.Offset:x6} {section.GetSizeInternal():x6} {section.GetTableEntrySizeInternal():x2} {GetElfSectionFlags(section.Flags),3} {section.Link.GetSectionIndex(),2} {section.GetInfoIndexInternal(),3} {section.Alignment,2}");
+                writer.WriteLine($"  [{section.Index,2:#0}] {section.GetFullName(),-17} {GetElfSectionType(section.Type),-15} {section.VirtualAddress:x16} {section.Offset:x6} {section.Size:x6} {section.GetTableEntrySizeInternal():x2} {GetElfSectionFlags(section.Flags),3} {section.Link.GetSectionIndex(),2} {section.GetInfoIndexInternal(),3} {section.Alignment,2}");
             }
 
             {
                 var section = elf.SectionHeaderStringTableInternal;
-                writer.WriteLine($"  [{section.Index,2:#0}] {section.GetFullName(),-17} {GetElfSectionType(section.Type),-15} {section.VirtualAddress:x16} {section.Offset:x6} {section.GetSizeInternal():x6} {section.GetTableEntrySizeInternal():x2} {GetElfSectionFlags(section.Flags),3} {section.Link.GetSectionIndex(),2} {section.GetInfoIndexInternal(),3} {section.Alignment,2}");
+                writer.WriteLine($"  [{section.Index,2:#0}] {section.GetFullName(),-17} {GetElfSectionType(section.Type),-15} {section.VirtualAddress:x16} {section.Offset:x6} {section.Size:x6} {section.GetTableEntrySizeInternal():x2} {GetElfSectionFlags(section.Flags),3} {section.Link.GetSectionIndex(),2} {section.GetInfoIndexInternal(),3} {section.Alignment,2}");
             }
             writer.WriteLine(@"Key to Flags:
   W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
@@ -97,6 +97,121 @@ namespace LibObjectFile.Elf
                 var phdr = elf.ProgramHeaders[i];
                 writer.WriteLine($"  {GetElfSegmentType(phdr.Type),-14} 0x{GetElfSegmentOffset(phdr.Offset):x6} 0x{phdr.VirtualAddress:x16} 0x{phdr.PhysicalAddress:x16} 0x{phdr.SizeInFile:x6} 0x{phdr.SizeInMemory:x6} {GetElfSegmentFlags(phdr.Flags),3} 0x{phdr.Align:x4}");
             }
+
+            if (elf.ProgramHeaders.Count > 0 && elf.Sections.Count > 0)
+            {
+                writer.WriteLine();
+                writer.WriteLine(" Section to Segment mapping:");
+                writer.WriteLine("  Segment Sections...");
+
+                for (int i = 0; i < elf.ProgramHeaders.Count; i++)
+                {
+                    var segment = elf.ProgramHeaders[i];
+                    writer.Write($"   {i:00}     ");
+
+                    foreach (var section in elf.Sections)
+                    {
+                        if (IsSectionInSegment(section, segment, true, true))
+                        {
+                            writer.Write($"{section.GetFullName()} ");
+                        }
+                    }
+
+                    writer.WriteLine();
+                }
+            }
+        }
+
+        private static bool IsTlsSpecial(ElfSection section, ElfSegment segment)
+        {
+            return (((section).Flags & ElfSectionFlags.Tls) != 0
+                    && (section).Type == ElfSectionType.NoBits
+                    && (segment).Type != ElfSegmentTypeCore.Tls);
+        }
+
+        private static ulong GetSectionSize(ElfSection section, ElfSegment segment)
+        {
+            return IsTlsSpecial(section, segment) ? 0 : section.Size;
+        }
+
+        private static bool IsSectionInSegment(ElfSection section, ElfSegment segment, bool checkVirtualAddress, bool isStrict)
+        {
+            return (( /* Only PT_LOAD, PT_GNU_RELRO and PT_TLS segments can contain	 SHF_TLS sections.  */
+                        ((((section).Flags & ElfSectionFlags.Tls) != 0)
+                         && (segment.Type == ElfSegmentTypeCore.Tls
+                             //|| segment.Type == ElfSegmentTypeCore.GnuRelPro
+                             || segment.Type == ElfSegmentTypeCore.Load))
+                        /* PT_TLS segment contains only SHF_TLS sections, PT_PHDR no	
+                           sections at all.  */
+                        || (((section).Flags & ElfSectionFlags.Tls) == 0
+
+                            && segment.Type != ElfSegmentTypeCore.Tls
+
+                            && segment.Type != ElfSegmentTypeCore.ProgramHeader))
+                    /* PT_LOAD and similar segments only have SHF_ALLOC sections.  */
+                    && !((section.Flags & ElfSectionFlags.Alloc) == 0
+
+                         && (segment.Type == ElfSegmentTypeCore.Load
+
+                             || segment.Type == ElfSegmentTypeCore.Dynamic
+                             //|| segment.Type == PT_GNU_EH_FRAME
+                             //|| segment.Type == PT_GNU_STACK
+                             //|| segment.Type == PT_GNU_RELRO
+                             //|| (segment.Type >= PT_GNU_MBIND_LO
+                                 //&& segment.Type <= PT_GNU_MBIND_HI
+                             )))
+                    /* Any section besides one of type SHT_NOBITS must have file		
+                       offsets within the segment.  */
+                    && (section.Type == ElfSectionType.NoBits
+                        || ((section).Offset >= segment.AbsoluteOffset
+
+                            && (!(isStrict)
+
+                                || (section.Offset - segment.AbsoluteOffset
+
+                                    <= segment.SizeInFile - 1))
+
+                            && ((section.Offset - segment.AbsoluteOffset
+                                 + GetSectionSize(section, segment))
+
+                                <= segment.SizeInFile)))
+                    /* SHF_ALLOC sections must have VMAs within the segment.  */
+                    && (!(checkVirtualAddress)
+                        || (section.Flags & ElfSectionFlags.Alloc) == 0
+                        || (section.VirtualAddress >= segment.VirtualAddress
+
+                            && (!(isStrict)
+
+                                || (section.VirtualAddress - segment.VirtualAddress
+
+                                    <= segment.SizeInMemory - 1))
+
+                            && ((section.VirtualAddress - segment.VirtualAddress
+                                 + GetSectionSize(section, segment))
+
+                                <= segment.SizeInMemory)))
+                    /* No zero size sections at start or end of PT_DYNAMIC nor		
+                       PT_NOTE.  */
+                    && ((segment.Type != ElfSegmentTypeCore.Dynamic
+
+                         && segment.Type != ElfSegmentTypeCore.Note)
+                        || section.Size != 0
+                        || segment.SizeInMemory == 0
+                        || ((section.Type == ElfSectionType.NoBits
+
+                             || (section.Offset > segment.AbsoluteOffset
+
+                                 && (section.Offset - segment.AbsoluteOffset
+
+                                     < segment.SizeInFile)))
+
+                            && ((section.Flags & ElfSectionFlags.Alloc) == 0
+
+                                || (section.VirtualAddress > segment.VirtualAddress
+
+                                    && (section.VirtualAddress - segment.VirtualAddress
+
+                                        < segment.SizeInMemory)))));
         }
 
         public static void PrintDynamicSections(ElfObjectFile elf, TextWriter writer)
@@ -113,7 +228,7 @@ namespace LibObjectFile.Elf
             var builder = new StringBuilder();
             builder.Append((flags.Value & RawElf.PF_R) != 0 ? 'R' : ' ');
             builder.Append((flags.Value & RawElf.PF_W) != 0 ? 'W' : ' ');
-            builder.Append((flags.Value & RawElf.PF_X) != 0 ? 'X' : ' ');
+            builder.Append((flags.Value & RawElf.PF_X) != 0 ? 'E' : ' ');
             // TODO: other flags
             return builder.ToString();
         }

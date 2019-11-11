@@ -1,6 +1,6 @@
 ﻿namespace LibObjectFile.Elf
 {
-    public struct ElfProgramHeader
+    public struct ElfSegment
     {
         public ElfSegmentType Type { get; set; }
 

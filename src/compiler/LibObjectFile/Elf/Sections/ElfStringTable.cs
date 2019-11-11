@@ -43,7 +43,7 @@ namespace LibObjectFile.Elf
             }
         }
 
-        protected override ulong GetSize() => (uint) _table.Position;
+        public override ulong Size => (uint) _table.Position;
 
         protected override void Write(ElfWriter writer)
         {
