@@ -460,7 +460,7 @@ namespace LibObjectFile.Elf
             _encoder.Encode(out shdr.sh_offset, (uint)section.Offset);
             _encoder.Encode(out shdr.sh_size, (uint)section.Size);
             _encoder.Encode(out shdr.sh_link, section.Link.GetSectionIndex());
-            _encoder.Encode(out shdr.sh_info, section.GetInfoIndexInternal());
+            _encoder.Encode(out shdr.sh_info, section.InfoIndex);
             _encoder.Encode(out shdr.sh_addralign, (uint)section.Alignment);
             _encoder.Encode(out shdr.sh_entsize, (uint)section.GetTableEntrySizeInternal());
             Write(shdr);
@@ -476,7 +476,7 @@ namespace LibObjectFile.Elf
             _encoder.Encode(out shdr.sh_offset, section.Offset);
             _encoder.Encode(out shdr.sh_size, section.Size);
             _encoder.Encode(out shdr.sh_link, section.Link.GetSectionIndex());
-            _encoder.Encode(out shdr.sh_info, section.GetInfoIndexInternal());
+            _encoder.Encode(out shdr.sh_info, section.InfoIndex);
             _encoder.Encode(out shdr.sh_addralign, section.Alignment);
             _encoder.Encode(out shdr.sh_entsize, section.GetTableEntrySizeInternal());
             Write(shdr);

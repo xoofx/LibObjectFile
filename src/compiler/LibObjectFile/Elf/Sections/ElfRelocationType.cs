@@ -42,6 +42,8 @@ namespace LibObjectFile.Elf
             return !left.Equals(right);
         }
 
+        public string Name => ToStringInternal();
+
         public override string ToString()
         {
             if (Arch.Value == 0 && Value == 0) return "Empty ElfRelocationType";

@@ -5,7 +5,6 @@ namespace LibObjectFile.Elf
     [DebuggerDisplay("{ToString(),nq}")]
     public abstract class ElfSection : IElfSectionView
     {
-        private ElfSectionSpecialType _specialType;
         private ElfSectionType _type;
 
         protected ElfSection() : this(ElfSectionType.Null)
@@ -16,10 +15,6 @@ namespace LibObjectFile.Elf
         {
             _type = sectionType;
             Alignment = 1;
-        }
-
-        public ElfSectionSpecialType SpecialType { get => _specialType;
-            set => _specialType = value;
         }
 
         public virtual ElfSectionType Type
@@ -43,6 +38,8 @@ namespace LibObjectFile.Elf
         public uint Index { get; internal set; }
 
         public abstract ulong Size { get; }
+
+        public virtual uint InfoIndex => 0;
 
         /// <summary>
         /// Gets or sets the offset from the beginning of the file
@@ -96,16 +93,6 @@ namespace LibObjectFile.Elf
         
         protected virtual void PrepareWrite(ElfWriter writer)
         {
-        }
-        
-        internal uint GetInfoIndexInternal()
-        {
-            return GetInfoIndex();
-        }
-        
-        protected virtual uint GetInfoIndex()
-        {
-            return 0;
         }
 
         public override string ToString()

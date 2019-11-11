@@ -6,8 +6,6 @@ namespace LibObjectFile.Elf
     {
         public static TElfSection ConfigureAs<TElfSection>(this TElfSection section, ElfSectionSpecialType sectionSpecialType) where TElfSection : ElfSection
         {
-            section.SpecialType = sectionSpecialType;
-
             switch (sectionSpecialType)
             {
                 case ElfSectionSpecialType.None:

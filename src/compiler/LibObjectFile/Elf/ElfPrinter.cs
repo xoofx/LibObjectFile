@@ -9,16 +9,22 @@ namespace LibObjectFile.Elf
     {
         public static void Print(this ElfObjectFile elf, TextWriter writer)
         {
+            if (elf == null) throw new ArgumentNullException(nameof(elf));
             if (writer == null) throw new ArgumentNullException(nameof(writer));
             PrintElfHeader(elf, writer);
             PrintSectionHeaders(elf, writer);
             PrintSectionGroups(elf, writer);
             PrintProgramHeaders(elf, writer);
             PrintDynamicSections(elf, writer);
+            PrintRelocations(elf, writer);
+            PrintUnwind(elf, writer);
+            PrintSymbolTables(elf, writer);
+            PrintVersionInformation(elf, writer);
         }
 
         public static void PrintElfHeader(ElfObjectFile elf, TextWriter writer)
         {
+            if (elf == null) throw new ArgumentNullException(nameof(elf));
             if (writer == null) throw new ArgumentNullException(nameof(writer));
 
             Span<byte> ident = stackalloc byte[ElfObjectFile.IdentSizeInBytes];
@@ -54,6 +60,7 @@ namespace LibObjectFile.Elf
 
         public static void PrintSectionHeaders(ElfObjectFile elf, TextWriter writer)
         {
+            if (elf == null) throw new ArgumentNullException(nameof(elf));
             if (writer == null) throw new ArgumentNullException(nameof(writer));
             if (elf.Sections.Count == 0) return;
 
@@ -65,12 +72,12 @@ namespace LibObjectFile.Elf
             for (int i = 0; i < elf.Sections.Count; i++)
             {
                 var section = elf.Sections[i];
-                writer.WriteLine($"  [{section.Index,2:#0}] {section.GetFullName(),-17} {GetElfSectionType(section.Type),-15} {section.VirtualAddress:x16} {section.Offset:x6} {section.Size:x6} {section.GetTableEntrySizeInternal():x2} {GetElfSectionFlags(section.Flags),3} {section.Link.GetSectionIndex(),2} {section.GetInfoIndexInternal(),3} {section.Alignment,2}");
+                writer.WriteLine($"  [{section.Index,2:#0}] {section.GetFullName(),-17} {GetElfSectionType(section.Type),-15} {section.VirtualAddress:x16} {section.Offset:x6} {section.Size:x6} {section.GetTableEntrySizeInternal():x2} {GetElfSectionFlags(section.Flags),3} {section.Link.GetSectionIndex(),2} {section.InfoIndex,3} {section.Alignment,2}");
             }
 
             {
                 var section = elf.SectionHeaderStringTableInternal;
-                writer.WriteLine($"  [{section.Index,2:#0}] {section.GetFullName(),-17} {GetElfSectionType(section.Type),-15} {section.VirtualAddress:x16} {section.Offset:x6} {section.Size:x6} {section.GetTableEntrySizeInternal():x2} {GetElfSectionFlags(section.Flags),3} {section.Link.GetSectionIndex(),2} {section.GetInfoIndexInternal(),3} {section.Alignment,2}");
+                writer.WriteLine($"  [{section.Index,2:#0}] {section.GetFullName(),-17} {GetElfSectionType(section.Type),-15} {section.VirtualAddress:x16} {section.Offset:x6} {section.Size:x6} {section.GetTableEntrySizeInternal():x2} {GetElfSectionFlags(section.Flags),3} {section.Link.GetSectionIndex(),2} {section.InfoIndex,3} {section.Alignment,2}");
             }
             writer.WriteLine(@"Key to Flags:
   W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
@@ -81,6 +88,8 @@ namespace LibObjectFile.Elf
 
         public static void PrintSectionGroups(ElfObjectFile elf, TextWriter writer)
         {
+            if (elf == null) throw new ArgumentNullException(nameof(elf));
+            if (writer == null) throw new ArgumentNullException(nameof(writer));
             writer.WriteLine();
             writer.WriteLine("There are no section groups in this file.");
             // TODO
@@ -88,6 +97,8 @@ namespace LibObjectFile.Elf
 
         public static void PrintProgramHeaders(ElfObjectFile elf, TextWriter writer)
         {
+            if (elf == null) throw new ArgumentNullException(nameof(elf));
+            if (writer == null) throw new ArgumentNullException(nameof(writer));
             writer.WriteLine();
             writer.WriteLine(elf.ProgramHeaders.Count > 1 ? "Program Headers:" : "Program Header:");
 
@@ -120,6 +131,164 @@ namespace LibObjectFile.Elf
                     writer.WriteLine();
                 }
             }
+        }
+
+        public static void PrintRelocations(ElfObjectFile elf, TextWriter writer)
+        {
+            if (elf == null) throw new ArgumentNullException(nameof(elf));
+            if (writer == null) throw new ArgumentNullException(nameof(writer));
+
+            writer.WriteLine();
+            foreach (var section in elf.Sections)
+            {
+                if (section.Type == ElfSectionType.Relocation || section.Type == ElfSectionType.RelocationAddends)
+                {
+                    var relocTable = (ElfRelocationTable) section;
+
+                    writer.WriteLine($"Relocation section '{section.GetFullName()}' at offset 0x{section.Offset:x} contains {relocTable.Entries.Count} entries:");
+                    if (elf.FileClass == ElfFileClass.Is32)
+                    {
+                        // TODO
+                        writer.WriteLine("    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend");
+                    }
+                    else
+                    {
+                        writer.WriteLine("    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend");
+                    }
+                    foreach (var entry in relocTable.Entries)
+                    {
+                        var symbolTable = relocTable.Link.Section as ElfSymbolTable;
+                        if (symbolTable == null) continue;
+                        string symbolName = string.Empty;
+                        ulong symbolValue = 0;
+                        if (entry.SymbolIndex <= symbolTable.Entries.Count)
+                        {
+                            symbolName = symbolTable.Entries[(int)entry.SymbolIndex].Name;
+                            symbolValue = symbolTable.Entries[(int)entry.SymbolIndex].Value;
+                        }
+
+                        if (elf.FileClass == ElfFileClass.Is32)
+                        {
+                            writer.WriteLine($"{entry.Offset:x8}  {entry.Info32:x8} {entry.Type.Name,-22} {symbolValue:x8} {symbolName} + {entry.Addend}");
+                        }
+                        else
+                        {
+                            writer.WriteLine($"{entry.Offset:x16}  {entry.Info64:x16} {entry.Type.Name,-22} {symbolValue:x16} {symbolName} + {entry.Addend}");
+                        }
+                    }
+
+                }
+            }
+        }
+
+        public static void PrintUnwind(ElfObjectFile elf, TextWriter writer)
+        {
+            if (elf == null) throw new ArgumentNullException(nameof(elf));
+            if (writer == null) throw new ArgumentNullException(nameof(writer));
+
+            writer.WriteLine();
+            writer.WriteLine($"The decoding of unwind sections for machine type {GetElfArch(elf.Arch)} is not currently supported.");
+        }
+
+
+        public static void PrintSymbolTables(ElfObjectFile elf, TextWriter writer)
+        {
+            if (elf == null) throw new ArgumentNullException(nameof(elf));
+            if (writer == null) throw new ArgumentNullException(nameof(writer));
+
+            if (elf.Sections.Count == 0) return;
+
+            foreach (var section in elf.Sections)
+            {
+                if (!(section is ElfSymbolTable symbolTable)) continue;
+
+                writer.WriteLine();
+                writer.WriteLine(symbolTable.Entries.Count <= 1
+                    ? $"Symbol table '{symbolTable.GetFullName()}' contains {symbolTable.Entries.Count} entry:"
+                    : $"Symbol table '{symbolTable.GetFullName()}' contains {symbolTable.Entries.Count} entries:"
+                );
+
+                if (elf.FileClass == ElfFileClass.Is32)
+                {
+                    writer.WriteLine("   Num:    Value  Size Type    Bind   Vis      Ndx Name");
+                }
+                else
+                {
+                    writer.WriteLine("   Num:    Value          Size Type    Bind   Vis      Ndx Name");
+                }
+
+                for (var i = 0; i < symbolTable.Entries.Count; i++)
+                {
+                    var symbol = symbolTable.Entries[i];
+                    writer.WriteLine($"{i,6}: {symbol.Value:x16} {symbol.Size,5} {GetElfSymbolType(symbol.Type),-7} {GetElfSymbolBind(symbol.Bind),-6} {GetElfSymbolVisibility(symbol.Visibility),-7} {(symbol.Section.GetSectionIndex() == 0 ? "UND" : symbol.Section.GetSectionIndex().ToString()),4} {symbol.Name}");
+                }
+            }
+        }
+
+        public static void PrintVersionInformation(ElfObjectFile elf, TextWriter writer)
+        {
+            if (elf == null) throw new ArgumentNullException(nameof(elf));
+            if (writer == null) throw new ArgumentNullException(nameof(writer));
+            writer.WriteLine();
+            writer.WriteLine("No version information found in this file.");
+        }
+
+        private static string GetElfSymbolType(ElfSymbolType symbolType)
+        {
+            switch (symbolType)
+            {
+                case ElfSymbolType.NoType: return "NOTYPE";
+                case ElfSymbolType.Object: return "OBJECT";
+                case ElfSymbolType.Function: return "FUNC";
+                case ElfSymbolType.Section: return "SECTION";
+                case ElfSymbolType.File: return "FILE";
+                case ElfSymbolType.Common: return "COMMON";
+                case ElfSymbolType.Tls: return "TLS";
+                case ElfSymbolType.GnuIndirectFunction:
+                case ElfSymbolType.SpecificOS1:
+                case ElfSymbolType.SpecificOS2:
+                    return $"<OS specific>: {(uint)symbolType}";
+                case ElfSymbolType.SpecificProcessor0:
+                case ElfSymbolType.SpecificProcessor1:
+                case ElfSymbolType.SpecificProcessor2:
+                    return $"<processor specific>: {(uint)symbolType}";
+                default:
+                    return $"<unknown>: {(uint)symbolType}";
+            }
+        }
+
+        private static string GetElfSymbolBind(ElfSymbolBind symbolBind)
+        {
+            switch (symbolBind)
+            {
+                case ElfSymbolBind.Local:
+                    return "LOCAL";
+                case ElfSymbolBind.Global:
+                    return "GLOBAL";
+                case ElfSymbolBind.Weak:
+                    return "WEAK";
+                case ElfSymbolBind.SpecificOS1:
+                case ElfSymbolBind.SpecificOS2:
+                    return $"<OS specific>: {(uint)symbolBind}";
+                case ElfSymbolBind.SpecificProcessor0:
+                case ElfSymbolBind.SpecificProcessor1:
+                case ElfSymbolBind.SpecificProcessor2:
+                    return $"<processor specific>: {(uint)symbolBind}";
+                default:
+                    return $"<unknown>: {(uint)symbolBind}";
+            }
+        }
+
+        private static string GetElfSymbolVisibility(ElfSymbolVisibility symbolVisibility)
+        {
+            return symbolVisibility switch
+            {
+                ElfSymbolVisibility.Default => "DEFAULT",
+                ElfSymbolVisibility.Internal => "INTERNAL",
+                ElfSymbolVisibility.Hidden => "HIDDEN",
+                ElfSymbolVisibility.Protected => "PROTECTED",
+                _ => $"Unrecognized visibility value: {(uint) symbolVisibility}"
+            };
         }
 
         private static bool IsTlsSpecial(ElfSection section, ElfSegment segment)

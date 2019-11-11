@@ -19,5 +19,7 @@
         uint Index { get; }
 
         ulong Size { get; }
+
+        uint InfoIndex { get; }
     }
 }

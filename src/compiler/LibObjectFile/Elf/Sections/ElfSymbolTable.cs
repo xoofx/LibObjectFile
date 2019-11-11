@@ -13,6 +13,7 @@ namespace LibObjectFile.Elf
         {
             Name = DefaultName;
             Entries = new List<ElfSymbol>();
+            Entries.Add(new ElfSymbol());
         }
 
         public override ElfSectionType Type
@@ -30,18 +31,18 @@ namespace LibObjectFile.Elf
 
         public List<ElfSymbol> Entries { get;  }
 
-        public override unsafe ulong Size => 
-            Parent == null ? 0 :
-            Parent.FileClass == ElfFileClass.Is32 ? (ulong) ((Entries.Count + 1) * sizeof(RawElf.Elf32_Sym)) : (ulong) ((Entries.Count + 1) * sizeof(RawElf.Elf64_Sym));
+        public override unsafe ulong Size =>
+            Parent == null || Parent.FileClass == ElfFileClass.None ? 0 :
+            Parent.FileClass == ElfFileClass.Is32 ? (ulong) (Entries.Count * sizeof(RawElf.Elf32_Sym)) : (ulong) (Entries.Count * sizeof(RawElf.Elf64_Sym));
 
         protected override unsafe ulong GetTableEntrySize()
         {
             return Parent.FileClass == ElfFileClass.Is32 ? (ulong) sizeof(RawElf.Elf32_Sym) : (ulong) sizeof(RawElf.Elf64_Sym);
         }
 
-        protected override uint GetInfoIndex()
+        public override uint InfoIndex
         {
-            return _localIndexPlusOne;
+            get { return _localIndexPlusOne; }
         }
 
         protected override void Write(ElfWriter writer)
@@ -80,8 +81,8 @@ namespace LibObjectFile.Elf
                 // Update the last local index
                 if (entry.Bind == ElfSymbolBind.Local)
                 {
-                    // + 1 For the plus one, another +1 for the entry 0
-                    _localIndexPlusOne = (uint)(i + 1 + 1);
+                    // + 1 For the plus one
+                    _localIndexPlusOne = (uint)(i + 1);
                     if (!isAllowingLocal)
                     {
                         writer.Diagnostics.Error($"Invalid position for the LOCAL symbol entry #{i} in the {nameof(ElfSymbolTable)} section [{Index}]. A LOCAL symbol entry must be before any other symbol entry");
@@ -98,16 +99,12 @@ namespace LibObjectFile.Elf
         {
             var stringTable = (ElfStringTable)Link.Section;
 
-            // First entry is null
-            var sym = new RawElf.Elf32_Sym();
-            writer.Write(sym);
-
             // Write all entries
             for (int i = 0; i < Entries.Count; i++)
             {
                 var entry = Entries[i];
 
-                sym = new RawElf.Elf32_Sym();
+                var sym = new RawElf.Elf32_Sym();
                 writer.Encode(out sym.st_name, (ushort)stringTable.GetOrCreateIndex(entry.Name));
                 writer.Encode(out sym.st_value, (uint)entry.Value);
                 writer.Encode(out sym.st_size, (uint)entry.Size);
@@ -123,15 +120,11 @@ namespace LibObjectFile.Elf
         {
             var stringTable = (ElfStringTable)Link.Section;
 
-            // First entry is null
-            var sym = new RawElf.Elf64_Sym();
-            writer.Write(sym);
-
             for (int i = 0; i < Entries.Count; i++)
             {
                 var entry = Entries[i];
 
-                sym = new RawElf.Elf64_Sym();
+                var sym = new RawElf.Elf64_Sym();
                 writer.Encode(out sym.st_name, stringTable.GetOrCreateIndex(entry.Name));
                 writer.Encode(out sym.st_value, entry.Value);
                 writer.Encode(out sym.st_size, entry.Size);
