@@ -6,7 +6,7 @@
 
         ElfSectionFlags Flags { get; }
 
-        string Name { get;  }
+        ElfString Name { get;  }
 
         ulong VirtualAddress { get; }
 
@@ -20,6 +20,8 @@
 
         ulong Size { get; }
 
-        uint InfoIndex { get; }
+        ulong TableEntrySize { get; }
+
+        ElfSectionLink Info { get; }
     }
 }

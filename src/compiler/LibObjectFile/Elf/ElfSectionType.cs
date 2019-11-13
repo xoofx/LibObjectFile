@@ -1,65 +1,65 @@
 ﻿namespace LibObjectFile.Elf
 {
-    public enum ElfSectionType
+    public enum ElfSectionType : uint
     {
         /// <summary>
         /// Section header table entry unused
         /// </summary>
-        Null = 0,
+        Null = RawElf.SHT_NULL,
 
         /// <summary>
         /// Program data
         /// </summary>
-        ProgBits,
+        ProgBits = RawElf.SHT_PROGBITS,
 
         /// <summary>
         /// Symbol table
         /// </summary>
-        SymbolTable,
+        SymbolTable = RawElf.SHT_SYMTAB,
 
         /// <summary>
         /// String table
         /// </summary>
-        StringTable,
+        StringTable = RawElf.SHT_STRTAB,
 
         /// <summary>
         /// Relocation entries with addends
         /// </summary>
-        RelocationAddends,
+        RelocationAddends = RawElf.SHT_RELA,
 
         /// <summary>
         /// Symbol hash table
         /// </summary>
-        SymbolHashTable,
+        SymbolHashTable = RawElf.SHT_HASH,
 
         /// <summary>
         /// Dynamic linking information 
         /// </summary>
-        DynamicLinking,
+        DynamicLinking = RawElf.SHT_DYNAMIC,
 
         /// <summary>
         /// Notes
         /// </summary>
-        Note,
+        Note = RawElf.SHT_NOTE,
 
         /// <summary>
         /// Program space with no data (bss)
         /// </summary>
-        NoBits,
+        NoBits = RawElf.SHT_NOBITS,
 
         /// <summary>
         /// Relocation entries, no addends
         /// </summary>
-        Relocation,
+        Relocation = RawElf.SHT_REL,
 
         /// <summary>
         /// Reserved
         /// </summary>
-        Shlib,
+        Shlib = RawElf.SHT_SHLIB,
 
         /// <summary>
         /// Dynamic linker symbol table
         /// </summary>
-        DynamicLinkerSymbolTable,
+        DynamicLinkerSymbolTable = RawElf.SHT_DYNSYM,
     }
 }

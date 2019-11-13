@@ -40,7 +40,7 @@ namespace LibObjectFile.Elf
             writer.WriteLine();
             writer.WriteLine($"  Class:                             {GetElfFileClass(elf.FileClass)}");
             writer.WriteLine($"  Data:                              {GetElfEncoding(elf.Encoding)}");
-            writer.WriteLine($"  Version:                           {GetElfVersion(elf.Version)}");
+            writer.WriteLine($"  Version:                           {GetElfVersion((byte)elf.Version)}");
             writer.WriteLine($"  OS/ABI:                            {GetElfOsAbi(elf.OSAbi)}");
             writer.WriteLine($"  ABI Version:                       {elf.AbiVersion}");
             writer.WriteLine($"  Type:                              {GetElfFileType(elf.FileType)}");
@@ -76,12 +76,12 @@ namespace LibObjectFile.Elf
             for (int i = 0; i < elf.Sections.Count; i++)
             {
                 var section = elf.Sections[i];
-                writer.WriteLine($"  [{section.Index,2:#0}] {section.GetFullName(),-17} {GetElfSectionType(section.Type),-15} {section.VirtualAddress:x16} {section.Offset:x6} {section.Size:x6} {section.GetTableEntrySizeInternal():x2} {GetElfSectionFlags(section.Flags),3} {section.Link.GetSectionIndex(),2} {section.InfoIndex,3} {section.Alignment,2}");
+                writer.WriteLine($"  [{section.Index,2:#0}] {section.FullName,-17} {GetElfSectionType(section.Type),-15} {section.VirtualAddress:x16} {section.Offset:x6} {section.Size:x6} {section.TableEntrySize:x2} {GetElfSectionFlags(section.Flags),3} {section.Link.GetIndex(),2} {section.Info.GetIndex(),3} {section.Alignment,2}");
             }
 
             {
                 var section = elf.SectionHeaderStringTableInternal;
-                writer.WriteLine($"  [{section.Index,2:#0}] {section.GetFullName(),-17} {GetElfSectionType(section.Type),-15} {section.VirtualAddress:x16} {section.Offset:x6} {section.Size:x6} {section.GetTableEntrySizeInternal():x2} {GetElfSectionFlags(section.Flags),3} {section.Link.GetSectionIndex(),2} {section.InfoIndex,3} {section.Alignment,2}");
+                writer.WriteLine($"  [{section.Index,2:#0}] {section.FullName,-17} {GetElfSectionType(section.Type),-15} {section.VirtualAddress:x16} {section.Offset:x6} {section.Size:x6} {section.TableEntrySize:x2} {GetElfSectionFlags(section.Flags),3} {section.Link.GetIndex(),2} {section.Info.GetIndex(),3} {section.Alignment,2}");
             }
             writer.WriteLine(@"Key to Flags:
   W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
@@ -136,7 +136,7 @@ namespace LibObjectFile.Elf
                     {
                         if (IsSectionInSegment(section, segment, true, true))
                         {
-                            writer.Write($"{section.GetFullName()} ");
+                            writer.Write($"{section.FullName} ");
                         }
                     }
 
@@ -161,7 +161,7 @@ namespace LibObjectFile.Elf
                     hasRelocations = true;
                     var relocTable = (ElfRelocationTable) section;
 
-                    writer.WriteLine($"Relocation section '{section.GetFullName()}' at offset 0x{section.Offset:x} contains {relocTable.Entries.Count} entries:");
+                    writer.WriteLine($"Relocation section '{section.FullName}' at offset 0x{section.Offset:x} contains {relocTable.Entries.Count} entries:");
                     if (elf.FileClass == ElfFileClass.Is32)
                     {
                         // TODO
@@ -225,8 +225,8 @@ namespace LibObjectFile.Elf
 
                 writer.WriteLine();
                 writer.WriteLine(symbolTable.Entries.Count <= 1
-                    ? $"Symbol table '{symbolTable.GetFullName()}' contains {symbolTable.Entries.Count} entry:"
-                    : $"Symbol table '{symbolTable.GetFullName()}' contains {symbolTable.Entries.Count} entries:"
+                    ? $"Symbol table '{symbolTable.FullName}' contains {symbolTable.Entries.Count} entry:"
+                    : $"Symbol table '{symbolTable.FullName}' contains {symbolTable.Entries.Count} entries:"
                 );
 
                 if (elf.FileClass == ElfFileClass.Is32)
@@ -241,7 +241,7 @@ namespace LibObjectFile.Elf
                 for (var i = 0; i < symbolTable.Entries.Count; i++)
                 {
                     var symbol = symbolTable.Entries[i];
-                    writer.WriteLine($"{i,6}: {symbol.Value:x16} {symbol.Size,5} {GetElfSymbolType(symbol.Type),-7} {GetElfSymbolBind(symbol.Bind),-6} {GetElfSymbolVisibility(symbol.Visibility),-7} {(symbol.Section.GetSectionIndex() == 0 ? "UND" : symbol.Section.GetSectionIndex().ToString()),4} {symbol.Name}");
+                    writer.WriteLine($"{i,6}: {symbol.Value:x16} {symbol.Size,5} {GetElfSymbolType(symbol.Type),-7} {GetElfSymbolBind(symbol.Bind),-6} {GetElfSymbolVisibility(symbol.Visibility),-7} {(symbol.Section.GetIndex() == 0 ? "UND" : symbol.Section.GetIndex().ToString()),4} {symbol.Name.Value}");
                 }
             }
         }
@@ -353,15 +353,15 @@ namespace LibObjectFile.Elf
                     /* Any section besides one of type SHT_NOBITS must have file		
                        offsets within the segment.  */
                     && (section.Type == ElfSectionType.NoBits
-                        || ((section).Offset >= segment.AbsoluteOffset
+                        || ((section).Offset >= segment.Offset.Value
 
                             && (!(isStrict)
 
-                                || (section.Offset - segment.AbsoluteOffset
+                                || (section.Offset - segment.Offset.Value
 
                                     <= segment.SizeInFile - 1))
 
-                            && ((section.Offset - segment.AbsoluteOffset
+                            && ((section.Offset - segment.Offset.Value
                                  + GetSectionSize(section, segment))
 
                                 <= segment.SizeInFile)))
@@ -389,9 +389,9 @@ namespace LibObjectFile.Elf
                         || segment.SizeInMemory == 0
                         || ((section.Type == ElfSectionType.NoBits
 
-                             || (section.Offset > segment.AbsoluteOffset
+                             || (section.Offset > segment.Offset.Value
 
-                                 && (section.Offset - segment.AbsoluteOffset
+                                 && (section.Offset - segment.Offset.Value
 
                                      < segment.SizeInFile)))
 
@@ -423,9 +423,9 @@ namespace LibObjectFile.Elf
             return builder.ToString();
         }
 
-        private static ulong GetElfSegmentOffset(ElfSectionOffset offset)
+        private static ulong GetElfSegmentOffset(ElfOffset offset)
         {
-            return (offset.Section?.Offset ?? 0) + offset.LocalOffset;
+            return offset.Value;
         }
 
         public static string GetElfSegmentType(ElfSegmentType segmentType)

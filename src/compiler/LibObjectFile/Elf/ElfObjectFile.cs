@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace LibObjectFile.Elf
 {
     public sealed class ElfObjectFile
     {
-        private readonly List<ElfSection> _sections;
-        private const int MinSectionIndex = 1;
+        internal readonly List<ElfSection> _sections;
+        internal const int MinSectionIndex = 1;
 
         public const int IdentSizeInBytes = RawElf.EI_NIDENT;
 
@@ -28,7 +29,7 @@ namespace LibObjectFile.Elf
 
         public ElfEncoding Encoding { get; set; }
 
-        public byte Version { get; set; }
+        public uint Version { get; set; }
 
         public ElfOSAbi OSAbi { get; set; }
 
@@ -91,6 +92,21 @@ namespace LibObjectFile.Elf
 
             // Always moved after the other sections
             SectionHeaderStringTableInternal.Index--;
+        }
+
+        public static ElfObjectFile Read(Stream stream)
+        {
+            if (stream == null) throw new ArgumentNullException(nameof(stream));
+            var objectFile = new ElfObjectFile();
+            var reader = ElfReader.Create(objectFile, stream);
+            reader.Read();
+
+            if (reader.Diagnostics.HasErrors)
+            {
+                throw new ObjectFileException($"Unexpected error while reading ELF object file", reader.Diagnostics);
+            }
+
+            return objectFile;
         }
 
         public sealed class ElfObjectLayout

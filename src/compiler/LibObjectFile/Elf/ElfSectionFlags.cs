@@ -3,63 +3,63 @@
 namespace LibObjectFile.Elf
 {
     [Flags]
-    public enum ElfSectionFlags
+    public enum ElfSectionFlags : uint
     {
         None = 0,
 
         /// <summary>
         /// Writable
         /// </summary>
-        Write = (1 << 0),
+        Write = RawElf.SHF_WRITE,
 
         /// <summary>
         /// Occupies memory during execution
         /// </summary>
-        Alloc = (1 << 1),
+        Alloc = RawElf.SHF_ALLOC,
 
         /// <summary>
         /// Executable
         /// </summary>
-        Executable = (1 << 2),
+        Executable = RawElf.SHF_EXECINSTR,
 
         /// <summary>
         /// Might be merged
         /// </summary>
-        Merge = (1 << 4),
+        Merge = RawElf.SHF_MERGE,
 
         /// <summary>
         /// Contains nul-terminated strings
         /// </summary>
-        Strings = (1 << 5),
+        Strings = RawElf.SHF_STRINGS,
 
         /// <summary>
         /// `sh_info' contains SHT index
         /// </summary>
-        InfoLink = (1 << 6),
+        InfoLink = RawElf.SHF_INFO_LINK,
 
         /// <summary>
         /// Preserve order after combining
         /// </summary>
-        LinkOrder = (1 << 7),
+        LinkOrder = RawElf.SHF_LINK_ORDER,
 
         /// <summary>
         /// Non-standard OS specific handling required
         /// </summary>
-        OsNonConforming = (1 << 8),
+        OsNonConforming = RawElf.SHF_OS_NONCONFORMING,
 
         /// <summary>
         /// Section is member of a group. 
         /// </summary>
-        Group = (1 << 9),
+        Group = RawElf.SHF_GROUP,
 
         /// <summary>
         /// Section hold thread-local data. 
         /// </summary>
-        Tls = (1 << 10),
+        Tls = RawElf.SHF_TLS,
 
         /// <summary>
         /// Section with compressed data.
         /// </summary>
-        Compressed = (1 << 11),
+        Compressed = RawElf.SHF_COMPRESSED,
     }
 }

@@ -18,7 +18,7 @@ namespace LibObjectFile.Elf
 
         public ElfSectionLink Section { get; set; }
 
-        public string Name { get; set; }
+        public ElfString Name { get; set; }
 
         public override string ToString()
         {

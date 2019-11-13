@@ -10,7 +10,8 @@ namespace LibObjectFile.Elf
     public sealed class ElfStringTable : ElfSection
     {
         private readonly MemoryStream _table;
-        private readonly Dictionary<string, uint> _map;
+        private readonly Dictionary<string, uint> _mapStringToIndex;
+        private readonly Dictionary<uint, string> _mapIndexToString;
 
         public const string DefaultName = ".strtab";
 
@@ -25,7 +26,8 @@ namespace LibObjectFile.Elf
             if (capacityInBytes < 0) throw new ArgumentOutOfRangeException(nameof(capacityInBytes));
             Name = DefaultName;
             _table = new MemoryStream(capacityInBytes);
-            _map = new Dictionary<string, uint>();
+            _mapStringToIndex = new Dictionary<string, uint>();
+            _mapIndexToString = new Dictionary<uint, string>();
             // Always create an empty string
             GetOrCreateIndex(string.Empty);
         }
@@ -43,11 +45,21 @@ namespace LibObjectFile.Elf
             }
         }
 
-        public override ulong Size => (uint) _table.Position;
+        public override ulong Size => (uint) _table.Length;
+
+        protected override void Read(ElfReader reader)
+        {
+            Debug.Assert(_table.Position == 1 && _table.Length == 1);
+            var length = (long) OriginalSize;
+            _table.SetLength(length);
+            var buffer = _table.GetBuffer();
+            reader.Stream.Read(buffer, 0, (int)length);
+            _table.Position = _table.Length;
+        }
 
         protected override void Write(ElfWriter writer)
         {
-            writer.Stream.Write(_table.GetBuffer(), 0, (int)_table.Position);
+            writer.Stream.Write(_table.GetBuffer(), 0, (int)_table.Length);
         }
 
         public uint GetOrCreateIndex(string text)
@@ -55,13 +67,14 @@ namespace LibObjectFile.Elf
             // Same as empty string
             if (text == null) return 0;
 
-            if (_map.TryGetValue(text, out uint index))
+            if (_mapStringToIndex.TryGetValue(text, out uint index))
             {
                 return index;
             }
 
-            index = (uint) _table.Position;
-            _map.Add(text, index);
+            index = (uint) _table.Length;
+            _mapIndexToString.Add(index, text);
+            _mapStringToIndex.Add(text, index);
 
             if (text.Length == 0)
             {
@@ -72,9 +85,13 @@ namespace LibObjectFile.Elf
             {
                 var reservedBytes = Encoding.UTF8.GetByteCount(text) + 1;
                 var buffer = ArrayPool<byte>.Shared.Rent(reservedBytes);
-                var span = new Span<byte>(buffer);
+                var span = new Span<byte>(buffer, 0, reservedBytes);
                 Encoding.UTF8.GetEncoder().GetBytes(text, span, true);
                 span[reservedBytes - 1] = 0;
+                if (_table.Position != index)
+                {
+                    _table.Position = index;
+                }
                 _table.Write(span);
                 ArrayPool<byte>.Shared.Return(buffer);
             }
@@ -82,10 +99,73 @@ namespace LibObjectFile.Elf
             return index;
         }
 
+        public bool TryResolve(ElfString inStr, out ElfString outStr)
+        {
+            outStr = inStr;
+            if (inStr.Value != null)
+            {
+                outStr = inStr.WithIndex(GetOrCreateIndex(inStr.Value));
+            }
+            else
+            {
+                if (TryFind(inStr.Index, out var text))
+                {
+                    outStr = inStr.WithName(text);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        
+        public bool TryFind(uint index, out string text)
+        {
+            if (index == 0)
+            {
+                text = string.Empty;
+                return true;
+            }
+
+            if (_mapIndexToString.TryGetValue(index, out text))
+            {
+                return true;
+            }
+
+            if (index >= _table.Length)
+            {
+                return false;
+            }
+
+            _table.Position = index;
+
+            var buffer = _table.GetBuffer();
+            var indexOfByte0 = Array.IndexOf(buffer, (byte)0, (int)index);
+
+            if (indexOfByte0 < 0 || indexOfByte0 >= _table.Length)
+            {
+                indexOfByte0 = (int)(_table.Length - 1);
+            }
+
+            var strLength = (int)(indexOfByte0 - index);
+            text = Encoding.UTF8.GetString(buffer, (int)index, strLength);
+            _mapIndexToString.Add(index, text);
+
+            // Don't try to override an existing mapping
+            if (!_mapStringToIndex.TryGetValue(text, out var existingIndex))
+            {
+                _mapStringToIndex.Add(text, index);
+            }
+
+            return true;
+        }
+
         public void Reset()
         {
             _table.SetLength(0);
-            _map.Clear();
+            _mapStringToIndex.Clear();
+            _mapIndexToString.Clear();
 
             // Always create an empty string
             GetOrCreateIndex(string.Empty);

@@ -3,7 +3,7 @@ using System.IO;
 
 namespace LibObjectFile.Elf
 {
-    public abstract class ElfWriter : ObjectFileWriter, IElfEncoder
+    public abstract class ElfWriter : ObjectFileReaderWriter, IElfEncoder
     {
         protected ElfWriter(ElfObjectFile objectFile, Stream stream) : base(stream)
         {

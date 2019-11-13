@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 namespace LibObjectFile.Elf
 {
@@ -25,13 +26,15 @@ namespace LibObjectFile.Elf
 
         public ElfSectionFlags Flags { get; set; }
 
-        public string Name { get; set; }
+        public ElfString Name { get; set; }
 
         public ulong VirtualAddress { get; set; }
 
         public ulong Alignment { get; set; }
 
         public ElfSectionLink Link { get; set; }
+
+        public ElfSectionLink Info { get; set; }
         
         public ElfObjectFile Parent { get; internal set; }
 
@@ -39,65 +42,74 @@ namespace LibObjectFile.Elf
 
         public abstract ulong Size { get; }
 
-        public virtual uint InfoIndex => 0;
+        public virtual ulong TableEntrySize => 0;
+
+        public ulong OriginalSize { get; internal set; }
+        
+        public ulong OriginalTableEntrySize { get; internal set; }
 
         /// <summary>
-        /// Gets or sets the offset from the beginning of the file
+        /// Gets the offset from the beginning of the file
         /// </summary>
-        internal ulong Offset { get; set; }
-        
-        /// <summary>
-        /// Gets or sets the index in the string name sections
-        /// </summary>
-        internal uint NameStringIndex { get; set; }
+        public ulong Offset { get; internal set; }
 
-
-        internal ulong GetTableEntrySizeInternal()
-        {
-            return GetTableEntrySize();
-        }
-
-        protected virtual ulong GetTableEntrySize() => 0;
-        
         internal void WriteInternal(ElfWriter writer)
         {
             Write(writer);
         }
 
+        internal void ReadInternal(ElfReader reader)
+        {
+            Read(reader);
+        }
+
+        protected abstract void Read(ElfReader reader);
+
         protected abstract void Write(ElfWriter writer);
 
-        internal void PrepareWriteInternal(ElfWriter writer)
+        public virtual string FullName => Name;
+
+        public virtual void Verify(DiagnosticBag diagnostics)
         {
+            if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
+
             // Verify that Link is correctly setup for this section
             switch (Type)
             {
                 case ElfSectionType.DynamicLinking:
                 case ElfSectionType.DynamicLinkerSymbolTable:
                 case ElfSectionType.SymbolTable:
-                    Link.TryGetSectionSafe<ElfStringTable>(ElfSectionType.StringTable, this.GetType().Name, nameof(Link), this, writer.Diagnostics, out _);
+                    Link.TryGetSectionSafe<ElfStringTable>(ElfSectionType.StringTable, this.GetType().Name, nameof(Link), this, diagnostics, out _);
                     break;
                 case ElfSectionType.SymbolHashTable:
                 case ElfSectionType.Relocation:
                 case ElfSectionType.RelocationAddends:
-                    Link.TryGetSectionSafe<ElfSymbolTable>(ElfSectionType.SymbolTable, this.GetType().Name, nameof(Link), this, writer.Diagnostics, out _);
+                    Link.TryGetSectionSafe<ElfSymbolTable>(ElfSectionType.SymbolTable, this.GetType().Name, nameof(Link), this, diagnostics, out _);
                     break;
             }
-
-            PrepareWrite(writer);
         }
 
-        public virtual string GetFullName()
+        protected virtual void AfterRead(ElfReader reader)
         {
-            return Name;
         }
-        
-        protected virtual void PrepareWrite(ElfWriter writer)
+
+        protected virtual void BeforeWrite(ElfWriter writer)
         {
         }
 
         public override string ToString()
         {
-            return $"Section [{Index}] `{GetFullName()}` ";
+            return $"Section [{Index}] `{FullName}` ";
+        }
+
+        internal void BeforeWriteInternal(ElfWriter writer)
+        {
+            BeforeWrite(writer);
+        }
+
+        internal void AfterReadInternal(ElfReader reader)
+        {
+            AfterRead(reader);
         }
     }
 }

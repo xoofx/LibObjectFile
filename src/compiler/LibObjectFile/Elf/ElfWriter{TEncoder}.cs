@@ -144,7 +144,7 @@ namespace LibObjectFile.Elf
             var hdr = new Elf32_Phdr();
 
             _encoder.Encode(out hdr.p_type, segment.Type.Value);
-            _encoder.Encode(out hdr.p_offset, (uint)segment.AbsoluteOffset);
+            _encoder.Encode(out hdr.p_offset, (uint)segment.Offset.Value);
             _encoder.Encode(out hdr.p_vaddr, (uint)segment.VirtualAddress);
             _encoder.Encode(out hdr.p_paddr, (uint)segment.PhysicalAddress);
             _encoder.Encode(out hdr.p_filesz, (uint)segment.SizeInFile);
@@ -160,7 +160,7 @@ namespace LibObjectFile.Elf
             var hdr = new Elf64_Phdr();
 
             _encoder.Encode(out hdr.p_type, segment.Type.Value);
-            _encoder.Encode(out hdr.p_offset, segment.AbsoluteOffset);
+            _encoder.Encode(out hdr.p_offset, segment.Offset.Value);
             _encoder.Encode(out hdr.p_vaddr, segment.VirtualAddress);
             _encoder.Encode(out hdr.p_paddr, segment.PhysicalAddress);
             _encoder.Encode(out hdr.p_filesz, segment.SizeInFile);
@@ -201,7 +201,7 @@ namespace LibObjectFile.Elf
             ushort e_machine = ObjectFile.Arch.Value;
             _encoder.Encode(out hdr.e_machine, e_machine);
 
-            hdr.e_version = EV_CURRENT;
+            _encoder.Encode(out hdr.e_version, EV_CURRENT);
 
             _encoder.Encode(out hdr.e_entry, (uint)ObjectFile.EntryPointAddress);
             _encoder.Encode(out hdr.e_ehsize, Layout.SizeOfElfHeader);
@@ -252,7 +252,7 @@ namespace LibObjectFile.Elf
             ushort e_machine = ObjectFile.Arch.Value;
             _encoder.Encode(out hdr.e_machine, e_machine);
 
-            hdr.e_version = EV_CURRENT;
+            _encoder.Encode(out hdr.e_version, EV_CURRENT);
 
             _encoder.Encode(out hdr.e_entry, ObjectFile.EntryPointAddress);
             _encoder.Encode(out hdr.e_ehsize, Layout.SizeOfElfHeader);
@@ -298,11 +298,7 @@ namespace LibObjectFile.Elf
                 {
                     var programHeader = ObjectFile.ProgramHeaders[i];
 
-                    if (programHeader.Offset.Section == null)
-                    {
-                        Diagnostics.Error($"The section of the program header #{i} cannot be null", ObjectFile);
-                    }
-                    else if (programHeader.Offset.Section.Parent != ObjectFile)
+                    if (programHeader.Offset.Section != null && programHeader.Offset.Section.Parent != ObjectFile)
                     {
                         Diagnostics.Error($"Invalid parent of the section for the Offset of the program header #{i}. It must have the same parent {nameof(ObjectFile)} than the current being written", ObjectFile);
                     }
@@ -315,12 +311,23 @@ namespace LibObjectFile.Elf
             {
                 Layout.SizeOfSectionHeaderEntry = ObjectFile.FileClass == ElfFileClass.Is32 ? (ushort)sizeof(Elf32_Shdr) : (ushort)sizeof(Elf64_Shdr);
 
-                // Prepare all section before writing (e.g allowing sections to calculate their names)
+                // Verify all sections before doing anything else
                 foreach (var section in ObjectFile.Sections)
                 {
-                    section.PrepareWriteInternal(this);
+                    section.Verify(this.Diagnostics);
                 }
 
+                // If we have any any errors
+                if (Diagnostics.HasErrors)
+                {
+                    throw new ObjectFileException("Errors while verifying sections:", this.Diagnostics);
+                }
+
+                foreach (var section in ObjectFile.Sections)
+                {
+                    section.BeforeWriteInternal(this);
+                }
+                
                 // Calculate offsets of all sections in the stream
                 foreach (var section in ObjectFile.Sections)
                 {
@@ -340,19 +347,22 @@ namespace LibObjectFile.Elf
 
                     offset += section.Size;
                 }
-                
-                ObjectFile.SectionHeaderStringTableInternal.Reset();
-                ObjectFile.SectionHeaderStringTableInternal.NameStringIndex = ObjectFile.SectionHeaderStringTableInternal.GetOrCreateIndex(ObjectFile.SectionHeaderStringTableInternal.GetFullName());
+
+                var shstrTable = ObjectFile.SectionHeaderStringTableInternal;
+
+
+                shstrTable.Reset();
+                shstrTable.Name = shstrTable.Name.WithIndex(shstrTable.GetOrCreateIndex(shstrTable.FullName));
 
                 // Prepare all section names (to calculate the name indices and the size of the SectionNames)
                 foreach (var section in ObjectFile.Sections)
                 {
-                    section.NameStringIndex = ObjectFile.SectionHeaderStringTableInternal.GetOrCreateIndex(section.GetFullName());
+                    section.Name = section.Name.WithIndex(shstrTable.GetOrCreateIndex(section.FullName));
                 }
 
                 // Section names is serialized right after the SectionHeaderTable
-                ObjectFile.SectionHeaderStringTableInternal.Offset = offset;
-                offset += ObjectFile.SectionHeaderStringTableInternal.Size;
+                shstrTable.Offset = offset;
+                offset += shstrTable.Size;
 
                 // The Section Header Table will be put just after all the sections
                 Layout.OffsetOfSectionHeaderTable = offset;
@@ -453,32 +463,32 @@ namespace LibObjectFile.Elf
         private void WriteSectionTableEntry32(ElfSection section)
         {
             var shdr = new Elf32_Shdr();
-            _encoder.Encode(out shdr.sh_name, section.NameStringIndex);
-            _encoder.Encode(out shdr.sh_type, GetSectionType(section.Type));
-            _encoder.Encode(out shdr.sh_flags, GetSectionFlags(section.Flags));
+            _encoder.Encode(out shdr.sh_name, ObjectFile.SectionHeaderStringTableInternal.GetOrCreateIndex(section.FullName));
+            _encoder.Encode(out shdr.sh_type, (uint)section.Type);
+            _encoder.Encode(out shdr.sh_flags, (uint)section.Flags);
             _encoder.Encode(out shdr.sh_addr, (uint)section.VirtualAddress);
             _encoder.Encode(out shdr.sh_offset, (uint)section.Offset);
             _encoder.Encode(out shdr.sh_size, (uint)section.Size);
-            _encoder.Encode(out shdr.sh_link, section.Link.GetSectionIndex());
-            _encoder.Encode(out shdr.sh_info, section.InfoIndex);
+            _encoder.Encode(out shdr.sh_link, section.Link.GetIndex());
+            _encoder.Encode(out shdr.sh_info, section.Info.GetIndex());
             _encoder.Encode(out shdr.sh_addralign, (uint)section.Alignment);
-            _encoder.Encode(out shdr.sh_entsize, (uint)section.GetTableEntrySizeInternal());
+            _encoder.Encode(out shdr.sh_entsize, (uint)section.TableEntrySize);
             Write(shdr);
         }
 
         private void WriteSectionTableEntry64(ElfSection section)
         {
             var shdr = new Elf64_Shdr();
-            _encoder.Encode(out shdr.sh_name, section.NameStringIndex);
-            _encoder.Encode(out shdr.sh_type, GetSectionType(section.Type));
-            _encoder.Encode(out shdr.sh_flags, GetSectionFlags(section.Flags));
+            _encoder.Encode(out shdr.sh_name, ObjectFile.SectionHeaderStringTableInternal.GetOrCreateIndex(section.FullName));
+            _encoder.Encode(out shdr.sh_type, (uint)section.Type);
+            _encoder.Encode(out shdr.sh_flags, (uint)section.Flags);
             _encoder.Encode(out shdr.sh_addr, section.VirtualAddress);
             _encoder.Encode(out shdr.sh_offset, section.Offset);
             _encoder.Encode(out shdr.sh_size, section.Size);
-            _encoder.Encode(out shdr.sh_link, section.Link.GetSectionIndex());
-            _encoder.Encode(out shdr.sh_info, section.InfoIndex);
+            _encoder.Encode(out shdr.sh_link, section.Link.GetIndex());
+            _encoder.Encode(out shdr.sh_info, section.Info.GetIndex());
             _encoder.Encode(out shdr.sh_addralign, section.Alignment);
-            _encoder.Encode(out shdr.sh_entsize, section.GetTableEntrySizeInternal());
+            _encoder.Encode(out shdr.sh_entsize, section.TableEntrySize);
             Write(shdr);
         }
 
@@ -490,90 +500,6 @@ namespace LibObjectFile.Elf
         private void WriteNullSectionTableEntry64()
         {
             Write(new Elf64_Shdr());
-        }
-
-        private static uint GetSectionType(ElfSectionType sectionType)
-        {
-            switch (sectionType)
-            {
-                case ElfSectionType.Null:
-                    return SHT_NULL;
-                case ElfSectionType.ProgBits:
-                    return SHT_PROGBITS;
-                case ElfSectionType.SymbolTable:
-                    return SHT_SYMTAB;
-                case ElfSectionType.StringTable:
-                    return SHT_STRTAB;
-                case ElfSectionType.RelocationAddends:
-                    return SHT_RELA;
-                case ElfSectionType.SymbolHashTable:
-                    return SHT_HASH;
-                case ElfSectionType.DynamicLinking:
-                    return SHT_DYNAMIC;
-                case ElfSectionType.Note:
-                    return SHT_NOTE;
-                case ElfSectionType.NoBits:
-                    return SHT_NOBITS;
-                case ElfSectionType.Relocation:
-                    return SHT_REL;
-                case ElfSectionType.Shlib:
-                    return SHT_SHLIB;
-                case ElfSectionType.DynamicLinkerSymbolTable:
-                    return SHT_DYNSYM;
-                default:
-                    throw ThrowHelper.InvalidEnum(sectionType);
-            }
-        }
-
-        private static uint GetSectionFlags(ElfSectionFlags sectionFlags)
-        {
-            uint flags = 0;
-            if ((sectionFlags & ElfSectionFlags.Write) != 0)
-            {
-                flags |= SHF_WRITE;
-            }
-            if ((sectionFlags & ElfSectionFlags.Alloc) != 0)
-            {
-                flags |= SHF_ALLOC;
-            }
-            if ((sectionFlags & ElfSectionFlags.Executable) != 0)
-            {
-                flags |= SHF_EXECINSTR;
-            }
-            if ((sectionFlags & ElfSectionFlags.Merge) != 0)
-            {
-                flags |= SHF_MERGE;
-            }
-            if ((sectionFlags & ElfSectionFlags.Strings) != 0)
-            {
-                flags |= SHF_STRINGS;
-            }
-            if ((sectionFlags & ElfSectionFlags.InfoLink) != 0)
-            {
-                flags |= SHF_INFO_LINK;
-            }
-            if ((sectionFlags & ElfSectionFlags.LinkOrder) != 0)
-            {
-                flags |= SHF_LINK_ORDER;
-            }
-            if ((sectionFlags & ElfSectionFlags.OsNonConforming) != 0)
-            {
-                flags |= SHF_OS_NONCONFORMING;
-            }
-            if ((sectionFlags & ElfSectionFlags.Group) != 0)
-            {
-                flags |= SHF_GROUP;
-            }
-            if ((sectionFlags & ElfSectionFlags.Tls) != 0)
-            {
-                flags |= SHF_TLS;
-            }
-            if ((sectionFlags & ElfSectionFlags.Compressed) != 0)
-            {
-                flags |= SHF_COMPRESSED;
-            }
-
-            return flags;
         }
     }
 }

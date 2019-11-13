@@ -9,10 +9,10 @@ namespace LibObjectFile.Elf
         public static ElfSectionLink SectionCommon = new ElfSectionLink(RawElf.SHN_COMMON);
 
 
-        public ElfSectionLink(uint specialSectionIndex)
+        public ElfSectionLink(uint index)
         {
             Section = null;
-            SpecialSectionIndex = specialSectionIndex;
+            SpecialSectionIndex = index;
         }
 
         public ElfSectionLink(ElfSection section)
@@ -25,7 +25,12 @@ namespace LibObjectFile.Elf
 
         public readonly uint SpecialSectionIndex;
 
-        public uint GetSectionIndex()
+        /// <summary>
+        /// <c>true</c> if this link to a section is a special section.
+        /// </summary>
+        public bool IsSpecial => Section == null && (SpecialSectionIndex == RawElf.SHN_UNDEF || SpecialSectionIndex >= RawElf.SHN_LORESERVE);
+        
+        public uint GetIndex()
         {
             return Section?.Index ?? SpecialSectionIndex;
         }
