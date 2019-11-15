@@ -11908,87 +11908,87 @@ namespace LibObjectFile.Elf
         }
     }
     
-    public readonly partial struct ElfOSAbi
+    public readonly partial struct ElfOSABI
     {
         /// <summary>
         /// UNIX System V ABI
         /// </summary>
-        public static readonly ElfOSAbi NONE = new ElfOSAbi(RawElf.ELFOSABI_NONE);
+        public static readonly ElfOSABI NONE = new ElfOSABI(RawElf.ELFOSABI_NONE);
         
         /// <summary>
         /// UNIX System V ABI
         /// </summary>
-        public static readonly ElfOSAbi SYSV = new ElfOSAbi(RawElf.ELFOSABI_SYSV);
+        public static readonly ElfOSABI SYSV = new ElfOSABI(RawElf.ELFOSABI_SYSV);
         
         /// <summary>
         /// HP-UX
         /// </summary>
-        public static readonly ElfOSAbi HPUX = new ElfOSAbi(RawElf.ELFOSABI_HPUX);
+        public static readonly ElfOSABI HPUX = new ElfOSABI(RawElf.ELFOSABI_HPUX);
         
         /// <summary>
         /// NetBSD.
         /// </summary>
-        public static readonly ElfOSAbi NETBSD = new ElfOSAbi(RawElf.ELFOSABI_NETBSD);
+        public static readonly ElfOSABI NETBSD = new ElfOSABI(RawElf.ELFOSABI_NETBSD);
         
         /// <summary>
         /// Object uses GNU ELF extensions.
         /// </summary>
-        public static readonly ElfOSAbi GNU = new ElfOSAbi(RawElf.ELFOSABI_GNU);
+        public static readonly ElfOSABI GNU = new ElfOSABI(RawElf.ELFOSABI_GNU);
         
         /// <summary>
         /// Object uses GNU ELF extensions.
         /// </summary>
-        public static readonly ElfOSAbi LINUX = new ElfOSAbi(RawElf.ELFOSABI_LINUX);
+        public static readonly ElfOSABI LINUX = new ElfOSABI(RawElf.ELFOSABI_LINUX);
         
         /// <summary>
         /// Sun Solaris.
         /// </summary>
-        public static readonly ElfOSAbi SOLARIS = new ElfOSAbi(RawElf.ELFOSABI_SOLARIS);
+        public static readonly ElfOSABI SOLARIS = new ElfOSABI(RawElf.ELFOSABI_SOLARIS);
         
         /// <summary>
         /// IBM AIX.
         /// </summary>
-        public static readonly ElfOSAbi AIX = new ElfOSAbi(RawElf.ELFOSABI_AIX);
+        public static readonly ElfOSABI AIX = new ElfOSABI(RawElf.ELFOSABI_AIX);
         
         /// <summary>
         /// SGI Irix.
         /// </summary>
-        public static readonly ElfOSAbi IRIX = new ElfOSAbi(RawElf.ELFOSABI_IRIX);
+        public static readonly ElfOSABI IRIX = new ElfOSABI(RawElf.ELFOSABI_IRIX);
         
         /// <summary>
         /// FreeBSD.
         /// </summary>
-        public static readonly ElfOSAbi FREEBSD = new ElfOSAbi(RawElf.ELFOSABI_FREEBSD);
+        public static readonly ElfOSABI FREEBSD = new ElfOSABI(RawElf.ELFOSABI_FREEBSD);
         
         /// <summary>
         /// Compaq TRU64 UNIX.
         /// </summary>
-        public static readonly ElfOSAbi TRU64 = new ElfOSAbi(RawElf.ELFOSABI_TRU64);
+        public static readonly ElfOSABI TRU64 = new ElfOSABI(RawElf.ELFOSABI_TRU64);
         
         /// <summary>
         /// Novell Modesto.
         /// </summary>
-        public static readonly ElfOSAbi MODESTO = new ElfOSAbi(RawElf.ELFOSABI_MODESTO);
+        public static readonly ElfOSABI MODESTO = new ElfOSABI(RawElf.ELFOSABI_MODESTO);
         
         /// <summary>
         /// OpenBSD.
         /// </summary>
-        public static readonly ElfOSAbi OPENBSD = new ElfOSAbi(RawElf.ELFOSABI_OPENBSD);
+        public static readonly ElfOSABI OPENBSD = new ElfOSABI(RawElf.ELFOSABI_OPENBSD);
         
         /// <summary>
         /// ARM EABI
         /// </summary>
-        public static readonly ElfOSAbi ARM_AEABI = new ElfOSAbi(RawElf.ELFOSABI_ARM_AEABI);
+        public static readonly ElfOSABI ARM_AEABI = new ElfOSABI(RawElf.ELFOSABI_ARM_AEABI);
         
         /// <summary>
         /// ARM
         /// </summary>
-        public static readonly ElfOSAbi ARM = new ElfOSAbi(RawElf.ELFOSABI_ARM);
+        public static readonly ElfOSABI ARM = new ElfOSABI(RawElf.ELFOSABI_ARM);
         
         /// <summary>
         /// Standalone (embedded) application
         /// </summary>
-        public static readonly ElfOSAbi STANDALONE = new ElfOSAbi(RawElf.ELFOSABI_STANDALONE);
+        public static readonly ElfOSABI STANDALONE = new ElfOSABI(RawElf.ELFOSABI_STANDALONE);
         
         private string ToStringInternal()
         {
@@ -12008,7 +12008,7 @@ namespace LibObjectFile.Elf
                 case RawElf.ELFOSABI_ARM_AEABI: return "ELFOSABI_ARM_AEABI - ARM EABI";
                 case RawElf.ELFOSABI_ARM: return "ELFOSABI_ARM - ARM";
                 case RawElf.ELFOSABI_STANDALONE: return "ELFOSABI_STANDALONE - Standalone (embedded) application";
-                default: return "Unknown ElfOSAbi";
+                default: return "Unknown ElfOSABI";
             }
         }
     }

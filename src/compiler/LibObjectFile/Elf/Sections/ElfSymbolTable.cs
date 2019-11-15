@@ -63,7 +63,7 @@ namespace LibObjectFile.Elf
 
         private void Read32(ElfReader reader)
         {
-            var numberOfEntries = OriginalSize / OriginalTableEntrySize;
+            var numberOfEntries = base.Size / OriginalTableEntrySize;
             for (ulong i = 0; i < numberOfEntries; i++)
             {
                 RawElf.Elf32_Sym sym;
@@ -79,7 +79,7 @@ namespace LibObjectFile.Elf
                 entry.Size = reader.Decode(sym.st_size);
 
                 var st_info = sym.st_info;
-                entry.Type = (ElfSymbolType) (st_info & 3);
+                entry.Type = (ElfSymbolType) (st_info & 0xF);
                 entry.Bind = (ElfSymbolBind)(st_info >> 4);
                 entry.Visibility = (ElfSymbolVisibility) sym.st_other;
                 entry.Section = new ElfSectionLink(reader.Decode(sym.st_shndx));
@@ -96,7 +96,7 @@ namespace LibObjectFile.Elf
 
         private void Read64(ElfReader reader)
         {
-            var numberOfEntries = OriginalSize / OriginalTableEntrySize;
+            var numberOfEntries = base.Size / OriginalTableEntrySize;
             for (ulong i = 0; i < numberOfEntries; i++)
             {
                 RawElf.Elf64_Sym sym;
@@ -112,7 +112,7 @@ namespace LibObjectFile.Elf
                 entry.Size = reader.Decode(sym.st_size);
 
                 var st_info = sym.st_info;
-                entry.Type = (ElfSymbolType)(st_info & 3);
+                entry.Type = (ElfSymbolType)(st_info & 0xF);
                 entry.Bind = (ElfSymbolBind)(st_info >> 4);
                 entry.Visibility = (ElfSymbolVisibility)sym.st_other;
                 entry.Section = new ElfSectionLink(reader.Decode(sym.st_shndx));
@@ -182,7 +182,7 @@ namespace LibObjectFile.Elf
         protected override void AfterRead(ElfReader reader)
         {
             // Verify that the link is safe and configured as expected
-            Link.TryGetSectionSafe<ElfStringTable>(ElfSectionType.StringTable, nameof(ElfSymbolTable), nameof(Link), this, reader.Diagnostics, out var stringTable);
+            Link.TryGetSectionSafe<ElfStringTable>(nameof(ElfSymbolTable), nameof(Link), this, reader.Diagnostics, out var stringTable, ElfSectionType.StringTable);
 
             for (int i = 0; i < Entries.Count; i++)
             {
@@ -210,7 +210,7 @@ namespace LibObjectFile.Elf
             base.Verify(diagnostics);
 
             // Verify that the link is safe and configured as expected
-            if (!Link.TryGetSectionSafe<ElfStringTable>(ElfSectionType.StringTable, nameof(ElfSymbolTable), nameof(Link), this, diagnostics, out var stringTable))
+            if (!Link.TryGetSectionSafe<ElfStringTable>(nameof(ElfSymbolTable), nameof(Link), this, diagnostics, out var stringTable, ElfSectionType.StringTable))
             {
                 return;
             }

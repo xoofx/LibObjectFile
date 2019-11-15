@@ -141,7 +141,7 @@ namespace StarkPlatform.NativeCompiler.CodeGen
             AssertCompilation(csCompilation);
 
             ProcessElfEnum(cppOptions, csCompilation, "EM_", "ElfArch");
-            ProcessElfEnum(cppOptions, csCompilation, "ELFOSABI_", "ElfOSAbi");
+            ProcessElfEnum(cppOptions, csCompilation, "ELFOSABI_", "ElfOSABI");
             ProcessElfEnum(cppOptions, csCompilation, "R_", "ElfRelocationType");
 
             csCompilation.DumpTo(GetCodeWriter(Path.Combine("LibObjectFile", "generated")));

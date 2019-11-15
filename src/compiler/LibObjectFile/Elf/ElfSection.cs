@@ -3,8 +3,16 @@ using System.Diagnostics;
 
 namespace LibObjectFile.Elf
 {
+    // TODO: SPECS ELF: Executable and Linkable Format
+    // TODO: Every section in an object file has exactly one section header describing it. Section headers may exist that do not have a section.
+    // TODO: Sections in a file may not overlap. No byte in a file resides in more than one section.
+    // TODO: Each section occupies one contiguous (possibly empty) sequence of bytes within a file.
+
+    /// <summary>
+    /// 
+    /// </summary>
     [DebuggerDisplay("{ToString(),nq}")]
-    public abstract class ElfSection : IElfSectionView
+    public abstract class ElfSection : ElfObjectFilePart
     {
         private ElfSectionType _type;
 
@@ -15,7 +23,6 @@ namespace LibObjectFile.Elf
         protected ElfSection(ElfSectionType sectionType)
         {
             _type = sectionType;
-            Alignment = 1;
         }
 
         public virtual ElfSectionType Type
@@ -24,34 +31,30 @@ namespace LibObjectFile.Elf
             set => _type = value;
         }
 
-        public ElfSectionFlags Flags { get; set; }
+        public virtual ElfSectionFlags Flags { get; set; }
 
-        public ElfString Name { get; set; }
+        public virtual ElfString Name { get; set; }
 
-        public ulong VirtualAddress { get; set; }
+        public virtual ulong VirtualAddress { get; set; }
 
-        public ulong Alignment { get; set; }
+        public virtual ulong Alignment { get; set; }
 
-        public ElfSectionLink Link { get; set; }
+        public virtual ElfSectionLink Link { get; set; }
 
-        public ElfSectionLink Info { get; set; }
-        
-        public ElfObjectFile Parent { get; internal set; }
+        public virtual ElfSectionLink Info { get; set; }
 
-        public uint Index { get; internal set; }
 
-        public abstract ulong Size { get; }
+        // TODO: The member contains 0 if the section does not hold a table of fixed-size entries.
 
         public virtual ulong TableEntrySize => 0;
 
-        public ulong OriginalSize { get; internal set; }
-        
+        public uint SectionIndex { get; internal set; }
+
         public ulong OriginalTableEntrySize { get; internal set; }
 
-        /// <summary>
-        /// Gets the offset from the beginning of the file
-        /// </summary>
-        public ulong Offset { get; internal set; }
+        public bool IsShadow => this is ElfShadowSection;
+
+        public virtual bool HasContent => Type != ElfSectionType.NoBits;
 
         internal void WriteInternal(ElfWriter writer)
         {
@@ -61,17 +64,39 @@ namespace LibObjectFile.Elf
         internal void ReadInternal(ElfReader reader)
         {
             Read(reader);
+            // After reading the size must be Auto by default
+            SizeKind = ElfValueKind.Auto;
         }
 
         protected abstract void Read(ElfReader reader);
 
         protected abstract void Write(ElfWriter writer);
 
-        public virtual string FullName => Name;
-
-        public virtual void Verify(DiagnosticBag diagnostics)
+        public override void Verify(DiagnosticBag diagnostics)
         {
             if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
+
+            if (Type != ElfSectionType.Null && Type != ElfSectionType.NoBits && SizeKind != ElfValueKind.Auto)
+            {
+                diagnostics.Error($"Invalid {nameof(SizeKind)}: {SizeKind} for `{this}`. Expecting {ElfValueKind.Absolute}.");
+            }
+
+            // Check parent for link section
+            if (Link.Section != null)
+            {
+                if (Link.Section.Parent != this.Parent)
+                {
+                    diagnostics.Error($"Invalid parent for {nameof(Link)}: `{Link}` used by section `{this}`. The {nameof(Link)}.{nameof(ElfSectionLink.Section)} must have the same parent {nameof(ElfObjectFile)} than this section");
+                }
+            }
+
+            if (Info.Section != null)
+            {
+                if (Info.Section.Parent != this.Parent)
+                {
+                    diagnostics.Error($"Invalid parent for {nameof(Info)}: `{Info}` used by section `{this}`. The {nameof(Info)}.{nameof(ElfSectionLink.Section)} must have the same parent {nameof(ElfObjectFile)} than this section");
+                }
+            }
 
             // Verify that Link is correctly setup for this section
             switch (Type)
@@ -79,12 +104,12 @@ namespace LibObjectFile.Elf
                 case ElfSectionType.DynamicLinking:
                 case ElfSectionType.DynamicLinkerSymbolTable:
                 case ElfSectionType.SymbolTable:
-                    Link.TryGetSectionSafe<ElfStringTable>(ElfSectionType.StringTable, this.GetType().Name, nameof(Link), this, diagnostics, out _);
+                    Link.TryGetSectionSafe<ElfStringTable>(this.GetType().Name, nameof(Link), this, diagnostics, out _, ElfSectionType.StringTable);
                     break;
                 case ElfSectionType.SymbolHashTable:
                 case ElfSectionType.Relocation:
                 case ElfSectionType.RelocationAddends:
-                    Link.TryGetSectionSafe<ElfSymbolTable>(ElfSectionType.SymbolTable, this.GetType().Name, nameof(Link), this, diagnostics, out _);
+                    Link.TryGetSectionSafe<ElfSymbolTable>(this.GetType().Name, nameof(Link), this, diagnostics, out _, ElfSectionType.SymbolTable, ElfSectionType.DynamicLinkerSymbolTable);
                     break;
             }
         }
@@ -99,7 +124,7 @@ namespace LibObjectFile.Elf
 
         public override string ToString()
         {
-            return $"Section [{Index}] `{FullName}` ";
+            return $"Section [{SectionIndex}](Internal: {Index}) `{Name}` ";
         }
 
         internal void BeforeWriteInternal(ElfWriter writer)

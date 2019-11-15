@@ -58,7 +58,7 @@ namespace LibObjectFile.Elf
 
             ident[EI_VERSION] = (byte)objectFile.Version;
 
-            ident[EI_OSABI] = objectFile.OSAbi.Value;
+            ident[EI_OSABI] = objectFile.OSABI.Value;
 
             ident[EI_ABIVERSION] = objectFile.AbiVersion;
         }
@@ -112,7 +112,7 @@ namespace LibObjectFile.Elf
 
             objectFile.Version = ident[EI_VERSION];
 
-            objectFile.OSAbi = new ElfOSAbi(ident[EI_OSABI]);
+            objectFile.OSABI = new ElfOSABI(ident[EI_OSABI]);
 
             objectFile.AbiVersion = ident[EI_ABIVERSION];
             return true;

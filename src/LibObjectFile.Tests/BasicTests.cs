@@ -19,6 +19,7 @@ namespace LibObjectFile.Tests
 
             var codeSection = new ElfCustomSection(codeStream).ConfigureAs(ElfSectionSpecialType.Text);
             elf.AddSection(codeSection);
+            elf.AddSection(new ElfSectionHeaderStringTable());
 
             AssertReadElf(elf, "test.elf");
         }
@@ -67,6 +68,7 @@ namespace LibObjectFile.Tests
                 }
             };
             elf.AddSection(symbolSection);
+            elf.AddSection(new ElfSectionHeaderStringTable());
 
             AssertReadElf(elf, "test2.elf");
         }
@@ -130,27 +132,28 @@ namespace LibObjectFile.Tests
                     }
                 }
             );
+            elf.AddSection(new ElfSectionHeaderStringTable());
 
-            elf.ProgramHeaders.Add(new ElfSegment()
+            elf.AddSegment(new ElfSegment()
                 {
                     Type = ElfSegmentTypeCore.Load,
-                    Offset = new ElfOffset(codeSection, 0),
+                    Range = codeSection,
                     VirtualAddress = 0x1000, 
                     PhysicalAddress = 0x1000, 
                     Flags = ElfSegmentFlagsCore.Readable|ElfSegmentFlagsCore.Executable,
-                    SizeInFile = 4096,
+                    Size = 4096,
                     SizeInMemory = 4096,
                     Align = 4096,
             });
 
-            elf.ProgramHeaders.Add(new ElfSegment()
+            elf.AddSegment(new ElfSegment()
             {
                 Type = ElfSegmentTypeCore.Load,
-                Offset = new ElfOffset(dataSection, 0),
+                Range = dataSection,
                 VirtualAddress = 0x2000,
                 PhysicalAddress = 0x2000,
                 Flags = ElfSegmentFlagsCore.Readable | ElfSegmentFlagsCore.Writable,
-                SizeInFile = 1024,
+                Size = 1024,
                 SizeInMemory = 1024,
                 Align = 4096,
             });
@@ -221,29 +224,29 @@ namespace LibObjectFile.Tests
                 }
             );
 
-            elf.ProgramHeaders.Add(
+            elf.AddSegment(
                 new ElfSegment()
                 {
                     Type = ElfSegmentTypeCore.Load,
-                    Offset = new ElfOffset(codeSection, 0),
+                    Range = codeSection,
                     VirtualAddress = 0x1000,
                     PhysicalAddress = 0x1000,
                     Flags = ElfSegmentFlagsCore.Readable | ElfSegmentFlagsCore.Executable,
-                    SizeInFile = 4096,
+                    Size = 4096,
                     SizeInMemory = 4096,
                     Align = 4096,
                 }
             );
 
-            elf.ProgramHeaders.Add(
+            elf.AddSegment(
                 new ElfSegment()
                 {
                     Type = ElfSegmentTypeCore.Load,
-                    Offset = new ElfOffset(dataSection, 0),
+                    Range = dataSection,
                     VirtualAddress = 0x2000,
                     PhysicalAddress = 0x2000,
                     Flags = ElfSegmentFlagsCore.Readable | ElfSegmentFlagsCore.Writable,
-                    SizeInFile = 1024,
+                    Size = 1024,
                     SizeInMemory = 1024,
                     Align = 4096,
                 }
@@ -252,6 +255,7 @@ namespace LibObjectFile.Tests
             var relocTable = elf.AddSection(
                 new ElfRelocationTable
                 {
+                    Name = ".rela.text",
                     Link = symbolSection,
                     Info = codeSection,
                     Entries =
@@ -271,6 +275,8 @@ namespace LibObjectFile.Tests
                     }
                 }
             );
+
+            elf.AddSection(new ElfSectionHeaderStringTable());
 
             AssertReadElf(elf, "test4.elf");
         }
@@ -342,6 +348,25 @@ namespace LibObjectFile.Tests
                 Assert.AreEqual(readelf, result);
             }
         }
+
+
+        [Test]
+        public void TestHelloWorld()
+        {
+            LinuxUtil.RunLinuxExe("gcc", "helloworld.cpp -o helloworld");
+
+            using (var stream = File.OpenRead("helloworld"))
+            {
+                var elf = ElfObjectFile.Read(stream);
+                elf.Print(Console.Out);
+
+                using (var outstream = File.OpenWrite("helloworld_copy"))
+                {
+                    elf.Write(outstream);
+                }
+            }
+        }
+
 
         private static void AssertReadback(ElfObjectFile elf, string fileName)
         {

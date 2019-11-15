@@ -15,6 +15,31 @@ namespace LibObjectFile.Elf
 
         internal abstract void Read();
 
+        public MemoryStream ReadAsMemoryStream(ulong size)
+        {
+            var memoryStream = new MemoryStream((int)size);
+            if (size == 0) return memoryStream;
+
+            memoryStream.SetLength((long)size);
+
+            var buffer = memoryStream.GetBuffer();
+            while (size != 0)
+            {
+                var lengthToRead = size >= int.MaxValue ? int.MaxValue : (int) size;
+                var lengthRead = Stream.Read(buffer, 0, lengthToRead);
+                if (lengthRead < 0) break;
+                if ((uint)lengthRead >= size)
+                {
+                    size -= (uint)lengthRead;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return memoryStream;
+        }
+
         public abstract ElfSectionLink ResolveLink(ElfSectionLink link, string errorMessageFormat);
 
         internal static ElfReader Create(ElfObjectFile objectFile, Stream stream)

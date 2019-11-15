@@ -1,30 +1,30 @@
 ﻿namespace LibObjectFile.Elf
 {
-    public enum ElfFileType
+    public enum ElfFileType : ushort
     {
         /// <summary>
         /// No file type
         /// </summary>
-        None,
+        None = RawElf.ET_NONE,
 
         /// <summary>
         /// Relocatable file
         /// </summary>
-        Relocatable,
+        Relocatable = RawElf.ET_REL,
 
         /// <summary>
         /// Executable file
         /// </summary>
-        Executable,
+        Executable = RawElf.ET_EXEC,
 
         /// <summary>
         /// Shared object file 
         /// </summary>
-        Dynamic,
+        Dynamic = RawElf.ET_DYN,
 
         /// <summary>
         /// Core file
         /// </summary>
-        Core,
+        Core = RawElf.ET_CORE,
     }
 }

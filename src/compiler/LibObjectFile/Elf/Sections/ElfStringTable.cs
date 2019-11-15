@@ -7,7 +7,18 @@ using System.Text;
 
 namespace LibObjectFile.Elf
 {
-    public sealed class ElfStringTable : ElfSection
+
+    public class ElfSectionHeaderStringTable : ElfStringTable
+    {
+        public new const string DefaultName = ".shstrtab";
+
+        public ElfSectionHeaderStringTable()
+        {
+            Name = DefaultName;
+        }
+    }
+    
+    public class ElfStringTable : ElfSection
     {
         private readonly MemoryStream _table;
         private readonly Dictionary<string, uint> _mapStringToIndex;
@@ -50,7 +61,7 @@ namespace LibObjectFile.Elf
         protected override void Read(ElfReader reader)
         {
             Debug.Assert(_table.Position == 1 && _table.Length == 1);
-            var length = (long) OriginalSize;
+            var length = (long) base.Size;
             _table.SetLength(length);
             var buffer = _table.GetBuffer();
             reader.Stream.Read(buffer, 0, (int)length);
@@ -94,6 +105,20 @@ namespace LibObjectFile.Elf
                 }
                 _table.Write(span);
                 ArrayPool<byte>.Shared.Return(buffer);
+                
+                // Register all subsequent strings
+                while (text.Length > 0)
+                {
+                    text = text.Substring(1);
+                    if (_mapStringToIndex.ContainsKey(text))
+                    {
+                        break;
+                    }
+                    var offset = reservedBytes - Encoding.UTF8.GetByteCount(text) - 1;
+                    var subIndex = index + (uint) offset;
+                    _mapStringToIndex.Add(text, subIndex);
+                    _mapIndexToString.Add(subIndex, text);
+                }
             }
 
             return index;

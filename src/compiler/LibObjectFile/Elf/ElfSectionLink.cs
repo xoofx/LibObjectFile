@@ -4,11 +4,12 @@ namespace LibObjectFile.Elf
 {
     public readonly struct ElfSectionLink : IEquatable<ElfSectionLink>
     {
-        public static ElfSectionLink SectionAbsolute = new ElfSectionLink(RawElf.SHN_ABS);
+        public static readonly ElfSectionLink Empty = new ElfSectionLink(RawElf.SHN_UNDEF);
 
-        public static ElfSectionLink SectionCommon = new ElfSectionLink(RawElf.SHN_COMMON);
+        public static readonly ElfSectionLink SectionAbsolute = new ElfSectionLink(RawElf.SHN_ABS);
 
-
+        public static readonly ElfSectionLink SectionCommon = new ElfSectionLink(RawElf.SHN_COMMON);
+        
         public ElfSectionLink(uint index)
         {
             Section = null;
@@ -32,7 +33,7 @@ namespace LibObjectFile.Elf
         
         public uint GetIndex()
         {
-            return Section?.Index ?? SpecialSectionIndex;
+            return Section?.SectionIndex ?? SpecialSectionIndex;
         }
 
         public bool Equals(ElfSectionLink other)
@@ -99,7 +100,7 @@ namespace LibObjectFile.Elf
         }
         
         
-        public bool TryGetSectionSafe<TSection>(ElfSectionType sectionType, string className, string propertyName, object context, DiagnosticBag diagnostics, out TSection section) where TSection : ElfSection
+        public bool TryGetSectionSafe<TSection>(string className, string propertyName, object context, DiagnosticBag diagnostics, out TSection section, params ElfSectionType[] sectionTypes) where TSection : ElfSection
         {
             section = null;
 
@@ -109,9 +110,19 @@ namespace LibObjectFile.Elf
                 return false;
             }
 
-            if (Section.Type != sectionType)
+            bool foundValid = false;
+            foreach (var elfSectionType in sectionTypes)
             {
-                diagnostics.Error($"The type `{Section.Type}` of `{className}.{propertyName}` must be a {sectionType}", context);
+                if (Section.Type == elfSectionType)
+                {
+                    foundValid = true;
+                    break;
+                }
+            }
+
+            if (!foundValid)
+            {
+                diagnostics.Error($"The type `{Section.Type}` of `{className}.{propertyName}` must be a {string.Join(" or ", sectionTypes)}", context);
                 return false;
             }
             section = Section as TSection;

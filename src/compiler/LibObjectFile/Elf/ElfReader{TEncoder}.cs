@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 
 namespace LibObjectFile.Elf
@@ -11,14 +11,12 @@ namespace LibObjectFile.Elf
         private ushort _programHeaderCount;
         private ushort _sectionHeaderCount;
         private ushort _sectionStringTableIndex;
-        private readonly List<ElfSection> _sections;
         private bool _isFirstSectionValidNull;
         private bool _hasValidSectionStringTable;
 
         protected ElfReader(ElfObjectFile objectFile, Stream stream) : base(objectFile, stream)
         {
             _decoder = new TDecoder();
-            _sections = new List<ElfSection>();
         }
 
         private ElfObjectFile.ElfObjectLayout Layout => ObjectFile.Layout;
@@ -65,30 +63,7 @@ namespace LibObjectFile.Elf
                 Diagnostics.Error($"Unable to read entirely Elf header. Not enough data (size: {sizeof(RawElf.Elf32_Ehdr)}) read at offset {streamOffset} from the stream");
             }
 
-            ushort e_type = _decoder.Decode(hdr.e_type);
-            switch (e_type)
-            {
-                case RawElf.ET_NONE:
-                    ObjectFile.FileType = ElfFileType.None;
-                    break;
-                case RawElf.ET_REL:
-                    ObjectFile.FileType = ElfFileType.Relocatable;
-                    break;
-                case RawElf.ET_EXEC:
-                    ObjectFile.FileType = ElfFileType.Executable;
-                    break;
-                case RawElf.ET_DYN:
-                    ObjectFile.FileType = ElfFileType.Dynamic;
-                    break;
-                case RawElf.ET_CORE:
-                    e_type = RawElf.ET_CORE;
-                    ObjectFile.FileType = ElfFileType.Core;
-                    break;
-                default:
-                    Diagnostics.Error($"Invalid {nameof(RawElf.Elf32_Ehdr)}.{nameof(RawElf.Elf32_Ehdr.e_type)} 0x{e_type:x4}");
-                    return;
-            }
-
+            ObjectFile.FileType = (ElfFileType)_decoder.Decode(hdr.e_type);
             ObjectFile.Arch = new ElfArch(_decoder.Decode(hdr.e_machine));
             ObjectFile.Version = _decoder.Decode(hdr.e_version);
 
@@ -117,30 +92,7 @@ namespace LibObjectFile.Elf
                 Diagnostics.Error($"Unable to read entirely Elf header. Not enough data (size: {sizeof(RawElf.Elf64_Ehdr)}) read at offset {streamOffset} from the stream");
             }
 
-            ushort e_type = _decoder.Decode(hdr.e_type);
-            switch (e_type)
-            {
-                case RawElf.ET_NONE:
-                    ObjectFile.FileType = ElfFileType.None;
-                    break;
-                case RawElf.ET_REL:
-                    ObjectFile.FileType = ElfFileType.Relocatable;
-                    break;
-                case RawElf.ET_EXEC:
-                    ObjectFile.FileType = ElfFileType.Executable;
-                    break;
-                case RawElf.ET_DYN:
-                    ObjectFile.FileType = ElfFileType.Dynamic;
-                    break;
-                case RawElf.ET_CORE:
-                    e_type = RawElf.ET_CORE;
-                    ObjectFile.FileType = ElfFileType.Core;
-                    break;
-                default:
-                    Diagnostics.Error($"Invalid {nameof(RawElf.Elf64_Ehdr)}.{nameof(RawElf.Elf64_Ehdr.e_type)} 0x{e_type:x4}");
-                    return;
-            }
-
+            ObjectFile.FileType = (ElfFileType)_decoder.Decode(hdr.e_type);
             ObjectFile.Arch = new ElfArch(_decoder.Decode(hdr.e_machine));
             ObjectFile.Version = _decoder.Decode(hdr.e_version);
 
@@ -184,8 +136,8 @@ namespace LibObjectFile.Elf
                 // Seek to the header position
                 Stream.Position = (long)offset;
 
-                var header = (ObjectFile.FileClass == ElfFileClass.Is32) ? ReadProgramHeader32(i) : ReadProgramHeader64(i);
-                ObjectFile.ProgramHeaders.Add(header);
+                var segment = (ObjectFile.FileClass == ElfFileClass.Is32) ? ReadProgramHeader32(i) : ReadProgramHeader64(i);
+                ObjectFile.AddSegment(segment);
             }
         }
         
@@ -200,10 +152,10 @@ namespace LibObjectFile.Elf
             return new ElfSegment
             {
                 Type = new ElfSegmentType(_decoder.Decode(hdr.p_type)),
-                Offset = new ElfOffset(_decoder.Decode(hdr.p_offset)),
+                Offset =_decoder.Decode(hdr.p_offset),
                 VirtualAddress = _decoder.Decode(hdr.p_vaddr),
                 PhysicalAddress = _decoder.Decode(hdr.p_paddr),
-                SizeInFile = _decoder.Decode(hdr.p_filesz),
+                Size = _decoder.Decode(hdr.p_filesz),
                 SizeInMemory = _decoder.Decode(hdr.p_memsz),
                 Flags = new ElfSegmentFlags(_decoder.Decode(hdr.p_flags)),
                 Align = _decoder.Decode(hdr.p_align)
@@ -221,10 +173,10 @@ namespace LibObjectFile.Elf
             return new ElfSegment
             {
                 Type = new ElfSegmentType(_decoder.Decode(hdr.p_type)),
-                Offset = new ElfOffset(_decoder.Decode(hdr.p_offset)),
+                Offset = _decoder.Decode(hdr.p_offset),
                 VirtualAddress = _decoder.Decode(hdr.p_vaddr),
                 PhysicalAddress = _decoder.Decode(hdr.p_paddr),
-                SizeInFile = _decoder.Decode(hdr.p_filesz),
+                Size = _decoder.Decode(hdr.p_filesz),
                 SizeInMemory = _decoder.Decode(hdr.p_memsz),
                 Flags = new ElfSegmentFlags(_decoder.Decode(hdr.p_flags)),
                 Align = _decoder.Decode(hdr.p_align)
@@ -264,7 +216,7 @@ namespace LibObjectFile.Elf
                 Stream.Position = (long)offset;
 
                 var section = ReadSectionTableEntry(i);
-                _sections.Add(section);
+                ObjectFile.AddSection(section);
             }
         }
 
@@ -287,18 +239,22 @@ namespace LibObjectFile.Elf
             }
             
             var sectionType = (ElfSectionType)_decoder.Decode(rawSection.sh_type);
-            var section = CreateElfSection(sectionIndex, sectionType);
+            bool isValidNullSection = sectionIndex == 0 && rawSection.IsNull;
+            var section = CreateElfSection(sectionIndex, sectionType, isValidNullSection);
 
-            section.Name = new ElfString(_decoder.Decode(rawSection.sh_name));
-            section.Type = (ElfSectionType)_decoder.Decode(rawSection.sh_type);
-            section.Flags = (ElfSectionFlags)_decoder.Decode(rawSection.sh_flags);
-            section.VirtualAddress = _decoder.Decode(rawSection.sh_addr);
-            section.Offset = _decoder.Decode(rawSection.sh_offset);
-            section.Alignment = _decoder.Decode(rawSection.sh_addralign);
-            section.Link = new ElfSectionLink(_decoder.Decode(rawSection.sh_link));
-            section.Info = new ElfSectionLink(_decoder.Decode(rawSection.sh_info));
-            section.OriginalSize = _decoder.Decode(rawSection.sh_size);
-            section.OriginalTableEntrySize = _decoder.Decode(rawSection.sh_entsize);
+            if (!isValidNullSection)
+            {
+                section.Name = new ElfString(_decoder.Decode(rawSection.sh_name));
+                section.Type = (ElfSectionType)_decoder.Decode(rawSection.sh_type);
+                section.Flags = (ElfSectionFlags)_decoder.Decode(rawSection.sh_flags);
+                section.VirtualAddress = _decoder.Decode(rawSection.sh_addr);
+                section.Offset = _decoder.Decode(rawSection.sh_offset);
+                section.Alignment = _decoder.Decode(rawSection.sh_addralign);
+                section.Link = new ElfSectionLink(_decoder.Decode(rawSection.sh_link));
+                section.Info = new ElfSectionLink(_decoder.Decode(rawSection.sh_info));
+                section.Size = _decoder.Decode(rawSection.sh_size);
+                section.OriginalTableEntrySize = _decoder.Decode(rawSection.sh_entsize);
+            }
 
             return section;
         }
@@ -317,18 +273,22 @@ namespace LibObjectFile.Elf
             }
 
             var sectionType = (ElfSectionType)_decoder.Decode(rawSection.sh_type);
-            var section = CreateElfSection(sectionIndex, sectionType);
+            bool isValidNullSection = sectionIndex == 0 && rawSection.IsNull;
+            var section = CreateElfSection(sectionIndex, sectionType, sectionIndex == 0 && rawSection.IsNull);
 
-            section.Name = new ElfString(_decoder.Decode(rawSection.sh_name));
-            section.Type = (ElfSectionType)_decoder.Decode(rawSection.sh_type);
-            section.Flags = (ElfSectionFlags)_decoder.Decode(rawSection.sh_flags);
-            section.VirtualAddress = _decoder.Decode(rawSection.sh_addr);
-            section.Offset = _decoder.Decode(rawSection.sh_offset);
-            section.Alignment = _decoder.Decode(rawSection.sh_addralign);
-            section.Link = new ElfSectionLink(_decoder.Decode(rawSection.sh_link));
-            section.Info = new ElfSectionLink(_decoder.Decode(rawSection.sh_info));
-            section.OriginalSize = _decoder.Decode(rawSection.sh_size);
-            section.OriginalTableEntrySize = _decoder.Decode(rawSection.sh_entsize);
+            if (!isValidNullSection)
+            {
+                section.Name = new ElfString(_decoder.Decode(rawSection.sh_name));
+                section.Type = (ElfSectionType)_decoder.Decode(rawSection.sh_type);
+                section.Flags = (ElfSectionFlags)_decoder.Decode(rawSection.sh_flags);
+                section.VirtualAddress = _decoder.Decode(rawSection.sh_addr);
+                section.Offset = _decoder.Decode(rawSection.sh_offset);
+                section.Alignment = _decoder.Decode(rawSection.sh_addralign);
+                section.Link = new ElfSectionLink(_decoder.Decode(rawSection.sh_link));
+                section.Info = new ElfSectionLink(_decoder.Decode(rawSection.sh_info));
+                section.Size = _decoder.Decode(rawSection.sh_size);
+                section.OriginalTableEntrySize = _decoder.Decode(rawSection.sh_entsize);
+            }
 
             return section;
         }
@@ -342,18 +302,26 @@ namespace LibObjectFile.Elf
             {
                 if (link.SpecialSectionIndex == _sectionStringTableIndex)
                 {
-                    link = new ElfSectionLink(ObjectFile.SectionHeaderStringTableInternal);
+                    link = new ElfSectionLink(ObjectFile.SectionHeaderStringTable);
                 }
                 else
                 {
                     var sectionIndex = link.SpecialSectionIndex;
-                    if (sectionIndex >= _sections.Count)
+
+                    bool sectionFound = false;
+                    foreach (var section in ObjectFile.Sections)
+                    {
+                        if (section.SectionIndex == sectionIndex)
+                        {
+                            link = new ElfSectionLink(section);
+                            sectionFound = true;
+                            break;
+                        }
+                    }
+
+                    if (!sectionFound)
                     {
                         Diagnostics.Error(string.Format(errorMessageFormat, link.SpecialSectionIndex));
-                    }
-                    else
-                    {
-                        link = new ElfSectionLink(_sections[(int)sectionIndex]);
                     }
                 }
             }
@@ -370,29 +338,35 @@ namespace LibObjectFile.Elf
 
             if (_hasValidSectionStringTable)
             {
-                Stream.Position = (long)ObjectFile.SectionHeaderStringTableInternal.Offset;
-                ObjectFile.SectionHeaderStringTableInternal.ReadInternal(this);
+                Stream.Position = (long)ObjectFile.SectionHeaderStringTable.Offset;
+                ObjectFile.SectionHeaderStringTable.ReadInternal(this);
             }
 
-            for (var i = 0; i < _sections.Count; i++)
+            for (var i = 0; i < ObjectFile.Sections.Count; i++)
             {
-                var section = _sections[i];
+                var section = ObjectFile.Sections[i];
+                if (section is ElfNullSection || section is ElfProgramHeaderTable) continue;
 
                 // Resolve the name of the section
-                if (ObjectFile.SectionHeaderStringTableInternal.TryFind(section.Name.Index, out var sectionName))
+                if (ObjectFile.SectionHeaderStringTable != null && ObjectFile.SectionHeaderStringTable.TryFind(section.Name.Index, out var sectionName))
                 {
                     section.Name = section.Name.WithName(sectionName);
                 }
                 else
                 {
-                    Diagnostics.Error($"Unable to resolve string index [{section.Name.Index}] for section [{section.Index}] from section header string table");
+                    Diagnostics.Warning(ObjectFile.SectionHeaderStringTable == null
+                        ? $"Unable to resolve string index [{section.Name.Index}] for section [{section.Index}] as section header string table does not exist"
+                        : $"Unable to resolve string index [{section.Name.Index}] for section [{section.Index}] from section header string table");
                 }
 
                 // Connect section Link instance
                 section.Link = ResolveLink(section.Link, $"Invalid section Link [{{0}}] for section [{i}]");
 
                 // Connect section Info instance
-                section.Info = ResolveLink(section.Info, $"Invalid section Info [{{0}}] for section [{i}]");
+                if (section.Type != ElfSectionType.DynamicLinkerSymbolTable && section.Type != ElfSectionType.SymbolTable)
+                {
+                    section.Info = ResolveLink(section.Info, $"Invalid section Info [{{0}}] for section [{i}]");
+                }
 
                 if (i == 0 && _isFirstSectionValidNull)
                 {
@@ -404,78 +378,197 @@ namespace LibObjectFile.Elf
                     continue;
                 }
 
-                Stream.Position = (long)section.Offset;
-                section.ReadInternal(this);
+                if (section.HasContent)
+                {
+                    Stream.Position = (long)section.Offset;
+                    section.ReadInternal(this);
+                }
             }
 
-            foreach (var section in _sections)
+            foreach (var section in ObjectFile.Sections)
             {
                 section.AfterReadInternal(this);
             }
 
-            for (var i = 0; i < _sections.Count; i++)
-            {
-                if (i == 0 && _isFirstSectionValidNull)
-                {
-                    continue;
-                }
+            var fileParts = new ElfFilePartList(ObjectFile.Sections.Count + ObjectFile.Segments.Count);
 
-                var section = _sections[i];
-
-                if (i == _sectionStringTableIndex && _hasValidSectionStringTable)
-                {
-                    continue;
-                }
-
-                section.Index = (uint)(ObjectFile._sections.Count + ElfObjectFile.MinSectionIndex);
-                ObjectFile._sections.Add(section);
-            }
-
-            // Fixup section header string table index
-            if (_hasValidSectionStringTable && ObjectFile.Sections.Count > 0)
-            {
-                ObjectFile.SectionHeaderStringTableInternal.Index = (uint)ObjectFile.Sections.Count + ElfObjectFile.MinSectionIndex;
-            }
+            // Make sure to pre-sort all sections by offset
+            ObjectFile.SortSectionsByOffset();
 
             // Lastly verify integrity of all sections
-            foreach (var section in ObjectFile.Sections)
+            for (var i = 0; i < ObjectFile.Sections.Count; i++)
             {
+                var section = ObjectFile.Sections[i];
                 section.Verify(this.Diagnostics);
+
+                if (section.Size > 0)
+                {
+                    // Collect sections parts
+                    fileParts.Insert(new ElfFilePart(section));
+                }
+
+                // Verify overlapping sections and generate and error
+                for (int j = i + 1; j < ObjectFile.Sections.Count; j++)
+                {
+                    var otherSection = ObjectFile.Sections[j];
+                    if (section.Contains(otherSection) || otherSection.Contains(section))
+                    {
+                        Diagnostics.Warning($"The section {section} [{section.Offset} : {section.Offset + section.Size - 1}] is overlapping with the section {otherSection} [{otherSection.Offset} : {otherSection.Offset + otherSection.Size - 1}]");
+                    }
+                }
+            }
+            
+            if (_isFirstSectionValidNull)
+            {
+                var programHeaderTable = new ElfProgramHeaderTable()
+                {
+                    Offset = Layout.OffsetOfProgramHeaderTable,
+                };
+                // Add the shadow section ElfProgramHeaderTable
+                ObjectFile.InsertSectionAt(1, programHeaderTable);
+                if (programHeaderTable.Size > 0)
+                {
+                    fileParts.Insert(new ElfFilePart(programHeaderTable));
+                }
+            }
+            
+            // Link segments to sections, create shadow sections if necessary
+            bool hasShadowSections = false;
+            foreach (var segment in ObjectFile.Segments)
+            {
+                if (segment.Size == 0) continue;
+
+                var segmentEndOffset = segment.Offset + segment.Size - 1;
+                foreach (var section in ObjectFile.Sections)
+                {
+                    if (section.Size == 0) continue;
+
+                    var sectionEndOffset = section.Offset + section.Size - 1;
+                    if (segment.Offset == section.Offset && segmentEndOffset == sectionEndOffset)
+                    {
+                        // Single case: segment == section
+                        // If we found a section, we will bind the program header to this section
+                        // and switch the offset calculation to auto
+                        segment.Range = section;
+                        segment.OffsetKind = ElfValueKind.Auto;
+                        segment.SizeKind = ElfValueKind.Auto;
+                        break;
+                    }
+                }
+
+                if (segment.Range.IsEmpty)
+                {
+                    var offset = segment.Offset;
+
+                    // If a segment offset is set to 0, we need to take into
+                    // account the fact that the Elf header is already being handled
+                    // so we should not try to create a shadow section for it
+                    if (offset < Layout.SizeOfElfHeader)
+                    {
+                        offset = Layout.SizeOfElfHeader;
+                    }
+                    
+                    // Create parts for the segment
+                    fileParts.CreateParts(offset, segmentEndOffset);
+                    hasShadowSections = true;
+                }
             }
 
-            // Fix program headers
-            for(int i = 0; i < ObjectFile.ProgramHeaders.Count; i++)
+            if (hasShadowSections)
             {
-                var phdr = ObjectFile.ProgramHeaders[i];
-
-                for (int j = 0; j < ObjectFile.Sections.Count; j++)
+                int shadowCount = 0;
+                uint previousSectionIndex = 1;
+                for (var i = 0; i < fileParts.Count; i++)
                 {
-                    var section = ObjectFile.Sections[j];
-                    if (phdr.Offset.Delta >= section.Offset && phdr.Offset.Delta < (section.Offset + section.OriginalSize))
+                    var part = fileParts[i];
+                    if (part.Section == null)
                     {
-                        phdr.Offset = new ElfOffset(section, phdr.Offset.Delta - section.Offset);
-                        break;
+                        var shadowSection = new ElfCustomShadowSection()
+                        {
+                            Name = ".shadow." + shadowCount,
+                            Offset = part.StartOffset, 
+                            Size = part.EndOffset - part.StartOffset + 1
+                        };
+                        shadowCount++;
+
+                        Stream.Position = (long)shadowSection.Offset;
+                        shadowSection.ReadInternal(this);
+
+                        ObjectFile.InsertSectionAt((int)previousSectionIndex, shadowSection);
+                        fileParts[i] = new ElfFilePart(shadowSection);
+                    }
+                    else
+                    {
+                        previousSectionIndex = part.Section.Index + 1;
+                    }
+                }
+
+                foreach (var segment in ObjectFile.Segments)
+                {
+                    if (segment.Size == 0) continue;
+                    if (!segment.Range.IsEmpty) continue;
+
+                    var segmentEndOffset = segment.Offset + segment.Size - 1;
+                    for (var i = 0; i < ObjectFile.Sections.Count; i++)
+                    {
+                        var section = ObjectFile.Sections[i];
+                        if (section.Size == 0) continue;
+
+                        var sectionEndOffset = section.Offset + section.Size - 1;
+                        if (segment.Offset >= section.Offset && segment.Offset <= sectionEndOffset)
+                        {
+                            ElfSection beginSection = section;
+                            ElfSection endSection = null;
+                            for (int j = i; j < ObjectFile.Sections.Count; j++)
+                            {
+                                var nextSection = ObjectFile.Sections[j];
+                                if (nextSection.Size == 0) continue;
+
+                                sectionEndOffset = nextSection.Offset + nextSection.Size - 1;
+
+                                if (segmentEndOffset >= nextSection.Offset && segmentEndOffset <= sectionEndOffset)
+                                {
+                                    endSection = nextSection;
+                                    break;
+                                }
+                            }
+
+                            if (endSection == null)
+                            {
+                                Diagnostics.Error($"Invalid range for {segment}. The range is set to empty");
+                            }
+                            else
+                            {
+                                segment.Range = new ElfSegmentRange(beginSection, segment.Offset - beginSection.Offset, endSection, (long)(segmentEndOffset - endSection.Offset));
+                            }
+
+                            segment.OffsetKind = ElfValueKind.Auto;
+                            segment.SizeKind = ElfValueKind.Auto;
+                            break;
+                        }
                     }
                 }
             }
         }
-
-        private ElfSection CreateElfSection(int sectionIndex, ElfSectionType sectionType)
+        
+        private ElfSection CreateElfSection(int sectionIndex, ElfSectionType sectionType, bool isNullSection)
         {
             ElfSection section;
 
             switch (sectionType)
             {
                 case ElfSectionType.Null:
+                    section = isNullSection ? (ElfSection)new ElfNullSection() : new ElfCustomSection();
+                    break;
                 case ElfSectionType.ProgBits:
                 case ElfSectionType.SymbolHashTable:
                 case ElfSectionType.DynamicLinking:
                 case ElfSectionType.Note:
                 case ElfSectionType.NoBits:
                 case ElfSectionType.Shlib:
-                case ElfSectionType.DynamicLinkerSymbolTable:
                     section = new ElfCustomSection();
                     break;
+                case ElfSectionType.DynamicLinkerSymbolTable:
                 case ElfSectionType.SymbolTable:
                     section = new ElfSymbolTable();
                     break;
@@ -484,7 +577,7 @@ namespace LibObjectFile.Elf
                     if (sectionIndex == _sectionStringTableIndex)
                     {
                         _hasValidSectionStringTable = true;
-                        section = ObjectFile.SectionHeaderStringTableInternal;
+                        section = new ElfSectionHeaderStringTable();
                     }
                     else
                     {
@@ -499,10 +592,6 @@ namespace LibObjectFile.Elf
                     section = new ElfCustomSection();
                     break;
             }
-
-            section.Index = (uint)sectionIndex;
-            section.Parent = ObjectFile;
-
             return section;
         }
 

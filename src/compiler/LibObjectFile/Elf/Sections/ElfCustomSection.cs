@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using LibObjectFile.Utils;
 
 namespace LibObjectFile.Elf
 {
@@ -34,32 +33,24 @@ namespace LibObjectFile.Elf
                 base.Type = value;
             }
         }
+
+        public override ulong TableEntrySize => OriginalTableEntrySize;
         
         public Stream Stream { get; set; }
-
-        public override ulong Size => Stream != null ? (ulong) Stream.Length : 0;
+        
+        protected override ulong GetSize() => Stream != null ? (ulong)Stream.Length : 0;
 
         protected override void Read(ElfReader reader)
         {
-            var length = (long) OriginalSize;
-            var memoryStream = new MemoryStream((int)length);
-            memoryStream.SetLength(length);
-
-            var buffer = memoryStream.GetBuffer();
-            reader.Stream.Read(buffer, 0, (int)length);
-            
-            Stream = memoryStream;
-            Stream.Position = 0;
-
-            // TODO: Add support for copy stream if necessary
-            //Stream = new SliceStream(reader.Stream, reader.Stream.Position, (long)OriginalSize);
+            Stream = reader.ReadAsMemoryStream(base.Size);
+            SizeKind = ElfValueKind.Auto;
         }
 
         protected override void Write(ElfWriter writer)
         {
             if (Stream == null) return;
             Stream.Position = 0;
-            Stream.CopyTo(writer.Stream);
+            writer.Write(Stream);
         }
     }
 }

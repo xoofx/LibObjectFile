@@ -25,6 +25,15 @@ namespace LibObjectFile
             HasErrors = false;
         }
 
+        public void CopyTo(DiagnosticBag diagnostics)
+        {
+            if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
+            foreach (var diagnosticMessage in Messages)
+            {
+                diagnostics.Log(diagnosticMessage);
+            }
+        }
+
         public void Log(DiagnosticMessage message)
         {
             if (message.Message == null) throw new InvalidOperationException($"{nameof(DiagnosticMessage)}.{nameof(DiagnosticMessage.Message)} cannot be null");

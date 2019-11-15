@@ -16,19 +16,6 @@ namespace LibObjectFile.Elf
 
         public List<ElfRelocation> Entries { get; }
 
-        public override string FullName
-        {
-            get
-            {
-                if (Info.Section == null)
-                {
-                    return Name;
-                }
-
-                return $"{Name.Value ?? GetDefaultName(Type)}{Info.Section.FullName}";
-            }
-        }
-
         private static string GetDefaultName(ElfSectionType type)
         {
             return type == ElfSectionType.Relocation? DefaultName : DefaultNameWithAddends;
@@ -85,7 +72,7 @@ namespace LibObjectFile.Elf
 
         private void Read32(ElfReader reader)
         {
-            var numberOfEntries = OriginalSize / OriginalTableEntrySize;
+            var numberOfEntries = base.Size / OriginalTableEntrySize;
             if (IsRelocationWithAddends)
             {
                 for (ulong i = 0; i < numberOfEntries; i++)
@@ -133,7 +120,7 @@ namespace LibObjectFile.Elf
 
         private void Read64(ElfReader reader)
         {
-            var numberOfEntries = OriginalSize / OriginalTableEntrySize;
+            var numberOfEntries = base.Size / OriginalTableEntrySize;
             if (IsRelocationWithAddends)
             {
                 for (ulong i = 0; i < numberOfEntries; i++)
@@ -257,17 +244,16 @@ namespace LibObjectFile.Elf
 
             if (!name.StartsWith(defaultName))
             {
-                reader.Diagnostics.Error($"The name of the {Type} section `{this}` doesn't start with `{DefaultName}`");
+                reader.Diagnostics.Warning($"The name of the {Type} section `{this}` doesn't start with `{DefaultName}`");
             }
             else
             {
-                // Replace the name of relocation to avoid having the name of the Info section
-                Name = defaultName;
+                // Check the name of relocation
                 var currentTargetName = name.Substring(defaultName.Length);
                 var sectionTargetName = Info.Section?.Name.Value;
                 if (sectionTargetName != null && currentTargetName != sectionTargetName)
                 {
-                    reader.Diagnostics.Error($"Invalid name `{name}` for relocation table  [{Index}] the current link section is named `{sectionTargetName}` so the expected name should be `{defaultName}{sectionTargetName}`", this);
+                    reader.Diagnostics.Warning($"Invalid name `{name}` for relocation table  [{Index}] the current link section is named `{sectionTargetName}` so the expected name should be `{defaultName}{sectionTargetName}`", this);
                 }
             }
         }
@@ -276,11 +262,12 @@ namespace LibObjectFile.Elf
         {
             base.Verify(diagnostics);
 
-            if (Info.Section == null)
-            {
-                diagnostics.Error($"Invalid {nameof(Info)} of the section [{Index}] `{nameof(ElfRelocationTable)}` that cannot be null and must point to a valid section", this);
-            }
-            else if (Info.Section.Parent != Parent)
+            //if (Info.Section == null)
+            //{
+            //    diagnostics.Error($"Invalid {nameof(Info)} of the section [{Index}] `{nameof(ElfRelocationTable)}` that cannot be null and must point to a valid section", this);
+            //}
+            //else 
+            if (Info.Section != null && Info.Section.Parent != Parent)
             {
                 diagnostics.Error($"Invalid parent for the {nameof(Info)} of the section [{Index}] `{nameof(ElfRelocationTable)}`. It must point to the same {nameof(ElfObjectFile)} parent instance than this section parent", this);
             }

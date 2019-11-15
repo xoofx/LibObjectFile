@@ -41,7 +41,7 @@ namespace LibObjectFile.Elf
             writer.WriteLine($"  Class:                             {GetElfFileClass(elf.FileClass)}");
             writer.WriteLine($"  Data:                              {GetElfEncoding(elf.Encoding)}");
             writer.WriteLine($"  Version:                           {GetElfVersion((byte)elf.Version)}");
-            writer.WriteLine($"  OS/ABI:                            {GetElfOsAbi(elf.OSAbi)}");
+            writer.WriteLine($"  OS/ABI:                            {GetElfOsAbi(elf.OSABI)}");
             writer.WriteLine($"  ABI Version:                       {elf.AbiVersion}");
             writer.WriteLine($"  Type:                              {GetElfFileType(elf.FileType)}");
             writer.WriteLine($"  Machine:                           {GetElfArch(elf.Arch)}");
@@ -52,36 +52,31 @@ namespace LibObjectFile.Elf
             writer.WriteLine($"  Flags:                             {elf.Flags}");
             writer.WriteLine($"  Size of this header:               {elf.Layout.SizeOfElfHeader} (bytes)");
             writer.WriteLine($"  Size of program headers:           {elf.Layout.SizeOfProgramHeaderEntry} (bytes)");
-            writer.WriteLine($"  Number of program headers:         {elf.ProgramHeaders.Count}");
+            writer.WriteLine($"  Number of program headers:         {elf.Segments.Count}");
             writer.WriteLine($"  Size of section headers:           {elf.Layout.SizeOfSectionHeaderEntry} (bytes)");
-            writer.WriteLine($"  Number of section headers:         {(elf.Sections.Count == 0 ? 0 : elf.Sections.Count + 2)}");
-            writer.WriteLine($"  Section header string table index: {elf.SectionHeaderStringTable.Index}");
+            writer.WriteLine($"  Number of section headers:         {elf.VisibleSectionCount}");
+            writer.WriteLine($"  Section header string table index: {elf.SectionHeaderStringTable?.SectionIndex ?? 0}");
         }
 
         public static void PrintSectionHeaders(ElfObjectFile elf, TextWriter writer)
         {
             if (elf == null) throw new ArgumentNullException(nameof(elf));
             if (writer == null) throw new ArgumentNullException(nameof(writer));
-            if (elf.Sections.Count == 0)
+            if (elf.VisibleSectionCount == 0)
             {
                 writer.WriteLine("There are no sections in this file.");
                 return;
             }
 
             writer.WriteLine();
-            writer.WriteLine(elf.Sections.Count > 0 ? "Section Headers:" : "Section Header:");
+            writer.WriteLine(elf.VisibleSectionCount > 0 ? "Section Headers:" : "Section Header:");
 
             writer.WriteLine("  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al");
-            writer.WriteLine("  [ 0]                   NULL            0000000000000000 000000 000000 00      0   0  0");
             for (int i = 0; i < elf.Sections.Count; i++)
             {
                 var section = elf.Sections[i];
-                writer.WriteLine($"  [{section.Index,2:#0}] {section.FullName,-17} {GetElfSectionType(section.Type),-15} {section.VirtualAddress:x16} {section.Offset:x6} {section.Size:x6} {section.TableEntrySize:x2} {GetElfSectionFlags(section.Flags),3} {section.Link.GetIndex(),2} {section.Info.GetIndex(),3} {section.Alignment,2}");
-            }
-
-            {
-                var section = elf.SectionHeaderStringTableInternal;
-                writer.WriteLine($"  [{section.Index,2:#0}] {section.FullName,-17} {GetElfSectionType(section.Type),-15} {section.VirtualAddress:x16} {section.Offset:x6} {section.Size:x6} {section.TableEntrySize:x2} {GetElfSectionFlags(section.Flags),3} {section.Link.GetIndex(),2} {section.Info.GetIndex(),3} {section.Alignment,2}");
+                if (section.IsShadow) continue;
+                writer.WriteLine($"  [{section.SectionIndex,2:#0}] {GetElfSectionName(section),-17} {GetElfSectionType(section.Type),-15} {section.VirtualAddress:x16} {section.Offset:x6} {section.Size:x6} {section.TableEntrySize:x2} {GetElfSectionFlags(section.Flags),3} {section.Link.GetIndex(),2} {section.Info.GetIndex(),3} {section.Alignment,2}");
             }
             writer.WriteLine(@"Key to Flags:
   W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
@@ -99,6 +94,11 @@ namespace LibObjectFile.Elf
             // TODO
         }
 
+        private static string GetElfSectionName(ElfSection section)
+        {
+            return section.Parent.SectionHeaderStringTable == null ? "<no-strings>" : section.Name.Value;
+        }
+
         public static void PrintProgramHeaders(ElfObjectFile elf, TextWriter writer)
         {
             if (elf == null) throw new ArgumentNullException(nameof(elf));
@@ -106,37 +106,37 @@ namespace LibObjectFile.Elf
 
             writer.WriteLine();
 
-            if (elf.ProgramHeaders.Count == 0)
+            if (elf.Segments.Count == 0)
             {
                 writer.WriteLine("There are no program headers in this file.");
                 return;
             }
             
-            writer.WriteLine(elf.ProgramHeaders.Count > 1 ? "Program Headers:" : "Program Header:");
+            writer.WriteLine(elf.Segments.Count > 1 ? "Program Headers:" : "Program Header:");
 
             writer.WriteLine("  Type           Offset   VirtAddr           PhysAddr           FileSiz  MemSiz   Flg Align");
-            for (int i = 0; i < elf.ProgramHeaders.Count; i++)
+            for (int i = 0; i < elf.Segments.Count; i++)
             {
-                var phdr = elf.ProgramHeaders[i];
-                writer.WriteLine($"  {GetElfSegmentType(phdr.Type),-14} 0x{GetElfSegmentOffset(phdr.Offset):x6} 0x{phdr.VirtualAddress:x16} 0x{phdr.PhysicalAddress:x16} 0x{phdr.SizeInFile:x6} 0x{phdr.SizeInMemory:x6} {GetElfSegmentFlags(phdr.Flags),3} 0x{phdr.Align:x4}");
+                var phdr = elf.Segments[i];
+                writer.WriteLine($"  {GetElfSegmentType(phdr.Type),-14} 0x{phdr.Offset:x6} 0x{phdr.VirtualAddress:x16} 0x{phdr.PhysicalAddress:x16} 0x{phdr.Size:x6} 0x{phdr.SizeInMemory:x6} {GetElfSegmentFlags(phdr.Flags),3} 0x{phdr.Align:x4}");
             }
 
-            if (elf.ProgramHeaders.Count > 0 && elf.Sections.Count > 0)
+            if (elf.Segments.Count > 0 && elf.VisibleSectionCount > 0 && elf.SectionHeaderStringTable != null)
             {
                 writer.WriteLine();
                 writer.WriteLine(" Section to Segment mapping:");
                 writer.WriteLine("  Segment Sections...");
 
-                for (int i = 0; i < elf.ProgramHeaders.Count; i++)
+                for (int i = 0; i < elf.Segments.Count; i++)
                 {
-                    var segment = elf.ProgramHeaders[i];
+                    var segment = elf.Segments[i];
                     writer.Write($"   {i:00}     ");
 
                     foreach (var section in elf.Sections)
                     {
                         if (IsSectionInSegment(section, segment, true, true))
                         {
-                            writer.Write($"{section.FullName} ");
+                            writer.Write($"{GetElfSectionName(section)} ");
                         }
                     }
 
@@ -161,7 +161,8 @@ namespace LibObjectFile.Elf
                     hasRelocations = true;
                     var relocTable = (ElfRelocationTable) section;
 
-                    writer.WriteLine($"Relocation section '{section.FullName}' at offset 0x{section.Offset:x} contains {relocTable.Entries.Count} entries:");
+                    writer.WriteLine($"Relocation section {(elf.SectionHeaderStringTable == null ? "0" : $"'{section.Name}'")} at offset 0x{section.Offset:x} contains {relocTable.Entries.Count} entries:");
+                     
                     if (elf.FileClass == ElfFileClass.Is32)
                     {
                         // TODO
@@ -217,7 +218,7 @@ namespace LibObjectFile.Elf
             if (elf == null) throw new ArgumentNullException(nameof(elf));
             if (writer == null) throw new ArgumentNullException(nameof(writer));
 
-            if (elf.Sections.Count == 0) return;
+            if (elf.VisibleSectionCount == 0) return;
 
             foreach (var section in elf.Sections)
             {
@@ -225,8 +226,8 @@ namespace LibObjectFile.Elf
 
                 writer.WriteLine();
                 writer.WriteLine(symbolTable.Entries.Count <= 1
-                    ? $"Symbol table '{symbolTable.FullName}' contains {symbolTable.Entries.Count} entry:"
-                    : $"Symbol table '{symbolTable.FullName}' contains {symbolTable.Entries.Count} entries:"
+                    ? $"Symbol table '{GetElfSectionName(symbolTable)}' contains {symbolTable.Entries.Count} entry:"
+                    : $"Symbol table '{GetElfSectionName(symbolTable)}' contains {symbolTable.Entries.Count} entries:"
                 );
 
                 if (elf.FileClass == ElfFileClass.Is32)
@@ -353,18 +354,18 @@ namespace LibObjectFile.Elf
                     /* Any section besides one of type SHT_NOBITS must have file		
                        offsets within the segment.  */
                     && (section.Type == ElfSectionType.NoBits
-                        || ((section).Offset >= segment.Offset.Value
+                        || ((section).Offset >= segment.Offset
 
                             && (!(isStrict)
 
-                                || (section.Offset - segment.Offset.Value
+                                || (section.Offset - segment.Offset
 
-                                    <= segment.SizeInFile - 1))
+                                    <= segment.Size - 1))
 
-                            && ((section.Offset - segment.Offset.Value
+                            && ((section.Offset - segment.Offset
                                  + GetSectionSize(section, segment))
 
-                                <= segment.SizeInFile)))
+                                <= segment.Size)))
                     /* SHF_ALLOC sections must have VMAs within the segment.  */
                     && (!(checkVirtualAddress)
                         || (section.Flags & ElfSectionFlags.Alloc) == 0
@@ -389,11 +390,11 @@ namespace LibObjectFile.Elf
                         || segment.SizeInMemory == 0
                         || ((section.Type == ElfSectionType.NoBits
 
-                             || (section.Offset > segment.Offset.Value
+                             || (section.Offset > segment.Offset
 
-                                 && (section.Offset - segment.Offset.Value
+                                 && (section.Offset - segment.Offset
 
-                                     < segment.SizeInFile)))
+                                     < segment.Size)))
 
                             && ((section.Flags & ElfSectionFlags.Alloc) == 0
 
@@ -421,11 +422,6 @@ namespace LibObjectFile.Elf
             builder.Append((flags.Value & RawElf.PF_X) != 0 ? 'E' : ' ');
             // TODO: other flags
             return builder.ToString();
-        }
-
-        private static ulong GetElfSegmentOffset(ElfOffset offset)
-        {
-            return offset.Value;
         }
 
         public static string GetElfSegmentType(ElfSegmentType segmentType)
@@ -539,9 +535,9 @@ namespace LibObjectFile.Elf
         }
 
 
-        private static string GetElfOsAbi(ElfOSAbi osAbi)
+        private static string GetElfOsAbi(ElfOSABI osabi)
         {
-            return osAbi.Value switch
+            return osabi.Value switch
             {
                 RawElf.ELFOSABI_NONE => "UNIX - System V",
                 RawElf.ELFOSABI_HPUX => "UNIX - HP-UX",
@@ -554,7 +550,7 @@ namespace LibObjectFile.Elf
                 RawElf.ELFOSABI_TRU64 => "UNIX - TRU64",
                 RawElf.ELFOSABI_MODESTO => "Novell - Modesto",
                 RawElf.ELFOSABI_OPENBSD => "UNIX - OpenBSD",
-                _ => $"<unknown: {osAbi.Value:x}"
+                _ => $"<unknown: {osabi.Value:x}"
             };
         }
         static string GetElfFileType(ElfFileType fileType)
