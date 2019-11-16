@@ -5,7 +5,7 @@ install:
 - ps: >-
     cd src
 
-    wsl.exe -d Ubuntu-18.04 sudo apt-get -y install binutils
+    wsl.exe -d Ubuntu-18.04 sudo apt-get -y install binutils gcc
 
     nuget restore LibObjectFile.sln
 
