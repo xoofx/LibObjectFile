@@ -7,13 +7,8 @@ using System.Diagnostics;
 
 namespace LibObjectFile.Elf
 {
-    // TODO: SPECS ELF: Executable and Linkable Format
-    // TODO: Every section in an object file has exactly one section header describing it. Section headers may exist that do not have a section.
-    // TODO: Sections in a file may not overlap. No byte in a file resides in more than one section.
-    // TODO: Each section occupies one contiguous (possibly empty) sequence of bytes within a file.
-
     /// <summary>
-    /// 
+    /// Defines the base class for a section in an <see cref="ElfObjectFile"/>.
     /// </summary>
     [DebuggerDisplay("{ToString(),nq}")]
     public abstract class ElfSection : ElfObjectFilePart
@@ -35,30 +30,72 @@ namespace LibObjectFile.Elf
             set => _type = value;
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="ElfSectionFlags"/> of this section.
+        /// </summary>
         public virtual ElfSectionFlags Flags { get; set; }
 
+        /// <summary>
+        /// Gets or sets the name of this section.
+        /// </summary>
         public virtual ElfString Name { get; set; }
 
+        /// <summary>
+        /// Gets or sets the virtual address of this section.
+        /// </summary>
         public virtual ulong VirtualAddress { get; set; }
 
+        /// <summary>
+        /// Gets or sets the alignment requirement of this section.
+        /// </summary>
         public virtual ulong Alignment { get; set; }
 
+        /// <summary>
+        /// Gets or sets the link element of this section.
+        /// </summary>
         public virtual ElfSectionLink Link { get; set; }
 
+        /// <summary>
+        /// Gets or sets the info element of this section.
+        /// </summary>
         public virtual ElfSectionLink Info { get; set; }
 
-
-        // TODO: The member contains 0 if the section does not hold a table of fixed-size entries.
-
+        /// <summary>
+        /// Gets the table entry size of this section.
+        /// </summary>
         public virtual ulong TableEntrySize => 0;
 
+        /// <summary>
+        /// Gets the index of the visible sections in <see cref="ElfObjectFile.Sections"/> (visible == not <see cref="ElfShadowSection"/>)
+        /// </summary>
         public uint SectionIndex { get; internal set; }
 
+        /// <summary>
+        /// Gets the size of the original table entry size of this section.
+        /// </summary>
         public ulong OriginalTableEntrySize { get; internal set; }
 
+        /// <summary>
+        /// Gets a boolean indicating if this section is a <see cref="ElfShadowSection"/>.
+        /// </summary>
         public bool IsShadow => this is ElfShadowSection;
 
+        /// <summary>
+        /// Gets a boolean indicating if this section has some content (Size should be taken into account).
+        /// </summary>
         public virtual bool HasContent => Type != ElfSectionType.NoBits;
+
+        /// <summary>
+        /// Read data from the specified reader to this instance.
+        /// </summary>
+        /// <param name="reader">The reader to read data from.</param>
+        protected abstract void Read(ElfReader reader);
+
+        /// <summary>
+        /// Writes data to the specified writer from this instance.
+        /// </summary>
+        /// <param name="writer">The writer to write data to.</param>
+        protected abstract void Write(ElfWriter writer);
 
         internal void WriteInternal(ElfWriter writer)
         {
@@ -71,11 +108,7 @@ namespace LibObjectFile.Elf
             // After reading the size must be Auto by default
             SizeKind = ElfValueKind.Auto;
         }
-
-        protected abstract void Read(ElfReader reader);
-
-        protected abstract void Write(ElfWriter writer);
-
+        
         public override void Verify(DiagnosticBag diagnostics)
         {
             if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));

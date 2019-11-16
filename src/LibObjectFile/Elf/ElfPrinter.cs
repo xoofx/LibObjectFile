@@ -3,14 +3,21 @@
 // See the license.txt file in the project root for more information.
 
 using System;
-using System.Buffers;
 using System.IO;
 using System.Text;
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// Extensions methods for <see cref="ElfObjectFile"/> to print their layout in text forms, similar to readelf.
+    /// </summary>
     public static class ElfPrinter
     {
+        /// <summary>
+        /// Prints an <see cref="ElfObjectFile"/> to the specified writer.
+        /// </summary>
+        /// <param name="elf">The object file to print.</param>
+        /// <param name="writer">The destination text writer.</param>
         public static void Print(this ElfObjectFile elf, TextWriter writer)
         {
             if (elf == null) throw new ArgumentNullException(nameof(elf));

@@ -3,11 +3,14 @@
 // See the license.txt file in the project root for more information.
 
 using System;
-using System.Diagnostics;
 using System.IO;
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// Internal implementation of <see cref="ElfReader"/> to read from a stream to an <see cref="ElfObjectFile"/> instance.
+    /// </summary>
+    /// <typeparam name="TDecoder"></typeparam>
     internal abstract class ElfReader<TDecoder> : ElfReader where TDecoder : struct, IElfDecoder
     {
         private TDecoder _decoder;
@@ -441,7 +444,8 @@ namespace LibObjectFile.Elf
                 }
             }
             
-            // Link segments to sections, create shadow sections if necessary
+            // Link segments to sections if we have an exact match.
+            // otherwise record any segments that are not bound to a section.
             bool hasShadowSections = false;
             foreach (var segment in ObjectFile.Segments)
             {
@@ -483,10 +487,15 @@ namespace LibObjectFile.Elf
                 }
             }
 
+            // If the previous loop has created ElfFilePart, we have to 
+            // create ElfCustomShadowSection and update the ElfSegment.Range
             if (hasShadowSections)
             {
                 int shadowCount = 0;
                 uint previousSectionIndex = 1;
+
+                // Create ElfCustomShadowSection for any parts in the file
+                // that are referenced by a segment but doesn't have a section
                 for (var i = 0; i < fileParts.Count; i++)
                 {
                     var part = fileParts[i];
@@ -512,6 +521,7 @@ namespace LibObjectFile.Elf
                     }
                 }
 
+                // Update all segment Ranges
                 foreach (var segment in ObjectFile.Segments)
                 {
                     if (segment.Size == 0) continue;
@@ -563,20 +573,15 @@ namespace LibObjectFile.Elf
         
         private ElfSection CreateElfSection(int sectionIndex, ElfSectionType sectionType, bool isNullSection)
         {
-            ElfSection section;
+            ElfSection section = null;
 
             switch (sectionType)
             {
                 case ElfSectionType.Null:
-                    section = isNullSection ? (ElfSection)new ElfNullSection() : new ElfCustomSection();
-                    break;
-                case ElfSectionType.ProgBits:
-                case ElfSectionType.SymbolHashTable:
-                case ElfSectionType.DynamicLinking:
-                case ElfSectionType.Note:
-                case ElfSectionType.NoBits:
-                case ElfSectionType.Shlib:
-                    section = new ElfCustomSection();
+                    if (isNullSection)
+                    {
+                        section = new ElfNullSection();
+                    }
                     break;
                 case ElfSectionType.DynamicLinkerSymbolTable:
                 case ElfSectionType.SymbolTable:
@@ -598,14 +603,26 @@ namespace LibObjectFile.Elf
                 case ElfSectionType.RelocationAddends:
                     section = new ElfRelocationTable();
                     break;
-                default:
-                    section = new ElfCustomSection();
-                    break;
             }
+
+            // If the section is not a builtin section, try to offload to a delegate
+            // or use the default ElfCustomSection.
+            if (section == null)
+            {
+                if (Options.TryCreateSection != null)
+                {
+                    section = Options.TryCreateSection(sectionType, Diagnostics);
+                }
+
+                if (section == null)
+                {
+                    section = new ElfCustomSection();
+                }
+            }
+
             return section;
         }
-
-
+        
         public override ushort Decode(RawElf.Elf32_Half src)
         {
             return _decoder.Decode(src);

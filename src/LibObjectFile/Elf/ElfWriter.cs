@@ -18,32 +18,9 @@ namespace LibObjectFile.Elf
         private protected ElfObjectFile ObjectFile { get; }
 
         internal abstract void Write();
-
-
-        public void Write(Stream stream, ulong size = 0, int bufferSize = 4096)
-        {
-            if (stream == null) throw new ArgumentNullException(nameof(stream));
-            if (bufferSize <= 0) throw new ArgumentOutOfRangeException(nameof(bufferSize));
-            
-            size = size == 0 ? (ulong)stream.Length - (ulong)stream.Position : size;
-            var buffer = ArrayPool<byte>.Shared.Rent(bufferSize);
-
-            while (size != 0)
-            {
-                var sizeToRead = size >= (ulong) buffer.Length ? buffer.Length : (int)size;
-                var sizeRead = stream.Read(buffer, 0, sizeToRead);
-                if (sizeRead <= 0) break;
-
-                Stream.Write(buffer, 0, sizeRead);
-                size -= (ulong)sizeRead;
-            }
-
-            if (size != 0)
-            {
-                throw new InvalidOperationException("Unable to write stream entirely");
-            }
-        }
-
+        
+        public override bool IsReadOnly => false;
+        
         internal static ElfWriter Create(ElfObjectFile objectFile, Stream stream)
         {
             var thisComputerEncoding = BitConverter.IsLittleEndian ? ElfEncoding.Lsb : ElfEncoding.Msb;

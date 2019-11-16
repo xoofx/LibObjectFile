@@ -3,14 +3,22 @@
 // See the license.txt file in the project root for more information.
 
 using System;
-using System.IO;
 
 namespace LibObjectFile.Elf
 {
     using static RawElf;
 
+    /// <summary>
+    /// Extensions for <see cref="ElfObjectFile"/>
+    /// </summary>
     public static class ElfObjectFileExtensions
     {
+        /// <summary>
+        /// Copy to an array buffer the ident array as found in ELF header <see cref="Elf32_Ehdr.e_ident"/>
+        /// or <see cref="Elf64_Ehdr.e_ident"/>.
+        /// </summary>
+        /// <param name="objectFile">The object file to copy the ident from.</param>
+        /// <param name="ident">A span receiving the ident. Must be >= 16 bytes length</param>
         public static void CopyIdentTo(this ElfObjectFile objectFile, Span<byte> ident)
         {
             if (objectFile == null) throw new ArgumentNullException(nameof(objectFile));
@@ -36,6 +44,14 @@ namespace LibObjectFile.Elf
             ident[EI_ABIVERSION] = objectFile.AbiVersion;
         }
 
+        /// <summary>
+        /// Tries to copy from an ident array as found in ELF header <see cref="Elf32_Ehdr.e_ident"/> to this ELF object file instance.
+        /// or <see cref="Elf64_Ehdr.e_ident"/>.
+        /// </summary>
+        /// <param name="objectFile">The object file to receive the ident from.</param>
+        /// <param name="ident">A span to read from. Must be >= 16 bytes length</param>
+        /// <param name="diagnostics">The diagnostics</param>
+        /// <returns><c>true</c> if copying the ident was successful. <c>false</c> otherwise</returns>
         public static bool TryCopyIdentFrom(this ElfObjectFile objectFile, ReadOnlySpan<byte> ident, DiagnosticBag diagnostics)
         {
             if (objectFile == null) throw new ArgumentNullException(nameof(objectFile));

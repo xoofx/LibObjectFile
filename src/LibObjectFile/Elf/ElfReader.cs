@@ -5,10 +5,12 @@
 using System;
 using System.Buffers;
 using System.IO;
-using LibObjectFile.Utils;
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// Base class for reading and building an <see cref="ElfObjectFile"/> from a <see cref="Stream"/>.
+    /// </summary>
     public abstract class ElfReader : ObjectFileReaderWriter, IElfDecoder
     {
         private protected ElfReader(ElfObjectFile objectFile, Stream stream, ElfReaderOptions readerOptions) : base(stream)
@@ -19,51 +21,14 @@ namespace LibObjectFile.Elf
 
         private protected ElfObjectFile ObjectFile { get; }
 
+        /// <summary>
+        /// Gets the <see cref="ElfReaderOptions"/> used for reading the <see cref="ElfObjectFile"/>
+        /// </summary>
         public ElfReaderOptions Options { get; }
 
+        public override bool IsReadOnly => Options.ReadOnly;
+
         internal abstract void Read();
-
-        public Stream ReadAsStream(ulong size)
-        {
-            if (Options.ReadOnly)
-            {
-                return ReadAsSliceStream(size);
-            }
-            else
-            {
-                return ReadAsMemoryStream(size);
-            }
-        }
-
-        private SliceStream ReadAsSliceStream(ulong size)
-        {
-            return new SliceStream(Stream, Stream.Position, (long)size);
-        }
-
-        private MemoryStream ReadAsMemoryStream(ulong size)
-        {
-            var memoryStream = new MemoryStream((int)size);
-            if (size == 0) return memoryStream;
-
-            memoryStream.SetLength((long)size);
-
-            var buffer = memoryStream.GetBuffer();
-            while (size != 0)
-            {
-                var lengthToRead = size >= int.MaxValue ? int.MaxValue : (int) size;
-                var lengthRead = Stream.Read(buffer, 0, lengthToRead);
-                if (lengthRead < 0) break;
-                if ((uint)lengthRead >= size)
-                {
-                    size -= (uint)lengthRead;
-                }
-                else
-                {
-                    break;
-                }
-            }
-            return memoryStream;
-        }
 
         public abstract ElfSectionLink ResolveLink(ElfSectionLink link, string errorMessageFormat);
 

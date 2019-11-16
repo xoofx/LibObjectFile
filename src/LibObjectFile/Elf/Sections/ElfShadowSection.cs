@@ -7,6 +7,12 @@ using System.IO;
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// A shadow section is a section that will not be saved to the section header table but can contain data
+    /// that will be saved with the <see cref="ElfObjectFile"/>.
+    /// A shadow section is usually associated with an <see cref="ElfSegment"/> that is referencing a portion of
+    /// data that is not owned by a visible section.
+    /// </summary>
     public abstract class ElfShadowSection : ElfSection
     {
         protected ElfShadowSection() : base(ElfSectionType.Null)

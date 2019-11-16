@@ -6,6 +6,11 @@ using System;
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// Defines an OS ABI.
+    /// This is the value seen in the ident part of an Elf header at index <see cref="RawElf.EI_OSABI"/>
+    /// as well as the various machine defines (e.g <see cref="RawElf.ELFOSABI_LINUX"/>).
+    /// </summary>
     public readonly partial struct ElfOSABI : IEquatable<ElfOSABI>
     {
         public ElfOSABI(byte value)

@@ -2,4 +2,6 @@
 	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderText/@EntryValue">Copyright (c) Alexandre Mutel. All rights reserved.&#xD;
 This file is licensed under the BSD-Clause 2 license. &#xD;
 See the license.txt file in the project root for more information.</s:String>
-	<s:Boolean x:Key="/Default/UserDictionary/Words/=endian/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=Alexandre/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=endian/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=Mutel/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>
