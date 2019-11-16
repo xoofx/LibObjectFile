@@ -152,8 +152,8 @@ namespace LibObjectFile.Elf
             Layout.SizeOfElfHeader = (ushort)offset;
             Layout.OffsetOfProgramHeaderTable = 0;
             Layout.OffsetOfSectionHeaderTable = 0;
-            Layout.SizeOfProgramHeaderEntry = 0;
-            Layout.SizeOfSectionHeaderEntry = 0;
+            Layout.SizeOfProgramHeaderEntry = FileClass == ElfFileClass.Is32 ? (ushort)sizeof(RawElf.Elf32_Phdr) : (ushort)sizeof(RawElf.Elf64_Phdr);
+            Layout.SizeOfSectionHeaderEntry = FileClass == ElfFileClass.Is32 ? (ushort)sizeof(RawElf.Elf32_Shdr) : (ushort)sizeof(RawElf.Elf64_Shdr);
 
             bool programHeaderTableFoundAndUpdated = false;
 
@@ -161,8 +161,6 @@ namespace LibObjectFile.Elf
             var sections = Sections;
             if (sections.Count > 0)
             {
-                Layout.SizeOfSectionHeaderEntry = FileClass == ElfFileClass.Is32 ? (ushort)sizeof(RawElf.Elf32_Shdr) : (ushort)sizeof(RawElf.Elf64_Shdr);
-
                 // Calculate offsets of all sections in the stream
                 for (var i = 0; i < sections.Count; i++)
                 {
