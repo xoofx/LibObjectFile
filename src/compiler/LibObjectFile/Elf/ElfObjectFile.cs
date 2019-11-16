@@ -422,6 +422,15 @@ namespace LibObjectFile.Elf
                 }
             }
 
+            if (wasShadow)
+            {
+                ShadowSectionCount--;
+            }
+            else
+            {
+                VisibleSectionCount--;
+            }
+
             section.Parent = null;
 
             // Automatically replace the current ElfSectionHeaderStringTable with another existing one if any
