@@ -5,7 +5,7 @@ install:
 - ps: >-
     cd src
 
-    wsl.exe -d Ubuntu-18.04 sudo apt-get install build-essential
+    wsl.exe -d Ubuntu-18.04 sudo apt-get -y install build-essential
 
     nuget restore LibObjectFile.sln
 
