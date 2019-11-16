@@ -4,6 +4,7 @@
 
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -22,9 +23,13 @@ namespace LibObjectFile.Tests
             if (arguments == null) throw new ArgumentNullException(nameof(arguments));
             if (distribution == null) throw new ArgumentNullException(nameof(distribution));
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            // redirect to a file the output as there is a bug reading back stdout with WSL
+            var wslOut = $"wsl_stdout_{Guid.NewGuid()}.txt";
+
+            bool isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+            if (isWindows)
             {
-                arguments = $"-d {distribution} {exe} {arguments}";
+                arguments = $"-d {distribution} {exe} {arguments} > {wslOut}";
                 exe = "wsl.exe";
             }
 
@@ -36,7 +41,7 @@ namespace LibObjectFile.Tests
                 StartInfo = new ProcessStartInfo(exe, arguments)
                 {
                     UseShellExecute = false,
-                    RedirectStandardOutput = true,
+                    RedirectStandardOutput = !isWindows,
                     CreateNoWindow = true,
                     RedirectStandardError = true,
                 },
@@ -53,17 +58,40 @@ namespace LibObjectFile.Tests
                     errorBuilder.Append(args.Data).Append('\n');
                 };
 
-                process.OutputDataReceived += (sender, args) => { outputBuilder.Append(args.Data).Append('\n'); };
+                if (!isWindows)
+                {
+                    process.OutputDataReceived += (sender, args) => { outputBuilder.Append(args.Data).Append('\n'); };
+                }
 
                 process.Start();
                 process.BeginErrorReadLine();
-                process.BeginOutputReadLine();
+
+                if (!isWindows)
+                {
+                    process.BeginOutputReadLine();
+                }
 
                 process.WaitForExit();
 
                 if (process.ExitCode != 0)
                 {
                     throw new InvalidOperationException($"Error while running command `{exe} {arguments}`: {errorBuilder}");
+                }
+
+                if (isWindows)
+                {
+                    var generated = Path.Combine(Environment.CurrentDirectory, wslOut);
+                    var result = File.ReadAllText(generated);
+                    try
+                    {
+                        File.Delete(generated);
+                    }
+                    catch
+                    {
+                        // ignore
+                    }
+
+                    return result;
                 }
             }
 
