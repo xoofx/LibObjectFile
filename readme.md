@@ -1,4 +1,4 @@
-# LibObjectFile [![Build status](https://ci.appveyor.com/api/projects/status/hk391x8jcskxt1u8?svg=true)](https://ci.appveyor.com/project/xoofx/libobjectfile) [![NuGet](https://img.shields.io/nuget/v/LibObjectFile.svg)](https://www.nuget.org/packages/LibObjectFile/)
+# LibObjectFile [![Build status](https://ci.appveyor.com/api/projects/status/n6oavn8iblf2hq8f?svg=true)](https://ci.appveyor.com/project/xoofx/libobjectfile) [![NuGet](https://img.shields.io/nuget/v/LibObjectFile.svg)](https://www.nuget.org/packages/LibObjectFile/)
 
 <img align="right" width="160px" height="160px" src="img/libobjectfile.png">
 
