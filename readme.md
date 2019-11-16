@@ -2,12 +2,16 @@
 
 <img align="right" width="160px" height="160px" src="img/libobjectfile.png">
 
-LibObjectFile is a .NET library to read, manipulate and write object files (e.g ELF, COFF...)
+LibObjectFile is a .NET library to read, manipulate and write linker and executable object files (e.g ELF, COFF...)
 
 > NOTE: The repository is under construction. 
+>
+> Currently LibObjectFile **supports only the ELF object-file format**
+>
+> There is a longer term plan to support other file formats (e.g COFF, MACH-O) but as I don't 
+> have a need for them right now, it is left as an exercise for PR contributors! ;)
 
 ## Features
-
 - TODO
 
 ## Documentation
