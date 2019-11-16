@@ -5,6 +5,8 @@ install:
 - ps: >-
     cd src
 
+    wsl.exe -d Ubuntu-18.04 sudo apt-get install build-essential
+
     nuget restore LibObjectFile.sln
 
     $env:LibObjectFile_BUILD_NUMBER = ([int]$env:APPVEYOR_BUILD_NUMBER).ToString("000")
