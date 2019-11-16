@@ -25,7 +25,7 @@ namespace LibObjectFile.Elf
                     throw new ArgumentException($"Invalid type `{Type}` of the section [{Index}]. Must be used on a `{nameof(ElfRelocationTable)}` instead");
                 }
 
-                if (value == ElfSectionType.SymbolTable)
+                if (value == ElfSectionType.SymbolTable || value == ElfSectionType.DynamicLinkerSymbolTable)
                 {
                     throw new ArgumentException($"Invalid type `{Type}` of the section [{Index}]. Must be used on a `{nameof(ElfSymbolTable)}` instead");
                 }
