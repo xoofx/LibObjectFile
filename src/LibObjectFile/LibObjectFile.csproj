@@ -17,6 +17,13 @@
     <PackageLicenseExpression>BSD-2-Clause</PackageLicenseExpression>
     <PackageIconUrl>https://raw.githubusercontent.com/xoofx/LibObjectFile/master/img/helloworld.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/xoofx/LibObjectFile</PackageProjectUrl>
+    <!--Add support for sourcelink-->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
+  <ItemGroup>
+    <!--Add support for sourcelink-->
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-*" PrivateAssets="All" />
+  </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
 # Changelog
 
-## 0.1.0 (xx Dec 2019)
-- TODO
+## 0.1.0 (16 Nov 2019)
+- Initial version with support for ELF file format
