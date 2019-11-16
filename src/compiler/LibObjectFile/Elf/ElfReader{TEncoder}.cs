@@ -331,7 +331,7 @@ namespace LibObjectFile.Elf
        
         private void VerifyAndFixProgramHeadersAndSections()
         {
-            if (!_isFirstSectionValidNull)
+            if (!_isFirstSectionValidNull && _sectionHeaderCount > 0)
             {
                 Diagnostics.Error($"Invalid non {RawElf.SHN_UNDEF} first section");
             }
