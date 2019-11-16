@@ -7,7 +7,7 @@ install:
 
     wsl.exe -d Ubuntu-18.04 sudo apt-get update
 
-    wsl.exe -d Ubuntu-18.04 sudo apt-get -y install binutils gcc
+    wsl.exe -d Ubuntu-18.04 sudo apt-get -y install build-essential
 
     nuget restore LibObjectFile.sln
 
