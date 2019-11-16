@@ -62,14 +62,15 @@ namespace LibObjectFile.Elf
         {
             if (elf == null) throw new ArgumentNullException(nameof(elf));
             if (writer == null) throw new ArgumentNullException(nameof(writer));
+
+            writer.WriteLine();
             if (elf.VisibleSectionCount == 0)
             {
                 writer.WriteLine("There are no sections in this file.");
                 return;
             }
 
-            writer.WriteLine();
-            writer.WriteLine(elf.VisibleSectionCount > 0 ? "Section Headers:" : "Section Header:");
+            writer.WriteLine(elf.VisibleSectionCount > 1 ? "Section Headers:" : "Section Header:");
 
             writer.WriteLine("  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al");
             for (int i = 0; i < elf.Sections.Count; i++)
@@ -89,6 +90,14 @@ namespace LibObjectFile.Elf
         {
             if (elf == null) throw new ArgumentNullException(nameof(elf));
             if (writer == null) throw new ArgumentNullException(nameof(writer));
+
+            if (elf.Sections.Count == 0)
+            {
+                writer.WriteLine();
+                writer.WriteLine("There are no sections to group in this file.");
+                return;
+            }
+
             writer.WriteLine();
             writer.WriteLine("There are no section groups in this file.");
             // TODO
@@ -218,7 +227,12 @@ namespace LibObjectFile.Elf
             if (elf == null) throw new ArgumentNullException(nameof(elf));
             if (writer == null) throw new ArgumentNullException(nameof(writer));
 
-            if (elf.VisibleSectionCount == 0) return;
+            if (elf.VisibleSectionCount == 0)
+            {
+                writer.WriteLine();
+                writer.WriteLine("Dynamic symbol information is not available for displaying symbols.");
+                return;
+            }
 
             foreach (var section in elf.Sections)
             {
