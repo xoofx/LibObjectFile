@@ -3,7 +3,7 @@ using System.IO;
 
 namespace LibObjectFile.Elf
 {
-    public class ElfCustomSection : ElfSection
+    public sealed class ElfCustomSection : ElfSection
     {
         public ElfCustomSection()
         {
