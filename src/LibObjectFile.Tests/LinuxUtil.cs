@@ -29,8 +29,9 @@ namespace LibObjectFile.Tests
             }
 
             StringBuilder errorBuilder = null;
+            StringBuilder outputBuilder = new StringBuilder();
 
-            var process = new Process()
+            using (var process = new Process()
             {
                 StartInfo = new ProcessStartInfo(exe, arguments)
                 {
@@ -39,28 +40,34 @@ namespace LibObjectFile.Tests
                     CreateNoWindow = true,
                     RedirectStandardError = true,
                 },
-            };
-
-            process.ErrorDataReceived += (sender, args) =>
+            })
             {
-                if (errorBuilder == null)
+
+                process.ErrorDataReceived += (sender, args) =>
                 {
-                    errorBuilder = new StringBuilder();
+                    if (errorBuilder == null)
+                    {
+                        errorBuilder = new StringBuilder();
+                    }
+
+                    errorBuilder.Append(args.Data).Append('\n');
+                };
+
+                process.OutputDataReceived += (sender, args) => { outputBuilder.Append(args.Data).Append('\n'); };
+
+                process.Start();
+                process.BeginErrorReadLine();
+                process.BeginOutputReadLine();
+
+                process.WaitForExit();
+
+                if (process.ExitCode != 0)
+                {
+                    throw new InvalidOperationException($"Error while running command `{exe} {arguments}`: {errorBuilder}");
                 }
-                errorBuilder.Append(args.Data);
-            };
-
-            process.Start();
-            process.BeginErrorReadLine();
-            var result = process.StandardOutput.ReadToEnd();
-
-            process.WaitForExit();
-
-            if (process.ExitCode != 0)
-            {
-                throw new InvalidOperationException($"Error while running command `{exe} {arguments}`: {errorBuilder}");
             }
-            return result;
+
+            return outputBuilder.ToString();
         }
     }
 }

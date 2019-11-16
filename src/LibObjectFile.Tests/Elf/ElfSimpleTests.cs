@@ -324,10 +324,11 @@ namespace LibObjectFile.Tests.Elf
                 
             var original = LinuxUtil.ReadElf(cppName);
             var result = LinuxUtil.ReadElf($"{cppName}_copy");
-            Console.WriteLine("=== Expected:");
-            Console.WriteLine(original);
             Console.WriteLine("=== Result:");
             Console.WriteLine(result);
+
+            Console.WriteLine("=== Expected:");
+            Console.WriteLine(original);
 
             Assert.AreEqual(original, result);
         }
