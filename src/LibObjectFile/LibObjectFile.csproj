@@ -1,9 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFrameworks>netstandard2.1</TargetFrameworks>
     <LangVersion>8.0</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Description>LibObjectFile is a .NET library to read, manipulate and write linker and executable object files (e.g ELF, COFF...)</Description>
+    <Copyright>Alexandre Mutel</Copyright>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <VersionPrefix>0.1.0</VersionPrefix>
+    <Authors>Alexandre Mutel</Authors>
+    <PackageTags>ELF objectfile</PackageTags>
+    <PackageReleaseNotes>https://github.com/xoofx/LibObjectFile/blob/master/changelog.md</PackageReleaseNotes>
+    <PackageLicenseExpression>BSD-2-Clause</PackageLicenseExpression>
+    <PackageIconUrl>https://raw.githubusercontent.com/xoofx/LibObjectFile/master/img/helloworld.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/xoofx/LibObjectFile</PackageProjectUrl>
   </PropertyGroup>
 
 </Project>
