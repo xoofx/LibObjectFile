@@ -16,7 +16,7 @@
 
         public ulong Align { get; set; }
 
-        protected override ulong GetSize() => Range.Size;
+        protected override ulong GetSizeAuto() => Range.Size;
 
         public override void Verify(DiagnosticBag diagnostics)
         {

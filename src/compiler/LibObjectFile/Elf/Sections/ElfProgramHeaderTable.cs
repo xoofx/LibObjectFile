@@ -12,7 +12,7 @@
             // This is not read by this instance but by ElfReader directly
         }
 
-        protected override unsafe ulong GetSize()
+        protected override unsafe ulong GetSizeAuto()
         {
             return (ulong)Parent.Segments.Count * Parent.Layout.SizeOfProgramHeaderEntry;
         }

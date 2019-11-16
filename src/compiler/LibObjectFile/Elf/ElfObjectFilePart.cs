@@ -21,7 +21,7 @@ namespace LibObjectFile.Elf
 
         public virtual ulong Size
         {
-            get => SizeKind == ElfValueKind.Auto ? GetSize() : _size;
+            get => SizeKind == ElfValueKind.Auto ? GetSizeAuto() : _size;
             set
             {
                 SizeKind = ElfValueKind.Absolute;
@@ -31,7 +31,7 @@ namespace LibObjectFile.Elf
        
         public virtual ElfValueKind SizeKind { get; set; }
 
-        protected virtual ulong GetSize() => 0;
+        protected virtual ulong GetSizeAuto() => 0;
 
 
         public bool Contains(ulong offset)

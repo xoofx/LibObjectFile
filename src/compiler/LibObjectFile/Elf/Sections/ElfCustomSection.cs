@@ -38,7 +38,7 @@ namespace LibObjectFile.Elf
         
         public Stream Stream { get; set; }
         
-        protected override ulong GetSize() => Stream != null ? (ulong)Stream.Length : 0;
+        protected override ulong GetSizeAuto() => Stream != null ? (ulong)Stream.Length : 0;
 
         protected override void Read(ElfReader reader)
         {
