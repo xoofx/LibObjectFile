@@ -42,7 +42,7 @@ namespace LibObjectFile.Elf
 
         protected override void Read(ElfReader reader)
         {
-            Stream = reader.ReadAsMemoryStream(base.Size);
+            Stream = reader.ReadAsStream(Size);
             SizeKind = ElfValueKind.Auto;
         }
 

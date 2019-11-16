@@ -1,21 +1,42 @@
 ﻿using System;
 using System.Buffers;
 using System.IO;
+using LibObjectFile.Utils;
 
 namespace LibObjectFile.Elf
 {
     public abstract class ElfReader : ObjectFileReaderWriter, IElfDecoder
     {
-        protected ElfReader(ElfObjectFile objectFile, Stream stream) : base(stream)
+        private protected ElfReader(ElfObjectFile objectFile, Stream stream, ElfReaderOptions readerOptions) : base(stream)
         {
             ObjectFile = objectFile ?? throw new ArgumentNullException(nameof(objectFile));
+            Options = readerOptions;
         }
 
-        public ElfObjectFile ObjectFile { get; }
+        private protected ElfObjectFile ObjectFile { get; }
+
+        public ElfReaderOptions Options { get; }
 
         internal abstract void Read();
 
-        public MemoryStream ReadAsMemoryStream(ulong size)
+        public Stream ReadAsStream(ulong size)
+        {
+            if (Options.ReadOnly)
+            {
+                return ReadAsSliceStream(size);
+            }
+            else
+            {
+                return ReadAsMemoryStream(size);
+            }
+        }
+
+        private SliceStream ReadAsSliceStream(ulong size)
+        {
+            return new SliceStream(Stream, Stream.Position, (long)size);
+        }
+
+        private MemoryStream ReadAsMemoryStream(ulong size)
         {
             var memoryStream = new MemoryStream((int)size);
             if (size == 0) return memoryStream;
@@ -42,11 +63,8 @@ namespace LibObjectFile.Elf
 
         public abstract ElfSectionLink ResolveLink(ElfSectionLink link, string errorMessageFormat);
 
-        internal static ElfReader Create(ElfObjectFile objectFile, Stream stream)
+        internal static ElfReader Create(ElfObjectFile objectFile, Stream stream, ElfReaderOptions options)
         {
-            if (objectFile == null) throw new ArgumentNullException(nameof(objectFile));
-            if (stream == null) throw new ArgumentNullException(nameof(stream));
-
             var ident = ArrayPool<byte>.Shared.Rent(RawElf.EI_NIDENT);
             var startPosition = stream.Position;
             var length = stream.Read(ident, 0, RawElf.EI_NIDENT);
@@ -64,7 +82,7 @@ namespace LibObjectFile.Elf
             stream.Position = startPosition;
 
             var thisComputerEncoding = BitConverter.IsLittleEndian ? ElfEncoding.Lsb : ElfEncoding.Msb;
-            return objectFile.Encoding == thisComputerEncoding ? (ElfReader) new ElfReaderDirect(objectFile, stream) : new ElfReaderSwap(objectFile, stream);
+            return objectFile.Encoding == thisComputerEncoding ? (ElfReader) new ElfReaderDirect(objectFile, stream, options) : new ElfReaderSwap(objectFile, stream, options);
         }
 
         public abstract ushort Decode(RawElf.Elf32_Half src);

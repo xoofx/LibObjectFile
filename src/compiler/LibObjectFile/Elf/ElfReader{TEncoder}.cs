@@ -14,7 +14,7 @@ namespace LibObjectFile.Elf
         private bool _isFirstSectionValidNull;
         private bool _hasValidSectionStringTable;
 
-        protected ElfReader(ElfObjectFile objectFile, Stream stream) : base(objectFile, stream)
+        protected ElfReader(ElfObjectFile objectFile, Stream stream, ElfReaderOptions options) : base(objectFile, stream, options)
         {
             _decoder = new TDecoder();
         }

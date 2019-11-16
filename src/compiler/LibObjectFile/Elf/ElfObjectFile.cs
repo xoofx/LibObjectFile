@@ -447,11 +447,13 @@ namespace LibObjectFile.Elf
             return section;
         }
 
-        public static ElfObjectFile Read(Stream stream)
+        public static ElfObjectFile Read(Stream stream, ElfReaderOptions options = null)
         {
             if (stream == null) throw new ArgumentNullException(nameof(stream));
             var objectFile = new ElfObjectFile(false);
-            var reader = ElfReader.Create(objectFile, stream);
+            options ??= new ElfReaderOptions();
+
+            var reader = ElfReader.Create(objectFile, stream, options);
             reader.Read();
 
             if (reader.Diagnostics.HasErrors)
