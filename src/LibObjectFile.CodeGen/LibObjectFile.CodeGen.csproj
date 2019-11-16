@@ -10,18 +10,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Include="..\StarkPlatform.NativeCompiler\IR\IROpCode.cs" Link="IROpCode.cs" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="CppAst.CodeGen" Version="0.4.0" />
       <Content Include="elf.h">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\..\..\stark\src\compiler\StarkPlatform.Reflection.Metadata\StarkPlatform.Reflection.Metadata.csproj" />
     </ItemGroup>
 
 </Project>

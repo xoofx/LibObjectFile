@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\compiler\LibObjectFile\LibObjectFile.csproj" />
+    <ProjectReference Include="..\LibObjectFile\LibObjectFile.csproj" />
   </ItemGroup>
 
 </Project>
