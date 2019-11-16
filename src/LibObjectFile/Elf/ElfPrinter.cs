@@ -24,7 +24,6 @@ namespace LibObjectFile.Elf
             PrintUnwind(elf, writer);
             PrintSymbolTables(elf, writer);
             PrintVersionInformation(elf, writer);
-            writer.WriteLine();
         }
 
         public static void PrintElfHeader(ElfObjectFile elf, TextWriter writer)
