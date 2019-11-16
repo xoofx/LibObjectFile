@@ -320,17 +320,21 @@ namespace LibObjectFile.Tests.Elf
             using (var outStream = File.OpenWrite($"{cppName}_copy"))
             {
                 elf.Write(outStream);
+                outStream.Flush();
             }
                 
-            var original = LinuxUtil.ReadElf(cppName);
+            var expected = LinuxUtil.ReadElf(cppName);
             var result = LinuxUtil.ReadElf($"{cppName}_copy");
-            Console.WriteLine("=== Result:");
-            Console.WriteLine(result);
+            if (expected != result)
+            {
+                Console.WriteLine("=== Result:");
+                Console.WriteLine(result);
 
-            Console.WriteLine("=== Expected:");
-            Console.WriteLine(original);
+                Console.WriteLine("=== Expected:");
+                Console.WriteLine(expected);
 
-            Assert.AreEqual(original, result);
+                Assert.AreEqual(expected, result);
+            }
         }
     }
 }

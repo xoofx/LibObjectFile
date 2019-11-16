@@ -35,17 +35,20 @@ namespace LibObjectFile.Tests.Elf
 
             var result = stringWriter.ToString().Replace("\r\n", "\n");
             var readelf = LinuxUtil.ReadElf(fileName);
-            Console.WriteLine("=== Expected:");
-            Console.WriteLine(readelf);
-            Console.WriteLine("=== Result:");
-            Console.WriteLine(result);
-            if (context != null)
+            if (readelf != result)
             {
-                Assert.AreEqual(readelf, result, context);
-            }
-            else
-            {
-                Assert.AreEqual(readelf, result);
+                Console.WriteLine("=== Expected:");
+                Console.WriteLine(readelf);
+                Console.WriteLine("=== Result:");
+                Console.WriteLine(result);
+                if (context != null)
+                {
+                    Assert.AreEqual(readelf, result, context);
+                }
+                else
+                {
+                    Assert.AreEqual(readelf, result);
+                }
             }
         }
         
