@@ -302,18 +302,30 @@ namespace LibObjectFile.Tests.Elf
         [Test]
         public void TestHelloWorld()
         {
-            LinuxUtil.RunLinuxExe("gcc", "helloworld.cpp -o helloworld");
+            var cppName = "helloworld";
+            LinuxUtil.RunLinuxExe("gcc", $"{cppName}.cpp -o {cppName}");
 
-            using (var stream = File.OpenRead("helloworld"))
+            ElfObjectFile elf;
+            using (var inStream = File.OpenRead(cppName))
             {
-                var elf = ElfObjectFile.Read(stream);
+                Console.WriteLine($"ReadBack from {cppName}");
+                elf = ElfObjectFile.Read(inStream);
                 elf.Print(Console.Out);
-
-                using (var outstream = File.OpenWrite("helloworld_copy"))
-                {
-                    elf.Write(outstream);
-                }
             }
+
+            using (var outStream = File.OpenWrite($"{cppName}_copy"))
+            {
+                elf.Write(outStream);
+            }
+                
+            var original = LinuxUtil.ReadElf(cppName);
+            var result = LinuxUtil.ReadElf($"{cppName}_copy");
+            Console.WriteLine("=== Expected:");
+            Console.WriteLine(original);
+            Console.WriteLine("=== Result:");
+            Console.WriteLine(result);
+
+            Assert.AreEqual(original, result);
         }
     }
 }
