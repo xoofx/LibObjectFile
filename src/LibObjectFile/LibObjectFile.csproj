@@ -15,7 +15,7 @@
     <PackageTags>ELF objectfile</PackageTags>
     <PackageReleaseNotes>https://github.com/xoofx/LibObjectFile/blob/master/changelog.md</PackageReleaseNotes>
     <PackageLicenseExpression>BSD-2-Clause</PackageLicenseExpression>
-    <PackageIconUrl>https://raw.githubusercontent.com/xoofx/LibObjectFile/master/img/helloworld.png</PackageIconUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/xoofx/LibObjectFile/master/img/libobjectfile.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/xoofx/LibObjectFile</PackageProjectUrl>
     <!--Add support for sourcelink-->
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
