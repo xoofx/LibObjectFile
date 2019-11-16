@@ -70,7 +70,7 @@ namespace LibObjectFile.Elf
                 ulong streamOffset = (ulong)reader.Stream.Position;
                 if (!reader.TryRead((int)OriginalTableEntrySize, out sym))
                 {
-                    reader.Diagnostics.Error($"Unable to read entirely the symbol entry [{i}] from {Type} section [{Index}]. Not enough data (size: {OriginalTableEntrySize}) read at offset {streamOffset} from the stream");
+                    reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteSymbolEntry32Size, $"Unable to read entirely the symbol entry [{i}] from {Type} section [{Index}]. Not enough data (size: {OriginalTableEntrySize}) read at offset {streamOffset} from the stream");
                 }
 
                 var entry = new ElfSymbol();
@@ -85,7 +85,7 @@ namespace LibObjectFile.Elf
                 entry.Section = new ElfSectionLink(reader.Decode(sym.st_shndx));
 
                 // If the entry 0 was validated
-                if (i == 0 && ValidateNullEntry(entry, reader.Diagnostics))
+                if (i == 0 && entry == ElfSymbol.Empty)
                 {
                     continue;
                 }
@@ -103,7 +103,7 @@ namespace LibObjectFile.Elf
                 ulong streamOffset = (ulong)reader.Stream.Position;
                 if (!reader.TryRead((int)OriginalTableEntrySize, out sym))
                 {
-                    reader.Diagnostics.Error($"Unable to read entirely the symbol entry [{i}] from {Type} section [{Index}]. Not enough data (size: {OriginalTableEntrySize}) read at offset {streamOffset} from the stream");
+                    reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteSymbolEntry64Size, $"Unable to read entirely the symbol entry [{i}] from {Type} section [{Index}]. Not enough data (size: {OriginalTableEntrySize}) read at offset {streamOffset} from the stream");
                 }
 
                 var entry = new ElfSymbol();
@@ -118,7 +118,7 @@ namespace LibObjectFile.Elf
                 entry.Section = new ElfSectionLink(reader.Decode(sym.st_shndx));
 
                 // If the entry 0 was validated
-                if (i == 0 && ValidateNullEntry(entry, reader.Diagnostics))
+                if (i == 0 && entry == ElfSymbol.Empty)
                 {
                     continue;
                 }
@@ -127,17 +127,7 @@ namespace LibObjectFile.Elf
             }
         }
 
-        private bool ValidateNullEntry(in ElfSymbol symbol, DiagnosticBag diagnostics)
-        {
-            if (symbol == ElfSymbol.Empty)
-            {
-                return true;
-            }
-
-            diagnostics.Error($"First symbol entry `{symbol}` from section [{Index}] is not null");
-            return false;
-        }
-
+        
         private void Write32(ElfWriter writer)
         {
             var stringTable = (ElfStringTable)Link.Section;
@@ -195,7 +185,7 @@ namespace LibObjectFile.Elf
                     }
                     else
                     {
-                        reader.Diagnostics.Error($"Invalid name index [{entry.Name.Index}] for symbol [{i}] in section [{this}]");
+                        reader.Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSymbolEntryNameIndex, $"Invalid name index [{entry.Name.Index}] for symbol [{i}] in section [{this}]");
                     }
                 }
 
@@ -223,12 +213,12 @@ namespace LibObjectFile.Elf
 
                 if (i == 0 && entry != ElfSymbol.Empty)
                 {
-                    diagnostics.Error($"Invalid entry #{i} in the {nameof(ElfSymbolTable)} section [{Index}]. The first entry must be null/undefined");
+                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidFirstSymbolEntryNonNull, $"Invalid entry #{i} in the {nameof(ElfSymbolTable)} section [{Index}]. The first entry must be null/undefined");
                 }
 
                 if (entry.Section.Section != null && entry.Section.Section.Parent != Parent)
                 {
-                    diagnostics.Error($"Invalid section for the symbol entry #{i} in the {nameof(ElfSymbolTable)} section [{Index}]. The section of the entry `{entry}` must the same than this symbol table section");
+                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSymbolEntrySectionParent, $"Invalid section for the symbol entry #{i} in the {nameof(ElfSymbolTable)} section [{Index}]. The section of the entry `{entry}` must the same than this symbol table section");
                 }
 
                 stringTable.GetOrCreateIndex(entry.Name);
@@ -240,7 +230,7 @@ namespace LibObjectFile.Elf
                     Info = new ElfSectionLink((uint)(i + 1));
                     if (!isAllowingLocal)
                     {
-                        diagnostics.Error($"Invalid position for the LOCAL symbol entry #{i} in the {nameof(ElfSymbolTable)} section [{Index}]. A LOCAL symbol entry must be before any other symbol entry");
+                        diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSymbolEntryLocalPosition, $"Invalid position for the LOCAL symbol entry #{i} in the {nameof(ElfSymbolTable)} section [{Index}]. A LOCAL symbol entry must be before any other symbol entry");
                     }
                 }
                 else

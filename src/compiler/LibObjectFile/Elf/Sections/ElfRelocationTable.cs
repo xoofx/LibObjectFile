@@ -81,7 +81,7 @@ namespace LibObjectFile.Elf
                     ulong streamOffset = (ulong)reader.Stream.Position;
                     if (!reader.TryRead((int)OriginalTableEntrySize, out rel))
                     {
-                        reader.Diagnostics.Error($"Unable to read entirely the relocation entry [{i}] from {Type} section [{Index}]. Not enough data (size: {OriginalTableEntrySize}) read at offset {streamOffset} from the stream");
+                        reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteRelocationAddendsEntry32Size, $"Unable to read entirely the relocation entry [{i}] from {Type} section [{Index}]. Not enough data (size: {OriginalTableEntrySize}) read at offset {streamOffset} from the stream");
                     }
 
                     var entry = new ElfRelocation();
@@ -103,7 +103,7 @@ namespace LibObjectFile.Elf
                     ulong streamOffset = (ulong)reader.Stream.Position;
                     if (!reader.TryRead((int)OriginalTableEntrySize, out rel))
                     {
-                        reader.Diagnostics.Error($"Unable to read entirely the relocation entry [{i}] from {Type} section [{Index}]. Not enough data (size: {OriginalTableEntrySize}) read at offset {streamOffset} from the stream");
+                        reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteRelocationEntry32Size, $"Unable to read entirely the relocation entry [{i}] from {Type} section [{Index}]. Not enough data (size: {OriginalTableEntrySize}) read at offset {streamOffset} from the stream");
                     }
 
                     var entry = new ElfRelocation();
@@ -129,7 +129,7 @@ namespace LibObjectFile.Elf
                     ulong streamOffset = (ulong)reader.Stream.Position;
                     if (!reader.TryRead((int)OriginalTableEntrySize, out rel))
                     {
-                        reader.Diagnostics.Error($"Unable to read entirely the relocation entry [{i}] from {Type} section [{Index}]. Not enough data (size: {OriginalTableEntrySize}) read at offset {streamOffset} from the stream");
+                        reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteRelocationAddendsEntry64Size, $"Unable to read entirely the relocation entry [{i}] from {Type} section [{Index}]. Not enough data (size: {OriginalTableEntrySize}) read at offset {streamOffset} from the stream");
                     }
 
                     var entry = new ElfRelocation();
@@ -151,7 +151,7 @@ namespace LibObjectFile.Elf
                     ulong streamOffset = (ulong)reader.Stream.Position;
                     if (!reader.TryRead((int)OriginalTableEntrySize, out rel))
                     {
-                        reader.Diagnostics.Error($"Unable to read entirely the relocation entry [{i}] from {Type} section [{Index}]. Not enough data (size: {OriginalTableEntrySize}) read at offset {streamOffset} from the stream");
+                        reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteRelocationEntry64Size, $"Unable to read entirely the relocation entry [{i}] from {Type} section [{Index}]. Not enough data (size: {OriginalTableEntrySize}) read at offset {streamOffset} from the stream");
                     }
 
                     var entry = new ElfRelocation();
@@ -244,7 +244,7 @@ namespace LibObjectFile.Elf
 
             if (!name.StartsWith(defaultName))
             {
-                reader.Diagnostics.Warning($"The name of the {Type} section `{this}` doesn't start with `{DefaultName}`");
+                reader.Diagnostics.Warning(DiagnosticId.ELF_WRN_InvalidRelocationTablePrefixName, $"The name of the {Type} section `{this}` doesn't start with `{DefaultName}`");
             }
             else
             {
@@ -253,7 +253,7 @@ namespace LibObjectFile.Elf
                 var sectionTargetName = Info.Section?.Name.Value;
                 if (sectionTargetName != null && currentTargetName != sectionTargetName)
                 {
-                    reader.Diagnostics.Warning($"Invalid name `{name}` for relocation table  [{Index}] the current link section is named `{sectionTargetName}` so the expected name should be `{defaultName}{sectionTargetName}`", this);
+                    reader.Diagnostics.Warning(DiagnosticId.ELF_WRN_InvalidRelocationTablePrefixTargetName, $"Invalid name `{name}` for relocation table  [{Index}] the current link section is named `{sectionTargetName}` so the expected name should be `{defaultName}{sectionTargetName}`", this);
                 }
             }
         }
@@ -269,7 +269,7 @@ namespace LibObjectFile.Elf
             //else 
             if (Info.Section != null && Info.Section.Parent != Parent)
             {
-                diagnostics.Error($"Invalid parent for the {nameof(Info)} of the section [{Index}] `{nameof(ElfRelocationTable)}`. It must point to the same {nameof(ElfObjectFile)} parent instance than this section parent", this);
+                diagnostics.Error(DiagnosticId.ELF_ERR_InvalidRelocationInfoParent, $"Invalid parent for the {nameof(Info)} of the section [{Index}] `{nameof(ElfRelocationTable)}`. It must point to the same {nameof(ElfObjectFile)} parent instance than this section parent", this);
             }
 
             var symbolTable = Link.Section as ElfSymbolTable;
@@ -280,17 +280,17 @@ namespace LibObjectFile.Elf
                 var entry = Entries[i];
                 if (entry.Addend != 0 && !IsRelocationWithAddends)
                 {
-                    diagnostics.Error($"Invalid relocation entry {i} in section [{Index}] `{nameof(ElfRelocationTable)}`. The addend != 0 while the section is not a `{ElfSectionType.RelocationAddends}`", this);
+                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidRelocationEntryAddend, $"Invalid relocation entry {i} in section [{Index}] `{nameof(ElfRelocationTable)}`. The addend != 0 while the section is not a `{ElfSectionType.RelocationAddends}`", this);
                 }
 
                 if (entry.Type.Arch != Parent.Arch)
                 {
-                    diagnostics.Error($"Invalid Arch `{entry.Type.Arch}` for relocation entry {i} in section [{Index}] `{nameof(ElfRelocationTable)}`. The arch doesn't match the arch `{Parent.Arch}`", this);
+                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidRelocationEntryArch, $"Invalid Arch `{entry.Type.Arch}` for relocation entry {i} in section [{Index}] `{nameof(ElfRelocationTable)}`. The arch doesn't match the arch `{Parent.Arch}`", this);
                 }
 
                 if (symbolTable != null && entry.SymbolIndex > (uint)symbolTable.Entries.Count)
                 {
-                    diagnostics.Error($"Out of range symbol index `{entry.SymbolIndex}` (max: {symbolTable.Entries.Count + 1} from symbol table {symbolTable}) for relocation entry {i} in section [{Index}] `{nameof(ElfRelocationTable)}`", this);
+                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidRelocationSymbolIndex, $"Out of range symbol index `{entry.SymbolIndex}` (max: {symbolTable.Entries.Count + 1} from symbol table {symbolTable}) for relocation entry {i} in section [{Index}] `{nameof(ElfRelocationTable)}`", this);
                 }
             }
         }

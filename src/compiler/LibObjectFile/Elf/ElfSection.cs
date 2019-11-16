@@ -78,7 +78,7 @@ namespace LibObjectFile.Elf
 
             if (Type != ElfSectionType.Null && Type != ElfSectionType.NoBits && SizeKind != ElfValueKind.Auto)
             {
-                diagnostics.Error($"Invalid {nameof(SizeKind)}: {SizeKind} for `{this}`. Expecting {ElfValueKind.Absolute}.");
+                diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSectionSizeKind, $"Invalid {nameof(SizeKind)}: {SizeKind} for `{this}`. Expecting {ElfValueKind.Absolute}.");
             }
 
             // Check parent for link section
@@ -86,7 +86,7 @@ namespace LibObjectFile.Elf
             {
                 if (Link.Section.Parent != this.Parent)
                 {
-                    diagnostics.Error($"Invalid parent for {nameof(Link)}: `{Link}` used by section `{this}`. The {nameof(Link)}.{nameof(ElfSectionLink.Section)} must have the same parent {nameof(ElfObjectFile)} than this section");
+                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSectionLinkParent, $"Invalid parent for {nameof(Link)}: `{Link}` used by section `{this}`. The {nameof(Link)}.{nameof(ElfSectionLink.Section)} must have the same parent {nameof(ElfObjectFile)} than this section");
                 }
             }
 
@@ -94,7 +94,7 @@ namespace LibObjectFile.Elf
             {
                 if (Info.Section.Parent != this.Parent)
                 {
-                    diagnostics.Error($"Invalid parent for {nameof(Info)}: `{Info}` used by section `{this}`. The {nameof(Info)}.{nameof(ElfSectionLink.Section)} must have the same parent {nameof(ElfObjectFile)} than this section");
+                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSectionInfoParent, $"Invalid parent for {nameof(Info)}: `{Info}` used by section `{this}`. The {nameof(Info)}.{nameof(ElfSectionLink.Section)} must have the same parent {nameof(ElfObjectFile)} than this section");
                 }
             }
 

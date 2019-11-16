@@ -92,7 +92,7 @@ namespace LibObjectFile.Elf
 
             if (FileClass == ElfFileClass.None)
             {
-                diagnostics.Error($"Cannot compute the layout with an {nameof(ElfObjectFile)} having a {nameof(FileClass)} == {ElfFileClass.None}");
+                diagnostics.Error(DiagnosticId.ELF_ERR_InvalidHeaderFileClassNone, $"Cannot compute the layout with an {nameof(ElfObjectFile)} having a {nameof(FileClass)} == {ElfFileClass.None}");
             }
 
             foreach (var segment in Segments)
@@ -218,7 +218,7 @@ namespace LibObjectFile.Elf
                 // Write program headers
                 if (!programHeaderTableFoundAndUpdated)
                 {
-                    diagnostics.Error($"Missing {nameof(ElfProgramHeaderTable)} shadow section for writing program headers / segments from this object file");
+                    diagnostics.Error(DiagnosticId.ELF_ERR_MissingProgramHeaderTableSection, $"Missing {nameof(ElfProgramHeaderTable)} shadow section for writing program headers / segments from this object file");
                 }
 
                 for (int i = 0; i < Segments.Count; i++)

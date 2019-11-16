@@ -25,7 +25,7 @@ namespace LibObjectFile.Elf
         {
             if (ObjectFile.FileClass == ElfFileClass.None)
             {
-                Diagnostics.Error("Cannot read an ELF Class = None");
+                Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidHeaderFileClassNone, "Cannot read an ELF Class = None");
                 throw new ObjectFileException($"Invalid {nameof(ElfObjectFile)}", Diagnostics);
             }
 
@@ -50,7 +50,7 @@ namespace LibObjectFile.Elf
 
             if (_sectionHeaderCount >= RawElf.SHN_LORESERVE)
             {
-                Diagnostics.Error($"Invalid number `{_sectionHeaderCount}` of section headers found from Elf Header. Must be < {RawElf.SHN_LORESERVE}");
+                Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSectionHeaderCount, $"Invalid number `{_sectionHeaderCount}` of section headers found from Elf Header. Must be < {RawElf.SHN_LORESERVE}");
             }
         }
         
@@ -60,7 +60,7 @@ namespace LibObjectFile.Elf
             ulong streamOffset = (ulong)Stream.Position;
             if (!TryRead(sizeof(RawElf.Elf32_Ehdr), out hdr))
             {
-                Diagnostics.Error($"Unable to read entirely Elf header. Not enough data (size: {sizeof(RawElf.Elf32_Ehdr)}) read at offset {streamOffset} from the stream");
+                Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteHeader32Size, $"Unable to read entirely Elf header. Not enough data (size: {sizeof(RawElf.Elf32_Ehdr)}) read at offset {streamOffset} from the stream");
             }
 
             ObjectFile.FileType = (ElfFileType)_decoder.Decode(hdr.e_type);
@@ -89,7 +89,7 @@ namespace LibObjectFile.Elf
             ulong streamOffset = (ulong)Stream.Position;
             if (!TryRead(sizeof(RawElf.Elf64_Ehdr), out hdr))
             {
-                Diagnostics.Error($"Unable to read entirely Elf header. Not enough data (size: {sizeof(RawElf.Elf64_Ehdr)}) read at offset {streamOffset} from the stream");
+                Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteHeader64Size, $"Unable to read entirely Elf header. Not enough data (size: {sizeof(RawElf.Elf64_Ehdr)}) read at offset {streamOffset} from the stream");
             }
 
             ObjectFile.FileType = (ElfFileType)_decoder.Decode(hdr.e_type);
@@ -118,7 +118,7 @@ namespace LibObjectFile.Elf
             {
                 if (_programHeaderCount > 0)
                 {
-                    Diagnostics.Error($"Unable to read program header table as the size of program header entry ({nameof(RawElf.Elf32_Ehdr.e_phentsize)}) == 0 in the Elf Header");
+                    Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidZeroProgramHeaderTableEntrySize, $"Unable to read program header table as the size of program header entry ({nameof(RawElf.Elf32_Ehdr.e_phentsize)}) == 0 in the Elf Header");
                 }
                 return;
             }
@@ -129,7 +129,7 @@ namespace LibObjectFile.Elf
 
                 if (offset >= (ulong)Stream.Length)
                 {
-                    Diagnostics.Error($"Unable to read program header [{i}] as its offset {offset} is out of bounds");
+                    Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidProgramHeaderStreamOffset, $"Unable to read program header [{i}] as its offset {offset} is out of bounds");
                     break;
                 }
 
@@ -146,7 +146,7 @@ namespace LibObjectFile.Elf
             var streamOffset = Stream.Position;
             if (!TryRead(Layout.SizeOfSectionHeaderEntry, out RawElf.Elf32_Phdr hdr))
             {
-                Diagnostics.Error($"Unable to read entirely program header [{phdrIndex}]. Not enough data (size: {Layout.SizeOfProgramHeaderEntry}) read at offset {streamOffset} from the stream");
+                Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteProgramHeader32Size, $"Unable to read entirely program header [{phdrIndex}]. Not enough data (size: {Layout.SizeOfProgramHeaderEntry}) read at offset {streamOffset} from the stream");
             }
 
             return new ElfSegment
@@ -167,7 +167,7 @@ namespace LibObjectFile.Elf
             var streamOffset = Stream.Position;
             if (!TryRead(Layout.SizeOfSectionHeaderEntry, out RawElf.Elf64_Phdr hdr))
             {
-                Diagnostics.Error($"Unable to read entirely program header [{phdrIndex}]. Not enough data (size: {Layout.SizeOfProgramHeaderEntry}) read at offset {streamOffset} from the stream");
+                Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteProgramHeader64Size, $"Unable to read entirely program header [{phdrIndex}]. Not enough data (size: {Layout.SizeOfProgramHeaderEntry}) read at offset {streamOffset} from the stream");
             }
 
             return new ElfSegment
@@ -197,7 +197,7 @@ namespace LibObjectFile.Elf
             {
                 if (_sectionHeaderCount > 0)
                 {
-                    Diagnostics.Error($"Unable to read section header table as the size of section header entry ({nameof(RawElf.Elf32_Ehdr.e_ehsize)}) == 0 in the Elf Header");
+                    Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidZeroSectionHeaderTableEntrySize, $"Unable to read section header table as the size of section header entry ({nameof(RawElf.Elf32_Ehdr.e_ehsize)}) == 0 in the Elf Header");
                 }
                 return;
             }
@@ -208,7 +208,7 @@ namespace LibObjectFile.Elf
 
                 if (offset >= (ulong)Stream.Length)
                 {
-                    Diagnostics.Error($"Unable to read section [{i}] as its offset {offset} is out of bounds");
+                    Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSectionHeaderStreamOffset, $"Unable to read section [{i}] as its offset {offset} is out of bounds");
                     break;
                 }
 
@@ -230,7 +230,7 @@ namespace LibObjectFile.Elf
             var streamOffset = Stream.Position;
             if (!TryRead(Layout.SizeOfSectionHeaderEntry, out RawElf.Elf32_Shdr rawSection))
             {
-                Diagnostics.Error($"Unable to read entirely section header [{sectionIndex}]. Not enough data (size: {Layout.SizeOfSectionHeaderEntry}) read at offset {streamOffset} from the stream");
+                Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteSectionHeader32Size, $"Unable to read entirely section header [{sectionIndex}]. Not enough data (size: {Layout.SizeOfSectionHeaderEntry}) read at offset {streamOffset} from the stream");
             }
 
             if (sectionIndex == 0)
@@ -264,7 +264,7 @@ namespace LibObjectFile.Elf
             var streamOffset = Stream.Position;
             if (!TryRead(Layout.SizeOfSectionHeaderEntry, out RawElf.Elf64_Shdr rawSection))
             {
-                Diagnostics.Error($"Unable to read entirely section header [{sectionIndex}]. Not enough data (size: {Layout.SizeOfSectionHeaderEntry}) read at offset {streamOffset} from the stream");
+                Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteSectionHeader64Size, $"Unable to read entirely section header [{sectionIndex}]. Not enough data (size: {Layout.SizeOfSectionHeaderEntry}) read at offset {streamOffset} from the stream");
             }
 
             if (sectionIndex == 0)
@@ -321,7 +321,7 @@ namespace LibObjectFile.Elf
 
                     if (!sectionFound)
                     {
-                        Diagnostics.Error(string.Format(errorMessageFormat, link.SpecialSectionIndex));
+                        Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidResolvedLink, string.Format(errorMessageFormat, link.SpecialSectionIndex));
                     }
                 }
             }
@@ -331,9 +331,9 @@ namespace LibObjectFile.Elf
        
         private void VerifyAndFixProgramHeadersAndSections()
         {
-            if (!_isFirstSectionValidNull && _sectionHeaderCount > 0)
+            if (!_isFirstSectionValidNull && ObjectFile.Sections.Count > 0)
             {
-                Diagnostics.Error($"Invalid non {RawElf.SHN_UNDEF} first section");
+                Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidFirstSectionExpectingUndefined, $"Invalid Section [0] {ObjectFile.Sections[0].Type}. Expecting {RawElf.SHN_UNDEF}");
             }
 
             if (_hasValidSectionStringTable)
@@ -354,9 +354,14 @@ namespace LibObjectFile.Elf
                 }
                 else
                 {
-                    Diagnostics.Warning(ObjectFile.SectionHeaderStringTable == null
-                        ? $"Unable to resolve string index [{section.Name.Index}] for section [{section.Index}] as section header string table does not exist"
-                        : $"Unable to resolve string index [{section.Name.Index}] for section [{section.Index}] from section header string table");
+                    if (ObjectFile.SectionHeaderStringTable == null)
+                    {
+                        Diagnostics.Warning(DiagnosticId.ELF_ERR_InvalidStringIndexMissingStringHeaderTable, $"Unable to resolve string index [{section.Name.Index}] for section [{section.Index}] as section header string table does not exist");
+                    }
+                    else
+                    {
+                        Diagnostics.Warning(DiagnosticId.ELF_ERR_InvalidStringIndex, $"Unable to resolve string index [{section.Name.Index}] for section [{section.Index}] from section header string table");
+                    }
                 }
 
                 // Connect section Link instance
@@ -413,7 +418,7 @@ namespace LibObjectFile.Elf
                     var otherSection = ObjectFile.Sections[j];
                     if (section.Contains(otherSection) || otherSection.Contains(section))
                     {
-                        Diagnostics.Warning($"The section {section} [{section.Offset} : {section.Offset + section.Size - 1}] is overlapping with the section {otherSection} [{otherSection.Offset} : {otherSection.Offset + otherSection.Size - 1}]");
+                        Diagnostics.Warning(DiagnosticId.ELF_ERR_InvalidOverlappingSections, $"The section {section} [{section.Offset} : {section.Offset + section.Size - 1}] is overlapping with the section {otherSection} [{otherSection.Offset} : {otherSection.Offset + otherSection.Size - 1}]");
                     }
                 }
             }
@@ -535,7 +540,8 @@ namespace LibObjectFile.Elf
 
                             if (endSection == null)
                             {
-                                Diagnostics.Error($"Invalid range for {segment}. The range is set to empty");
+                                // TODO: is it a throw/assert or a log?
+                                Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRange, $"Invalid range for {segment}. The range is set to empty");
                             }
                             else
                             {

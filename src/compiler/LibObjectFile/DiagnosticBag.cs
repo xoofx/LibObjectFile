@@ -44,16 +44,16 @@ namespace LibObjectFile
             }
         }
 
-        public void Error(string message, object context = null)
+        public void Error(DiagnosticId id, string message, object context = null)
         {
             if (message == null) throw new ArgumentNullException(nameof(message));
-            Log(new DiagnosticMessage(DiagnosticKind.Error, message, context));
+            Log(new DiagnosticMessage(DiagnosticKind.Error, id, message, context));
         }
 
-        public void Warning(string message, object context = null)
+        public void Warning(DiagnosticId id, string message, object context = null)
         {
             if (message == null) throw new ArgumentNullException(nameof(message));
-            Log(new DiagnosticMessage(DiagnosticKind.Warning, message, context));
+            Log(new DiagnosticMessage(DiagnosticKind.Warning, id, message, context));
         }
 
         public override string ToString()

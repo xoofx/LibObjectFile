@@ -30,29 +30,29 @@
             {
                 if (Range.BeginSection.Parent == null)
                 {
-                    diagnostics.Error($"Invalid null parent {nameof(Range)}.{nameof(Range.BeginSection)} in {this}. The section must be attached to the same {nameof(ElfObjectFile)} than this instance");
+                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeBeginSectionParent, $"Invalid null parent {nameof(Range)}.{nameof(Range.BeginSection)} in {this}. The section must be attached to the same {nameof(ElfObjectFile)} than this instance");
                 }
 
                 if (Range.EndSection.Parent == null)
                 {
-                    diagnostics.Error($"Invalid null parent {nameof(Range)}.{nameof(Range.EndSection)} in {this}. The section must be attached to the same {nameof(ElfObjectFile)} than this instance");
+                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeEndSectionParent, $"Invalid null parent {nameof(Range)}.{nameof(Range.EndSection)} in {this}. The section must be attached to the same {nameof(ElfObjectFile)} than this instance");
                 }
 
                 if (Range.BeginOffset >= Range.BeginSection.Size)
                 {
-                    diagnostics.Error($"Invalid {nameof(Range)}.{nameof(Range.BeginOffset)}: {Range.BeginOffset} cannot be >= {nameof(Range.BeginSection)}.{nameof(ElfSection.Size)}: {Range.BeginSection.Size} in {this}. The offset must be within the section");
+                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeBeginOffset, $"Invalid {nameof(Range)}.{nameof(Range.BeginOffset)}: {Range.BeginOffset} cannot be >= {nameof(Range.BeginSection)}.{nameof(ElfSection.Size)}: {Range.BeginSection.Size} in {this}. The offset must be within the section");
                 }
 
                 if ((Range.EndOffset >= 0 && (ulong)Range.EndOffset >= Range.EndSection.Size))
                 {
-                    diagnostics.Error($"Invalid {nameof(Range)}.{nameof(Range.EndOffset)}: {Range.EndOffset} cannot be >= {nameof(Range)}.{nameof(ElfSegmentRange.EndSection)}.{nameof(ElfSection.Size)}: {Range.EndSection.Size} in {this}. The offset must be within the section");
+                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeEndOffset, $"Invalid {nameof(Range)}.{nameof(Range.EndOffset)}: {Range.EndOffset} cannot be >= {nameof(Range)}.{nameof(ElfSegmentRange.EndSection)}.{nameof(ElfSection.Size)}: {Range.EndSection.Size} in {this}. The offset must be within the section");
                 }
                 else if (Range.EndOffset < 0)
                 {
                     var endOffset = (long) Range.EndSection.Size + Range.EndOffset;
                     if (endOffset < 0)
                     {
-                        diagnostics.Error($"Invalid relative {nameof(Range)}.{nameof(Range.EndOffset)}: {Range.EndOffset}. The resulting end offset {endOffset} with {nameof(Range)}.{nameof(ElfSegmentRange.EndSection)}.{nameof(ElfSection.Size)}: {Range.EndSection.Size} cannot be < 0 in {this}. The offset must be within the section");
+                        diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeEndOffset, $"Invalid relative {nameof(Range)}.{nameof(Range.EndOffset)}: {Range.EndOffset}. The resulting end offset {endOffset} with {nameof(Range)}.{nameof(ElfSegmentRange.EndSection)}.{nameof(ElfSection.Size)}: {Range.EndSection.Size} cannot be < 0 in {this}. The offset must be within the section");
                     }
                 }
 
@@ -60,7 +60,7 @@
                 {
                     if (Range.BeginSection.Index > Range.EndSection.Index)
                     {
-                        diagnostics.Error($"Invalid index order between {nameof(Range)}.{nameof(ElfSegmentRange.BeginSection)}.{nameof(ElfSegment.Index)}: {Range.BeginSection.Index} and {nameof(Range)}.{nameof(ElfSegmentRange.EndSection)}.{nameof(ElfSegment.Index)}: {Range.EndSection.Index} in {this}. The from index must be <= to the end index.");
+                        diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeIndices, $"Invalid index order between {nameof(Range)}.{nameof(ElfSegmentRange.BeginSection)}.{nameof(ElfSegment.Index)}: {Range.BeginSection.Index} and {nameof(Range)}.{nameof(ElfSegmentRange.EndSection)}.{nameof(ElfSegment.Index)}: {Range.EndSection.Index} in {this}. The from index must be <= to the end index.");
                     }
                 }
             }

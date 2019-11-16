@@ -106,7 +106,7 @@ namespace LibObjectFile.Elf
 
             if (Section == null)
             {
-                diagnostics.Error($"`{className}.{propertyName}` cannot be null for this instance", context);
+                diagnostics.Error(DiagnosticId.ELF_ERR_LinkOrInfoSectionNull, $"`{className}.{propertyName}` cannot be null for this instance", context);
                 return false;
             }
 
@@ -122,14 +122,14 @@ namespace LibObjectFile.Elf
 
             if (!foundValid)
             {
-                diagnostics.Error($"The type `{Section.Type}` of `{className}.{propertyName}` must be a {string.Join(" or ", sectionTypes)}", context);
+                diagnostics.Error(DiagnosticId.ELF_ERR_LinkOrInfoInvalidSectionType, $"The type `{Section.Type}` of `{className}.{propertyName}` must be a {string.Join(" or ", sectionTypes)}", context);
                 return false;
             }
             section = Section as TSection;
 
             if (section == null)
             {
-                diagnostics.Error($"The `{className}.{propertyName}` must be an instance of {typeof(TSection).Name}");
+                diagnostics.Error(DiagnosticId.ELF_ERR_LinkOrInfoInvalidSectionInstance, $"The `{className}.{propertyName}` must be an instance of {typeof(TSection).Name}");
                 return false;
             }
             return true;

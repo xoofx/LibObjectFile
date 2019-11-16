@@ -68,13 +68,13 @@ namespace LibObjectFile.Elf
             if (objectFile == null) throw new ArgumentNullException(nameof(objectFile));
             if (ident.Length < EI_NIDENT)
             {
-                diagnostics.Error($"Invalid ELF Ident length found. Must be >= {EI_NIDENT}");
+                diagnostics.Error(DiagnosticId.ELF_ERR_InvalidHeaderIdentLength, $"Invalid ELF Ident length found. Must be >= {EI_NIDENT}");
                 return false;
             }
 
             if (ident[EI_MAG0] != ELFMAG0 || ident[EI_MAG1] != ELFMAG1 || ident[EI_MAG2] != ELFMAG2 || ident[EI_MAG3] != ELFMAG3)
             {
-                diagnostics.Error("Invalid ELF Magic found");
+                diagnostics.Error(DiagnosticId.ELF_ERR_InvalidHeaderMagic, "Invalid ELF Magic found");
                 return false;
             }
 
@@ -90,7 +90,7 @@ namespace LibObjectFile.Elf
                     objectFile.FileClass = ElfFileClass.Is64;
                     break;
                 default:
-                    diagnostics.Error($"Invalid EI_CLASS found 0x`{ident[EI_CLASS]:x2}`");
+                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidHeaderFileClass, $"Invalid EI_CLASS found 0x`{ident[EI_CLASS]:x2}`");
                     return false;
             }
 
@@ -106,7 +106,7 @@ namespace LibObjectFile.Elf
                     objectFile.Encoding = ElfEncoding.Msb;
                     break;
                 default:
-                    diagnostics.Error($"Invalid EI_DATA found 0x`{ident[EI_DATA]:x2}`");
+                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidHeaderEncoding, $"Invalid EI_DATA bit encoding found 0x`{ident[EI_DATA]:x2}`");
                     return false;
             }
 
