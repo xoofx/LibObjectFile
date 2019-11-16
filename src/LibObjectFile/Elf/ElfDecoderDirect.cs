@@ -4,6 +4,9 @@
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// A decoder for the various Elf types that doesn't change LSB/MSB ordering from the current machine.
+    /// </summary>
     public struct ElfDecoderDirect : IElfDecoder
     {
         public ushort Decode(RawElf.Elf32_Half src)

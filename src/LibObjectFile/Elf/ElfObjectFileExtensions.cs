@@ -29,41 +29,10 @@ namespace LibObjectFile.Elf
             ident[EI_MAG1] = ELFMAG1;
             ident[EI_MAG2] = ELFMAG2;
             ident[EI_MAG3] = ELFMAG3;
-
-            switch (objectFile.FileClass)
-            {
-                case ElfFileClass.None:
-                    ident[EI_CLASS] = ELFCLASSNONE;
-                    break;
-                case ElfFileClass.Is32:
-                    ident[EI_CLASS] = ELFCLASS32;
-                    break;
-                case ElfFileClass.Is64:
-                    ident[EI_CLASS] = ELFCLASS64;
-                    break;
-                default:
-                    throw ThrowHelper.InvalidEnum(objectFile.FileClass);
-            }
-
-            switch (objectFile.Encoding)
-            {
-                case ElfEncoding.None:
-                    ident[EI_DATA] = ELFDATANONE;
-                    break;
-                case ElfEncoding.Lsb:
-                    ident[EI_DATA] = ELFDATA2LSB;
-                    break;
-                case ElfEncoding.Msb:
-                    ident[EI_DATA] = ELFDATA2MSB;
-                    break;
-                default:
-                    throw ThrowHelper.InvalidEnum(objectFile.Encoding);
-            }
-
+            ident[EI_CLASS] = (byte) objectFile.FileClass;
+            ident[EI_DATA] = (byte) objectFile.Encoding;
             ident[EI_VERSION] = (byte)objectFile.Version;
-
             ident[EI_OSABI] = objectFile.OSABI.Value;
-
             ident[EI_ABIVERSION] = objectFile.AbiVersion;
         }
 
@@ -82,42 +51,10 @@ namespace LibObjectFile.Elf
                 return false;
             }
 
-            switch (ident[EI_CLASS])
-            {
-                case ELFCLASSNONE:
-                    objectFile.FileClass = ElfFileClass.None;
-                    break;
-                case ELFCLASS32:
-                    objectFile.FileClass = ElfFileClass.Is32;
-                    break;
-                case ELFCLASS64:
-                    objectFile.FileClass = ElfFileClass.Is64;
-                    break;
-                default:
-                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidHeaderFileClass, $"Invalid EI_CLASS found 0x`{ident[EI_CLASS]:x2}`");
-                    return false;
-            }
-
-            switch (ident[EI_DATA])
-            {
-                case ELFDATANONE:
-                    objectFile.Encoding = ElfEncoding.None;
-                    break;
-                case ELFDATA2LSB:
-                    objectFile.Encoding = ElfEncoding.Lsb;
-                    break;
-                case ELFDATA2MSB:
-                    objectFile.Encoding = ElfEncoding.Msb;
-                    break;
-                default:
-                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidHeaderEncoding, $"Invalid EI_DATA bit encoding found 0x`{ident[EI_DATA]:x2}`");
-                    return false;
-            }
-
+            objectFile.FileClass = (ElfFileClass)ident[EI_CLASS];
+            objectFile.Encoding = (ElfEncoding)ident[EI_DATA];
             objectFile.Version = ident[EI_VERSION];
-
             objectFile.OSABI = new ElfOSABI(ident[EI_OSABI]);
-
             objectFile.AbiVersion = ident[EI_ABIVERSION];
             return true;
         }

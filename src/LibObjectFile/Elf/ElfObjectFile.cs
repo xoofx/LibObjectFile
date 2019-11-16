@@ -4,20 +4,27 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using LibObjectFile.Utils;
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// Defines an ELF object file that can be manipulated in memory.
+    /// </summary>
     public sealed class ElfObjectFile
     {
+        private static readonly Comparison<ElfSection> CompareSectionOffsetsDelegate = new Comparison<ElfSection>(CompareSectionOffsets);
+
         private readonly List<ElfSection> _sections;
         private ElfSectionHeaderStringTable _sectionHeaderStringTable;
         private readonly List<ElfSegment> _segments;
 
         public const int IdentSizeInBytes = RawElf.EI_NIDENT;
 
+        /// <summary>
+        /// Creates a new instance with the default sections (null and a shadow program header table).
+        /// </summary>
         public ElfObjectFile() : this(true)
         {
         }
@@ -41,32 +48,78 @@ namespace LibObjectFile.Elf
             }
         }
 
+        /// <summary>
+        /// Gets or sets the file class (i.e. 32 or 64 bits)
+        /// </summary>
         public ElfFileClass FileClass { get; set; }
 
+        /// <summary>
+        /// Gets or sets the file encoding (i.e. LSB or MSB)
+        /// </summary>
         public ElfEncoding Encoding { get; set; }
 
+        /// <summary>
+        /// Gets or sets the version of this file.
+        /// </summary>
         public uint Version { get; set; }
 
+        /// <summary>
+        /// Gets or sets the OS ABI.
+        /// </summary>
         public ElfOSABI OSABI { get; set; }
 
+        /// <summary>
+        /// Gets or sets the OS ABI version.
+        /// </summary>
         public byte AbiVersion { get; set; }
 
+        /// <summary>
+        /// Gets or sets the file type (e.g executable, relocatable...)
+        /// From Elf Header equivalent of <see cref="RawElf.Elf32_Ehdr.e_type"/> or <see cref="RawElf.Elf64_Ehdr.e_type"/>.
+        /// </summary>
         public ElfFileType FileType { get; set; }
 
+        /// <summary>
+        /// Gets or sets the file flags (not used).
+        /// </summary>
         public ElfHeaderFlags Flags { get; set; }
 
+        /// <summary>
+        /// Gets or sets the machine architecture (e.g 386, X86_64...)
+        /// From Elf Header equivalent of <see cref="RawElf.Elf32_Ehdr.e_machine"/> or <see cref="RawElf.Elf64_Ehdr.e_machine"/>.
+        /// </summary>
         public ElfArch Arch { get; set; }
 
+        /// <summary>
+        /// Entry point virtual address.
+        /// From Elf Header equivalent of <see cref="RawElf.Elf32_Ehdr.e_entry"/> or <see cref="RawElf.Elf64_Ehdr.e_entry"/>.
+        /// </summary>
         public ulong EntryPointAddress { get; set; }
 
+        /// <summary>
+        /// List of the segments - program headers defined by this instance.
+        /// </summary>
         public IReadOnlyList<ElfSegment> Segments => _segments;
 
+        /// <summary>
+        /// List of the sections - program headers defined by this instance.
+        /// </summary>
         public IReadOnlyList<ElfSection> Sections => _sections;
         
+        /// <summary>
+        /// Number of visible sections excluding <see cref="ElfShadowSection"/> in the <see cref="Sections"/>.
+        /// </summary>
         public uint VisibleSectionCount { get; private set; }
 
+        /// <summary>
+        /// Number of <see cref="ElfShadowSection"/> in the <see cref="Sections"/>
+        /// </summary>
         public uint ShadowSectionCount { get; private set; }
 
+        /// <summary>
+        /// Gets or sets the section header string table used to store the names of the sections.
+        /// Must have been added to <see cref="Sections"/>.
+        /// </summary>
         public ElfSectionHeaderStringTable SectionHeaderStringTable
         {
             get => _sectionHeaderStringTable;
@@ -88,8 +141,15 @@ namespace LibObjectFile.Elf
             }
         }
 
+        /// <summary>
+        /// Gets the current calculated layout of this instance (e.g offset of the program header table)
+        /// </summary>
         public ElfObjectLayout Layout { get; }
 
+        /// <summary>
+        /// Verifies the integrity of this ELF object file.
+        /// </summary>
+        /// <param name="diagnostics">A DiagnosticBag instance to receive the diagnostics.</param>
         public void Verify(DiagnosticBag diagnostics)
         {
             if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
@@ -111,22 +171,9 @@ namespace LibObjectFile.Elf
             }
         }
 
-        internal void SortSectionsByOffset()
-        {
-            _sections.Sort(CompareSectionOffsetsDelegate);
-            for (int i = 0; i < _sections.Count; i++)
-            {
-                _sections[i].Index = (uint)i;
-            }
-        }
-
-        private static readonly Comparison<ElfSection> CompareSectionOffsetsDelegate = new Comparison<ElfSection>(CompareSectionOffsets);
-
-        private static int CompareSectionOffsets(ElfSection left, ElfSection right)
-        {
-            return left.Offset.CompareTo(right.Offset);
-        }
-
+        /// <summary>
+        /// Update and calculate the layout of the sections, segments and <see cref="Layout"/>.
+        /// </summary>
         public void UpdateLayout()
         {
             var diagnostics = new DiagnosticBag();
@@ -137,6 +184,11 @@ namespace LibObjectFile.Elf
             }
         }
 
+        /// <summary>
+        /// Tries to update and calculate the layout of the sections, segments and <see cref="Layout"/>.
+        /// </summary>
+        /// <param name="diagnostics">A DiagnosticBag instance to receive the diagnostics.</param>
+        /// <returns><c>true</c> if the calculation of the layout is successful. otherwise <c>false</c></returns>
         public unsafe bool TryUpdateLayout(DiagnosticBag diagnostics)
         {
             if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
@@ -238,6 +290,10 @@ namespace LibObjectFile.Elf
             return true;
         }
 
+        /// <summary>
+        /// Adds a segment to <see cref="Segments"/>.
+        /// </summary>
+        /// <param name="segment">A segment</param>
         public void AddSegment(ElfSegment segment)
         {
             if (segment == null) throw new ArgumentNullException(nameof(segment));
@@ -252,6 +308,11 @@ namespace LibObjectFile.Elf
             _segments.Add(segment);
         }
 
+        /// <summary>
+        /// Inserts a segment into <see cref="Segments"/> at the specified index.
+        /// </summary>
+        /// <param name="index">Index into <see cref="Segments"/> to insert the specified segment</param>
+        /// <param name="segment">The segment to insert</param>
         public void InsertSegmentAt(int index, ElfSegment segment)
         {
             if (index < 0 || index > _segments.Count) throw new ArgumentOutOfRangeException(nameof(index), $"Invalid index {index}, Must be >= 0 && <= {_segments.Count}");
@@ -274,6 +335,10 @@ namespace LibObjectFile.Elf
             }
         }
 
+        /// <summary>
+        /// Removes a segment from <see cref="Segments"/>
+        /// </summary>
+        /// <param name="segment">The segment to remove</param>
         public void RemoveSegment(ElfSegment segment)
         {
             if (segment == null) throw new ArgumentNullException(nameof(segment));
@@ -296,6 +361,10 @@ namespace LibObjectFile.Elf
             segment.Parent = null;
         }
 
+        /// <summary>
+        /// Removes a segment from <see cref="Segments"/> at the specified index.
+        /// </summary>
+        /// <param name="index">Index into <see cref="Segments"/> to remove the specified segment</param>
         public ElfSegment RemoveSegmentAt(int index)
         {
             if (index < 0 || index > _segments.Count) throw new ArgumentOutOfRangeException(nameof(index), $"Invalid index {index}, Must be >= 0 && <= {_segments.Count}");
@@ -304,6 +373,10 @@ namespace LibObjectFile.Elf
             return segment;
         }
 
+        /// <summary>
+        /// Adds a section to <see cref="Sections"/>.
+        /// </summary>
+        /// <param name="section">A section</param>
         public TSection AddSection<TSection>(TSection section) where TSection : ElfSection
         {
             if (section == null) throw new ArgumentNullException(nameof(section));
@@ -337,6 +410,11 @@ namespace LibObjectFile.Elf
             return section;
         }
 
+        /// <summary>
+        /// Inserts a section into <see cref="Sections"/> at the specified index.
+        /// </summary>
+        /// <param name="index">Index into <see cref="Sections"/> to insert the specified section</param>
+        /// <param name="section">The section to insert</param>
         public void InsertSectionAt(int index, ElfSection section)
         {
             if (index < 0 || index > _sections.Count) throw new ArgumentOutOfRangeException(nameof(index), $"Invalid index {index}, Must be >= 0 && <= {_sections.Count}");
@@ -396,7 +474,11 @@ namespace LibObjectFile.Elf
                 SectionHeaderStringTable = sectionHeaderStringTable;
             }
         }
-        
+
+        /// <summary>
+        /// Removes a section from <see cref="Sections"/>
+        /// </summary>
+        /// <param name="section">The section to remove</param>
         public void RemoveSection(ElfSection section)
         {
             if (section == null) throw new ArgumentNullException(nameof(section));
@@ -450,6 +532,10 @@ namespace LibObjectFile.Elf
             }
         }
 
+        /// <summary>
+        /// Removes a section from <see cref="Sections"/> at the specified index.
+        /// </summary>
+        /// <param name="index">Index into <see cref="Sections"/> to remove the specified section</param>
         public ElfSection RemoveSectionAt(int index)
         {
             if (index < 0 || index > _sections.Count) throw new ArgumentOutOfRangeException(nameof(index), $"Invalid index {index}, Must be >= 0 && <= {_sections.Count}");
@@ -458,21 +544,55 @@ namespace LibObjectFile.Elf
             return section;
         }
 
+        /// <summary>
+        /// Reads an <see cref="ElfObjectFile"/> from the specified stream.
+        /// </summary>
+        /// <param name="stream">The stream to read ELF object file from</param>
+        /// <param name="options">The options for the reader</param>
+        /// <returns>An instance of <see cref="ElfObjectFile"/> if the read was successful.</returns>
         public static ElfObjectFile Read(Stream stream, ElfReaderOptions options = null)
         {
+            if (!TryRead(stream, out var objectFile, out var diagnostics, options))
+            {
+                throw new ObjectFileException($"Unexpected error while reading ELF object file", diagnostics);
+            }
+            return objectFile;
+        }
+
+        /// <summary>
+        /// Tries to read an <see cref="ElfObjectFile"/> from the specified stream.
+        /// </summary>
+        /// <param name="stream">The stream to read ELF object file from</param>
+        /// <param name="objectFile"> instance of <see cref="ElfObjectFile"/> if the read was successful.</param>
+        /// <param name="diagnostics">A <see cref="DiagnosticBag"/> instance</param>
+        /// <param name="options">The options for the reader</param>
+        /// <returns><c>true</c> An instance of <see cref="ElfObjectFile"/> if the read was successful.</returns>
+        public static bool TryRead(Stream stream, out ElfObjectFile objectFile, out DiagnosticBag diagnostics, ElfReaderOptions options = null)
+        {
             if (stream == null) throw new ArgumentNullException(nameof(stream));
-            var objectFile = new ElfObjectFile(false);
+            objectFile = new ElfObjectFile(false);
             options ??= new ElfReaderOptions();
 
             var reader = ElfReader.Create(objectFile, stream, options);
+            diagnostics = reader.Diagnostics;
+
             reader.Read();
 
-            if (reader.Diagnostics.HasErrors)
-            {
-                throw new ObjectFileException($"Unexpected error while reading ELF object file", reader.Diagnostics);
-            }
+            return !reader.Diagnostics.HasErrors;
+        }
 
-            return objectFile;
+        internal void SortSectionsByOffset()
+        {
+            _sections.Sort(CompareSectionOffsetsDelegate);
+            for (int i = 0; i < _sections.Count; i++)
+            {
+                _sections[i].Index = (uint)i;
+            }
+        }
+
+        private static int CompareSectionOffsets(ElfSection left, ElfSection right)
+        {
+            return left.Offset.CompareTo(right.Offset);
         }
 
         public sealed class ElfObjectLayout

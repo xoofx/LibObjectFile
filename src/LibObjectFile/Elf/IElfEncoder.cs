@@ -2,10 +2,12 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
-using System.Runtime.CompilerServices;
-
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// An encoder interface for the various Elf types that provides encoding of data based on LSB/MSB.
+    /// </summary>
+    /// <seealso cref="IElfDecoder"/>
     public interface IElfEncoder
     {
         void Encode(out RawElf.Elf32_Half dest, ushort value);

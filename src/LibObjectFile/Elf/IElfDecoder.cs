@@ -4,6 +4,10 @@
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// A decoder interface for the various Elf types that provides decoding of data based on LSB/MSB.
+    /// </summary>
+    /// <seealso cref="IElfEncoder"/>
     public interface IElfDecoder
     {
         ushort Decode(RawElf.Elf32_Half src);

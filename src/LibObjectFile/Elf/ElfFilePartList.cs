@@ -6,6 +6,11 @@ using System.Collections.Generic;
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// Internal list used to keep an ordered list of <see cref="ElfFilePart"/> based on offsets.
+    /// It is used to track region of the file that are actually referenced by a <see cref="ElfSegment"/>
+    /// but are not declared as a <see cref="ElfSection"/>
+    /// </summary>
     internal struct ElfFilePartList
     {
         private readonly List<ElfFilePart> _parts;

@@ -4,6 +4,9 @@
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// An encoder for the various Elf types that doesn't change LSB/MSB ordering from the current machine.
+    /// </summary>
     internal readonly struct ElfEncoderDirect : IElfEncoder
     {
         public void Encode(out RawElf.Elf32_Half dest, ushort value)

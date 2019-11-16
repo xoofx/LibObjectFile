@@ -4,6 +4,11 @@
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// Defines the file type of an <see cref="ElfObjectFile"/>.
+    /// This is the value seen in <see cref="RawElf.Elf32_Ehdr.e_type"/> or <see cref="RawElf.Elf64_Ehdr.e_type"/>
+    /// as well as the various machine defines (e.g <see cref="RawElf.ET_REL"/>).
+    /// </summary>
     public enum ElfFileType : ushort
     {
         /// <summary>

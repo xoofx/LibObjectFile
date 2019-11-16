@@ -7,9 +7,19 @@ using System.Diagnostics;
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// Internal struct used to identify which part of the file is attached to a section or not.
+    /// It is used while reading back an ELF file from the disk to create <see cref="ElfShadowSection"/>
+    /// </summary>
     [DebuggerDisplay("{StartOffset,nq} - {EndOffset,nq} : {Section,nq}")]
     internal readonly struct ElfFilePart : IComparable<ElfFilePart>, IEquatable<ElfFilePart>
     {
+        /// <summary>
+        /// Creates an instance that is not yet bound to a section for which an
+        /// <see cref="ElfShadowSection"/> will be created
+        /// </summary>
+        /// <param name="startOffset">Start of the offset in the file</param>
+        /// <param name="endOffset">End of the offset in the file (inclusive)</param>
         public ElfFilePart(ulong startOffset, ulong endOffset)
         {
             StartOffset = startOffset;
@@ -17,6 +27,10 @@ namespace LibObjectFile.Elf
             Section = null;
         }
 
+        /// <summary>
+        /// Creates an instance that is bound to a section 
+        /// </summary>
+        /// <param name="section">A section of the file</param>
         public ElfFilePart(ElfSection section)
         {
             Section = section ?? throw new ArgumentNullException(nameof(section));

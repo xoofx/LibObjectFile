@@ -6,6 +6,9 @@ using LibObjectFile.Utils;
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// An encoder for the various Elf types that swap LSB/MSB ordering based on a mismatch between the current machine and file ordering.
+    /// </summary>
     internal readonly struct ElfEncoderSwap : IElfEncoder
     {
         public void Encode(out RawElf.Elf32_Half dest, ushort value)

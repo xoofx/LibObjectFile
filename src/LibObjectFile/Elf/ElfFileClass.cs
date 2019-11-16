@@ -4,10 +4,27 @@
 
 namespace LibObjectFile.Elf
 {
-    public enum ElfFileClass
+
+    /// <summary>
+    /// Defines the File class byte index (32bit or 64bits) of an <see cref="ElfObjectFile"/>.
+    /// This is the value seen in the ident part of an Elf header at index <see cref="RawElf.EI_CLASS"/>
+    /// It is associated with <see cref="RawElf.ELFCLASSNONE"/>, <see cref="RawElf.ELFCLASS32"/> and <see cref="RawElf.ELFCLASS64"/>
+    /// </summary>
+    public enum ElfFileClass : byte
     {
-        None = 0,
-        Is32 = 1,
-        Is64 = 2,
+        /// <summary>
+        /// Invalid class. Equivalent of <see cref="RawElf.ELFCLASSNONE"/>.
+        /// </summary>
+        None = RawElf.ELFCLASSNONE,
+
+        /// <summary>
+        /// 32-bit objects. Equivalent of <see cref="RawElf.ELFCLASS32"/>.
+        /// </summary>
+        Is32 = RawElf.ELFCLASS32,
+
+        /// <summary>
+        /// 64-bit objects. Equivalent of <see cref="RawElf.ELFCLASS64"/>.
+        /// </summary>
+        Is64 = RawElf.ELFCLASS64,
     }
 }
