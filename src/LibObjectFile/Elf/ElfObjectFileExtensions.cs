@@ -58,11 +58,5 @@ namespace LibObjectFile.Elf
             objectFile.AbiVersion = ident[EI_ABIVERSION];
             return true;
         }
-
-        public static void Write(this ElfObjectFile objectFile, Stream stream)
-        {
-            var elfWriter = ElfWriter.Create(objectFile, stream);
-            elfWriter.Write();
-        }
     }
 }

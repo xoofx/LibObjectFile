@@ -44,11 +44,8 @@ namespace LibObjectFile.Elf
             }
         }
 
-        public static ElfWriter Create(ElfObjectFile objectFile, Stream stream)
+        internal static ElfWriter Create(ElfObjectFile objectFile, Stream stream)
         {
-            if (objectFile == null) throw new ArgumentNullException(nameof(objectFile));
-            if (stream == null) throw new ArgumentNullException(nameof(stream));
-
             var thisComputerEncoding = BitConverter.IsLittleEndian ? ElfEncoding.Lsb : ElfEncoding.Msb;
             return objectFile.Encoding == thisComputerEncoding ? (ElfWriter) new ElfWriterDirect(objectFile, stream) : new ElfWriterSwap(objectFile, stream);
         }

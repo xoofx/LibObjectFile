@@ -545,6 +545,40 @@ namespace LibObjectFile.Elf
         }
 
         /// <summary>
+        /// Writes this ELF object file to the specified stream.
+        /// </summary>
+        /// <param name="stream">The stream to write to.</param>
+        public void Write(Stream stream)
+        {
+            if (!TryWrite(stream, out var diagnostics))
+            {
+                throw new ObjectFileException($"Invalid {nameof(ElfObjectFile)}", diagnostics);
+            }
+        }
+
+        /// <summary>
+        /// Tries to write this ELF object file to the specified stream.
+        /// </summary>
+        /// <param name="stream">The stream to write to.</param>
+        /// <param name="diagnostics">The output diagnostics</param>
+        /// <returns><c>true</c> if writing was successful. otherwise <c>false</c></returns>
+        public bool TryWrite(Stream stream, out DiagnosticBag diagnostics)
+        {
+            if (stream == null) throw new ArgumentNullException(nameof(stream));
+            var elfWriter = ElfWriter.Create(this, stream);
+            diagnostics = elfWriter.Diagnostics;
+
+            if (!TryUpdateLayout(diagnostics))
+            {
+                return false;
+            }
+
+            elfWriter.Write();
+
+            return !diagnostics.HasErrors;
+        }
+
+        /// <summary>
         /// Reads an <see cref="ElfObjectFile"/> from the specified stream.
         /// </summary>
         /// <param name="stream">The stream to read ELF object file from</param>
@@ -595,20 +629,39 @@ namespace LibObjectFile.Elf
             return left.Offset.CompareTo(right.Offset);
         }
 
+        /// <summary>
+        /// Contains the layout of an object available after reading an <see cref="ElfObjectFile"/>
+        /// or after calling <see cref="ElfObjectFile.UpdateLayout"/> or <see cref="ElfObjectFile.TryUpdateLayout"/>
+        /// </summary>
         public sealed class ElfObjectLayout
         {
             internal ElfObjectLayout()
             {
             }
 
+            /// <summary>
+            /// Size of ELF Header.
+            /// </summary>
             public ushort SizeOfElfHeader { get; internal set; }
 
+            /// <summary>
+            /// Offset of the program header table.
+            /// </summary>
             public ulong OffsetOfProgramHeaderTable { get; internal set; }
 
+            /// <summary>
+            /// Size of a program header entry.
+            /// </summary>
             public ushort SizeOfProgramHeaderEntry { get; internal set; }
 
+            /// <summary>
+            /// Offset of the section header table.
+            /// </summary>
             public ulong OffsetOfSectionHeaderTable { get; internal set; }
 
+            /// <summary>
+            /// Size of a section header entry.
+            /// </summary>
             public ushort SizeOfSectionHeaderEntry { get; internal set; }
         }
     }

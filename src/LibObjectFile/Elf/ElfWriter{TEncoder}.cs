@@ -21,12 +21,6 @@ namespace LibObjectFile.Elf
 
         internal override void Write()
         {
-            ObjectFile.TryUpdateLayout(Diagnostics);
-            if (Diagnostics.HasErrors)
-            {
-                throw new ObjectFileException($"Invalid {nameof(ElfObjectFile)}", Diagnostics);
-            }
-
             _startOfFile = (ulong)Stream.Position;
             WriteHeader();
             CheckProgramHeaders();
