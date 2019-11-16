@@ -4,10 +4,28 @@ using System.Text;
 using LibObjectFile.Elf;
 using NUnit.Framework;
 
-namespace LibObjectFile.Tests
+namespace LibObjectFile.Tests.Elf
 {
-    public class BasicTests
+    public class ElfSimpleTests : ElfTestBase
     {
+        [Test]
+        public void SimpleEmptyWithDefaultSections()
+        {
+            var elf = new ElfObjectFile();
+            AssertReadElf(elf, "empty_default.elf");
+        }
+
+        [Test]
+        public void SimpleEmpty()
+        {
+            var elf = new ElfObjectFile();
+            for (int i = elf.Sections.Count - 1; i >= 0; i--)
+            {
+                elf.RemoveSectionAt(i);
+            }
+            AssertReadElf(elf, "empty.elf");
+        }
+
         [Test]
         public void SimpleCodeSection()
         {
@@ -23,8 +41,7 @@ namespace LibObjectFile.Tests
 
             AssertReadElf(elf, "test.elf");
         }
-
-
+        
         [Test]
         public void SimpleCodeSectionAndSymbolSection()
         {
@@ -281,74 +298,6 @@ namespace LibObjectFile.Tests
             AssertReadElf(elf, "test4.elf");
         }
 
-        private static void AssertReadElf(ElfObjectFile elf, string fileName, bool writeFile = true, string context = null)
-        {
-            if (writeFile)
-            {
-                using (var stream = new FileStream(Path.Combine(Environment.CurrentDirectory, fileName), FileMode.Create))
-                {
-                    elf.Write(stream);
-                    stream.Flush();
-                }
-            }
-
-            var stringWriter = new StringWriter();
-            elf.Print(stringWriter);
-
-            var result = stringWriter.ToString().Replace("\r\n", "\n");
-            var readelf = LinuxUtil.ReadElf(fileName);
-            Console.WriteLine("=== Expected:");
-            Console.WriteLine(readelf);
-            Console.WriteLine("=== Result:");
-            Console.WriteLine(result);
-            if (context != null)
-            {
-                Assert.AreEqual(readelf, result, context);
-            }
-            else
-            {
-                Assert.AreEqual(readelf, result);
-            }
-        }
-
-
-        private static void AssertReadElf(ElfObjectFile elf, string fileName)
-        {
-            AssertReadElfInternal(elf, fileName);
-            AssertReadback(elf, fileName);
-            AssertLsbMsb(elf, fileName);
-        }
-
-        private static void AssertReadElfInternal(ElfObjectFile elf, string fileName, bool writeFile = true, string context = null)
-        {
-            if (writeFile)
-            {
-                using (var stream = new FileStream(Path.Combine(Environment.CurrentDirectory, fileName), FileMode.Create))
-                {
-                    elf.Write(stream);
-                    stream.Flush();
-                }
-            }
-
-            var stringWriter = new StringWriter();
-            elf.Print(stringWriter);
-
-            var result = stringWriter.ToString().Replace("\r\n", "\n");
-            var readelf = LinuxUtil.ReadElf(fileName);
-            Console.WriteLine("=== Expected:");
-            Console.WriteLine(readelf);
-            Console.WriteLine("=== Result:");
-            Console.WriteLine(result);
-            if (context != null)
-            {
-                Assert.AreEqual(readelf, result, context);
-            }
-            else
-            {
-                Assert.AreEqual(readelf, result);
-            }
-        }
-
 
         [Test]
         public void TestHelloWorld()
@@ -365,47 +314,6 @@ namespace LibObjectFile.Tests
                     elf.Write(outstream);
                 }
             }
-        }
-
-
-        private static void AssertReadback(ElfObjectFile elf, string fileName)
-        {
-            ElfObjectFile newObjectFile;
-
-            var filePath = Path.Combine(Environment.CurrentDirectory, fileName);
-            using (var stream = new FileStream(filePath, FileMode.Open))
-            {
-                newObjectFile = ElfObjectFile.Read(stream);
-            }
-
-            Console.WriteLine();
-            Console.WriteLine("=============================================================================");
-            Console.WriteLine("readback");
-            Console.WriteLine("=============================================================================");
-            Console.WriteLine();
-
-            AssertReadElfInternal(newObjectFile, fileName, false, $"Unexpected error while reading back {fileName}");
-
-            var originalBuffer = File.ReadAllBytes(filePath);
-            var memoryStream = new MemoryStream();
-            newObjectFile.Write(memoryStream);
-            var newBuffer = memoryStream.ToArray();
-
-            Assert.AreEqual(originalBuffer, newBuffer, "Invalid binary diff between write -> (original) -> read -> write -> (new)");
-        }
-
-        private static void AssertLsbMsb(ElfObjectFile elf, string fileName)
-        {
-            Console.WriteLine();
-            Console.WriteLine("*****************************************************************************");
-            Console.WriteLine("LSB to MSB");
-            Console.WriteLine("*****************************************************************************");
-            Console.WriteLine();
-
-            elf.Encoding = ElfEncoding.Msb;
-            var newFileName = Path.GetFileNameWithoutExtension(fileName) + "_msb.elf";
-            AssertReadElfInternal(elf, newFileName);
-            AssertReadback(elf, newFileName);
         }
     }
 }
