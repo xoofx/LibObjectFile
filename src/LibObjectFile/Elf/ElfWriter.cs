@@ -10,12 +10,12 @@ namespace LibObjectFile.Elf
 {
     public abstract class ElfWriter : ObjectFileReaderWriter, IElfEncoder
     {
-        protected ElfWriter(ElfObjectFile objectFile, Stream stream) : base(stream)
+        private protected ElfWriter(ElfObjectFile objectFile, Stream stream) : base(stream)
         {
             ObjectFile = objectFile ?? throw new ArgumentNullException(nameof(objectFile));
         }
 
-        public ElfObjectFile ObjectFile { get; }
+        private protected ElfObjectFile ObjectFile { get; }
 
         internal abstract void Write();
 
