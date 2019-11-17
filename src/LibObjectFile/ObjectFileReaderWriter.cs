@@ -6,6 +6,7 @@ using System;
 using System.Buffers;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using LibObjectFile.Utils;
 
 namespace LibObjectFile
@@ -45,6 +46,56 @@ namespace LibObjectFile
         public int Read(byte[] buffer, int offset, int count)
         {
             return Stream.Read(buffer, offset, count);
+        }
+
+        /// <summary>
+        /// Reads a null terminated UTF8 string from the stream.
+        /// </summary>
+        /// <param name="byteLength">The number of bytes to read including the null</param>
+        /// <returns>A string</returns>
+        public string ReadStringUTF8NullTerminated(uint byteLength)
+        {
+            if (byteLength == 0) return string.Empty;
+
+            var buffer = ArrayPool<byte>.Shared.Rent((int)byteLength);
+            try
+            {
+                var dataLength = Stream.Read(buffer, 0, (int) byteLength);
+                if (dataLength < 0) throw new EndOfStreamException("Unexpected end of stream while trying to read data");
+
+                var byteReadLength = (uint) dataLength;
+                if (byteReadLength != byteLength) throw new EndOfStreamException($"Not enough data read {byteReadLength} bytes while expecting to read {byteLength} bytes");
+
+                var isNullTerminated = buffer[byteReadLength - 1] == 0;
+
+                var text = Encoding.UTF8.GetString(buffer, 0, (int) (isNullTerminated ? byteReadLength - 1 : byteReadLength));
+                return text;
+            } 
+            finally
+            {
+                ArrayPool<byte>.Shared.Return(buffer);
+            }
+        }
+
+        /// <summary>
+        /// Writes a null terminated UTF8 string to the stream.
+        /// </summary>
+        public void WriteStringUTF8NullTerminated(string text)
+        {
+            if (text == null) throw new ArgumentNullException(nameof(text));
+            
+            int byteLength = Encoding.UTF8.GetByteCount(text);
+            var buffer = ArrayPool<byte>.Shared.Rent(byteLength + 1);
+            try
+            {
+                Encoding.UTF8.GetBytes(text, 0, text.Length, buffer, 0);
+                buffer[byteLength] = 0;
+                Stream.Write(buffer, 0, byteLength + 1);
+            }
+            finally
+            {
+                ArrayPool<byte>.Shared.Return(buffer);
+            }
         }
 
         /// <summary>

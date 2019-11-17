@@ -603,6 +603,9 @@ namespace LibObjectFile.Elf
                 case ElfSectionType.RelocationAddends:
                     section = new ElfRelocationTable();
                     break;
+                case ElfSectionType.Note:
+                    section = new ElfNoteTable();
+                    break;
             }
 
             // If the section is not a builtin section, try to offload to a delegate

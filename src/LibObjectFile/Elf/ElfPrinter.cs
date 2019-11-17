@@ -3,8 +3,10 @@
 // See the license.txt file in the project root for more information.
 
 using System;
+using System.Buffers;
 using System.IO;
 using System.Text;
+using System.Xml;
 
 namespace LibObjectFile.Elf
 {
@@ -31,6 +33,7 @@ namespace LibObjectFile.Elf
             PrintUnwind(elf, writer);
             PrintSymbolTables(elf, writer);
             PrintVersionInformation(elf, writer);
+            PrintNotes(elf, writer);
         }
 
         public static void PrintElfHeader(ElfObjectFile elf, TextWriter writer)
@@ -138,7 +141,7 @@ namespace LibObjectFile.Elf
             for (int i = 0; i < elf.Segments.Count; i++)
             {
                 var phdr = elf.Segments[i];
-                writer.WriteLine($"  {GetElfSegmentType(phdr.Type),-14} 0x{phdr.Offset:x6} 0x{phdr.VirtualAddress:x16} 0x{phdr.PhysicalAddress:x16} 0x{phdr.Size:x6} 0x{phdr.SizeInMemory:x6} {GetElfSegmentFlags(phdr.Flags),3} 0x{phdr.Alignment:x4}");
+                writer.WriteLine($"  {GetElfSegmentType(phdr.Type),-14} 0x{phdr.Offset:x6} 0x{phdr.VirtualAddress:x16} 0x{phdr.PhysicalAddress:x16} 0x{phdr.Size:x6} 0x{phdr.SizeInMemory:x6} {GetElfSegmentFlags(phdr.Flags),3} 0x{phdr.Alignment:x}");
             }
 
             if (elf.Segments.Count > 0 && elf.VisibleSectionCount > 0 && elf.SectionHeaderStringTable != null)
@@ -170,8 +173,6 @@ namespace LibObjectFile.Elf
             if (elf == null) throw new ArgumentNullException(nameof(elf));
             if (writer == null) throw new ArgumentNullException(nameof(writer));
 
-            writer.WriteLine();
-
             bool hasRelocations = false;
 
             foreach (var section in elf.Sections)
@@ -181,7 +182,8 @@ namespace LibObjectFile.Elf
                     hasRelocations = true;
                     var relocTable = (ElfRelocationTable) section;
 
-                    writer.WriteLine($"Relocation section {(elf.SectionHeaderStringTable == null ? "0" : $"'{section.Name}'")} at offset 0x{section.Offset:x} contains {relocTable.Entries.Count} entries:");
+                    writer.WriteLine();
+                    writer.WriteLine($"Relocation section {(elf.SectionHeaderStringTable == null ? "0" : $"'{section.Name}'")} at offset 0x{section.Offset:x} contains {relocTable.Entries.Count} {(relocTable.Entries.Count > 1 ? "entries" : "entry")}:");
                      
                     if (elf.FileClass == ElfFileClass.Is32)
                     {
@@ -210,7 +212,14 @@ namespace LibObjectFile.Elf
                         }
                         else
                         {
-                            writer.WriteLine($"{entry.Offset:x16}  {entry.Info64:x16} {entry.Type.Name,-22} {symbolValue:x16} {symbolName} + {entry.Addend}");
+                            if (string.IsNullOrEmpty(symbolName))
+                            {
+                                writer.WriteLine($"{entry.Offset:x16}  {entry.Info64:x16} {entry.Type.Name,-22} {"",16}   {entry.Addend:x}");
+                            }
+                            else
+                            {
+                                writer.WriteLine($"{entry.Offset:x16}  {entry.Info64:x16} {entry.Type.Name,-22} {symbolValue:x16} {symbolName} + {entry.Addend}");
+                            }
                         }
                     }
 
@@ -219,6 +228,7 @@ namespace LibObjectFile.Elf
 
             if (!hasRelocations)
             {
+                writer.WriteLine();
                 writer.WriteLine("There are no relocations in this file.");
             }
         }
@@ -267,9 +277,87 @@ namespace LibObjectFile.Elf
                 for (var i = 0; i < symbolTable.Entries.Count; i++)
                 {
                     var symbol = symbolTable.Entries[i];
-                    writer.WriteLine($"{i,6}: {symbol.Value:x16} {symbol.Size,5} {GetElfSymbolType(symbol.Type),-7} {GetElfSymbolBind(symbol.Bind),-6} {GetElfSymbolVisibility(symbol.Visibility),-7} {(symbol.Section.GetIndex() == 0 ? "UND" : symbol.Section.GetIndex().ToString()),4} {symbol.Name.Value}");
+                    writer.WriteLine($"{i,6}: {symbol.Value:x16} {symbol.Size,5} {GetElfSymbolType(symbol.Type),-7} {GetElfSymbolBind(symbol.Bind),-6} {GetElfSymbolVisibility(symbol.Visibility),-7} {GetElfSymbolLink(symbol.Section),4} {symbol.Name.Value}");
                 }
             }
+        }
+
+        private static string GetElfSymbolLink(ElfSectionLink link)
+        {
+            var index = link.GetIndex();
+            switch (index)
+            {
+                case 0:
+                    return "UND";
+                case ElfNative.SHN_ABS:
+                    return "ABS";
+                case ElfNative.SHN_COMMON:
+                    return "COMMON";
+            }
+            return index.ToString();
+        }
+
+        public static void PrintNotes(ElfObjectFile elf, TextWriter writer)
+        {
+            if (elf == null) throw new ArgumentNullException(nameof(elf));
+            if (writer == null) throw new ArgumentNullException(nameof(writer));
+            
+            foreach (var section in elf.Sections)
+            {
+                if (!(section is ElfNoteTable noteTable)) continue;
+
+                writer.WriteLine();
+                writer.WriteLine($"Displaying notes found in: {noteTable.Name}");
+
+                writer.WriteLine("  Owner\t\tData size\tDescription");
+                foreach (var note in noteTable.Entries)
+                {
+                    writer.WriteLine($"  {note.GetName()}\t\t0x{(note.GetDescriptorSize()):x8}\t{GetElfNoteDescription(note)}");
+                }
+            }
+        }
+
+        private static string GetElfNoteDescription(ElfNote note)
+        {
+            var builder = new StringBuilder();
+
+            if (note.GetName() == "GNU")
+            {
+                switch (note.GetNoteType().Value)
+                {
+                    case ElfNative.NT_GNU_ABI_TAG:
+                        builder.Append("NT_GNU_ABI_TAG (ABI version tag)");
+                        break;
+                    case ElfNative.NT_GNU_HWCAP:
+                        builder.Append("NT_GNU_HWCAP (DSO-supplied software HWCAP info)");
+                        break;
+                    case ElfNative.NT_GNU_BUILD_ID:
+                        builder.Append("NT_GNU_BUILD_ID (unique build ID bitstring)");
+                        break;
+                    case ElfNative.NT_GNU_GOLD_VERSION:
+                        builder.Append("NT_GNU_GOLD_VERSION (gold version)");
+                        break;
+                }
+            }
+            else
+            {
+                switch (note.GetNoteType().Value)
+                {
+                    case ElfNative.NT_VERSION:
+                        builder.Append("NT_VERSION (version)");
+                        break;
+                }
+            }
+
+            if (builder.Length == 0)
+            {
+                builder.Append($"Unknown note type: (0x{note.GetNoteType().Value:x8})");
+            }
+
+            builder.Append("\t\t");
+
+            builder.Append(note.GetDescriptorAsText());
+            return builder.ToString();
         }
 
         public static void PrintVersionInformation(ElfObjectFile elf, TextWriter writer)
@@ -517,6 +605,36 @@ namespace LibObjectFile.Elf
                     return "SHLIB";
                 case ElfSectionType.DynamicLinkerSymbolTable:
                     return "DYNSYM";
+                case ElfSectionType.InitArray:
+                    return "INIT_ARRAY";
+                case ElfSectionType.FiniArray:
+                    return "FINI_ARRAY";
+                case ElfSectionType.PreInitArray:
+                    return "PREINIT_ARRAY";
+                case ElfSectionType.Group:
+                    return "GROUP";
+                case ElfSectionType.SymbolTableSectionHeaderIndices:
+                    return "SYMTAB SECTION INDICIES";
+                case ElfSectionType.GnuHash:
+                    return "GNU_HASH";
+                case ElfSectionType.GnuLibList:
+                    return "GNU_LIBLIST";
+                case ElfSectionType.GnuAttributes:
+                    return "GNU_ATTRIBUTES";
+                case ElfSectionType.Checksum:
+                    return "CHECKSUM";
+                case ElfSectionType.GnuVersionDefinition:
+                case (ElfSectionType)0x6ffffffc:
+                    return "VERDEF";
+                case ElfSectionType.GnuVersionNeedsSection:
+                    return "VERNEED";
+                case ElfSectionType.GnuVersionSymbolTable:
+                case (ElfSectionType)0x6ffffff0:
+                    return "VERSYM";
+                case (ElfSectionType)0x7ffffffd:
+                    return "AUXILIARY";
+                case (ElfSectionType)0x7fffffff:
+                    return "FILTER";
                 default:
                     return $"{(uint)sectionType:x8}: <unknown>";
             }

@@ -68,5 +68,65 @@ namespace LibObjectFile.Elf
         /// Dynamic linker symbol table
         /// </summary>
         DynamicLinkerSymbolTable = ElfNative.SHT_DYNSYM,
+
+        /// <summary>
+        /// Array of constructors
+        /// </summary>
+        InitArray = ElfNative.SHT_INIT_ARRAY,
+
+        /// <summary>
+        /// Array of destructors
+        /// </summary>
+        FiniArray = ElfNative.SHT_FINI_ARRAY,
+
+        /// <summary>
+        /// Array of pre-constructors
+        /// </summary>
+        PreInitArray = ElfNative.SHT_PREINIT_ARRAY,
+
+        /// <summary>
+        /// Section group
+        /// </summary>
+        Group = ElfNative.SHT_GROUP,
+
+        /// <summary>
+        /// Extended section indices
+        /// </summary>
+        SymbolTableSectionHeaderIndices = ElfNative.SHT_SYMTAB_SHNDX,
+
+        /// <summary>
+        /// Object attributes.
+        /// </summary>
+        GnuAttributes = ElfNative.SHT_GNU_ATTRIBUTES,
+
+        /// <summary>
+        /// GNU-style hash table.
+        /// </summary>
+        GnuHash = ElfNative.SHT_GNU_HASH,
+
+        /// <summary>
+        /// Prelink library list
+        /// </summary>
+        GnuLibList = ElfNative.SHT_GNU_LIBLIST,
+
+        /// <summary>
+        /// Checksum for DSO content.
+        /// </summary>
+        Checksum = ElfNative.SHT_CHECKSUM,
+
+        /// <summary>
+        /// Version definition section.
+        /// </summary>
+        GnuVersionDefinition = ElfNative.SHT_GNU_verdef,
+
+        /// <summary>
+        /// Version needs section.
+        /// </summary>
+        GnuVersionNeedsSection = ElfNative.SHT_GNU_verneed,
+
+        /// <summary>
+        /// Version symbol table.
+        /// </summary>
+        GnuVersionSymbolTable = ElfNative.SHT_GNU_versym,
     }
 }

@@ -16,6 +16,12 @@ namespace LibObjectFile.Elf
         public bool ReadOnly { get; set; }
 
         /// <summary>
+        /// Gets or sets a delegate that can be used to replace the creation of <see cref="ElfNote"/> when
+        /// reading from a Stream.
+        /// </summary>
+        public TryCreateNoteDelegate TryCreateNote { get; set; }
+        
+        /// <summary>
         /// Gets or sets a delegate that can be used to replace the creation of <see cref="ElfSection"/> when
         /// reading from a Stream.
         /// </summary>
@@ -28,5 +34,14 @@ namespace LibObjectFile.Elf
         /// <param name="diagnostics">The diagnostics</param>
         /// <returns><c>null</c> if the section is not supported or an instance of <see cref="ElfSection"/> for the specified type.</returns>
         public delegate ElfSection TryCreateSectionDelegate(ElfSectionType sectionType, DiagnosticBag diagnostics);
+        
+        /// <summary>
+        /// Tries to create a note instance from the specified name and type. Might return null.
+        /// </summary>
+        /// <param name="noteName">Name of the note.</param>
+        /// <param name="noteType">Type of the note</param>
+        /// <returns><c>null</c> if the note is not supported or an instance of <see cref="ElfNote"/> for the specified name and type.</returns>
+        public delegate ElfNote TryCreateNoteDelegate(string noteName, ElfNoteType noteType);
+
     }
 }

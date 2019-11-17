@@ -82,6 +82,7 @@ namespace LibObjectFile.CodeGen
                     map => map.MapMacroToConst("^STN_.*", "uint8_t"),
                     map => map.MapMacroToConst("^STV_.*", "uint8_t"),
                     map => map.MapMacroToConst("^R_.*", "uint32_t"),
+                    map => map.MapMacroToConst("ELF_NOTE_OS_.*", "uint32_t"),
                 }
             };
 
@@ -99,6 +100,7 @@ namespace LibObjectFile.CodeGen
             ProcessElfEnum(cppOptions, csCompilation, "EM_", "ElfArch");
             ProcessElfEnum(cppOptions, csCompilation, "ELFOSABI_", "ElfOSABI");
             ProcessElfEnum(cppOptions, csCompilation, "R_", "ElfRelocationType");
+            ProcessElfEnum(cppOptions, csCompilation, "NT_", "ElfNoteType");
 
             csCompilation.DumpTo(GetCodeWriter(Path.Combine("LibObjectFile", "generated")));
         }

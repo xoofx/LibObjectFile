@@ -3789,6 +3789,14 @@ namespace LibObjectFile.Elf
         
         public const uint NT_GNU_ABI_TAG = 1;
         
+        public const uint ELF_NOTE_OS_LINUX = 0;
+        
+        public const uint ELF_NOTE_OS_GNU = 1;
+        
+        public const uint ELF_NOTE_OS_SOLARIS2 = 2;
+        
+        public const uint ELF_NOTE_OS_FREEBSD = 3;
+        
         public const uint NT_GNU_HWCAP = 2;
         
         public const uint NT_GNU_BUILD_ID = 3;
@@ -13992,6 +14000,257 @@ namespace LibObjectFile.Elf
                 case ((ulong)ElfNative.R_X86_64_IRELATIVE << 16) | ElfNative.EM_X86_64 : return "R_X86_64_IRELATIVE";
                 case ((ulong)ElfNative.R_X86_64_RELATIVE64 << 16) | ElfNative.EM_X86_64 : return "R_X86_64_RELATIVE64";
                 default: return "Unknown ElfRelocationType";
+            }
+        }
+    }
+    
+    public readonly partial struct ElfNoteType
+    {
+        /// <summary>
+        /// Contains copy of prstatus struct
+        /// </summary>
+        public static readonly ElfNoteType PRSTATUS = new ElfNoteType(ElfNative.NT_PRSTATUS);
+        
+        /// <summary>
+        /// Contains copy of fpregset struct
+        /// </summary>
+        public static readonly ElfNoteType FPREGSET = new ElfNoteType(ElfNative.NT_FPREGSET);
+        
+        /// <summary>
+        /// Contains copy of prpsinfo struct
+        /// </summary>
+        public static readonly ElfNoteType PRPSINFO = new ElfNoteType(ElfNative.NT_PRPSINFO);
+        
+        /// <summary>
+        /// Contains copy of prxregset struct
+        /// </summary>
+        public static readonly ElfNoteType PRXREG = new ElfNoteType(ElfNative.NT_PRXREG);
+        
+        /// <summary>
+        /// Contains copy of task structure
+        /// </summary>
+        public static readonly ElfNoteType TASKSTRUCT = new ElfNoteType(ElfNative.NT_TASKSTRUCT);
+        
+        /// <summary>
+        /// String from sysinfo(SI_PLATFORM)
+        /// </summary>
+        public static readonly ElfNoteType PLATFORM = new ElfNoteType(ElfNative.NT_PLATFORM);
+        
+        /// <summary>
+        /// Contains copy of auxv array
+        /// </summary>
+        public static readonly ElfNoteType AUXV = new ElfNoteType(ElfNative.NT_AUXV);
+        
+        /// <summary>
+        /// Contains copy of gwindows struct
+        /// </summary>
+        public static readonly ElfNoteType GWINDOWS = new ElfNoteType(ElfNative.NT_GWINDOWS);
+        
+        /// <summary>
+        /// Contains copy of asrset struct
+        /// </summary>
+        public static readonly ElfNoteType ASRS = new ElfNoteType(ElfNative.NT_ASRS);
+        
+        /// <summary>
+        /// Contains copy of pstatus struct
+        /// </summary>
+        public static readonly ElfNoteType PSTATUS = new ElfNoteType(ElfNative.NT_PSTATUS);
+        
+        /// <summary>
+        /// Contains copy of psinfo struct
+        /// </summary>
+        public static readonly ElfNoteType PSINFO = new ElfNoteType(ElfNative.NT_PSINFO);
+        
+        /// <summary>
+        /// Contains copy of prcred struct
+        /// </summary>
+        public static readonly ElfNoteType PRCRED = new ElfNoteType(ElfNative.NT_PRCRED);
+        
+        /// <summary>
+        /// Contains copy of utsname struct
+        /// </summary>
+        public static readonly ElfNoteType UTSNAME = new ElfNoteType(ElfNative.NT_UTSNAME);
+        
+        /// <summary>
+        /// Contains copy of lwpstatus struct
+        /// </summary>
+        public static readonly ElfNoteType LWPSTATUS = new ElfNoteType(ElfNative.NT_LWPSTATUS);
+        
+        /// <summary>
+        /// Contains copy of lwpinfo struct
+        /// </summary>
+        public static readonly ElfNoteType LWPSINFO = new ElfNoteType(ElfNative.NT_LWPSINFO);
+        
+        /// <summary>
+        /// Contains copy of fprxregset struct
+        /// </summary>
+        public static readonly ElfNoteType PRFPXREG = new ElfNoteType(ElfNative.NT_PRFPXREG);
+        
+        /// <summary>
+        /// Contains copy of siginfo_t, size might increase
+        /// </summary>
+        public static readonly ElfNoteType SIGINFO = new ElfNoteType(ElfNative.NT_SIGINFO);
+        
+        /// <summary>
+        /// Contains information about mapped files
+        /// </summary>
+        public static readonly ElfNoteType FILE = new ElfNoteType(ElfNative.NT_FILE);
+        
+        /// <summary>
+        /// Contains copy of user_fxsr_struct
+        /// </summary>
+        public static readonly ElfNoteType PRXFPREG = new ElfNoteType(ElfNative.NT_PRXFPREG);
+        
+        /// <summary>
+        /// PowerPC Altivec/VMX registers
+        /// </summary>
+        public static readonly ElfNoteType PPC_VMX = new ElfNoteType(ElfNative.NT_PPC_VMX);
+        
+        /// <summary>
+        /// PowerPC SPE/EVR registers
+        /// </summary>
+        public static readonly ElfNoteType PPC_SPE = new ElfNoteType(ElfNative.NT_PPC_SPE);
+        
+        /// <summary>
+        /// PowerPC VSX registers
+        /// </summary>
+        public static readonly ElfNoteType PPC_VSX = new ElfNoteType(ElfNative.NT_PPC_VSX);
+        
+        /// <summary>
+        /// i386 TLS slots (struct user_desc)
+        /// </summary>
+        public static readonly ElfNoteType I386_TLS = new ElfNoteType(ElfNative.NT_386_TLS);
+        
+        /// <summary>
+        /// x86 io permission bitmap (1=deny)
+        /// </summary>
+        public static readonly ElfNoteType I386_IOPERM = new ElfNoteType(ElfNative.NT_386_IOPERM);
+        
+        /// <summary>
+        /// x86 extended state using xsave
+        /// </summary>
+        public static readonly ElfNoteType X86_XSTATE = new ElfNoteType(ElfNative.NT_X86_XSTATE);
+        
+        /// <summary>
+        /// s390 upper register halves
+        /// </summary>
+        public static readonly ElfNoteType S390_HIGH_GPRS = new ElfNoteType(ElfNative.NT_S390_HIGH_GPRS);
+        
+        /// <summary>
+        /// s390 timer register
+        /// </summary>
+        public static readonly ElfNoteType S390_TIMER = new ElfNoteType(ElfNative.NT_S390_TIMER);
+        
+        /// <summary>
+        /// s390 TOD clock comparator register
+        /// </summary>
+        public static readonly ElfNoteType S390_TODCMP = new ElfNoteType(ElfNative.NT_S390_TODCMP);
+        
+        /// <summary>
+        /// s390 TOD programmable register
+        /// </summary>
+        public static readonly ElfNoteType S390_TODPREG = new ElfNoteType(ElfNative.NT_S390_TODPREG);
+        
+        /// <summary>
+        /// s390 control registers
+        /// </summary>
+        public static readonly ElfNoteType S390_CTRS = new ElfNoteType(ElfNative.NT_S390_CTRS);
+        
+        /// <summary>
+        /// s390 prefix register
+        /// </summary>
+        public static readonly ElfNoteType S390_PREFIX = new ElfNoteType(ElfNative.NT_S390_PREFIX);
+        
+        /// <summary>
+        /// s390 breaking event address
+        /// </summary>
+        public static readonly ElfNoteType S390_LAST_BREAK = new ElfNoteType(ElfNative.NT_S390_LAST_BREAK);
+        
+        /// <summary>
+        /// s390 system call restart data
+        /// </summary>
+        public static readonly ElfNoteType S390_SYSTEM_CALL = new ElfNoteType(ElfNative.NT_S390_SYSTEM_CALL);
+        
+        /// <summary>
+        /// s390 transaction diagnostic block
+        /// </summary>
+        public static readonly ElfNoteType S390_TDB = new ElfNoteType(ElfNative.NT_S390_TDB);
+        
+        /// <summary>
+        /// ARM VFP/NEON registers
+        /// </summary>
+        public static readonly ElfNoteType ARM_VFP = new ElfNoteType(ElfNative.NT_ARM_VFP);
+        
+        /// <summary>
+        /// ARM TLS register
+        /// </summary>
+        public static readonly ElfNoteType ARM_TLS = new ElfNoteType(ElfNative.NT_ARM_TLS);
+        
+        /// <summary>
+        /// ARM hardware breakpoint registers
+        /// </summary>
+        public static readonly ElfNoteType ARM_HW_BREAK = new ElfNoteType(ElfNative.NT_ARM_HW_BREAK);
+        
+        /// <summary>
+        /// ARM hardware watchpoint registers
+        /// </summary>
+        public static readonly ElfNoteType ARM_HW_WATCH = new ElfNoteType(ElfNative.NT_ARM_HW_WATCH);
+        
+        /// <summary>
+        /// Contains a version string.
+        /// </summary>
+        public static readonly ElfNoteType VERSION = new ElfNoteType(ElfNative.NT_VERSION);
+        
+        public static readonly ElfNoteType GNU_ABI_TAG = new ElfNoteType(ElfNative.NT_GNU_ABI_TAG);
+        
+        public static readonly ElfNoteType GNU_HWCAP = new ElfNoteType(ElfNative.NT_GNU_HWCAP);
+        
+        public static readonly ElfNoteType GNU_BUILD_ID = new ElfNoteType(ElfNative.NT_GNU_BUILD_ID);
+        
+        public static readonly ElfNoteType GNU_GOLD_VERSION = new ElfNoteType(ElfNative.NT_GNU_GOLD_VERSION);
+        
+        private string ToStringInternal()
+        {
+            switch (Value)
+            {
+                case ElfNative.NT_PRSTATUS: return "NT_PRSTATUS - Contains copy of prstatus struct";
+                case ElfNative.NT_FPREGSET: return "NT_FPREGSET - Contains copy of fpregset struct";
+                case ElfNative.NT_PRPSINFO: return "NT_PRPSINFO - Contains copy of prpsinfo struct";
+                case ElfNative.NT_PRXREG: return "NT_PRXREG - Contains copy of prxregset struct";
+                case ElfNative.NT_PLATFORM: return "NT_PLATFORM - String from sysinfo(SI_PLATFORM)";
+                case ElfNative.NT_AUXV: return "NT_AUXV - Contains copy of auxv array";
+                case ElfNative.NT_GWINDOWS: return "NT_GWINDOWS - Contains copy of gwindows struct";
+                case ElfNative.NT_ASRS: return "NT_ASRS - Contains copy of asrset struct";
+                case ElfNative.NT_PSTATUS: return "NT_PSTATUS - Contains copy of pstatus struct";
+                case ElfNative.NT_PSINFO: return "NT_PSINFO - Contains copy of psinfo struct";
+                case ElfNative.NT_PRCRED: return "NT_PRCRED - Contains copy of prcred struct";
+                case ElfNative.NT_UTSNAME: return "NT_UTSNAME - Contains copy of utsname struct";
+                case ElfNative.NT_LWPSTATUS: return "NT_LWPSTATUS - Contains copy of lwpstatus struct";
+                case ElfNative.NT_LWPSINFO: return "NT_LWPSINFO - Contains copy of lwpinfo struct";
+                case ElfNative.NT_PRFPXREG: return "NT_PRFPXREG - Contains copy of fprxregset struct";
+                case ElfNative.NT_SIGINFO: return "NT_SIGINFO - Contains copy of siginfo_t, size might increase";
+                case ElfNative.NT_FILE: return "NT_FILE - Contains information about mapped files";
+                case ElfNative.NT_PRXFPREG: return "NT_PRXFPREG - Contains copy of user_fxsr_struct";
+                case ElfNative.NT_PPC_VMX: return "NT_PPC_VMX - PowerPC Altivec/VMX registers";
+                case ElfNative.NT_PPC_SPE: return "NT_PPC_SPE - PowerPC SPE/EVR registers";
+                case ElfNative.NT_PPC_VSX: return "NT_PPC_VSX - PowerPC VSX registers";
+                case ElfNative.NT_386_TLS: return "NT_386_TLS - i386 TLS slots (struct user_desc)";
+                case ElfNative.NT_386_IOPERM: return "NT_386_IOPERM - x86 io permission bitmap (1=deny)";
+                case ElfNative.NT_X86_XSTATE: return "NT_X86_XSTATE - x86 extended state using xsave";
+                case ElfNative.NT_S390_HIGH_GPRS: return "NT_S390_HIGH_GPRS - s390 upper register halves";
+                case ElfNative.NT_S390_TIMER: return "NT_S390_TIMER - s390 timer register";
+                case ElfNative.NT_S390_TODCMP: return "NT_S390_TODCMP - s390 TOD clock comparator register";
+                case ElfNative.NT_S390_TODPREG: return "NT_S390_TODPREG - s390 TOD programmable register";
+                case ElfNative.NT_S390_CTRS: return "NT_S390_CTRS - s390 control registers";
+                case ElfNative.NT_S390_PREFIX: return "NT_S390_PREFIX - s390 prefix register";
+                case ElfNative.NT_S390_LAST_BREAK: return "NT_S390_LAST_BREAK - s390 breaking event address";
+                case ElfNative.NT_S390_SYSTEM_CALL: return "NT_S390_SYSTEM_CALL - s390 system call restart data";
+                case ElfNative.NT_S390_TDB: return "NT_S390_TDB - s390 transaction diagnostic block";
+                case ElfNative.NT_ARM_VFP: return "NT_ARM_VFP - ARM VFP/NEON registers";
+                case ElfNative.NT_ARM_TLS: return "NT_ARM_TLS - ARM TLS register";
+                case ElfNative.NT_ARM_HW_BREAK: return "NT_ARM_HW_BREAK - ARM hardware breakpoint registers";
+                case ElfNative.NT_ARM_HW_WATCH: return "NT_ARM_HW_WATCH - ARM hardware watchpoint registers";
+                default: return "Unknown ElfNoteType";
             }
         }
     }

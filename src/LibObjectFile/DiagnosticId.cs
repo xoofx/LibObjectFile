@@ -60,5 +60,7 @@ namespace LibObjectFile
         ELF_ERR_InvalidSymbolEntryNameIndex = 49,
         ELF_ERR_InvalidSymbolEntrySectionParent = 50,
         ELF_ERR_InvalidSymbolEntryLocalPosition = 51,
+        ELF_ERR_IncompleteNoteEntrySize = 52,
+        ELF_ERR_IncompleNoteGnuAbiTag = 53,
     }
 }
