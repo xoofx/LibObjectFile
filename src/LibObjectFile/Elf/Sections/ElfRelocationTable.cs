@@ -7,6 +7,9 @@ using System.Collections.Generic;
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// A relocation section with the type <see cref="ElfSectionType.Relocation"/> or <see cref="ElfSectionType.RelocationAddends"/>
+    /// </summary>
     public sealed class ElfRelocationTable : ElfSection
     {
         public const string DefaultName = ".rel";
@@ -18,6 +21,9 @@ namespace LibObjectFile.Elf
             Entries = new List<ElfRelocation>();
         }
 
+        /// <summary>
+        /// Gets a list of <see cref="ElfRelocation"/> entries.
+        /// </summary>
         public List<ElfRelocation> Entries { get; }
 
         private static string GetDefaultName(ElfSectionType type)

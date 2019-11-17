@@ -5,7 +5,9 @@
 namespace LibObjectFile.Elf
 {
     /// <summary>
-    /// Defines a symbol binding.
+    /// Defines a symbol binding 
+    /// This is the value seen compressed in <see cref="RawElf.Elf32_Sym.st_info"/> or <see cref="RawElf.Elf64_Sym.st_info"/>
+    /// as well as the various defines (e.g <see cref="RawElf.STB_LOCAL"/>).
     /// </summary>
     public enum ElfSymbolBind : byte
     {

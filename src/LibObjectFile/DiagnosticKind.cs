@@ -4,10 +4,19 @@
 
 namespace LibObjectFile
 {
+    /// <summary>
+    /// Defines the kind of a <see cref="DiagnosticMessage"/>
+    /// </summary>
     public enum DiagnosticKind
     {
+        /// <summary>
+        /// A warning message.
+        /// </summary>
         Warning,
 
+        /// <summary>
+        /// An error message.
+        /// </summary>
         Error,
     }
 }

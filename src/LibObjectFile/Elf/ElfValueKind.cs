@@ -4,10 +4,19 @@
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// Defines the way a value is calculated (used by <see cref="ElfObjectFilePart.OffsetKind"/> and <see cref="ElfObjectFilePart.SizeKind"/>
+    /// </summary>
     public enum ElfValueKind
     {
+        /// <summary>
+        /// The associated value is automatically calculated by the system.
+        /// </summary>
         Auto,
 
-        Absolute,
+        /// <summary>
+        /// The associated value is set manually.
+        /// </summary>
+        Manual,
     }
 }

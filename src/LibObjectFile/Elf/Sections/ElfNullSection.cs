@@ -6,6 +6,9 @@ using System;
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// A null section with the type <see cref="ElfSectionType.Null"/>.
+    /// </summary>
     public sealed class ElfNullSection : ElfSection
     {
         public override ElfSectionType Type

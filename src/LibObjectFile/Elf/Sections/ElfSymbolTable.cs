@@ -7,6 +7,9 @@ using System.Collections.Generic;
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// A symbol table section with the type <see cref="ElfSectionType.SymbolTable"/> or <see cref="ElfSectionType.DynamicLinkerSymbolTable"/>
+    /// </summary>
     public sealed class ElfSymbolTable : ElfSection
     {
         public const string DefaultName = ".symtab";
@@ -30,7 +33,10 @@ namespace LibObjectFile.Elf
                 base.Type = value;
             }
         }
-
+        
+        /// <summary>
+        /// Gets a list of <see cref="ElfSymbol"/> entries.
+        /// </summary>
         public List<ElfSymbol> Entries { get;  }
 
         public override unsafe ulong Size =>
@@ -193,7 +199,7 @@ namespace LibObjectFile.Elf
                     }
                 }
 
-                entry.Section = reader.ResolveLink(entry.Section, $"Invalid link section index {entry.Section.SpecialSectionIndex} for  symbol table entry [{i}] from symbol table section [{this}]");
+                entry.Section = reader.ResolveLink(entry.Section, $"Invalid link section index {entry.Section.SpecialIndex} for  symbol table entry [{i}] from symbol table section [{this}]");
 
                 Entries[i] = entry;
             }

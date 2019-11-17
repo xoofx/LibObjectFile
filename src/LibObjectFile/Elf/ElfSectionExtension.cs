@@ -6,8 +6,18 @@ using System;
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// Extensions for <see cref="ElfSection"/>
+    /// </summary>
     public static class ElfSectionExtension
     {
+        /// <summary>
+        /// Configure a section default name, type and flags with <see cref="ElfSectionSpecialType"/>
+        /// </summary>
+        /// <typeparam name="TElfSection">The type of the section to configure</typeparam>
+        /// <param name="section">The section to configure</param>
+        /// <param name="sectionSpecialType">The special type</param>
+        /// <returns>The section configured</returns>
         public static TElfSection ConfigureAs<TElfSection>(this TElfSection section, ElfSectionSpecialType sectionSpecialType) where TElfSection : ElfSection
         {
             switch (sectionSpecialType)

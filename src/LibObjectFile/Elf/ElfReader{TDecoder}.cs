@@ -10,7 +10,7 @@ namespace LibObjectFile.Elf
     /// <summary>
     /// Internal implementation of <see cref="ElfReader"/> to read from a stream to an <see cref="ElfObjectFile"/> instance.
     /// </summary>
-    /// <typeparam name="TDecoder"></typeparam>
+    /// <typeparam name="TDecoder">The decoder used for LSB/MSB conversion</typeparam>
     internal abstract class ElfReader<TDecoder> : ElfReader where TDecoder : struct, IElfDecoder
     {
         private TDecoder _decoder;
@@ -165,7 +165,7 @@ namespace LibObjectFile.Elf
                 Size = _decoder.Decode(hdr.p_filesz),
                 SizeInMemory = _decoder.Decode(hdr.p_memsz),
                 Flags = new ElfSegmentFlags(_decoder.Decode(hdr.p_flags)),
-                Align = _decoder.Decode(hdr.p_align)
+                Alignment = _decoder.Decode(hdr.p_align)
             };
         }
 
@@ -186,7 +186,7 @@ namespace LibObjectFile.Elf
                 Size = _decoder.Decode(hdr.p_filesz),
                 SizeInMemory = _decoder.Decode(hdr.p_memsz),
                 Flags = new ElfSegmentFlags(_decoder.Decode(hdr.p_flags)),
-                Align = _decoder.Decode(hdr.p_align)
+                Alignment = _decoder.Decode(hdr.p_align)
             };
         }
         
@@ -307,13 +307,13 @@ namespace LibObjectFile.Elf
             // Connect section Link instance
             if (!link.IsSpecial)
             {
-                if (link.SpecialSectionIndex == _sectionStringTableIndex)
+                if (link.SpecialIndex == _sectionStringTableIndex)
                 {
                     link = new ElfSectionLink(ObjectFile.SectionHeaderStringTable);
                 }
                 else
                 {
-                    var sectionIndex = link.SpecialSectionIndex;
+                    var sectionIndex = link.SpecialIndex;
 
                     bool sectionFound = false;
                     foreach (var section in ObjectFile.Sections)
@@ -328,7 +328,7 @@ namespace LibObjectFile.Elf
 
                     if (!sectionFound)
                     {
-                        Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidResolvedLink, string.Format(errorMessageFormat, link.SpecialSectionIndex));
+                        Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidResolvedLink, string.Format(errorMessageFormat, link.SpecialIndex));
                     }
                 }
             }

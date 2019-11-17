@@ -6,6 +6,9 @@ using System;
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// Gets the type of a <see cref="ElfRelocation"/>.
+    /// </summary>
     public readonly partial struct ElfRelocationType : IEquatable<ElfRelocationType>
     {
         public ElfRelocationType(ElfArch arch, uint value)
@@ -14,8 +17,14 @@ namespace LibObjectFile.Elf
             Value = value;
         }
 
+        /// <summary>
+        /// The associated <see cref="ElfArch"/> the <see cref="Value"/> applies to.
+        /// </summary>
         public readonly ElfArch Arch;
 
+        /// <summary>
+        /// The value of this relocation type.
+        /// </summary>
         public readonly uint Value;
 
         public bool Equals(ElfRelocationType other)

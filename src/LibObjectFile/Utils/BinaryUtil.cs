@@ -6,26 +6,49 @@ using System.Runtime.CompilerServices;
 
 namespace LibObjectFile.Utils
 {
+    /// <summary>
+    /// Binary helper class to swap LSB/MSB integers.
+    /// </summary>
     public static class BinaryUtil
     {
+        /// <summary>
+        /// Swap the bits LSB/MSB for the specified value.
+        /// </summary>
+        /// <param name="value">The value to swap the LSB/MSB bits</param>
+        /// <returns>The value swapped</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static short SwapBits(short value)
         {
             return (short) SwapBits((ushort) value);
         }
 
+        /// <summary>
+        /// Swap the bits LSB/MSB for the specified value.
+        /// </summary>
+        /// <param name="value">The value to swap the LSB/MSB bits</param>
+        /// <returns>The value swapped</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ushort SwapBits(ushort value)
         {
             return (ushort)(((byte)value << 8) | (byte)(value >> 8));
         }
 
+        /// <summary>
+        /// Swap the bits LSB/MSB for the specified value.
+        /// </summary>
+        /// <param name="value">The value to swap the LSB/MSB bits</param>
+        /// <returns>The value swapped</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int SwapBits(int value)
         {
             return (int)SwapBits((uint)value);
         }
 
+        /// <summary>
+        /// Swap the bits LSB/MSB for the specified value.
+        /// </summary>
+        /// <param name="value">The value to swap the LSB/MSB bits</param>
+        /// <returns>The value swapped</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint SwapBits(uint value)
         {
@@ -36,12 +59,22 @@ namespace LibObjectFile.Utils
                 );
         }
 
+        /// <summary>
+        /// Swap the bits LSB/MSB for the specified value.
+        /// </summary>
+        /// <param name="value">The value to swap the LSB/MSB bits</param>
+        /// <returns>The value swapped</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long SwapBits(long value)
         {
             return (long)SwapBits((ulong)value);
         }
 
+        /// <summary>
+        /// Swap the bits LSB/MSB for the specified value.
+        /// </summary>
+        /// <param name="value">The value to swap the LSB/MSB bits</param>
+        /// <returns>The value swapped</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe ulong SwapBits(ulong value)
         {

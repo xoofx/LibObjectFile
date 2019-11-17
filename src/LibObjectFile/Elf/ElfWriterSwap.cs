@@ -6,6 +6,9 @@ using System.IO;
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// Internal implementation of <see cref="ElfWriter{TEncoder}"/> with a <see cref="ElfEncoderSwap"/>.
+    /// </summary>
     internal sealed class ElfWriterSwap : ElfWriter<ElfEncoderSwap>
     {
         public ElfWriterSwap(ElfObjectFile elfObjectFile, Stream stream) : base(elfObjectFile, stream)

@@ -4,6 +4,9 @@
 
 namespace LibObjectFile
 {
+    /// <summary>
+    /// A diagnostic message.
+    /// </summary>
     public readonly struct DiagnosticMessage
     {
         public DiagnosticMessage(DiagnosticKind kind, DiagnosticId id, string message)
@@ -22,17 +25,29 @@ namespace LibObjectFile
             Message = message;
         }
 
+        /// <summary>
+        /// Gets the kind of this message.
+        /// </summary>
         public DiagnosticKind Kind { get; }
 
+        /// <summary>
+        /// Gets the id of this message.
+        /// </summary>
         public DiagnosticId Id { get; }
 
+        /// <summary>
+        /// Gets the context of this message.
+        /// </summary>
         public object Context { get; }
 
+        /// <summary>
+        /// Gets the associated text of this message.
+        /// </summary>
         public string Message { get; }
         
         public override string ToString()
         {
-            return $"{Kind}: {Message}";
+            return $"{Kind} LB{(uint)Id:0000}: {Message}";
         }
     }
 }

@@ -4,6 +4,9 @@
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// Defines a core <see cref="ElfSegmentType"/>
+    /// </summary>
     public enum ElfSegmentTypeCore : uint
     {
         /// <summary>

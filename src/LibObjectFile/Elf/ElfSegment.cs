@@ -4,21 +4,46 @@
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// Defines a segment or program header.
+    /// </summary>
     public sealed class ElfSegment : ElfObjectFilePart
     {
+        /// <summary>
+        /// Gets or sets the type of this segment.
+        /// </summary>
         public ElfSegmentType Type { get; set; }
 
+        /// <summary>
+        /// Gets or sets the range of section this segment applies to.
+        /// It can applies to <see cref="ElfShadowSection"/>.
+        /// </summary>
         public ElfSegmentRange Range { get; set; }
 
+        /// <summary>
+        /// Gets or sets the virtual address.
+        /// </summary>
         public ulong VirtualAddress { get; set; }
 
+        /// <summary>
+        /// Gets or sets the physical address.
+        /// </summary>
         public ulong PhysicalAddress { get; set; }
         
+        /// <summary>
+        /// Gets or sets the size in bytes occupied in memory by this segment.
+        /// </summary>
         public ulong SizeInMemory { get; set; }
 
+        /// <summary>
+        /// Gets or sets the flags of this segment.
+        /// </summary>
         public ElfSegmentFlags Flags { get; set; }
 
-        public ulong Align { get; set; }
+        /// <summary>
+        /// Gets the alignment requirement of this section.
+        /// </summary>
+        public ulong Alignment { get; set; }
 
         protected override ulong GetSizeAuto() => Range.Size;
 

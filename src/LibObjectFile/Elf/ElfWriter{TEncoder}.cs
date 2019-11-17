@@ -9,6 +9,10 @@ namespace LibObjectFile.Elf
 {
     using static RawElf;
 
+    /// <summary>
+    /// Internal implementation of <see cref="ElfWriter"/> to write to a stream an <see cref="ElfObjectFile"/> instance.
+    /// </summary>
+    /// <typeparam name="TEncoder">The encoder used for LSB/MSB conversion</typeparam>
     internal abstract class ElfWriter<TEncoder> : ElfWriter where TEncoder : struct, IElfEncoder 
     {
         private TEncoder _encoder;

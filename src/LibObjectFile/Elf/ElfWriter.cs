@@ -8,6 +8,9 @@ using System.IO;
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// Base class for writing an <see cref="ElfObjectFile"/> to a <see cref="Stream"/>.
+    /// </summary>
     public abstract class ElfWriter : ObjectFileReaderWriter, IElfEncoder
     {
         private protected ElfWriter(ElfObjectFile objectFile, Stream stream) : base(stream)

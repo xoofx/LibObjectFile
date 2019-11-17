@@ -6,6 +6,9 @@ using System;
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// Defines the flag of a section.
+    /// </summary>
     [Flags]
     public enum ElfSectionFlags : uint
     {

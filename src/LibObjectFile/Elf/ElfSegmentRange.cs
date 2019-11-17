@@ -6,10 +6,17 @@ using System;
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// Defines the range of section a segment is bound to.
+    /// </summary>
     public readonly struct ElfSegmentRange : IEquatable<ElfSegmentRange>
     {
         public static readonly ElfSegmentRange Empty = new ElfSegmentRange();
 
+        /// <summary>
+        /// Creates a new instance that is bound to an entire section/
+        /// </summary>
+        /// <param name="section">The section to be bound to</param>
         public ElfSegmentRange(ElfSection section)
         {
             BeginSection = section ?? throw new ArgumentNullException(nameof(section));
@@ -18,6 +25,13 @@ namespace LibObjectFile.Elf
             EndOffset = -1;
         }
 
+        /// <summary>
+        /// Creates a new instance that is bound to a range of section.
+        /// </summary>
+        /// <param name="beginSection">The first section.</param>
+        /// <param name="beginOffset">The offset inside the first section.</param>
+        /// <param name="endSection">The last section.</param>
+        /// <param name="endOffset">The offset in the last section</param>
         public ElfSegmentRange(ElfSection beginSection, ulong beginOffset, ElfSection endSection, long endOffset)
         {
             BeginSection = beginSection ?? throw new ArgumentNullException(nameof(beginSection));
@@ -30,16 +44,34 @@ namespace LibObjectFile.Elf
             }
         }
         
+        /// <summary>
+        /// The first section.
+        /// </summary>
         public readonly ElfSection BeginSection;
 
+        /// <summary>
+        /// The relative offset in <see cref="BeginSection"/>.
+        /// </summary>
         public readonly ulong BeginOffset;
 
+        /// <summary>
+        /// The last section.
+        /// </summary>
         public readonly ElfSection EndSection;
 
+        /// <summary>
+        /// The offset in the last section. If the offset is &lt; 0, then the actual offset starts from end of the section where finalEndOffset = section.Size + EndOffset.
+        /// </summary>
         public readonly long EndOffset;
 
+        /// <summary>
+        /// Gets a boolean indicating if this section is empty.
+        /// </summary>
         public bool IsEmpty => this == Empty;
 
+        /// <summary>
+        /// Returns the absolute offset of this range taking into account the <see cref="BeginSection"/>.<see cref="ElfObjectFilePart.Offset"/>.
+        /// </summary>
         public ulong Offset
         {
             get
@@ -54,6 +86,9 @@ namespace LibObjectFile.Elf
             }
         }
 
+        /// <summary>
+        /// Returns the size of this range taking into account the size of each section involved in this range.
+        /// </summary>
         public ulong Size
         {
             get

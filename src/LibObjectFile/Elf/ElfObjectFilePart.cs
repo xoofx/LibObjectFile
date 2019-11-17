@@ -47,7 +47,7 @@ namespace LibObjectFile.Elf
             get => SizeKind == ElfValueKind.Auto ? GetSizeAuto() : _size;
             set
             {
-                SizeKind = ElfValueKind.Absolute;
+                SizeKind = ElfValueKind.Manual;
                 _size = value;
             }
         }

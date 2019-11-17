@@ -4,6 +4,9 @@
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// Defines special sections that can be configured via <see cref="ElfSectionExtension.ConfigureAs{TElfSection}"/>
+    /// </summary>
     public enum ElfSectionSpecialType
     {
         None,

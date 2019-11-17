@@ -3,7 +3,6 @@
 // See the license.txt file in the project root for more information.
 
 using System;
-using System.IO;
 
 namespace LibObjectFile.Elf
 {
@@ -49,31 +48,6 @@ namespace LibObjectFile.Elf
         private static InvalidOperationException CannotModifyThisPropertyForShadow()
         {
             return new InvalidOperationException($"Cannot modify this property for a {nameof(ElfShadowSection)}");
-        }
-    }
-
-
-    public sealed class ElfCustomShadowSection : ElfShadowSection
-    {
-        public ElfCustomShadowSection()
-        {
-        }
-
-        public Stream Stream { get; set; }
-
-        protected override ulong GetSizeAuto() => Stream != null ? (ulong)Stream.Length : 0;
-
-        protected override void Read(ElfReader reader)
-        {
-            Stream = reader.ReadAsStream(Size);
-            SizeKind = ElfValueKind.Absolute;
-        }
-
-        protected override void Write(ElfWriter writer)
-        {
-            if (Stream == null) return;
-            Stream.Position = 0;
-            writer.Write(Stream);
         }
     }
 }

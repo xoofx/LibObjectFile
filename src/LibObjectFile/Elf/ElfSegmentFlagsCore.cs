@@ -6,6 +6,9 @@ using System;
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// Defines the core part of <see cref="ElfSegmentFlags"/>
+    /// </summary>
     [Flags]
     public enum ElfSegmentFlagsCore : uint
     {

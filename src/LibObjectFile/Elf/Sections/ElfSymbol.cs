@@ -6,22 +6,47 @@ using System;
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// A symbol entry in the <see cref="ElfSymbolTable"/>
+    /// This is the value seen in <see cref="RawElf.Elf32_Sym"/> or <see cref="RawElf.Elf64_Sym"/>
+    /// </summary>
     public struct ElfSymbol : IEquatable<ElfSymbol>
     {
         public static readonly ElfSymbol Empty = new ElfSymbol();
 
+        /// <summary>
+        /// Gets or sets the value associated to this symbol.
+        /// </summary>
         public ulong Value { get; set; }
 
+        /// <summary>
+        /// Gets or sets the size of this symbol.
+        /// </summary>
         public ulong Size { get; set; }
-        
+
+        /// <summary>
+        /// Gets or sets the type of this symbol (e.g <see cref="ElfSymbolType.Function"/> or <see cref="ElfSymbolType.NoType"/>).
+        /// </summary>
         public ElfSymbolType Type { get; set; }
 
+        /// <summary>
+        /// Get or sets the binding applying to this symbol (e.g <see cref="ElfSymbolBind.Global"/> or <see cref="ElfSymbolBind.Local"/>).
+        /// </summary>
         public ElfSymbolBind Bind { get; set; }
 
+        /// <summary>
+        /// Gets or sets the visibility of this symbol (e.g <see cref="ElfSymbolVisibility.Hidden"/>)
+        /// </summary>
         public ElfSymbolVisibility Visibility { get; set; }
 
+        /// <summary>
+        /// Gets or sets the associated section to this symbol.
+        /// </summary>
         public ElfSectionLink Section { get; set; }
 
+        /// <summary>
+        /// Gets or sets the name of this symbol.
+        /// </summary>
         public ElfString Name { get; set; }
 
         public override string ToString()

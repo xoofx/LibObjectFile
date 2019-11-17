@@ -6,6 +6,8 @@ namespace LibObjectFile.Elf
 {
     /// <summary>
     /// Defines the visibility of a symbol
+    /// This is the value seen compressed in <see cref="RawElf.Elf32_Sym.st_other"/> or <see cref="RawElf.Elf64_Sym.st_other"/>
+    /// as well as the various defines (e.g <see cref="RawElf.STV_INTERNAL"/>).
     /// </summary>
     public enum ElfSymbolVisibility : byte
     {

@@ -7,6 +7,9 @@ using System.IO;
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// A custom section associated with its stream of data to read/write.
+    /// </summary>
     public sealed class ElfCustomSection : ElfSection
     {
         public ElfCustomSection()
@@ -40,6 +43,9 @@ namespace LibObjectFile.Elf
 
         public override ulong TableEntrySize => OriginalTableEntrySize;
         
+        /// <summary>
+        /// Gets or sets the associated stream to this section.
+        /// </summary>
         public Stream Stream { get; set; }
         
         protected override ulong GetSizeAuto() => Stream != null ? (ulong)Stream.Length : 0;

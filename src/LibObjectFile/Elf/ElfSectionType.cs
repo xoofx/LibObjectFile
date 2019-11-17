@@ -4,6 +4,9 @@
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// Defines the type of a section.
+    /// </summary>
     public enum ElfSectionType : uint
     {
         /// <summary>

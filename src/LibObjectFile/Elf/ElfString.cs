@@ -6,6 +6,9 @@ using System;
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// Defines a string with the associated index in the string table.
+    /// </summary>
     public struct ElfString : IEquatable<ElfString>
     {
         private ElfString(string value, uint index)

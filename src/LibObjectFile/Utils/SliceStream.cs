@@ -7,6 +7,9 @@ using System.IO;
 
 namespace LibObjectFile.Utils
 {
+    /// <summary>
+    /// Defines a stream as a slice of another existing stream.
+    /// </summary>
     public class SliceStream : Stream
     {
         private Stream _baseStream;

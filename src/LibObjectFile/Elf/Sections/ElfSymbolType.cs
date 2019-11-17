@@ -6,6 +6,8 @@ namespace LibObjectFile.Elf
 {
     /// <summary>
     /// Defines a symbol type.
+    /// This is the value seen compressed in <see cref="RawElf.Elf32_Sym.st_info"/> or <see cref="RawElf.Elf64_Sym.st_info"/>
+    /// as well as the various defines (e.g <see cref="RawElf.STT_NOTYPE"/>).
     /// </summary>
     public enum ElfSymbolType : byte
     {

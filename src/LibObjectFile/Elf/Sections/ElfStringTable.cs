@@ -11,17 +11,9 @@ using System.Text;
 
 namespace LibObjectFile.Elf
 {
-
-    public class ElfSectionHeaderStringTable : ElfStringTable
-    {
-        public new const string DefaultName = ".shstrtab";
-
-        public ElfSectionHeaderStringTable()
-        {
-            Name = DefaultName;
-        }
-    }
-    
+    /// <summary>
+    /// A string table section with the type <see cref="ElfSectionType.StringTable"/>.
+    /// </summary>
     public class ElfStringTable : ElfSection
     {
         private readonly MemoryStream _table;

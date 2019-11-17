@@ -4,18 +4,20 @@
 
 namespace LibObjectFile
 {
+    /// <summary>
+    /// Defines the various diagnostic message ids.
+    /// </summary>
     public enum DiagnosticId
     {
         // Elf
-
         ELF_ERR_LinkOrInfoSectionNull = 2,
         ELF_ERR_LinkOrInfoInvalidSectionType = 3,
         ELF_ERR_LinkOrInfoInvalidSectionInstance = 4,
         ELF_ERR_InvalidHeaderFileClassNone = 5,
         ELF_ERR_InvalidHeaderIdentLength = 6,
         ELF_ERR_InvalidHeaderMagic = 7,
-        ELF_ERR_InvalidHeaderFileClass = 8,
-        ELF_ERR_InvalidHeaderEncoding = 9,
+        //ELF_ERR_InvalidHeaderFileClass = 8,
+        //ELF_ERR_InvalidHeaderEncoding = 9,
         ELF_ERR_MissingProgramHeaderTableSection = 10,
         ELF_ERR_InvalidSectionHeaderCount = 11,
         ELF_ERR_IncompleteHeader32Size = 12,

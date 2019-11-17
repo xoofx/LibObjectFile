@@ -115,7 +115,7 @@ namespace LibObjectFile.Elf
 
             if (Type != ElfSectionType.Null && Type != ElfSectionType.NoBits && SizeKind != ElfValueKind.Auto)
             {
-                diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSectionSizeKind, $"Invalid {nameof(SizeKind)}: {SizeKind} for `{this}`. Expecting {ElfValueKind.Absolute}.");
+                diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSectionSizeKind, $"Invalid {nameof(SizeKind)}: {SizeKind} for `{this}`. Expecting {ElfValueKind.Manual}.");
             }
 
             // Check parent for link section

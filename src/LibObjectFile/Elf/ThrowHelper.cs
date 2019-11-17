@@ -6,6 +6,9 @@ using System;
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// Internal helper class for throwing exceptions.
+    /// </summary>
     internal static class ThrowHelper
     {
         public static InvalidOperationException InvalidEnum(object v)

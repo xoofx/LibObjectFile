@@ -138,7 +138,7 @@ namespace LibObjectFile.Elf
             for (int i = 0; i < elf.Segments.Count; i++)
             {
                 var phdr = elf.Segments[i];
-                writer.WriteLine($"  {GetElfSegmentType(phdr.Type),-14} 0x{phdr.Offset:x6} 0x{phdr.VirtualAddress:x16} 0x{phdr.PhysicalAddress:x16} 0x{phdr.Size:x6} 0x{phdr.SizeInMemory:x6} {GetElfSegmentFlags(phdr.Flags),3} 0x{phdr.Align:x4}");
+                writer.WriteLine($"  {GetElfSegmentType(phdr.Type),-14} 0x{phdr.Offset:x6} 0x{phdr.VirtualAddress:x16} 0x{phdr.PhysicalAddress:x16} 0x{phdr.Size:x6} 0x{phdr.SizeInMemory:x6} {GetElfSegmentFlags(phdr.Flags),3} 0x{phdr.Alignment:x4}");
             }
 
             if (elf.Segments.Count > 0 && elf.VisibleSectionCount > 0 && elf.SectionHeaderStringTable != null)

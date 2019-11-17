@@ -6,6 +6,9 @@ using System;
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// Defines a link to a section, special section or an index (used by <see cref="ElfSection.Info"/> and <see cref="ElfSection.Link"/>)
+    /// </summary>
     public readonly struct ElfSectionLink : IEquatable<ElfSectionLink>
     {
         public static readonly ElfSectionLink Empty = new ElfSectionLink(RawElf.SHN_UNDEF);
@@ -17,32 +20,32 @@ namespace LibObjectFile.Elf
         public ElfSectionLink(uint index)
         {
             Section = null;
-            SpecialSectionIndex = index;
+            SpecialIndex = index;
         }
 
         public ElfSectionLink(ElfSection section)
         {
             Section = section;
-            SpecialSectionIndex = 0;
+            SpecialIndex = 0;
         }
 
         public readonly ElfSection Section;
 
-        public readonly uint SpecialSectionIndex;
+        public readonly uint SpecialIndex;
 
         /// <summary>
         /// <c>true</c> if this link to a section is a special section.
         /// </summary>
-        public bool IsSpecial => Section == null && (SpecialSectionIndex == RawElf.SHN_UNDEF || SpecialSectionIndex >= RawElf.SHN_LORESERVE);
+        public bool IsSpecial => Section == null && (SpecialIndex == RawElf.SHN_UNDEF || SpecialIndex >= RawElf.SHN_LORESERVE);
         
         public uint GetIndex()
         {
-            return Section?.SectionIndex ?? SpecialSectionIndex;
+            return Section?.SectionIndex ?? SpecialIndex;
         }
 
         public bool Equals(ElfSectionLink other)
         {
-            return Equals(Section, other.Section) && SpecialSectionIndex == other.SpecialSectionIndex;
+            return Equals(Section, other.Section) && SpecialIndex == other.SpecialIndex;
         }
 
         public override bool Equals(object obj)
@@ -54,7 +57,7 @@ namespace LibObjectFile.Elf
         {
             unchecked
             {
-                return ((Section != null ? Section.GetHashCode() : 0) * 397) ^ SpecialSectionIndex.GetHashCode();
+                return ((Section != null ? Section.GetHashCode() : 0) * 397) ^ SpecialIndex.GetHashCode();
             }
         }
 
@@ -75,27 +78,27 @@ namespace LibObjectFile.Elf
                 return Section.ToString();
             }
 
-            if (SpecialSectionIndex == 0) return "Special Section Undefined";
+            if (SpecialIndex == 0) return "Special Section Undefined";
 
-            if (SpecialSectionIndex > RawElf.SHN_BEFORE)
+            if (SpecialIndex > RawElf.SHN_BEFORE)
             {
-                if (SpecialSectionIndex == RawElf.SHN_ABS)
+                if (SpecialIndex == RawElf.SHN_ABS)
                 {
                     return "Special Section Absolute";
                 }
                 
-                if (SpecialSectionIndex == RawElf.SHN_COMMON)
+                if (SpecialIndex == RawElf.SHN_COMMON)
                 {
                     return "Special Section Common";
                 }
 
-                if (SpecialSectionIndex == RawElf.SHN_XINDEX)
+                if (SpecialIndex == RawElf.SHN_XINDEX)
                 {
                     return "Special Section XIndex";
                 }
             }
 
-            return $"Unknown Section Value 0x{SpecialSectionIndex:X8}";
+            return $"Unknown Section Value 0x{SpecialIndex:X8}";
         }
 
         public static implicit operator ElfSectionLink(ElfSection section)

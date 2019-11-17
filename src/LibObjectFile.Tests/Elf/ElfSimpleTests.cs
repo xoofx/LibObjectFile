@@ -164,7 +164,7 @@ namespace LibObjectFile.Tests.Elf
                     Flags = ElfSegmentFlagsCore.Readable|ElfSegmentFlagsCore.Executable,
                     Size = 4096,
                     SizeInMemory = 4096,
-                    Align = 4096,
+                    Alignment = 4096,
             });
 
             elf.AddSegment(new ElfSegment()
@@ -176,7 +176,7 @@ namespace LibObjectFile.Tests.Elf
                 Flags = ElfSegmentFlagsCore.Readable | ElfSegmentFlagsCore.Writable,
                 Size = 1024,
                 SizeInMemory = 1024,
-                Align = 4096,
+                Alignment = 4096,
             });
 
             AssertReadElf(elf, "test3.elf");
@@ -255,7 +255,7 @@ namespace LibObjectFile.Tests.Elf
                     Flags = ElfSegmentFlagsCore.Readable | ElfSegmentFlagsCore.Executable,
                     Size = 4096,
                     SizeInMemory = 4096,
-                    Align = 4096,
+                    Alignment = 4096,
                 }
             );
 
@@ -269,7 +269,7 @@ namespace LibObjectFile.Tests.Elf
                     Flags = ElfSegmentFlagsCore.Readable | ElfSegmentFlagsCore.Writable,
                     Size = 1024,
                     SizeInMemory = 1024,
-                    Align = 4096,
+                    Alignment = 4096,
                 }
             );
 

@@ -4,6 +4,9 @@
 
 namespace LibObjectFile.Elf
 {
+    /// <summary>
+    /// The program header table as a <see cref="ElfShadowSection"/>.
+    /// </summary>
     public sealed class ElfProgramHeaderTable : ElfShadowSection
     {
         public ElfProgramHeaderTable()
@@ -57,7 +60,7 @@ namespace LibObjectFile.Elf
             writer.Encode(out hdr.p_filesz, (uint)segment.Size);
             writer.Encode(out hdr.p_memsz, (uint)segment.SizeInMemory);
             writer.Encode(out hdr.p_flags, segment.Flags.Value);
-            writer.Encode(out hdr.p_align, (uint)segment.Align);
+            writer.Encode(out hdr.p_align, (uint)segment.Alignment);
 
             writer.Write(hdr);
         }
@@ -73,7 +76,7 @@ namespace LibObjectFile.Elf
             writer.Encode(out hdr.p_filesz, segment.Size);
             writer.Encode(out hdr.p_memsz, segment.SizeInMemory);
             writer.Encode(out hdr.p_flags, segment.Flags.Value);
-            writer.Encode(out hdr.p_align, segment.Align);
+            writer.Encode(out hdr.p_align, segment.Alignment);
 
             writer.Write(hdr);
         }
