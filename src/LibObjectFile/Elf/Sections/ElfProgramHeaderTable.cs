@@ -29,7 +29,7 @@ namespace LibObjectFile.Elf
             get
             {
                 if (Parent == null) return 0;
-                return Parent.FileClass == ElfFileClass.Is32 ? (ulong)sizeof(RawElf.Elf32_Phdr) : (ulong)sizeof(RawElf.Elf64_Phdr);
+                return Parent.FileClass == ElfFileClass.Is32 ? (ulong)sizeof(ElfNative.Elf32_Phdr) : (ulong)sizeof(ElfNative.Elf64_Phdr);
             }
         }
 
@@ -51,7 +51,7 @@ namespace LibObjectFile.Elf
         
         private void WriteProgramHeader32(ElfWriter writer, ref ElfSegment segment)
         {
-            var hdr = new RawElf.Elf32_Phdr();
+            var hdr = new ElfNative.Elf32_Phdr();
 
             writer.Encode(out hdr.p_type, segment.Type.Value);
             writer.Encode(out hdr.p_offset, (uint)segment.Offset);
@@ -67,7 +67,7 @@ namespace LibObjectFile.Elf
 
         private void WriteProgramHeader64(ElfWriter writer, ref ElfSegment segment)
         {
-            var hdr = new RawElf.Elf64_Phdr();
+            var hdr = new ElfNative.Elf64_Phdr();
 
             writer.Encode(out hdr.p_type, segment.Type.Value);
             writer.Encode(out hdr.p_offset, segment.Offset);

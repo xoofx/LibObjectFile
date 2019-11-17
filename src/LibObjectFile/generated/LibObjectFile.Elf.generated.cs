@@ -12,7 +12,7 @@ namespace LibObjectFile.Elf
 {
     using System.Runtime.InteropServices;
     
-    public static partial class RawElf
+    public static partial class ElfNative
     {
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public unsafe partial struct Elf32_Ehdr
@@ -25,67 +25,67 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Object file type
             /// </summary>
-            public RawElf.Elf32_Half e_type;
+            public ElfNative.Elf32_Half e_type;
             
             /// <summary>
             /// Architecture
             /// </summary>
-            public RawElf.Elf32_Half e_machine;
+            public ElfNative.Elf32_Half e_machine;
             
             /// <summary>
             /// Object file version
             /// </summary>
-            public RawElf.Elf32_Word e_version;
+            public ElfNative.Elf32_Word e_version;
             
             /// <summary>
             /// Entry point virtual address
             /// </summary>
-            public RawElf.Elf32_Addr e_entry;
+            public ElfNative.Elf32_Addr e_entry;
             
             /// <summary>
             /// Program header table file offset
             /// </summary>
-            public RawElf.Elf32_Off e_phoff;
+            public ElfNative.Elf32_Off e_phoff;
             
             /// <summary>
             /// Section header table file offset
             /// </summary>
-            public RawElf.Elf32_Off e_shoff;
+            public ElfNative.Elf32_Off e_shoff;
             
             /// <summary>
             /// Processor-specific flags
             /// </summary>
-            public RawElf.Elf32_Word e_flags;
+            public ElfNative.Elf32_Word e_flags;
             
             /// <summary>
             /// ELF header size in bytes
             /// </summary>
-            public RawElf.Elf32_Half e_ehsize;
+            public ElfNative.Elf32_Half e_ehsize;
             
             /// <summary>
             /// Program header table entry size
             /// </summary>
-            public RawElf.Elf32_Half e_phentsize;
+            public ElfNative.Elf32_Half e_phentsize;
             
             /// <summary>
             /// Program header table entry count
             /// </summary>
-            public RawElf.Elf32_Half e_phnum;
+            public ElfNative.Elf32_Half e_phnum;
             
             /// <summary>
             /// Section header table entry size
             /// </summary>
-            public RawElf.Elf32_Half e_shentsize;
+            public ElfNative.Elf32_Half e_shentsize;
             
             /// <summary>
             /// Section header table entry count
             /// </summary>
-            public RawElf.Elf32_Half e_shnum;
+            public ElfNative.Elf32_Half e_shnum;
             
             /// <summary>
             /// Section header string table index
             /// </summary>
-            public RawElf.Elf32_Half e_shstrndx;
+            public ElfNative.Elf32_Half e_shstrndx;
         }
         
         /// <summary>
@@ -207,67 +207,67 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Object file type
             /// </summary>
-            public RawElf.Elf64_Half e_type;
+            public ElfNative.Elf64_Half e_type;
             
             /// <summary>
             /// Architecture
             /// </summary>
-            public RawElf.Elf64_Half e_machine;
+            public ElfNative.Elf64_Half e_machine;
             
             /// <summary>
             /// Object file version
             /// </summary>
-            public RawElf.Elf64_Word e_version;
+            public ElfNative.Elf64_Word e_version;
             
             /// <summary>
             /// Entry point virtual address
             /// </summary>
-            public RawElf.Elf64_Addr e_entry;
+            public ElfNative.Elf64_Addr e_entry;
             
             /// <summary>
             /// Program header table file offset
             /// </summary>
-            public RawElf.Elf64_Off e_phoff;
+            public ElfNative.Elf64_Off e_phoff;
             
             /// <summary>
             /// Section header table file offset
             /// </summary>
-            public RawElf.Elf64_Off e_shoff;
+            public ElfNative.Elf64_Off e_shoff;
             
             /// <summary>
             /// Processor-specific flags
             /// </summary>
-            public RawElf.Elf64_Word e_flags;
+            public ElfNative.Elf64_Word e_flags;
             
             /// <summary>
             /// ELF header size in bytes
             /// </summary>
-            public RawElf.Elf64_Half e_ehsize;
+            public ElfNative.Elf64_Half e_ehsize;
             
             /// <summary>
             /// Program header table entry size
             /// </summary>
-            public RawElf.Elf64_Half e_phentsize;
+            public ElfNative.Elf64_Half e_phentsize;
             
             /// <summary>
             /// Program header table entry count
             /// </summary>
-            public RawElf.Elf64_Half e_phnum;
+            public ElfNative.Elf64_Half e_phnum;
             
             /// <summary>
             /// Section header table entry size
             /// </summary>
-            public RawElf.Elf64_Half e_shentsize;
+            public ElfNative.Elf64_Half e_shentsize;
             
             /// <summary>
             /// Section header table entry count
             /// </summary>
-            public RawElf.Elf64_Half e_shnum;
+            public ElfNative.Elf64_Half e_shnum;
             
             /// <summary>
             /// Section header string table index
             /// </summary>
-            public RawElf.Elf64_Half e_shstrndx;
+            public ElfNative.Elf64_Half e_shstrndx;
         }
         
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
@@ -375,52 +375,52 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Section name (string tbl index)
             /// </summary>
-            public RawElf.Elf32_Word sh_name;
+            public ElfNative.Elf32_Word sh_name;
             
             /// <summary>
             /// Section type
             /// </summary>
-            public RawElf.Elf32_Word sh_type;
+            public ElfNative.Elf32_Word sh_type;
             
             /// <summary>
             /// Section flags
             /// </summary>
-            public RawElf.Elf32_Word sh_flags;
+            public ElfNative.Elf32_Word sh_flags;
             
             /// <summary>
             /// Section virtual addr at execution
             /// </summary>
-            public RawElf.Elf32_Addr sh_addr;
+            public ElfNative.Elf32_Addr sh_addr;
             
             /// <summary>
             /// Section file offset
             /// </summary>
-            public RawElf.Elf32_Off sh_offset;
+            public ElfNative.Elf32_Off sh_offset;
             
             /// <summary>
             /// Section size in bytes
             /// </summary>
-            public RawElf.Elf32_Word sh_size;
+            public ElfNative.Elf32_Word sh_size;
             
             /// <summary>
             /// Link to another section
             /// </summary>
-            public RawElf.Elf32_Word sh_link;
+            public ElfNative.Elf32_Word sh_link;
             
             /// <summary>
             /// Additional section information
             /// </summary>
-            public RawElf.Elf32_Word sh_info;
+            public ElfNative.Elf32_Word sh_info;
             
             /// <summary>
             /// Section alignment
             /// </summary>
-            public RawElf.Elf32_Word sh_addralign;
+            public ElfNative.Elf32_Word sh_addralign;
             
             /// <summary>
             /// Entry size if section holds table
             /// </summary>
-            public RawElf.Elf32_Word sh_entsize;
+            public ElfNative.Elf32_Word sh_entsize;
         }
         
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
@@ -429,52 +429,52 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Section name (string tbl index)
             /// </summary>
-            public RawElf.Elf64_Word sh_name;
+            public ElfNative.Elf64_Word sh_name;
             
             /// <summary>
             /// Section type
             /// </summary>
-            public RawElf.Elf64_Word sh_type;
+            public ElfNative.Elf64_Word sh_type;
             
             /// <summary>
             /// Section flags
             /// </summary>
-            public RawElf.Elf64_Xword sh_flags;
+            public ElfNative.Elf64_Xword sh_flags;
             
             /// <summary>
             /// Section virtual addr at execution
             /// </summary>
-            public RawElf.Elf64_Addr sh_addr;
+            public ElfNative.Elf64_Addr sh_addr;
             
             /// <summary>
             /// Section file offset
             /// </summary>
-            public RawElf.Elf64_Off sh_offset;
+            public ElfNative.Elf64_Off sh_offset;
             
             /// <summary>
             /// Section size in bytes
             /// </summary>
-            public RawElf.Elf64_Xword sh_size;
+            public ElfNative.Elf64_Xword sh_size;
             
             /// <summary>
             /// Link to another section
             /// </summary>
-            public RawElf.Elf64_Word sh_link;
+            public ElfNative.Elf64_Word sh_link;
             
             /// <summary>
             /// Additional section information
             /// </summary>
-            public RawElf.Elf64_Word sh_info;
+            public ElfNative.Elf64_Word sh_info;
             
             /// <summary>
             /// Section alignment
             /// </summary>
-            public RawElf.Elf64_Xword sh_addralign;
+            public ElfNative.Elf64_Xword sh_addralign;
             
             /// <summary>
             /// Entry size if section holds table
             /// </summary>
-            public RawElf.Elf64_Xword sh_entsize;
+            public ElfNative.Elf64_Xword sh_entsize;
         }
         
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
@@ -510,17 +510,17 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Compression format.
             /// </summary>
-            public RawElf.Elf32_Word ch_type;
+            public ElfNative.Elf32_Word ch_type;
             
             /// <summary>
             /// Uncompressed data size.
             /// </summary>
-            public RawElf.Elf32_Word ch_size;
+            public ElfNative.Elf32_Word ch_size;
             
             /// <summary>
             /// Uncompressed data alignment.
             /// </summary>
-            public RawElf.Elf32_Word ch_addralign;
+            public ElfNative.Elf32_Word ch_addralign;
         }
         
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
@@ -529,19 +529,19 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Compression format.
             /// </summary>
-            public RawElf.Elf64_Word ch_type;
+            public ElfNative.Elf64_Word ch_type;
             
-            public RawElf.Elf64_Word ch_reserved;
+            public ElfNative.Elf64_Word ch_reserved;
             
             /// <summary>
             /// Uncompressed data size.
             /// </summary>
-            public RawElf.Elf64_Xword ch_size;
+            public ElfNative.Elf64_Xword ch_size;
             
             /// <summary>
             /// Uncompressed data alignment.
             /// </summary>
-            public RawElf.Elf64_Xword ch_addralign;
+            public ElfNative.Elf64_Xword ch_addralign;
         }
         
         /// <summary>
@@ -553,17 +553,17 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Symbol name (string tbl index)
             /// </summary>
-            public RawElf.Elf32_Word st_name;
+            public ElfNative.Elf32_Word st_name;
             
             /// <summary>
             /// Symbol value
             /// </summary>
-            public RawElf.Elf32_Addr st_value;
+            public ElfNative.Elf32_Addr st_value;
             
             /// <summary>
             /// Symbol size
             /// </summary>
-            public RawElf.Elf32_Word st_size;
+            public ElfNative.Elf32_Word st_size;
             
             /// <summary>
             /// Symbol type and binding
@@ -578,7 +578,7 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Section index
             /// </summary>
-            public RawElf.Elf32_Section st_shndx;
+            public ElfNative.Elf32_Section st_shndx;
         }
         
         /// <summary>
@@ -614,7 +614,7 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Symbol name (string tbl index)
             /// </summary>
-            public RawElf.Elf64_Word st_name;
+            public ElfNative.Elf64_Word st_name;
             
             /// <summary>
             /// Symbol type and binding
@@ -629,17 +629,17 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Section index
             /// </summary>
-            public RawElf.Elf64_Section st_shndx;
+            public ElfNative.Elf64_Section st_shndx;
             
             /// <summary>
             /// Symbol value
             /// </summary>
-            public RawElf.Elf64_Addr st_value;
+            public ElfNative.Elf64_Addr st_value;
             
             /// <summary>
             /// Symbol size
             /// </summary>
-            public RawElf.Elf64_Xword st_size;
+            public ElfNative.Elf64_Xword st_size;
         }
         
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
@@ -676,12 +676,12 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Direct bindings, symbol bound to
             /// </summary>
-            public RawElf.Elf32_Half si_boundto;
+            public ElfNative.Elf32_Half si_boundto;
             
             /// <summary>
             /// Per symbol flags
             /// </summary>
-            public RawElf.Elf32_Half si_flags;
+            public ElfNative.Elf32_Half si_flags;
         }
         
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
@@ -690,12 +690,12 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Direct bindings, symbol bound to
             /// </summary>
-            public RawElf.Elf64_Half si_boundto;
+            public ElfNative.Elf64_Half si_boundto;
             
             /// <summary>
             /// Per symbol flags
             /// </summary>
-            public RawElf.Elf64_Half si_flags;
+            public ElfNative.Elf64_Half si_flags;
         }
         
         /// <summary>
@@ -707,12 +707,12 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Address
             /// </summary>
-            public RawElf.Elf32_Addr r_offset;
+            public ElfNative.Elf32_Addr r_offset;
             
             /// <summary>
             /// Relocation type and symbol index
             /// </summary>
-            public RawElf.Elf32_Word r_info;
+            public ElfNative.Elf32_Word r_info;
         }
         
         /// <summary>
@@ -729,12 +729,12 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Address
             /// </summary>
-            public RawElf.Elf64_Addr r_offset;
+            public ElfNative.Elf64_Addr r_offset;
             
             /// <summary>
             /// Relocation type and symbol index
             /// </summary>
-            public RawElf.Elf64_Xword r_info;
+            public ElfNative.Elf64_Xword r_info;
         }
         
         /// <summary>
@@ -746,17 +746,17 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Address
             /// </summary>
-            public RawElf.Elf32_Addr r_offset;
+            public ElfNative.Elf32_Addr r_offset;
             
             /// <summary>
             /// Relocation type and symbol index
             /// </summary>
-            public RawElf.Elf32_Word r_info;
+            public ElfNative.Elf32_Word r_info;
             
             /// <summary>
             /// Addend
             /// </summary>
-            public RawElf.Elf32_Sword r_addend;
+            public ElfNative.Elf32_Sword r_addend;
         }
         
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
@@ -789,17 +789,17 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Address
             /// </summary>
-            public RawElf.Elf64_Addr r_offset;
+            public ElfNative.Elf64_Addr r_offset;
             
             /// <summary>
             /// Relocation type and symbol index
             /// </summary>
-            public RawElf.Elf64_Xword r_info;
+            public ElfNative.Elf64_Xword r_info;
             
             /// <summary>
             /// Addend
             /// </summary>
-            public RawElf.Elf64_Sxword r_addend;
+            public ElfNative.Elf64_Sxword r_addend;
         }
         
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
@@ -835,42 +835,42 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Segment type
             /// </summary>
-            public RawElf.Elf32_Word p_type;
+            public ElfNative.Elf32_Word p_type;
             
             /// <summary>
             /// Segment file offset
             /// </summary>
-            public RawElf.Elf32_Off p_offset;
+            public ElfNative.Elf32_Off p_offset;
             
             /// <summary>
             /// Segment virtual address
             /// </summary>
-            public RawElf.Elf32_Addr p_vaddr;
+            public ElfNative.Elf32_Addr p_vaddr;
             
             /// <summary>
             /// Segment physical address
             /// </summary>
-            public RawElf.Elf32_Addr p_paddr;
+            public ElfNative.Elf32_Addr p_paddr;
             
             /// <summary>
             /// Segment size in file
             /// </summary>
-            public RawElf.Elf32_Word p_filesz;
+            public ElfNative.Elf32_Word p_filesz;
             
             /// <summary>
             /// Segment size in memory
             /// </summary>
-            public RawElf.Elf32_Word p_memsz;
+            public ElfNative.Elf32_Word p_memsz;
             
             /// <summary>
             /// Segment flags
             /// </summary>
-            public RawElf.Elf32_Word p_flags;
+            public ElfNative.Elf32_Word p_flags;
             
             /// <summary>
             /// Segment alignment
             /// </summary>
-            public RawElf.Elf32_Word p_align;
+            public ElfNative.Elf32_Word p_align;
         }
         
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
@@ -879,42 +879,42 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Segment type
             /// </summary>
-            public RawElf.Elf64_Word p_type;
+            public ElfNative.Elf64_Word p_type;
             
             /// <summary>
             /// Segment flags
             /// </summary>
-            public RawElf.Elf64_Word p_flags;
+            public ElfNative.Elf64_Word p_flags;
             
             /// <summary>
             /// Segment file offset
             /// </summary>
-            public RawElf.Elf64_Off p_offset;
+            public ElfNative.Elf64_Off p_offset;
             
             /// <summary>
             /// Segment virtual address
             /// </summary>
-            public RawElf.Elf64_Addr p_vaddr;
+            public ElfNative.Elf64_Addr p_vaddr;
             
             /// <summary>
             /// Segment physical address
             /// </summary>
-            public RawElf.Elf64_Addr p_paddr;
+            public ElfNative.Elf64_Addr p_paddr;
             
             /// <summary>
             /// Segment size in file
             /// </summary>
-            public RawElf.Elf64_Xword p_filesz;
+            public ElfNative.Elf64_Xword p_filesz;
             
             /// <summary>
             /// Segment size in memory
             /// </summary>
-            public RawElf.Elf64_Xword p_memsz;
+            public ElfNative.Elf64_Xword p_memsz;
             
             /// <summary>
             /// Segment alignment
             /// </summary>
-            public RawElf.Elf64_Xword p_align;
+            public ElfNative.Elf64_Xword p_align;
         }
         
         /// <summary>
@@ -930,21 +930,21 @@ namespace LibObjectFile.Elf
                 /// Integer value
                 /// </summary>
                 [FieldOffset(0)]
-                public RawElf.Elf32_Word d_val;
+                public ElfNative.Elf32_Word d_val;
                 
                 /// <summary>
                 /// Address value
                 /// </summary>
                 [FieldOffset(0)]
-                public RawElf.Elf32_Addr d_ptr;
+                public ElfNative.Elf32_Addr d_ptr;
             }
             
             /// <summary>
             /// Dynamic entry type
             /// </summary>
-            public RawElf.Elf32_Sword d_tag;
+            public ElfNative.Elf32_Sword d_tag;
             
-            public RawElf.Elf32_Dyn.Elf32_Dyn_union_d_un d_un;
+            public ElfNative.Elf32_Dyn.Elf32_Dyn_union_d_un d_un;
         }
         
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
@@ -957,21 +957,21 @@ namespace LibObjectFile.Elf
                 /// Integer value
                 /// </summary>
                 [FieldOffset(0)]
-                public RawElf.Elf64_Xword d_val;
+                public ElfNative.Elf64_Xword d_val;
                 
                 /// <summary>
                 /// Address value
                 /// </summary>
                 [FieldOffset(0)]
-                public RawElf.Elf64_Addr d_ptr;
+                public ElfNative.Elf64_Addr d_ptr;
             }
             
             /// <summary>
             /// Dynamic entry type
             /// </summary>
-            public RawElf.Elf64_Sxword d_tag;
+            public ElfNative.Elf64_Sxword d_tag;
             
-            public RawElf.Elf64_Dyn.Elf64_Dyn_union_d_un d_un;
+            public ElfNative.Elf64_Dyn.Elf64_Dyn_union_d_un d_un;
         }
         
         /// <summary>
@@ -983,38 +983,38 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Version revision
             /// </summary>
-            public RawElf.Elf32_Half vd_version;
+            public ElfNative.Elf32_Half vd_version;
             
             /// <summary>
             /// Version information
             /// </summary>
-            public RawElf.Elf32_Half vd_flags;
+            public ElfNative.Elf32_Half vd_flags;
             
             /// <summary>
             /// Version Index
             /// </summary>
-            public RawElf.Elf32_Half vd_ndx;
+            public ElfNative.Elf32_Half vd_ndx;
             
             /// <summary>
             /// Number of associated aux entries
             /// </summary>
-            public RawElf.Elf32_Half vd_cnt;
+            public ElfNative.Elf32_Half vd_cnt;
             
             /// <summary>
             /// Version name hash value
             /// </summary>
-            public RawElf.Elf32_Word vd_hash;
+            public ElfNative.Elf32_Word vd_hash;
             
             /// <summary>
             /// Offset in bytes to verdaux array
             /// </summary>
-            public RawElf.Elf32_Word vd_aux;
+            public ElfNative.Elf32_Word vd_aux;
             
             /// <summary>
             /// Offset in bytes to next verdef
             /// entry
             /// </summary>
-            public RawElf.Elf32_Word vd_next;
+            public ElfNative.Elf32_Word vd_next;
         }
         
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
@@ -1023,38 +1023,38 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Version revision
             /// </summary>
-            public RawElf.Elf64_Half vd_version;
+            public ElfNative.Elf64_Half vd_version;
             
             /// <summary>
             /// Version information
             /// </summary>
-            public RawElf.Elf64_Half vd_flags;
+            public ElfNative.Elf64_Half vd_flags;
             
             /// <summary>
             /// Version Index
             /// </summary>
-            public RawElf.Elf64_Half vd_ndx;
+            public ElfNative.Elf64_Half vd_ndx;
             
             /// <summary>
             /// Number of associated aux entries
             /// </summary>
-            public RawElf.Elf64_Half vd_cnt;
+            public ElfNative.Elf64_Half vd_cnt;
             
             /// <summary>
             /// Version name hash value
             /// </summary>
-            public RawElf.Elf64_Word vd_hash;
+            public ElfNative.Elf64_Word vd_hash;
             
             /// <summary>
             /// Offset in bytes to verdaux array
             /// </summary>
-            public RawElf.Elf64_Word vd_aux;
+            public ElfNative.Elf64_Word vd_aux;
             
             /// <summary>
             /// Offset in bytes to next verdef
             /// entry
             /// </summary>
-            public RawElf.Elf64_Word vd_next;
+            public ElfNative.Elf64_Word vd_next;
         }
         
         /// <summary>
@@ -1066,13 +1066,13 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Version or dependency names
             /// </summary>
-            public RawElf.Elf32_Word vda_name;
+            public ElfNative.Elf32_Word vda_name;
             
             /// <summary>
             /// Offset in bytes to next verdaux
             /// entry
             /// </summary>
-            public RawElf.Elf32_Word vda_next;
+            public ElfNative.Elf32_Word vda_next;
         }
         
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
@@ -1081,13 +1081,13 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Version or dependency names
             /// </summary>
-            public RawElf.Elf64_Word vda_name;
+            public ElfNative.Elf64_Word vda_name;
             
             /// <summary>
             /// Offset in bytes to next verdaux
             /// entry
             /// </summary>
-            public RawElf.Elf64_Word vda_next;
+            public ElfNative.Elf64_Word vda_next;
         }
         
         /// <summary>
@@ -1099,29 +1099,29 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Version of structure
             /// </summary>
-            public RawElf.Elf32_Half vn_version;
+            public ElfNative.Elf32_Half vn_version;
             
             /// <summary>
             /// Number of associated aux entries
             /// </summary>
-            public RawElf.Elf32_Half vn_cnt;
+            public ElfNative.Elf32_Half vn_cnt;
             
             /// <summary>
             /// Offset of filename for this
             /// dependency
             /// </summary>
-            public RawElf.Elf32_Word vn_file;
+            public ElfNative.Elf32_Word vn_file;
             
             /// <summary>
             /// Offset in bytes to vernaux array
             /// </summary>
-            public RawElf.Elf32_Word vn_aux;
+            public ElfNative.Elf32_Word vn_aux;
             
             /// <summary>
             /// Offset in bytes to next verneed
             /// entry
             /// </summary>
-            public RawElf.Elf32_Word vn_next;
+            public ElfNative.Elf32_Word vn_next;
         }
         
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
@@ -1130,29 +1130,29 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Version of structure
             /// </summary>
-            public RawElf.Elf64_Half vn_version;
+            public ElfNative.Elf64_Half vn_version;
             
             /// <summary>
             /// Number of associated aux entries
             /// </summary>
-            public RawElf.Elf64_Half vn_cnt;
+            public ElfNative.Elf64_Half vn_cnt;
             
             /// <summary>
             /// Offset of filename for this
             /// dependency
             /// </summary>
-            public RawElf.Elf64_Word vn_file;
+            public ElfNative.Elf64_Word vn_file;
             
             /// <summary>
             /// Offset in bytes to vernaux array
             /// </summary>
-            public RawElf.Elf64_Word vn_aux;
+            public ElfNative.Elf64_Word vn_aux;
             
             /// <summary>
             /// Offset in bytes to next verneed
             /// entry
             /// </summary>
-            public RawElf.Elf64_Word vn_next;
+            public ElfNative.Elf64_Word vn_next;
         }
         
         /// <summary>
@@ -1164,28 +1164,28 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Hash value of dependency name
             /// </summary>
-            public RawElf.Elf32_Word vna_hash;
+            public ElfNative.Elf32_Word vna_hash;
             
             /// <summary>
             /// Dependency specific information
             /// </summary>
-            public RawElf.Elf32_Half vna_flags;
+            public ElfNative.Elf32_Half vna_flags;
             
             /// <summary>
             /// Unused
             /// </summary>
-            public RawElf.Elf32_Half vna_other;
+            public ElfNative.Elf32_Half vna_other;
             
             /// <summary>
             /// Dependency name string offset
             /// </summary>
-            public RawElf.Elf32_Word vna_name;
+            public ElfNative.Elf32_Word vna_name;
             
             /// <summary>
             /// Offset in bytes to next vernaux
             /// entry
             /// </summary>
-            public RawElf.Elf32_Word vna_next;
+            public ElfNative.Elf32_Word vna_next;
         }
         
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
@@ -1194,28 +1194,28 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Hash value of dependency name
             /// </summary>
-            public RawElf.Elf64_Word vna_hash;
+            public ElfNative.Elf64_Word vna_hash;
             
             /// <summary>
             /// Dependency specific information
             /// </summary>
-            public RawElf.Elf64_Half vna_flags;
+            public ElfNative.Elf64_Half vna_flags;
             
             /// <summary>
             /// Unused
             /// </summary>
-            public RawElf.Elf64_Half vna_other;
+            public ElfNative.Elf64_Half vna_other;
             
             /// <summary>
             /// Dependency name string offset
             /// </summary>
-            public RawElf.Elf64_Word vna_name;
+            public ElfNative.Elf64_Word vna_name;
             
             /// <summary>
             /// Offset in bytes to next vernaux
             /// entry
             /// </summary>
-            public RawElf.Elf64_Word vna_next;
+            public ElfNative.Elf64_Word vna_next;
         }
         
         /// <summary>
@@ -1246,7 +1246,7 @@ namespace LibObjectFile.Elf
             /// </summary>
             public uint a_type;
             
-            public RawElf.Elf32_auxv_t.Elf32_auxv_t_union_a_un a_un;
+            public ElfNative.Elf32_auxv_t.Elf32_auxv_t_union_a_un a_un;
         }
         
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
@@ -1267,7 +1267,7 @@ namespace LibObjectFile.Elf
             /// </summary>
             public ulong a_type;
             
-            public RawElf.Elf64_auxv_t.Elf64_auxv_t_union_a_un a_un;
+            public ElfNative.Elf64_auxv_t.Elf64_auxv_t_union_a_un a_un;
         }
         
         /// <summary>
@@ -1280,17 +1280,17 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Length of the note's name.
             /// </summary>
-            public RawElf.Elf32_Word n_namesz;
+            public ElfNative.Elf32_Word n_namesz;
             
             /// <summary>
             /// Length of the note's descriptor.
             /// </summary>
-            public RawElf.Elf32_Word n_descsz;
+            public ElfNative.Elf32_Word n_descsz;
             
             /// <summary>
             /// Type of the note.
             /// </summary>
-            public RawElf.Elf32_Word n_type;
+            public ElfNative.Elf32_Word n_type;
         }
         
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
@@ -1299,17 +1299,17 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Length of the note's name.
             /// </summary>
-            public RawElf.Elf64_Word n_namesz;
+            public ElfNative.Elf64_Word n_namesz;
             
             /// <summary>
             /// Length of the note's descriptor.
             /// </summary>
-            public RawElf.Elf64_Word n_descsz;
+            public ElfNative.Elf64_Word n_descsz;
             
             /// <summary>
             /// Type of the note.
             /// </summary>
-            public RawElf.Elf64_Word n_type;
+            public ElfNative.Elf64_Word n_type;
         }
         
         /// <summary>
@@ -1321,27 +1321,27 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Symbol value.
             /// </summary>
-            public RawElf.Elf32_Xword m_value;
+            public ElfNative.Elf32_Xword m_value;
             
             /// <summary>
             /// Size and index.
             /// </summary>
-            public RawElf.Elf32_Word m_info;
+            public ElfNative.Elf32_Word m_info;
             
             /// <summary>
             /// Symbol offset.
             /// </summary>
-            public RawElf.Elf32_Word m_poffset;
+            public ElfNative.Elf32_Word m_poffset;
             
             /// <summary>
             /// Repeat count.
             /// </summary>
-            public RawElf.Elf32_Half m_repeat;
+            public ElfNative.Elf32_Half m_repeat;
             
             /// <summary>
             /// Stride info.
             /// </summary>
-            public RawElf.Elf32_Half m_stride;
+            public ElfNative.Elf32_Half m_stride;
         }
         
         /// <summary>
@@ -1377,27 +1377,27 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Symbol value.
             /// </summary>
-            public RawElf.Elf64_Xword m_value;
+            public ElfNative.Elf64_Xword m_value;
             
             /// <summary>
             /// Size and index.
             /// </summary>
-            public RawElf.Elf64_Xword m_info;
+            public ElfNative.Elf64_Xword m_info;
             
             /// <summary>
             /// Symbol offset.
             /// </summary>
-            public RawElf.Elf64_Xword m_poffset;
+            public ElfNative.Elf64_Xword m_poffset;
             
             /// <summary>
             /// Repeat count.
             /// </summary>
-            public RawElf.Elf64_Half m_repeat;
+            public ElfNative.Elf64_Half m_repeat;
             
             /// <summary>
             /// Stride info.
             /// </summary>
-            public RawElf.Elf64_Half m_stride;
+            public ElfNative.Elf64_Half m_stride;
         }
         
         /// <summary>
@@ -1412,12 +1412,12 @@ namespace LibObjectFile.Elf
                 /// <summary>
                 /// -G value used for compilation.
                 /// </summary>
-                public RawElf.Elf32_Word gt_current_g_value;
+                public ElfNative.Elf32_Word gt_current_g_value;
                 
                 /// <summary>
                 /// Not used.
                 /// </summary>
-                public RawElf.Elf32_Word gt_unused;
+                public ElfNative.Elf32_Word gt_unused;
             }
             
             [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
@@ -1426,25 +1426,25 @@ namespace LibObjectFile.Elf
                 /// <summary>
                 /// If this value were used for -G.
                 /// </summary>
-                public RawElf.Elf32_Word gt_g_value;
+                public ElfNative.Elf32_Word gt_g_value;
                 
                 /// <summary>
                 /// This many bytes would be used.
                 /// </summary>
-                public RawElf.Elf32_Word gt_bytes;
+                public ElfNative.Elf32_Word gt_bytes;
             }
             
             /// <summary>
             /// First entry in section.
             /// </summary>
             [FieldOffset(0)]
-            public RawElf.Elf32_gptab.Elf32_gptab_gt_header gt_header;
+            public ElfNative.Elf32_gptab.Elf32_gptab_gt_header gt_header;
             
             /// <summary>
             /// Subsequent entries in section.
             /// </summary>
             [FieldOffset(0)]
-            public RawElf.Elf32_gptab.Elf32_gptab_gt_entry gt_entry;
+            public ElfNative.Elf32_gptab.Elf32_gptab_gt_entry gt_entry;
         }
         
         /// <summary>
@@ -1456,7 +1456,7 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// General registers used.
             /// </summary>
-            public RawElf.Elf32_Word ri_gprmask;
+            public ElfNative.Elf32_Word ri_gprmask;
             
             /// <summary>
             /// Coprocessor registers used.
@@ -1466,7 +1466,7 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// $gp register value.
             /// </summary>
-            public RawElf.Elf32_Sword ri_gp_value;
+            public ElfNative.Elf32_Sword ri_gp_value;
         }
         
         /// <summary>
@@ -1490,12 +1490,12 @@ namespace LibObjectFile.Elf
             /// Section header index of section affected,
             /// 0 for global options.
             /// </summary>
-            public RawElf.Elf32_Section section;
+            public ElfNative.Elf32_Section section;
             
             /// <summary>
             /// Kind-specific information.
             /// </summary>
-            public RawElf.Elf32_Word info;
+            public ElfNative.Elf32_Word info;
         }
         
         /// <summary>
@@ -1507,12 +1507,12 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Extra flags.
             /// </summary>
-            public RawElf.Elf32_Word hwp_flags1;
+            public ElfNative.Elf32_Word hwp_flags1;
             
             /// <summary>
             /// Extra flags.
             /// </summary>
-            public RawElf.Elf32_Word hwp_flags2;
+            public ElfNative.Elf32_Word hwp_flags2;
         }
         
         /// <summary>
@@ -1524,27 +1524,27 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Name (string table index)
             /// </summary>
-            public RawElf.Elf32_Word l_name;
+            public ElfNative.Elf32_Word l_name;
             
             /// <summary>
             /// Timestamp
             /// </summary>
-            public RawElf.Elf32_Word l_time_stamp;
+            public ElfNative.Elf32_Word l_time_stamp;
             
             /// <summary>
             /// Checksum
             /// </summary>
-            public RawElf.Elf32_Word l_checksum;
+            public ElfNative.Elf32_Word l_checksum;
             
             /// <summary>
             /// Interface version
             /// </summary>
-            public RawElf.Elf32_Word l_version;
+            public ElfNative.Elf32_Word l_version;
             
             /// <summary>
             /// Flags
             /// </summary>
-            public RawElf.Elf32_Word l_flags;
+            public ElfNative.Elf32_Word l_flags;
         }
         
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
@@ -1553,27 +1553,27 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Name (string table index)
             /// </summary>
-            public RawElf.Elf64_Word l_name;
+            public ElfNative.Elf64_Word l_name;
             
             /// <summary>
             /// Timestamp
             /// </summary>
-            public RawElf.Elf64_Word l_time_stamp;
+            public ElfNative.Elf64_Word l_time_stamp;
             
             /// <summary>
             /// Checksum
             /// </summary>
-            public RawElf.Elf64_Word l_checksum;
+            public ElfNative.Elf64_Word l_checksum;
             
             /// <summary>
             /// Interface version
             /// </summary>
-            public RawElf.Elf64_Word l_version;
+            public ElfNative.Elf64_Word l_version;
             
             /// <summary>
             /// Flags
             /// </summary>
-            public RawElf.Elf64_Word l_flags;
+            public ElfNative.Elf64_Word l_flags;
         }
         
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
@@ -1582,7 +1582,7 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Version of flags structure.
             /// </summary>
-            public RawElf.Elf32_Half version;
+            public ElfNative.Elf32_Half version;
             
             /// <summary>
             /// The level of the ISA: 1-5, 32, 64.
@@ -1617,19 +1617,19 @@ namespace LibObjectFile.Elf
             /// <summary>
             /// Processor-specific extension.
             /// </summary>
-            public RawElf.Elf32_Word isa_ext;
+            public ElfNative.Elf32_Word isa_ext;
             
             /// <summary>
             /// Mask of ASEs used.
             /// </summary>
-            public RawElf.Elf32_Word ases;
+            public ElfNative.Elf32_Word ases;
             
             /// <summary>
             /// Mask of general flags.
             /// </summary>
-            public RawElf.Elf32_Word flags1;
+            public ElfNative.Elf32_Word flags1;
             
-            public RawElf.Elf32_Word flags2;
+            public ElfNative.Elf32_Word flags2;
         }
         
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
@@ -1686,9 +1686,9 @@ namespace LibObjectFile.Elf
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public readonly partial struct Elf32_Versym : IEquatable<Elf32_Versym>
         {
-            public Elf32_Versym(RawElf.Elf32_Half value) => this.Value = value;
+            public Elf32_Versym(ElfNative.Elf32_Half value) => this.Value = value;
             
-            public readonly RawElf.Elf32_Half Value;
+            public readonly ElfNative.Elf32_Half Value;
             
             public bool Equals(Elf32_Versym other) =>  Value.Equals(other.Value);
             
@@ -1698,9 +1698,9 @@ namespace LibObjectFile.Elf
             
             public override string ToString() => Value.ToString();
             
-            public static implicit operator RawElf.Elf32_Half(Elf32_Versym from) => from.Value;
+            public static implicit operator ElfNative.Elf32_Half(Elf32_Versym from) => from.Value;
             
-            public static implicit operator Elf32_Versym(RawElf.Elf32_Half from) => new Elf32_Versym(from);
+            public static implicit operator Elf32_Versym(ElfNative.Elf32_Half from) => new Elf32_Versym(from);
             
             public static bool operator ==(Elf32_Versym left, Elf32_Versym right) => left.Equals(right);
             
@@ -1710,9 +1710,9 @@ namespace LibObjectFile.Elf
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public readonly partial struct Elf64_Versym : IEquatable<Elf64_Versym>
         {
-            public Elf64_Versym(RawElf.Elf64_Half value) => this.Value = value;
+            public Elf64_Versym(ElfNative.Elf64_Half value) => this.Value = value;
             
-            public readonly RawElf.Elf64_Half Value;
+            public readonly ElfNative.Elf64_Half Value;
             
             public bool Equals(Elf64_Versym other) =>  Value.Equals(other.Value);
             
@@ -1722,9 +1722,9 @@ namespace LibObjectFile.Elf
             
             public override string ToString() => Value.ToString();
             
-            public static implicit operator RawElf.Elf64_Half(Elf64_Versym from) => from.Value;
+            public static implicit operator ElfNative.Elf64_Half(Elf64_Versym from) => from.Value;
             
-            public static implicit operator Elf64_Versym(RawElf.Elf64_Half from) => new Elf64_Versym(from);
+            public static implicit operator Elf64_Versym(ElfNative.Elf64_Half from) => new Elf64_Versym(from);
             
             public static bool operator ==(Elf64_Versym left, Elf64_Versym right) => left.Equals(right);
             
@@ -1737,9 +1737,9 @@ namespace LibObjectFile.Elf
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public readonly partial struct Elf32_Conflict : IEquatable<Elf32_Conflict>
         {
-            public Elf32_Conflict(RawElf.Elf32_Addr value) => this.Value = value;
+            public Elf32_Conflict(ElfNative.Elf32_Addr value) => this.Value = value;
             
-            public readonly RawElf.Elf32_Addr Value;
+            public readonly ElfNative.Elf32_Addr Value;
             
             public bool Equals(Elf32_Conflict other) =>  Value.Equals(other.Value);
             
@@ -1749,9 +1749,9 @@ namespace LibObjectFile.Elf
             
             public override string ToString() => Value.ToString();
             
-            public static implicit operator RawElf.Elf32_Addr(Elf32_Conflict from) => from.Value;
+            public static implicit operator ElfNative.Elf32_Addr(Elf32_Conflict from) => from.Value;
             
-            public static implicit operator Elf32_Conflict(RawElf.Elf32_Addr from) => new Elf32_Conflict(from);
+            public static implicit operator Elf32_Conflict(ElfNative.Elf32_Addr from) => new Elf32_Conflict(from);
             
             public static bool operator ==(Elf32_Conflict left, Elf32_Conflict right) => left.Equals(right);
             
@@ -11423,486 +11423,486 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// No machine
         /// </summary>
-        public static readonly ElfArch NONE = new ElfArch(RawElf.EM_NONE);
+        public static readonly ElfArch NONE = new ElfArch(ElfNative.EM_NONE);
         
         /// <summary>
         /// AT
         /// &amp;T
         /// WE 32100
         /// </summary>
-        public static readonly ElfArch M32 = new ElfArch(RawElf.EM_M32);
+        public static readonly ElfArch M32 = new ElfArch(ElfNative.EM_M32);
         
         /// <summary>
         /// SUN SPARC
         /// </summary>
-        public static readonly ElfArch SPARC = new ElfArch(RawElf.EM_SPARC);
+        public static readonly ElfArch SPARC = new ElfArch(ElfNative.EM_SPARC);
         
         /// <summary>
         /// Intel 80386
         /// </summary>
-        public static readonly ElfArch I386 = new ElfArch(RawElf.EM_386);
+        public static readonly ElfArch I386 = new ElfArch(ElfNative.EM_386);
         
         /// <summary>
         /// Motorola m68k family
         /// </summary>
-        public static readonly ElfArch M68K = new ElfArch(RawElf.EM_68K);
+        public static readonly ElfArch M68K = new ElfArch(ElfNative.EM_68K);
         
         /// <summary>
         /// Motorola m88k family
         /// </summary>
-        public static readonly ElfArch M88K = new ElfArch(RawElf.EM_88K);
+        public static readonly ElfArch M88K = new ElfArch(ElfNative.EM_88K);
         
         /// <summary>
         /// Intel 80860
         /// </summary>
-        public static readonly ElfArch I860 = new ElfArch(RawElf.EM_860);
+        public static readonly ElfArch I860 = new ElfArch(ElfNative.EM_860);
         
         /// <summary>
         /// MIPS R3000 big-endian
         /// </summary>
-        public static readonly ElfArch MIPS = new ElfArch(RawElf.EM_MIPS);
+        public static readonly ElfArch MIPS = new ElfArch(ElfNative.EM_MIPS);
         
         /// <summary>
         /// IBM System/370
         /// </summary>
-        public static readonly ElfArch S370 = new ElfArch(RawElf.EM_S370);
+        public static readonly ElfArch S370 = new ElfArch(ElfNative.EM_S370);
         
         /// <summary>
         /// MIPS R3000 little-endian
         /// </summary>
-        public static readonly ElfArch MIPS_RS3_LE = new ElfArch(RawElf.EM_MIPS_RS3_LE);
+        public static readonly ElfArch MIPS_RS3_LE = new ElfArch(ElfNative.EM_MIPS_RS3_LE);
         
         /// <summary>
         /// HPPA
         /// </summary>
-        public static readonly ElfArch PARISC = new ElfArch(RawElf.EM_PARISC);
+        public static readonly ElfArch PARISC = new ElfArch(ElfNative.EM_PARISC);
         
         /// <summary>
         /// Fujitsu VPP500
         /// </summary>
-        public static readonly ElfArch VPP500 = new ElfArch(RawElf.EM_VPP500);
+        public static readonly ElfArch VPP500 = new ElfArch(ElfNative.EM_VPP500);
         
         /// <summary>
         /// Sun's "v8plus"
         /// </summary>
-        public static readonly ElfArch SPARC32PLUS = new ElfArch(RawElf.EM_SPARC32PLUS);
+        public static readonly ElfArch SPARC32PLUS = new ElfArch(ElfNative.EM_SPARC32PLUS);
         
         /// <summary>
         /// Intel 80960
         /// </summary>
-        public static readonly ElfArch I960 = new ElfArch(RawElf.EM_960);
+        public static readonly ElfArch I960 = new ElfArch(ElfNative.EM_960);
         
         /// <summary>
         /// PowerPC
         /// </summary>
-        public static readonly ElfArch PPC = new ElfArch(RawElf.EM_PPC);
+        public static readonly ElfArch PPC = new ElfArch(ElfNative.EM_PPC);
         
         /// <summary>
         /// PowerPC 64-bit
         /// </summary>
-        public static readonly ElfArch PPC64 = new ElfArch(RawElf.EM_PPC64);
+        public static readonly ElfArch PPC64 = new ElfArch(ElfNative.EM_PPC64);
         
         /// <summary>
         /// IBM S390
         /// </summary>
-        public static readonly ElfArch S390 = new ElfArch(RawElf.EM_S390);
+        public static readonly ElfArch S390 = new ElfArch(ElfNative.EM_S390);
         
         /// <summary>
         /// NEC V800 series
         /// </summary>
-        public static readonly ElfArch V800 = new ElfArch(RawElf.EM_V800);
+        public static readonly ElfArch V800 = new ElfArch(ElfNative.EM_V800);
         
         /// <summary>
         /// Fujitsu FR20
         /// </summary>
-        public static readonly ElfArch FR20 = new ElfArch(RawElf.EM_FR20);
+        public static readonly ElfArch FR20 = new ElfArch(ElfNative.EM_FR20);
         
         /// <summary>
         /// TRW RH-32
         /// </summary>
-        public static readonly ElfArch RH32 = new ElfArch(RawElf.EM_RH32);
+        public static readonly ElfArch RH32 = new ElfArch(ElfNative.EM_RH32);
         
         /// <summary>
         /// Motorola RCE
         /// </summary>
-        public static readonly ElfArch RCE = new ElfArch(RawElf.EM_RCE);
+        public static readonly ElfArch RCE = new ElfArch(ElfNative.EM_RCE);
         
         /// <summary>
         /// ARM
         /// </summary>
-        public static readonly ElfArch ARM = new ElfArch(RawElf.EM_ARM);
+        public static readonly ElfArch ARM = new ElfArch(ElfNative.EM_ARM);
         
         /// <summary>
         /// Digital Alpha
         /// </summary>
-        public static readonly ElfArch FAKE_ALPHA = new ElfArch(RawElf.EM_FAKE_ALPHA);
+        public static readonly ElfArch FAKE_ALPHA = new ElfArch(ElfNative.EM_FAKE_ALPHA);
         
         /// <summary>
         /// Hitachi SH
         /// </summary>
-        public static readonly ElfArch SH = new ElfArch(RawElf.EM_SH);
+        public static readonly ElfArch SH = new ElfArch(ElfNative.EM_SH);
         
         /// <summary>
         /// SPARC v9 64-bit
         /// </summary>
-        public static readonly ElfArch SPARCV9 = new ElfArch(RawElf.EM_SPARCV9);
+        public static readonly ElfArch SPARCV9 = new ElfArch(ElfNative.EM_SPARCV9);
         
         /// <summary>
         /// Siemens Tricore
         /// </summary>
-        public static readonly ElfArch TRICORE = new ElfArch(RawElf.EM_TRICORE);
+        public static readonly ElfArch TRICORE = new ElfArch(ElfNative.EM_TRICORE);
         
         /// <summary>
         /// Argonaut RISC Core
         /// </summary>
-        public static readonly ElfArch ARC = new ElfArch(RawElf.EM_ARC);
+        public static readonly ElfArch ARC = new ElfArch(ElfNative.EM_ARC);
         
         /// <summary>
         /// Hitachi H8/300
         /// </summary>
-        public static readonly ElfArch H8_300 = new ElfArch(RawElf.EM_H8_300);
+        public static readonly ElfArch H8_300 = new ElfArch(ElfNative.EM_H8_300);
         
         /// <summary>
         /// Hitachi H8/300H
         /// </summary>
-        public static readonly ElfArch H8_300H = new ElfArch(RawElf.EM_H8_300H);
+        public static readonly ElfArch H8_300H = new ElfArch(ElfNative.EM_H8_300H);
         
         /// <summary>
         /// Hitachi H8S
         /// </summary>
-        public static readonly ElfArch H8S = new ElfArch(RawElf.EM_H8S);
+        public static readonly ElfArch H8S = new ElfArch(ElfNative.EM_H8S);
         
         /// <summary>
         /// Hitachi H8/500
         /// </summary>
-        public static readonly ElfArch H8_500 = new ElfArch(RawElf.EM_H8_500);
+        public static readonly ElfArch H8_500 = new ElfArch(ElfNative.EM_H8_500);
         
         /// <summary>
         /// Intel Merced
         /// </summary>
-        public static readonly ElfArch IA_64 = new ElfArch(RawElf.EM_IA_64);
+        public static readonly ElfArch IA_64 = new ElfArch(ElfNative.EM_IA_64);
         
         /// <summary>
         /// Stanford MIPS-X
         /// </summary>
-        public static readonly ElfArch MIPS_X = new ElfArch(RawElf.EM_MIPS_X);
+        public static readonly ElfArch MIPS_X = new ElfArch(ElfNative.EM_MIPS_X);
         
         /// <summary>
         /// Motorola Coldfire
         /// </summary>
-        public static readonly ElfArch COLDFIRE = new ElfArch(RawElf.EM_COLDFIRE);
+        public static readonly ElfArch COLDFIRE = new ElfArch(ElfNative.EM_COLDFIRE);
         
         /// <summary>
         /// Motorola M68HC12
         /// </summary>
-        public static readonly ElfArch M68HC12 = new ElfArch(RawElf.EM_68HC12);
+        public static readonly ElfArch M68HC12 = new ElfArch(ElfNative.EM_68HC12);
         
         /// <summary>
         /// Fujitsu MMA Multimedia Accelerator
         /// </summary>
-        public static readonly ElfArch MMA = new ElfArch(RawElf.EM_MMA);
+        public static readonly ElfArch MMA = new ElfArch(ElfNative.EM_MMA);
         
         /// <summary>
         /// Siemens PCP
         /// </summary>
-        public static readonly ElfArch PCP = new ElfArch(RawElf.EM_PCP);
+        public static readonly ElfArch PCP = new ElfArch(ElfNative.EM_PCP);
         
         /// <summary>
         /// Sony nCPU embeeded RISC
         /// </summary>
-        public static readonly ElfArch NCPU = new ElfArch(RawElf.EM_NCPU);
+        public static readonly ElfArch NCPU = new ElfArch(ElfNative.EM_NCPU);
         
         /// <summary>
         /// Denso NDR1 microprocessor
         /// </summary>
-        public static readonly ElfArch NDR1 = new ElfArch(RawElf.EM_NDR1);
+        public static readonly ElfArch NDR1 = new ElfArch(ElfNative.EM_NDR1);
         
         /// <summary>
         /// Motorola Start*Core processor
         /// </summary>
-        public static readonly ElfArch STARCORE = new ElfArch(RawElf.EM_STARCORE);
+        public static readonly ElfArch STARCORE = new ElfArch(ElfNative.EM_STARCORE);
         
         /// <summary>
         /// Toyota ME16 processor
         /// </summary>
-        public static readonly ElfArch ME16 = new ElfArch(RawElf.EM_ME16);
+        public static readonly ElfArch ME16 = new ElfArch(ElfNative.EM_ME16);
         
         /// <summary>
         /// STMicroelectronic ST100 processor
         /// </summary>
-        public static readonly ElfArch ST100 = new ElfArch(RawElf.EM_ST100);
+        public static readonly ElfArch ST100 = new ElfArch(ElfNative.EM_ST100);
         
         /// <summary>
         /// Advanced Logic Corp. Tinyj emb.fam
         /// </summary>
-        public static readonly ElfArch TINYJ = new ElfArch(RawElf.EM_TINYJ);
+        public static readonly ElfArch TINYJ = new ElfArch(ElfNative.EM_TINYJ);
         
         /// <summary>
         /// AMD x86-64 architecture
         /// </summary>
-        public static readonly ElfArch X86_64 = new ElfArch(RawElf.EM_X86_64);
+        public static readonly ElfArch X86_64 = new ElfArch(ElfNative.EM_X86_64);
         
         /// <summary>
         /// Sony DSP Processor
         /// </summary>
-        public static readonly ElfArch PDSP = new ElfArch(RawElf.EM_PDSP);
+        public static readonly ElfArch PDSP = new ElfArch(ElfNative.EM_PDSP);
         
         /// <summary>
         /// Siemens FX66 microcontroller
         /// </summary>
-        public static readonly ElfArch FX66 = new ElfArch(RawElf.EM_FX66);
+        public static readonly ElfArch FX66 = new ElfArch(ElfNative.EM_FX66);
         
         /// <summary>
         /// STMicroelectronics ST9+ 8/16 mc
         /// </summary>
-        public static readonly ElfArch ST9PLUS = new ElfArch(RawElf.EM_ST9PLUS);
+        public static readonly ElfArch ST9PLUS = new ElfArch(ElfNative.EM_ST9PLUS);
         
         /// <summary>
         /// STmicroelectronics ST7 8 bit mc
         /// </summary>
-        public static readonly ElfArch ST7 = new ElfArch(RawElf.EM_ST7);
+        public static readonly ElfArch ST7 = new ElfArch(ElfNative.EM_ST7);
         
         /// <summary>
         /// Motorola MC68HC16 microcontroller
         /// </summary>
-        public static readonly ElfArch M68HC16 = new ElfArch(RawElf.EM_68HC16);
+        public static readonly ElfArch M68HC16 = new ElfArch(ElfNative.EM_68HC16);
         
         /// <summary>
         /// Motorola MC68HC11 microcontroller
         /// </summary>
-        public static readonly ElfArch M68HC11 = new ElfArch(RawElf.EM_68HC11);
+        public static readonly ElfArch M68HC11 = new ElfArch(ElfNative.EM_68HC11);
         
         /// <summary>
         /// Motorola MC68HC08 microcontroller
         /// </summary>
-        public static readonly ElfArch M68HC08 = new ElfArch(RawElf.EM_68HC08);
+        public static readonly ElfArch M68HC08 = new ElfArch(ElfNative.EM_68HC08);
         
         /// <summary>
         /// Motorola MC68HC05 microcontroller
         /// </summary>
-        public static readonly ElfArch M68HC05 = new ElfArch(RawElf.EM_68HC05);
+        public static readonly ElfArch M68HC05 = new ElfArch(ElfNative.EM_68HC05);
         
         /// <summary>
         /// Silicon Graphics SVx
         /// </summary>
-        public static readonly ElfArch SVX = new ElfArch(RawElf.EM_SVX);
+        public static readonly ElfArch SVX = new ElfArch(ElfNative.EM_SVX);
         
         /// <summary>
         /// STMicroelectronics ST19 8 bit mc
         /// </summary>
-        public static readonly ElfArch ST19 = new ElfArch(RawElf.EM_ST19);
+        public static readonly ElfArch ST19 = new ElfArch(ElfNative.EM_ST19);
         
         /// <summary>
         /// Digital VAX
         /// </summary>
-        public static readonly ElfArch VAX = new ElfArch(RawElf.EM_VAX);
+        public static readonly ElfArch VAX = new ElfArch(ElfNative.EM_VAX);
         
         /// <summary>
         /// Axis Communications 32-bit embedded processor
         /// </summary>
-        public static readonly ElfArch CRIS = new ElfArch(RawElf.EM_CRIS);
+        public static readonly ElfArch CRIS = new ElfArch(ElfNative.EM_CRIS);
         
         /// <summary>
         /// Infineon Technologies 32-bit embedded processor
         /// </summary>
-        public static readonly ElfArch JAVELIN = new ElfArch(RawElf.EM_JAVELIN);
+        public static readonly ElfArch JAVELIN = new ElfArch(ElfNative.EM_JAVELIN);
         
         /// <summary>
         /// Element 14 64-bit DSP Processor
         /// </summary>
-        public static readonly ElfArch FIREPATH = new ElfArch(RawElf.EM_FIREPATH);
+        public static readonly ElfArch FIREPATH = new ElfArch(ElfNative.EM_FIREPATH);
         
         /// <summary>
         /// LSI Logic 16-bit DSP Processor
         /// </summary>
-        public static readonly ElfArch ZSP = new ElfArch(RawElf.EM_ZSP);
+        public static readonly ElfArch ZSP = new ElfArch(ElfNative.EM_ZSP);
         
         /// <summary>
         /// Donald Knuth's educational 64-bit processor
         /// </summary>
-        public static readonly ElfArch MMIX = new ElfArch(RawElf.EM_MMIX);
+        public static readonly ElfArch MMIX = new ElfArch(ElfNative.EM_MMIX);
         
         /// <summary>
         /// Harvard University machine-independent object files
         /// </summary>
-        public static readonly ElfArch HUANY = new ElfArch(RawElf.EM_HUANY);
+        public static readonly ElfArch HUANY = new ElfArch(ElfNative.EM_HUANY);
         
         /// <summary>
         /// SiTera Prism
         /// </summary>
-        public static readonly ElfArch PRISM = new ElfArch(RawElf.EM_PRISM);
+        public static readonly ElfArch PRISM = new ElfArch(ElfNative.EM_PRISM);
         
         /// <summary>
         /// Atmel AVR 8-bit microcontroller
         /// </summary>
-        public static readonly ElfArch AVR = new ElfArch(RawElf.EM_AVR);
+        public static readonly ElfArch AVR = new ElfArch(ElfNative.EM_AVR);
         
         /// <summary>
         /// Fujitsu FR30
         /// </summary>
-        public static readonly ElfArch FR30 = new ElfArch(RawElf.EM_FR30);
+        public static readonly ElfArch FR30 = new ElfArch(ElfNative.EM_FR30);
         
         /// <summary>
         /// Mitsubishi D10V
         /// </summary>
-        public static readonly ElfArch D10V = new ElfArch(RawElf.EM_D10V);
+        public static readonly ElfArch D10V = new ElfArch(ElfNative.EM_D10V);
         
         /// <summary>
         /// Mitsubishi D30V
         /// </summary>
-        public static readonly ElfArch D30V = new ElfArch(RawElf.EM_D30V);
+        public static readonly ElfArch D30V = new ElfArch(ElfNative.EM_D30V);
         
         /// <summary>
         /// NEC v850
         /// </summary>
-        public static readonly ElfArch V850 = new ElfArch(RawElf.EM_V850);
+        public static readonly ElfArch V850 = new ElfArch(ElfNative.EM_V850);
         
         /// <summary>
         /// Mitsubishi M32R
         /// </summary>
-        public static readonly ElfArch M32R = new ElfArch(RawElf.EM_M32R);
+        public static readonly ElfArch M32R = new ElfArch(ElfNative.EM_M32R);
         
         /// <summary>
         /// Matsushita MN10300
         /// </summary>
-        public static readonly ElfArch MN10300 = new ElfArch(RawElf.EM_MN10300);
+        public static readonly ElfArch MN10300 = new ElfArch(ElfNative.EM_MN10300);
         
         /// <summary>
         /// Matsushita MN10200
         /// </summary>
-        public static readonly ElfArch MN10200 = new ElfArch(RawElf.EM_MN10200);
+        public static readonly ElfArch MN10200 = new ElfArch(ElfNative.EM_MN10200);
         
         /// <summary>
         /// picoJava
         /// </summary>
-        public static readonly ElfArch PJ = new ElfArch(RawElf.EM_PJ);
+        public static readonly ElfArch PJ = new ElfArch(ElfNative.EM_PJ);
         
         /// <summary>
         /// OpenRISC 32-bit embedded processor
         /// </summary>
-        public static readonly ElfArch OPENRISC = new ElfArch(RawElf.EM_OPENRISC);
+        public static readonly ElfArch OPENRISC = new ElfArch(ElfNative.EM_OPENRISC);
         
         /// <summary>
         /// ARC Cores Tangent-A5
         /// </summary>
-        public static readonly ElfArch ARC_A5 = new ElfArch(RawElf.EM_ARC_A5);
+        public static readonly ElfArch ARC_A5 = new ElfArch(ElfNative.EM_ARC_A5);
         
         /// <summary>
         /// Tensilica Xtensa Architecture
         /// </summary>
-        public static readonly ElfArch XTENSA = new ElfArch(RawElf.EM_XTENSA);
+        public static readonly ElfArch XTENSA = new ElfArch(ElfNative.EM_XTENSA);
         
         /// <summary>
         /// Altera Nios II
         /// </summary>
-        public static readonly ElfArch ALTERA_NIOS2 = new ElfArch(RawElf.EM_ALTERA_NIOS2);
+        public static readonly ElfArch ALTERA_NIOS2 = new ElfArch(ElfNative.EM_ALTERA_NIOS2);
         
         /// <summary>
         /// ARM AARCH64
         /// </summary>
-        public static readonly ElfArch AARCH64 = new ElfArch(RawElf.EM_AARCH64);
+        public static readonly ElfArch AARCH64 = new ElfArch(ElfNative.EM_AARCH64);
         
         /// <summary>
         /// Tilera TILEPro
         /// </summary>
-        public static readonly ElfArch TILEPRO = new ElfArch(RawElf.EM_TILEPRO);
+        public static readonly ElfArch TILEPRO = new ElfArch(ElfNative.EM_TILEPRO);
         
         /// <summary>
         /// Xilinx MicroBlaze
         /// </summary>
-        public static readonly ElfArch MICROBLAZE = new ElfArch(RawElf.EM_MICROBLAZE);
+        public static readonly ElfArch MICROBLAZE = new ElfArch(ElfNative.EM_MICROBLAZE);
         
         /// <summary>
         /// Tilera TILE-Gx
         /// </summary>
-        public static readonly ElfArch TILEGX = new ElfArch(RawElf.EM_TILEGX);
+        public static readonly ElfArch TILEGX = new ElfArch(ElfNative.EM_TILEGX);
         
-        public static readonly ElfArch ALPHA = new ElfArch(RawElf.EM_ALPHA);
+        public static readonly ElfArch ALPHA = new ElfArch(ElfNative.EM_ALPHA);
         
         private string ToStringInternal()
         {
             switch (Value)
             {
-                case RawElf.EM_NONE: return "EM_NONE - No machine";
-                case RawElf.EM_M32: return "EM_M32 - AT&TWE 32100";
-                case RawElf.EM_SPARC: return "EM_SPARC - SUN SPARC";
-                case RawElf.EM_386: return "EM_386 - Intel 80386";
-                case RawElf.EM_68K: return "EM_68K - Motorola m68k family";
-                case RawElf.EM_88K: return "EM_88K - Motorola m88k family";
-                case RawElf.EM_860: return "EM_860 - Intel 80860";
-                case RawElf.EM_MIPS: return "EM_MIPS - MIPS R3000 big-endian";
-                case RawElf.EM_S370: return "EM_S370 - IBM System/370";
-                case RawElf.EM_MIPS_RS3_LE: return "EM_MIPS_RS3_LE - MIPS R3000 little-endian";
-                case RawElf.EM_PARISC: return "EM_PARISC - HPPA";
-                case RawElf.EM_VPP500: return "EM_VPP500 - Fujitsu VPP500";
-                case RawElf.EM_SPARC32PLUS: return "EM_SPARC32PLUS - Sun's \"v8plus\"";
-                case RawElf.EM_960: return "EM_960 - Intel 80960";
-                case RawElf.EM_PPC: return "EM_PPC - PowerPC";
-                case RawElf.EM_PPC64: return "EM_PPC64 - PowerPC 64-bit";
-                case RawElf.EM_S390: return "EM_S390 - IBM S390";
-                case RawElf.EM_V800: return "EM_V800 - NEC V800 series";
-                case RawElf.EM_FR20: return "EM_FR20 - Fujitsu FR20";
-                case RawElf.EM_RH32: return "EM_RH32 - TRW RH-32";
-                case RawElf.EM_RCE: return "EM_RCE - Motorola RCE";
-                case RawElf.EM_ARM: return "EM_ARM - ARM";
-                case RawElf.EM_FAKE_ALPHA: return "EM_FAKE_ALPHA - Digital Alpha";
-                case RawElf.EM_SH: return "EM_SH - Hitachi SH";
-                case RawElf.EM_SPARCV9: return "EM_SPARCV9 - SPARC v9 64-bit";
-                case RawElf.EM_TRICORE: return "EM_TRICORE - Siemens Tricore";
-                case RawElf.EM_ARC: return "EM_ARC - Argonaut RISC Core";
-                case RawElf.EM_H8_300: return "EM_H8_300 - Hitachi H8/300";
-                case RawElf.EM_H8_300H: return "EM_H8_300H - Hitachi H8/300H";
-                case RawElf.EM_H8S: return "EM_H8S - Hitachi H8S";
-                case RawElf.EM_H8_500: return "EM_H8_500 - Hitachi H8/500";
-                case RawElf.EM_IA_64: return "EM_IA_64 - Intel Merced";
-                case RawElf.EM_MIPS_X: return "EM_MIPS_X - Stanford MIPS-X";
-                case RawElf.EM_COLDFIRE: return "EM_COLDFIRE - Motorola Coldfire";
-                case RawElf.EM_68HC12: return "EM_68HC12 - Motorola M68HC12";
-                case RawElf.EM_MMA: return "EM_MMA - Fujitsu MMA Multimedia Accelerator";
-                case RawElf.EM_PCP: return "EM_PCP - Siemens PCP";
-                case RawElf.EM_NCPU: return "EM_NCPU - Sony nCPU embeeded RISC";
-                case RawElf.EM_NDR1: return "EM_NDR1 - Denso NDR1 microprocessor";
-                case RawElf.EM_STARCORE: return "EM_STARCORE - Motorola Start*Core processor";
-                case RawElf.EM_ME16: return "EM_ME16 - Toyota ME16 processor";
-                case RawElf.EM_ST100: return "EM_ST100 - STMicroelectronic ST100 processor";
-                case RawElf.EM_TINYJ: return "EM_TINYJ - Advanced Logic Corp. Tinyj emb.fam";
-                case RawElf.EM_X86_64: return "EM_X86_64 - AMD x86-64 architecture";
-                case RawElf.EM_PDSP: return "EM_PDSP - Sony DSP Processor";
-                case RawElf.EM_FX66: return "EM_FX66 - Siemens FX66 microcontroller";
-                case RawElf.EM_ST9PLUS: return "EM_ST9PLUS - STMicroelectronics ST9+ 8/16 mc";
-                case RawElf.EM_ST7: return "EM_ST7 - STmicroelectronics ST7 8 bit mc";
-                case RawElf.EM_68HC16: return "EM_68HC16 - Motorola MC68HC16 microcontroller";
-                case RawElf.EM_68HC11: return "EM_68HC11 - Motorola MC68HC11 microcontroller";
-                case RawElf.EM_68HC08: return "EM_68HC08 - Motorola MC68HC08 microcontroller";
-                case RawElf.EM_68HC05: return "EM_68HC05 - Motorola MC68HC05 microcontroller";
-                case RawElf.EM_SVX: return "EM_SVX - Silicon Graphics SVx";
-                case RawElf.EM_ST19: return "EM_ST19 - STMicroelectronics ST19 8 bit mc";
-                case RawElf.EM_VAX: return "EM_VAX - Digital VAX";
-                case RawElf.EM_CRIS: return "EM_CRIS - Axis Communications 32-bit embedded processor";
-                case RawElf.EM_JAVELIN: return "EM_JAVELIN - Infineon Technologies 32-bit embedded processor";
-                case RawElf.EM_FIREPATH: return "EM_FIREPATH - Element 14 64-bit DSP Processor";
-                case RawElf.EM_ZSP: return "EM_ZSP - LSI Logic 16-bit DSP Processor";
-                case RawElf.EM_MMIX: return "EM_MMIX - Donald Knuth's educational 64-bit processor";
-                case RawElf.EM_HUANY: return "EM_HUANY - Harvard University machine-independent object files";
-                case RawElf.EM_PRISM: return "EM_PRISM - SiTera Prism";
-                case RawElf.EM_AVR: return "EM_AVR - Atmel AVR 8-bit microcontroller";
-                case RawElf.EM_FR30: return "EM_FR30 - Fujitsu FR30";
-                case RawElf.EM_D10V: return "EM_D10V - Mitsubishi D10V";
-                case RawElf.EM_D30V: return "EM_D30V - Mitsubishi D30V";
-                case RawElf.EM_V850: return "EM_V850 - NEC v850";
-                case RawElf.EM_M32R: return "EM_M32R - Mitsubishi M32R";
-                case RawElf.EM_MN10300: return "EM_MN10300 - Matsushita MN10300";
-                case RawElf.EM_MN10200: return "EM_MN10200 - Matsushita MN10200";
-                case RawElf.EM_PJ: return "EM_PJ - picoJava";
-                case RawElf.EM_OPENRISC: return "EM_OPENRISC - OpenRISC 32-bit embedded processor";
-                case RawElf.EM_ARC_A5: return "EM_ARC_A5 - ARC Cores Tangent-A5";
-                case RawElf.EM_XTENSA: return "EM_XTENSA - Tensilica Xtensa Architecture";
-                case RawElf.EM_ALTERA_NIOS2: return "EM_ALTERA_NIOS2 - Altera Nios II";
-                case RawElf.EM_AARCH64: return "EM_AARCH64 - ARM AARCH64";
-                case RawElf.EM_TILEPRO: return "EM_TILEPRO - Tilera TILEPro";
-                case RawElf.EM_MICROBLAZE: return "EM_MICROBLAZE - Xilinx MicroBlaze";
-                case RawElf.EM_TILEGX: return "EM_TILEGX - Tilera TILE-Gx";
-                case RawElf.EM_ALPHA: return "EM_ALPHA";
+                case ElfNative.EM_NONE: return "EM_NONE - No machine";
+                case ElfNative.EM_M32: return "EM_M32 - AT&TWE 32100";
+                case ElfNative.EM_SPARC: return "EM_SPARC - SUN SPARC";
+                case ElfNative.EM_386: return "EM_386 - Intel 80386";
+                case ElfNative.EM_68K: return "EM_68K - Motorola m68k family";
+                case ElfNative.EM_88K: return "EM_88K - Motorola m88k family";
+                case ElfNative.EM_860: return "EM_860 - Intel 80860";
+                case ElfNative.EM_MIPS: return "EM_MIPS - MIPS R3000 big-endian";
+                case ElfNative.EM_S370: return "EM_S370 - IBM System/370";
+                case ElfNative.EM_MIPS_RS3_LE: return "EM_MIPS_RS3_LE - MIPS R3000 little-endian";
+                case ElfNative.EM_PARISC: return "EM_PARISC - HPPA";
+                case ElfNative.EM_VPP500: return "EM_VPP500 - Fujitsu VPP500";
+                case ElfNative.EM_SPARC32PLUS: return "EM_SPARC32PLUS - Sun's \"v8plus\"";
+                case ElfNative.EM_960: return "EM_960 - Intel 80960";
+                case ElfNative.EM_PPC: return "EM_PPC - PowerPC";
+                case ElfNative.EM_PPC64: return "EM_PPC64 - PowerPC 64-bit";
+                case ElfNative.EM_S390: return "EM_S390 - IBM S390";
+                case ElfNative.EM_V800: return "EM_V800 - NEC V800 series";
+                case ElfNative.EM_FR20: return "EM_FR20 - Fujitsu FR20";
+                case ElfNative.EM_RH32: return "EM_RH32 - TRW RH-32";
+                case ElfNative.EM_RCE: return "EM_RCE - Motorola RCE";
+                case ElfNative.EM_ARM: return "EM_ARM - ARM";
+                case ElfNative.EM_FAKE_ALPHA: return "EM_FAKE_ALPHA - Digital Alpha";
+                case ElfNative.EM_SH: return "EM_SH - Hitachi SH";
+                case ElfNative.EM_SPARCV9: return "EM_SPARCV9 - SPARC v9 64-bit";
+                case ElfNative.EM_TRICORE: return "EM_TRICORE - Siemens Tricore";
+                case ElfNative.EM_ARC: return "EM_ARC - Argonaut RISC Core";
+                case ElfNative.EM_H8_300: return "EM_H8_300 - Hitachi H8/300";
+                case ElfNative.EM_H8_300H: return "EM_H8_300H - Hitachi H8/300H";
+                case ElfNative.EM_H8S: return "EM_H8S - Hitachi H8S";
+                case ElfNative.EM_H8_500: return "EM_H8_500 - Hitachi H8/500";
+                case ElfNative.EM_IA_64: return "EM_IA_64 - Intel Merced";
+                case ElfNative.EM_MIPS_X: return "EM_MIPS_X - Stanford MIPS-X";
+                case ElfNative.EM_COLDFIRE: return "EM_COLDFIRE - Motorola Coldfire";
+                case ElfNative.EM_68HC12: return "EM_68HC12 - Motorola M68HC12";
+                case ElfNative.EM_MMA: return "EM_MMA - Fujitsu MMA Multimedia Accelerator";
+                case ElfNative.EM_PCP: return "EM_PCP - Siemens PCP";
+                case ElfNative.EM_NCPU: return "EM_NCPU - Sony nCPU embeeded RISC";
+                case ElfNative.EM_NDR1: return "EM_NDR1 - Denso NDR1 microprocessor";
+                case ElfNative.EM_STARCORE: return "EM_STARCORE - Motorola Start*Core processor";
+                case ElfNative.EM_ME16: return "EM_ME16 - Toyota ME16 processor";
+                case ElfNative.EM_ST100: return "EM_ST100 - STMicroelectronic ST100 processor";
+                case ElfNative.EM_TINYJ: return "EM_TINYJ - Advanced Logic Corp. Tinyj emb.fam";
+                case ElfNative.EM_X86_64: return "EM_X86_64 - AMD x86-64 architecture";
+                case ElfNative.EM_PDSP: return "EM_PDSP - Sony DSP Processor";
+                case ElfNative.EM_FX66: return "EM_FX66 - Siemens FX66 microcontroller";
+                case ElfNative.EM_ST9PLUS: return "EM_ST9PLUS - STMicroelectronics ST9+ 8/16 mc";
+                case ElfNative.EM_ST7: return "EM_ST7 - STmicroelectronics ST7 8 bit mc";
+                case ElfNative.EM_68HC16: return "EM_68HC16 - Motorola MC68HC16 microcontroller";
+                case ElfNative.EM_68HC11: return "EM_68HC11 - Motorola MC68HC11 microcontroller";
+                case ElfNative.EM_68HC08: return "EM_68HC08 - Motorola MC68HC08 microcontroller";
+                case ElfNative.EM_68HC05: return "EM_68HC05 - Motorola MC68HC05 microcontroller";
+                case ElfNative.EM_SVX: return "EM_SVX - Silicon Graphics SVx";
+                case ElfNative.EM_ST19: return "EM_ST19 - STMicroelectronics ST19 8 bit mc";
+                case ElfNative.EM_VAX: return "EM_VAX - Digital VAX";
+                case ElfNative.EM_CRIS: return "EM_CRIS - Axis Communications 32-bit embedded processor";
+                case ElfNative.EM_JAVELIN: return "EM_JAVELIN - Infineon Technologies 32-bit embedded processor";
+                case ElfNative.EM_FIREPATH: return "EM_FIREPATH - Element 14 64-bit DSP Processor";
+                case ElfNative.EM_ZSP: return "EM_ZSP - LSI Logic 16-bit DSP Processor";
+                case ElfNative.EM_MMIX: return "EM_MMIX - Donald Knuth's educational 64-bit processor";
+                case ElfNative.EM_HUANY: return "EM_HUANY - Harvard University machine-independent object files";
+                case ElfNative.EM_PRISM: return "EM_PRISM - SiTera Prism";
+                case ElfNative.EM_AVR: return "EM_AVR - Atmel AVR 8-bit microcontroller";
+                case ElfNative.EM_FR30: return "EM_FR30 - Fujitsu FR30";
+                case ElfNative.EM_D10V: return "EM_D10V - Mitsubishi D10V";
+                case ElfNative.EM_D30V: return "EM_D30V - Mitsubishi D30V";
+                case ElfNative.EM_V850: return "EM_V850 - NEC v850";
+                case ElfNative.EM_M32R: return "EM_M32R - Mitsubishi M32R";
+                case ElfNative.EM_MN10300: return "EM_MN10300 - Matsushita MN10300";
+                case ElfNative.EM_MN10200: return "EM_MN10200 - Matsushita MN10200";
+                case ElfNative.EM_PJ: return "EM_PJ - picoJava";
+                case ElfNative.EM_OPENRISC: return "EM_OPENRISC - OpenRISC 32-bit embedded processor";
+                case ElfNative.EM_ARC_A5: return "EM_ARC_A5 - ARC Cores Tangent-A5";
+                case ElfNative.EM_XTENSA: return "EM_XTENSA - Tensilica Xtensa Architecture";
+                case ElfNative.EM_ALTERA_NIOS2: return "EM_ALTERA_NIOS2 - Altera Nios II";
+                case ElfNative.EM_AARCH64: return "EM_AARCH64 - ARM AARCH64";
+                case ElfNative.EM_TILEPRO: return "EM_TILEPRO - Tilera TILEPro";
+                case ElfNative.EM_MICROBLAZE: return "EM_MICROBLAZE - Xilinx MicroBlaze";
+                case ElfNative.EM_TILEGX: return "EM_TILEGX - Tilera TILE-Gx";
+                case ElfNative.EM_ALPHA: return "EM_ALPHA";
                 default: return "Unknown ElfArch";
             }
         }
@@ -11913,101 +11913,101 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// UNIX System V ABI
         /// </summary>
-        public static readonly ElfOSABI NONE = new ElfOSABI(RawElf.ELFOSABI_NONE);
+        public static readonly ElfOSABI NONE = new ElfOSABI(ElfNative.ELFOSABI_NONE);
         
         /// <summary>
         /// UNIX System V ABI
         /// </summary>
-        public static readonly ElfOSABI SYSV = new ElfOSABI(RawElf.ELFOSABI_SYSV);
+        public static readonly ElfOSABI SYSV = new ElfOSABI(ElfNative.ELFOSABI_SYSV);
         
         /// <summary>
         /// HP-UX
         /// </summary>
-        public static readonly ElfOSABI HPUX = new ElfOSABI(RawElf.ELFOSABI_HPUX);
+        public static readonly ElfOSABI HPUX = new ElfOSABI(ElfNative.ELFOSABI_HPUX);
         
         /// <summary>
         /// NetBSD.
         /// </summary>
-        public static readonly ElfOSABI NETBSD = new ElfOSABI(RawElf.ELFOSABI_NETBSD);
+        public static readonly ElfOSABI NETBSD = new ElfOSABI(ElfNative.ELFOSABI_NETBSD);
         
         /// <summary>
         /// Object uses GNU ELF extensions.
         /// </summary>
-        public static readonly ElfOSABI GNU = new ElfOSABI(RawElf.ELFOSABI_GNU);
+        public static readonly ElfOSABI GNU = new ElfOSABI(ElfNative.ELFOSABI_GNU);
         
         /// <summary>
         /// Object uses GNU ELF extensions.
         /// </summary>
-        public static readonly ElfOSABI LINUX = new ElfOSABI(RawElf.ELFOSABI_LINUX);
+        public static readonly ElfOSABI LINUX = new ElfOSABI(ElfNative.ELFOSABI_LINUX);
         
         /// <summary>
         /// Sun Solaris.
         /// </summary>
-        public static readonly ElfOSABI SOLARIS = new ElfOSABI(RawElf.ELFOSABI_SOLARIS);
+        public static readonly ElfOSABI SOLARIS = new ElfOSABI(ElfNative.ELFOSABI_SOLARIS);
         
         /// <summary>
         /// IBM AIX.
         /// </summary>
-        public static readonly ElfOSABI AIX = new ElfOSABI(RawElf.ELFOSABI_AIX);
+        public static readonly ElfOSABI AIX = new ElfOSABI(ElfNative.ELFOSABI_AIX);
         
         /// <summary>
         /// SGI Irix.
         /// </summary>
-        public static readonly ElfOSABI IRIX = new ElfOSABI(RawElf.ELFOSABI_IRIX);
+        public static readonly ElfOSABI IRIX = new ElfOSABI(ElfNative.ELFOSABI_IRIX);
         
         /// <summary>
         /// FreeBSD.
         /// </summary>
-        public static readonly ElfOSABI FREEBSD = new ElfOSABI(RawElf.ELFOSABI_FREEBSD);
+        public static readonly ElfOSABI FREEBSD = new ElfOSABI(ElfNative.ELFOSABI_FREEBSD);
         
         /// <summary>
         /// Compaq TRU64 UNIX.
         /// </summary>
-        public static readonly ElfOSABI TRU64 = new ElfOSABI(RawElf.ELFOSABI_TRU64);
+        public static readonly ElfOSABI TRU64 = new ElfOSABI(ElfNative.ELFOSABI_TRU64);
         
         /// <summary>
         /// Novell Modesto.
         /// </summary>
-        public static readonly ElfOSABI MODESTO = new ElfOSABI(RawElf.ELFOSABI_MODESTO);
+        public static readonly ElfOSABI MODESTO = new ElfOSABI(ElfNative.ELFOSABI_MODESTO);
         
         /// <summary>
         /// OpenBSD.
         /// </summary>
-        public static readonly ElfOSABI OPENBSD = new ElfOSABI(RawElf.ELFOSABI_OPENBSD);
+        public static readonly ElfOSABI OPENBSD = new ElfOSABI(ElfNative.ELFOSABI_OPENBSD);
         
         /// <summary>
         /// ARM EABI
         /// </summary>
-        public static readonly ElfOSABI ARM_AEABI = new ElfOSABI(RawElf.ELFOSABI_ARM_AEABI);
+        public static readonly ElfOSABI ARM_AEABI = new ElfOSABI(ElfNative.ELFOSABI_ARM_AEABI);
         
         /// <summary>
         /// ARM
         /// </summary>
-        public static readonly ElfOSABI ARM = new ElfOSABI(RawElf.ELFOSABI_ARM);
+        public static readonly ElfOSABI ARM = new ElfOSABI(ElfNative.ELFOSABI_ARM);
         
         /// <summary>
         /// Standalone (embedded) application
         /// </summary>
-        public static readonly ElfOSABI STANDALONE = new ElfOSABI(RawElf.ELFOSABI_STANDALONE);
+        public static readonly ElfOSABI STANDALONE = new ElfOSABI(ElfNative.ELFOSABI_STANDALONE);
         
         private string ToStringInternal()
         {
             switch (Value)
             {
-                case RawElf.ELFOSABI_NONE: return "ELFOSABI_NONE - UNIX System V ABI";
-                case RawElf.ELFOSABI_HPUX: return "ELFOSABI_HPUX - HP-UX";
-                case RawElf.ELFOSABI_NETBSD: return "ELFOSABI_NETBSD - NetBSD.";
-                case RawElf.ELFOSABI_GNU: return "ELFOSABI_GNU - Object uses GNU ELF extensions.";
-                case RawElf.ELFOSABI_SOLARIS: return "ELFOSABI_SOLARIS - Sun Solaris.";
-                case RawElf.ELFOSABI_AIX: return "ELFOSABI_AIX - IBM AIX.";
-                case RawElf.ELFOSABI_IRIX: return "ELFOSABI_IRIX - SGI Irix.";
-                case RawElf.ELFOSABI_FREEBSD: return "ELFOSABI_FREEBSD - FreeBSD.";
-                case RawElf.ELFOSABI_TRU64: return "ELFOSABI_TRU64 - Compaq TRU64 UNIX.";
-                case RawElf.ELFOSABI_MODESTO: return "ELFOSABI_MODESTO - Novell Modesto.";
-                case RawElf.ELFOSABI_OPENBSD: return "ELFOSABI_OPENBSD - OpenBSD.";
-                case RawElf.ELFOSABI_ARM_AEABI: return "ELFOSABI_ARM_AEABI - ARM EABI";
-                case RawElf.ELFOSABI_ARM: return "ELFOSABI_ARM - ARM";
-                case RawElf.ELFOSABI_STANDALONE: return "ELFOSABI_STANDALONE - Standalone (embedded) application";
+                case ElfNative.ELFOSABI_NONE: return "ELFOSABI_NONE - UNIX System V ABI";
+                case ElfNative.ELFOSABI_HPUX: return "ELFOSABI_HPUX - HP-UX";
+                case ElfNative.ELFOSABI_NETBSD: return "ELFOSABI_NETBSD - NetBSD.";
+                case ElfNative.ELFOSABI_GNU: return "ELFOSABI_GNU - Object uses GNU ELF extensions.";
+                case ElfNative.ELFOSABI_SOLARIS: return "ELFOSABI_SOLARIS - Sun Solaris.";
+                case ElfNative.ELFOSABI_AIX: return "ELFOSABI_AIX - IBM AIX.";
+                case ElfNative.ELFOSABI_IRIX: return "ELFOSABI_IRIX - SGI Irix.";
+                case ElfNative.ELFOSABI_FREEBSD: return "ELFOSABI_FREEBSD - FreeBSD.";
+                case ElfNative.ELFOSABI_TRU64: return "ELFOSABI_TRU64 - Compaq TRU64 UNIX.";
+                case ElfNative.ELFOSABI_MODESTO: return "ELFOSABI_MODESTO - Novell Modesto.";
+                case ElfNative.ELFOSABI_OPENBSD: return "ELFOSABI_OPENBSD - OpenBSD.";
+                case ElfNative.ELFOSABI_ARM_AEABI: return "ELFOSABI_ARM_AEABI - ARM EABI";
+                case ElfNative.ELFOSABI_ARM: return "ELFOSABI_ARM - ARM";
+                case ElfNative.ELFOSABI_STANDALONE: return "ELFOSABI_STANDALONE - Standalone (embedded) application";
                 default: return "Unknown ElfOSABI";
             }
         }
@@ -12018,190 +12018,190 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// No reloc
         /// </summary>
-        public static readonly ElfRelocationType R_386_NONE = new ElfRelocationType(ElfArch.I386, RawElf.R_386_NONE);
+        public static readonly ElfRelocationType R_386_NONE = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_NONE);
         
         /// <summary>
         /// Direct 32 bit
         /// </summary>
-        public static readonly ElfRelocationType R_386_32 = new ElfRelocationType(ElfArch.I386, RawElf.R_386_32);
+        public static readonly ElfRelocationType R_386_32 = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_32);
         
         /// <summary>
         /// PC relative 32 bit
         /// </summary>
-        public static readonly ElfRelocationType R_386_PC32 = new ElfRelocationType(ElfArch.I386, RawElf.R_386_PC32);
+        public static readonly ElfRelocationType R_386_PC32 = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_PC32);
         
         /// <summary>
         /// 32 bit GOT entry
         /// </summary>
-        public static readonly ElfRelocationType R_386_GOT32 = new ElfRelocationType(ElfArch.I386, RawElf.R_386_GOT32);
+        public static readonly ElfRelocationType R_386_GOT32 = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_GOT32);
         
         /// <summary>
         /// 32 bit PLT address
         /// </summary>
-        public static readonly ElfRelocationType R_386_PLT32 = new ElfRelocationType(ElfArch.I386, RawElf.R_386_PLT32);
+        public static readonly ElfRelocationType R_386_PLT32 = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_PLT32);
         
         /// <summary>
         /// Copy symbol at runtime
         /// </summary>
-        public static readonly ElfRelocationType R_386_COPY = new ElfRelocationType(ElfArch.I386, RawElf.R_386_COPY);
+        public static readonly ElfRelocationType R_386_COPY = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_COPY);
         
         /// <summary>
         /// Create GOT entry
         /// </summary>
-        public static readonly ElfRelocationType R_386_GLOB_DAT = new ElfRelocationType(ElfArch.I386, RawElf.R_386_GLOB_DAT);
+        public static readonly ElfRelocationType R_386_GLOB_DAT = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_GLOB_DAT);
         
         /// <summary>
         /// Create PLT entry
         /// </summary>
-        public static readonly ElfRelocationType R_386_JMP_SLOT = new ElfRelocationType(ElfArch.I386, RawElf.R_386_JMP_SLOT);
+        public static readonly ElfRelocationType R_386_JMP_SLOT = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_JMP_SLOT);
         
         /// <summary>
         /// Adjust by program base
         /// </summary>
-        public static readonly ElfRelocationType R_386_RELATIVE = new ElfRelocationType(ElfArch.I386, RawElf.R_386_RELATIVE);
+        public static readonly ElfRelocationType R_386_RELATIVE = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_RELATIVE);
         
         /// <summary>
         /// 32 bit offset to GOT
         /// </summary>
-        public static readonly ElfRelocationType R_386_GOTOFF = new ElfRelocationType(ElfArch.I386, RawElf.R_386_GOTOFF);
+        public static readonly ElfRelocationType R_386_GOTOFF = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_GOTOFF);
         
         /// <summary>
         /// 32 bit PC relative offset to GOT
         /// </summary>
-        public static readonly ElfRelocationType R_386_GOTPC = new ElfRelocationType(ElfArch.I386, RawElf.R_386_GOTPC);
+        public static readonly ElfRelocationType R_386_GOTPC = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_GOTPC);
         
-        public static readonly ElfRelocationType R_386_32PLT = new ElfRelocationType(ElfArch.I386, RawElf.R_386_32PLT);
+        public static readonly ElfRelocationType R_386_32PLT = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_32PLT);
         
         /// <summary>
         /// Offset in static TLS block
         /// </summary>
-        public static readonly ElfRelocationType R_386_TLS_TPOFF = new ElfRelocationType(ElfArch.I386, RawElf.R_386_TLS_TPOFF);
+        public static readonly ElfRelocationType R_386_TLS_TPOFF = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_TPOFF);
         
         /// <summary>
         /// Address of GOT entry for static TLS block offset
         /// </summary>
-        public static readonly ElfRelocationType R_386_TLS_IE = new ElfRelocationType(ElfArch.I386, RawElf.R_386_TLS_IE);
+        public static readonly ElfRelocationType R_386_TLS_IE = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_IE);
         
         /// <summary>
         /// GOT entry for static TLS block offset
         /// </summary>
-        public static readonly ElfRelocationType R_386_TLS_GOTIE = new ElfRelocationType(ElfArch.I386, RawElf.R_386_TLS_GOTIE);
+        public static readonly ElfRelocationType R_386_TLS_GOTIE = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_GOTIE);
         
         /// <summary>
         /// Offset relative to static TLS block
         /// </summary>
-        public static readonly ElfRelocationType R_386_TLS_LE = new ElfRelocationType(ElfArch.I386, RawElf.R_386_TLS_LE);
+        public static readonly ElfRelocationType R_386_TLS_LE = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_LE);
         
         /// <summary>
         /// Direct 32 bit for GNU version of general dynamic thread local data
         /// </summary>
-        public static readonly ElfRelocationType R_386_TLS_GD = new ElfRelocationType(ElfArch.I386, RawElf.R_386_TLS_GD);
+        public static readonly ElfRelocationType R_386_TLS_GD = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_GD);
         
         /// <summary>
         /// Direct 32 bit for GNU version of local dynamic thread local data in LE code
         /// </summary>
-        public static readonly ElfRelocationType R_386_TLS_LDM = new ElfRelocationType(ElfArch.I386, RawElf.R_386_TLS_LDM);
+        public static readonly ElfRelocationType R_386_TLS_LDM = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_LDM);
         
-        public static readonly ElfRelocationType R_386_16 = new ElfRelocationType(ElfArch.I386, RawElf.R_386_16);
+        public static readonly ElfRelocationType R_386_16 = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_16);
         
-        public static readonly ElfRelocationType R_386_PC16 = new ElfRelocationType(ElfArch.I386, RawElf.R_386_PC16);
+        public static readonly ElfRelocationType R_386_PC16 = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_PC16);
         
-        public static readonly ElfRelocationType R_386_8 = new ElfRelocationType(ElfArch.I386, RawElf.R_386_8);
+        public static readonly ElfRelocationType R_386_8 = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_8);
         
-        public static readonly ElfRelocationType R_386_PC8 = new ElfRelocationType(ElfArch.I386, RawElf.R_386_PC8);
+        public static readonly ElfRelocationType R_386_PC8 = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_PC8);
         
         /// <summary>
         /// Direct 32 bit for general dynamic
         /// thread local data
         /// </summary>
-        public static readonly ElfRelocationType R_386_TLS_GD_32 = new ElfRelocationType(ElfArch.I386, RawElf.R_386_TLS_GD_32);
+        public static readonly ElfRelocationType R_386_TLS_GD_32 = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_GD_32);
         
         /// <summary>
         /// Tag for pushl in GD TLS code
         /// </summary>
-        public static readonly ElfRelocationType R_386_TLS_GD_PUSH = new ElfRelocationType(ElfArch.I386, RawElf.R_386_TLS_GD_PUSH);
+        public static readonly ElfRelocationType R_386_TLS_GD_PUSH = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_GD_PUSH);
         
         /// <summary>
         /// Relocation for call to
         /// __tls_get_addr()
         /// </summary>
-        public static readonly ElfRelocationType R_386_TLS_GD_CALL = new ElfRelocationType(ElfArch.I386, RawElf.R_386_TLS_GD_CALL);
+        public static readonly ElfRelocationType R_386_TLS_GD_CALL = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_GD_CALL);
         
         /// <summary>
         /// Tag for popl in GD TLS code
         /// </summary>
-        public static readonly ElfRelocationType R_386_TLS_GD_POP = new ElfRelocationType(ElfArch.I386, RawElf.R_386_TLS_GD_POP);
+        public static readonly ElfRelocationType R_386_TLS_GD_POP = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_GD_POP);
         
         /// <summary>
         /// Direct 32 bit for local dynamic
         /// thread local data in LE code
         /// </summary>
-        public static readonly ElfRelocationType R_386_TLS_LDM_32 = new ElfRelocationType(ElfArch.I386, RawElf.R_386_TLS_LDM_32);
+        public static readonly ElfRelocationType R_386_TLS_LDM_32 = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_LDM_32);
         
         /// <summary>
         /// Tag for pushl in LDM TLS code
         /// </summary>
-        public static readonly ElfRelocationType R_386_TLS_LDM_PUSH = new ElfRelocationType(ElfArch.I386, RawElf.R_386_TLS_LDM_PUSH);
+        public static readonly ElfRelocationType R_386_TLS_LDM_PUSH = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_LDM_PUSH);
         
         /// <summary>
         /// Relocation for call to
         /// __tls_get_addr() in LDM code
         /// </summary>
-        public static readonly ElfRelocationType R_386_TLS_LDM_CALL = new ElfRelocationType(ElfArch.I386, RawElf.R_386_TLS_LDM_CALL);
+        public static readonly ElfRelocationType R_386_TLS_LDM_CALL = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_LDM_CALL);
         
         /// <summary>
         /// Tag for popl in LDM TLS code
         /// </summary>
-        public static readonly ElfRelocationType R_386_TLS_LDM_POP = new ElfRelocationType(ElfArch.I386, RawElf.R_386_TLS_LDM_POP);
+        public static readonly ElfRelocationType R_386_TLS_LDM_POP = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_LDM_POP);
         
         /// <summary>
         /// Offset relative to TLS block
         /// </summary>
-        public static readonly ElfRelocationType R_386_TLS_LDO_32 = new ElfRelocationType(ElfArch.I386, RawElf.R_386_TLS_LDO_32);
+        public static readonly ElfRelocationType R_386_TLS_LDO_32 = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_LDO_32);
         
         /// <summary>
         /// GOT entry for negated static TLS
         /// block offset
         /// </summary>
-        public static readonly ElfRelocationType R_386_TLS_IE_32 = new ElfRelocationType(ElfArch.I386, RawElf.R_386_TLS_IE_32);
+        public static readonly ElfRelocationType R_386_TLS_IE_32 = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_IE_32);
         
         /// <summary>
         /// Negated offset relative to static
         /// TLS block
         /// </summary>
-        public static readonly ElfRelocationType R_386_TLS_LE_32 = new ElfRelocationType(ElfArch.I386, RawElf.R_386_TLS_LE_32);
+        public static readonly ElfRelocationType R_386_TLS_LE_32 = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_LE_32);
         
         /// <summary>
         /// ID of module containing symbol
         /// </summary>
-        public static readonly ElfRelocationType R_386_TLS_DTPMOD32 = new ElfRelocationType(ElfArch.I386, RawElf.R_386_TLS_DTPMOD32);
+        public static readonly ElfRelocationType R_386_TLS_DTPMOD32 = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_DTPMOD32);
         
         /// <summary>
         /// Offset in TLS block
         /// </summary>
-        public static readonly ElfRelocationType R_386_TLS_DTPOFF32 = new ElfRelocationType(ElfArch.I386, RawElf.R_386_TLS_DTPOFF32);
+        public static readonly ElfRelocationType R_386_TLS_DTPOFF32 = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_DTPOFF32);
         
         /// <summary>
         /// Negated offset in static TLS block
         /// </summary>
-        public static readonly ElfRelocationType R_386_TLS_TPOFF32 = new ElfRelocationType(ElfArch.I386, RawElf.R_386_TLS_TPOFF32);
+        public static readonly ElfRelocationType R_386_TLS_TPOFF32 = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_TPOFF32);
         
         /// <summary>
         /// 32-bit symbol size
         /// </summary>
-        public static readonly ElfRelocationType R_386_SIZE32 = new ElfRelocationType(ElfArch.I386, RawElf.R_386_SIZE32);
+        public static readonly ElfRelocationType R_386_SIZE32 = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_SIZE32);
         
         /// <summary>
         /// GOT offset for TLS descriptor.
         /// </summary>
-        public static readonly ElfRelocationType R_386_TLS_GOTDESC = new ElfRelocationType(ElfArch.I386, RawElf.R_386_TLS_GOTDESC);
+        public static readonly ElfRelocationType R_386_TLS_GOTDESC = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_GOTDESC);
         
         /// <summary>
         /// Marker of call through TLS
         /// descriptor for
         /// relaxation.
         /// </summary>
-        public static readonly ElfRelocationType R_386_TLS_DESC_CALL = new ElfRelocationType(ElfArch.I386, RawElf.R_386_TLS_DESC_CALL);
+        public static readonly ElfRelocationType R_386_TLS_DESC_CALL = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_DESC_CALL);
         
         /// <summary>
         /// TLS descriptor containing
@@ -12209,1170 +12209,1170 @@ namespace LibObjectFile.Elf
         /// argument, returning the TLS
         /// offset for the symbol.
         /// </summary>
-        public static readonly ElfRelocationType R_386_TLS_DESC = new ElfRelocationType(ElfArch.I386, RawElf.R_386_TLS_DESC);
+        public static readonly ElfRelocationType R_386_TLS_DESC = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_DESC);
         
         /// <summary>
         /// Adjust indirectly by program base
         /// </summary>
-        public static readonly ElfRelocationType R_386_IRELATIVE = new ElfRelocationType(ElfArch.I386, RawElf.R_386_IRELATIVE);
+        public static readonly ElfRelocationType R_386_IRELATIVE = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_IRELATIVE);
         
         /// <summary>
         /// No relocation.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_NONE = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_NONE);
+        public static readonly ElfRelocationType R_AARCH64_NONE = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_NONE);
         
         /// <summary>
         /// Direct 32 bit.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_P32_ABS32 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_P32_ABS32);
+        public static readonly ElfRelocationType R_AARCH64_P32_ABS32 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_P32_ABS32);
         
         /// <summary>
         /// Copy symbol at runtime.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_P32_COPY = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_P32_COPY);
+        public static readonly ElfRelocationType R_AARCH64_P32_COPY = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_P32_COPY);
         
         /// <summary>
         /// Create GOT entry.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_P32_GLOB_DAT = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_P32_GLOB_DAT);
+        public static readonly ElfRelocationType R_AARCH64_P32_GLOB_DAT = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_P32_GLOB_DAT);
         
         /// <summary>
         /// Create PLT entry.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_P32_JUMP_SLOT = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_P32_JUMP_SLOT);
+        public static readonly ElfRelocationType R_AARCH64_P32_JUMP_SLOT = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_P32_JUMP_SLOT);
         
         /// <summary>
         /// Adjust by program base.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_P32_RELATIVE = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_P32_RELATIVE);
+        public static readonly ElfRelocationType R_AARCH64_P32_RELATIVE = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_P32_RELATIVE);
         
         /// <summary>
         /// Module number, 32 bit.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_P32_TLS_DTPMOD = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_P32_TLS_DTPMOD);
+        public static readonly ElfRelocationType R_AARCH64_P32_TLS_DTPMOD = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_P32_TLS_DTPMOD);
         
         /// <summary>
         /// Module-relative offset, 32 bit.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_P32_TLS_DTPREL = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_P32_TLS_DTPREL);
+        public static readonly ElfRelocationType R_AARCH64_P32_TLS_DTPREL = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_P32_TLS_DTPREL);
         
         /// <summary>
         /// TP-relative offset, 32 bit.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_P32_TLS_TPREL = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_P32_TLS_TPREL);
+        public static readonly ElfRelocationType R_AARCH64_P32_TLS_TPREL = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_P32_TLS_TPREL);
         
         /// <summary>
         /// TLS Descriptor.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_P32_TLSDESC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_P32_TLSDESC);
+        public static readonly ElfRelocationType R_AARCH64_P32_TLSDESC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_P32_TLSDESC);
         
         /// <summary>
         /// STT_GNU_IFUNC relocation.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_P32_IRELATIVE = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_P32_IRELATIVE);
+        public static readonly ElfRelocationType R_AARCH64_P32_IRELATIVE = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_P32_IRELATIVE);
         
         /// <summary>
         /// Direct 64 bit.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_ABS64 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_ABS64);
+        public static readonly ElfRelocationType R_AARCH64_ABS64 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_ABS64);
         
         /// <summary>
         /// Direct 32 bit.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_ABS32 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_ABS32);
+        public static readonly ElfRelocationType R_AARCH64_ABS32 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_ABS32);
         
         /// <summary>
         /// Direct 16-bit.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_ABS16 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_ABS16);
+        public static readonly ElfRelocationType R_AARCH64_ABS16 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_ABS16);
         
         /// <summary>
         /// PC-relative 64-bit.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_PREL64 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_PREL64);
+        public static readonly ElfRelocationType R_AARCH64_PREL64 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_PREL64);
         
         /// <summary>
         /// PC-relative 32-bit.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_PREL32 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_PREL32);
+        public static readonly ElfRelocationType R_AARCH64_PREL32 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_PREL32);
         
         /// <summary>
         /// PC-relative 16-bit.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_PREL16 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_PREL16);
+        public static readonly ElfRelocationType R_AARCH64_PREL16 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_PREL16);
         
         /// <summary>
         /// Dir. MOVZ imm. from bits 15:0.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_MOVW_UABS_G0 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_MOVW_UABS_G0);
+        public static readonly ElfRelocationType R_AARCH64_MOVW_UABS_G0 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_MOVW_UABS_G0);
         
         /// <summary>
         /// Likewise for MOVK; no check.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_MOVW_UABS_G0_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_MOVW_UABS_G0_NC);
+        public static readonly ElfRelocationType R_AARCH64_MOVW_UABS_G0_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_MOVW_UABS_G0_NC);
         
         /// <summary>
         /// Dir. MOVZ imm. from bits 31:16.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_MOVW_UABS_G1 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_MOVW_UABS_G1);
+        public static readonly ElfRelocationType R_AARCH64_MOVW_UABS_G1 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_MOVW_UABS_G1);
         
         /// <summary>
         /// Likewise for MOVK; no check.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_MOVW_UABS_G1_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_MOVW_UABS_G1_NC);
+        public static readonly ElfRelocationType R_AARCH64_MOVW_UABS_G1_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_MOVW_UABS_G1_NC);
         
         /// <summary>
         /// Dir. MOVZ imm. from bits 47:32.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_MOVW_UABS_G2 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_MOVW_UABS_G2);
+        public static readonly ElfRelocationType R_AARCH64_MOVW_UABS_G2 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_MOVW_UABS_G2);
         
         /// <summary>
         /// Likewise for MOVK; no check.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_MOVW_UABS_G2_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_MOVW_UABS_G2_NC);
+        public static readonly ElfRelocationType R_AARCH64_MOVW_UABS_G2_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_MOVW_UABS_G2_NC);
         
         /// <summary>
         /// Dir. MOV{K,Z} imm. from 63:48.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_MOVW_UABS_G3 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_MOVW_UABS_G3);
+        public static readonly ElfRelocationType R_AARCH64_MOVW_UABS_G3 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_MOVW_UABS_G3);
         
         /// <summary>
         /// Dir. MOV{N,Z} imm. from 15:0.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_MOVW_SABS_G0 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_MOVW_SABS_G0);
+        public static readonly ElfRelocationType R_AARCH64_MOVW_SABS_G0 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_MOVW_SABS_G0);
         
         /// <summary>
         /// Dir. MOV{N,Z} imm. from 31:16.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_MOVW_SABS_G1 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_MOVW_SABS_G1);
+        public static readonly ElfRelocationType R_AARCH64_MOVW_SABS_G1 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_MOVW_SABS_G1);
         
         /// <summary>
         /// Dir. MOV{N,Z} imm. from 47:32.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_MOVW_SABS_G2 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_MOVW_SABS_G2);
+        public static readonly ElfRelocationType R_AARCH64_MOVW_SABS_G2 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_MOVW_SABS_G2);
         
         /// <summary>
         /// PC-rel. LD imm. from bits 20:2.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_LD_PREL_LO19 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_LD_PREL_LO19);
+        public static readonly ElfRelocationType R_AARCH64_LD_PREL_LO19 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_LD_PREL_LO19);
         
         /// <summary>
         /// PC-rel. ADR imm. from bits 20:0.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_ADR_PREL_LO21 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_ADR_PREL_LO21);
+        public static readonly ElfRelocationType R_AARCH64_ADR_PREL_LO21 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_ADR_PREL_LO21);
         
         /// <summary>
         /// Page-rel. ADRP imm. from 32:12.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_ADR_PREL_PG_HI21 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_ADR_PREL_PG_HI21);
+        public static readonly ElfRelocationType R_AARCH64_ADR_PREL_PG_HI21 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_ADR_PREL_PG_HI21);
         
         /// <summary>
         /// Likewise; no overflow check.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_ADR_PREL_PG_HI21_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_ADR_PREL_PG_HI21_NC);
+        public static readonly ElfRelocationType R_AARCH64_ADR_PREL_PG_HI21_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_ADR_PREL_PG_HI21_NC);
         
         /// <summary>
         /// Dir. ADD imm. from bits 11:0.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_ADD_ABS_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_ADD_ABS_LO12_NC);
+        public static readonly ElfRelocationType R_AARCH64_ADD_ABS_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_ADD_ABS_LO12_NC);
         
         /// <summary>
         /// Likewise for LD/ST; no check.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_LDST8_ABS_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_LDST8_ABS_LO12_NC);
+        public static readonly ElfRelocationType R_AARCH64_LDST8_ABS_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_LDST8_ABS_LO12_NC);
         
         /// <summary>
         /// PC-rel. TBZ/TBNZ imm. from 15:2.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TSTBR14 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TSTBR14);
+        public static readonly ElfRelocationType R_AARCH64_TSTBR14 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TSTBR14);
         
         /// <summary>
         /// PC-rel. cond. br. imm. from 20:2.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_CONDBR19 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_CONDBR19);
+        public static readonly ElfRelocationType R_AARCH64_CONDBR19 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_CONDBR19);
         
         /// <summary>
         /// PC-rel. B imm. from bits 27:2.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_JUMP26 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_JUMP26);
+        public static readonly ElfRelocationType R_AARCH64_JUMP26 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_JUMP26);
         
         /// <summary>
         /// Likewise for CALL.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_CALL26 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_CALL26);
+        public static readonly ElfRelocationType R_AARCH64_CALL26 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_CALL26);
         
         /// <summary>
         /// Dir. ADD imm. from bits 11:1.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_LDST16_ABS_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_LDST16_ABS_LO12_NC);
+        public static readonly ElfRelocationType R_AARCH64_LDST16_ABS_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_LDST16_ABS_LO12_NC);
         
         /// <summary>
         /// Likewise for bits 11:2.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_LDST32_ABS_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_LDST32_ABS_LO12_NC);
+        public static readonly ElfRelocationType R_AARCH64_LDST32_ABS_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_LDST32_ABS_LO12_NC);
         
         /// <summary>
         /// Likewise for bits 11:3.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_LDST64_ABS_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_LDST64_ABS_LO12_NC);
+        public static readonly ElfRelocationType R_AARCH64_LDST64_ABS_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_LDST64_ABS_LO12_NC);
         
         /// <summary>
         /// PC-rel. MOV{N,Z} imm. from 15:0.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_MOVW_PREL_G0 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_MOVW_PREL_G0);
+        public static readonly ElfRelocationType R_AARCH64_MOVW_PREL_G0 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_MOVW_PREL_G0);
         
         /// <summary>
         /// Likewise for MOVK; no check.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_MOVW_PREL_G0_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_MOVW_PREL_G0_NC);
+        public static readonly ElfRelocationType R_AARCH64_MOVW_PREL_G0_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_MOVW_PREL_G0_NC);
         
         /// <summary>
         /// PC-rel. MOV{N,Z} imm. from 31:16.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_MOVW_PREL_G1 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_MOVW_PREL_G1);
+        public static readonly ElfRelocationType R_AARCH64_MOVW_PREL_G1 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_MOVW_PREL_G1);
         
         /// <summary>
         /// Likewise for MOVK; no check.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_MOVW_PREL_G1_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_MOVW_PREL_G1_NC);
+        public static readonly ElfRelocationType R_AARCH64_MOVW_PREL_G1_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_MOVW_PREL_G1_NC);
         
         /// <summary>
         /// PC-rel. MOV{N,Z} imm. from 47:32.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_MOVW_PREL_G2 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_MOVW_PREL_G2);
+        public static readonly ElfRelocationType R_AARCH64_MOVW_PREL_G2 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_MOVW_PREL_G2);
         
         /// <summary>
         /// Likewise for MOVK; no check.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_MOVW_PREL_G2_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_MOVW_PREL_G2_NC);
+        public static readonly ElfRelocationType R_AARCH64_MOVW_PREL_G2_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_MOVW_PREL_G2_NC);
         
         /// <summary>
         /// PC-rel. MOV{N,Z} imm. from 63:48.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_MOVW_PREL_G3 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_MOVW_PREL_G3);
+        public static readonly ElfRelocationType R_AARCH64_MOVW_PREL_G3 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_MOVW_PREL_G3);
         
         /// <summary>
         /// Dir. ADD imm. from bits 11:4.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_LDST128_ABS_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_LDST128_ABS_LO12_NC);
+        public static readonly ElfRelocationType R_AARCH64_LDST128_ABS_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_LDST128_ABS_LO12_NC);
         
         /// <summary>
         /// GOT-rel. off. MOV{N,Z} imm. 15:0.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_MOVW_GOTOFF_G0 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_MOVW_GOTOFF_G0);
+        public static readonly ElfRelocationType R_AARCH64_MOVW_GOTOFF_G0 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_MOVW_GOTOFF_G0);
         
         /// <summary>
         /// Likewise for MOVK; no check.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_MOVW_GOTOFF_G0_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_MOVW_GOTOFF_G0_NC);
+        public static readonly ElfRelocationType R_AARCH64_MOVW_GOTOFF_G0_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_MOVW_GOTOFF_G0_NC);
         
         /// <summary>
         /// GOT-rel. o. MOV{N,Z} imm. 31:16.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_MOVW_GOTOFF_G1 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_MOVW_GOTOFF_G1);
+        public static readonly ElfRelocationType R_AARCH64_MOVW_GOTOFF_G1 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_MOVW_GOTOFF_G1);
         
         /// <summary>
         /// Likewise for MOVK; no check.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_MOVW_GOTOFF_G1_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_MOVW_GOTOFF_G1_NC);
+        public static readonly ElfRelocationType R_AARCH64_MOVW_GOTOFF_G1_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_MOVW_GOTOFF_G1_NC);
         
         /// <summary>
         /// GOT-rel. o. MOV{N,Z} imm. 47:32.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_MOVW_GOTOFF_G2 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_MOVW_GOTOFF_G2);
+        public static readonly ElfRelocationType R_AARCH64_MOVW_GOTOFF_G2 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_MOVW_GOTOFF_G2);
         
         /// <summary>
         /// Likewise for MOVK; no check.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_MOVW_GOTOFF_G2_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_MOVW_GOTOFF_G2_NC);
+        public static readonly ElfRelocationType R_AARCH64_MOVW_GOTOFF_G2_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_MOVW_GOTOFF_G2_NC);
         
         /// <summary>
         /// GOT-rel. o. MOV{N,Z} imm. 63:48.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_MOVW_GOTOFF_G3 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_MOVW_GOTOFF_G3);
+        public static readonly ElfRelocationType R_AARCH64_MOVW_GOTOFF_G3 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_MOVW_GOTOFF_G3);
         
         /// <summary>
         /// GOT-relative 64-bit.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_GOTREL64 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_GOTREL64);
+        public static readonly ElfRelocationType R_AARCH64_GOTREL64 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_GOTREL64);
         
         /// <summary>
         /// GOT-relative 32-bit.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_GOTREL32 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_GOTREL32);
+        public static readonly ElfRelocationType R_AARCH64_GOTREL32 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_GOTREL32);
         
         /// <summary>
         /// PC-rel. GOT off. load imm. 20:2.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_GOT_LD_PREL19 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_GOT_LD_PREL19);
+        public static readonly ElfRelocationType R_AARCH64_GOT_LD_PREL19 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_GOT_LD_PREL19);
         
         /// <summary>
         /// GOT-rel. off. LD/ST imm. 14:3.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_LD64_GOTOFF_LO15 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_LD64_GOTOFF_LO15);
+        public static readonly ElfRelocationType R_AARCH64_LD64_GOTOFF_LO15 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_LD64_GOTOFF_LO15);
         
         /// <summary>
         /// P-page-rel. GOT off. ADRP 32:12.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_ADR_GOT_PAGE = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_ADR_GOT_PAGE);
+        public static readonly ElfRelocationType R_AARCH64_ADR_GOT_PAGE = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_ADR_GOT_PAGE);
         
         /// <summary>
         /// Dir. GOT off. LD/ST imm. 11:3.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_LD64_GOT_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_LD64_GOT_LO12_NC);
+        public static readonly ElfRelocationType R_AARCH64_LD64_GOT_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_LD64_GOT_LO12_NC);
         
         /// <summary>
         /// GOT-page-rel. GOT off. LD/ST 14:3
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_LD64_GOTPAGE_LO15 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_LD64_GOTPAGE_LO15);
+        public static readonly ElfRelocationType R_AARCH64_LD64_GOTPAGE_LO15 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_LD64_GOTPAGE_LO15);
         
         /// <summary>
         /// PC-relative ADR imm. 20:0.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSGD_ADR_PREL21 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSGD_ADR_PREL21);
+        public static readonly ElfRelocationType R_AARCH64_TLSGD_ADR_PREL21 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSGD_ADR_PREL21);
         
         /// <summary>
         /// page-rel. ADRP imm. 32:12.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSGD_ADR_PAGE21 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSGD_ADR_PAGE21);
+        public static readonly ElfRelocationType R_AARCH64_TLSGD_ADR_PAGE21 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSGD_ADR_PAGE21);
         
         /// <summary>
         /// direct ADD imm. from 11:0.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSGD_ADD_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSGD_ADD_LO12_NC);
+        public static readonly ElfRelocationType R_AARCH64_TLSGD_ADD_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSGD_ADD_LO12_NC);
         
         /// <summary>
         /// GOT-rel. MOV{N,Z} 31:16.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSGD_MOVW_G1 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSGD_MOVW_G1);
+        public static readonly ElfRelocationType R_AARCH64_TLSGD_MOVW_G1 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSGD_MOVW_G1);
         
         /// <summary>
         /// GOT-rel. MOVK imm. 15:0.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSGD_MOVW_G0_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSGD_MOVW_G0_NC);
+        public static readonly ElfRelocationType R_AARCH64_TLSGD_MOVW_G0_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSGD_MOVW_G0_NC);
         
         /// <summary>
         /// Like 512; local dynamic model.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLD_ADR_PREL21 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLD_ADR_PREL21);
+        public static readonly ElfRelocationType R_AARCH64_TLSLD_ADR_PREL21 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLD_ADR_PREL21);
         
         /// <summary>
         /// Like 513; local dynamic model.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLD_ADR_PAGE21 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLD_ADR_PAGE21);
+        public static readonly ElfRelocationType R_AARCH64_TLSLD_ADR_PAGE21 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLD_ADR_PAGE21);
         
         /// <summary>
         /// Like 514; local dynamic model.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLD_ADD_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLD_ADD_LO12_NC);
+        public static readonly ElfRelocationType R_AARCH64_TLSLD_ADD_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLD_ADD_LO12_NC);
         
         /// <summary>
         /// Like 515; local dynamic model.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLD_MOVW_G1 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLD_MOVW_G1);
+        public static readonly ElfRelocationType R_AARCH64_TLSLD_MOVW_G1 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLD_MOVW_G1);
         
         /// <summary>
         /// Like 516; local dynamic model.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLD_MOVW_G0_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLD_MOVW_G0_NC);
+        public static readonly ElfRelocationType R_AARCH64_TLSLD_MOVW_G0_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLD_MOVW_G0_NC);
         
         /// <summary>
         /// TLS PC-rel. load imm. 20:2.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLD_LD_PREL19 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLD_LD_PREL19);
+        public static readonly ElfRelocationType R_AARCH64_TLSLD_LD_PREL19 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLD_LD_PREL19);
         
         /// <summary>
         /// TLS DTP-rel. MOV{N,Z} 47:32.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLD_MOVW_DTPREL_G2 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLD_MOVW_DTPREL_G2);
+        public static readonly ElfRelocationType R_AARCH64_TLSLD_MOVW_DTPREL_G2 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLD_MOVW_DTPREL_G2);
         
         /// <summary>
         /// TLS DTP-rel. MOV{N,Z} 31:16.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLD_MOVW_DTPREL_G1 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLD_MOVW_DTPREL_G1);
+        public static readonly ElfRelocationType R_AARCH64_TLSLD_MOVW_DTPREL_G1 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLD_MOVW_DTPREL_G1);
         
         /// <summary>
         /// Likewise; MOVK; no check.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLD_MOVW_DTPREL_G1_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLD_MOVW_DTPREL_G1_NC);
+        public static readonly ElfRelocationType R_AARCH64_TLSLD_MOVW_DTPREL_G1_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLD_MOVW_DTPREL_G1_NC);
         
         /// <summary>
         /// TLS DTP-rel. MOV{N,Z} 15:0.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLD_MOVW_DTPREL_G0 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLD_MOVW_DTPREL_G0);
+        public static readonly ElfRelocationType R_AARCH64_TLSLD_MOVW_DTPREL_G0 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLD_MOVW_DTPREL_G0);
         
         /// <summary>
         /// Likewise; MOVK; no check.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLD_MOVW_DTPREL_G0_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLD_MOVW_DTPREL_G0_NC);
+        public static readonly ElfRelocationType R_AARCH64_TLSLD_MOVW_DTPREL_G0_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLD_MOVW_DTPREL_G0_NC);
         
         /// <summary>
         /// DTP-rel. ADD imm. from 23:12.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLD_ADD_DTPREL_HI12 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLD_ADD_DTPREL_HI12);
+        public static readonly ElfRelocationType R_AARCH64_TLSLD_ADD_DTPREL_HI12 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLD_ADD_DTPREL_HI12);
         
         /// <summary>
         /// DTP-rel. ADD imm. from 11:0.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLD_ADD_DTPREL_LO12 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLD_ADD_DTPREL_LO12);
+        public static readonly ElfRelocationType R_AARCH64_TLSLD_ADD_DTPREL_LO12 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLD_ADD_DTPREL_LO12);
         
         /// <summary>
         /// Likewise; no ovfl. check.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLD_ADD_DTPREL_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLD_ADD_DTPREL_LO12_NC);
+        public static readonly ElfRelocationType R_AARCH64_TLSLD_ADD_DTPREL_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLD_ADD_DTPREL_LO12_NC);
         
         /// <summary>
         /// DTP-rel. LD/ST imm. 11:0.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLD_LDST8_DTPREL_LO12 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLD_LDST8_DTPREL_LO12);
+        public static readonly ElfRelocationType R_AARCH64_TLSLD_LDST8_DTPREL_LO12 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLD_LDST8_DTPREL_LO12);
         
         /// <summary>
         /// Likewise; no check.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLD_LDST8_DTPREL_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLD_LDST8_DTPREL_LO12_NC);
+        public static readonly ElfRelocationType R_AARCH64_TLSLD_LDST8_DTPREL_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLD_LDST8_DTPREL_LO12_NC);
         
         /// <summary>
         /// DTP-rel. LD/ST imm. 11:1.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLD_LDST16_DTPREL_LO12 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLD_LDST16_DTPREL_LO12);
+        public static readonly ElfRelocationType R_AARCH64_TLSLD_LDST16_DTPREL_LO12 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLD_LDST16_DTPREL_LO12);
         
         /// <summary>
         /// Likewise; no check.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLD_LDST16_DTPREL_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLD_LDST16_DTPREL_LO12_NC);
+        public static readonly ElfRelocationType R_AARCH64_TLSLD_LDST16_DTPREL_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLD_LDST16_DTPREL_LO12_NC);
         
         /// <summary>
         /// DTP-rel. LD/ST imm. 11:2.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLD_LDST32_DTPREL_LO12 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLD_LDST32_DTPREL_LO12);
+        public static readonly ElfRelocationType R_AARCH64_TLSLD_LDST32_DTPREL_LO12 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLD_LDST32_DTPREL_LO12);
         
         /// <summary>
         /// Likewise; no check.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLD_LDST32_DTPREL_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLD_LDST32_DTPREL_LO12_NC);
+        public static readonly ElfRelocationType R_AARCH64_TLSLD_LDST32_DTPREL_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLD_LDST32_DTPREL_LO12_NC);
         
         /// <summary>
         /// DTP-rel. LD/ST imm. 11:3.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLD_LDST64_DTPREL_LO12 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLD_LDST64_DTPREL_LO12);
+        public static readonly ElfRelocationType R_AARCH64_TLSLD_LDST64_DTPREL_LO12 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLD_LDST64_DTPREL_LO12);
         
         /// <summary>
         /// Likewise; no check.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLD_LDST64_DTPREL_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLD_LDST64_DTPREL_LO12_NC);
+        public static readonly ElfRelocationType R_AARCH64_TLSLD_LDST64_DTPREL_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLD_LDST64_DTPREL_LO12_NC);
         
         /// <summary>
         /// GOT-rel. MOV{N,Z} 31:16.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSIE_MOVW_GOTTPREL_G1 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSIE_MOVW_GOTTPREL_G1);
+        public static readonly ElfRelocationType R_AARCH64_TLSIE_MOVW_GOTTPREL_G1 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSIE_MOVW_GOTTPREL_G1);
         
         /// <summary>
         /// GOT-rel. MOVK 15:0.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSIE_MOVW_GOTTPREL_G0_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSIE_MOVW_GOTTPREL_G0_NC);
+        public static readonly ElfRelocationType R_AARCH64_TLSIE_MOVW_GOTTPREL_G0_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSIE_MOVW_GOTTPREL_G0_NC);
         
         /// <summary>
         /// Page-rel. ADRP 32:12.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSIE_ADR_GOTTPREL_PAGE21 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSIE_ADR_GOTTPREL_PAGE21);
+        public static readonly ElfRelocationType R_AARCH64_TLSIE_ADR_GOTTPREL_PAGE21 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSIE_ADR_GOTTPREL_PAGE21);
         
         /// <summary>
         /// Direct LD off. 11:3.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSIE_LD64_GOTTPREL_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSIE_LD64_GOTTPREL_LO12_NC);
+        public static readonly ElfRelocationType R_AARCH64_TLSIE_LD64_GOTTPREL_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSIE_LD64_GOTTPREL_LO12_NC);
         
         /// <summary>
         /// PC-rel. load imm. 20:2.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSIE_LD_GOTTPREL_PREL19 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSIE_LD_GOTTPREL_PREL19);
+        public static readonly ElfRelocationType R_AARCH64_TLSIE_LD_GOTTPREL_PREL19 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSIE_LD_GOTTPREL_PREL19);
         
         /// <summary>
         /// TLS TP-rel. MOV{N,Z} 47:32.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLE_MOVW_TPREL_G2 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLE_MOVW_TPREL_G2);
+        public static readonly ElfRelocationType R_AARCH64_TLSLE_MOVW_TPREL_G2 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLE_MOVW_TPREL_G2);
         
         /// <summary>
         /// TLS TP-rel. MOV{N,Z} 31:16.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLE_MOVW_TPREL_G1 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLE_MOVW_TPREL_G1);
+        public static readonly ElfRelocationType R_AARCH64_TLSLE_MOVW_TPREL_G1 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLE_MOVW_TPREL_G1);
         
         /// <summary>
         /// Likewise; MOVK; no check.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLE_MOVW_TPREL_G1_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLE_MOVW_TPREL_G1_NC);
+        public static readonly ElfRelocationType R_AARCH64_TLSLE_MOVW_TPREL_G1_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLE_MOVW_TPREL_G1_NC);
         
         /// <summary>
         /// TLS TP-rel. MOV{N,Z} 15:0.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLE_MOVW_TPREL_G0 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLE_MOVW_TPREL_G0);
+        public static readonly ElfRelocationType R_AARCH64_TLSLE_MOVW_TPREL_G0 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLE_MOVW_TPREL_G0);
         
         /// <summary>
         /// Likewise; MOVK; no check.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLE_MOVW_TPREL_G0_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLE_MOVW_TPREL_G0_NC);
+        public static readonly ElfRelocationType R_AARCH64_TLSLE_MOVW_TPREL_G0_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLE_MOVW_TPREL_G0_NC);
         
         /// <summary>
         /// TP-rel. ADD imm. 23:12.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLE_ADD_TPREL_HI12 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLE_ADD_TPREL_HI12);
+        public static readonly ElfRelocationType R_AARCH64_TLSLE_ADD_TPREL_HI12 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLE_ADD_TPREL_HI12);
         
         /// <summary>
         /// TP-rel. ADD imm. 11:0.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLE_ADD_TPREL_LO12 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLE_ADD_TPREL_LO12);
+        public static readonly ElfRelocationType R_AARCH64_TLSLE_ADD_TPREL_LO12 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLE_ADD_TPREL_LO12);
         
         /// <summary>
         /// Likewise; no ovfl. check.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLE_ADD_TPREL_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLE_ADD_TPREL_LO12_NC);
+        public static readonly ElfRelocationType R_AARCH64_TLSLE_ADD_TPREL_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLE_ADD_TPREL_LO12_NC);
         
         /// <summary>
         /// TP-rel. LD/ST off. 11:0.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLE_LDST8_TPREL_LO12 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLE_LDST8_TPREL_LO12);
+        public static readonly ElfRelocationType R_AARCH64_TLSLE_LDST8_TPREL_LO12 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLE_LDST8_TPREL_LO12);
         
         /// <summary>
         /// Likewise; no ovfl. check.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLE_LDST8_TPREL_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLE_LDST8_TPREL_LO12_NC);
+        public static readonly ElfRelocationType R_AARCH64_TLSLE_LDST8_TPREL_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLE_LDST8_TPREL_LO12_NC);
         
         /// <summary>
         /// TP-rel. LD/ST off. 11:1.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLE_LDST16_TPREL_LO12 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLE_LDST16_TPREL_LO12);
+        public static readonly ElfRelocationType R_AARCH64_TLSLE_LDST16_TPREL_LO12 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLE_LDST16_TPREL_LO12);
         
         /// <summary>
         /// Likewise; no check.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLE_LDST16_TPREL_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLE_LDST16_TPREL_LO12_NC);
+        public static readonly ElfRelocationType R_AARCH64_TLSLE_LDST16_TPREL_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLE_LDST16_TPREL_LO12_NC);
         
         /// <summary>
         /// TP-rel. LD/ST off. 11:2.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLE_LDST32_TPREL_LO12 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLE_LDST32_TPREL_LO12);
+        public static readonly ElfRelocationType R_AARCH64_TLSLE_LDST32_TPREL_LO12 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLE_LDST32_TPREL_LO12);
         
         /// <summary>
         /// Likewise; no check.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLE_LDST32_TPREL_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLE_LDST32_TPREL_LO12_NC);
+        public static readonly ElfRelocationType R_AARCH64_TLSLE_LDST32_TPREL_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLE_LDST32_TPREL_LO12_NC);
         
         /// <summary>
         /// TP-rel. LD/ST off. 11:3.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLE_LDST64_TPREL_LO12 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLE_LDST64_TPREL_LO12);
+        public static readonly ElfRelocationType R_AARCH64_TLSLE_LDST64_TPREL_LO12 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLE_LDST64_TPREL_LO12);
         
         /// <summary>
         /// Likewise; no check.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLE_LDST64_TPREL_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLE_LDST64_TPREL_LO12_NC);
+        public static readonly ElfRelocationType R_AARCH64_TLSLE_LDST64_TPREL_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLE_LDST64_TPREL_LO12_NC);
         
         /// <summary>
         /// PC-rel. load immediate 20:2.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSDESC_LD_PREL19 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSDESC_LD_PREL19);
+        public static readonly ElfRelocationType R_AARCH64_TLSDESC_LD_PREL19 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSDESC_LD_PREL19);
         
         /// <summary>
         /// PC-rel. ADR immediate 20:0.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSDESC_ADR_PREL21 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSDESC_ADR_PREL21);
+        public static readonly ElfRelocationType R_AARCH64_TLSDESC_ADR_PREL21 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSDESC_ADR_PREL21);
         
         /// <summary>
         /// Page-rel. ADRP imm. 32:12.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSDESC_ADR_PAGE21 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSDESC_ADR_PAGE21);
+        public static readonly ElfRelocationType R_AARCH64_TLSDESC_ADR_PAGE21 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSDESC_ADR_PAGE21);
         
         /// <summary>
         /// Direct LD off. from 11:3.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSDESC_LD64_LO12 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSDESC_LD64_LO12);
+        public static readonly ElfRelocationType R_AARCH64_TLSDESC_LD64_LO12 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSDESC_LD64_LO12);
         
         /// <summary>
         /// Direct ADD imm. from 11:0.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSDESC_ADD_LO12 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSDESC_ADD_LO12);
+        public static readonly ElfRelocationType R_AARCH64_TLSDESC_ADD_LO12 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSDESC_ADD_LO12);
         
         /// <summary>
         /// GOT-rel. MOV{N,Z} imm. 31:16.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSDESC_OFF_G1 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSDESC_OFF_G1);
+        public static readonly ElfRelocationType R_AARCH64_TLSDESC_OFF_G1 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSDESC_OFF_G1);
         
         /// <summary>
         /// GOT-rel. MOVK imm. 15:0; no ck.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSDESC_OFF_G0_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSDESC_OFF_G0_NC);
+        public static readonly ElfRelocationType R_AARCH64_TLSDESC_OFF_G0_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSDESC_OFF_G0_NC);
         
         /// <summary>
         /// Relax LDR.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSDESC_LDR = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSDESC_LDR);
+        public static readonly ElfRelocationType R_AARCH64_TLSDESC_LDR = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSDESC_LDR);
         
         /// <summary>
         /// Relax ADD.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSDESC_ADD = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSDESC_ADD);
+        public static readonly ElfRelocationType R_AARCH64_TLSDESC_ADD = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSDESC_ADD);
         
         /// <summary>
         /// Relax BLR.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSDESC_CALL = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSDESC_CALL);
+        public static readonly ElfRelocationType R_AARCH64_TLSDESC_CALL = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSDESC_CALL);
         
         /// <summary>
         /// TP-rel. LD/ST off. 11:4.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLE_LDST128_TPREL_LO12 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLE_LDST128_TPREL_LO12);
+        public static readonly ElfRelocationType R_AARCH64_TLSLE_LDST128_TPREL_LO12 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLE_LDST128_TPREL_LO12);
         
         /// <summary>
         /// Likewise; no check.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLE_LDST128_TPREL_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLE_LDST128_TPREL_LO12_NC);
+        public static readonly ElfRelocationType R_AARCH64_TLSLE_LDST128_TPREL_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLE_LDST128_TPREL_LO12_NC);
         
         /// <summary>
         /// DTP-rel. LD/ST imm. 11:4.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLD_LDST128_DTPREL_LO12 = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLD_LDST128_DTPREL_LO12);
+        public static readonly ElfRelocationType R_AARCH64_TLSLD_LDST128_DTPREL_LO12 = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLD_LDST128_DTPREL_LO12);
         
         /// <summary>
         /// Likewise; no check.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSLD_LDST128_DTPREL_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSLD_LDST128_DTPREL_LO12_NC);
+        public static readonly ElfRelocationType R_AARCH64_TLSLD_LDST128_DTPREL_LO12_NC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSLD_LDST128_DTPREL_LO12_NC);
         
         /// <summary>
         /// Copy symbol at runtime.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_COPY = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_COPY);
+        public static readonly ElfRelocationType R_AARCH64_COPY = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_COPY);
         
         /// <summary>
         /// Create GOT entry.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_GLOB_DAT = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_GLOB_DAT);
+        public static readonly ElfRelocationType R_AARCH64_GLOB_DAT = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_GLOB_DAT);
         
         /// <summary>
         /// Create PLT entry.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_JUMP_SLOT = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_JUMP_SLOT);
+        public static readonly ElfRelocationType R_AARCH64_JUMP_SLOT = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_JUMP_SLOT);
         
         /// <summary>
         /// Adjust by program base.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_RELATIVE = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_RELATIVE);
+        public static readonly ElfRelocationType R_AARCH64_RELATIVE = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_RELATIVE);
         
         /// <summary>
         /// Module number, 64 bit.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLS_DTPMOD = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLS_DTPMOD);
+        public static readonly ElfRelocationType R_AARCH64_TLS_DTPMOD = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLS_DTPMOD);
         
         /// <summary>
         /// Module-relative offset, 64 bit.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLS_DTPREL = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLS_DTPREL);
+        public static readonly ElfRelocationType R_AARCH64_TLS_DTPREL = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLS_DTPREL);
         
         /// <summary>
         /// TP-relative offset, 64 bit.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLS_TPREL = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLS_TPREL);
+        public static readonly ElfRelocationType R_AARCH64_TLS_TPREL = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLS_TPREL);
         
         /// <summary>
         /// TLS Descriptor.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_TLSDESC = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_TLSDESC);
+        public static readonly ElfRelocationType R_AARCH64_TLSDESC = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_TLSDESC);
         
         /// <summary>
         /// STT_GNU_IFUNC relocation.
         /// </summary>
-        public static readonly ElfRelocationType R_AARCH64_IRELATIVE = new ElfRelocationType(ElfArch.AARCH64, RawElf.R_AARCH64_IRELATIVE);
+        public static readonly ElfRelocationType R_AARCH64_IRELATIVE = new ElfRelocationType(ElfArch.AARCH64, ElfNative.R_AARCH64_IRELATIVE);
         
         /// <summary>
         /// No reloc
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_NONE = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_NONE);
+        public static readonly ElfRelocationType R_ARM_NONE = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_NONE);
         
         /// <summary>
         /// Deprecated PC relative 26 bit branch.
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_PC24 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_PC24);
+        public static readonly ElfRelocationType R_ARM_PC24 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_PC24);
         
         /// <summary>
         /// Direct 32 bit
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_ABS32 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_ABS32);
+        public static readonly ElfRelocationType R_ARM_ABS32 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_ABS32);
         
         /// <summary>
         /// PC relative 32 bit
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_REL32 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_REL32);
+        public static readonly ElfRelocationType R_ARM_REL32 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_REL32);
         
-        public static readonly ElfRelocationType R_ARM_PC13 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_PC13);
+        public static readonly ElfRelocationType R_ARM_PC13 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_PC13);
         
         /// <summary>
         /// Direct 16 bit
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_ABS16 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_ABS16);
+        public static readonly ElfRelocationType R_ARM_ABS16 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_ABS16);
         
         /// <summary>
         /// Direct 12 bit
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_ABS12 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_ABS12);
+        public static readonly ElfRelocationType R_ARM_ABS12 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_ABS12);
         
         /// <summary>
         /// Direct 
         /// &amp;
         /// 0x7C (LDR, STR).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_THM_ABS5 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_THM_ABS5);
+        public static readonly ElfRelocationType R_ARM_THM_ABS5 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_ABS5);
         
         /// <summary>
         /// Direct 8 bit
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_ABS8 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_ABS8);
+        public static readonly ElfRelocationType R_ARM_ABS8 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_ABS8);
         
-        public static readonly ElfRelocationType R_ARM_SBREL32 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_SBREL32);
+        public static readonly ElfRelocationType R_ARM_SBREL32 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_SBREL32);
         
         /// <summary>
         /// PC relative 24 bit (Thumb32 BL).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_THM_PC22 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_THM_PC22);
+        public static readonly ElfRelocationType R_ARM_THM_PC22 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_PC22);
         
         /// <summary>
         /// PC relative 
         /// &amp;
         /// 0x3FC (Thumb16 LDR, ADD, ADR).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_THM_PC8 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_THM_PC8);
+        public static readonly ElfRelocationType R_ARM_THM_PC8 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_PC8);
         
-        public static readonly ElfRelocationType R_ARM_AMP_VCALL9 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_AMP_VCALL9);
+        public static readonly ElfRelocationType R_ARM_AMP_VCALL9 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_AMP_VCALL9);
         
         /// <summary>
         /// Obsolete static relocation.
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_SWI24 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_SWI24);
+        public static readonly ElfRelocationType R_ARM_SWI24 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_SWI24);
         
         /// <summary>
         /// Dynamic relocation.
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_TLS_DESC = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_TLS_DESC);
+        public static readonly ElfRelocationType R_ARM_TLS_DESC = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_TLS_DESC);
         
         /// <summary>
         /// Reserved.
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_THM_SWI8 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_THM_SWI8);
+        public static readonly ElfRelocationType R_ARM_THM_SWI8 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_SWI8);
         
         /// <summary>
         /// Reserved.
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_XPC25 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_XPC25);
+        public static readonly ElfRelocationType R_ARM_XPC25 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_XPC25);
         
         /// <summary>
         /// Reserved.
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_THM_XPC22 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_THM_XPC22);
+        public static readonly ElfRelocationType R_ARM_THM_XPC22 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_XPC22);
         
         /// <summary>
         /// ID of module containing symbol
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_TLS_DTPMOD32 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_TLS_DTPMOD32);
+        public static readonly ElfRelocationType R_ARM_TLS_DTPMOD32 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_TLS_DTPMOD32);
         
         /// <summary>
         /// Offset in TLS block
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_TLS_DTPOFF32 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_TLS_DTPOFF32);
+        public static readonly ElfRelocationType R_ARM_TLS_DTPOFF32 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_TLS_DTPOFF32);
         
         /// <summary>
         /// Offset in static TLS block
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_TLS_TPOFF32 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_TLS_TPOFF32);
+        public static readonly ElfRelocationType R_ARM_TLS_TPOFF32 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_TLS_TPOFF32);
         
         /// <summary>
         /// Copy symbol at runtime
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_COPY = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_COPY);
+        public static readonly ElfRelocationType R_ARM_COPY = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_COPY);
         
         /// <summary>
         /// Create GOT entry
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_GLOB_DAT = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_GLOB_DAT);
+        public static readonly ElfRelocationType R_ARM_GLOB_DAT = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_GLOB_DAT);
         
         /// <summary>
         /// Create PLT entry
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_JUMP_SLOT = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_JUMP_SLOT);
+        public static readonly ElfRelocationType R_ARM_JUMP_SLOT = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_JUMP_SLOT);
         
         /// <summary>
         /// Adjust by program base
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_RELATIVE = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_RELATIVE);
+        public static readonly ElfRelocationType R_ARM_RELATIVE = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_RELATIVE);
         
         /// <summary>
         /// 32 bit offset to GOT
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_GOTOFF = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_GOTOFF);
+        public static readonly ElfRelocationType R_ARM_GOTOFF = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_GOTOFF);
         
         /// <summary>
         /// 32 bit PC relative offset to GOT
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_GOTPC = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_GOTPC);
+        public static readonly ElfRelocationType R_ARM_GOTPC = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_GOTPC);
         
         /// <summary>
         /// 32 bit GOT entry
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_GOT32 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_GOT32);
+        public static readonly ElfRelocationType R_ARM_GOT32 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_GOT32);
         
         /// <summary>
         /// Deprecated, 32 bit PLT address.
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_PLT32 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_PLT32);
+        public static readonly ElfRelocationType R_ARM_PLT32 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_PLT32);
         
         /// <summary>
         /// PC relative 24 bit (BL, BLX).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_CALL = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_CALL);
+        public static readonly ElfRelocationType R_ARM_CALL = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_CALL);
         
         /// <summary>
         /// PC relative 24 bit (B, BL
         /// &lt;cond
         /// &gt;).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_JUMP24 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_JUMP24);
+        public static readonly ElfRelocationType R_ARM_JUMP24 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_JUMP24);
         
         /// <summary>
         /// PC relative 24 bit (Thumb32 B.W).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_THM_JUMP24 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_THM_JUMP24);
+        public static readonly ElfRelocationType R_ARM_THM_JUMP24 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_JUMP24);
         
         /// <summary>
         /// Adjust by program base.
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_BASE_ABS = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_BASE_ABS);
+        public static readonly ElfRelocationType R_ARM_BASE_ABS = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_BASE_ABS);
         
         /// <summary>
         /// Obsolete.
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_ALU_PCREL_7_0 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_ALU_PCREL_7_0);
+        public static readonly ElfRelocationType R_ARM_ALU_PCREL_7_0 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_ALU_PCREL_7_0);
         
         /// <summary>
         /// Obsolete.
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_ALU_PCREL_15_8 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_ALU_PCREL_15_8);
+        public static readonly ElfRelocationType R_ARM_ALU_PCREL_15_8 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_ALU_PCREL_15_8);
         
         /// <summary>
         /// Obsolete.
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_ALU_PCREL_23_15 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_ALU_PCREL_23_15);
+        public static readonly ElfRelocationType R_ARM_ALU_PCREL_23_15 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_ALU_PCREL_23_15);
         
         /// <summary>
         /// Deprecated, prog. base relative.
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_LDR_SBREL_11_0 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_LDR_SBREL_11_0);
+        public static readonly ElfRelocationType R_ARM_LDR_SBREL_11_0 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDR_SBREL_11_0);
         
         /// <summary>
         /// Deprecated, prog. base relative.
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_ALU_SBREL_19_12 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_ALU_SBREL_19_12);
+        public static readonly ElfRelocationType R_ARM_ALU_SBREL_19_12 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_ALU_SBREL_19_12);
         
         /// <summary>
         /// Deprecated, prog. base relative.
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_ALU_SBREL_27_20 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_ALU_SBREL_27_20);
+        public static readonly ElfRelocationType R_ARM_ALU_SBREL_27_20 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_ALU_SBREL_27_20);
         
-        public static readonly ElfRelocationType R_ARM_TARGET1 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_TARGET1);
+        public static readonly ElfRelocationType R_ARM_TARGET1 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_TARGET1);
         
         /// <summary>
         /// Program base relative.
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_SBREL31 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_SBREL31);
+        public static readonly ElfRelocationType R_ARM_SBREL31 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_SBREL31);
         
-        public static readonly ElfRelocationType R_ARM_V4BX = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_V4BX);
+        public static readonly ElfRelocationType R_ARM_V4BX = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_V4BX);
         
-        public static readonly ElfRelocationType R_ARM_TARGET2 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_TARGET2);
+        public static readonly ElfRelocationType R_ARM_TARGET2 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_TARGET2);
         
         /// <summary>
         /// 32 bit PC relative.
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_PREL31 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_PREL31);
+        public static readonly ElfRelocationType R_ARM_PREL31 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_PREL31);
         
         /// <summary>
         /// Direct 16-bit (MOVW).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_MOVW_ABS_NC = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_MOVW_ABS_NC);
+        public static readonly ElfRelocationType R_ARM_MOVW_ABS_NC = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_MOVW_ABS_NC);
         
         /// <summary>
         /// Direct high 16-bit (MOVT).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_MOVT_ABS = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_MOVT_ABS);
+        public static readonly ElfRelocationType R_ARM_MOVT_ABS = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_MOVT_ABS);
         
         /// <summary>
         /// PC relative 16-bit (MOVW).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_MOVW_PREL_NC = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_MOVW_PREL_NC);
+        public static readonly ElfRelocationType R_ARM_MOVW_PREL_NC = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_MOVW_PREL_NC);
         
         /// <summary>
         /// PC relative (MOVT).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_MOVT_PREL = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_MOVT_PREL);
+        public static readonly ElfRelocationType R_ARM_MOVT_PREL = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_MOVT_PREL);
         
         /// <summary>
         /// Direct 16 bit (Thumb32 MOVW).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_THM_MOVW_ABS_NC = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_THM_MOVW_ABS_NC);
+        public static readonly ElfRelocationType R_ARM_THM_MOVW_ABS_NC = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_MOVW_ABS_NC);
         
         /// <summary>
         /// Direct high 16 bit (Thumb32 MOVT).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_THM_MOVT_ABS = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_THM_MOVT_ABS);
+        public static readonly ElfRelocationType R_ARM_THM_MOVT_ABS = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_MOVT_ABS);
         
         /// <summary>
         /// PC relative 16 bit (Thumb32 MOVW).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_THM_MOVW_PREL_NC = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_THM_MOVW_PREL_NC);
+        public static readonly ElfRelocationType R_ARM_THM_MOVW_PREL_NC = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_MOVW_PREL_NC);
         
         /// <summary>
         /// PC relative high 16 bit (Thumb32 MOVT).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_THM_MOVT_PREL = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_THM_MOVT_PREL);
+        public static readonly ElfRelocationType R_ARM_THM_MOVT_PREL = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_MOVT_PREL);
         
         /// <summary>
         /// PC relative 20 bit (Thumb32 B
         /// &lt;cond
         /// &gt;.W).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_THM_JUMP19 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_THM_JUMP19);
+        public static readonly ElfRelocationType R_ARM_THM_JUMP19 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_JUMP19);
         
         /// <summary>
         /// PC relative X 
         /// &amp;
         /// 0x7E (Thumb16 CBZ, CBNZ).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_THM_JUMP6 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_THM_JUMP6);
+        public static readonly ElfRelocationType R_ARM_THM_JUMP6 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_JUMP6);
         
         /// <summary>
         /// PC relative 12 bit (Thumb32 ADR.W).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_THM_ALU_PREL_11_0 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_THM_ALU_PREL_11_0);
+        public static readonly ElfRelocationType R_ARM_THM_ALU_PREL_11_0 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_ALU_PREL_11_0);
         
         /// <summary>
         /// PC relative 12 bit (Thumb32 LDR{D,SB,H,SH}).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_THM_PC12 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_THM_PC12);
+        public static readonly ElfRelocationType R_ARM_THM_PC12 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_PC12);
         
         /// <summary>
         /// Direct 32-bit.
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_ABS32_NOI = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_ABS32_NOI);
+        public static readonly ElfRelocationType R_ARM_ABS32_NOI = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_ABS32_NOI);
         
         /// <summary>
         /// PC relative 32-bit.
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_REL32_NOI = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_REL32_NOI);
+        public static readonly ElfRelocationType R_ARM_REL32_NOI = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_REL32_NOI);
         
         /// <summary>
         /// PC relative (ADD, SUB).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_ALU_PC_G0_NC = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_ALU_PC_G0_NC);
+        public static readonly ElfRelocationType R_ARM_ALU_PC_G0_NC = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_ALU_PC_G0_NC);
         
         /// <summary>
         /// PC relative (ADD, SUB).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_ALU_PC_G0 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_ALU_PC_G0);
+        public static readonly ElfRelocationType R_ARM_ALU_PC_G0 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_ALU_PC_G0);
         
         /// <summary>
         /// PC relative (ADD, SUB).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_ALU_PC_G1_NC = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_ALU_PC_G1_NC);
+        public static readonly ElfRelocationType R_ARM_ALU_PC_G1_NC = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_ALU_PC_G1_NC);
         
         /// <summary>
         /// PC relative (ADD, SUB).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_ALU_PC_G1 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_ALU_PC_G1);
+        public static readonly ElfRelocationType R_ARM_ALU_PC_G1 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_ALU_PC_G1);
         
         /// <summary>
         /// PC relative (ADD, SUB).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_ALU_PC_G2 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_ALU_PC_G2);
+        public static readonly ElfRelocationType R_ARM_ALU_PC_G2 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_ALU_PC_G2);
         
         /// <summary>
         /// PC relative (LDR,STR,LDRB,STRB).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_LDR_PC_G1 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_LDR_PC_G1);
+        public static readonly ElfRelocationType R_ARM_LDR_PC_G1 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDR_PC_G1);
         
         /// <summary>
         /// PC relative (LDR,STR,LDRB,STRB).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_LDR_PC_G2 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_LDR_PC_G2);
+        public static readonly ElfRelocationType R_ARM_LDR_PC_G2 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDR_PC_G2);
         
         /// <summary>
         /// PC relative (STR{D,H}, LDR{D,SB,H,SH}).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_LDRS_PC_G0 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_LDRS_PC_G0);
+        public static readonly ElfRelocationType R_ARM_LDRS_PC_G0 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDRS_PC_G0);
         
         /// <summary>
         /// PC relative (STR{D,H}, LDR{D,SB,H,SH}).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_LDRS_PC_G1 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_LDRS_PC_G1);
+        public static readonly ElfRelocationType R_ARM_LDRS_PC_G1 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDRS_PC_G1);
         
         /// <summary>
         /// PC relative (STR{D,H}, LDR{D,SB,H,SH}).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_LDRS_PC_G2 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_LDRS_PC_G2);
+        public static readonly ElfRelocationType R_ARM_LDRS_PC_G2 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDRS_PC_G2);
         
         /// <summary>
         /// PC relative (LDC, STC).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_LDC_PC_G0 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_LDC_PC_G0);
+        public static readonly ElfRelocationType R_ARM_LDC_PC_G0 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDC_PC_G0);
         
         /// <summary>
         /// PC relative (LDC, STC).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_LDC_PC_G1 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_LDC_PC_G1);
+        public static readonly ElfRelocationType R_ARM_LDC_PC_G1 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDC_PC_G1);
         
         /// <summary>
         /// PC relative (LDC, STC).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_LDC_PC_G2 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_LDC_PC_G2);
+        public static readonly ElfRelocationType R_ARM_LDC_PC_G2 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDC_PC_G2);
         
         /// <summary>
         /// Program base relative (ADD,SUB).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_ALU_SB_G0_NC = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_ALU_SB_G0_NC);
+        public static readonly ElfRelocationType R_ARM_ALU_SB_G0_NC = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_ALU_SB_G0_NC);
         
         /// <summary>
         /// Program base relative (ADD,SUB).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_ALU_SB_G0 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_ALU_SB_G0);
+        public static readonly ElfRelocationType R_ARM_ALU_SB_G0 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_ALU_SB_G0);
         
         /// <summary>
         /// Program base relative (ADD,SUB).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_ALU_SB_G1_NC = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_ALU_SB_G1_NC);
+        public static readonly ElfRelocationType R_ARM_ALU_SB_G1_NC = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_ALU_SB_G1_NC);
         
         /// <summary>
         /// Program base relative (ADD,SUB).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_ALU_SB_G1 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_ALU_SB_G1);
+        public static readonly ElfRelocationType R_ARM_ALU_SB_G1 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_ALU_SB_G1);
         
         /// <summary>
         /// Program base relative (ADD,SUB).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_ALU_SB_G2 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_ALU_SB_G2);
+        public static readonly ElfRelocationType R_ARM_ALU_SB_G2 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_ALU_SB_G2);
         
         /// <summary>
         /// Program base relative (LDR, STR, LDRB, STRB).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_LDR_SB_G0 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_LDR_SB_G0);
+        public static readonly ElfRelocationType R_ARM_LDR_SB_G0 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDR_SB_G0);
         
         /// <summary>
         /// Program base relative (LDR, STR, LDRB, STRB).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_LDR_SB_G1 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_LDR_SB_G1);
+        public static readonly ElfRelocationType R_ARM_LDR_SB_G1 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDR_SB_G1);
         
         /// <summary>
         /// Program base relative (LDR, STR, LDRB, STRB).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_LDR_SB_G2 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_LDR_SB_G2);
+        public static readonly ElfRelocationType R_ARM_LDR_SB_G2 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDR_SB_G2);
         
         /// <summary>
         /// Program base relative (LDR, STR, LDRB, STRB).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_LDRS_SB_G0 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_LDRS_SB_G0);
+        public static readonly ElfRelocationType R_ARM_LDRS_SB_G0 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDRS_SB_G0);
         
         /// <summary>
         /// Program base relative (LDR, STR, LDRB, STRB).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_LDRS_SB_G1 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_LDRS_SB_G1);
+        public static readonly ElfRelocationType R_ARM_LDRS_SB_G1 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDRS_SB_G1);
         
         /// <summary>
         /// Program base relative (LDR, STR, LDRB, STRB).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_LDRS_SB_G2 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_LDRS_SB_G2);
+        public static readonly ElfRelocationType R_ARM_LDRS_SB_G2 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDRS_SB_G2);
         
         /// <summary>
         /// Program base relative (LDC,STC).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_LDC_SB_G0 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_LDC_SB_G0);
+        public static readonly ElfRelocationType R_ARM_LDC_SB_G0 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDC_SB_G0);
         
         /// <summary>
         /// Program base relative (LDC,STC).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_LDC_SB_G1 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_LDC_SB_G1);
+        public static readonly ElfRelocationType R_ARM_LDC_SB_G1 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDC_SB_G1);
         
         /// <summary>
         /// Program base relative (LDC,STC).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_LDC_SB_G2 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_LDC_SB_G2);
+        public static readonly ElfRelocationType R_ARM_LDC_SB_G2 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDC_SB_G2);
         
         /// <summary>
         /// Program base relative 16 bit (MOVW).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_MOVW_BREL_NC = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_MOVW_BREL_NC);
+        public static readonly ElfRelocationType R_ARM_MOVW_BREL_NC = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_MOVW_BREL_NC);
         
         /// <summary>
         /// Program base relative high 16 bit (MOVT).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_MOVT_BREL = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_MOVT_BREL);
+        public static readonly ElfRelocationType R_ARM_MOVT_BREL = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_MOVT_BREL);
         
         /// <summary>
         /// Program base relative 16 bit (MOVW).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_MOVW_BREL = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_MOVW_BREL);
+        public static readonly ElfRelocationType R_ARM_MOVW_BREL = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_MOVW_BREL);
         
         /// <summary>
         /// Program base relative 16 bit (Thumb32 MOVW).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_THM_MOVW_BREL_NC = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_THM_MOVW_BREL_NC);
+        public static readonly ElfRelocationType R_ARM_THM_MOVW_BREL_NC = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_MOVW_BREL_NC);
         
         /// <summary>
         /// Program base relative high 16 bit (Thumb32 MOVT).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_THM_MOVT_BREL = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_THM_MOVT_BREL);
+        public static readonly ElfRelocationType R_ARM_THM_MOVT_BREL = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_MOVT_BREL);
         
         /// <summary>
         /// Program base relative 16 bit (Thumb32 MOVW).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_THM_MOVW_BREL = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_THM_MOVW_BREL);
+        public static readonly ElfRelocationType R_ARM_THM_MOVW_BREL = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_MOVW_BREL);
         
-        public static readonly ElfRelocationType R_ARM_TLS_GOTDESC = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_TLS_GOTDESC);
+        public static readonly ElfRelocationType R_ARM_TLS_GOTDESC = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_TLS_GOTDESC);
         
-        public static readonly ElfRelocationType R_ARM_TLS_CALL = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_TLS_CALL);
+        public static readonly ElfRelocationType R_ARM_TLS_CALL = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_TLS_CALL);
         
         /// <summary>
         /// TLS relaxation.
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_TLS_DESCSEQ = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_TLS_DESCSEQ);
+        public static readonly ElfRelocationType R_ARM_TLS_DESCSEQ = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_TLS_DESCSEQ);
         
-        public static readonly ElfRelocationType R_ARM_THM_TLS_CALL = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_THM_TLS_CALL);
+        public static readonly ElfRelocationType R_ARM_THM_TLS_CALL = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_TLS_CALL);
         
-        public static readonly ElfRelocationType R_ARM_PLT32_ABS = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_PLT32_ABS);
+        public static readonly ElfRelocationType R_ARM_PLT32_ABS = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_PLT32_ABS);
         
         /// <summary>
         /// GOT entry.
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_GOT_ABS = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_GOT_ABS);
+        public static readonly ElfRelocationType R_ARM_GOT_ABS = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_GOT_ABS);
         
         /// <summary>
         /// PC relative GOT entry.
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_GOT_PREL = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_GOT_PREL);
+        public static readonly ElfRelocationType R_ARM_GOT_PREL = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_GOT_PREL);
         
         /// <summary>
         /// GOT entry relative to GOT origin (LDR).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_GOT_BREL12 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_GOT_BREL12);
+        public static readonly ElfRelocationType R_ARM_GOT_BREL12 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_GOT_BREL12);
         
         /// <summary>
         /// 12 bit, GOT entry relative to GOT origin (LDR, STR).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_GOTOFF12 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_GOTOFF12);
+        public static readonly ElfRelocationType R_ARM_GOTOFF12 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_GOTOFF12);
         
-        public static readonly ElfRelocationType R_ARM_GOTRELAX = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_GOTRELAX);
+        public static readonly ElfRelocationType R_ARM_GOTRELAX = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_GOTRELAX);
         
-        public static readonly ElfRelocationType R_ARM_GNU_VTENTRY = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_GNU_VTENTRY);
+        public static readonly ElfRelocationType R_ARM_GNU_VTENTRY = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_GNU_VTENTRY);
         
-        public static readonly ElfRelocationType R_ARM_GNU_VTINHERIT = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_GNU_VTINHERIT);
+        public static readonly ElfRelocationType R_ARM_GNU_VTINHERIT = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_GNU_VTINHERIT);
         
         /// <summary>
         /// PC relative 
         /// &amp;
         /// 0xFFE (Thumb16 B).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_THM_PC11 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_THM_PC11);
+        public static readonly ElfRelocationType R_ARM_THM_PC11 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_PC11);
         
         /// <summary>
         /// PC relative 
@@ -13381,616 +13381,616 @@ namespace LibObjectFile.Elf
         /// &lt;cond
         /// &gt;).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_THM_PC9 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_THM_PC9);
+        public static readonly ElfRelocationType R_ARM_THM_PC9 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_PC9);
         
         /// <summary>
         /// PC-rel 32 bit for global dynamic thread local data
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_TLS_GD32 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_TLS_GD32);
+        public static readonly ElfRelocationType R_ARM_TLS_GD32 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_TLS_GD32);
         
         /// <summary>
         /// PC-rel 32 bit for local dynamic thread local data
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_TLS_LDM32 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_TLS_LDM32);
+        public static readonly ElfRelocationType R_ARM_TLS_LDM32 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_TLS_LDM32);
         
         /// <summary>
         /// 32 bit offset relative to TLS block
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_TLS_LDO32 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_TLS_LDO32);
+        public static readonly ElfRelocationType R_ARM_TLS_LDO32 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_TLS_LDO32);
         
         /// <summary>
         /// PC-rel 32 bit for GOT entry of static TLS block offset
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_TLS_IE32 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_TLS_IE32);
+        public static readonly ElfRelocationType R_ARM_TLS_IE32 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_TLS_IE32);
         
         /// <summary>
         /// 32 bit offset relative to static TLS block
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_TLS_LE32 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_TLS_LE32);
+        public static readonly ElfRelocationType R_ARM_TLS_LE32 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_TLS_LE32);
         
         /// <summary>
         /// 12 bit relative to TLS block (LDR, STR).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_TLS_LDO12 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_TLS_LDO12);
+        public static readonly ElfRelocationType R_ARM_TLS_LDO12 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_TLS_LDO12);
         
         /// <summary>
         /// 12 bit relative to static TLS block (LDR, STR).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_TLS_LE12 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_TLS_LE12);
+        public static readonly ElfRelocationType R_ARM_TLS_LE12 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_TLS_LE12);
         
         /// <summary>
         /// 12 bit GOT entry relative to GOT origin (LDR).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_TLS_IE12GP = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_TLS_IE12GP);
+        public static readonly ElfRelocationType R_ARM_TLS_IE12GP = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_TLS_IE12GP);
         
         /// <summary>
         /// Obsolete.
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_ME_TOO = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_ME_TOO);
+        public static readonly ElfRelocationType R_ARM_ME_TOO = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_ME_TOO);
         
-        public static readonly ElfRelocationType R_ARM_THM_TLS_DESCSEQ = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_THM_TLS_DESCSEQ);
+        public static readonly ElfRelocationType R_ARM_THM_TLS_DESCSEQ = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_TLS_DESCSEQ);
         
-        public static readonly ElfRelocationType R_ARM_THM_TLS_DESCSEQ16 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_THM_TLS_DESCSEQ16);
+        public static readonly ElfRelocationType R_ARM_THM_TLS_DESCSEQ16 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_TLS_DESCSEQ16);
         
-        public static readonly ElfRelocationType R_ARM_THM_TLS_DESCSEQ32 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_THM_TLS_DESCSEQ32);
+        public static readonly ElfRelocationType R_ARM_THM_TLS_DESCSEQ32 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_TLS_DESCSEQ32);
         
         /// <summary>
         /// GOT entry relative to GOT origin, 12 bit (Thumb32 LDR).
         /// </summary>
-        public static readonly ElfRelocationType R_ARM_THM_GOT_BREL12 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_THM_GOT_BREL12);
+        public static readonly ElfRelocationType R_ARM_THM_GOT_BREL12 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_GOT_BREL12);
         
-        public static readonly ElfRelocationType R_ARM_IRELATIVE = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_IRELATIVE);
+        public static readonly ElfRelocationType R_ARM_IRELATIVE = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_IRELATIVE);
         
-        public static readonly ElfRelocationType R_ARM_RXPC25 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_RXPC25);
+        public static readonly ElfRelocationType R_ARM_RXPC25 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_RXPC25);
         
-        public static readonly ElfRelocationType R_ARM_RSBREL32 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_RSBREL32);
+        public static readonly ElfRelocationType R_ARM_RSBREL32 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_RSBREL32);
         
-        public static readonly ElfRelocationType R_ARM_THM_RPC22 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_THM_RPC22);
+        public static readonly ElfRelocationType R_ARM_THM_RPC22 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_RPC22);
         
-        public static readonly ElfRelocationType R_ARM_RREL32 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_RREL32);
+        public static readonly ElfRelocationType R_ARM_RREL32 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_RREL32);
         
-        public static readonly ElfRelocationType R_ARM_RABS22 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_RABS22);
+        public static readonly ElfRelocationType R_ARM_RABS22 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_RABS22);
         
-        public static readonly ElfRelocationType R_ARM_RPC24 = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_RPC24);
+        public static readonly ElfRelocationType R_ARM_RPC24 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_RPC24);
         
-        public static readonly ElfRelocationType R_ARM_RBASE = new ElfRelocationType(ElfArch.ARM, RawElf.R_ARM_RBASE);
+        public static readonly ElfRelocationType R_ARM_RBASE = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_RBASE);
         
         /// <summary>
         /// No reloc
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_NONE = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_NONE);
+        public static readonly ElfRelocationType R_X86_64_NONE = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_NONE);
         
         /// <summary>
         /// Direct 64 bit
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_64 = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_64);
+        public static readonly ElfRelocationType R_X86_64_64 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_64);
         
         /// <summary>
         /// PC relative 32 bit signed
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_PC32 = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_PC32);
+        public static readonly ElfRelocationType R_X86_64_PC32 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_PC32);
         
         /// <summary>
         /// 32 bit GOT entry
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_GOT32 = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_GOT32);
+        public static readonly ElfRelocationType R_X86_64_GOT32 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_GOT32);
         
         /// <summary>
         /// 32 bit PLT address
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_PLT32 = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_PLT32);
+        public static readonly ElfRelocationType R_X86_64_PLT32 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_PLT32);
         
         /// <summary>
         /// Copy symbol at runtime
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_COPY = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_COPY);
+        public static readonly ElfRelocationType R_X86_64_COPY = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_COPY);
         
         /// <summary>
         /// Create GOT entry
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_GLOB_DAT = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_GLOB_DAT);
+        public static readonly ElfRelocationType R_X86_64_GLOB_DAT = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_GLOB_DAT);
         
         /// <summary>
         /// Create PLT entry
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_JUMP_SLOT = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_JUMP_SLOT);
+        public static readonly ElfRelocationType R_X86_64_JUMP_SLOT = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_JUMP_SLOT);
         
         /// <summary>
         /// Adjust by program base
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_RELATIVE = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_RELATIVE);
+        public static readonly ElfRelocationType R_X86_64_RELATIVE = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_RELATIVE);
         
         /// <summary>
         /// 32 bit signed PC relative offset to GOT
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_GOTPCREL = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_GOTPCREL);
+        public static readonly ElfRelocationType R_X86_64_GOTPCREL = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_GOTPCREL);
         
         /// <summary>
         /// Direct 32 bit zero extended
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_32 = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_32);
+        public static readonly ElfRelocationType R_X86_64_32 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_32);
         
         /// <summary>
         /// Direct 32 bit sign extended
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_32S = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_32S);
+        public static readonly ElfRelocationType R_X86_64_32S = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_32S);
         
         /// <summary>
         /// Direct 16 bit zero extended
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_16 = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_16);
+        public static readonly ElfRelocationType R_X86_64_16 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_16);
         
         /// <summary>
         /// 16 bit sign extended pc relative
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_PC16 = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_PC16);
+        public static readonly ElfRelocationType R_X86_64_PC16 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_PC16);
         
         /// <summary>
         /// Direct 8 bit sign extended
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_8 = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_8);
+        public static readonly ElfRelocationType R_X86_64_8 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_8);
         
         /// <summary>
         /// 8 bit sign extended pc relative
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_PC8 = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_PC8);
+        public static readonly ElfRelocationType R_X86_64_PC8 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_PC8);
         
         /// <summary>
         /// ID of module containing symbol
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_DTPMOD64 = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_DTPMOD64);
+        public static readonly ElfRelocationType R_X86_64_DTPMOD64 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_DTPMOD64);
         
         /// <summary>
         /// Offset in module's TLS block
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_DTPOFF64 = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_DTPOFF64);
+        public static readonly ElfRelocationType R_X86_64_DTPOFF64 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_DTPOFF64);
         
         /// <summary>
         /// Offset in initial TLS block
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_TPOFF64 = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_TPOFF64);
+        public static readonly ElfRelocationType R_X86_64_TPOFF64 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_TPOFF64);
         
         /// <summary>
         /// 32 bit signed PC relative offset to two GOT entries for GD symbol
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_TLSGD = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_TLSGD);
+        public static readonly ElfRelocationType R_X86_64_TLSGD = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_TLSGD);
         
         /// <summary>
         /// 32 bit signed PC relative offset to two GOT entries for LD symbol
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_TLSLD = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_TLSLD);
+        public static readonly ElfRelocationType R_X86_64_TLSLD = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_TLSLD);
         
         /// <summary>
         /// Offset in TLS block
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_DTPOFF32 = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_DTPOFF32);
+        public static readonly ElfRelocationType R_X86_64_DTPOFF32 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_DTPOFF32);
         
         /// <summary>
         /// 32 bit signed PC relative offset to GOT entry for IE symbol
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_GOTTPOFF = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_GOTTPOFF);
+        public static readonly ElfRelocationType R_X86_64_GOTTPOFF = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_GOTTPOFF);
         
         /// <summary>
         /// Offset in initial TLS block
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_TPOFF32 = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_TPOFF32);
+        public static readonly ElfRelocationType R_X86_64_TPOFF32 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_TPOFF32);
         
         /// <summary>
         /// PC relative 64 bit
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_PC64 = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_PC64);
+        public static readonly ElfRelocationType R_X86_64_PC64 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_PC64);
         
         /// <summary>
         /// 64 bit offset to GOT
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_GOTOFF64 = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_GOTOFF64);
+        public static readonly ElfRelocationType R_X86_64_GOTOFF64 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_GOTOFF64);
         
         /// <summary>
         /// 32 bit signed pc relative offset to GOT
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_GOTPC32 = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_GOTPC32);
+        public static readonly ElfRelocationType R_X86_64_GOTPC32 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_GOTPC32);
         
         /// <summary>
         /// 64-bit GOT entry offset
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_GOT64 = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_GOT64);
+        public static readonly ElfRelocationType R_X86_64_GOT64 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_GOT64);
         
         /// <summary>
         /// 64-bit PC relative offset to GOT entry
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_GOTPCREL64 = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_GOTPCREL64);
+        public static readonly ElfRelocationType R_X86_64_GOTPCREL64 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_GOTPCREL64);
         
         /// <summary>
         /// 64-bit PC relative offset to GOT
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_GOTPC64 = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_GOTPC64);
+        public static readonly ElfRelocationType R_X86_64_GOTPC64 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_GOTPC64);
         
         /// <summary>
         /// like GOT64, says PLT entry needed
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_GOTPLT64 = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_GOTPLT64);
+        public static readonly ElfRelocationType R_X86_64_GOTPLT64 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_GOTPLT64);
         
         /// <summary>
         /// 64-bit GOT relative offset to PLT entry
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_PLTOFF64 = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_PLTOFF64);
+        public static readonly ElfRelocationType R_X86_64_PLTOFF64 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_PLTOFF64);
         
         /// <summary>
         /// Size of symbol plus 32-bit addend
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_SIZE32 = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_SIZE32);
+        public static readonly ElfRelocationType R_X86_64_SIZE32 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_SIZE32);
         
         /// <summary>
         /// Size of symbol plus 64-bit addend
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_SIZE64 = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_SIZE64);
+        public static readonly ElfRelocationType R_X86_64_SIZE64 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_SIZE64);
         
         /// <summary>
         /// GOT offset for TLS descriptor.
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_GOTPC32_TLSDESC = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_GOTPC32_TLSDESC);
+        public static readonly ElfRelocationType R_X86_64_GOTPC32_TLSDESC = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_GOTPC32_TLSDESC);
         
         /// <summary>
         /// Marker for call through TLS descriptor.
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_TLSDESC_CALL = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_TLSDESC_CALL);
+        public static readonly ElfRelocationType R_X86_64_TLSDESC_CALL = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_TLSDESC_CALL);
         
         /// <summary>
         /// TLS descriptor.
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_TLSDESC = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_TLSDESC);
+        public static readonly ElfRelocationType R_X86_64_TLSDESC = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_TLSDESC);
         
         /// <summary>
         /// Adjust indirectly by program base
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_IRELATIVE = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_IRELATIVE);
+        public static readonly ElfRelocationType R_X86_64_IRELATIVE = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_IRELATIVE);
         
         /// <summary>
         /// 64-bit adjust by program base
         /// </summary>
-        public static readonly ElfRelocationType R_X86_64_RELATIVE64 = new ElfRelocationType(ElfArch.X86_64, RawElf.R_X86_64_RELATIVE64);
+        public static readonly ElfRelocationType R_X86_64_RELATIVE64 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_RELATIVE64);
         
         private string ToStringInternal()
         {
             switch (((ulong)Value << 16) | Arch.Value)
             {
-                case ((ulong)RawElf.R_386_NONE << 16) | RawElf.EM_386 : return "R_386_NONE";
-                case ((ulong)RawElf.R_386_32 << 16) | RawElf.EM_386 : return "R_386_32";
-                case ((ulong)RawElf.R_386_PC32 << 16) | RawElf.EM_386 : return "R_386_PC32";
-                case ((ulong)RawElf.R_386_GOT32 << 16) | RawElf.EM_386 : return "R_386_GOT32";
-                case ((ulong)RawElf.R_386_PLT32 << 16) | RawElf.EM_386 : return "R_386_PLT32";
-                case ((ulong)RawElf.R_386_COPY << 16) | RawElf.EM_386 : return "R_386_COPY";
-                case ((ulong)RawElf.R_386_GLOB_DAT << 16) | RawElf.EM_386 : return "R_386_GLOB_DAT";
-                case ((ulong)RawElf.R_386_JMP_SLOT << 16) | RawElf.EM_386 : return "R_386_JMP_SLOT";
-                case ((ulong)RawElf.R_386_RELATIVE << 16) | RawElf.EM_386 : return "R_386_RELATIVE";
-                case ((ulong)RawElf.R_386_GOTOFF << 16) | RawElf.EM_386 : return "R_386_GOTOFF";
-                case ((ulong)RawElf.R_386_GOTPC << 16) | RawElf.EM_386 : return "R_386_GOTPC";
-                case ((ulong)RawElf.R_386_32PLT << 16) | RawElf.EM_386 : return "R_386_32PLT";
-                case ((ulong)RawElf.R_386_TLS_TPOFF << 16) | RawElf.EM_386 : return "R_386_TLS_TPOFF";
-                case ((ulong)RawElf.R_386_TLS_IE << 16) | RawElf.EM_386 : return "R_386_TLS_IE";
-                case ((ulong)RawElf.R_386_TLS_GOTIE << 16) | RawElf.EM_386 : return "R_386_TLS_GOTIE";
-                case ((ulong)RawElf.R_386_TLS_LE << 16) | RawElf.EM_386 : return "R_386_TLS_LE";
-                case ((ulong)RawElf.R_386_TLS_GD << 16) | RawElf.EM_386 : return "R_386_TLS_GD";
-                case ((ulong)RawElf.R_386_TLS_LDM << 16) | RawElf.EM_386 : return "R_386_TLS_LDM";
-                case ((ulong)RawElf.R_386_16 << 16) | RawElf.EM_386 : return "R_386_16";
-                case ((ulong)RawElf.R_386_PC16 << 16) | RawElf.EM_386 : return "R_386_PC16";
-                case ((ulong)RawElf.R_386_8 << 16) | RawElf.EM_386 : return "R_386_8";
-                case ((ulong)RawElf.R_386_PC8 << 16) | RawElf.EM_386 : return "R_386_PC8";
-                case ((ulong)RawElf.R_386_TLS_GD_32 << 16) | RawElf.EM_386 : return "R_386_TLS_GD_32";
-                case ((ulong)RawElf.R_386_TLS_GD_PUSH << 16) | RawElf.EM_386 : return "R_386_TLS_GD_PUSH";
-                case ((ulong)RawElf.R_386_TLS_GD_CALL << 16) | RawElf.EM_386 : return "R_386_TLS_GD_CALL";
-                case ((ulong)RawElf.R_386_TLS_GD_POP << 16) | RawElf.EM_386 : return "R_386_TLS_GD_POP";
-                case ((ulong)RawElf.R_386_TLS_LDM_32 << 16) | RawElf.EM_386 : return "R_386_TLS_LDM_32";
-                case ((ulong)RawElf.R_386_TLS_LDM_PUSH << 16) | RawElf.EM_386 : return "R_386_TLS_LDM_PUSH";
-                case ((ulong)RawElf.R_386_TLS_LDM_CALL << 16) | RawElf.EM_386 : return "R_386_TLS_LDM_CALL";
-                case ((ulong)RawElf.R_386_TLS_LDM_POP << 16) | RawElf.EM_386 : return "R_386_TLS_LDM_POP";
-                case ((ulong)RawElf.R_386_TLS_LDO_32 << 16) | RawElf.EM_386 : return "R_386_TLS_LDO_32";
-                case ((ulong)RawElf.R_386_TLS_IE_32 << 16) | RawElf.EM_386 : return "R_386_TLS_IE_32";
-                case ((ulong)RawElf.R_386_TLS_LE_32 << 16) | RawElf.EM_386 : return "R_386_TLS_LE_32";
-                case ((ulong)RawElf.R_386_TLS_DTPMOD32 << 16) | RawElf.EM_386 : return "R_386_TLS_DTPMOD32";
-                case ((ulong)RawElf.R_386_TLS_DTPOFF32 << 16) | RawElf.EM_386 : return "R_386_TLS_DTPOFF32";
-                case ((ulong)RawElf.R_386_TLS_TPOFF32 << 16) | RawElf.EM_386 : return "R_386_TLS_TPOFF32";
-                case ((ulong)RawElf.R_386_SIZE32 << 16) | RawElf.EM_386 : return "R_386_SIZE32";
-                case ((ulong)RawElf.R_386_TLS_GOTDESC << 16) | RawElf.EM_386 : return "R_386_TLS_GOTDESC";
-                case ((ulong)RawElf.R_386_TLS_DESC_CALL << 16) | RawElf.EM_386 : return "R_386_TLS_DESC_CALL";
-                case ((ulong)RawElf.R_386_TLS_DESC << 16) | RawElf.EM_386 : return "R_386_TLS_DESC";
-                case ((ulong)RawElf.R_386_IRELATIVE << 16) | RawElf.EM_386 : return "R_386_IRELATIVE";
-                case ((ulong)RawElf.R_AARCH64_NONE << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_NONE";
-                case ((ulong)RawElf.R_AARCH64_P32_ABS32 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_P32_ABS32";
-                case ((ulong)RawElf.R_AARCH64_P32_COPY << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_P32_COPY";
-                case ((ulong)RawElf.R_AARCH64_P32_GLOB_DAT << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_P32_GLOB_DAT";
-                case ((ulong)RawElf.R_AARCH64_P32_JUMP_SLOT << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_P32_JUMP_SLOT";
-                case ((ulong)RawElf.R_AARCH64_P32_RELATIVE << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_P32_RELATIVE";
-                case ((ulong)RawElf.R_AARCH64_P32_TLS_DTPMOD << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_P32_TLS_DTPMOD";
-                case ((ulong)RawElf.R_AARCH64_P32_TLS_DTPREL << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_P32_TLS_DTPREL";
-                case ((ulong)RawElf.R_AARCH64_P32_TLS_TPREL << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_P32_TLS_TPREL";
-                case ((ulong)RawElf.R_AARCH64_P32_TLSDESC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_P32_TLSDESC";
-                case ((ulong)RawElf.R_AARCH64_P32_IRELATIVE << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_P32_IRELATIVE";
-                case ((ulong)RawElf.R_AARCH64_ABS64 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_ABS64";
-                case ((ulong)RawElf.R_AARCH64_ABS32 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_ABS32";
-                case ((ulong)RawElf.R_AARCH64_ABS16 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_ABS16";
-                case ((ulong)RawElf.R_AARCH64_PREL64 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_PREL64";
-                case ((ulong)RawElf.R_AARCH64_PREL32 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_PREL32";
-                case ((ulong)RawElf.R_AARCH64_PREL16 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_PREL16";
-                case ((ulong)RawElf.R_AARCH64_MOVW_UABS_G0 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_MOVW_UABS_G0";
-                case ((ulong)RawElf.R_AARCH64_MOVW_UABS_G0_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_MOVW_UABS_G0_NC";
-                case ((ulong)RawElf.R_AARCH64_MOVW_UABS_G1 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_MOVW_UABS_G1";
-                case ((ulong)RawElf.R_AARCH64_MOVW_UABS_G1_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_MOVW_UABS_G1_NC";
-                case ((ulong)RawElf.R_AARCH64_MOVW_UABS_G2 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_MOVW_UABS_G2";
-                case ((ulong)RawElf.R_AARCH64_MOVW_UABS_G2_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_MOVW_UABS_G2_NC";
-                case ((ulong)RawElf.R_AARCH64_MOVW_UABS_G3 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_MOVW_UABS_G3";
-                case ((ulong)RawElf.R_AARCH64_MOVW_SABS_G0 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_MOVW_SABS_G0";
-                case ((ulong)RawElf.R_AARCH64_MOVW_SABS_G1 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_MOVW_SABS_G1";
-                case ((ulong)RawElf.R_AARCH64_MOVW_SABS_G2 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_MOVW_SABS_G2";
-                case ((ulong)RawElf.R_AARCH64_LD_PREL_LO19 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_LD_PREL_LO19";
-                case ((ulong)RawElf.R_AARCH64_ADR_PREL_LO21 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_ADR_PREL_LO21";
-                case ((ulong)RawElf.R_AARCH64_ADR_PREL_PG_HI21 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_ADR_PREL_PG_HI21";
-                case ((ulong)RawElf.R_AARCH64_ADR_PREL_PG_HI21_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_ADR_PREL_PG_HI21_NC";
-                case ((ulong)RawElf.R_AARCH64_ADD_ABS_LO12_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_ADD_ABS_LO12_NC";
-                case ((ulong)RawElf.R_AARCH64_LDST8_ABS_LO12_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_LDST8_ABS_LO12_NC";
-                case ((ulong)RawElf.R_AARCH64_TSTBR14 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TSTBR14";
-                case ((ulong)RawElf.R_AARCH64_CONDBR19 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_CONDBR19";
-                case ((ulong)RawElf.R_AARCH64_JUMP26 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_JUMP26";
-                case ((ulong)RawElf.R_AARCH64_CALL26 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_CALL26";
-                case ((ulong)RawElf.R_AARCH64_LDST16_ABS_LO12_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_LDST16_ABS_LO12_NC";
-                case ((ulong)RawElf.R_AARCH64_LDST32_ABS_LO12_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_LDST32_ABS_LO12_NC";
-                case ((ulong)RawElf.R_AARCH64_LDST64_ABS_LO12_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_LDST64_ABS_LO12_NC";
-                case ((ulong)RawElf.R_AARCH64_MOVW_PREL_G0 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_MOVW_PREL_G0";
-                case ((ulong)RawElf.R_AARCH64_MOVW_PREL_G0_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_MOVW_PREL_G0_NC";
-                case ((ulong)RawElf.R_AARCH64_MOVW_PREL_G1 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_MOVW_PREL_G1";
-                case ((ulong)RawElf.R_AARCH64_MOVW_PREL_G1_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_MOVW_PREL_G1_NC";
-                case ((ulong)RawElf.R_AARCH64_MOVW_PREL_G2 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_MOVW_PREL_G2";
-                case ((ulong)RawElf.R_AARCH64_MOVW_PREL_G2_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_MOVW_PREL_G2_NC";
-                case ((ulong)RawElf.R_AARCH64_MOVW_PREL_G3 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_MOVW_PREL_G3";
-                case ((ulong)RawElf.R_AARCH64_LDST128_ABS_LO12_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_LDST128_ABS_LO12_NC";
-                case ((ulong)RawElf.R_AARCH64_MOVW_GOTOFF_G0 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_MOVW_GOTOFF_G0";
-                case ((ulong)RawElf.R_AARCH64_MOVW_GOTOFF_G0_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_MOVW_GOTOFF_G0_NC";
-                case ((ulong)RawElf.R_AARCH64_MOVW_GOTOFF_G1 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_MOVW_GOTOFF_G1";
-                case ((ulong)RawElf.R_AARCH64_MOVW_GOTOFF_G1_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_MOVW_GOTOFF_G1_NC";
-                case ((ulong)RawElf.R_AARCH64_MOVW_GOTOFF_G2 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_MOVW_GOTOFF_G2";
-                case ((ulong)RawElf.R_AARCH64_MOVW_GOTOFF_G2_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_MOVW_GOTOFF_G2_NC";
-                case ((ulong)RawElf.R_AARCH64_MOVW_GOTOFF_G3 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_MOVW_GOTOFF_G3";
-                case ((ulong)RawElf.R_AARCH64_GOTREL64 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_GOTREL64";
-                case ((ulong)RawElf.R_AARCH64_GOTREL32 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_GOTREL32";
-                case ((ulong)RawElf.R_AARCH64_GOT_LD_PREL19 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_GOT_LD_PREL19";
-                case ((ulong)RawElf.R_AARCH64_LD64_GOTOFF_LO15 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_LD64_GOTOFF_LO15";
-                case ((ulong)RawElf.R_AARCH64_ADR_GOT_PAGE << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_ADR_GOT_PAGE";
-                case ((ulong)RawElf.R_AARCH64_LD64_GOT_LO12_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_LD64_GOT_LO12_NC";
-                case ((ulong)RawElf.R_AARCH64_LD64_GOTPAGE_LO15 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_LD64_GOTPAGE_LO15";
-                case ((ulong)RawElf.R_AARCH64_TLSGD_ADR_PREL21 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSGD_ADR_PREL21";
-                case ((ulong)RawElf.R_AARCH64_TLSGD_ADR_PAGE21 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSGD_ADR_PAGE21";
-                case ((ulong)RawElf.R_AARCH64_TLSGD_ADD_LO12_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSGD_ADD_LO12_NC";
-                case ((ulong)RawElf.R_AARCH64_TLSGD_MOVW_G1 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSGD_MOVW_G1";
-                case ((ulong)RawElf.R_AARCH64_TLSGD_MOVW_G0_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSGD_MOVW_G0_NC";
-                case ((ulong)RawElf.R_AARCH64_TLSLD_ADR_PREL21 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLD_ADR_PREL21";
-                case ((ulong)RawElf.R_AARCH64_TLSLD_ADR_PAGE21 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLD_ADR_PAGE21";
-                case ((ulong)RawElf.R_AARCH64_TLSLD_ADD_LO12_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLD_ADD_LO12_NC";
-                case ((ulong)RawElf.R_AARCH64_TLSLD_MOVW_G1 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLD_MOVW_G1";
-                case ((ulong)RawElf.R_AARCH64_TLSLD_MOVW_G0_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLD_MOVW_G0_NC";
-                case ((ulong)RawElf.R_AARCH64_TLSLD_LD_PREL19 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLD_LD_PREL19";
-                case ((ulong)RawElf.R_AARCH64_TLSLD_MOVW_DTPREL_G2 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLD_MOVW_DTPREL_G2";
-                case ((ulong)RawElf.R_AARCH64_TLSLD_MOVW_DTPREL_G1 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLD_MOVW_DTPREL_G1";
-                case ((ulong)RawElf.R_AARCH64_TLSLD_MOVW_DTPREL_G1_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLD_MOVW_DTPREL_G1_NC";
-                case ((ulong)RawElf.R_AARCH64_TLSLD_MOVW_DTPREL_G0 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLD_MOVW_DTPREL_G0";
-                case ((ulong)RawElf.R_AARCH64_TLSLD_MOVW_DTPREL_G0_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLD_MOVW_DTPREL_G0_NC";
-                case ((ulong)RawElf.R_AARCH64_TLSLD_ADD_DTPREL_HI12 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLD_ADD_DTPREL_HI12";
-                case ((ulong)RawElf.R_AARCH64_TLSLD_ADD_DTPREL_LO12 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLD_ADD_DTPREL_LO12";
-                case ((ulong)RawElf.R_AARCH64_TLSLD_ADD_DTPREL_LO12_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLD_ADD_DTPREL_LO12_NC";
-                case ((ulong)RawElf.R_AARCH64_TLSLD_LDST8_DTPREL_LO12 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLD_LDST8_DTPREL_LO12";
-                case ((ulong)RawElf.R_AARCH64_TLSLD_LDST8_DTPREL_LO12_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLD_LDST8_DTPREL_LO12_NC";
-                case ((ulong)RawElf.R_AARCH64_TLSLD_LDST16_DTPREL_LO12 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLD_LDST16_DTPREL_LO12";
-                case ((ulong)RawElf.R_AARCH64_TLSLD_LDST16_DTPREL_LO12_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLD_LDST16_DTPREL_LO12_NC";
-                case ((ulong)RawElf.R_AARCH64_TLSLD_LDST32_DTPREL_LO12 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLD_LDST32_DTPREL_LO12";
-                case ((ulong)RawElf.R_AARCH64_TLSLD_LDST32_DTPREL_LO12_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLD_LDST32_DTPREL_LO12_NC";
-                case ((ulong)RawElf.R_AARCH64_TLSLD_LDST64_DTPREL_LO12 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLD_LDST64_DTPREL_LO12";
-                case ((ulong)RawElf.R_AARCH64_TLSLD_LDST64_DTPREL_LO12_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLD_LDST64_DTPREL_LO12_NC";
-                case ((ulong)RawElf.R_AARCH64_TLSIE_MOVW_GOTTPREL_G1 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSIE_MOVW_GOTTPREL_G1";
-                case ((ulong)RawElf.R_AARCH64_TLSIE_MOVW_GOTTPREL_G0_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSIE_MOVW_GOTTPREL_G0_NC";
-                case ((ulong)RawElf.R_AARCH64_TLSIE_ADR_GOTTPREL_PAGE21 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSIE_ADR_GOTTPREL_PAGE21";
-                case ((ulong)RawElf.R_AARCH64_TLSIE_LD64_GOTTPREL_LO12_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSIE_LD64_GOTTPREL_LO12_NC";
-                case ((ulong)RawElf.R_AARCH64_TLSIE_LD_GOTTPREL_PREL19 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSIE_LD_GOTTPREL_PREL19";
-                case ((ulong)RawElf.R_AARCH64_TLSLE_MOVW_TPREL_G2 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLE_MOVW_TPREL_G2";
-                case ((ulong)RawElf.R_AARCH64_TLSLE_MOVW_TPREL_G1 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLE_MOVW_TPREL_G1";
-                case ((ulong)RawElf.R_AARCH64_TLSLE_MOVW_TPREL_G1_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLE_MOVW_TPREL_G1_NC";
-                case ((ulong)RawElf.R_AARCH64_TLSLE_MOVW_TPREL_G0 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLE_MOVW_TPREL_G0";
-                case ((ulong)RawElf.R_AARCH64_TLSLE_MOVW_TPREL_G0_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLE_MOVW_TPREL_G0_NC";
-                case ((ulong)RawElf.R_AARCH64_TLSLE_ADD_TPREL_HI12 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLE_ADD_TPREL_HI12";
-                case ((ulong)RawElf.R_AARCH64_TLSLE_ADD_TPREL_LO12 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLE_ADD_TPREL_LO12";
-                case ((ulong)RawElf.R_AARCH64_TLSLE_ADD_TPREL_LO12_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLE_ADD_TPREL_LO12_NC";
-                case ((ulong)RawElf.R_AARCH64_TLSLE_LDST8_TPREL_LO12 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLE_LDST8_TPREL_LO12";
-                case ((ulong)RawElf.R_AARCH64_TLSLE_LDST8_TPREL_LO12_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLE_LDST8_TPREL_LO12_NC";
-                case ((ulong)RawElf.R_AARCH64_TLSLE_LDST16_TPREL_LO12 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLE_LDST16_TPREL_LO12";
-                case ((ulong)RawElf.R_AARCH64_TLSLE_LDST16_TPREL_LO12_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLE_LDST16_TPREL_LO12_NC";
-                case ((ulong)RawElf.R_AARCH64_TLSLE_LDST32_TPREL_LO12 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLE_LDST32_TPREL_LO12";
-                case ((ulong)RawElf.R_AARCH64_TLSLE_LDST32_TPREL_LO12_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLE_LDST32_TPREL_LO12_NC";
-                case ((ulong)RawElf.R_AARCH64_TLSLE_LDST64_TPREL_LO12 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLE_LDST64_TPREL_LO12";
-                case ((ulong)RawElf.R_AARCH64_TLSLE_LDST64_TPREL_LO12_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLE_LDST64_TPREL_LO12_NC";
-                case ((ulong)RawElf.R_AARCH64_TLSDESC_LD_PREL19 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSDESC_LD_PREL19";
-                case ((ulong)RawElf.R_AARCH64_TLSDESC_ADR_PREL21 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSDESC_ADR_PREL21";
-                case ((ulong)RawElf.R_AARCH64_TLSDESC_ADR_PAGE21 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSDESC_ADR_PAGE21";
-                case ((ulong)RawElf.R_AARCH64_TLSDESC_LD64_LO12 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSDESC_LD64_LO12";
-                case ((ulong)RawElf.R_AARCH64_TLSDESC_ADD_LO12 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSDESC_ADD_LO12";
-                case ((ulong)RawElf.R_AARCH64_TLSDESC_OFF_G1 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSDESC_OFF_G1";
-                case ((ulong)RawElf.R_AARCH64_TLSDESC_OFF_G0_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSDESC_OFF_G0_NC";
-                case ((ulong)RawElf.R_AARCH64_TLSDESC_LDR << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSDESC_LDR";
-                case ((ulong)RawElf.R_AARCH64_TLSDESC_ADD << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSDESC_ADD";
-                case ((ulong)RawElf.R_AARCH64_TLSDESC_CALL << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSDESC_CALL";
-                case ((ulong)RawElf.R_AARCH64_TLSLE_LDST128_TPREL_LO12 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLE_LDST128_TPREL_LO12";
-                case ((ulong)RawElf.R_AARCH64_TLSLE_LDST128_TPREL_LO12_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLE_LDST128_TPREL_LO12_NC";
-                case ((ulong)RawElf.R_AARCH64_TLSLD_LDST128_DTPREL_LO12 << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLD_LDST128_DTPREL_LO12";
-                case ((ulong)RawElf.R_AARCH64_TLSLD_LDST128_DTPREL_LO12_NC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSLD_LDST128_DTPREL_LO12_NC";
-                case ((ulong)RawElf.R_AARCH64_COPY << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_COPY";
-                case ((ulong)RawElf.R_AARCH64_GLOB_DAT << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_GLOB_DAT";
-                case ((ulong)RawElf.R_AARCH64_JUMP_SLOT << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_JUMP_SLOT";
-                case ((ulong)RawElf.R_AARCH64_RELATIVE << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_RELATIVE";
-                case ((ulong)RawElf.R_AARCH64_TLS_DTPMOD << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLS_DTPMOD";
-                case ((ulong)RawElf.R_AARCH64_TLS_DTPREL << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLS_DTPREL";
-                case ((ulong)RawElf.R_AARCH64_TLS_TPREL << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLS_TPREL";
-                case ((ulong)RawElf.R_AARCH64_TLSDESC << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_TLSDESC";
-                case ((ulong)RawElf.R_AARCH64_IRELATIVE << 16) | RawElf.EM_AARCH64 : return "R_AARCH64_IRELATIVE";
-                case ((ulong)RawElf.R_ARM_NONE << 16) | RawElf.EM_ARM : return "R_ARM_NONE";
-                case ((ulong)RawElf.R_ARM_PC24 << 16) | RawElf.EM_ARM : return "R_ARM_PC24";
-                case ((ulong)RawElf.R_ARM_ABS32 << 16) | RawElf.EM_ARM : return "R_ARM_ABS32";
-                case ((ulong)RawElf.R_ARM_REL32 << 16) | RawElf.EM_ARM : return "R_ARM_REL32";
-                case ((ulong)RawElf.R_ARM_PC13 << 16) | RawElf.EM_ARM : return "R_ARM_PC13";
-                case ((ulong)RawElf.R_ARM_ABS16 << 16) | RawElf.EM_ARM : return "R_ARM_ABS16";
-                case ((ulong)RawElf.R_ARM_ABS12 << 16) | RawElf.EM_ARM : return "R_ARM_ABS12";
-                case ((ulong)RawElf.R_ARM_THM_ABS5 << 16) | RawElf.EM_ARM : return "R_ARM_THM_ABS5";
-                case ((ulong)RawElf.R_ARM_ABS8 << 16) | RawElf.EM_ARM : return "R_ARM_ABS8";
-                case ((ulong)RawElf.R_ARM_SBREL32 << 16) | RawElf.EM_ARM : return "R_ARM_SBREL32";
-                case ((ulong)RawElf.R_ARM_THM_PC22 << 16) | RawElf.EM_ARM : return "R_ARM_THM_PC22";
-                case ((ulong)RawElf.R_ARM_THM_PC8 << 16) | RawElf.EM_ARM : return "R_ARM_THM_PC8";
-                case ((ulong)RawElf.R_ARM_AMP_VCALL9 << 16) | RawElf.EM_ARM : return "R_ARM_AMP_VCALL9";
-                case ((ulong)RawElf.R_ARM_SWI24 << 16) | RawElf.EM_ARM : return "R_ARM_SWI24";
-                case ((ulong)RawElf.R_ARM_THM_SWI8 << 16) | RawElf.EM_ARM : return "R_ARM_THM_SWI8";
-                case ((ulong)RawElf.R_ARM_XPC25 << 16) | RawElf.EM_ARM : return "R_ARM_XPC25";
-                case ((ulong)RawElf.R_ARM_THM_XPC22 << 16) | RawElf.EM_ARM : return "R_ARM_THM_XPC22";
-                case ((ulong)RawElf.R_ARM_TLS_DTPMOD32 << 16) | RawElf.EM_ARM : return "R_ARM_TLS_DTPMOD32";
-                case ((ulong)RawElf.R_ARM_TLS_DTPOFF32 << 16) | RawElf.EM_ARM : return "R_ARM_TLS_DTPOFF32";
-                case ((ulong)RawElf.R_ARM_TLS_TPOFF32 << 16) | RawElf.EM_ARM : return "R_ARM_TLS_TPOFF32";
-                case ((ulong)RawElf.R_ARM_COPY << 16) | RawElf.EM_ARM : return "R_ARM_COPY";
-                case ((ulong)RawElf.R_ARM_GLOB_DAT << 16) | RawElf.EM_ARM : return "R_ARM_GLOB_DAT";
-                case ((ulong)RawElf.R_ARM_JUMP_SLOT << 16) | RawElf.EM_ARM : return "R_ARM_JUMP_SLOT";
-                case ((ulong)RawElf.R_ARM_RELATIVE << 16) | RawElf.EM_ARM : return "R_ARM_RELATIVE";
-                case ((ulong)RawElf.R_ARM_GOTOFF << 16) | RawElf.EM_ARM : return "R_ARM_GOTOFF";
-                case ((ulong)RawElf.R_ARM_GOTPC << 16) | RawElf.EM_ARM : return "R_ARM_GOTPC";
-                case ((ulong)RawElf.R_ARM_GOT32 << 16) | RawElf.EM_ARM : return "R_ARM_GOT32";
-                case ((ulong)RawElf.R_ARM_PLT32 << 16) | RawElf.EM_ARM : return "R_ARM_PLT32";
-                case ((ulong)RawElf.R_ARM_CALL << 16) | RawElf.EM_ARM : return "R_ARM_CALL";
-                case ((ulong)RawElf.R_ARM_JUMP24 << 16) | RawElf.EM_ARM : return "R_ARM_JUMP24";
-                case ((ulong)RawElf.R_ARM_THM_JUMP24 << 16) | RawElf.EM_ARM : return "R_ARM_THM_JUMP24";
-                case ((ulong)RawElf.R_ARM_BASE_ABS << 16) | RawElf.EM_ARM : return "R_ARM_BASE_ABS";
-                case ((ulong)RawElf.R_ARM_ALU_PCREL_7_0 << 16) | RawElf.EM_ARM : return "R_ARM_ALU_PCREL_7_0";
-                case ((ulong)RawElf.R_ARM_ALU_PCREL_15_8 << 16) | RawElf.EM_ARM : return "R_ARM_ALU_PCREL_15_8";
-                case ((ulong)RawElf.R_ARM_ALU_PCREL_23_15 << 16) | RawElf.EM_ARM : return "R_ARM_ALU_PCREL_23_15";
-                case ((ulong)RawElf.R_ARM_LDR_SBREL_11_0 << 16) | RawElf.EM_ARM : return "R_ARM_LDR_SBREL_11_0";
-                case ((ulong)RawElf.R_ARM_ALU_SBREL_19_12 << 16) | RawElf.EM_ARM : return "R_ARM_ALU_SBREL_19_12";
-                case ((ulong)RawElf.R_ARM_ALU_SBREL_27_20 << 16) | RawElf.EM_ARM : return "R_ARM_ALU_SBREL_27_20";
-                case ((ulong)RawElf.R_ARM_TARGET1 << 16) | RawElf.EM_ARM : return "R_ARM_TARGET1";
-                case ((ulong)RawElf.R_ARM_SBREL31 << 16) | RawElf.EM_ARM : return "R_ARM_SBREL31";
-                case ((ulong)RawElf.R_ARM_V4BX << 16) | RawElf.EM_ARM : return "R_ARM_V4BX";
-                case ((ulong)RawElf.R_ARM_TARGET2 << 16) | RawElf.EM_ARM : return "R_ARM_TARGET2";
-                case ((ulong)RawElf.R_ARM_PREL31 << 16) | RawElf.EM_ARM : return "R_ARM_PREL31";
-                case ((ulong)RawElf.R_ARM_MOVW_ABS_NC << 16) | RawElf.EM_ARM : return "R_ARM_MOVW_ABS_NC";
-                case ((ulong)RawElf.R_ARM_MOVT_ABS << 16) | RawElf.EM_ARM : return "R_ARM_MOVT_ABS";
-                case ((ulong)RawElf.R_ARM_MOVW_PREL_NC << 16) | RawElf.EM_ARM : return "R_ARM_MOVW_PREL_NC";
-                case ((ulong)RawElf.R_ARM_MOVT_PREL << 16) | RawElf.EM_ARM : return "R_ARM_MOVT_PREL";
-                case ((ulong)RawElf.R_ARM_THM_MOVW_ABS_NC << 16) | RawElf.EM_ARM : return "R_ARM_THM_MOVW_ABS_NC";
-                case ((ulong)RawElf.R_ARM_THM_MOVT_ABS << 16) | RawElf.EM_ARM : return "R_ARM_THM_MOVT_ABS";
-                case ((ulong)RawElf.R_ARM_THM_MOVW_PREL_NC << 16) | RawElf.EM_ARM : return "R_ARM_THM_MOVW_PREL_NC";
-                case ((ulong)RawElf.R_ARM_THM_MOVT_PREL << 16) | RawElf.EM_ARM : return "R_ARM_THM_MOVT_PREL";
-                case ((ulong)RawElf.R_ARM_THM_JUMP19 << 16) | RawElf.EM_ARM : return "R_ARM_THM_JUMP19";
-                case ((ulong)RawElf.R_ARM_THM_JUMP6 << 16) | RawElf.EM_ARM : return "R_ARM_THM_JUMP6";
-                case ((ulong)RawElf.R_ARM_THM_ALU_PREL_11_0 << 16) | RawElf.EM_ARM : return "R_ARM_THM_ALU_PREL_11_0";
-                case ((ulong)RawElf.R_ARM_THM_PC12 << 16) | RawElf.EM_ARM : return "R_ARM_THM_PC12";
-                case ((ulong)RawElf.R_ARM_ABS32_NOI << 16) | RawElf.EM_ARM : return "R_ARM_ABS32_NOI";
-                case ((ulong)RawElf.R_ARM_REL32_NOI << 16) | RawElf.EM_ARM : return "R_ARM_REL32_NOI";
-                case ((ulong)RawElf.R_ARM_ALU_PC_G0_NC << 16) | RawElf.EM_ARM : return "R_ARM_ALU_PC_G0_NC";
-                case ((ulong)RawElf.R_ARM_ALU_PC_G0 << 16) | RawElf.EM_ARM : return "R_ARM_ALU_PC_G0";
-                case ((ulong)RawElf.R_ARM_ALU_PC_G1_NC << 16) | RawElf.EM_ARM : return "R_ARM_ALU_PC_G1_NC";
-                case ((ulong)RawElf.R_ARM_ALU_PC_G1 << 16) | RawElf.EM_ARM : return "R_ARM_ALU_PC_G1";
-                case ((ulong)RawElf.R_ARM_ALU_PC_G2 << 16) | RawElf.EM_ARM : return "R_ARM_ALU_PC_G2";
-                case ((ulong)RawElf.R_ARM_LDR_PC_G1 << 16) | RawElf.EM_ARM : return "R_ARM_LDR_PC_G1";
-                case ((ulong)RawElf.R_ARM_LDR_PC_G2 << 16) | RawElf.EM_ARM : return "R_ARM_LDR_PC_G2";
-                case ((ulong)RawElf.R_ARM_LDRS_PC_G0 << 16) | RawElf.EM_ARM : return "R_ARM_LDRS_PC_G0";
-                case ((ulong)RawElf.R_ARM_LDRS_PC_G1 << 16) | RawElf.EM_ARM : return "R_ARM_LDRS_PC_G1";
-                case ((ulong)RawElf.R_ARM_LDRS_PC_G2 << 16) | RawElf.EM_ARM : return "R_ARM_LDRS_PC_G2";
-                case ((ulong)RawElf.R_ARM_LDC_PC_G0 << 16) | RawElf.EM_ARM : return "R_ARM_LDC_PC_G0";
-                case ((ulong)RawElf.R_ARM_LDC_PC_G1 << 16) | RawElf.EM_ARM : return "R_ARM_LDC_PC_G1";
-                case ((ulong)RawElf.R_ARM_LDC_PC_G2 << 16) | RawElf.EM_ARM : return "R_ARM_LDC_PC_G2";
-                case ((ulong)RawElf.R_ARM_ALU_SB_G0_NC << 16) | RawElf.EM_ARM : return "R_ARM_ALU_SB_G0_NC";
-                case ((ulong)RawElf.R_ARM_ALU_SB_G0 << 16) | RawElf.EM_ARM : return "R_ARM_ALU_SB_G0";
-                case ((ulong)RawElf.R_ARM_ALU_SB_G1_NC << 16) | RawElf.EM_ARM : return "R_ARM_ALU_SB_G1_NC";
-                case ((ulong)RawElf.R_ARM_ALU_SB_G1 << 16) | RawElf.EM_ARM : return "R_ARM_ALU_SB_G1";
-                case ((ulong)RawElf.R_ARM_ALU_SB_G2 << 16) | RawElf.EM_ARM : return "R_ARM_ALU_SB_G2";
-                case ((ulong)RawElf.R_ARM_LDR_SB_G0 << 16) | RawElf.EM_ARM : return "R_ARM_LDR_SB_G0";
-                case ((ulong)RawElf.R_ARM_LDR_SB_G1 << 16) | RawElf.EM_ARM : return "R_ARM_LDR_SB_G1";
-                case ((ulong)RawElf.R_ARM_LDR_SB_G2 << 16) | RawElf.EM_ARM : return "R_ARM_LDR_SB_G2";
-                case ((ulong)RawElf.R_ARM_LDRS_SB_G0 << 16) | RawElf.EM_ARM : return "R_ARM_LDRS_SB_G0";
-                case ((ulong)RawElf.R_ARM_LDRS_SB_G1 << 16) | RawElf.EM_ARM : return "R_ARM_LDRS_SB_G1";
-                case ((ulong)RawElf.R_ARM_LDRS_SB_G2 << 16) | RawElf.EM_ARM : return "R_ARM_LDRS_SB_G2";
-                case ((ulong)RawElf.R_ARM_LDC_SB_G0 << 16) | RawElf.EM_ARM : return "R_ARM_LDC_SB_G0";
-                case ((ulong)RawElf.R_ARM_LDC_SB_G1 << 16) | RawElf.EM_ARM : return "R_ARM_LDC_SB_G1";
-                case ((ulong)RawElf.R_ARM_LDC_SB_G2 << 16) | RawElf.EM_ARM : return "R_ARM_LDC_SB_G2";
-                case ((ulong)RawElf.R_ARM_MOVW_BREL_NC << 16) | RawElf.EM_ARM : return "R_ARM_MOVW_BREL_NC";
-                case ((ulong)RawElf.R_ARM_MOVT_BREL << 16) | RawElf.EM_ARM : return "R_ARM_MOVT_BREL";
-                case ((ulong)RawElf.R_ARM_MOVW_BREL << 16) | RawElf.EM_ARM : return "R_ARM_MOVW_BREL";
-                case ((ulong)RawElf.R_ARM_THM_MOVW_BREL_NC << 16) | RawElf.EM_ARM : return "R_ARM_THM_MOVW_BREL_NC";
-                case ((ulong)RawElf.R_ARM_THM_MOVT_BREL << 16) | RawElf.EM_ARM : return "R_ARM_THM_MOVT_BREL";
-                case ((ulong)RawElf.R_ARM_THM_MOVW_BREL << 16) | RawElf.EM_ARM : return "R_ARM_THM_MOVW_BREL";
-                case ((ulong)RawElf.R_ARM_TLS_GOTDESC << 16) | RawElf.EM_ARM : return "R_ARM_TLS_GOTDESC";
-                case ((ulong)RawElf.R_ARM_TLS_CALL << 16) | RawElf.EM_ARM : return "R_ARM_TLS_CALL";
-                case ((ulong)RawElf.R_ARM_TLS_DESCSEQ << 16) | RawElf.EM_ARM : return "R_ARM_TLS_DESCSEQ";
-                case ((ulong)RawElf.R_ARM_THM_TLS_CALL << 16) | RawElf.EM_ARM : return "R_ARM_THM_TLS_CALL";
-                case ((ulong)RawElf.R_ARM_PLT32_ABS << 16) | RawElf.EM_ARM : return "R_ARM_PLT32_ABS";
-                case ((ulong)RawElf.R_ARM_GOT_ABS << 16) | RawElf.EM_ARM : return "R_ARM_GOT_ABS";
-                case ((ulong)RawElf.R_ARM_GOT_PREL << 16) | RawElf.EM_ARM : return "R_ARM_GOT_PREL";
-                case ((ulong)RawElf.R_ARM_GOT_BREL12 << 16) | RawElf.EM_ARM : return "R_ARM_GOT_BREL12";
-                case ((ulong)RawElf.R_ARM_GOTOFF12 << 16) | RawElf.EM_ARM : return "R_ARM_GOTOFF12";
-                case ((ulong)RawElf.R_ARM_GOTRELAX << 16) | RawElf.EM_ARM : return "R_ARM_GOTRELAX";
-                case ((ulong)RawElf.R_ARM_GNU_VTENTRY << 16) | RawElf.EM_ARM : return "R_ARM_GNU_VTENTRY";
-                case ((ulong)RawElf.R_ARM_GNU_VTINHERIT << 16) | RawElf.EM_ARM : return "R_ARM_GNU_VTINHERIT";
-                case ((ulong)RawElf.R_ARM_THM_PC11 << 16) | RawElf.EM_ARM : return "R_ARM_THM_PC11";
-                case ((ulong)RawElf.R_ARM_THM_PC9 << 16) | RawElf.EM_ARM : return "R_ARM_THM_PC9";
-                case ((ulong)RawElf.R_ARM_TLS_GD32 << 16) | RawElf.EM_ARM : return "R_ARM_TLS_GD32";
-                case ((ulong)RawElf.R_ARM_TLS_LDM32 << 16) | RawElf.EM_ARM : return "R_ARM_TLS_LDM32";
-                case ((ulong)RawElf.R_ARM_TLS_LDO32 << 16) | RawElf.EM_ARM : return "R_ARM_TLS_LDO32";
-                case ((ulong)RawElf.R_ARM_TLS_IE32 << 16) | RawElf.EM_ARM : return "R_ARM_TLS_IE32";
-                case ((ulong)RawElf.R_ARM_TLS_LE32 << 16) | RawElf.EM_ARM : return "R_ARM_TLS_LE32";
-                case ((ulong)RawElf.R_ARM_TLS_LDO12 << 16) | RawElf.EM_ARM : return "R_ARM_TLS_LDO12";
-                case ((ulong)RawElf.R_ARM_TLS_LE12 << 16) | RawElf.EM_ARM : return "R_ARM_TLS_LE12";
-                case ((ulong)RawElf.R_ARM_TLS_IE12GP << 16) | RawElf.EM_ARM : return "R_ARM_TLS_IE12GP";
-                case ((ulong)RawElf.R_ARM_ME_TOO << 16) | RawElf.EM_ARM : return "R_ARM_ME_TOO";
-                case ((ulong)RawElf.R_ARM_THM_TLS_DESCSEQ << 16) | RawElf.EM_ARM : return "R_ARM_THM_TLS_DESCSEQ";
-                case ((ulong)RawElf.R_ARM_THM_TLS_DESCSEQ32 << 16) | RawElf.EM_ARM : return "R_ARM_THM_TLS_DESCSEQ32";
-                case ((ulong)RawElf.R_ARM_THM_GOT_BREL12 << 16) | RawElf.EM_ARM : return "R_ARM_THM_GOT_BREL12";
-                case ((ulong)RawElf.R_ARM_IRELATIVE << 16) | RawElf.EM_ARM : return "R_ARM_IRELATIVE";
-                case ((ulong)RawElf.R_ARM_RXPC25 << 16) | RawElf.EM_ARM : return "R_ARM_RXPC25";
-                case ((ulong)RawElf.R_ARM_RSBREL32 << 16) | RawElf.EM_ARM : return "R_ARM_RSBREL32";
-                case ((ulong)RawElf.R_ARM_THM_RPC22 << 16) | RawElf.EM_ARM : return "R_ARM_THM_RPC22";
-                case ((ulong)RawElf.R_ARM_RREL32 << 16) | RawElf.EM_ARM : return "R_ARM_RREL32";
-                case ((ulong)RawElf.R_ARM_RABS22 << 16) | RawElf.EM_ARM : return "R_ARM_RABS22";
-                case ((ulong)RawElf.R_ARM_RPC24 << 16) | RawElf.EM_ARM : return "R_ARM_RPC24";
-                case ((ulong)RawElf.R_ARM_RBASE << 16) | RawElf.EM_ARM : return "R_ARM_RBASE";
-                case ((ulong)RawElf.R_X86_64_NONE << 16) | RawElf.EM_X86_64 : return "R_X86_64_NONE";
-                case ((ulong)RawElf.R_X86_64_64 << 16) | RawElf.EM_X86_64 : return "R_X86_64_64";
-                case ((ulong)RawElf.R_X86_64_PC32 << 16) | RawElf.EM_X86_64 : return "R_X86_64_PC32";
-                case ((ulong)RawElf.R_X86_64_GOT32 << 16) | RawElf.EM_X86_64 : return "R_X86_64_GOT32";
-                case ((ulong)RawElf.R_X86_64_PLT32 << 16) | RawElf.EM_X86_64 : return "R_X86_64_PLT32";
-                case ((ulong)RawElf.R_X86_64_COPY << 16) | RawElf.EM_X86_64 : return "R_X86_64_COPY";
-                case ((ulong)RawElf.R_X86_64_GLOB_DAT << 16) | RawElf.EM_X86_64 : return "R_X86_64_GLOB_DAT";
-                case ((ulong)RawElf.R_X86_64_JUMP_SLOT << 16) | RawElf.EM_X86_64 : return "R_X86_64_JUMP_SLOT";
-                case ((ulong)RawElf.R_X86_64_RELATIVE << 16) | RawElf.EM_X86_64 : return "R_X86_64_RELATIVE";
-                case ((ulong)RawElf.R_X86_64_GOTPCREL << 16) | RawElf.EM_X86_64 : return "R_X86_64_GOTPCREL";
-                case ((ulong)RawElf.R_X86_64_32 << 16) | RawElf.EM_X86_64 : return "R_X86_64_32";
-                case ((ulong)RawElf.R_X86_64_32S << 16) | RawElf.EM_X86_64 : return "R_X86_64_32S";
-                case ((ulong)RawElf.R_X86_64_16 << 16) | RawElf.EM_X86_64 : return "R_X86_64_16";
-                case ((ulong)RawElf.R_X86_64_PC16 << 16) | RawElf.EM_X86_64 : return "R_X86_64_PC16";
-                case ((ulong)RawElf.R_X86_64_8 << 16) | RawElf.EM_X86_64 : return "R_X86_64_8";
-                case ((ulong)RawElf.R_X86_64_PC8 << 16) | RawElf.EM_X86_64 : return "R_X86_64_PC8";
-                case ((ulong)RawElf.R_X86_64_DTPMOD64 << 16) | RawElf.EM_X86_64 : return "R_X86_64_DTPMOD64";
-                case ((ulong)RawElf.R_X86_64_DTPOFF64 << 16) | RawElf.EM_X86_64 : return "R_X86_64_DTPOFF64";
-                case ((ulong)RawElf.R_X86_64_TPOFF64 << 16) | RawElf.EM_X86_64 : return "R_X86_64_TPOFF64";
-                case ((ulong)RawElf.R_X86_64_TLSGD << 16) | RawElf.EM_X86_64 : return "R_X86_64_TLSGD";
-                case ((ulong)RawElf.R_X86_64_TLSLD << 16) | RawElf.EM_X86_64 : return "R_X86_64_TLSLD";
-                case ((ulong)RawElf.R_X86_64_DTPOFF32 << 16) | RawElf.EM_X86_64 : return "R_X86_64_DTPOFF32";
-                case ((ulong)RawElf.R_X86_64_GOTTPOFF << 16) | RawElf.EM_X86_64 : return "R_X86_64_GOTTPOFF";
-                case ((ulong)RawElf.R_X86_64_TPOFF32 << 16) | RawElf.EM_X86_64 : return "R_X86_64_TPOFF32";
-                case ((ulong)RawElf.R_X86_64_PC64 << 16) | RawElf.EM_X86_64 : return "R_X86_64_PC64";
-                case ((ulong)RawElf.R_X86_64_GOTOFF64 << 16) | RawElf.EM_X86_64 : return "R_X86_64_GOTOFF64";
-                case ((ulong)RawElf.R_X86_64_GOTPC32 << 16) | RawElf.EM_X86_64 : return "R_X86_64_GOTPC32";
-                case ((ulong)RawElf.R_X86_64_GOT64 << 16) | RawElf.EM_X86_64 : return "R_X86_64_GOT64";
-                case ((ulong)RawElf.R_X86_64_GOTPCREL64 << 16) | RawElf.EM_X86_64 : return "R_X86_64_GOTPCREL64";
-                case ((ulong)RawElf.R_X86_64_GOTPC64 << 16) | RawElf.EM_X86_64 : return "R_X86_64_GOTPC64";
-                case ((ulong)RawElf.R_X86_64_GOTPLT64 << 16) | RawElf.EM_X86_64 : return "R_X86_64_GOTPLT64";
-                case ((ulong)RawElf.R_X86_64_PLTOFF64 << 16) | RawElf.EM_X86_64 : return "R_X86_64_PLTOFF64";
-                case ((ulong)RawElf.R_X86_64_SIZE32 << 16) | RawElf.EM_X86_64 : return "R_X86_64_SIZE32";
-                case ((ulong)RawElf.R_X86_64_SIZE64 << 16) | RawElf.EM_X86_64 : return "R_X86_64_SIZE64";
-                case ((ulong)RawElf.R_X86_64_GOTPC32_TLSDESC << 16) | RawElf.EM_X86_64 : return "R_X86_64_GOTPC32_TLSDESC";
-                case ((ulong)RawElf.R_X86_64_TLSDESC_CALL << 16) | RawElf.EM_X86_64 : return "R_X86_64_TLSDESC_CALL";
-                case ((ulong)RawElf.R_X86_64_TLSDESC << 16) | RawElf.EM_X86_64 : return "R_X86_64_TLSDESC";
-                case ((ulong)RawElf.R_X86_64_IRELATIVE << 16) | RawElf.EM_X86_64 : return "R_X86_64_IRELATIVE";
-                case ((ulong)RawElf.R_X86_64_RELATIVE64 << 16) | RawElf.EM_X86_64 : return "R_X86_64_RELATIVE64";
+                case ((ulong)ElfNative.R_386_NONE << 16) | ElfNative.EM_386 : return "R_386_NONE";
+                case ((ulong)ElfNative.R_386_32 << 16) | ElfNative.EM_386 : return "R_386_32";
+                case ((ulong)ElfNative.R_386_PC32 << 16) | ElfNative.EM_386 : return "R_386_PC32";
+                case ((ulong)ElfNative.R_386_GOT32 << 16) | ElfNative.EM_386 : return "R_386_GOT32";
+                case ((ulong)ElfNative.R_386_PLT32 << 16) | ElfNative.EM_386 : return "R_386_PLT32";
+                case ((ulong)ElfNative.R_386_COPY << 16) | ElfNative.EM_386 : return "R_386_COPY";
+                case ((ulong)ElfNative.R_386_GLOB_DAT << 16) | ElfNative.EM_386 : return "R_386_GLOB_DAT";
+                case ((ulong)ElfNative.R_386_JMP_SLOT << 16) | ElfNative.EM_386 : return "R_386_JMP_SLOT";
+                case ((ulong)ElfNative.R_386_RELATIVE << 16) | ElfNative.EM_386 : return "R_386_RELATIVE";
+                case ((ulong)ElfNative.R_386_GOTOFF << 16) | ElfNative.EM_386 : return "R_386_GOTOFF";
+                case ((ulong)ElfNative.R_386_GOTPC << 16) | ElfNative.EM_386 : return "R_386_GOTPC";
+                case ((ulong)ElfNative.R_386_32PLT << 16) | ElfNative.EM_386 : return "R_386_32PLT";
+                case ((ulong)ElfNative.R_386_TLS_TPOFF << 16) | ElfNative.EM_386 : return "R_386_TLS_TPOFF";
+                case ((ulong)ElfNative.R_386_TLS_IE << 16) | ElfNative.EM_386 : return "R_386_TLS_IE";
+                case ((ulong)ElfNative.R_386_TLS_GOTIE << 16) | ElfNative.EM_386 : return "R_386_TLS_GOTIE";
+                case ((ulong)ElfNative.R_386_TLS_LE << 16) | ElfNative.EM_386 : return "R_386_TLS_LE";
+                case ((ulong)ElfNative.R_386_TLS_GD << 16) | ElfNative.EM_386 : return "R_386_TLS_GD";
+                case ((ulong)ElfNative.R_386_TLS_LDM << 16) | ElfNative.EM_386 : return "R_386_TLS_LDM";
+                case ((ulong)ElfNative.R_386_16 << 16) | ElfNative.EM_386 : return "R_386_16";
+                case ((ulong)ElfNative.R_386_PC16 << 16) | ElfNative.EM_386 : return "R_386_PC16";
+                case ((ulong)ElfNative.R_386_8 << 16) | ElfNative.EM_386 : return "R_386_8";
+                case ((ulong)ElfNative.R_386_PC8 << 16) | ElfNative.EM_386 : return "R_386_PC8";
+                case ((ulong)ElfNative.R_386_TLS_GD_32 << 16) | ElfNative.EM_386 : return "R_386_TLS_GD_32";
+                case ((ulong)ElfNative.R_386_TLS_GD_PUSH << 16) | ElfNative.EM_386 : return "R_386_TLS_GD_PUSH";
+                case ((ulong)ElfNative.R_386_TLS_GD_CALL << 16) | ElfNative.EM_386 : return "R_386_TLS_GD_CALL";
+                case ((ulong)ElfNative.R_386_TLS_GD_POP << 16) | ElfNative.EM_386 : return "R_386_TLS_GD_POP";
+                case ((ulong)ElfNative.R_386_TLS_LDM_32 << 16) | ElfNative.EM_386 : return "R_386_TLS_LDM_32";
+                case ((ulong)ElfNative.R_386_TLS_LDM_PUSH << 16) | ElfNative.EM_386 : return "R_386_TLS_LDM_PUSH";
+                case ((ulong)ElfNative.R_386_TLS_LDM_CALL << 16) | ElfNative.EM_386 : return "R_386_TLS_LDM_CALL";
+                case ((ulong)ElfNative.R_386_TLS_LDM_POP << 16) | ElfNative.EM_386 : return "R_386_TLS_LDM_POP";
+                case ((ulong)ElfNative.R_386_TLS_LDO_32 << 16) | ElfNative.EM_386 : return "R_386_TLS_LDO_32";
+                case ((ulong)ElfNative.R_386_TLS_IE_32 << 16) | ElfNative.EM_386 : return "R_386_TLS_IE_32";
+                case ((ulong)ElfNative.R_386_TLS_LE_32 << 16) | ElfNative.EM_386 : return "R_386_TLS_LE_32";
+                case ((ulong)ElfNative.R_386_TLS_DTPMOD32 << 16) | ElfNative.EM_386 : return "R_386_TLS_DTPMOD32";
+                case ((ulong)ElfNative.R_386_TLS_DTPOFF32 << 16) | ElfNative.EM_386 : return "R_386_TLS_DTPOFF32";
+                case ((ulong)ElfNative.R_386_TLS_TPOFF32 << 16) | ElfNative.EM_386 : return "R_386_TLS_TPOFF32";
+                case ((ulong)ElfNative.R_386_SIZE32 << 16) | ElfNative.EM_386 : return "R_386_SIZE32";
+                case ((ulong)ElfNative.R_386_TLS_GOTDESC << 16) | ElfNative.EM_386 : return "R_386_TLS_GOTDESC";
+                case ((ulong)ElfNative.R_386_TLS_DESC_CALL << 16) | ElfNative.EM_386 : return "R_386_TLS_DESC_CALL";
+                case ((ulong)ElfNative.R_386_TLS_DESC << 16) | ElfNative.EM_386 : return "R_386_TLS_DESC";
+                case ((ulong)ElfNative.R_386_IRELATIVE << 16) | ElfNative.EM_386 : return "R_386_IRELATIVE";
+                case ((ulong)ElfNative.R_AARCH64_NONE << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_NONE";
+                case ((ulong)ElfNative.R_AARCH64_P32_ABS32 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_P32_ABS32";
+                case ((ulong)ElfNative.R_AARCH64_P32_COPY << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_P32_COPY";
+                case ((ulong)ElfNative.R_AARCH64_P32_GLOB_DAT << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_P32_GLOB_DAT";
+                case ((ulong)ElfNative.R_AARCH64_P32_JUMP_SLOT << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_P32_JUMP_SLOT";
+                case ((ulong)ElfNative.R_AARCH64_P32_RELATIVE << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_P32_RELATIVE";
+                case ((ulong)ElfNative.R_AARCH64_P32_TLS_DTPMOD << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_P32_TLS_DTPMOD";
+                case ((ulong)ElfNative.R_AARCH64_P32_TLS_DTPREL << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_P32_TLS_DTPREL";
+                case ((ulong)ElfNative.R_AARCH64_P32_TLS_TPREL << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_P32_TLS_TPREL";
+                case ((ulong)ElfNative.R_AARCH64_P32_TLSDESC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_P32_TLSDESC";
+                case ((ulong)ElfNative.R_AARCH64_P32_IRELATIVE << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_P32_IRELATIVE";
+                case ((ulong)ElfNative.R_AARCH64_ABS64 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_ABS64";
+                case ((ulong)ElfNative.R_AARCH64_ABS32 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_ABS32";
+                case ((ulong)ElfNative.R_AARCH64_ABS16 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_ABS16";
+                case ((ulong)ElfNative.R_AARCH64_PREL64 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_PREL64";
+                case ((ulong)ElfNative.R_AARCH64_PREL32 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_PREL32";
+                case ((ulong)ElfNative.R_AARCH64_PREL16 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_PREL16";
+                case ((ulong)ElfNative.R_AARCH64_MOVW_UABS_G0 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_MOVW_UABS_G0";
+                case ((ulong)ElfNative.R_AARCH64_MOVW_UABS_G0_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_MOVW_UABS_G0_NC";
+                case ((ulong)ElfNative.R_AARCH64_MOVW_UABS_G1 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_MOVW_UABS_G1";
+                case ((ulong)ElfNative.R_AARCH64_MOVW_UABS_G1_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_MOVW_UABS_G1_NC";
+                case ((ulong)ElfNative.R_AARCH64_MOVW_UABS_G2 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_MOVW_UABS_G2";
+                case ((ulong)ElfNative.R_AARCH64_MOVW_UABS_G2_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_MOVW_UABS_G2_NC";
+                case ((ulong)ElfNative.R_AARCH64_MOVW_UABS_G3 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_MOVW_UABS_G3";
+                case ((ulong)ElfNative.R_AARCH64_MOVW_SABS_G0 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_MOVW_SABS_G0";
+                case ((ulong)ElfNative.R_AARCH64_MOVW_SABS_G1 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_MOVW_SABS_G1";
+                case ((ulong)ElfNative.R_AARCH64_MOVW_SABS_G2 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_MOVW_SABS_G2";
+                case ((ulong)ElfNative.R_AARCH64_LD_PREL_LO19 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_LD_PREL_LO19";
+                case ((ulong)ElfNative.R_AARCH64_ADR_PREL_LO21 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_ADR_PREL_LO21";
+                case ((ulong)ElfNative.R_AARCH64_ADR_PREL_PG_HI21 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_ADR_PREL_PG_HI21";
+                case ((ulong)ElfNative.R_AARCH64_ADR_PREL_PG_HI21_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_ADR_PREL_PG_HI21_NC";
+                case ((ulong)ElfNative.R_AARCH64_ADD_ABS_LO12_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_ADD_ABS_LO12_NC";
+                case ((ulong)ElfNative.R_AARCH64_LDST8_ABS_LO12_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_LDST8_ABS_LO12_NC";
+                case ((ulong)ElfNative.R_AARCH64_TSTBR14 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TSTBR14";
+                case ((ulong)ElfNative.R_AARCH64_CONDBR19 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_CONDBR19";
+                case ((ulong)ElfNative.R_AARCH64_JUMP26 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_JUMP26";
+                case ((ulong)ElfNative.R_AARCH64_CALL26 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_CALL26";
+                case ((ulong)ElfNative.R_AARCH64_LDST16_ABS_LO12_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_LDST16_ABS_LO12_NC";
+                case ((ulong)ElfNative.R_AARCH64_LDST32_ABS_LO12_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_LDST32_ABS_LO12_NC";
+                case ((ulong)ElfNative.R_AARCH64_LDST64_ABS_LO12_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_LDST64_ABS_LO12_NC";
+                case ((ulong)ElfNative.R_AARCH64_MOVW_PREL_G0 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_MOVW_PREL_G0";
+                case ((ulong)ElfNative.R_AARCH64_MOVW_PREL_G0_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_MOVW_PREL_G0_NC";
+                case ((ulong)ElfNative.R_AARCH64_MOVW_PREL_G1 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_MOVW_PREL_G1";
+                case ((ulong)ElfNative.R_AARCH64_MOVW_PREL_G1_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_MOVW_PREL_G1_NC";
+                case ((ulong)ElfNative.R_AARCH64_MOVW_PREL_G2 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_MOVW_PREL_G2";
+                case ((ulong)ElfNative.R_AARCH64_MOVW_PREL_G2_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_MOVW_PREL_G2_NC";
+                case ((ulong)ElfNative.R_AARCH64_MOVW_PREL_G3 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_MOVW_PREL_G3";
+                case ((ulong)ElfNative.R_AARCH64_LDST128_ABS_LO12_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_LDST128_ABS_LO12_NC";
+                case ((ulong)ElfNative.R_AARCH64_MOVW_GOTOFF_G0 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_MOVW_GOTOFF_G0";
+                case ((ulong)ElfNative.R_AARCH64_MOVW_GOTOFF_G0_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_MOVW_GOTOFF_G0_NC";
+                case ((ulong)ElfNative.R_AARCH64_MOVW_GOTOFF_G1 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_MOVW_GOTOFF_G1";
+                case ((ulong)ElfNative.R_AARCH64_MOVW_GOTOFF_G1_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_MOVW_GOTOFF_G1_NC";
+                case ((ulong)ElfNative.R_AARCH64_MOVW_GOTOFF_G2 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_MOVW_GOTOFF_G2";
+                case ((ulong)ElfNative.R_AARCH64_MOVW_GOTOFF_G2_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_MOVW_GOTOFF_G2_NC";
+                case ((ulong)ElfNative.R_AARCH64_MOVW_GOTOFF_G3 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_MOVW_GOTOFF_G3";
+                case ((ulong)ElfNative.R_AARCH64_GOTREL64 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_GOTREL64";
+                case ((ulong)ElfNative.R_AARCH64_GOTREL32 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_GOTREL32";
+                case ((ulong)ElfNative.R_AARCH64_GOT_LD_PREL19 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_GOT_LD_PREL19";
+                case ((ulong)ElfNative.R_AARCH64_LD64_GOTOFF_LO15 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_LD64_GOTOFF_LO15";
+                case ((ulong)ElfNative.R_AARCH64_ADR_GOT_PAGE << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_ADR_GOT_PAGE";
+                case ((ulong)ElfNative.R_AARCH64_LD64_GOT_LO12_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_LD64_GOT_LO12_NC";
+                case ((ulong)ElfNative.R_AARCH64_LD64_GOTPAGE_LO15 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_LD64_GOTPAGE_LO15";
+                case ((ulong)ElfNative.R_AARCH64_TLSGD_ADR_PREL21 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSGD_ADR_PREL21";
+                case ((ulong)ElfNative.R_AARCH64_TLSGD_ADR_PAGE21 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSGD_ADR_PAGE21";
+                case ((ulong)ElfNative.R_AARCH64_TLSGD_ADD_LO12_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSGD_ADD_LO12_NC";
+                case ((ulong)ElfNative.R_AARCH64_TLSGD_MOVW_G1 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSGD_MOVW_G1";
+                case ((ulong)ElfNative.R_AARCH64_TLSGD_MOVW_G0_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSGD_MOVW_G0_NC";
+                case ((ulong)ElfNative.R_AARCH64_TLSLD_ADR_PREL21 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLD_ADR_PREL21";
+                case ((ulong)ElfNative.R_AARCH64_TLSLD_ADR_PAGE21 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLD_ADR_PAGE21";
+                case ((ulong)ElfNative.R_AARCH64_TLSLD_ADD_LO12_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLD_ADD_LO12_NC";
+                case ((ulong)ElfNative.R_AARCH64_TLSLD_MOVW_G1 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLD_MOVW_G1";
+                case ((ulong)ElfNative.R_AARCH64_TLSLD_MOVW_G0_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLD_MOVW_G0_NC";
+                case ((ulong)ElfNative.R_AARCH64_TLSLD_LD_PREL19 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLD_LD_PREL19";
+                case ((ulong)ElfNative.R_AARCH64_TLSLD_MOVW_DTPREL_G2 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLD_MOVW_DTPREL_G2";
+                case ((ulong)ElfNative.R_AARCH64_TLSLD_MOVW_DTPREL_G1 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLD_MOVW_DTPREL_G1";
+                case ((ulong)ElfNative.R_AARCH64_TLSLD_MOVW_DTPREL_G1_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLD_MOVW_DTPREL_G1_NC";
+                case ((ulong)ElfNative.R_AARCH64_TLSLD_MOVW_DTPREL_G0 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLD_MOVW_DTPREL_G0";
+                case ((ulong)ElfNative.R_AARCH64_TLSLD_MOVW_DTPREL_G0_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLD_MOVW_DTPREL_G0_NC";
+                case ((ulong)ElfNative.R_AARCH64_TLSLD_ADD_DTPREL_HI12 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLD_ADD_DTPREL_HI12";
+                case ((ulong)ElfNative.R_AARCH64_TLSLD_ADD_DTPREL_LO12 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLD_ADD_DTPREL_LO12";
+                case ((ulong)ElfNative.R_AARCH64_TLSLD_ADD_DTPREL_LO12_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLD_ADD_DTPREL_LO12_NC";
+                case ((ulong)ElfNative.R_AARCH64_TLSLD_LDST8_DTPREL_LO12 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLD_LDST8_DTPREL_LO12";
+                case ((ulong)ElfNative.R_AARCH64_TLSLD_LDST8_DTPREL_LO12_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLD_LDST8_DTPREL_LO12_NC";
+                case ((ulong)ElfNative.R_AARCH64_TLSLD_LDST16_DTPREL_LO12 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLD_LDST16_DTPREL_LO12";
+                case ((ulong)ElfNative.R_AARCH64_TLSLD_LDST16_DTPREL_LO12_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLD_LDST16_DTPREL_LO12_NC";
+                case ((ulong)ElfNative.R_AARCH64_TLSLD_LDST32_DTPREL_LO12 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLD_LDST32_DTPREL_LO12";
+                case ((ulong)ElfNative.R_AARCH64_TLSLD_LDST32_DTPREL_LO12_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLD_LDST32_DTPREL_LO12_NC";
+                case ((ulong)ElfNative.R_AARCH64_TLSLD_LDST64_DTPREL_LO12 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLD_LDST64_DTPREL_LO12";
+                case ((ulong)ElfNative.R_AARCH64_TLSLD_LDST64_DTPREL_LO12_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLD_LDST64_DTPREL_LO12_NC";
+                case ((ulong)ElfNative.R_AARCH64_TLSIE_MOVW_GOTTPREL_G1 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSIE_MOVW_GOTTPREL_G1";
+                case ((ulong)ElfNative.R_AARCH64_TLSIE_MOVW_GOTTPREL_G0_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSIE_MOVW_GOTTPREL_G0_NC";
+                case ((ulong)ElfNative.R_AARCH64_TLSIE_ADR_GOTTPREL_PAGE21 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSIE_ADR_GOTTPREL_PAGE21";
+                case ((ulong)ElfNative.R_AARCH64_TLSIE_LD64_GOTTPREL_LO12_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSIE_LD64_GOTTPREL_LO12_NC";
+                case ((ulong)ElfNative.R_AARCH64_TLSIE_LD_GOTTPREL_PREL19 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSIE_LD_GOTTPREL_PREL19";
+                case ((ulong)ElfNative.R_AARCH64_TLSLE_MOVW_TPREL_G2 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLE_MOVW_TPREL_G2";
+                case ((ulong)ElfNative.R_AARCH64_TLSLE_MOVW_TPREL_G1 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLE_MOVW_TPREL_G1";
+                case ((ulong)ElfNative.R_AARCH64_TLSLE_MOVW_TPREL_G1_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLE_MOVW_TPREL_G1_NC";
+                case ((ulong)ElfNative.R_AARCH64_TLSLE_MOVW_TPREL_G0 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLE_MOVW_TPREL_G0";
+                case ((ulong)ElfNative.R_AARCH64_TLSLE_MOVW_TPREL_G0_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLE_MOVW_TPREL_G0_NC";
+                case ((ulong)ElfNative.R_AARCH64_TLSLE_ADD_TPREL_HI12 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLE_ADD_TPREL_HI12";
+                case ((ulong)ElfNative.R_AARCH64_TLSLE_ADD_TPREL_LO12 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLE_ADD_TPREL_LO12";
+                case ((ulong)ElfNative.R_AARCH64_TLSLE_ADD_TPREL_LO12_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLE_ADD_TPREL_LO12_NC";
+                case ((ulong)ElfNative.R_AARCH64_TLSLE_LDST8_TPREL_LO12 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLE_LDST8_TPREL_LO12";
+                case ((ulong)ElfNative.R_AARCH64_TLSLE_LDST8_TPREL_LO12_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLE_LDST8_TPREL_LO12_NC";
+                case ((ulong)ElfNative.R_AARCH64_TLSLE_LDST16_TPREL_LO12 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLE_LDST16_TPREL_LO12";
+                case ((ulong)ElfNative.R_AARCH64_TLSLE_LDST16_TPREL_LO12_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLE_LDST16_TPREL_LO12_NC";
+                case ((ulong)ElfNative.R_AARCH64_TLSLE_LDST32_TPREL_LO12 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLE_LDST32_TPREL_LO12";
+                case ((ulong)ElfNative.R_AARCH64_TLSLE_LDST32_TPREL_LO12_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLE_LDST32_TPREL_LO12_NC";
+                case ((ulong)ElfNative.R_AARCH64_TLSLE_LDST64_TPREL_LO12 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLE_LDST64_TPREL_LO12";
+                case ((ulong)ElfNative.R_AARCH64_TLSLE_LDST64_TPREL_LO12_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLE_LDST64_TPREL_LO12_NC";
+                case ((ulong)ElfNative.R_AARCH64_TLSDESC_LD_PREL19 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSDESC_LD_PREL19";
+                case ((ulong)ElfNative.R_AARCH64_TLSDESC_ADR_PREL21 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSDESC_ADR_PREL21";
+                case ((ulong)ElfNative.R_AARCH64_TLSDESC_ADR_PAGE21 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSDESC_ADR_PAGE21";
+                case ((ulong)ElfNative.R_AARCH64_TLSDESC_LD64_LO12 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSDESC_LD64_LO12";
+                case ((ulong)ElfNative.R_AARCH64_TLSDESC_ADD_LO12 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSDESC_ADD_LO12";
+                case ((ulong)ElfNative.R_AARCH64_TLSDESC_OFF_G1 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSDESC_OFF_G1";
+                case ((ulong)ElfNative.R_AARCH64_TLSDESC_OFF_G0_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSDESC_OFF_G0_NC";
+                case ((ulong)ElfNative.R_AARCH64_TLSDESC_LDR << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSDESC_LDR";
+                case ((ulong)ElfNative.R_AARCH64_TLSDESC_ADD << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSDESC_ADD";
+                case ((ulong)ElfNative.R_AARCH64_TLSDESC_CALL << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSDESC_CALL";
+                case ((ulong)ElfNative.R_AARCH64_TLSLE_LDST128_TPREL_LO12 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLE_LDST128_TPREL_LO12";
+                case ((ulong)ElfNative.R_AARCH64_TLSLE_LDST128_TPREL_LO12_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLE_LDST128_TPREL_LO12_NC";
+                case ((ulong)ElfNative.R_AARCH64_TLSLD_LDST128_DTPREL_LO12 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLD_LDST128_DTPREL_LO12";
+                case ((ulong)ElfNative.R_AARCH64_TLSLD_LDST128_DTPREL_LO12_NC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSLD_LDST128_DTPREL_LO12_NC";
+                case ((ulong)ElfNative.R_AARCH64_COPY << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_COPY";
+                case ((ulong)ElfNative.R_AARCH64_GLOB_DAT << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_GLOB_DAT";
+                case ((ulong)ElfNative.R_AARCH64_JUMP_SLOT << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_JUMP_SLOT";
+                case ((ulong)ElfNative.R_AARCH64_RELATIVE << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_RELATIVE";
+                case ((ulong)ElfNative.R_AARCH64_TLS_DTPMOD << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLS_DTPMOD";
+                case ((ulong)ElfNative.R_AARCH64_TLS_DTPREL << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLS_DTPREL";
+                case ((ulong)ElfNative.R_AARCH64_TLS_TPREL << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLS_TPREL";
+                case ((ulong)ElfNative.R_AARCH64_TLSDESC << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_TLSDESC";
+                case ((ulong)ElfNative.R_AARCH64_IRELATIVE << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_IRELATIVE";
+                case ((ulong)ElfNative.R_ARM_NONE << 16) | ElfNative.EM_ARM : return "R_ARM_NONE";
+                case ((ulong)ElfNative.R_ARM_PC24 << 16) | ElfNative.EM_ARM : return "R_ARM_PC24";
+                case ((ulong)ElfNative.R_ARM_ABS32 << 16) | ElfNative.EM_ARM : return "R_ARM_ABS32";
+                case ((ulong)ElfNative.R_ARM_REL32 << 16) | ElfNative.EM_ARM : return "R_ARM_REL32";
+                case ((ulong)ElfNative.R_ARM_PC13 << 16) | ElfNative.EM_ARM : return "R_ARM_PC13";
+                case ((ulong)ElfNative.R_ARM_ABS16 << 16) | ElfNative.EM_ARM : return "R_ARM_ABS16";
+                case ((ulong)ElfNative.R_ARM_ABS12 << 16) | ElfNative.EM_ARM : return "R_ARM_ABS12";
+                case ((ulong)ElfNative.R_ARM_THM_ABS5 << 16) | ElfNative.EM_ARM : return "R_ARM_THM_ABS5";
+                case ((ulong)ElfNative.R_ARM_ABS8 << 16) | ElfNative.EM_ARM : return "R_ARM_ABS8";
+                case ((ulong)ElfNative.R_ARM_SBREL32 << 16) | ElfNative.EM_ARM : return "R_ARM_SBREL32";
+                case ((ulong)ElfNative.R_ARM_THM_PC22 << 16) | ElfNative.EM_ARM : return "R_ARM_THM_PC22";
+                case ((ulong)ElfNative.R_ARM_THM_PC8 << 16) | ElfNative.EM_ARM : return "R_ARM_THM_PC8";
+                case ((ulong)ElfNative.R_ARM_AMP_VCALL9 << 16) | ElfNative.EM_ARM : return "R_ARM_AMP_VCALL9";
+                case ((ulong)ElfNative.R_ARM_SWI24 << 16) | ElfNative.EM_ARM : return "R_ARM_SWI24";
+                case ((ulong)ElfNative.R_ARM_THM_SWI8 << 16) | ElfNative.EM_ARM : return "R_ARM_THM_SWI8";
+                case ((ulong)ElfNative.R_ARM_XPC25 << 16) | ElfNative.EM_ARM : return "R_ARM_XPC25";
+                case ((ulong)ElfNative.R_ARM_THM_XPC22 << 16) | ElfNative.EM_ARM : return "R_ARM_THM_XPC22";
+                case ((ulong)ElfNative.R_ARM_TLS_DTPMOD32 << 16) | ElfNative.EM_ARM : return "R_ARM_TLS_DTPMOD32";
+                case ((ulong)ElfNative.R_ARM_TLS_DTPOFF32 << 16) | ElfNative.EM_ARM : return "R_ARM_TLS_DTPOFF32";
+                case ((ulong)ElfNative.R_ARM_TLS_TPOFF32 << 16) | ElfNative.EM_ARM : return "R_ARM_TLS_TPOFF32";
+                case ((ulong)ElfNative.R_ARM_COPY << 16) | ElfNative.EM_ARM : return "R_ARM_COPY";
+                case ((ulong)ElfNative.R_ARM_GLOB_DAT << 16) | ElfNative.EM_ARM : return "R_ARM_GLOB_DAT";
+                case ((ulong)ElfNative.R_ARM_JUMP_SLOT << 16) | ElfNative.EM_ARM : return "R_ARM_JUMP_SLOT";
+                case ((ulong)ElfNative.R_ARM_RELATIVE << 16) | ElfNative.EM_ARM : return "R_ARM_RELATIVE";
+                case ((ulong)ElfNative.R_ARM_GOTOFF << 16) | ElfNative.EM_ARM : return "R_ARM_GOTOFF";
+                case ((ulong)ElfNative.R_ARM_GOTPC << 16) | ElfNative.EM_ARM : return "R_ARM_GOTPC";
+                case ((ulong)ElfNative.R_ARM_GOT32 << 16) | ElfNative.EM_ARM : return "R_ARM_GOT32";
+                case ((ulong)ElfNative.R_ARM_PLT32 << 16) | ElfNative.EM_ARM : return "R_ARM_PLT32";
+                case ((ulong)ElfNative.R_ARM_CALL << 16) | ElfNative.EM_ARM : return "R_ARM_CALL";
+                case ((ulong)ElfNative.R_ARM_JUMP24 << 16) | ElfNative.EM_ARM : return "R_ARM_JUMP24";
+                case ((ulong)ElfNative.R_ARM_THM_JUMP24 << 16) | ElfNative.EM_ARM : return "R_ARM_THM_JUMP24";
+                case ((ulong)ElfNative.R_ARM_BASE_ABS << 16) | ElfNative.EM_ARM : return "R_ARM_BASE_ABS";
+                case ((ulong)ElfNative.R_ARM_ALU_PCREL_7_0 << 16) | ElfNative.EM_ARM : return "R_ARM_ALU_PCREL_7_0";
+                case ((ulong)ElfNative.R_ARM_ALU_PCREL_15_8 << 16) | ElfNative.EM_ARM : return "R_ARM_ALU_PCREL_15_8";
+                case ((ulong)ElfNative.R_ARM_ALU_PCREL_23_15 << 16) | ElfNative.EM_ARM : return "R_ARM_ALU_PCREL_23_15";
+                case ((ulong)ElfNative.R_ARM_LDR_SBREL_11_0 << 16) | ElfNative.EM_ARM : return "R_ARM_LDR_SBREL_11_0";
+                case ((ulong)ElfNative.R_ARM_ALU_SBREL_19_12 << 16) | ElfNative.EM_ARM : return "R_ARM_ALU_SBREL_19_12";
+                case ((ulong)ElfNative.R_ARM_ALU_SBREL_27_20 << 16) | ElfNative.EM_ARM : return "R_ARM_ALU_SBREL_27_20";
+                case ((ulong)ElfNative.R_ARM_TARGET1 << 16) | ElfNative.EM_ARM : return "R_ARM_TARGET1";
+                case ((ulong)ElfNative.R_ARM_SBREL31 << 16) | ElfNative.EM_ARM : return "R_ARM_SBREL31";
+                case ((ulong)ElfNative.R_ARM_V4BX << 16) | ElfNative.EM_ARM : return "R_ARM_V4BX";
+                case ((ulong)ElfNative.R_ARM_TARGET2 << 16) | ElfNative.EM_ARM : return "R_ARM_TARGET2";
+                case ((ulong)ElfNative.R_ARM_PREL31 << 16) | ElfNative.EM_ARM : return "R_ARM_PREL31";
+                case ((ulong)ElfNative.R_ARM_MOVW_ABS_NC << 16) | ElfNative.EM_ARM : return "R_ARM_MOVW_ABS_NC";
+                case ((ulong)ElfNative.R_ARM_MOVT_ABS << 16) | ElfNative.EM_ARM : return "R_ARM_MOVT_ABS";
+                case ((ulong)ElfNative.R_ARM_MOVW_PREL_NC << 16) | ElfNative.EM_ARM : return "R_ARM_MOVW_PREL_NC";
+                case ((ulong)ElfNative.R_ARM_MOVT_PREL << 16) | ElfNative.EM_ARM : return "R_ARM_MOVT_PREL";
+                case ((ulong)ElfNative.R_ARM_THM_MOVW_ABS_NC << 16) | ElfNative.EM_ARM : return "R_ARM_THM_MOVW_ABS_NC";
+                case ((ulong)ElfNative.R_ARM_THM_MOVT_ABS << 16) | ElfNative.EM_ARM : return "R_ARM_THM_MOVT_ABS";
+                case ((ulong)ElfNative.R_ARM_THM_MOVW_PREL_NC << 16) | ElfNative.EM_ARM : return "R_ARM_THM_MOVW_PREL_NC";
+                case ((ulong)ElfNative.R_ARM_THM_MOVT_PREL << 16) | ElfNative.EM_ARM : return "R_ARM_THM_MOVT_PREL";
+                case ((ulong)ElfNative.R_ARM_THM_JUMP19 << 16) | ElfNative.EM_ARM : return "R_ARM_THM_JUMP19";
+                case ((ulong)ElfNative.R_ARM_THM_JUMP6 << 16) | ElfNative.EM_ARM : return "R_ARM_THM_JUMP6";
+                case ((ulong)ElfNative.R_ARM_THM_ALU_PREL_11_0 << 16) | ElfNative.EM_ARM : return "R_ARM_THM_ALU_PREL_11_0";
+                case ((ulong)ElfNative.R_ARM_THM_PC12 << 16) | ElfNative.EM_ARM : return "R_ARM_THM_PC12";
+                case ((ulong)ElfNative.R_ARM_ABS32_NOI << 16) | ElfNative.EM_ARM : return "R_ARM_ABS32_NOI";
+                case ((ulong)ElfNative.R_ARM_REL32_NOI << 16) | ElfNative.EM_ARM : return "R_ARM_REL32_NOI";
+                case ((ulong)ElfNative.R_ARM_ALU_PC_G0_NC << 16) | ElfNative.EM_ARM : return "R_ARM_ALU_PC_G0_NC";
+                case ((ulong)ElfNative.R_ARM_ALU_PC_G0 << 16) | ElfNative.EM_ARM : return "R_ARM_ALU_PC_G0";
+                case ((ulong)ElfNative.R_ARM_ALU_PC_G1_NC << 16) | ElfNative.EM_ARM : return "R_ARM_ALU_PC_G1_NC";
+                case ((ulong)ElfNative.R_ARM_ALU_PC_G1 << 16) | ElfNative.EM_ARM : return "R_ARM_ALU_PC_G1";
+                case ((ulong)ElfNative.R_ARM_ALU_PC_G2 << 16) | ElfNative.EM_ARM : return "R_ARM_ALU_PC_G2";
+                case ((ulong)ElfNative.R_ARM_LDR_PC_G1 << 16) | ElfNative.EM_ARM : return "R_ARM_LDR_PC_G1";
+                case ((ulong)ElfNative.R_ARM_LDR_PC_G2 << 16) | ElfNative.EM_ARM : return "R_ARM_LDR_PC_G2";
+                case ((ulong)ElfNative.R_ARM_LDRS_PC_G0 << 16) | ElfNative.EM_ARM : return "R_ARM_LDRS_PC_G0";
+                case ((ulong)ElfNative.R_ARM_LDRS_PC_G1 << 16) | ElfNative.EM_ARM : return "R_ARM_LDRS_PC_G1";
+                case ((ulong)ElfNative.R_ARM_LDRS_PC_G2 << 16) | ElfNative.EM_ARM : return "R_ARM_LDRS_PC_G2";
+                case ((ulong)ElfNative.R_ARM_LDC_PC_G0 << 16) | ElfNative.EM_ARM : return "R_ARM_LDC_PC_G0";
+                case ((ulong)ElfNative.R_ARM_LDC_PC_G1 << 16) | ElfNative.EM_ARM : return "R_ARM_LDC_PC_G1";
+                case ((ulong)ElfNative.R_ARM_LDC_PC_G2 << 16) | ElfNative.EM_ARM : return "R_ARM_LDC_PC_G2";
+                case ((ulong)ElfNative.R_ARM_ALU_SB_G0_NC << 16) | ElfNative.EM_ARM : return "R_ARM_ALU_SB_G0_NC";
+                case ((ulong)ElfNative.R_ARM_ALU_SB_G0 << 16) | ElfNative.EM_ARM : return "R_ARM_ALU_SB_G0";
+                case ((ulong)ElfNative.R_ARM_ALU_SB_G1_NC << 16) | ElfNative.EM_ARM : return "R_ARM_ALU_SB_G1_NC";
+                case ((ulong)ElfNative.R_ARM_ALU_SB_G1 << 16) | ElfNative.EM_ARM : return "R_ARM_ALU_SB_G1";
+                case ((ulong)ElfNative.R_ARM_ALU_SB_G2 << 16) | ElfNative.EM_ARM : return "R_ARM_ALU_SB_G2";
+                case ((ulong)ElfNative.R_ARM_LDR_SB_G0 << 16) | ElfNative.EM_ARM : return "R_ARM_LDR_SB_G0";
+                case ((ulong)ElfNative.R_ARM_LDR_SB_G1 << 16) | ElfNative.EM_ARM : return "R_ARM_LDR_SB_G1";
+                case ((ulong)ElfNative.R_ARM_LDR_SB_G2 << 16) | ElfNative.EM_ARM : return "R_ARM_LDR_SB_G2";
+                case ((ulong)ElfNative.R_ARM_LDRS_SB_G0 << 16) | ElfNative.EM_ARM : return "R_ARM_LDRS_SB_G0";
+                case ((ulong)ElfNative.R_ARM_LDRS_SB_G1 << 16) | ElfNative.EM_ARM : return "R_ARM_LDRS_SB_G1";
+                case ((ulong)ElfNative.R_ARM_LDRS_SB_G2 << 16) | ElfNative.EM_ARM : return "R_ARM_LDRS_SB_G2";
+                case ((ulong)ElfNative.R_ARM_LDC_SB_G0 << 16) | ElfNative.EM_ARM : return "R_ARM_LDC_SB_G0";
+                case ((ulong)ElfNative.R_ARM_LDC_SB_G1 << 16) | ElfNative.EM_ARM : return "R_ARM_LDC_SB_G1";
+                case ((ulong)ElfNative.R_ARM_LDC_SB_G2 << 16) | ElfNative.EM_ARM : return "R_ARM_LDC_SB_G2";
+                case ((ulong)ElfNative.R_ARM_MOVW_BREL_NC << 16) | ElfNative.EM_ARM : return "R_ARM_MOVW_BREL_NC";
+                case ((ulong)ElfNative.R_ARM_MOVT_BREL << 16) | ElfNative.EM_ARM : return "R_ARM_MOVT_BREL";
+                case ((ulong)ElfNative.R_ARM_MOVW_BREL << 16) | ElfNative.EM_ARM : return "R_ARM_MOVW_BREL";
+                case ((ulong)ElfNative.R_ARM_THM_MOVW_BREL_NC << 16) | ElfNative.EM_ARM : return "R_ARM_THM_MOVW_BREL_NC";
+                case ((ulong)ElfNative.R_ARM_THM_MOVT_BREL << 16) | ElfNative.EM_ARM : return "R_ARM_THM_MOVT_BREL";
+                case ((ulong)ElfNative.R_ARM_THM_MOVW_BREL << 16) | ElfNative.EM_ARM : return "R_ARM_THM_MOVW_BREL";
+                case ((ulong)ElfNative.R_ARM_TLS_GOTDESC << 16) | ElfNative.EM_ARM : return "R_ARM_TLS_GOTDESC";
+                case ((ulong)ElfNative.R_ARM_TLS_CALL << 16) | ElfNative.EM_ARM : return "R_ARM_TLS_CALL";
+                case ((ulong)ElfNative.R_ARM_TLS_DESCSEQ << 16) | ElfNative.EM_ARM : return "R_ARM_TLS_DESCSEQ";
+                case ((ulong)ElfNative.R_ARM_THM_TLS_CALL << 16) | ElfNative.EM_ARM : return "R_ARM_THM_TLS_CALL";
+                case ((ulong)ElfNative.R_ARM_PLT32_ABS << 16) | ElfNative.EM_ARM : return "R_ARM_PLT32_ABS";
+                case ((ulong)ElfNative.R_ARM_GOT_ABS << 16) | ElfNative.EM_ARM : return "R_ARM_GOT_ABS";
+                case ((ulong)ElfNative.R_ARM_GOT_PREL << 16) | ElfNative.EM_ARM : return "R_ARM_GOT_PREL";
+                case ((ulong)ElfNative.R_ARM_GOT_BREL12 << 16) | ElfNative.EM_ARM : return "R_ARM_GOT_BREL12";
+                case ((ulong)ElfNative.R_ARM_GOTOFF12 << 16) | ElfNative.EM_ARM : return "R_ARM_GOTOFF12";
+                case ((ulong)ElfNative.R_ARM_GOTRELAX << 16) | ElfNative.EM_ARM : return "R_ARM_GOTRELAX";
+                case ((ulong)ElfNative.R_ARM_GNU_VTENTRY << 16) | ElfNative.EM_ARM : return "R_ARM_GNU_VTENTRY";
+                case ((ulong)ElfNative.R_ARM_GNU_VTINHERIT << 16) | ElfNative.EM_ARM : return "R_ARM_GNU_VTINHERIT";
+                case ((ulong)ElfNative.R_ARM_THM_PC11 << 16) | ElfNative.EM_ARM : return "R_ARM_THM_PC11";
+                case ((ulong)ElfNative.R_ARM_THM_PC9 << 16) | ElfNative.EM_ARM : return "R_ARM_THM_PC9";
+                case ((ulong)ElfNative.R_ARM_TLS_GD32 << 16) | ElfNative.EM_ARM : return "R_ARM_TLS_GD32";
+                case ((ulong)ElfNative.R_ARM_TLS_LDM32 << 16) | ElfNative.EM_ARM : return "R_ARM_TLS_LDM32";
+                case ((ulong)ElfNative.R_ARM_TLS_LDO32 << 16) | ElfNative.EM_ARM : return "R_ARM_TLS_LDO32";
+                case ((ulong)ElfNative.R_ARM_TLS_IE32 << 16) | ElfNative.EM_ARM : return "R_ARM_TLS_IE32";
+                case ((ulong)ElfNative.R_ARM_TLS_LE32 << 16) | ElfNative.EM_ARM : return "R_ARM_TLS_LE32";
+                case ((ulong)ElfNative.R_ARM_TLS_LDO12 << 16) | ElfNative.EM_ARM : return "R_ARM_TLS_LDO12";
+                case ((ulong)ElfNative.R_ARM_TLS_LE12 << 16) | ElfNative.EM_ARM : return "R_ARM_TLS_LE12";
+                case ((ulong)ElfNative.R_ARM_TLS_IE12GP << 16) | ElfNative.EM_ARM : return "R_ARM_TLS_IE12GP";
+                case ((ulong)ElfNative.R_ARM_ME_TOO << 16) | ElfNative.EM_ARM : return "R_ARM_ME_TOO";
+                case ((ulong)ElfNative.R_ARM_THM_TLS_DESCSEQ << 16) | ElfNative.EM_ARM : return "R_ARM_THM_TLS_DESCSEQ";
+                case ((ulong)ElfNative.R_ARM_THM_TLS_DESCSEQ32 << 16) | ElfNative.EM_ARM : return "R_ARM_THM_TLS_DESCSEQ32";
+                case ((ulong)ElfNative.R_ARM_THM_GOT_BREL12 << 16) | ElfNative.EM_ARM : return "R_ARM_THM_GOT_BREL12";
+                case ((ulong)ElfNative.R_ARM_IRELATIVE << 16) | ElfNative.EM_ARM : return "R_ARM_IRELATIVE";
+                case ((ulong)ElfNative.R_ARM_RXPC25 << 16) | ElfNative.EM_ARM : return "R_ARM_RXPC25";
+                case ((ulong)ElfNative.R_ARM_RSBREL32 << 16) | ElfNative.EM_ARM : return "R_ARM_RSBREL32";
+                case ((ulong)ElfNative.R_ARM_THM_RPC22 << 16) | ElfNative.EM_ARM : return "R_ARM_THM_RPC22";
+                case ((ulong)ElfNative.R_ARM_RREL32 << 16) | ElfNative.EM_ARM : return "R_ARM_RREL32";
+                case ((ulong)ElfNative.R_ARM_RABS22 << 16) | ElfNative.EM_ARM : return "R_ARM_RABS22";
+                case ((ulong)ElfNative.R_ARM_RPC24 << 16) | ElfNative.EM_ARM : return "R_ARM_RPC24";
+                case ((ulong)ElfNative.R_ARM_RBASE << 16) | ElfNative.EM_ARM : return "R_ARM_RBASE";
+                case ((ulong)ElfNative.R_X86_64_NONE << 16) | ElfNative.EM_X86_64 : return "R_X86_64_NONE";
+                case ((ulong)ElfNative.R_X86_64_64 << 16) | ElfNative.EM_X86_64 : return "R_X86_64_64";
+                case ((ulong)ElfNative.R_X86_64_PC32 << 16) | ElfNative.EM_X86_64 : return "R_X86_64_PC32";
+                case ((ulong)ElfNative.R_X86_64_GOT32 << 16) | ElfNative.EM_X86_64 : return "R_X86_64_GOT32";
+                case ((ulong)ElfNative.R_X86_64_PLT32 << 16) | ElfNative.EM_X86_64 : return "R_X86_64_PLT32";
+                case ((ulong)ElfNative.R_X86_64_COPY << 16) | ElfNative.EM_X86_64 : return "R_X86_64_COPY";
+                case ((ulong)ElfNative.R_X86_64_GLOB_DAT << 16) | ElfNative.EM_X86_64 : return "R_X86_64_GLOB_DAT";
+                case ((ulong)ElfNative.R_X86_64_JUMP_SLOT << 16) | ElfNative.EM_X86_64 : return "R_X86_64_JUMP_SLOT";
+                case ((ulong)ElfNative.R_X86_64_RELATIVE << 16) | ElfNative.EM_X86_64 : return "R_X86_64_RELATIVE";
+                case ((ulong)ElfNative.R_X86_64_GOTPCREL << 16) | ElfNative.EM_X86_64 : return "R_X86_64_GOTPCREL";
+                case ((ulong)ElfNative.R_X86_64_32 << 16) | ElfNative.EM_X86_64 : return "R_X86_64_32";
+                case ((ulong)ElfNative.R_X86_64_32S << 16) | ElfNative.EM_X86_64 : return "R_X86_64_32S";
+                case ((ulong)ElfNative.R_X86_64_16 << 16) | ElfNative.EM_X86_64 : return "R_X86_64_16";
+                case ((ulong)ElfNative.R_X86_64_PC16 << 16) | ElfNative.EM_X86_64 : return "R_X86_64_PC16";
+                case ((ulong)ElfNative.R_X86_64_8 << 16) | ElfNative.EM_X86_64 : return "R_X86_64_8";
+                case ((ulong)ElfNative.R_X86_64_PC8 << 16) | ElfNative.EM_X86_64 : return "R_X86_64_PC8";
+                case ((ulong)ElfNative.R_X86_64_DTPMOD64 << 16) | ElfNative.EM_X86_64 : return "R_X86_64_DTPMOD64";
+                case ((ulong)ElfNative.R_X86_64_DTPOFF64 << 16) | ElfNative.EM_X86_64 : return "R_X86_64_DTPOFF64";
+                case ((ulong)ElfNative.R_X86_64_TPOFF64 << 16) | ElfNative.EM_X86_64 : return "R_X86_64_TPOFF64";
+                case ((ulong)ElfNative.R_X86_64_TLSGD << 16) | ElfNative.EM_X86_64 : return "R_X86_64_TLSGD";
+                case ((ulong)ElfNative.R_X86_64_TLSLD << 16) | ElfNative.EM_X86_64 : return "R_X86_64_TLSLD";
+                case ((ulong)ElfNative.R_X86_64_DTPOFF32 << 16) | ElfNative.EM_X86_64 : return "R_X86_64_DTPOFF32";
+                case ((ulong)ElfNative.R_X86_64_GOTTPOFF << 16) | ElfNative.EM_X86_64 : return "R_X86_64_GOTTPOFF";
+                case ((ulong)ElfNative.R_X86_64_TPOFF32 << 16) | ElfNative.EM_X86_64 : return "R_X86_64_TPOFF32";
+                case ((ulong)ElfNative.R_X86_64_PC64 << 16) | ElfNative.EM_X86_64 : return "R_X86_64_PC64";
+                case ((ulong)ElfNative.R_X86_64_GOTOFF64 << 16) | ElfNative.EM_X86_64 : return "R_X86_64_GOTOFF64";
+                case ((ulong)ElfNative.R_X86_64_GOTPC32 << 16) | ElfNative.EM_X86_64 : return "R_X86_64_GOTPC32";
+                case ((ulong)ElfNative.R_X86_64_GOT64 << 16) | ElfNative.EM_X86_64 : return "R_X86_64_GOT64";
+                case ((ulong)ElfNative.R_X86_64_GOTPCREL64 << 16) | ElfNative.EM_X86_64 : return "R_X86_64_GOTPCREL64";
+                case ((ulong)ElfNative.R_X86_64_GOTPC64 << 16) | ElfNative.EM_X86_64 : return "R_X86_64_GOTPC64";
+                case ((ulong)ElfNative.R_X86_64_GOTPLT64 << 16) | ElfNative.EM_X86_64 : return "R_X86_64_GOTPLT64";
+                case ((ulong)ElfNative.R_X86_64_PLTOFF64 << 16) | ElfNative.EM_X86_64 : return "R_X86_64_PLTOFF64";
+                case ((ulong)ElfNative.R_X86_64_SIZE32 << 16) | ElfNative.EM_X86_64 : return "R_X86_64_SIZE32";
+                case ((ulong)ElfNative.R_X86_64_SIZE64 << 16) | ElfNative.EM_X86_64 : return "R_X86_64_SIZE64";
+                case ((ulong)ElfNative.R_X86_64_GOTPC32_TLSDESC << 16) | ElfNative.EM_X86_64 : return "R_X86_64_GOTPC32_TLSDESC";
+                case ((ulong)ElfNative.R_X86_64_TLSDESC_CALL << 16) | ElfNative.EM_X86_64 : return "R_X86_64_TLSDESC_CALL";
+                case ((ulong)ElfNative.R_X86_64_TLSDESC << 16) | ElfNative.EM_X86_64 : return "R_X86_64_TLSDESC";
+                case ((ulong)ElfNative.R_X86_64_IRELATIVE << 16) | ElfNative.EM_X86_64 : return "R_X86_64_IRELATIVE";
+                case ((ulong)ElfNative.R_X86_64_RELATIVE64 << 16) | ElfNative.EM_X86_64 : return "R_X86_64_RELATIVE64";
                 default: return "Unknown ElfRelocationType";
             }
         }

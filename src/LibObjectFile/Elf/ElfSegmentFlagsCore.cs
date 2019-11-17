@@ -20,16 +20,16 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Segment is executable
         /// </summary>
-        Executable = RawElf.PF_X,
+        Executable = ElfNative.PF_X,
 
         /// <summary>
         /// Segment is writable
         /// </summary>
-        Writable = RawElf.PF_W,
+        Writable = ElfNative.PF_W,
 
         /// <summary>
         /// Segment is readable
         /// </summary>
-        Readable = RawElf.PF_R,
+        Readable = ElfNative.PF_R,
     }
 }

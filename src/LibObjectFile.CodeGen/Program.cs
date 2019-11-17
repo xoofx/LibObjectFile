@@ -47,7 +47,7 @@ namespace LibObjectFile.CodeGen
         {
             var cppOptions = new CSharpConverterOptions()
             {
-                DefaultClassLib = "RawElf",
+                DefaultClassLib = "ElfNative",
                 DefaultNamespace = "LibObjectFile.Elf",
                 DefaultOutputFilePath = "/LibObjectFile.Elf.generated.cs",
                 DefaultDllImportNameAndArguments = "NotUsed",

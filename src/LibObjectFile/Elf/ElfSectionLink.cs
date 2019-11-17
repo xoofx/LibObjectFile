@@ -11,11 +11,11 @@ namespace LibObjectFile.Elf
     /// </summary>
     public readonly struct ElfSectionLink : IEquatable<ElfSectionLink>
     {
-        public static readonly ElfSectionLink Empty = new ElfSectionLink(RawElf.SHN_UNDEF);
+        public static readonly ElfSectionLink Empty = new ElfSectionLink(ElfNative.SHN_UNDEF);
 
-        public static readonly ElfSectionLink SectionAbsolute = new ElfSectionLink(RawElf.SHN_ABS);
+        public static readonly ElfSectionLink SectionAbsolute = new ElfSectionLink(ElfNative.SHN_ABS);
 
-        public static readonly ElfSectionLink SectionCommon = new ElfSectionLink(RawElf.SHN_COMMON);
+        public static readonly ElfSectionLink SectionCommon = new ElfSectionLink(ElfNative.SHN_COMMON);
         
         public ElfSectionLink(uint index)
         {
@@ -36,7 +36,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// <c>true</c> if this link to a section is a special section.
         /// </summary>
-        public bool IsSpecial => Section == null && (SpecialIndex == RawElf.SHN_UNDEF || SpecialIndex >= RawElf.SHN_LORESERVE);
+        public bool IsSpecial => Section == null && (SpecialIndex == ElfNative.SHN_UNDEF || SpecialIndex >= ElfNative.SHN_LORESERVE);
         
         public uint GetIndex()
         {
@@ -80,19 +80,19 @@ namespace LibObjectFile.Elf
 
             if (SpecialIndex == 0) return "Special Section Undefined";
 
-            if (SpecialIndex > RawElf.SHN_BEFORE)
+            if (SpecialIndex > ElfNative.SHN_BEFORE)
             {
-                if (SpecialIndex == RawElf.SHN_ABS)
+                if (SpecialIndex == ElfNative.SHN_ABS)
                 {
                     return "Special Section Absolute";
                 }
                 
-                if (SpecialIndex == RawElf.SHN_COMMON)
+                if (SpecialIndex == ElfNative.SHN_COMMON)
                 {
                     return "Special Section Common";
                 }
 
-                if (SpecialIndex == RawElf.SHN_XINDEX)
+                if (SpecialIndex == ElfNative.SHN_XINDEX)
                 {
                     return "Special Section XIndex";
                 }

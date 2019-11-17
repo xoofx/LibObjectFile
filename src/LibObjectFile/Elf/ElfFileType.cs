@@ -6,34 +6,34 @@ namespace LibObjectFile.Elf
 {
     /// <summary>
     /// Defines the file type of an <see cref="ElfObjectFile"/>.
-    /// This is the value seen in <see cref="RawElf.Elf32_Ehdr.e_type"/> or <see cref="RawElf.Elf64_Ehdr.e_type"/>
-    /// as well as the various machine defines (e.g <see cref="RawElf.ET_REL"/>).
+    /// This is the value seen in <see cref="ElfNative.Elf32_Ehdr.e_type"/> or <see cref="ElfNative.Elf64_Ehdr.e_type"/>
+    /// as well as the various machine defines (e.g <see cref="ElfNative.ET_REL"/>).
     /// </summary>
     public enum ElfFileType : ushort
     {
         /// <summary>
         /// No file type
         /// </summary>
-        None = RawElf.ET_NONE,
+        None = ElfNative.ET_NONE,
 
         /// <summary>
         /// Relocatable file
         /// </summary>
-        Relocatable = RawElf.ET_REL,
+        Relocatable = ElfNative.ET_REL,
 
         /// <summary>
         /// Executable file
         /// </summary>
-        Executable = RawElf.ET_EXEC,
+        Executable = ElfNative.ET_EXEC,
 
         /// <summary>
         /// Shared object file 
         /// </summary>
-        Dynamic = RawElf.ET_DYN,
+        Dynamic = ElfNative.ET_DYN,
 
         /// <summary>
         /// Core file
         /// </summary>
-        Core = RawElf.ET_CORE,
+        Core = ElfNative.ET_CORE,
     }
 }

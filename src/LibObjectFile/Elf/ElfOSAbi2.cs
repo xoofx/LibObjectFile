@@ -8,8 +8,8 @@ namespace LibObjectFile.Elf
 {
     /// <summary>
     /// Defines an OS ABI.
-    /// This is the value seen in the ident part of an Elf header at index <see cref="RawElf.EI_OSABI"/>
-    /// as well as the various machine defines (e.g <see cref="RawElf.ELFOSABI_LINUX"/>).
+    /// This is the value seen in the ident part of an Elf header at index <see cref="ElfNative.EI_OSABI"/>
+    /// as well as the various machine defines (e.g <see cref="ElfNative.ELFOSABI_LINUX"/>).
     /// </summary>
     public readonly partial struct ElfOSABI : IEquatable<ElfOSABI>
     {

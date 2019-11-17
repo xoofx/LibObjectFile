@@ -6,29 +6,29 @@ namespace LibObjectFile.Elf
 {
     /// <summary>
     /// Defines the visibility of a symbol
-    /// This is the value seen compressed in <see cref="RawElf.Elf32_Sym.st_other"/> or <see cref="RawElf.Elf64_Sym.st_other"/>
-    /// as well as the various defines (e.g <see cref="RawElf.STV_INTERNAL"/>).
+    /// This is the value seen compressed in <see cref="ElfNative.Elf32_Sym.st_other"/> or <see cref="ElfNative.Elf64_Sym.st_other"/>
+    /// as well as the various defines (e.g <see cref="ElfNative.STV_INTERNAL"/>).
     /// </summary>
     public enum ElfSymbolVisibility : byte
     {
         /// <summary>
         /// Default symbol visibility rules 
         /// </summary>
-        Default = RawElf.STV_DEFAULT,
+        Default = ElfNative.STV_DEFAULT,
 
         /// <summary>
         /// Processor specific hidden class
         /// </summary>
-        Internal = RawElf.STV_INTERNAL,
+        Internal = ElfNative.STV_INTERNAL,
 
         /// <summary>
         /// Sym unavailable in other modules
         /// </summary>
-        Hidden = RawElf.STV_HIDDEN,
+        Hidden = ElfNative.STV_HIDDEN,
 
         /// <summary>
         /// Not preemptible, not exported 
         /// </summary>
-        Protected = RawElf.STV_PROTECTED,
+        Protected = ElfNative.STV_PROTECTED,
     }
 }

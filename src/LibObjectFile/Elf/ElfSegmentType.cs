@@ -50,7 +50,7 @@ namespace LibObjectFile.Elf
 
         public override string ToString()
         {
-            return Value < RawElf.PT_NUM ? $"SegmentType {((ElfSegmentTypeCore) Value)}" : $"SegmentType 0x{Value:X8}";
+            return Value < ElfNative.PT_NUM ? $"SegmentType {((ElfSegmentTypeCore) Value)}" : $"SegmentType 0x{Value:X8}";
         }
         
         public static implicit operator ElfSegmentType(ElfSegmentTypeCore segmentTypeCore)

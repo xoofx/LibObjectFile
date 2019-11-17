@@ -8,7 +8,7 @@ namespace LibObjectFile.Elf
 {
     /// <summary>
     /// A symbol entry in the <see cref="ElfSymbolTable"/>
-    /// This is the value seen in <see cref="RawElf.Elf32_Sym"/> or <see cref="RawElf.Elf64_Sym"/>
+    /// This is the value seen in <see cref="ElfNative.Elf32_Sym"/> or <see cref="ElfNative.Elf64_Sym"/>
     /// </summary>
     public struct ElfSymbol : IEquatable<ElfSymbol>
     {

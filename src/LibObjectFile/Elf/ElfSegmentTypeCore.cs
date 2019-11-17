@@ -12,41 +12,41 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Program header table entry unused
         /// </summary>
-        Null = RawElf.PT_NULL,
+        Null = ElfNative.PT_NULL,
 
         /// <summary>
         /// Loadable program segment
         /// </summary>
-        Load = RawElf.PT_LOAD,
+        Load = ElfNative.PT_LOAD,
 
         /// <summary>
         /// Dynamic linking information
         /// </summary>
-        Dynamic = RawElf.PT_DYNAMIC,
+        Dynamic = ElfNative.PT_DYNAMIC,
 
         /// <summary>
         /// Program interpreter
         /// </summary>
-        Interpreter = RawElf.PT_INTERP,
+        Interpreter = ElfNative.PT_INTERP,
 
         /// <summary>
         /// Auxiliary information
         /// </summary>
-        Note = RawElf.PT_NOTE,
+        Note = ElfNative.PT_NOTE,
 
         /// <summary>
         /// Reserved
         /// </summary>
-        SectionHeaderLib = RawElf.PT_SHLIB,
+        SectionHeaderLib = ElfNative.PT_SHLIB,
 
         /// <summary>
         /// Entry for header table itself
         /// </summary>
-        ProgramHeader = RawElf.PT_PHDR,
+        ProgramHeader = ElfNative.PT_PHDR,
 
         /// <summary>
         /// Thread-local storage segment
         /// </summary>
-        Tls = RawElf.PT_TLS,
+        Tls = ElfNative.PT_TLS,
     }
 }

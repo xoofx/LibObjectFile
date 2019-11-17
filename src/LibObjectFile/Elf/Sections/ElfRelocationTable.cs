@@ -49,8 +49,8 @@ namespace LibObjectFile.Elf
         public override unsafe ulong Size =>
             Parent == null || Parent.FileClass == ElfFileClass.None? 0 :
             Parent.FileClass == ElfFileClass.Is32
-                ? (ulong) Entries.Count * (IsRelocationWithAddends ? (ulong) sizeof(RawElf.Elf32_Rela) : (ulong) sizeof(RawElf.Elf32_Rel))
-                : (ulong) Entries.Count * (IsRelocationWithAddends ? (ulong) sizeof(RawElf.Elf64_Rela) : (ulong) sizeof(RawElf.Elf64_Rel));
+                ? (ulong) Entries.Count * (IsRelocationWithAddends ? (ulong) sizeof(ElfNative.Elf32_Rela) : (ulong) sizeof(ElfNative.Elf32_Rel))
+                : (ulong) Entries.Count * (IsRelocationWithAddends ? (ulong) sizeof(ElfNative.Elf64_Rela) : (ulong) sizeof(ElfNative.Elf64_Rel));
 
         protected override void Read(ElfReader reader)
         {
@@ -78,7 +78,7 @@ namespace LibObjectFile.Elf
 
         public override unsafe ulong TableEntrySize =>
             Parent == null || Parent.FileClass == ElfFileClass.None ? 0 :
-            Parent.FileClass == ElfFileClass.Is32 ? (ulong) (IsRelocationWithAddends ? sizeof(RawElf.Elf32_Rela) : sizeof(RawElf.Elf32_Rel)) : (ulong) (IsRelocationWithAddends ? sizeof(RawElf.Elf64_Rela) : sizeof(RawElf.Elf64_Rel));
+            Parent.FileClass == ElfFileClass.Is32 ? (ulong) (IsRelocationWithAddends ? sizeof(ElfNative.Elf32_Rela) : sizeof(ElfNative.Elf32_Rel)) : (ulong) (IsRelocationWithAddends ? sizeof(ElfNative.Elf64_Rela) : sizeof(ElfNative.Elf64_Rel));
 
         private void Read32(ElfReader reader)
         {
@@ -87,7 +87,7 @@ namespace LibObjectFile.Elf
             {
                 for (ulong i = 0; i < numberOfEntries; i++)
                 {
-                    RawElf.Elf32_Rela rel;
+                    ElfNative.Elf32_Rela rel;
                     ulong streamOffset = (ulong)reader.Stream.Position;
                     if (!reader.TryRead((int)OriginalTableEntrySize, out rel))
                     {
@@ -109,7 +109,7 @@ namespace LibObjectFile.Elf
             {
                 for (ulong i = 0; i < numberOfEntries; i++)
                 {
-                    RawElf.Elf32_Rel rel;
+                    ElfNative.Elf32_Rel rel;
                     ulong streamOffset = (ulong)reader.Stream.Position;
                     if (!reader.TryRead((int)OriginalTableEntrySize, out rel))
                     {
@@ -135,7 +135,7 @@ namespace LibObjectFile.Elf
             {
                 for (ulong i = 0; i < numberOfEntries; i++)
                 {
-                    RawElf.Elf64_Rela rel;
+                    ElfNative.Elf64_Rela rel;
                     ulong streamOffset = (ulong)reader.Stream.Position;
                     if (!reader.TryRead((int)OriginalTableEntrySize, out rel))
                     {
@@ -157,7 +157,7 @@ namespace LibObjectFile.Elf
             {
                 for (ulong i = 0; i < numberOfEntries; i++)
                 {
-                    RawElf.Elf64_Rel rel;
+                    ElfNative.Elf64_Rel rel;
                     ulong streamOffset = (ulong)reader.Stream.Position;
                     if (!reader.TryRead((int)OriginalTableEntrySize, out rel))
                     {
@@ -185,7 +185,7 @@ namespace LibObjectFile.Elf
                 {
                     var entry = Entries[i];
 
-                    var rel = new RawElf.Elf32_Rela();
+                    var rel = new ElfNative.Elf32_Rela();
                     writer.Encode(out rel.r_offset, (uint)entry.Offset);
                     uint r_info = entry.Info32;
                     writer.Encode(out rel.r_info, r_info);
@@ -200,7 +200,7 @@ namespace LibObjectFile.Elf
                 {
                     var entry = Entries[i];
 
-                    var rel = new RawElf.Elf32_Rel();
+                    var rel = new ElfNative.Elf32_Rel();
                     writer.Encode(out rel.r_offset, (uint)entry.Offset);
                     uint r_info = entry.Info32;
                     writer.Encode(out rel.r_info, r_info);
@@ -218,7 +218,7 @@ namespace LibObjectFile.Elf
                 {
                     var entry = Entries[i];
 
-                    var rel = new RawElf.Elf64_Rela();
+                    var rel = new ElfNative.Elf64_Rela();
                     writer.Encode(out rel.r_offset, entry.Offset);
                     ulong r_info = entry.Info64;
                     writer.Encode(out rel.r_info, r_info);
@@ -233,7 +233,7 @@ namespace LibObjectFile.Elf
                 {
                     var entry = Entries[i];
 
-                    var rel = new RawElf.Elf64_Rel();
+                    var rel = new ElfNative.Elf64_Rel();
                     writer.Encode(out rel.r_offset, (uint)entry.Offset);
                     ulong r_info = entry.Info64;
                     writer.Encode(out rel.r_info, r_info);

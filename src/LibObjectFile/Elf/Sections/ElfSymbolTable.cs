@@ -41,11 +41,11 @@ namespace LibObjectFile.Elf
 
         public override unsafe ulong Size =>
             Parent == null || Parent.FileClass == ElfFileClass.None ? 0 :
-            Parent.FileClass == ElfFileClass.Is32 ? (ulong) (Entries.Count * sizeof(RawElf.Elf32_Sym)) : (ulong) (Entries.Count * sizeof(RawElf.Elf64_Sym));
+            Parent.FileClass == ElfFileClass.Is32 ? (ulong) (Entries.Count * sizeof(ElfNative.Elf32_Sym)) : (ulong) (Entries.Count * sizeof(ElfNative.Elf64_Sym));
 
         public override unsafe ulong TableEntrySize =>
             Parent == null || Parent.FileClass == ElfFileClass.None ? 0 :
-            Parent.FileClass == ElfFileClass.Is32 ? (ulong) sizeof(RawElf.Elf32_Sym) : (ulong) sizeof(RawElf.Elf64_Sym);
+            Parent.FileClass == ElfFileClass.Is32 ? (ulong) sizeof(ElfNative.Elf32_Sym) : (ulong) sizeof(ElfNative.Elf64_Sym);
 
         protected override void Read(ElfReader reader)
         {
@@ -76,7 +76,7 @@ namespace LibObjectFile.Elf
             var numberOfEntries = base.Size / OriginalTableEntrySize;
             for (ulong i = 0; i < numberOfEntries; i++)
             {
-                RawElf.Elf32_Sym sym;
+                ElfNative.Elf32_Sym sym;
                 ulong streamOffset = (ulong)reader.Stream.Position;
                 if (!reader.TryRead((int)OriginalTableEntrySize, out sym))
                 {
@@ -109,7 +109,7 @@ namespace LibObjectFile.Elf
             var numberOfEntries = base.Size / OriginalTableEntrySize;
             for (ulong i = 0; i < numberOfEntries; i++)
             {
-                RawElf.Elf64_Sym sym;
+                ElfNative.Elf64_Sym sym;
                 ulong streamOffset = (ulong)reader.Stream.Position;
                 if (!reader.TryRead((int)OriginalTableEntrySize, out sym))
                 {
@@ -147,13 +147,13 @@ namespace LibObjectFile.Elf
             {
                 var entry = Entries[i];
 
-                var sym = new RawElf.Elf32_Sym();
+                var sym = new ElfNative.Elf32_Sym();
                 writer.Encode(out sym.st_name, (ushort)stringTable.GetOrCreateIndex(entry.Name));
                 writer.Encode(out sym.st_value, (uint)entry.Value);
                 writer.Encode(out sym.st_size, (uint)entry.Size);
                 sym.st_info = (byte)(((byte) entry.Bind << 4) | (byte) entry.Type);
                 sym.st_other = (byte) ((byte) entry.Visibility & 3);
-                writer.Encode(out sym.st_shndx, (RawElf.Elf32_Half) entry.Section.GetIndex());
+                writer.Encode(out sym.st_shndx, (ElfNative.Elf32_Half) entry.Section.GetIndex());
 
                 writer.Write(sym);
             }
@@ -167,13 +167,13 @@ namespace LibObjectFile.Elf
             {
                 var entry = Entries[i];
 
-                var sym = new RawElf.Elf64_Sym();
+                var sym = new ElfNative.Elf64_Sym();
                 writer.Encode(out sym.st_name, stringTable.GetOrCreateIndex(entry.Name));
                 writer.Encode(out sym.st_value, entry.Value);
                 writer.Encode(out sym.st_size, entry.Size);
                 sym.st_info = (byte)(((byte)entry.Bind << 4) | (byte)entry.Type);
                 sym.st_other = (byte)((byte)entry.Visibility & 3);
-                writer.Encode(out sym.st_shndx, (RawElf.Elf64_Half)entry.Section.GetIndex());
+                writer.Encode(out sym.st_shndx, (ElfNative.Elf64_Half)entry.Section.GetIndex());
 
                 writer.Write(sym);
             }

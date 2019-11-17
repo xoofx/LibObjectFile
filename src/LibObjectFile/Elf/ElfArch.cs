@@ -8,8 +8,8 @@ namespace LibObjectFile.Elf
 {
     /// <summary>
     /// Defines a machine architecture.
-    /// This is the value seen in <see cref="RawElf.Elf32_Ehdr.e_machine"/> or <see cref="RawElf.Elf64_Ehdr.e_machine"/>
-    /// as well as the various machine defines (e.g <see cref="RawElf.EM_386"/>).
+    /// This is the value seen in <see cref="ElfNative.Elf32_Ehdr.e_machine"/> or <see cref="ElfNative.Elf64_Ehdr.e_machine"/>
+    /// as well as the various machine defines (e.g <see cref="ElfNative.EM_386"/>).
     /// </summary>
     public readonly partial struct ElfArch : IEquatable<ElfArch>
     {

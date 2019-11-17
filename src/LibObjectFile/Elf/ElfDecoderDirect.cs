@@ -9,92 +9,92 @@ namespace LibObjectFile.Elf
     /// </summary>
     public struct ElfDecoderDirect : IElfDecoder
     {
-        public ushort Decode(RawElf.Elf32_Half src)
+        public ushort Decode(ElfNative.Elf32_Half src)
         {
             return src.Value;
         }
 
-        public ushort Decode(RawElf.Elf64_Half src)
+        public ushort Decode(ElfNative.Elf64_Half src)
         {
             return src.Value;
         }
 
-        public uint Decode(RawElf.Elf32_Word src)
+        public uint Decode(ElfNative.Elf32_Word src)
         {
             return src.Value;
         }
 
-        public uint Decode(RawElf.Elf64_Word src)
+        public uint Decode(ElfNative.Elf64_Word src)
         {
             return src.Value;
         }
 
-        public int Decode(RawElf.Elf32_Sword src)
+        public int Decode(ElfNative.Elf32_Sword src)
         {
             return src.Value;
         }
 
-        public int Decode(RawElf.Elf64_Sword src)
+        public int Decode(ElfNative.Elf64_Sword src)
         {
             return src.Value;
         }
 
-        public ulong Decode(RawElf.Elf32_Xword src)
+        public ulong Decode(ElfNative.Elf32_Xword src)
         {
             return src.Value;
         }
 
-        public long Decode(RawElf.Elf32_Sxword src)
+        public long Decode(ElfNative.Elf32_Sxword src)
         {
             return src.Value;
         }
 
-        public ulong Decode(RawElf.Elf64_Xword src)
+        public ulong Decode(ElfNative.Elf64_Xword src)
         {
             return src.Value;
         }
 
-        public long Decode(RawElf.Elf64_Sxword src)
+        public long Decode(ElfNative.Elf64_Sxword src)
         {
             return src.Value;
         }
 
-        public uint Decode(RawElf.Elf32_Addr src)
+        public uint Decode(ElfNative.Elf32_Addr src)
         {
             return src.Value;
         }
 
-        public ulong Decode(RawElf.Elf64_Addr src)
+        public ulong Decode(ElfNative.Elf64_Addr src)
         {
             return src.Value;
         }
 
-        public uint Decode(RawElf.Elf32_Off src)
+        public uint Decode(ElfNative.Elf32_Off src)
         {
             return src.Value;
         }
 
-        public ulong Decode(RawElf.Elf64_Off src)
+        public ulong Decode(ElfNative.Elf64_Off src)
         {
             return src.Value;
         }
 
-        public ushort Decode(RawElf.Elf32_Section src)
+        public ushort Decode(ElfNative.Elf32_Section src)
         {
             return src.Value;
         }
 
-        public ushort Decode(RawElf.Elf64_Section src)
+        public ushort Decode(ElfNative.Elf64_Section src)
         {
             return src.Value;
         }
 
-        public ushort Decode(RawElf.Elf32_Versym src)
+        public ushort Decode(ElfNative.Elf32_Versym src)
         {
             return src.Value;
         }
 
-        public ushort Decode(RawElf.Elf64_Versym src)
+        public ushort Decode(ElfNative.Elf64_Versym src)
         {
             return src.Value;
         }

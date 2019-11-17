@@ -442,9 +442,9 @@ namespace LibObjectFile.Elf
             if (flags.Value == 0) return string.Empty;
 
             var builder = new StringBuilder();
-            builder.Append((flags.Value & RawElf.PF_R) != 0 ? 'R' : ' ');
-            builder.Append((flags.Value & RawElf.PF_W) != 0 ? 'W' : ' ');
-            builder.Append((flags.Value & RawElf.PF_X) != 0 ? 'E' : ' ');
+            builder.Append((flags.Value & ElfNative.PF_R) != 0 ? 'R' : ' ');
+            builder.Append((flags.Value & ElfNative.PF_W) != 0 ? 'W' : ' ');
+            builder.Append((flags.Value & ElfNative.PF_X) != 0 ? 'E' : ' ');
             // TODO: other flags
             return builder.ToString();
         }
@@ -453,17 +453,17 @@ namespace LibObjectFile.Elf
         {
             return segmentType.Value switch
             {
-                RawElf.PT_NULL => "NULL",
-                RawElf.PT_LOAD => "LOAD",
-                RawElf.PT_DYNAMIC => "DYNAMIC",
-                RawElf.PT_INTERP => "INTERP",
-                RawElf.PT_NOTE => "NOTE",
-                RawElf.PT_SHLIB => "SHLIB",
-                RawElf.PT_PHDR => "PHDR",
-                RawElf.PT_TLS => "TLS",
-                RawElf.PT_GNU_EH_FRAME => "GNU_EH_FRAME",
-                RawElf.PT_GNU_STACK => "GNU_STACK",
-                RawElf.PT_GNU_RELRO => "GNU_RELRO",
+                ElfNative.PT_NULL => "NULL",
+                ElfNative.PT_LOAD => "LOAD",
+                ElfNative.PT_DYNAMIC => "DYNAMIC",
+                ElfNative.PT_INTERP => "INTERP",
+                ElfNative.PT_NOTE => "NOTE",
+                ElfNative.PT_SHLIB => "SHLIB",
+                ElfNative.PT_PHDR => "PHDR",
+                ElfNative.PT_TLS => "TLS",
+                ElfNative.PT_GNU_EH_FRAME => "GNU_EH_FRAME",
+                ElfNative.PT_GNU_STACK => "GNU_STACK",
+                ElfNative.PT_GNU_RELRO => "GNU_RELRO",
                 _ => $"<unknown>: {segmentType.Value:x}"
             };
         }
@@ -553,8 +553,8 @@ namespace LibObjectFile.Elf
         {
             return version switch
             {
-                RawElf.EV_CURRENT => $"{version} (current)",
-                RawElf.EV_NONE => "",
+                ElfNative.EV_CURRENT => $"{version} (current)",
+                ElfNative.EV_NONE => "",
                 _ => $"{version}  <unknown>",
             };
         }
@@ -564,17 +564,17 @@ namespace LibObjectFile.Elf
         {
             return osabi.Value switch
             {
-                RawElf.ELFOSABI_NONE => "UNIX - System V",
-                RawElf.ELFOSABI_HPUX => "UNIX - HP-UX",
-                RawElf.ELFOSABI_NETBSD => "UNIX - NetBSD",
-                RawElf.ELFOSABI_GNU => "UNIX - GNU",
-                RawElf.ELFOSABI_SOLARIS => "UNIX - Solaris",
-                RawElf.ELFOSABI_AIX => "UNIX - AIX",
-                RawElf.ELFOSABI_IRIX => "UNIX - IRIX",
-                RawElf.ELFOSABI_FREEBSD => "UNIX - FreeBSD",
-                RawElf.ELFOSABI_TRU64 => "UNIX - TRU64",
-                RawElf.ELFOSABI_MODESTO => "Novell - Modesto",
-                RawElf.ELFOSABI_OPENBSD => "UNIX - OpenBSD",
+                ElfNative.ELFOSABI_NONE => "UNIX - System V",
+                ElfNative.ELFOSABI_HPUX => "UNIX - HP-UX",
+                ElfNative.ELFOSABI_NETBSD => "UNIX - NetBSD",
+                ElfNative.ELFOSABI_GNU => "UNIX - GNU",
+                ElfNative.ELFOSABI_SOLARIS => "UNIX - Solaris",
+                ElfNative.ELFOSABI_AIX => "UNIX - AIX",
+                ElfNative.ELFOSABI_IRIX => "UNIX - IRIX",
+                ElfNative.ELFOSABI_FREEBSD => "UNIX - FreeBSD",
+                ElfNative.ELFOSABI_TRU64 => "UNIX - TRU64",
+                ElfNative.ELFOSABI_MODESTO => "Novell - Modesto",
+                ElfNative.ELFOSABI_OPENBSD => "UNIX - OpenBSD",
                 _ => $"<unknown: {osabi.Value:x}"
             };
         }
@@ -589,8 +589,8 @@ namespace LibObjectFile.Elf
                 case ElfFileType.Core: return "CORE (Core file)";
                 default:
                     var e_type = (ushort) fileType;
-                    if (e_type >= RawElf.ET_LOPROC && e_type <= RawElf.ET_HIPROC) return $"Processor Specific: ({e_type:x})";
-                    else if (e_type >= RawElf.ET_LOOS && e_type <= RawElf.ET_HIOS)
+                    if (e_type >= ElfNative.ET_LOPROC && e_type <= ElfNative.ET_HIPROC) return $"Processor Specific: ({e_type:x})";
+                    else if (e_type >= ElfNative.ET_LOOS && e_type <= ElfNative.ET_HIOS)
                         return $"OS Specific: ({e_type:x})";
                     else
                         return $"<unknown>: {e_type:x}";
@@ -601,75 +601,75 @@ namespace LibObjectFile.Elf
         {
             switch (arch.Value)
             {
-                case RawElf.EM_NONE: return "None";
-                case RawElf.EM_M32: return "WE32100";
-                case RawElf.EM_SPARC: return "Sparc";
-                case RawElf.EM_386: return "Intel 80386";
-                case RawElf.EM_68K: return "MC68000";
-                case RawElf.EM_88K: return "MC88000";
-                case RawElf.EM_860: return "Intel 80860";
-                case RawElf.EM_MIPS: return "MIPS R3000";
-                case RawElf.EM_S370: return "IBM System/370";
-                case RawElf.EM_MIPS_RS3_LE: return "MIPS R4000 big-endian";
-                case RawElf.EM_PARISC: return "HPPA";
-                case RawElf.EM_SPARC32PLUS: return "Sparc v8+";
-                case RawElf.EM_960: return "Intel 80960";
-                case RawElf.EM_PPC: return "PowerPC";
-                case RawElf.EM_PPC64: return "PowerPC64";
-                case RawElf.EM_S390: return "IBM S/390";
-                case RawElf.EM_V800: return "Renesas V850 (using RH850 ABI)";
-                case RawElf.EM_FR20: return "Fujitsu FR20";
-                case RawElf.EM_RH32: return "TRW RH32";
-                case RawElf.EM_ARM: return "ARM";
-                case RawElf.EM_SH: return "Renesas / SuperH SH";
-                case RawElf.EM_SPARCV9: return "Sparc v9";
-                case RawElf.EM_TRICORE: return "Siemens Tricore";
-                case RawElf.EM_ARC: return "ARC";
-                case RawElf.EM_H8_300: return "Renesas H8/300";
-                case RawElf.EM_H8_300H: return "Renesas H8/300H";
-                case RawElf.EM_H8S: return "Renesas H8S";
-                case RawElf.EM_H8_500: return "Renesas H8/500";
-                case RawElf.EM_IA_64: return "Intel IA-64";
-                case RawElf.EM_MIPS_X: return "Stanford MIPS-X";
-                case RawElf.EM_COLDFIRE: return "Motorola Coldfire";
-                case RawElf.EM_68HC12: return "Motorola MC68HC12 Microcontroller";
-                case RawElf.EM_MMA: return "Fujitsu Multimedia Accelerator";
-                case RawElf.EM_PCP: return "Siemens PCP";
-                case RawElf.EM_NCPU: return "Sony nCPU embedded RISC processor";
-                case RawElf.EM_NDR1: return "Denso NDR1 microprocesspr";
-                case RawElf.EM_STARCORE: return "Motorola Star*Core processor";
-                case RawElf.EM_ME16: return "Toyota ME16 processor";
-                case RawElf.EM_ST100: return "STMicroelectronics ST100 processor";
-                case RawElf.EM_TINYJ: return "Advanced Logic Corp. TinyJ embedded processor";
-                case RawElf.EM_X86_64: return "Advanced Micro Devices X86-64";
-                case RawElf.EM_PDSP: return "Sony DSP processor";
-                case RawElf.EM_FX66: return "Siemens FX66 microcontroller";
-                case RawElf.EM_ST9PLUS: return "STMicroelectronics ST9+ 8/16 bit microcontroller";
-                case RawElf.EM_ST7: return "STMicroelectronics ST7 8-bit microcontroller";
-                case RawElf.EM_68HC16: return "Motorola MC68HC16 Microcontroller";
-                case RawElf.EM_68HC11: return "Motorola MC68HC11 Microcontroller";
-                case RawElf.EM_68HC08: return "Motorola MC68HC08 Microcontroller";
-                case RawElf.EM_68HC05: return "Motorola MC68HC05 Microcontroller";
-                case RawElf.EM_SVX: return "Silicon Graphics SVx";
-                case RawElf.EM_ST19: return "STMicroelectronics ST19 8-bit microcontroller";
-                case RawElf.EM_VAX: return "Digital VAX";
-                case RawElf.EM_CRIS: return "Axis Communications 32-bit embedded processor";
-                case RawElf.EM_JAVELIN: return "Infineon Technologies 32-bit embedded cpu";
-                case RawElf.EM_FIREPATH: return "Element 14 64-bit DSP processor";
-                case RawElf.EM_ZSP: return "LSI Logic's 16-bit DSP processor";
-                case RawElf.EM_MMIX: return "Donald Knuth's educational 64-bit processor";
-                case RawElf.EM_HUANY: return "Harvard Universitys's machine-independent object format";
-                case RawElf.EM_PRISM: return "Vitesse Prism";
-                case RawElf.EM_AVR: return "Atmel AVR 8-bit microcontroller";
-                case RawElf.EM_FR30: return "Fujitsu FR30";
-                case RawElf.EM_D10V: return "d10v";
-                case RawElf.EM_D30V: return "d30v";
-                case RawElf.EM_V850: return "Renesas V850";
-                case RawElf.EM_M32R: return "Renesas M32R (formerly Mitsubishi M32r)";
-                case RawElf.EM_MN10300: return "mn10300";
-                case RawElf.EM_MN10200: return "mn10200";
-                case RawElf.EM_PJ: return "picoJava";
-                case RawElf.EM_XTENSA: return "Tensilica Xtensa Processor";
+                case ElfNative.EM_NONE: return "None";
+                case ElfNative.EM_M32: return "WE32100";
+                case ElfNative.EM_SPARC: return "Sparc";
+                case ElfNative.EM_386: return "Intel 80386";
+                case ElfNative.EM_68K: return "MC68000";
+                case ElfNative.EM_88K: return "MC88000";
+                case ElfNative.EM_860: return "Intel 80860";
+                case ElfNative.EM_MIPS: return "MIPS R3000";
+                case ElfNative.EM_S370: return "IBM System/370";
+                case ElfNative.EM_MIPS_RS3_LE: return "MIPS R4000 big-endian";
+                case ElfNative.EM_PARISC: return "HPPA";
+                case ElfNative.EM_SPARC32PLUS: return "Sparc v8+";
+                case ElfNative.EM_960: return "Intel 80960";
+                case ElfNative.EM_PPC: return "PowerPC";
+                case ElfNative.EM_PPC64: return "PowerPC64";
+                case ElfNative.EM_S390: return "IBM S/390";
+                case ElfNative.EM_V800: return "Renesas V850 (using RH850 ABI)";
+                case ElfNative.EM_FR20: return "Fujitsu FR20";
+                case ElfNative.EM_RH32: return "TRW RH32";
+                case ElfNative.EM_ARM: return "ARM";
+                case ElfNative.EM_SH: return "Renesas / SuperH SH";
+                case ElfNative.EM_SPARCV9: return "Sparc v9";
+                case ElfNative.EM_TRICORE: return "Siemens Tricore";
+                case ElfNative.EM_ARC: return "ARC";
+                case ElfNative.EM_H8_300: return "Renesas H8/300";
+                case ElfNative.EM_H8_300H: return "Renesas H8/300H";
+                case ElfNative.EM_H8S: return "Renesas H8S";
+                case ElfNative.EM_H8_500: return "Renesas H8/500";
+                case ElfNative.EM_IA_64: return "Intel IA-64";
+                case ElfNative.EM_MIPS_X: return "Stanford MIPS-X";
+                case ElfNative.EM_COLDFIRE: return "Motorola Coldfire";
+                case ElfNative.EM_68HC12: return "Motorola MC68HC12 Microcontroller";
+                case ElfNative.EM_MMA: return "Fujitsu Multimedia Accelerator";
+                case ElfNative.EM_PCP: return "Siemens PCP";
+                case ElfNative.EM_NCPU: return "Sony nCPU embedded RISC processor";
+                case ElfNative.EM_NDR1: return "Denso NDR1 microprocesspr";
+                case ElfNative.EM_STARCORE: return "Motorola Star*Core processor";
+                case ElfNative.EM_ME16: return "Toyota ME16 processor";
+                case ElfNative.EM_ST100: return "STMicroelectronics ST100 processor";
+                case ElfNative.EM_TINYJ: return "Advanced Logic Corp. TinyJ embedded processor";
+                case ElfNative.EM_X86_64: return "Advanced Micro Devices X86-64";
+                case ElfNative.EM_PDSP: return "Sony DSP processor";
+                case ElfNative.EM_FX66: return "Siemens FX66 microcontroller";
+                case ElfNative.EM_ST9PLUS: return "STMicroelectronics ST9+ 8/16 bit microcontroller";
+                case ElfNative.EM_ST7: return "STMicroelectronics ST7 8-bit microcontroller";
+                case ElfNative.EM_68HC16: return "Motorola MC68HC16 Microcontroller";
+                case ElfNative.EM_68HC11: return "Motorola MC68HC11 Microcontroller";
+                case ElfNative.EM_68HC08: return "Motorola MC68HC08 Microcontroller";
+                case ElfNative.EM_68HC05: return "Motorola MC68HC05 Microcontroller";
+                case ElfNative.EM_SVX: return "Silicon Graphics SVx";
+                case ElfNative.EM_ST19: return "STMicroelectronics ST19 8-bit microcontroller";
+                case ElfNative.EM_VAX: return "Digital VAX";
+                case ElfNative.EM_CRIS: return "Axis Communications 32-bit embedded processor";
+                case ElfNative.EM_JAVELIN: return "Infineon Technologies 32-bit embedded cpu";
+                case ElfNative.EM_FIREPATH: return "Element 14 64-bit DSP processor";
+                case ElfNative.EM_ZSP: return "LSI Logic's 16-bit DSP processor";
+                case ElfNative.EM_MMIX: return "Donald Knuth's educational 64-bit processor";
+                case ElfNative.EM_HUANY: return "Harvard Universitys's machine-independent object format";
+                case ElfNative.EM_PRISM: return "Vitesse Prism";
+                case ElfNative.EM_AVR: return "Atmel AVR 8-bit microcontroller";
+                case ElfNative.EM_FR30: return "Fujitsu FR30";
+                case ElfNative.EM_D10V: return "d10v";
+                case ElfNative.EM_D30V: return "d30v";
+                case ElfNative.EM_V850: return "Renesas V850";
+                case ElfNative.EM_M32R: return "Renesas M32R (formerly Mitsubishi M32r)";
+                case ElfNative.EM_MN10300: return "mn10300";
+                case ElfNative.EM_MN10200: return "mn10200";
+                case ElfNative.EM_PJ: return "picoJava";
+                case ElfNative.EM_XTENSA: return "Tensilica Xtensa Processor";
                 default:
                     return $"<unknown>: 0x{arch.Value:x}";
             }

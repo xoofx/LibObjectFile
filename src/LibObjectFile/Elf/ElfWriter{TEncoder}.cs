@@ -7,7 +7,7 @@ using System.IO;
 
 namespace LibObjectFile.Elf
 {
-    using static RawElf;
+    using static ElfNative;
 
     /// <summary>
     /// Internal implementation of <see cref="ElfWriter"/> to write to a stream an <see cref="ElfObjectFile"/> instance.

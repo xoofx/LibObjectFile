@@ -6,59 +6,59 @@ namespace LibObjectFile.Elf
 {
     /// <summary>
     /// Defines a symbol binding 
-    /// This is the value seen compressed in <see cref="RawElf.Elf32_Sym.st_info"/> or <see cref="RawElf.Elf64_Sym.st_info"/>
-    /// as well as the various defines (e.g <see cref="RawElf.STB_LOCAL"/>).
+    /// This is the value seen compressed in <see cref="ElfNative.Elf32_Sym.st_info"/> or <see cref="ElfNative.Elf64_Sym.st_info"/>
+    /// as well as the various defines (e.g <see cref="ElfNative.STB_LOCAL"/>).
     /// </summary>
     public enum ElfSymbolBind : byte
     {
         /// <summary>
         /// Local symbol
         /// </summary>
-        Local = RawElf.STB_LOCAL,
+        Local = ElfNative.STB_LOCAL,
         
         /// <summary>
         /// Global symbol
         /// </summary>
-        Global = RawElf.STB_GLOBAL,
+        Global = ElfNative.STB_GLOBAL,
 
         /// <summary>
         /// Weak symbol
         /// </summary>
-        Weak = RawElf.STB_WEAK,
+        Weak = ElfNative.STB_WEAK,
 
         /// <summary>
         /// Unique symbol
         /// </summary>
-        GnuUnique = RawElf.STB_GNU_UNIQUE,
+        GnuUnique = ElfNative.STB_GNU_UNIQUE,
 
         /// <summary>
         /// OS-specific 0
         /// </summary>
-        SpecificOS0 = RawElf.STB_GNU_UNIQUE,
+        SpecificOS0 = ElfNative.STB_GNU_UNIQUE,
 
         /// <summary>
         /// OS-specific 1
         /// </summary>
-        SpecificOS1 = RawElf.STB_GNU_UNIQUE + 1,
+        SpecificOS1 = ElfNative.STB_GNU_UNIQUE + 1,
 
         /// <summary>
         /// OS-specific 2
         /// </summary>
-        SpecificOS2 = RawElf.STB_GNU_UNIQUE + 2,
+        SpecificOS2 = ElfNative.STB_GNU_UNIQUE + 2,
 
         /// <summary>
         /// Processor-specific 0
         /// </summary>
-        SpecificProcessor0 = RawElf.STB_LOPROC,
+        SpecificProcessor0 = ElfNative.STB_LOPROC,
 
         /// <summary>
         /// Processor-specific 1
         /// </summary>
-        SpecificProcessor1 = RawElf.STB_LOPROC + 1,
+        SpecificProcessor1 = ElfNative.STB_LOPROC + 1,
 
         /// <summary>
         /// Processor-specific 2
         /// </summary>
-        SpecificProcessor2 = RawElf.STB_LOPROC + 2,
+        SpecificProcessor2 = ElfNative.STB_LOPROC + 2,
     }
 }

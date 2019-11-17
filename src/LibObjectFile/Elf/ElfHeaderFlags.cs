@@ -8,7 +8,7 @@ namespace LibObjectFile.Elf
 {
     /// <summary>
     /// Defines the flags of an <see cref="ElfObjectFile"/>.
-    /// This is the value seen in <see cref="RawElf.Elf32_Ehdr.e_flags"/> or <see cref="RawElf.Elf64_Ehdr.e_flags"/>.
+    /// This is the value seen in <see cref="ElfNative.Elf32_Ehdr.e_flags"/> or <see cref="ElfNative.Elf64_Ehdr.e_flags"/>.
     /// This is currently not used.
     /// </summary>
     public readonly struct ElfHeaderFlags : IEquatable<ElfHeaderFlags>

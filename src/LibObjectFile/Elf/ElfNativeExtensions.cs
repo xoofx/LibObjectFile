@@ -6,7 +6,10 @@ using System;
 
 namespace LibObjectFile.Elf
 {
-    public static partial class RawElf
+    /// <summary>
+    /// Contains all the low-level structures used for reading/writing ELF data, automatically generated from C headers.
+    /// </summary>
+    public static partial class ElfNative
     {
         public partial struct Elf32_Shdr: IEquatable<Elf32_Shdr>
         {

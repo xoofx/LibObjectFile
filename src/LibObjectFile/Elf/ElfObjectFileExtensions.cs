@@ -6,7 +6,7 @@ using System;
 
 namespace LibObjectFile.Elf
 {
-    using static RawElf;
+    using static ElfNative;
 
     /// <summary>
     /// Extensions for <see cref="ElfObjectFile"/>

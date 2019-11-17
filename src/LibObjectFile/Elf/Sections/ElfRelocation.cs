@@ -6,7 +6,7 @@ namespace LibObjectFile.Elf
 {
     /// <summary>
     /// A relocation entry in the <see cref="ElfRelocationTable"/>
-    /// This is the value seen in <see cref="RawElf.Elf32_Rel"/> or <see cref="RawElf.Elf64_Rel"/>
+    /// This is the value seen in <see cref="ElfNative.Elf32_Rel"/> or <see cref="ElfNative.Elf64_Rel"/>
     /// </summary>
     public struct ElfRelocation
     {
@@ -31,13 +31,13 @@ namespace LibObjectFile.Elf
         public long Addend { get; set; }
 
         /// <summary>
-        /// Gets the computed Info value as expected by <see cref="RawElf.Elf32_Rel.r_info"/>
+        /// Gets the computed Info value as expected by <see cref="ElfNative.Elf32_Rel.r_info"/>
         /// </summary>
         public uint Info32 =>
             ((uint) SymbolIndex << 8) | ((Type.Value & 0xFF));
 
         /// <summary>
-        /// Gets the computed Info value as expected by <see cref="RawElf.Elf64_Rel.r_info"/>
+        /// Gets the computed Info value as expected by <see cref="ElfNative.Elf64_Rel.r_info"/>
         /// </summary>
         public ulong Info64 =>
             ((ulong)SymbolIndex << 32) | (Type.Value);

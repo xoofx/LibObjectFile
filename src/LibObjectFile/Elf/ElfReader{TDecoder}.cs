@@ -55,19 +55,19 @@ namespace LibObjectFile.Elf
                 ReadElfHeader64();
             }
 
-            if (_sectionHeaderCount >= RawElf.SHN_LORESERVE)
+            if (_sectionHeaderCount >= ElfNative.SHN_LORESERVE)
             {
-                Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSectionHeaderCount, $"Invalid number `{_sectionHeaderCount}` of section headers found from Elf Header. Must be < {RawElf.SHN_LORESERVE}");
+                Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSectionHeaderCount, $"Invalid number `{_sectionHeaderCount}` of section headers found from Elf Header. Must be < {ElfNative.SHN_LORESERVE}");
             }
         }
         
         private unsafe void ReadElfHeader32()
         {
-            RawElf.Elf32_Ehdr hdr;
+            ElfNative.Elf32_Ehdr hdr;
             ulong streamOffset = (ulong)Stream.Position;
-            if (!TryRead(sizeof(RawElf.Elf32_Ehdr), out hdr))
+            if (!TryRead(sizeof(ElfNative.Elf32_Ehdr), out hdr))
             {
-                Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteHeader32Size, $"Unable to read entirely Elf header. Not enough data (size: {sizeof(RawElf.Elf32_Ehdr)}) read at offset {streamOffset} from the stream");
+                Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteHeader32Size, $"Unable to read entirely Elf header. Not enough data (size: {sizeof(ElfNative.Elf32_Ehdr)}) read at offset {streamOffset} from the stream");
             }
 
             ObjectFile.FileType = (ElfFileType)_decoder.Decode(hdr.e_type);
@@ -92,11 +92,11 @@ namespace LibObjectFile.Elf
 
         private unsafe void ReadElfHeader64()
         {
-            RawElf.Elf64_Ehdr hdr;
+            ElfNative.Elf64_Ehdr hdr;
             ulong streamOffset = (ulong)Stream.Position;
-            if (!TryRead(sizeof(RawElf.Elf64_Ehdr), out hdr))
+            if (!TryRead(sizeof(ElfNative.Elf64_Ehdr), out hdr))
             {
-                Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteHeader64Size, $"Unable to read entirely Elf header. Not enough data (size: {sizeof(RawElf.Elf64_Ehdr)}) read at offset {streamOffset} from the stream");
+                Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteHeader64Size, $"Unable to read entirely Elf header. Not enough data (size: {sizeof(ElfNative.Elf64_Ehdr)}) read at offset {streamOffset} from the stream");
             }
 
             ObjectFile.FileType = (ElfFileType)_decoder.Decode(hdr.e_type);
@@ -125,7 +125,7 @@ namespace LibObjectFile.Elf
             {
                 if (_programHeaderCount > 0)
                 {
-                    Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidZeroProgramHeaderTableEntrySize, $"Unable to read program header table as the size of program header entry ({nameof(RawElf.Elf32_Ehdr.e_phentsize)}) == 0 in the Elf Header");
+                    Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidZeroProgramHeaderTableEntrySize, $"Unable to read program header table as the size of program header entry ({nameof(ElfNative.Elf32_Ehdr.e_phentsize)}) == 0 in the Elf Header");
                 }
                 return;
             }
@@ -151,7 +151,7 @@ namespace LibObjectFile.Elf
         private ElfSegment ReadProgramHeader32(int phdrIndex)
         {
             var streamOffset = Stream.Position;
-            if (!TryRead(Layout.SizeOfSectionHeaderEntry, out RawElf.Elf32_Phdr hdr))
+            if (!TryRead(Layout.SizeOfSectionHeaderEntry, out ElfNative.Elf32_Phdr hdr))
             {
                 Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteProgramHeader32Size, $"Unable to read entirely program header [{phdrIndex}]. Not enough data (size: {Layout.SizeOfProgramHeaderEntry}) read at offset {streamOffset} from the stream");
             }
@@ -172,7 +172,7 @@ namespace LibObjectFile.Elf
         private ElfSegment ReadProgramHeader64(int phdrIndex)
         {
             var streamOffset = Stream.Position;
-            if (!TryRead(Layout.SizeOfSectionHeaderEntry, out RawElf.Elf64_Phdr hdr))
+            if (!TryRead(Layout.SizeOfSectionHeaderEntry, out ElfNative.Elf64_Phdr hdr))
             {
                 Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteProgramHeader64Size, $"Unable to read entirely program header [{phdrIndex}]. Not enough data (size: {Layout.SizeOfProgramHeaderEntry}) read at offset {streamOffset} from the stream");
             }
@@ -204,7 +204,7 @@ namespace LibObjectFile.Elf
             {
                 if (_sectionHeaderCount > 0)
                 {
-                    Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidZeroSectionHeaderTableEntrySize, $"Unable to read section header table as the size of section header entry ({nameof(RawElf.Elf32_Ehdr.e_ehsize)}) == 0 in the Elf Header");
+                    Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidZeroSectionHeaderTableEntrySize, $"Unable to read section header table as the size of section header entry ({nameof(ElfNative.Elf32_Ehdr.e_ehsize)}) == 0 in the Elf Header");
                 }
                 return;
             }
@@ -235,7 +235,7 @@ namespace LibObjectFile.Elf
         private ElfSection ReadSectionTableEntry32(int sectionIndex)
         {
             var streamOffset = Stream.Position;
-            if (!TryRead(Layout.SizeOfSectionHeaderEntry, out RawElf.Elf32_Shdr rawSection))
+            if (!TryRead(Layout.SizeOfSectionHeaderEntry, out ElfNative.Elf32_Shdr rawSection))
             {
                 Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteSectionHeader32Size, $"Unable to read entirely section header [{sectionIndex}]. Not enough data (size: {Layout.SizeOfSectionHeaderEntry}) read at offset {streamOffset} from the stream");
             }
@@ -269,7 +269,7 @@ namespace LibObjectFile.Elf
         private ElfSection ReadSectionTableEntry64(int sectionIndex)
         {
             var streamOffset = Stream.Position;
-            if (!TryRead(Layout.SizeOfSectionHeaderEntry, out RawElf.Elf64_Shdr rawSection))
+            if (!TryRead(Layout.SizeOfSectionHeaderEntry, out ElfNative.Elf64_Shdr rawSection))
             {
                 Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteSectionHeader64Size, $"Unable to read entirely section header [{sectionIndex}]. Not enough data (size: {Layout.SizeOfSectionHeaderEntry}) read at offset {streamOffset} from the stream");
             }
@@ -340,7 +340,7 @@ namespace LibObjectFile.Elf
         {
             if (!_isFirstSectionValidNull && ObjectFile.Sections.Count > 0)
             {
-                Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidFirstSectionExpectingUndefined, $"Invalid Section [0] {ObjectFile.Sections[0].Type}. Expecting {RawElf.SHN_UNDEF}");
+                Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidFirstSectionExpectingUndefined, $"Invalid Section [0] {ObjectFile.Sections[0].Type}. Expecting {ElfNative.SHN_UNDEF}");
             }
 
             if (_hasValidSectionStringTable)
@@ -623,92 +623,92 @@ namespace LibObjectFile.Elf
             return section;
         }
         
-        public override ushort Decode(RawElf.Elf32_Half src)
+        public override ushort Decode(ElfNative.Elf32_Half src)
         {
             return _decoder.Decode(src);
         }
 
-        public override ushort Decode(RawElf.Elf64_Half src)
+        public override ushort Decode(ElfNative.Elf64_Half src)
         {
             return _decoder.Decode(src);
         }
 
-        public override uint Decode(RawElf.Elf32_Word src)
+        public override uint Decode(ElfNative.Elf32_Word src)
         {
             return _decoder.Decode(src);
         }
 
-        public override uint Decode(RawElf.Elf64_Word src)
+        public override uint Decode(ElfNative.Elf64_Word src)
         {
             return _decoder.Decode(src);
         }
 
-        public override int Decode(RawElf.Elf32_Sword src)
+        public override int Decode(ElfNative.Elf32_Sword src)
         {
             return _decoder.Decode(src);
         }
 
-        public override int Decode(RawElf.Elf64_Sword src)
+        public override int Decode(ElfNative.Elf64_Sword src)
         {
             return _decoder.Decode(src);
         }
 
-        public override ulong Decode(RawElf.Elf32_Xword src)
+        public override ulong Decode(ElfNative.Elf32_Xword src)
         {
             return _decoder.Decode(src);
         }
 
-        public override long Decode(RawElf.Elf32_Sxword src)
+        public override long Decode(ElfNative.Elf32_Sxword src)
         {
             return _decoder.Decode(src);
         }
 
-        public override ulong Decode(RawElf.Elf64_Xword src)
+        public override ulong Decode(ElfNative.Elf64_Xword src)
         {
             return _decoder.Decode(src);
         }
 
-        public override long Decode(RawElf.Elf64_Sxword src)
+        public override long Decode(ElfNative.Elf64_Sxword src)
         {
             return _decoder.Decode(src);
         }
 
-        public override uint Decode(RawElf.Elf32_Addr src)
+        public override uint Decode(ElfNative.Elf32_Addr src)
         {
             return _decoder.Decode(src);
         }
 
-        public override ulong Decode(RawElf.Elf64_Addr src)
+        public override ulong Decode(ElfNative.Elf64_Addr src)
         {
             return _decoder.Decode(src);
         }
 
-        public override uint Decode(RawElf.Elf32_Off src)
+        public override uint Decode(ElfNative.Elf32_Off src)
         {
             return _decoder.Decode(src);
         }
 
-        public override ulong Decode(RawElf.Elf64_Off src)
+        public override ulong Decode(ElfNative.Elf64_Off src)
         {
             return _decoder.Decode(src);
         }
 
-        public override ushort Decode(RawElf.Elf32_Section src)
+        public override ushort Decode(ElfNative.Elf32_Section src)
         {
             return _decoder.Decode(src);
         }
 
-        public override ushort Decode(RawElf.Elf64_Section src)
+        public override ushort Decode(ElfNative.Elf64_Section src)
         {
             return _decoder.Decode(src);
         }
 
-        public override ushort Decode(RawElf.Elf32_Versym src)
+        public override ushort Decode(ElfNative.Elf32_Versym src)
         {
             return _decoder.Decode(src);
         }
 
-        public override ushort Decode(RawElf.Elf64_Versym src)
+        public override ushort Decode(ElfNative.Elf64_Versym src)
         {
             return _decoder.Decode(src);
         }

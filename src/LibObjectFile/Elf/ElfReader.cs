@@ -34,9 +34,9 @@ namespace LibObjectFile.Elf
 
         internal static ElfReader Create(ElfObjectFile objectFile, Stream stream, ElfReaderOptions options)
         {
-            var ident = ArrayPool<byte>.Shared.Rent(RawElf.EI_NIDENT);
+            var ident = ArrayPool<byte>.Shared.Rent(ElfNative.EI_NIDENT);
             var startPosition = stream.Position;
-            var length = stream.Read(ident, 0, RawElf.EI_NIDENT);
+            var length = stream.Read(ident, 0, ElfNative.EI_NIDENT);
             
             var span = new ReadOnlySpan<byte>(ident, 0, length);
 
@@ -54,23 +54,23 @@ namespace LibObjectFile.Elf
             return objectFile.Encoding == thisComputerEncoding ? (ElfReader) new ElfReaderDirect(objectFile, stream, options) : new ElfReaderSwap(objectFile, stream, options);
         }
 
-        public abstract ushort Decode(RawElf.Elf32_Half src);
-        public abstract ushort Decode(RawElf.Elf64_Half src);
-        public abstract uint Decode(RawElf.Elf32_Word src);
-        public abstract uint Decode(RawElf.Elf64_Word src);
-        public abstract int Decode(RawElf.Elf32_Sword src);
-        public abstract int Decode(RawElf.Elf64_Sword src);
-        public abstract ulong Decode(RawElf.Elf32_Xword src);
-        public abstract long Decode(RawElf.Elf32_Sxword src);
-        public abstract ulong Decode(RawElf.Elf64_Xword src);
-        public abstract long Decode(RawElf.Elf64_Sxword src);
-        public abstract uint Decode(RawElf.Elf32_Addr src);
-        public abstract ulong Decode(RawElf.Elf64_Addr src);
-        public abstract uint Decode(RawElf.Elf32_Off src);
-        public abstract ulong Decode(RawElf.Elf64_Off src);
-        public abstract ushort Decode(RawElf.Elf32_Section src);
-        public abstract ushort Decode(RawElf.Elf64_Section src);
-        public abstract ushort Decode(RawElf.Elf32_Versym src);
-        public abstract ushort Decode(RawElf.Elf64_Versym src);
+        public abstract ushort Decode(ElfNative.Elf32_Half src);
+        public abstract ushort Decode(ElfNative.Elf64_Half src);
+        public abstract uint Decode(ElfNative.Elf32_Word src);
+        public abstract uint Decode(ElfNative.Elf64_Word src);
+        public abstract int Decode(ElfNative.Elf32_Sword src);
+        public abstract int Decode(ElfNative.Elf64_Sword src);
+        public abstract ulong Decode(ElfNative.Elf32_Xword src);
+        public abstract long Decode(ElfNative.Elf32_Sxword src);
+        public abstract ulong Decode(ElfNative.Elf64_Xword src);
+        public abstract long Decode(ElfNative.Elf64_Sxword src);
+        public abstract uint Decode(ElfNative.Elf32_Addr src);
+        public abstract ulong Decode(ElfNative.Elf64_Addr src);
+        public abstract uint Decode(ElfNative.Elf32_Off src);
+        public abstract ulong Decode(ElfNative.Elf64_Off src);
+        public abstract ushort Decode(ElfNative.Elf32_Section src);
+        public abstract ushort Decode(ElfNative.Elf64_Section src);
+        public abstract ushort Decode(ElfNative.Elf32_Versym src);
+        public abstract ushort Decode(ElfNative.Elf64_Versym src);
     }
 }

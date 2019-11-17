@@ -20,7 +20,7 @@ namespace LibObjectFile.Elf
         private ElfSectionHeaderStringTable _sectionHeaderStringTable;
         private readonly List<ElfSegment> _segments;
 
-        public const int IdentSizeInBytes = RawElf.EI_NIDENT;
+        public const int IdentSizeInBytes = ElfNative.EI_NIDENT;
 
         /// <summary>
         /// Creates a new instance with the default sections (null and a shadow program header table).
@@ -38,7 +38,7 @@ namespace LibObjectFile.Elf
             Encoding = ElfEncoding.Lsb;
             FileType = ElfFileType.Relocatable;
             Arch = ElfArch.X86_64;
-            Version = RawElf.EV_CURRENT;
+            Version = ElfNative.EV_CURRENT;
             Layout = new ElfObjectLayout();
 
             if (addDefaultSections)
@@ -75,7 +75,7 @@ namespace LibObjectFile.Elf
 
         /// <summary>
         /// Gets or sets the file type (e.g executable, relocatable...)
-        /// From Elf Header equivalent of <see cref="RawElf.Elf32_Ehdr.e_type"/> or <see cref="RawElf.Elf64_Ehdr.e_type"/>.
+        /// From Elf Header equivalent of <see cref="ElfNative.Elf32_Ehdr.e_type"/> or <see cref="ElfNative.Elf64_Ehdr.e_type"/>.
         /// </summary>
         public ElfFileType FileType { get; set; }
 
@@ -86,13 +86,13 @@ namespace LibObjectFile.Elf
 
         /// <summary>
         /// Gets or sets the machine architecture (e.g 386, X86_64...)
-        /// From Elf Header equivalent of <see cref="RawElf.Elf32_Ehdr.e_machine"/> or <see cref="RawElf.Elf64_Ehdr.e_machine"/>.
+        /// From Elf Header equivalent of <see cref="ElfNative.Elf32_Ehdr.e_machine"/> or <see cref="ElfNative.Elf64_Ehdr.e_machine"/>.
         /// </summary>
         public ElfArch Arch { get; set; }
 
         /// <summary>
         /// Entry point virtual address.
-        /// From Elf Header equivalent of <see cref="RawElf.Elf32_Ehdr.e_entry"/> or <see cref="RawElf.Elf64_Ehdr.e_entry"/>.
+        /// From Elf Header equivalent of <see cref="ElfNative.Elf32_Ehdr.e_entry"/> or <see cref="ElfNative.Elf64_Ehdr.e_entry"/>.
         /// </summary>
         public ulong EntryPointAddress { get; set; }
 
@@ -204,12 +204,12 @@ namespace LibObjectFile.Elf
                 return false;
             }
 
-            ulong offset = FileClass == ElfFileClass.Is32 ? (uint)sizeof(RawElf.Elf32_Ehdr) : (uint)sizeof(RawElf.Elf64_Ehdr);
+            ulong offset = FileClass == ElfFileClass.Is32 ? (uint)sizeof(ElfNative.Elf32_Ehdr) : (uint)sizeof(ElfNative.Elf64_Ehdr);
             Layout.SizeOfElfHeader = (ushort)offset;
             Layout.OffsetOfProgramHeaderTable = 0;
             Layout.OffsetOfSectionHeaderTable = 0;
-            Layout.SizeOfProgramHeaderEntry = FileClass == ElfFileClass.Is32 ? (ushort)sizeof(RawElf.Elf32_Phdr) : (ushort)sizeof(RawElf.Elf64_Phdr);
-            Layout.SizeOfSectionHeaderEntry = FileClass == ElfFileClass.Is32 ? (ushort)sizeof(RawElf.Elf32_Shdr) : (ushort)sizeof(RawElf.Elf64_Shdr);
+            Layout.SizeOfProgramHeaderEntry = FileClass == ElfFileClass.Is32 ? (ushort)sizeof(ElfNative.Elf32_Phdr) : (ushort)sizeof(ElfNative.Elf64_Phdr);
+            Layout.SizeOfSectionHeaderEntry = FileClass == ElfFileClass.Is32 ? (ushort)sizeof(ElfNative.Elf32_Shdr) : (ushort)sizeof(ElfNative.Elf64_Shdr);
 
             bool programHeaderTableFoundAndUpdated = false;
 
