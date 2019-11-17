@@ -4,19 +4,65 @@
 
 LibObjectFile is a .NET library to read, manipulate and write linker and executable object files (e.g ELF, COFF...)
 
-> NOTE: The repository is under construction. 
->
-> Currently LibObjectFile **supports only the ELF object-file format**
+> NOTE: Currently LibObjectFile **supports only the ELF object-file format**
 >
 > There is a longer term plan to support other file formats (e.g COFF, MACH-O) but as I don't 
 > have a need for them right now, it is left as an exercise for PR contributors! ;)
 
+## Usage
+
+```C#
+// Reads an ELF file
+using var inStream = File.OpenRead("helloworld");
+var elf = ElfObjectFile.Read(inStream);
+foreach(var section in elf.Sections)
+{
+    Console.WriteLine(section.Name);
+}
+// Print the content of the ELF as readelf output
+elf.Print(Console.Out);
+// Write the ElfObjectFile to another file on the disk
+using var outStream = File.OpenWrite("helloworld2");
+elf.Write(outStream);
+```
+
 ## Features
-- TODO
+- Good support for the ELF file format:
+  - Correct handling of LSB/MSB
+  - Read and write a file
+  - Support the following sections: 
+    - String Table
+    - Symbol Table
+    - Relocation Table: supported I386, X86_64, ARM and AARCH64 relocations (others can be exposed by adding some mappings)
+    - Note Table
+    - Other sections fallback to `ElfCustomSection`
+  - Program headers with or without sections
+  - Print with readelf similar output
+- Library requiring .NET `netstandard2.1`+ and compatible with `netcoreapp3.0`+
 
 ## Documentation
 
-- TODO
+The [doc/readme.md](doc/readme.md) explains how the library is designed and can be used.
+
+## Known Issues
+
+PR Welcome if you are willing to contribute to one of this issue.
+
+### ELF
+There are still a few missing implementation of `ElfSection` for completeness:
+
+- [ ] Dynamic Linking Table (`SHT_DYNAMIC`)
+- [ ] Version Symbol Table (`SHT_VERSYM`)
+- [ ] Version Needs Table (`SHT_VERNEED`)
+
+These sections are currently loaded as `ElfCustomSection` but should have their own ElfXXXTable (e.g `ElfDynamicLinkingTable`, `ElfVersionSymbolTable`...)
+
+### Other file formats
+In a future version I would like to implement the following file format:
+
+- [ ] COFF
+- [ ] Mach-O
+- [ ] Portable in Memory file format to easily convert between ELF/COFF/Mach-O file formats.
 
 ## Download
 
