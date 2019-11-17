@@ -13,6 +13,7 @@ namespace LibObjectFile.Tests.Elf
     {
         protected static void AssertReadElf(ElfObjectFile elf, string fileName)
         {
+            elf.Print(Console.Out);
             AssertReadElfInternal(elf, fileName);
             AssertReadBack(elf, fileName, readAsReadOnly: false);
             AssertReadBack(elf, fileName, readAsReadOnly: true);
@@ -63,7 +64,7 @@ namespace LibObjectFile.Tests.Elf
 
                 Console.WriteLine();
                 Console.WriteLine("=============================================================================");
-                Console.WriteLine("readback");
+                Console.WriteLine($"readback {(readAsReadOnly ? "as readonly" : "as readwrite")}");
                 Console.WriteLine("=============================================================================");
                 Console.WriteLine();
 
