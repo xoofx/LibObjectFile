@@ -97,6 +97,11 @@ namespace LibObjectFile.CodeGen
 
             AssertCompilation(csCompilation);
 
+            // Add pragma
+            var csFile = csCompilation.Members.OfType<CSharpGeneratedFile>().First();
+            var ns = csFile.Members.OfType<CSharpNamespace>().First();
+            csFile.Members.Insert(csFile.Members.IndexOf(ns), new CSharpLineElement("#pragma warning disable 1591") ); 
+
             ProcessElfEnum(cppOptions, csCompilation, "EM_", "ElfArch");
             ProcessElfEnum(cppOptions, csCompilation, "ELFOSABI_", "ElfOSABI");
             ProcessElfEnum(cppOptions, csCompilation, "R_", "ElfRelocationType");
