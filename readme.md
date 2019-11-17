@@ -1,6 +1,6 @@
 # LibObjectFile [![Build status](https://ci.appveyor.com/api/projects/status/n6oavn8iblf2hq8f?svg=true)](https://ci.appveyor.com/project/xoofx/libobjectfile) [![NuGet](https://img.shields.io/nuget/v/LibObjectFile.svg)](https://www.nuget.org/packages/LibObjectFile/)
 
-<img align="right" width="160px" height="160px" src="img/libobjectfile.png">
+<img align="right" width="200px" height="200px" src="img/libobjectfile.png">
 
 LibObjectFile is a .NET library to read, manipulate and write linker and executable object files (e.g ELF, COFF...)
 
@@ -29,7 +29,7 @@ elf.Write(outStream);
 ## Features
 - Good support for the ELF file format:
   - Correct handling of LSB/MSB
-  - Read and write a file
+  - Read and write from/to a `System.IO.Stream`
   - Support the following sections: 
     - String Table
     - Symbol Table
@@ -37,7 +37,7 @@ elf.Write(outStream);
     - Note Table
     - Other sections fallback to `ElfCustomSection`
   - Program headers with or without sections
-  - Print with readelf similar output
+  - Print with `readelf` similar output
 - Library requiring .NET `netstandard2.1`+ and compatible with `netcoreapp3.0`+
 
 ## Documentation
@@ -46,7 +46,7 @@ The [doc/readme.md](doc/readme.md) explains how the library is designed and can 
 
 ## Known Issues
 
-PR Welcome if you are willing to contribute to one of this issue.
+PR Welcome if you are willing to contribute to one of these issues:
 
 ### ELF
 There are still a few missing implementation of `ElfSection` for completeness:
