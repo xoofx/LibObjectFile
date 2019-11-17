@@ -149,6 +149,17 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Verifies the integrity of this ELF object file.
         /// </summary>
+        /// <returns>The result of the diagnostics</returns>
+        public DiagnosticBag Verify()
+        {
+            var diagnostics = new DiagnosticBag();
+            Verify(diagnostics);
+            return diagnostics;
+        }
+
+        /// <summary>
+        /// Verifies the integrity of this ELF object file.
+        /// </summary>
         /// <param name="diagnostics">A DiagnosticBag instance to receive the diagnostics.</param>
         public void Verify(DiagnosticBag diagnostics)
         {
