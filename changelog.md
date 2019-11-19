@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.1 (17 Nov 2019)
+- Add verify for PT_LOAD segment align requirements
+
 ## 0.2.0 (17 Nov 2019)
 - Add support for ElfNoteTable
 - Add XML documentation and user manual
