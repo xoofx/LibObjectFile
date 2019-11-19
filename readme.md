@@ -1,4 +1,4 @@
-# LibObjectFile [![Build Status](https://github.com/xoofx/LibObjectFile/workflows/ci/badge.svg)](https://github.com/xoofx/LibObjectFile/actions) [![NuGet](https://img.shields.io/nuget/v/LibObjectFile.svg)](https://www.nuget.org/packages/LibObjectFile/)
+# LibObjectFile [![Build Status](https://github.com/xoofx/LibObjectFile/workflows/ci/badge.svg?branch=master)](https://github.com/xoofx/LibObjectFile/actions) [![NuGet](https://img.shields.io/nuget/v/LibObjectFile.svg)](https://www.nuget.org/packages/LibObjectFile/)
 
 <img align="right" width="200px" height="200px" src="img/libobjectfile.png">
 
