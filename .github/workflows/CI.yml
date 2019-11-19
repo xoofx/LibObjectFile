@@ -1,6 +1,12 @@
 name: ci
 
-on: [push, pull_request]
+on:
+  push:
+    paths-ignore:
+    - 'doc/**'
+    - 'changelog.md'
+    - 'readme.md'
+  pull_request:
 
 jobs:
   build:
