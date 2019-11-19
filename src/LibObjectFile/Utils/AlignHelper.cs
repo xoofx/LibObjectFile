@@ -13,6 +13,16 @@ namespace LibObjectFile.Utils
     public static class AlignHelper
     {
         /// <summary>
+        /// Returns <c>true</c> if alignment is a power of 2.
+        /// </summary>
+        /// <param name="align">The alignment</param>
+        /// <returns><c>true</c> if it is a power of 2.</returns>
+        public static bool IsPowerOfTwo(ulong align)
+        {
+            return (align & (align - 1)) == 0;
+        }
+
+        /// <summary>
         /// Aligns a value to the required alignment.
         /// </summary>
         /// <param name="value">The value to align.</param>
@@ -22,7 +32,7 @@ namespace LibObjectFile.Utils
         public static ulong AlignToUpper(ulong value, ulong align)
         {
             if (align == 0) throw new ArgumentOutOfRangeException(nameof(align), "Alignment must be > 0");
-            if ((align & (align -1)) != 0) throw new ArgumentOutOfRangeException(nameof(align), "Alignment must be > 0");
+            if (!IsPowerOfTwo(align)) throw new ArgumentOutOfRangeException(nameof(align), "Alignment must be a power of 2");
 
             var nextValue = ((value + align - 1) / align) * align;
             return nextValue;
