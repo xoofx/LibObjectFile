@@ -1,4 +1,4 @@
-# LibObjectFile [![Build status](https://ci.appveyor.com/api/projects/status/n6oavn8iblf2hq8f?svg=true)](https://ci.appveyor.com/project/xoofx/libobjectfile) [![NuGet](https://img.shields.io/nuget/v/LibObjectFile.svg)](https://www.nuget.org/packages/LibObjectFile/)
+# LibObjectFile ![Build Status](https://github.com/xoofx/LibObjectFile/workflows/ci/badge.svg) [![NuGet](https://img.shields.io/nuget/v/LibObjectFile.svg)](https://www.nuget.org/packages/LibObjectFile/)
 
 <img align="right" width="200px" height="200px" src="img/libobjectfile.png">
 
