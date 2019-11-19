@@ -34,8 +34,8 @@ namespace LibObjectFile.Tests.Elf
             var stringWriter = new StringWriter();
             elf.Print(stringWriter);
 
-            var result = stringWriter.ToString().Replace("\r\n", "\n");
-            var readelf = LinuxUtil.ReadElf(fileName);
+            var result = stringWriter.ToString().Replace("\r\n", "\n").TrimEnd();
+            var readelf = LinuxUtil.ReadElf(fileName).TrimEnd();
             if (readelf != result)
             {
                 Console.WriteLine("=== Expected:");
