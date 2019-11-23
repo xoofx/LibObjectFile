@@ -53,7 +53,7 @@ namespace LibObjectFile.Utils
         public static uint SwapBits(uint value)
         {
             return ((uint)((byte)value << 24)
-                    | ((value & 0x0000FF00) << 16)
+                    | ((value & 0x0000FF00) << 8)
                     | ((value & 0x00FF0000) >> 8)
                     | ((value & 0xFF000000) >> 24)
                 );
