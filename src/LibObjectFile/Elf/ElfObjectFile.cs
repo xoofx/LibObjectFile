@@ -3,16 +3,19 @@
 // See the license.txt file in the project root for more information.
 
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
 using LibObjectFile.Utils;
 
 namespace LibObjectFile.Elf
 {
+    using static ElfNative;
+
     /// <summary>
     /// Defines an ELF object file that can be manipulated in memory.
     /// </summary>
-    public sealed class ElfObjectFile
+    public sealed class ElfObjectFile : ObjectFile
     {
         private static readonly Comparison<ElfSection> CompareSectionOffsetsDelegate = new Comparison<ElfSection>(CompareSectionOffsets);
 
@@ -149,19 +152,8 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Verifies the integrity of this ELF object file.
         /// </summary>
-        /// <returns>The result of the diagnostics</returns>
-        public DiagnosticBag Verify()
-        {
-            var diagnostics = new DiagnosticBag();
-            Verify(diagnostics);
-            return diagnostics;
-        }
-
-        /// <summary>
-        /// Verifies the integrity of this ELF object file.
-        /// </summary>
         /// <param name="diagnostics">A DiagnosticBag instance to receive the diagnostics.</param>
-        public void Verify(DiagnosticBag diagnostics)
+        public override void Verify(DiagnosticBag diagnostics)
         {
             if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
 
@@ -183,24 +175,11 @@ namespace LibObjectFile.Elf
         }
 
         /// <summary>
-        /// Update and calculate the layout of the sections, segments and <see cref="Layout"/>.
-        /// </summary>
-        public void UpdateLayout()
-        {
-            var diagnostics = new DiagnosticBag();
-            TryUpdateLayout(diagnostics);
-            if (diagnostics.HasErrors)
-            {
-                throw new ObjectFileException("Unexpected error while updating the layout of this instance", diagnostics);
-            }
-        }
-
-        /// <summary>
         /// Tries to update and calculate the layout of the sections, segments and <see cref="Layout"/>.
         /// </summary>
         /// <param name="diagnostics">A DiagnosticBag instance to receive the diagnostics.</param>
         /// <returns><c>true</c> if the calculation of the layout is successful. otherwise <c>false</c></returns>
-        public unsafe bool TryUpdateLayout(DiagnosticBag diagnostics)
+        public override unsafe bool TryUpdateLayout(DiagnosticBag diagnostics)
         {
             if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
 
@@ -221,6 +200,7 @@ namespace LibObjectFile.Elf
             Layout.OffsetOfSectionHeaderTable = 0;
             Layout.SizeOfProgramHeaderEntry = FileClass == ElfFileClass.Is32 ? (ushort)sizeof(ElfNative.Elf32_Phdr) : (ushort)sizeof(ElfNative.Elf64_Phdr);
             Layout.SizeOfSectionHeaderEntry = FileClass == ElfFileClass.Is32 ? (ushort)sizeof(ElfNative.Elf32_Shdr) : (ushort)sizeof(ElfNative.Elf64_Shdr);
+            Layout.TotalSize = offset;
 
             bool programHeaderTableFoundAndUpdated = false;
 
@@ -277,6 +257,8 @@ namespace LibObjectFile.Elf
 
                 // The Section Header Table will be put just after all the sections
                 Layout.OffsetOfSectionHeaderTable = offset;
+
+                Layout.TotalSize = offset + (ulong)VisibleSectionCount * Layout.SizeOfSectionHeaderEntry;
             }
 
             // Update program headers with offsets from auto layout
@@ -291,7 +273,7 @@ namespace LibObjectFile.Elf
                 for (int i = 0; i < Segments.Count; i++)
                 {
                     var programHeader = Segments[i];
-                    if (programHeader.OffsetKind == ElfValueKind.Auto)
+                    if (programHeader.OffsetKind == ValueKind.Auto)
                     {
                         programHeader.Offset = programHeader.Range.Offset;
                     }
@@ -590,6 +572,48 @@ namespace LibObjectFile.Elf
         }
 
         /// <summary>
+        /// Checks if a stream contains an ELF file by checking the magic signature.
+        /// </summary>
+        /// <param name="stream">The stream containing potentially an ELF file</param>
+        /// <returns><c>true</c> if the stream contains an ELF file. otherwise returns <c>false</c></returns>
+        public static bool IsElf(Stream stream)
+        {
+            return IsElf(stream, out _);
+        }
+
+        /// <summary>
+        /// Checks if a stream contains an ELF file by checking the magic signature.
+        /// </summary>
+        /// <param name="stream">The stream containing potentially an ELF file</param>
+        /// <param name="encoding">Output the encoding if ELF is <c>true</c>.</param>
+        /// <returns><c>true</c> if the stream contains an ELF file. otherwise returns <c>false</c></returns>
+        public static bool IsElf(Stream stream, out ElfEncoding encoding)
+        {
+            if (stream == null) throw new ArgumentNullException(nameof(stream));
+
+            var ident = ArrayPool<byte>.Shared.Rent(EI_NIDENT);
+            encoding = ElfEncoding.None;
+            try
+            {
+                var startPosition = stream.Position;
+                var length = stream.Read(ident, 0, EI_NIDENT);
+                stream.Position = startPosition;
+
+                if (length == EI_NIDENT && (ident[EI_MAG0] == ELFMAG0 && ident[EI_MAG1] == ELFMAG1 && ident[EI_MAG2] == ELFMAG2 && ident[EI_MAG3] == ELFMAG3))
+                {
+                    encoding = (ElfEncoding)ident[EI_DATA];
+                    return true;
+                }
+            }
+            finally
+            {
+                ArrayPool<byte>.Shared.Return(ident);
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Reads an <see cref="ElfObjectFile"/> from the specified stream.
         /// </summary>
         /// <param name="stream">The stream to read ELF object file from</param>
@@ -615,7 +639,17 @@ namespace LibObjectFile.Elf
         public static bool TryRead(Stream stream, out ElfObjectFile objectFile, out DiagnosticBag diagnostics, ElfReaderOptions options = null)
         {
             if (stream == null) throw new ArgumentNullException(nameof(stream));
-            objectFile = new ElfObjectFile(false);
+
+            objectFile = null;
+
+            if (!IsElf(stream, out var encoding))
+            {
+                diagnostics = new DiagnosticBag();
+                diagnostics.Error(DiagnosticId.ELF_ERR_InvalidHeaderMagic, "ELF magic header not found");
+                return false;
+            }
+
+            objectFile = new ElfObjectFile(false) { Encoding = encoding };
             options ??= new ElfReaderOptions();
 
             var reader = ElfReader.Create(objectFile, stream, options);
@@ -674,6 +708,12 @@ namespace LibObjectFile.Elf
             /// Size of a section header entry.
             /// </summary>
             public ushort SizeOfSectionHeaderEntry { get; internal set; }
+
+            /// <summary>
+            /// Size of the entire file
+            /// </summary>
+            public ulong TotalSize { get; internal set; }
+
         }
     }
 }

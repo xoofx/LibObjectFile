@@ -89,7 +89,7 @@ namespace LibObjectFile.Elf
                 {
                     ElfNative.Elf32_Rela rel;
                     ulong streamOffset = (ulong)reader.Stream.Position;
-                    if (!reader.TryRead((int)OriginalTableEntrySize, out rel))
+                    if (!reader.TryReadInteger((int)OriginalTableEntrySize, out rel))
                     {
                         reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteRelocationAddendsEntry32Size, $"Unable to read entirely the relocation entry [{i}] from {Type} section [{Index}]. Not enough data (size: {OriginalTableEntrySize}) read at offset {streamOffset} from the stream");
                     }
@@ -111,7 +111,7 @@ namespace LibObjectFile.Elf
                 {
                     ElfNative.Elf32_Rel rel;
                     ulong streamOffset = (ulong)reader.Stream.Position;
-                    if (!reader.TryRead((int)OriginalTableEntrySize, out rel))
+                    if (!reader.TryReadInteger((int)OriginalTableEntrySize, out rel))
                     {
                         reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteRelocationEntry32Size, $"Unable to read entirely the relocation entry [{i}] from {Type} section [{Index}]. Not enough data (size: {OriginalTableEntrySize}) read at offset {streamOffset} from the stream");
                     }
@@ -137,7 +137,7 @@ namespace LibObjectFile.Elf
                 {
                     ElfNative.Elf64_Rela rel;
                     ulong streamOffset = (ulong)reader.Stream.Position;
-                    if (!reader.TryRead((int)OriginalTableEntrySize, out rel))
+                    if (!reader.TryReadInteger((int)OriginalTableEntrySize, out rel))
                     {
                         reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteRelocationAddendsEntry64Size, $"Unable to read entirely the relocation entry [{i}] from {Type} section [{Index}]. Not enough data (size: {OriginalTableEntrySize}) read at offset {streamOffset} from the stream");
                     }
@@ -159,7 +159,7 @@ namespace LibObjectFile.Elf
                 {
                     ElfNative.Elf64_Rel rel;
                     ulong streamOffset = (ulong)reader.Stream.Position;
-                    if (!reader.TryRead((int)OriginalTableEntrySize, out rel))
+                    if (!reader.TryReadInteger((int)OriginalTableEntrySize, out rel))
                     {
                         reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteRelocationEntry64Size, $"Unable to read entirely the relocation entry [{i}] from {Type} section [{Index}]. Not enough data (size: {OriginalTableEntrySize}) read at offset {streamOffset} from the stream");
                     }

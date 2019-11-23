@@ -4,7 +4,7 @@
 
 using System;
 
-namespace LibObjectFile.Elf
+namespace LibObjectFile.Utils
 {
     /// <summary>
     /// Internal helper class for throwing exceptions.

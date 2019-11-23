@@ -22,13 +22,12 @@ namespace LibObjectFile.Elf
         protected override void Read(ElfReader reader)
         {
             Stream = reader.ReadAsStream(Size);
-            SizeKind = ElfValueKind.Manual;
+            SizeKind = ValueKind.Manual;
         }
 
         protected override void Write(ElfWriter writer)
         {
             if (Stream == null) return;
-            Stream.Position = 0;
             writer.Write(Stream);
         }
     }

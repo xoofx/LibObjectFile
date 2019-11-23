@@ -106,16 +106,16 @@ namespace LibObjectFile.Elf
         {
             Read(reader);
             // After reading the size must be Auto by default
-            SizeKind = ElfValueKind.Auto;
+            SizeKind = ValueKind.Auto;
         }
         
         public override void Verify(DiagnosticBag diagnostics)
         {
             if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
 
-            if (Type != ElfSectionType.Null && Type != ElfSectionType.NoBits && SizeKind != ElfValueKind.Auto)
+            if (Type != ElfSectionType.Null && Type != ElfSectionType.NoBits && SizeKind != ValueKind.Auto)
             {
-                diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSectionSizeKind, $"Invalid {nameof(SizeKind)}: {SizeKind} for `{this}`. Expecting {ElfValueKind.Manual}.");
+                diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSectionSizeKind, $"Invalid {nameof(SizeKind)}: {SizeKind} for `{this}`. Expecting {ValueKind.Manual}.");
             }
 
             // Check parent for link section

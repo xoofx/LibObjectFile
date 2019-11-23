@@ -27,7 +27,8 @@ namespace LibObjectFile.Tests.Elf
                 using (var stream = new FileStream(Path.Combine(Environment.CurrentDirectory, fileName), FileMode.Create))
                 {
                     elf.Write(stream);
-                    stream.Flush();
+                    stream.Flush(); 
+                    Assert.AreEqual(stream.Length, (long)elf.Layout.TotalSize);
                 }
             }
 

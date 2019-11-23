@@ -51,7 +51,7 @@ namespace LibObjectFile.Elf
         protected override void ReadDescriptor(ElfReader reader, uint descriptorLength)
         {
             NativeGnuNoteOS nativeGnuNote;
-            if (!reader.TryRead((int)descriptorLength, out nativeGnuNote))
+            if (!reader.TryReadInteger((int)descriptorLength, out nativeGnuNote))
             {
                 reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleNoteGnuAbiTag, $"The {nameof(ElfGnuNoteABITag)} is incomplete in size. Expecting: {GetDescriptorSize()} but got {descriptorLength}");
             }

@@ -76,7 +76,7 @@ namespace LibObjectFile.Elf
             {
                 ElfNative.Elf32_Nhdr nativeNote;
                 ulong noteStartOffset = (ulong)reader.Stream.Position;
-                if (!reader.TryRead((int)entrySize, out nativeNote))
+                if (!reader.TryReadInteger((int)entrySize, out nativeNote))
                 {
                     reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteNoteEntrySize, $"Unable to read entirely the note entry [{Entries.Count}] from {Type} section [{Index}]. Not enough data (size: {entrySize}) read at offset {noteStartOffset} from the stream");
                     break;

@@ -34,22 +34,6 @@ namespace LibObjectFile.Elf
 
         internal static ElfReader Create(ElfObjectFile objectFile, Stream stream, ElfReaderOptions options)
         {
-            var ident = ArrayPool<byte>.Shared.Rent(ElfNative.EI_NIDENT);
-            var startPosition = stream.Position;
-            var length = stream.Read(ident, 0, ElfNative.EI_NIDENT);
-            
-            var span = new ReadOnlySpan<byte>(ident, 0, length);
-
-            var diagnostics = new DiagnosticBag();
-
-            if (!objectFile.TryCopyIdentFrom(span, diagnostics))
-            {
-                throw new ObjectFileException($"Invalid ELF object file while trying to decode Elf Header", diagnostics);
-            }
-
-            // Rewind
-            stream.Position = startPosition;
-
             var thisComputerEncoding = BitConverter.IsLittleEndian ? ElfEncoding.Lsb : ElfEncoding.Msb;
             return objectFile.Encoding == thisComputerEncoding ? (ElfReader) new ElfReaderDirect(objectFile, stream, options) : new ElfReaderSwap(objectFile, stream, options);
         }

@@ -48,6 +48,54 @@ namespace LibObjectFile
             return Stream.Read(buffer, offset, count);
         }
 
+
+        /// <summary>
+        /// Reads a null terminated UTF8 string from the stream.
+        /// </summary>
+        /// <returns><c>true</c> if the string was successfully read from the stream, false otherwise</returns>
+        public bool TryReadStringUTF8NullTerminated(out string text)
+        {
+            text = null;
+            var buffer = ArrayPool<byte>.Shared.Rent((int)128);
+            int textLength = 0;
+            try
+            {
+                while (true)
+                {
+                    // TODO: not efficient to read byte by byte
+                    int nextByte = Stream.ReadByte();
+                    if (nextByte < 0)
+                    {
+                        return false;
+                    }
+
+                    if (nextByte == 0)
+                    {
+                        break;
+                    }
+
+                    if (textLength > buffer.Length)
+                    {
+                        var newBuffer = ArrayPool<byte>.Shared.Rent((int)textLength * 2);
+                        Array.Copy(buffer, 0, newBuffer, 0, buffer.Length);
+                        ArrayPool<byte>.Shared.Return(buffer);
+                        buffer = newBuffer;
+                    }
+
+                    buffer[textLength++] = (byte)nextByte;
+                }
+
+                text = Encoding.UTF8.GetString(buffer, 0, textLength);
+            }
+            finally
+            {
+                ArrayPool<byte>.Shared.Return(buffer);
+            }
+
+            return true;
+        }
+
+
         /// <summary>
         /// Reads a null terminated UTF8 string from the stream.
         /// </summary>
@@ -75,6 +123,91 @@ namespace LibObjectFile
             {
                 ArrayPool<byte>.Shared.Return(buffer);
             }
+        }
+
+        public bool TryReadInteger(bool isLittleEndian, out ushort value)
+        {
+            value = 0;
+            int nextValue = Stream.ReadByte();
+            if (nextValue < 0) return false;
+            value = (byte)nextValue;
+
+            nextValue = Stream.ReadByte();
+            if (nextValue < 0) return false;
+            value = (ushort)((value << 8) | (byte)nextValue);
+
+            if (isLittleEndian != BitConverter.IsLittleEndian)
+            {
+                value = BinaryUtil.SwapBits(value);
+            }
+
+            return true;
+        }
+
+        public unsafe bool TryReadInteger(bool isLittleEndian, out uint value)
+        {
+            fixed (uint* pBufferInt = &value)
+            {
+                var span = new Span<byte>((byte*) pBufferInt, sizeof(uint));
+                if (Stream.Read(span) != sizeof(uint))
+                {
+                    return false;
+                }
+
+                if (isLittleEndian != BitConverter.IsLittleEndian)
+                {
+                    value = BinaryUtil.SwapBits(value);
+                }
+            }
+            return true;
+        }
+
+        public unsafe bool TryReadInteger(bool isLittleEndian, out ulong value)
+        {
+            fixed (ulong* pBufferInt = &value)
+            {
+                var span = new Span<byte>((byte*)pBufferInt, sizeof(ulong));
+                if (Stream.Read(span) != sizeof(ulong))
+                {
+                    return false;
+                }
+
+                if (isLittleEndian != BitConverter.IsLittleEndian)
+                {
+                    value = BinaryUtil.SwapBits(value);
+                }
+            }
+            return true;
+        }
+
+        public unsafe void WriteInteger(bool isLittleEndian, ushort value)
+        {
+            if (isLittleEndian != BitConverter.IsLittleEndian)
+            {
+                value = BinaryUtil.SwapBits(value);
+            }
+            var span = new Span<byte>((byte*)&value, sizeof(ushort));
+            Stream.Write(span);
+        }
+
+        public unsafe void WriteInteger(bool isLittleEndian, uint value)
+        {
+            if (isLittleEndian != BitConverter.IsLittleEndian)
+            {
+                value = BinaryUtil.SwapBits(value);
+            }
+            var span = new Span<byte>((byte*)&value, sizeof(uint));
+            Stream.Write(span);
+        }
+
+        public unsafe void WriteInteger(bool isLittleEndian, ulong value)
+        {
+            if (isLittleEndian != BitConverter.IsLittleEndian)
+            {
+                value = BinaryUtil.SwapBits(value);
+            }
+            var span = new Span<byte>((byte*)&value, sizeof(ulong));
+            Stream.Write(span);
         }
 
         /// <summary>
@@ -105,7 +238,7 @@ namespace LibObjectFile
         /// <param name="sizeToRead">Size of the element to read (might be smaller or bigger).</param>
         /// <param name="data">The data read.</param>
         /// <returns><c>true</c> if reading was successful. <c>false</c> otherwise.</returns>
-        public unsafe bool TryRead<T>(int sizeToRead, out T data) where T : unmanaged
+        public unsafe bool TryReadInteger<T>(int sizeToRead, out T data) where T : unmanaged
         {
             if (sizeToRead <= 0) throw new ArgumentOutOfRangeException(nameof(sizeToRead));
 
@@ -184,6 +317,7 @@ namespace LibObjectFile
 
         /// <summary>
         /// Writes from the specified stream to the current <see cref="Stream"/> of this instance.
+        /// The position of the input stream is set to 0 before writing and reset back to 0 after writing.
         /// </summary>
         /// <param name="inputStream">The input stream to read from and write to <see cref="Stream"/></param>
         /// <param name="size">The amount of data to read from the input stream (if == 0, by default, it will read the entire input stream)</param>
@@ -193,7 +327,8 @@ namespace LibObjectFile
             if (inputStream == null) throw new ArgumentNullException(nameof(inputStream));
             if (bufferSize <= 0) throw new ArgumentOutOfRangeException(nameof(bufferSize));
 
-            size = size == 0 ? (ulong)inputStream.Length - (ulong)inputStream.Position : size;
+            inputStream.Position = 0;
+            size = size == 0 ? (ulong)inputStream.Length : size;
             var buffer = ArrayPool<byte>.Shared.Rent(bufferSize);
 
             while (size != 0)
@@ -206,6 +341,7 @@ namespace LibObjectFile
                 size -= (ulong)sizeRead;
             }
 
+            inputStream.Position = 0;
             if (size != 0)
             {
                 throw new InvalidOperationException("Unable to write stream entirely");
