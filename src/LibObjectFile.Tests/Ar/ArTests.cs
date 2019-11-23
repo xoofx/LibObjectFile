@@ -292,6 +292,8 @@ namespace LibObjectFile.Tests.Ar
             var cppName = "helloworld";
             var cppObj = $"{cppName}.o";
             var cppLib = $"lib{cppName}.a";
+            File.Delete(cppObj);
+            File.Delete(cppLib);
             LinuxUtil.RunLinuxExe("gcc", $"{cppName}.cpp -c -o {cppObj}");
             LinuxUtil.RunLinuxExe("ar", $"rcs {cppLib} {cppObj}");
 
@@ -299,7 +301,7 @@ namespace LibObjectFile.Tests.Ar
             {
                 Assert.True(ArArchiveFile.IsAr(stream));
 
-                var arFile = ArArchiveFile.Read(stream, ArArchiveKind.GNU);
+                var arFile = ArArchiveFile.Read(stream, new ArArchiveFileReaderOptions(ArArchiveKind.GNU) {ProcessObjectFiles = false});
 
                 var elfFile = arFile.Files.FirstOrDefault(x => x.Name == cppObj);
 
@@ -327,7 +329,7 @@ namespace LibObjectFile.Tests.Ar
                 stream.CopyTo(originalStream);
                 var originalArray = originalStream.ToArray();
 
-                Assert.AreEqual(originalArray, newArray);
+                Assert.AreEqual(originalArray, newArray, $"Non binary matching between file {cppLib} and {cppLibCopy}");
             }
         }
 
