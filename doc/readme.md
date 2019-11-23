@@ -1,14 +1,21 @@
 # LibObjectFile User Manual
 
-## Overview
+This is the manual of LibObjectFile with the following API covered:
+
+- [ELF Object File Format](#elf-object-file-format) via the `ElfObjectFile` API
+- [Archive ar File Format](#archive-ar-file-format) via the `ArArchiveFile` API
+
+## ELF Object File Format
+
+### Overview
 
 The main entry-point for reading/writing ELF Object file is the [`ElfObjectFile`](https://github.com/xoofx/LibObjectFile/blob/master/src/LibObjectFile/Elf/ElfObjectFile.cs) class.
 
 This class is the equivalent of the ELF Header and contains also sections and segments (program headers)
 
-![class diagram](class_diagram.png)
+![ELF class diagram](elf_class_diagram.png)
 
-## ELF Reading
+### ELF Reading
 
 The ELF API allows to read from a `System.IO.Stream` via the method `ElfObjectFile.Read`:
 
@@ -16,7 +23,7 @@ The ELF API allows to read from a `System.IO.Stream` via the method `ElfObjectFi
 ElfObjectFile elf = ElfObjectFile.Read(inputStream);
 ``` 
 
-## ELF Writing
+### ELF Writing
 
 You can create an ELF object in memory and save it to the disk:
 
@@ -38,9 +45,9 @@ using var outputStream = File.OpenWrite("test.out");
 elf.Write(outputStream);
 ```
 
-## Advanced
+### Advanced
 
-### Print
+#### Print
 
 You can print an object to a similar textual format than `readelf` by using the extension method `ElfObjectFile.Print(TextWriter)`:
 
@@ -99,7 +106,7 @@ No version information found in this file.
 
 The `Print` is trying to follow `readelf` from as compiled on `Ubuntu 18.04`. It is not intended to be 100% exact but is currently used in the unit tests to match the output of `readelf`.
 
-### Section Header String Table
+#### Section Header String Table
 
 When sections are added to an `ElfObjectFile.Sections`, it is required to store their names in a Section Header String Table (`.shstrtab`)
 
@@ -112,7 +119,7 @@ elf.AddSection(new ElfSectionHeaderStringTable());
 
 This section can be put at any places in the sections, but is usually put at the end.
 
-### Shadow sections
+#### Shadow sections
 
 There is a type of section called `ElfShadowSection` which are only valid at runtime but are not saved in the Section Header Table, while their content might be saved as part of the layout of the file. They are also not part of ELF specifications but are an implementation details.
 
@@ -120,13 +127,13 @@ A shadow section is used by an `ElfSegment` for which a region of data might not
 
 This is specially required when working with executable that don't have any sections but have only segments/program headers. In that case, `ElfObjectFile.Read` will create `ElfCustomShadowSection` for each part of the file that are being referenced by an `ElfSegment`.
 
-### Null section and Program Header Table
+#### Null section and Program Header Table
 
 The null section `ElfNullSection` must be put as the first section of an `ElfObjectFile`. It is the default when creating an `ElfObjectFile`.
 
 The Program Header Table is implemented as the `ElfProgramHeaderTable` shadow section and is added right after the `NullSection`. This is required because a segment of type `PHDR` will reference it while it is not an actual section in the original ELF file.
 
-### ELF Layout
+#### ELF Layout
 
 An `ElfObjectFile` represents an ELF Object File in memory that can be freely modified. Unlike its serialized version on the disk, the offsets and size of the sections and segments references can be changed dynamically.
 
@@ -145,7 +152,7 @@ foreach(var section in elf.Sections)
 }
 ```
 
-### Diagnostics and verification
+#### Diagnostics and verification
 
 An `ElfObjectFile` can be created in memory with an invalid configuration (e.g missing a link between a symbol table and a string table).
 
@@ -167,7 +174,69 @@ if (diagnostics.HasError)
 }
 ```
 
-## Links
+### Links
 
 - [Executable and Linkable Format (ELF).pdf](http://www.skyfree.org/linux/references/ELF_Format.pdf)
 - [ELF Linux man page](http://man7.org/linux/man-pages/man5/elf.5.html)
+
+## Archive ar File Format
+
+### Overview
+
+LibObjectFile supports the [Unix `ar` archive file format](https://en.wikipedia.org/wiki/Ar_(Unix)) and the main entry point class is the [`ArArchiveFile`](https://github.com/xoofx/LibObjectFile/blob/master/src/LibObjectFile/Ar/ArArchiveFile.cs)  class.
+
+This class has a similar API than ELF for reading/writing archive.
+
+![AR class diagram](ar_class_diagram.png)
+
+### Archive reading
+
+The Ar API allows to read from a `System.IO.Stream` via the method `ArArchiveFile.Read` and by specifying the type of the archive to read (e.g GNU on Linux for regular `.a` files)
+
+```C#
+ArArchiveFile ar = ArArchiveFile.Read(inputStream, ArArchiveKind.GNU);
+``` 
+
+### Archive Writing
+
+You can create an ArArchiveFile object in memory and save it to the disk:
+
+```c#
+var arFile = new ArArchiveFile();
+arFile.AddFile(new ArBinaryFile()
+    {
+        Name = "file.txt",
+        Stream = new MemoryStream(Encoding.UTF8.GetBytes("This is the content"))
+    }
+);
+using var outputStream = File.OpenWrite("libtest.a");
+arFile.Write(outputStream);
+```
+
+Although the example above is storing a text, one of the main usage of an `ar` archive is to store object-file format (e.g `ELF`)
+
+If you want to store direct an `ElfObjectFile` you can use the `ArElfFile` to add an ELF object-file directly to an archive.
+
+### Symbol Table
+
+A symbol table allows an archive to quickly expose which symbols are stored in which file within the collection of files within the `ar` archive.
+
+You have to use the `ArSymbolTable` and add it to an `ArArchiveFile`
+
+> Note: The `ArSymbolTable` instance must be the first entry in the `ArArchiveFile.Files` before other file entries
+
+```c#
+var arFile = new ArArchiveFile();
+// Create Symbol table, added 1st to ArArchiveFile
+var symbolTable = new ArSymbolTable();
+arFile.AddFile(symbolTable);
+// Create an ELF
+var elf = new ElfObjectFile();
+// ... fill elf, add symbols
+arFile.AddFile(elf);
+// Add a symbol entry
+symbolTable.Symbols.Add(new ArSymbol("my_symbol", elf));
+``` 
+### Links
+
+- [Archive ar file format (Wikipedia)](https://en.wikipedia.org/wiki/Ar_(Unix))

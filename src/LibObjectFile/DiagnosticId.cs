@@ -64,5 +64,26 @@ namespace LibObjectFile
         ELF_ERR_IncompleNoteGnuAbiTag = 53,
         ELF_ERR_InvalidSegmentVirtualAddressOrOffset = 54,
         ELF_ERR_InvalidSegmentAlignmentForLoad = 55,
+
+
+        AR_ERR_InvalidMagicLength = 1000,
+        AR_ERR_MagicNotFound = 1001,
+        AR_ERR_ExpectingNewLineCharacter = 1002,
+        AR_ERR_UnexpectedEndOfFile = 1003,
+        AR_ERR_InvalidFileEntryLength = 1004,
+        AR_ERR_InvalidNonPrintableASCIIFoundInFileEntry = 1005,
+        AR_ERR_InvalidCharacterFoundInFileEntry = 1006,
+        AR_ERR_InvalidNullFileEntryName = 1007,
+        AR_ERR_InvalidFileOffsetInSystemVSymbolLookupTable = 1008,
+        AR_ERR_InvalidDuplicatedFutureHeadersTable = 1009,
+        AR_ERR_InvalidReferenceToFutureHeadersTable = 1010,
+        AR_ERR_InvalidFileEntryNameTooLong = 1011,
+        AR_ERR_InvalidCharacterInFileEntryName = 1012,
+        AR_ERR_InvalidNullOrEmptySymbolName = 1013,
+        AR_ERR_InvalidNullFileForSymbol = 1014,
+        AR_ERR_InvalidNullParentFileForSymbol = 1015,
+        AR_ERR_InvalidParentFileForSymbol = 1016,
+        AR_ERR_InvalidFileEntrySize = 1017,
+
     }
 }

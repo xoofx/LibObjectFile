@@ -2,11 +2,14 @@
 
 <img align="right" width="200px" height="200px" src="img/libobjectfile.png">
 
-LibObjectFile is a .NET library to read, manipulate and write linker and executable object files (e.g ELF, COFF...)
+LibObjectFile is a .NET library to read, manipulate and write linker and executable object files (e.g ELF, ar, COFF...)
 
-> NOTE: Currently LibObjectFile **supports only the ELF object-file format**
+> NOTE: Currently LibObjectFile supports only the following file format:
 >
-> There is a longer term plan to support other file formats (e.g COFF, MACH-O) but as I don't 
+> - **ELF** object-file format
+> - **Archive `ar`** file format (Common, GNU and BSD variants)
+>
+> There is a longer term plan to support other file formats (e.g COFF, MACH-O, .lib) but as I don't 
 > have a need for them right now, it is left as an exercise for PR contributors! ;)
 
 ## Usage
@@ -27,9 +30,10 @@ elf.Write(outStream);
 ```
 
 ## Features
+- Full support of Archive `ar` file format including Common, GNU and BSD variants.
 - Good support for the ELF file format:
-  - Correct handling of LSB/MSB
   - Read and write from/to a `System.IO.Stream`
+  - Handling of LSB/MSB
   - Support the following sections: 
     - String Table
     - Symbol Table
@@ -38,6 +42,7 @@ elf.Write(outStream);
     - Other sections fallback to `ElfCustomSection`
   - Program headers with or without sections
   - Print with `readelf` similar output
+- Use of a Diagnostics API to validate file format (on read/before write)
 - Library requiring .NET `netstandard2.1`+ and compatible with `netcoreapp3.0`+
 
 ## Documentation
