@@ -269,24 +269,6 @@ namespace LibObjectFile.Tests.Ar
         }
 
         [Test]
-        public void CheckArLibrary()
-        {
-            var stream = File.OpenRead("libsel4.a");
-            var file = ArArchiveFile.Read(stream, ArArchiveKind.GNU);
-
-            foreach (var entry in file.Files)
-            {
-                Console.WriteLine(entry);
-            }
-
-            using (var outStream = new FileStream(@"libsel4_copy.a", FileMode.Create, FileAccess.Write))
-            {
-                file.Write(outStream);
-                outStream.Flush();
-            }
-        }
-
-        [Test]
         public void CheckLibraryWithELF()
         {
             var cppName = "helloworld";
