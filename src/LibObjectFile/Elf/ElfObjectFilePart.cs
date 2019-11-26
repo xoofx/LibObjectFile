@@ -7,7 +7,7 @@ namespace LibObjectFile.Elf
     /// <summary>
     /// Base class for an <see cref="ElfSection"/> and <see cref="ElfSegment"/>.
     /// </summary>
-    public abstract class ElfObjectFilePart : ObjectFilePart<ElfObjectFile, ElfObjectFilePart>
+    public abstract class ElfObjectFilePart : ObjectFilePart<ElfObjectFile>
     {
     }
 }

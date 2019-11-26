@@ -4,6 +4,7 @@
 
 using System;
 using System.Buffers;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -16,16 +17,34 @@ namespace LibObjectFile
     /// </summary>
     public abstract class ObjectFileReaderWriter
     {
+        private Stream _stream;
+
         protected ObjectFileReaderWriter(Stream stream)
         {
             Stream = stream ?? throw new ArgumentNullException(nameof(stream));
             Diagnostics = new DiagnosticBag();
+            IsLittleEndian = true;
         }
 
         /// <summary>
-        /// The stream of the object file.
+        /// Gets or sets stream of the object file.
         /// </summary>
-        public Stream Stream { get; }
+        public Stream Stream
+        {
+            get => _stream;
+            set => _stream = value ?? throw new ArgumentNullException(nameof(value));
+        }
+
+        public ulong Offset
+        {
+            get => (ulong) Stream.Position;
+            set => Stream.Position = (long) value;
+        }
+
+        public ulong Length
+        {
+            get => (ulong) Stream.Length;
+        }
 
         /// <summary>
         /// The diagnostics while read/writing this object file.
@@ -36,6 +55,8 @@ namespace LibObjectFile
         /// Gets a boolean indicating if this reader is operating in read-only mode.
         /// </summary>
         public abstract bool IsReadOnly { get; }
+
+        public bool IsLittleEndian { get; protected set; }
 
         /// <summary>
         /// Reads from the <see cref="Stream"/> and current position to the specified buffer.
@@ -48,6 +69,19 @@ namespace LibObjectFile
             return Stream.Read(buffer, offset, count);
         }
 
+
+        /// <summary>
+        /// Reads a null terminated UTF8 string from the stream.
+        /// </summary>
+        /// <returns><c>true</c> if the string was successfully read from the stream, false otherwise</returns>
+        public string ReadStringUTF8NullTerminated()
+        {
+            if (!TryReadStringUTF8NullTerminated(out var text))
+            {
+                throw new EndOfStreamException();
+            }
+            return text;
+        }
 
         /// <summary>
         /// Reads a null terminated UTF8 string from the stream.
@@ -125,7 +159,63 @@ namespace LibObjectFile
             }
         }
 
-        public bool TryReadInteger(bool isLittleEndian, out ushort value)
+        public bool TryReadU8(out byte value)
+        {
+            value = 0;
+            int nextValue = Stream.ReadByte();
+            if (nextValue < 0) return false;
+            value = (byte)nextValue;
+
+            return true;
+        }
+
+        /// <summary>
+        /// Read little endian from the stream
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool TryReadU16(out ushort value)
+        {
+            return TryReadU16(IsLittleEndian, out value);
+        }
+
+        public byte ReadU8()
+        {
+            if (TryReadU8(out var value))
+            {
+                return value;
+            }
+            throw new EndOfStreamException();
+        }
+
+        public ushort ReadU16()
+        {
+            if (TryReadU16(out var value))
+            {
+                return value;
+            }
+            throw new EndOfStreamException();
+        }
+
+        public uint ReadU32()
+        {
+            if (TryReadU32(out var value))
+            {
+                return value;
+            }
+            throw new EndOfStreamException();
+        }
+
+        public ulong ReadU64()
+        {
+            if (TryReadU64(out var value))
+            {
+                return value;
+            }
+            throw new EndOfStreamException();
+        }
+        
+        public bool TryReadU16(bool isLittleEndian, out ushort value)
         {
             value = 0;
             int nextValue = Stream.ReadByte();
@@ -134,7 +224,7 @@ namespace LibObjectFile
 
             nextValue = Stream.ReadByte();
             if (nextValue < 0) return false;
-            value = (ushort)((value << 8) | (byte)nextValue);
+            value = (ushort)((nextValue << 8) | (byte)value);
 
             if (isLittleEndian != BitConverter.IsLittleEndian)
             {
@@ -144,7 +234,12 @@ namespace LibObjectFile
             return true;
         }
 
-        public unsafe bool TryReadInteger(bool isLittleEndian, out uint value)
+        public unsafe bool TryReadU32(out uint value)
+        {
+            return TryReadU32(IsLittleEndian, out value);
+        }
+
+        public unsafe bool TryReadU32(bool isLittleEndian, out uint value)
         {
             fixed (uint* pBufferInt = &value)
             {
@@ -162,7 +257,12 @@ namespace LibObjectFile
             return true;
         }
 
-        public unsafe bool TryReadInteger(bool isLittleEndian, out ulong value)
+        public unsafe bool TryReadU64(out ulong value)
+        {
+            return TryReadU64(IsLittleEndian, out value);
+        }
+
+        public unsafe bool TryReadU64(bool isLittleEndian, out ulong value)
         {
             fixed (ulong* pBufferInt = &value)
             {
@@ -180,7 +280,7 @@ namespace LibObjectFile
             return true;
         }
 
-        public unsafe void WriteInteger(bool isLittleEndian, ushort value)
+        public unsafe void WriteU16(bool isLittleEndian, ushort value)
         {
             if (isLittleEndian != BitConverter.IsLittleEndian)
             {
@@ -190,7 +290,7 @@ namespace LibObjectFile
             Stream.Write(span);
         }
 
-        public unsafe void WriteInteger(bool isLittleEndian, uint value)
+        public unsafe void WriteU32(bool isLittleEndian, uint value)
         {
             if (isLittleEndian != BitConverter.IsLittleEndian)
             {
@@ -200,7 +300,7 @@ namespace LibObjectFile
             Stream.Write(span);
         }
 
-        public unsafe void WriteInteger(bool isLittleEndian, ulong value)
+        public unsafe void WriteU64(bool isLittleEndian, ulong value)
         {
             if (isLittleEndian != BitConverter.IsLittleEndian)
             {
@@ -284,7 +384,9 @@ namespace LibObjectFile
         {
             if (IsReadOnly)
             {
-                return ReadAsSliceStream(size);
+                var stream = ReadAsSliceStream(size);
+                Stream.Position += (long)size;
+                return stream;
             }
 
             return ReadAsMemoryStream(size);

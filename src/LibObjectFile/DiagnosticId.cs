@@ -85,5 +85,11 @@ namespace LibObjectFile
         AR_ERR_InvalidParentFileForSymbol = 1016,
         AR_ERR_InvalidFileEntrySize = 1017,
 
+
+        DWARF_ERR_AttributeLEB128OutOfRange = 2000,
+        DWARF_ERR_VersionNotSupported = 2001,
+        DWARF_ERR_InvalidData = 2002,
+
+
     }
 }

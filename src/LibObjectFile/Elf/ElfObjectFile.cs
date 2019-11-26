@@ -15,7 +15,7 @@ namespace LibObjectFile.Elf
     /// <summary>
     /// Defines an ELF object file that can be manipulated in memory.
     /// </summary>
-    public sealed class ElfObjectFile : ObjectFile
+    public sealed class ElfObjectFile : ObjectFilePart
     {
         private static readonly Comparison<ElfSection> CompareSectionOffsetsDelegate = new Comparison<ElfSection>(CompareSectionOffsets);
 

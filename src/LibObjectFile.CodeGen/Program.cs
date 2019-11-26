@@ -12,13 +12,14 @@ using Zio.FileSystems;
 
 namespace LibObjectFile.CodeGen
 {
-    class Program
+    partial class Program
     {
         private const string SrcFolderRelative = @"..\..\..\..";
 
         static void Main(string[] args)
         {
             GenerateElf();
+            GenerateDwarf();
         }
        
         private static CodeWriter GetCodeWriter(string subPath)
@@ -205,6 +206,8 @@ namespace LibObjectFile.CodeGen
                 {
                     throw new InvalidOperationException($"The enum name `{rawName}` starts with a number and needs to be modified");
                 }
+
+                csFieldName = CSharpHelper.EscapeName(csFieldName);
 
                 var enumField = new CSharpField(csFieldName)
                 {

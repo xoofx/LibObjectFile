@@ -20,7 +20,7 @@ namespace LibObjectFile.Ar
         {
             return Stream != null ? (ulong)Stream.Length : 0;
         }
-        
+
         protected override void Read(ArArchiveFileReader reader)
         {
             Stream = reader.ReadAsStream(Size);

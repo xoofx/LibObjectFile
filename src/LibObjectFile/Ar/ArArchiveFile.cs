@@ -12,7 +12,7 @@ namespace LibObjectFile.Ar
     /// <summary>
     /// An 'ar' archive file.
     /// </summary>
-    public sealed class ArArchiveFile : ObjectFile
+    public sealed class ArArchiveFile : ObjectFilePart
     {
         private readonly List<ArFile> _files;
 

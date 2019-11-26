@@ -9,7 +9,7 @@ namespace LibObjectFile.Ar
     /// <summary>
     /// Base class for a file entry in <see cref="ArArchiveFile.Files"/>
     /// </summary>
-    public abstract partial class ArFile : ObjectFilePart<ArArchiveFile, ArFile>
+    public abstract partial class ArFile : ObjectFilePart<ArArchiveFile>
     {
         private string _name;
         private DateTimeOffset _timestamp;
@@ -139,6 +139,10 @@ namespace LibObjectFile.Ar
         public override string ToString()
         {
             return $"{this.GetType().Name} [{Index}] `{Name}`";
+        }
+
+        public override void Verify(DiagnosticBag diagnostics)
+        {
         }
     }
 }

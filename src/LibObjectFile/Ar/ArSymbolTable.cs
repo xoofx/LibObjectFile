@@ -78,7 +78,7 @@ namespace LibObjectFile.Ar
             bool isBSD = reader.ArArchiveFile.Kind == ArArchiveKind.BSD;
 
             // A 32-bit big endian integer, giving the number of entries in the table.
-            if (!reader.TryReadInteger(false, out uint entryCount))
+            if (!reader.TryReadU32(false, out uint entryCount))
             {
                 reader.Diagnostics.Error(DiagnosticId.AR_ERR_UnexpectedEndOfFile, $"Unexpected EOF while trying to read the number of entries in {this}");
                 return;
@@ -91,14 +91,14 @@ namespace LibObjectFile.Ar
 
                 if (isBSD)
                 {
-                    if (!reader.TryReadInteger(false, out stringOffset))
+                    if (!reader.TryReadU32(false, out stringOffset))
                     {
                         reader.Diagnostics.Error(DiagnosticId.AR_ERR_UnexpectedEndOfFile, $"Unexpected EOF while trying to read the string offset for symbol entry [{i}] in {this}");
                         return;
                     }
                 }
 
-                if (!reader.TryReadInteger(false, out uint offsetOfFile))
+                if (!reader.TryReadU32(false, out uint offsetOfFile))
                 {
                     reader.Diagnostics.Error(DiagnosticId.AR_ERR_UnexpectedEndOfFile, $"Unexpected EOF while trying to read the symbol entry [{i}] in {this}");
                     return;
@@ -190,7 +190,7 @@ namespace LibObjectFile.Ar
         protected override void Write(ArArchiveFileWriter writer)
         {
             long startOffset = writer.Stream.Position;
-            writer.WriteInteger(false, (uint)Symbols.Count);
+            writer.WriteU32(false, (uint)Symbols.Count);
 
             uint stringOffset = 0;
             bool isBSD = Parent.Kind == ArArchiveKind.BSD;
@@ -198,10 +198,10 @@ namespace LibObjectFile.Ar
             {
                 if (isBSD)
                 {
-                    writer.WriteInteger(false, stringOffset);
+                    writer.WriteU32(false, stringOffset);
                 }
 
-                writer.WriteInteger(false, (uint)symbol.File.Offset);
+                writer.WriteU32(false, (uint)symbol.File.Offset);
 
                 if (isBSD)
                 {
