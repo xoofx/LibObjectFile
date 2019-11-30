@@ -15,7 +15,7 @@ namespace LibObjectFile.Elf
     /// <summary>
     /// Defines an ELF object file that can be manipulated in memory.
     /// </summary>
-    public sealed class ElfObjectFile : ObjectFilePart
+    public sealed class ElfObjectFile : ObjectFileNode
     {
         private static readonly Comparison<ElfSection> CompareSectionOffsetsDelegate = new Comparison<ElfSection>(CompareSectionOffsets);
 
@@ -186,6 +186,8 @@ namespace LibObjectFile.Elf
             // Check first that we have a valid object file
             var localDiagnostics = new DiagnosticBag();
             Verify(localDiagnostics);
+
+            Size = 0;
             
             // If we have any any errors
             if (localDiagnostics.HasErrors)
@@ -246,6 +248,13 @@ namespace LibObjectFile.Elf
                         }
                     }
 
+                    if (!section.TryUpdateLayout(diagnostics))
+                    {
+                        return false;
+                    }
+
+                    Console.WriteLine($"{section.ToString(),-50} Offset: {section.Offset:x4} Size: {section.Size:x4}");
+
                     // A section without content doesn't count with its size
                     if (!section.HasContent)
                     {
@@ -273,12 +282,14 @@ namespace LibObjectFile.Elf
                 for (int i = 0; i < Segments.Count; i++)
                 {
                     var programHeader = Segments[i];
-                    if (programHeader.OffsetKind == ValueKind.Auto)
+                    if (!programHeader.TryUpdateLayout(diagnostics))
                     {
-                        programHeader.Offset = programHeader.Range.Offset;
+                        return false;
                     }
                 }
             }
+
+            Size = offset + (ulong)VisibleSectionCount * Layout.SizeOfSectionHeaderEntry;
 
             return true;
         }

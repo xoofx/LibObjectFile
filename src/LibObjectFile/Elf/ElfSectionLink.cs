@@ -33,6 +33,8 @@ namespace LibObjectFile.Elf
 
         public readonly uint SpecialIndex;
 
+        public bool IsEmpty => Section == null && SpecialIndex == 0;
+
         /// <summary>
         /// <c>true</c> if this link to a section is a special section.
         /// </summary>

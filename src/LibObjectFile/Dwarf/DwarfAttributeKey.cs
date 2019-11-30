@@ -12,9 +12,9 @@ namespace LibObjectFile.Dwarf
     /// This is the value seen in <see cref="DwarfNative.DW_AT_ALTIUM_loclist"/>
     /// </summary>
     [DebuggerDisplay("{ToString(),nq}")]
-    public readonly partial struct DwarfAttributeName : IEquatable<DwarfAttributeName>
+    public readonly partial struct DwarfAttributeKey : IEquatable<DwarfAttributeKey>
     {
-        public DwarfAttributeName(uint value)
+        public DwarfAttributeKey(uint value)
         {
             Value = value;
         }
@@ -22,14 +22,14 @@ namespace LibObjectFile.Dwarf
         public readonly uint Value;
 
 
-        public bool Equals(DwarfAttributeName other)
+        public bool Equals(DwarfAttributeKey other)
         {
             return Value == other.Value;
         }
 
         public override bool Equals(object obj)
         {
-            return obj is DwarfAttributeName other && Equals(other);
+            return obj is DwarfAttributeKey other && Equals(other);
         }
 
         public override int GetHashCode()
@@ -37,23 +37,23 @@ namespace LibObjectFile.Dwarf
             return (int) Value;
         }
 
-        public static bool operator ==(DwarfAttributeName left, DwarfAttributeName right)
+        public static bool operator ==(DwarfAttributeKey left, DwarfAttributeKey right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(DwarfAttributeName left, DwarfAttributeName right)
+        public static bool operator !=(DwarfAttributeKey left, DwarfAttributeKey right)
         {
             return !left.Equals(right);
         }
 
         public override string ToString()
         {
-            return $"{ToStringInternal()} (0x{Value:X4})";
+            return ToStringInternal() ?? $"Unknown {nameof(DwarfAttributeKey)} (0x{Value:X4})";
         }
 
-        public static explicit operator uint(DwarfAttributeName flags) => flags.Value;
+        public static explicit operator uint(DwarfAttributeKey flags) => flags.Value;
 
-        public static implicit operator DwarfAttributeName(uint flags) => new DwarfAttributeName(flags);
+        public static implicit operator DwarfAttributeKey(uint flags) => new DwarfAttributeKey(flags);
     }
 }

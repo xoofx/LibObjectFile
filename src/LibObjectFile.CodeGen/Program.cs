@@ -278,17 +278,16 @@ namespace LibObjectFile.CodeGen
                         }
 
                         string descriptionText = rawField.Name;
-
-                        if (cppField.Comment != null)
-                        {
-                            descriptionText += " - " + cppField.Comment.ToString().Replace("\"", "\\\"");
-                        }
+                        //if (cppField.Comment != null)
+                        //{
+                        //    descriptionText += " - " + cppField.Comment.ToString().Replace("\"", "\\\"");
+                        //}
                         descriptionText = descriptionText.Replace("\r\n", "").Replace("\n", "");
                         writer.WriteLine($"case {cppOptions.DefaultClassLib}.{rawField.Name}: return \"{descriptionText}\";");
                     }
                 }
 
-                writer.WriteLine($"default: return \"Unknown {enumClassName}\";");
+                writer.WriteLine($"default: return null;");
                 writer.CloseBraceBlock();
             };
         }

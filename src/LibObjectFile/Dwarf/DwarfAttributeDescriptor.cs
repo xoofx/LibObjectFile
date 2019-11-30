@@ -7,26 +7,26 @@ using System.Diagnostics;
 
 namespace LibObjectFile.Dwarf
 {
-    [DebuggerDisplay("{Name} {Form}")]
+    [DebuggerDisplay("{Key} {Form}")]
     public readonly struct DwarfAttributeDescriptor : IEquatable<DwarfAttributeDescriptor>
     {
         public static readonly DwarfAttributeDescriptor Empty = new DwarfAttributeDescriptor();
 
-        public DwarfAttributeDescriptor(DwarfAttributeName name, DwarfAttributeForm form)
+        public DwarfAttributeDescriptor(DwarfAttributeKey key, DwarfAttributeForm form)
         {
-            Name = name;
+            Key = key;
             Form = form;
         }
         
-        public readonly DwarfAttributeName Name;
+        public readonly DwarfAttributeKey Key;
 
         public readonly DwarfAttributeForm Form;
 
-        public bool IsNull => Name.Value == 0 && Form.Value == 0;
+        public bool IsNull => Key.Value == 0 && Form.Value == 0;
 
         public bool Equals(DwarfAttributeDescriptor other)
         {
-            return Name.Equals(other.Name) && Form.Equals(other.Form);
+            return Key.Equals(other.Key) && Form.Equals(other.Form);
         }
 
         public override bool Equals(object obj)
@@ -38,7 +38,7 @@ namespace LibObjectFile.Dwarf
         {
             unchecked
             {
-                return (Name.GetHashCode() * 397) ^ Form.GetHashCode();
+                return (Key.GetHashCode() * 397) ^ Form.GetHashCode();
             }
         }
 

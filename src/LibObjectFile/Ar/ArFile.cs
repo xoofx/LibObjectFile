@@ -9,7 +9,7 @@ namespace LibObjectFile.Ar
     /// <summary>
     /// Base class for a file entry in <see cref="ArArchiveFile.Files"/>
     /// </summary>
-    public abstract partial class ArFile : ObjectFilePart<ArArchiveFile>
+    public abstract partial class ArFile : ObjectFileNode<ArArchiveFile>
     {
         private string _name;
         private DateTimeOffset _timestamp;
@@ -93,7 +93,7 @@ namespace LibObjectFile.Ar
             // Verifies that the Size property is actually valid with what is being read
             if (size != expectedSize)
             {
-                reader.Diagnostics.Error(DiagnosticId.AR_ERR_UnexpectedEndOfFile, $"Unexpected EOF / size (expected: {expectedSize} != read: {size})  while trying to read file entry {Name}");
+                reader.Diagnostics.Error(DiagnosticId.CMN_ERR_UnexpectedEndOfFile, $"Unexpected EOF / size (expected: {expectedSize} != read: {size})  while trying to read file entry {Name}");
             }
         }
 

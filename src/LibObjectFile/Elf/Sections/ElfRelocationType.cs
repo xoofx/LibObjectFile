@@ -60,8 +60,7 @@ namespace LibObjectFile.Elf
         public override string ToString()
         {
             if (Arch.Value == 0 && Value == 0) return "Empty ElfRelocationType";
-
-            return $"{ToStringInternal()} ({Value})";
+            return ToStringInternal() ?? $"Unknown {nameof(ElfRelocationType)} (0x{Value:X4})";
         }
     }
 }

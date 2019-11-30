@@ -2,8 +2,6 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
-using System;
-
 namespace LibObjectFile.Elf
 {
     /// <summary>
@@ -16,38 +14,6 @@ namespace LibObjectFile.Elf
     {
         protected ElfShadowSection() : base(ElfSectionType.Null)
         {
-        }
-
-        public override ElfSectionType Type
-        {
-            get => base.Type;
-            set
-            {
-                if (value != ElfSectionType.Null) throw new InvalidOperationException($"Cannot change the type of a {nameof(ElfShadowSection)}");
-            }
-        }
-
-        public override ElfSectionFlags Flags
-        {
-            get => ElfSectionFlags.None;
-            set => throw CannotModifyThisPropertyForShadow();
-        }
-
-        public override ulong VirtualAddress
-        {
-            get => 0;
-            set => throw CannotModifyThisPropertyForShadow();
-        }
-
-        public override ulong Alignment
-        {
-            get => 0;
-            set => throw CannotModifyThisPropertyForShadow();
-        }
-
-        private static InvalidOperationException CannotModifyThisPropertyForShadow()
-        {
-            return new InvalidOperationException($"Cannot modify this property for a {nameof(ElfShadowSection)}");
         }
     }
 }

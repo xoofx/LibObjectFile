@@ -46,12 +46,6 @@ namespace LibObjectFile.Elf
 
         public bool IsRelocationWithAddends => this.Type == ElfSectionType.RelocationAddends;
 
-        public override unsafe ulong Size =>
-            Parent == null || Parent.FileClass == ElfFileClass.None? 0 :
-            Parent.FileClass == ElfFileClass.Is32
-                ? (ulong) Entries.Count * (IsRelocationWithAddends ? (ulong) sizeof(ElfNative.Elf32_Rela) : (ulong) sizeof(ElfNative.Elf32_Rel))
-                : (ulong) Entries.Count * (IsRelocationWithAddends ? (ulong) sizeof(ElfNative.Elf64_Rela) : (ulong) sizeof(ElfNative.Elf64_Rel));
-
         protected override void Read(ElfReader reader)
         {
             if (Parent.FileClass == ElfFileClass.Is32)
@@ -303,6 +297,18 @@ namespace LibObjectFile.Elf
                     diagnostics.Error(DiagnosticId.ELF_ERR_InvalidRelocationSymbolIndex, $"Out of range symbol index `{entry.SymbolIndex}` (max: {symbolTable.Entries.Count + 1} from symbol table {symbolTable}) for relocation entry {i} in section [{Index}] `{nameof(ElfRelocationTable)}`", this);
                 }
             }
+        }
+
+        public override unsafe bool TryUpdateLayout(DiagnosticBag diagnostics)
+        {
+            if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
+
+            Size = Parent == null || Parent.FileClass == ElfFileClass.None ? 0 :
+                Parent.FileClass == ElfFileClass.Is32
+                    ? (ulong)Entries.Count * (IsRelocationWithAddends ? (ulong)sizeof(ElfNative.Elf32_Rela) : (ulong)sizeof(ElfNative.Elf32_Rel))
+                    : (ulong)Entries.Count * (IsRelocationWithAddends ? (ulong)sizeof(ElfNative.Elf64_Rela) : (ulong)sizeof(ElfNative.Elf64_Rel));
+
+            return true;
         }
     }
 }

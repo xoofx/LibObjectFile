@@ -2,6 +2,8 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
+using System;
+
 namespace LibObjectFile.Elf
 {
     /// <summary>
@@ -19,11 +21,6 @@ namespace LibObjectFile.Elf
             // This is not read by this instance but by ElfReader directly
         }
 
-        protected override unsafe ulong GetSizeAuto()
-        {
-            return (ulong)Parent.Segments.Count * Parent.Layout.SizeOfProgramHeaderEntry;
-        }
-
         public override unsafe ulong TableEntrySize
         {
             get
@@ -32,6 +29,19 @@ namespace LibObjectFile.Elf
                 return Parent.FileClass == ElfFileClass.Is32 ? (ulong)sizeof(ElfNative.Elf32_Phdr) : (ulong)sizeof(ElfNative.Elf64_Phdr);
             }
         }
+
+        public override bool TryUpdateLayout(DiagnosticBag diagnostics)
+        {
+            if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
+
+            Size = 0;
+
+            if (Parent == null) return false;
+
+            Size = (ulong) Parent.Segments.Count * Parent.Layout.SizeOfProgramHeaderEntry;
+            return true;
+        }
+
 
         protected override void Write(ElfWriter writer)
         {

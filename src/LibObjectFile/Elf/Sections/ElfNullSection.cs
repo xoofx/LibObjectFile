@@ -11,75 +11,36 @@ namespace LibObjectFile.Elf
     /// </summary>
     public sealed class ElfNullSection : ElfSection
     {
-        public override ElfSectionType Type
+        public override void Verify(DiagnosticBag diagnostics)
         {
-            get => ElfSectionType.Null;
-            set => throw CannotModifyNullSection();
+            base.Verify(diagnostics);
+
+            if (Type != ElfSectionType.Null ||
+                Flags != ElfSectionFlags.None ||
+                !Name.IsEmpty ||
+                VirtualAddress != 0 ||
+                Alignment != 0 ||
+                !Link.IsEmpty ||
+                !Info.IsEmpty ||
+                Offset != 0 ||
+                Size != 0)
+            {
+                diagnostics.Error(DiagnosticId.ELF_ERR_InvalidNullSection, "Invalid Null section. This section should not be modified and all properties must be null");
+            }
         }
 
-        public override ElfSectionFlags Flags
+        public override bool TryUpdateLayout(DiagnosticBag diagnostics)
         {
-            get => ElfSectionFlags.None;
-            set => throw CannotModifyNullSection();
+            if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
+            return true;
         }
-
-        public override ElfString Name
-        {
-            get => null;
-            set => throw CannotModifyNullSection();
-        }
-
-        public override ulong VirtualAddress
-        {
-            get => 0;
-            set => throw CannotModifyNullSection();
-        }
-
-        public override ulong Alignment
-        {
-            get => 0;
-            set => throw CannotModifyNullSection();
-        }
-
-
-        public override ElfSectionLink Link
-        {
-            get => ElfSectionLink.Empty;
-            set => throw CannotModifyNullSection();
-        }
-
-
-        public override ElfSectionLink Info
-        {
-            get => ElfSectionLink.Empty;
-            set => throw CannotModifyNullSection();
-        }
-
-        public override ulong Offset
-        {
-            get => 0;
-            set => throw CannotModifyNullSection();
-        }
-
-        public override ulong Size
-        {
-            get => 0;
-            set => throw CannotModifyNullSection();
-        }
-
-        public override bool HasContent => false;
-
+        
         protected override void Read(ElfReader reader)
         {
         }
 
         protected override void Write(ElfWriter writer)
         {
-        }
-
-        private static InvalidOperationException CannotModifyNullSection()
-        {
-            return new InvalidOperationException("Cannot modify a Null Section");
         }
     }
 }

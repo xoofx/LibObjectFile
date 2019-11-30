@@ -46,7 +46,7 @@ namespace LibObjectFile.Dwarf
 
         public override string ToString()
         {
-            return $"{ToStringInternal()} (0x{Value:X4})";
+            return ToStringInternal() ?? $"Unknown {nameof(DwarfTag)} (0x{Value:X4})";
         }
 
         public static explicit operator uint(DwarfTag flags) => flags.Value;

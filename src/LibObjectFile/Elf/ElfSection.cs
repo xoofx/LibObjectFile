@@ -11,7 +11,7 @@ namespace LibObjectFile.Elf
     /// Defines the base class for a section in an <see cref="ElfObjectFile"/>.
     /// </summary>
     [DebuggerDisplay("{ToString(),nq}")]
-    public abstract class ElfSection : ElfObjectFilePart
+    public abstract class ElfSection : ElfObjectFileNode
     {
         private ElfSectionType _type;
 
@@ -27,38 +27,41 @@ namespace LibObjectFile.Elf
         public virtual ElfSectionType Type
         {
             get => _type;
-            set => _type = value;
+            set
+            {
+                _type = value;
+            }
         }
 
         /// <summary>
         /// Gets or sets the <see cref="ElfSectionFlags"/> of this section.
         /// </summary>
-        public virtual ElfSectionFlags Flags { get; set; }
+        public ElfSectionFlags Flags { get; set; }
 
         /// <summary>
         /// Gets or sets the name of this section.
         /// </summary>
-        public virtual ElfString Name { get; set; }
+        public ElfString Name { get; set; }
 
         /// <summary>
         /// Gets or sets the virtual address of this section.
         /// </summary>
-        public virtual ulong VirtualAddress { get; set; }
+        public ulong VirtualAddress { get; set; }
 
         /// <summary>
         /// Gets or sets the alignment requirement of this section.
         /// </summary>
-        public virtual ulong Alignment { get; set; }
+        public ulong Alignment { get; set; }
 
         /// <summary>
         /// Gets or sets the link element of this section.
         /// </summary>
-        public virtual ElfSectionLink Link { get; set; }
+        public ElfSectionLink Link { get; set; }
 
         /// <summary>
         /// Gets or sets the info element of this section.
         /// </summary>
-        public virtual ElfSectionLink Info { get; set; }
+        public ElfSectionLink Info { get; set; }
 
         /// <summary>
         /// Gets the table entry size of this section.
@@ -83,7 +86,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Gets a boolean indicating if this section has some content (Size should be taken into account).
         /// </summary>
-        public virtual bool HasContent => Type != ElfSectionType.NoBits;
+        public bool HasContent => Type != ElfSectionType.NoBits && (Type != ElfSectionType.Null || this is ElfShadowSection);
 
         /// <summary>
         /// Read data from the specified reader to this instance.
@@ -105,18 +108,11 @@ namespace LibObjectFile.Elf
         internal void ReadInternal(ElfReader reader)
         {
             Read(reader);
-            // After reading the size must be Auto by default
-            SizeKind = ValueKind.Auto;
         }
         
         public override void Verify(DiagnosticBag diagnostics)
         {
             if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
-
-            if (Type != ElfSectionType.Null && Type != ElfSectionType.NoBits && SizeKind != ValueKind.Auto)
-            {
-                diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSectionSizeKind, $"Invalid {nameof(SizeKind)}: {SizeKind} for `{this}`. Expecting {ValueKind.Manual}.");
-            }
 
             // Check parent for link section
             if (Link.Section != null)

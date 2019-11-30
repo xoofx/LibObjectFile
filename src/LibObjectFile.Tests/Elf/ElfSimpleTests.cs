@@ -39,7 +39,7 @@ namespace LibObjectFile.Tests.Elf
             codeStream.Write(Encoding.UTF8.GetBytes("This is a text"));
             codeStream.Position = 0;
 
-            var codeSection = new ElfCustomSection(codeStream).ConfigureAs(ElfSectionSpecialType.Text);
+            var codeSection = new ElfBinarySection(codeStream).ConfigureAs(ElfSectionSpecialType.Text);
             elf.AddSection(codeSection);
             elf.AddSection(new ElfSectionHeaderStringTable());
 
@@ -55,7 +55,7 @@ namespace LibObjectFile.Tests.Elf
             codeStream.Write(Encoding.UTF8.GetBytes("This is a text"));
             codeStream.Position = 0;
 
-            var codeSection = new ElfCustomSection(codeStream).ConfigureAs(ElfSectionSpecialType.Text);
+            var codeSection = new ElfBinarySection(codeStream).ConfigureAs(ElfSectionSpecialType.Text);
             elf.AddSection(codeSection);
 
             var stringSection = new ElfStringTable();
@@ -103,19 +103,18 @@ namespace LibObjectFile.Tests.Elf
             codeStream.Write(new byte[4096]);
             
             var codeSection = elf.AddSection(
-                new ElfCustomSection(codeStream)
+                new ElfBinarySection(codeStream)
                 {
                     VirtualAddress = 0x1000,
                     Alignment = 4096
                 }.ConfigureAs(ElfSectionSpecialType.Text)
             );
-
-
+            
             var dataStream = new MemoryStream();
             dataStream.Write(new byte[1024]);
 
             var dataSection = elf.AddSection(
-                new ElfCustomSection(dataStream)
+                new ElfBinarySection(dataStream)
                 {
                     VirtualAddress = 0x2000,
                     Alignment = 4096
@@ -194,7 +193,7 @@ namespace LibObjectFile.Tests.Elf
             codeStream.Write(new byte[4096]);
 
             var codeSection = elf.AddSection(
-                new ElfCustomSection(codeStream)
+                new ElfBinarySection(codeStream)
                 {
                     VirtualAddress = 0x1000,
                     Alignment = 4096
@@ -206,7 +205,7 @@ namespace LibObjectFile.Tests.Elf
             dataStream.Write(new byte[1024]);
 
             var dataSection = elf.AddSection(
-                new ElfCustomSection(dataStream)
+                new ElfBinarySection(dataStream)
                 {
                     VirtualAddress = 0x2000,
                     Alignment = 4096

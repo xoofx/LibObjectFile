@@ -10,13 +10,13 @@ namespace LibObjectFile.Elf
     /// <summary>
     /// A custom section associated with its stream of data to read/write.
     /// </summary>
-    public sealed class ElfCustomSection : ElfSection
+    public sealed class ElfBinarySection : ElfSection
     {
-        public ElfCustomSection()
+        public ElfBinarySection()
         {
         }
 
-        public ElfCustomSection(Stream stream)
+        public ElfBinarySection(Stream stream)
         {
             Stream = stream ?? throw new ArgumentNullException(nameof(stream));
         }
@@ -47,19 +47,36 @@ namespace LibObjectFile.Elf
         /// Gets or sets the associated stream to this section.
         /// </summary>
         public Stream Stream { get; set; }
-        
-        protected override ulong GetSizeAuto() => Stream != null ? (ulong)Stream.Length : 0;
 
         protected override void Read(ElfReader reader)
         {
             Stream = reader.ReadAsStream(Size);
-            SizeKind = ValueKind.Auto;
         }
 
         protected override void Write(ElfWriter writer)
         {
             if (Stream == null) return;
             writer.Write(Stream);
+        }
+
+        public override bool TryUpdateLayout(DiagnosticBag diagnostics)
+        {
+            if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
+
+            if (Type == ElfSectionType.NoBits) return true;
+
+            Size = Stream != null ? (ulong)Stream.Length : 0;
+            return true;
+        }
+
+        public override void Verify(DiagnosticBag diagnostics)
+        {
+            base.Verify(diagnostics);
+
+            if (Type == ElfSectionType.NoBits && Stream != null)
+            {
+                diagnostics.Error(DiagnosticId.ELF_ERR_InvalidStreamForSectionNoBits, $"The {Type} section {this} must have a null stream");
+            }
         }
     }
 }

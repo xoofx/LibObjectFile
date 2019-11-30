@@ -436,8 +436,11 @@ namespace LibObjectFile.Elf
                 {
                     Offset = Layout.OffsetOfProgramHeaderTable,
                 };
+
                 // Add the shadow section ElfProgramHeaderTable
                 ObjectFile.InsertSectionAt(1, programHeaderTable);
+                programHeaderTable.TryUpdateLayout(Diagnostics);
+
                 if (programHeaderTable.Size > 0)
                 {
                     fileParts.Insert(new ElfFilePart(programHeaderTable));
@@ -464,7 +467,6 @@ namespace LibObjectFile.Elf
                         // and switch the offset calculation to auto
                         segment.Range = section;
                         segment.OffsetKind = ValueKind.Auto;
-                        segment.SizeKind = ValueKind.Auto;
                         break;
                     }
                 }
@@ -501,7 +503,7 @@ namespace LibObjectFile.Elf
                     var part = fileParts[i];
                     if (part.Section == null)
                     {
-                        var shadowSection = new ElfCustomShadowSection()
+                        var shadowSection = new ElfBinaryShadowSection()
                         {
                             Name = ".shadow." + shadowCount,
                             Offset = part.StartOffset, 
@@ -563,7 +565,6 @@ namespace LibObjectFile.Elf
                             }
 
                             segment.OffsetKind = ValueKind.Auto;
-                            segment.SizeKind = ValueKind.Auto;
                             break;
                         }
                     }
@@ -619,7 +620,7 @@ namespace LibObjectFile.Elf
 
                 if (section == null)
                 {
-                    section = new ElfCustomSection();
+                    section = new ElfBinarySection();
                 }
             }
 

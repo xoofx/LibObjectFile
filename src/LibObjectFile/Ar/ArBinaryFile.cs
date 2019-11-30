@@ -2,6 +2,7 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
+using System;
 using System.IO;
 
 namespace LibObjectFile.Ar
@@ -16,15 +17,9 @@ namespace LibObjectFile.Ar
         /// </summary>
         public Stream Stream { get; set; }
 
-        protected override ulong GetSizeAuto()
-        {
-            return Stream != null ? (ulong)Stream.Length : 0;
-        }
-
         protected override void Read(ArArchiveFileReader reader)
         {
             Stream = reader.ReadAsStream(Size);
-            SizeKind = ValueKind.Auto;
         }
 
         protected override void Write(ArArchiveFileWriter writer)
@@ -33,6 +28,13 @@ namespace LibObjectFile.Ar
             {
                 writer.Write(Stream);
             }
+        }
+
+        public override bool TryUpdateLayout(DiagnosticBag diagnostics)
+        {
+            if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
+            Size = Stream != null ? (ulong) Stream.Length : 0;
+            return true;
         }
     }
 }

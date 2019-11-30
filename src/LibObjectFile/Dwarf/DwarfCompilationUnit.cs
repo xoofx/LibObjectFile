@@ -23,21 +23,7 @@ namespace LibObjectFile.Dwarf
         public DwarfDIE Root
         {
             get => _root;
-            set
-            {
-                if (_root != null)
-                {
-                    _root.Parent = null;
-                }
-
-                if (value?.Parent != null) throw new InvalidOperationException($"Cannot set the {value.GetType()} as it already belongs to another {value.Parent.GetType()} instance");
-                _root = value;
-
-                if (value != null)
-                {
-                    value.Parent = this;
-                }
-            }
+            set => AttachChild<DwarfContainer, DwarfDIE>(this, value, ref _root);
         }
     }
 }

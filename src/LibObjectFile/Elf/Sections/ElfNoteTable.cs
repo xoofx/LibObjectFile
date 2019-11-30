@@ -38,33 +38,30 @@ namespace LibObjectFile.Elf
             }
         }
 
-        public override unsafe ulong Size
+        public override unsafe bool TryUpdateLayout(DiagnosticBag diagnostics)
         {
-            get
+            if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
+            ulong size = 0;
+            ulong entrySize = (ulong)sizeof(ElfNative.Elf32_Nhdr);
+
+            foreach (var elfNote in Entries)
             {
-                Debug.Assert(sizeof(ElfNative.Elf32_Nhdr) == sizeof(ElfNative.Elf64_Nhdr));
-
-                ulong size = 0;
-                ulong entrySize = (ulong)sizeof(ElfNative.Elf32_Nhdr);
-
-                foreach (var elfNote in Entries)
+                var name = elfNote.GetName();
+                if (name != null)
                 {
-                    var name = elfNote.GetName();
-                    if (name != null)
-                    {
-                        size += (ulong)Encoding.UTF8.GetByteCount(name) + 1;
-                        size = AlignHelper.AlignToUpper(size, 4);
-                    }
-
-                    size += (ulong)elfNote.GetDescriptorSize();
+                    size += (ulong)Encoding.UTF8.GetByteCount(name) + 1;
                     size = AlignHelper.AlignToUpper(size, 4);
-
-                    size += entrySize;
                 }
-                return size;
-            }
-        }
 
+                size += (ulong)elfNote.GetDescriptorSize();
+                size = AlignHelper.AlignToUpper(size, 4);
+
+                size += entrySize;
+            }
+            Size = size;
+            return true;
+        }
+        
         protected override unsafe void Read(ElfReader reader)
         {
             var sizeToRead = (long)base.Size;

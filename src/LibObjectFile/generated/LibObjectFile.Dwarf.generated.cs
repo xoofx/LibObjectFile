@@ -2149,1139 +2149,1139 @@ namespace LibObjectFile.Dwarf
         public const byte DW_CHILDREN_yes = 1;
     }
     
-    public readonly partial struct DwarfAttributeName
+    public readonly partial struct DwarfAttributeKey
     {
-        public static readonly DwarfAttributeName sibling = new DwarfAttributeName(DwarfNative.DW_AT_sibling);
+        public static readonly DwarfAttributeKey sibling = new DwarfAttributeKey(DwarfNative.DW_AT_sibling);
         
-        public static readonly DwarfAttributeName location = new DwarfAttributeName(DwarfNative.DW_AT_location);
+        public static readonly DwarfAttributeKey location = new DwarfAttributeKey(DwarfNative.DW_AT_location);
         
-        public static readonly DwarfAttributeName name = new DwarfAttributeName(DwarfNative.DW_AT_name);
+        public static readonly DwarfAttributeKey name = new DwarfAttributeKey(DwarfNative.DW_AT_name);
         
-        public static readonly DwarfAttributeName ordering = new DwarfAttributeName(DwarfNative.DW_AT_ordering);
+        public static readonly DwarfAttributeKey ordering = new DwarfAttributeKey(DwarfNative.DW_AT_ordering);
         
-        public static readonly DwarfAttributeName subscr_data = new DwarfAttributeName(DwarfNative.DW_AT_subscr_data);
+        public static readonly DwarfAttributeKey subscr_data = new DwarfAttributeKey(DwarfNative.DW_AT_subscr_data);
         
-        public static readonly DwarfAttributeName byte_size = new DwarfAttributeName(DwarfNative.DW_AT_byte_size);
+        public static readonly DwarfAttributeKey byte_size = new DwarfAttributeKey(DwarfNative.DW_AT_byte_size);
         
-        public static readonly DwarfAttributeName bit_offset = new DwarfAttributeName(DwarfNative.DW_AT_bit_offset);
+        public static readonly DwarfAttributeKey bit_offset = new DwarfAttributeKey(DwarfNative.DW_AT_bit_offset);
         
-        public static readonly DwarfAttributeName bit_size = new DwarfAttributeName(DwarfNative.DW_AT_bit_size);
+        public static readonly DwarfAttributeKey bit_size = new DwarfAttributeKey(DwarfNative.DW_AT_bit_size);
         
-        public static readonly DwarfAttributeName element_list = new DwarfAttributeName(DwarfNative.DW_AT_element_list);
+        public static readonly DwarfAttributeKey element_list = new DwarfAttributeKey(DwarfNative.DW_AT_element_list);
         
-        public static readonly DwarfAttributeName stmt_list = new DwarfAttributeName(DwarfNative.DW_AT_stmt_list);
+        public static readonly DwarfAttributeKey stmt_list = new DwarfAttributeKey(DwarfNative.DW_AT_stmt_list);
         
-        public static readonly DwarfAttributeName low_pc = new DwarfAttributeName(DwarfNative.DW_AT_low_pc);
+        public static readonly DwarfAttributeKey low_pc = new DwarfAttributeKey(DwarfNative.DW_AT_low_pc);
         
-        public static readonly DwarfAttributeName high_pc = new DwarfAttributeName(DwarfNative.DW_AT_high_pc);
+        public static readonly DwarfAttributeKey high_pc = new DwarfAttributeKey(DwarfNative.DW_AT_high_pc);
         
-        public static readonly DwarfAttributeName language = new DwarfAttributeName(DwarfNative.DW_AT_language);
+        public static readonly DwarfAttributeKey language = new DwarfAttributeKey(DwarfNative.DW_AT_language);
         
-        public static readonly DwarfAttributeName member = new DwarfAttributeName(DwarfNative.DW_AT_member);
+        public static readonly DwarfAttributeKey member = new DwarfAttributeKey(DwarfNative.DW_AT_member);
         
-        public static readonly DwarfAttributeName discr = new DwarfAttributeName(DwarfNative.DW_AT_discr);
+        public static readonly DwarfAttributeKey discr = new DwarfAttributeKey(DwarfNative.DW_AT_discr);
         
-        public static readonly DwarfAttributeName discr_value = new DwarfAttributeName(DwarfNative.DW_AT_discr_value);
+        public static readonly DwarfAttributeKey discr_value = new DwarfAttributeKey(DwarfNative.DW_AT_discr_value);
         
-        public static readonly DwarfAttributeName visibility = new DwarfAttributeName(DwarfNative.DW_AT_visibility);
+        public static readonly DwarfAttributeKey visibility = new DwarfAttributeKey(DwarfNative.DW_AT_visibility);
         
-        public static readonly DwarfAttributeName import = new DwarfAttributeName(DwarfNative.DW_AT_import);
+        public static readonly DwarfAttributeKey import = new DwarfAttributeKey(DwarfNative.DW_AT_import);
         
-        public static readonly DwarfAttributeName string_length = new DwarfAttributeName(DwarfNative.DW_AT_string_length);
+        public static readonly DwarfAttributeKey string_length = new DwarfAttributeKey(DwarfNative.DW_AT_string_length);
         
-        public static readonly DwarfAttributeName common_reference = new DwarfAttributeName(DwarfNative.DW_AT_common_reference);
+        public static readonly DwarfAttributeKey common_reference = new DwarfAttributeKey(DwarfNative.DW_AT_common_reference);
         
-        public static readonly DwarfAttributeName comp_dir = new DwarfAttributeName(DwarfNative.DW_AT_comp_dir);
+        public static readonly DwarfAttributeKey comp_dir = new DwarfAttributeKey(DwarfNative.DW_AT_comp_dir);
         
-        public static readonly DwarfAttributeName const_value = new DwarfAttributeName(DwarfNative.DW_AT_const_value);
+        public static readonly DwarfAttributeKey const_value = new DwarfAttributeKey(DwarfNative.DW_AT_const_value);
         
-        public static readonly DwarfAttributeName containing_type = new DwarfAttributeName(DwarfNative.DW_AT_containing_type);
+        public static readonly DwarfAttributeKey containing_type = new DwarfAttributeKey(DwarfNative.DW_AT_containing_type);
         
-        public static readonly DwarfAttributeName default_value = new DwarfAttributeName(DwarfNative.DW_AT_default_value);
+        public static readonly DwarfAttributeKey default_value = new DwarfAttributeKey(DwarfNative.DW_AT_default_value);
         
-        public static readonly DwarfAttributeName inline = new DwarfAttributeName(DwarfNative.DW_AT_inline);
+        public static readonly DwarfAttributeKey inline = new DwarfAttributeKey(DwarfNative.DW_AT_inline);
         
-        public static readonly DwarfAttributeName is_optional = new DwarfAttributeName(DwarfNative.DW_AT_is_optional);
+        public static readonly DwarfAttributeKey is_optional = new DwarfAttributeKey(DwarfNative.DW_AT_is_optional);
         
-        public static readonly DwarfAttributeName lower_bound = new DwarfAttributeName(DwarfNative.DW_AT_lower_bound);
+        public static readonly DwarfAttributeKey lower_bound = new DwarfAttributeKey(DwarfNative.DW_AT_lower_bound);
         
-        public static readonly DwarfAttributeName producer = new DwarfAttributeName(DwarfNative.DW_AT_producer);
+        public static readonly DwarfAttributeKey producer = new DwarfAttributeKey(DwarfNative.DW_AT_producer);
         
-        public static readonly DwarfAttributeName prototyped = new DwarfAttributeName(DwarfNative.DW_AT_prototyped);
+        public static readonly DwarfAttributeKey prototyped = new DwarfAttributeKey(DwarfNative.DW_AT_prototyped);
         
-        public static readonly DwarfAttributeName return_addr = new DwarfAttributeName(DwarfNative.DW_AT_return_addr);
+        public static readonly DwarfAttributeKey return_addr = new DwarfAttributeKey(DwarfNative.DW_AT_return_addr);
         
-        public static readonly DwarfAttributeName start_scope = new DwarfAttributeName(DwarfNative.DW_AT_start_scope);
+        public static readonly DwarfAttributeKey start_scope = new DwarfAttributeKey(DwarfNative.DW_AT_start_scope);
         
         /// <summary>
         /// DWARF3 name
         /// </summary>
-        public static readonly DwarfAttributeName bit_stride = new DwarfAttributeName(DwarfNative.DW_AT_bit_stride);
+        public static readonly DwarfAttributeKey bit_stride = new DwarfAttributeKey(DwarfNative.DW_AT_bit_stride);
         
         /// <summary>
         /// DWARF2 name
         /// </summary>
-        public static readonly DwarfAttributeName stride_size = new DwarfAttributeName(DwarfNative.DW_AT_stride_size);
+        public static readonly DwarfAttributeKey stride_size = new DwarfAttributeKey(DwarfNative.DW_AT_stride_size);
         
-        public static readonly DwarfAttributeName upper_bound = new DwarfAttributeName(DwarfNative.DW_AT_upper_bound);
+        public static readonly DwarfAttributeKey upper_bound = new DwarfAttributeKey(DwarfNative.DW_AT_upper_bound);
         
-        public static readonly DwarfAttributeName abstract_origin = new DwarfAttributeName(DwarfNative.DW_AT_abstract_origin);
+        public static readonly DwarfAttributeKey abstract_origin = new DwarfAttributeKey(DwarfNative.DW_AT_abstract_origin);
         
-        public static readonly DwarfAttributeName accessibility = new DwarfAttributeName(DwarfNative.DW_AT_accessibility);
+        public static readonly DwarfAttributeKey accessibility = new DwarfAttributeKey(DwarfNative.DW_AT_accessibility);
         
-        public static readonly DwarfAttributeName address_class = new DwarfAttributeName(DwarfNative.DW_AT_address_class);
+        public static readonly DwarfAttributeKey address_class = new DwarfAttributeKey(DwarfNative.DW_AT_address_class);
         
-        public static readonly DwarfAttributeName artificial = new DwarfAttributeName(DwarfNative.DW_AT_artificial);
+        public static readonly DwarfAttributeKey artificial = new DwarfAttributeKey(DwarfNative.DW_AT_artificial);
         
-        public static readonly DwarfAttributeName base_types = new DwarfAttributeName(DwarfNative.DW_AT_base_types);
+        public static readonly DwarfAttributeKey base_types = new DwarfAttributeKey(DwarfNative.DW_AT_base_types);
         
-        public static readonly DwarfAttributeName calling_convention = new DwarfAttributeName(DwarfNative.DW_AT_calling_convention);
+        public static readonly DwarfAttributeKey calling_convention = new DwarfAttributeKey(DwarfNative.DW_AT_calling_convention);
         
-        public static readonly DwarfAttributeName count = new DwarfAttributeName(DwarfNative.DW_AT_count);
+        public static readonly DwarfAttributeKey count = new DwarfAttributeKey(DwarfNative.DW_AT_count);
         
-        public static readonly DwarfAttributeName data_member_location = new DwarfAttributeName(DwarfNative.DW_AT_data_member_location);
+        public static readonly DwarfAttributeKey data_member_location = new DwarfAttributeKey(DwarfNative.DW_AT_data_member_location);
         
-        public static readonly DwarfAttributeName decl_column = new DwarfAttributeName(DwarfNative.DW_AT_decl_column);
+        public static readonly DwarfAttributeKey decl_column = new DwarfAttributeKey(DwarfNative.DW_AT_decl_column);
         
-        public static readonly DwarfAttributeName decl_file = new DwarfAttributeName(DwarfNative.DW_AT_decl_file);
+        public static readonly DwarfAttributeKey decl_file = new DwarfAttributeKey(DwarfNative.DW_AT_decl_file);
         
-        public static readonly DwarfAttributeName decl_line = new DwarfAttributeName(DwarfNative.DW_AT_decl_line);
+        public static readonly DwarfAttributeKey decl_line = new DwarfAttributeKey(DwarfNative.DW_AT_decl_line);
         
-        public static readonly DwarfAttributeName declaration = new DwarfAttributeName(DwarfNative.DW_AT_declaration);
+        public static readonly DwarfAttributeKey declaration = new DwarfAttributeKey(DwarfNative.DW_AT_declaration);
         
         /// <summary>
         /// DWARF2
         /// </summary>
-        public static readonly DwarfAttributeName discr_list = new DwarfAttributeName(DwarfNative.DW_AT_discr_list);
+        public static readonly DwarfAttributeKey discr_list = new DwarfAttributeKey(DwarfNative.DW_AT_discr_list);
         
-        public static readonly DwarfAttributeName encoding = new DwarfAttributeName(DwarfNative.DW_AT_encoding);
+        public static readonly DwarfAttributeKey encoding = new DwarfAttributeKey(DwarfNative.DW_AT_encoding);
         
-        public static readonly DwarfAttributeName external = new DwarfAttributeName(DwarfNative.DW_AT_external);
+        public static readonly DwarfAttributeKey external = new DwarfAttributeKey(DwarfNative.DW_AT_external);
         
-        public static readonly DwarfAttributeName frame_base = new DwarfAttributeName(DwarfNative.DW_AT_frame_base);
+        public static readonly DwarfAttributeKey frame_base = new DwarfAttributeKey(DwarfNative.DW_AT_frame_base);
         
-        public static readonly DwarfAttributeName friend = new DwarfAttributeName(DwarfNative.DW_AT_friend);
+        public static readonly DwarfAttributeKey friend = new DwarfAttributeKey(DwarfNative.DW_AT_friend);
         
-        public static readonly DwarfAttributeName identifier_case = new DwarfAttributeName(DwarfNative.DW_AT_identifier_case);
+        public static readonly DwarfAttributeKey identifier_case = new DwarfAttributeKey(DwarfNative.DW_AT_identifier_case);
         
         /// <summary>
         /// DWARF{234} not DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName macro_info = new DwarfAttributeName(DwarfNative.DW_AT_macro_info);
+        public static readonly DwarfAttributeKey macro_info = new DwarfAttributeKey(DwarfNative.DW_AT_macro_info);
         
-        public static readonly DwarfAttributeName namelist_item = new DwarfAttributeName(DwarfNative.DW_AT_namelist_item);
+        public static readonly DwarfAttributeKey namelist_item = new DwarfAttributeKey(DwarfNative.DW_AT_namelist_item);
         
-        public static readonly DwarfAttributeName priority = new DwarfAttributeName(DwarfNative.DW_AT_priority);
+        public static readonly DwarfAttributeKey priority = new DwarfAttributeKey(DwarfNative.DW_AT_priority);
         
-        public static readonly DwarfAttributeName segment = new DwarfAttributeName(DwarfNative.DW_AT_segment);
+        public static readonly DwarfAttributeKey segment = new DwarfAttributeKey(DwarfNative.DW_AT_segment);
         
-        public static readonly DwarfAttributeName specification = new DwarfAttributeName(DwarfNative.DW_AT_specification);
+        public static readonly DwarfAttributeKey specification = new DwarfAttributeKey(DwarfNative.DW_AT_specification);
         
-        public static readonly DwarfAttributeName static_link = new DwarfAttributeName(DwarfNative.DW_AT_static_link);
+        public static readonly DwarfAttributeKey static_link = new DwarfAttributeKey(DwarfNative.DW_AT_static_link);
         
-        public static readonly DwarfAttributeName type = new DwarfAttributeName(DwarfNative.DW_AT_type);
+        public static readonly DwarfAttributeKey type = new DwarfAttributeKey(DwarfNative.DW_AT_type);
         
-        public static readonly DwarfAttributeName use_location = new DwarfAttributeName(DwarfNative.DW_AT_use_location);
+        public static readonly DwarfAttributeKey use_location = new DwarfAttributeKey(DwarfNative.DW_AT_use_location);
         
-        public static readonly DwarfAttributeName variable_parameter = new DwarfAttributeName(DwarfNative.DW_AT_variable_parameter);
+        public static readonly DwarfAttributeKey variable_parameter = new DwarfAttributeKey(DwarfNative.DW_AT_variable_parameter);
         
-        public static readonly DwarfAttributeName virtuality = new DwarfAttributeName(DwarfNative.DW_AT_virtuality);
+        public static readonly DwarfAttributeKey virtuality = new DwarfAttributeKey(DwarfNative.DW_AT_virtuality);
         
-        public static readonly DwarfAttributeName vtable_elem_location = new DwarfAttributeName(DwarfNative.DW_AT_vtable_elem_location);
-        
-        /// <summary>
-        /// DWARF3
-        /// </summary>
-        public static readonly DwarfAttributeName allocated = new DwarfAttributeName(DwarfNative.DW_AT_allocated);
+        public static readonly DwarfAttributeKey vtable_elem_location = new DwarfAttributeKey(DwarfNative.DW_AT_vtable_elem_location);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfAttributeName associated = new DwarfAttributeName(DwarfNative.DW_AT_associated);
+        public static readonly DwarfAttributeKey allocated = new DwarfAttributeKey(DwarfNative.DW_AT_allocated);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfAttributeName data_location = new DwarfAttributeName(DwarfNative.DW_AT_data_location);
+        public static readonly DwarfAttributeKey associated = new DwarfAttributeKey(DwarfNative.DW_AT_associated);
+        
+        /// <summary>
+        /// DWARF3
+        /// </summary>
+        public static readonly DwarfAttributeKey data_location = new DwarfAttributeKey(DwarfNative.DW_AT_data_location);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeName byte_stride = new DwarfAttributeName(DwarfNative.DW_AT_byte_stride);
+        public static readonly DwarfAttributeKey byte_stride = new DwarfAttributeKey(DwarfNative.DW_AT_byte_stride);
         
         /// <summary>
         /// DWARF3 (do not use)
         /// </summary>
-        public static readonly DwarfAttributeName stride = new DwarfAttributeName(DwarfNative.DW_AT_stride);
+        public static readonly DwarfAttributeKey stride = new DwarfAttributeKey(DwarfNative.DW_AT_stride);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfAttributeName entry_pc = new DwarfAttributeName(DwarfNative.DW_AT_entry_pc);
+        public static readonly DwarfAttributeKey entry_pc = new DwarfAttributeKey(DwarfNative.DW_AT_entry_pc);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfAttributeName use_UTF8 = new DwarfAttributeName(DwarfNative.DW_AT_use_UTF8);
+        public static readonly DwarfAttributeKey use_UTF8 = new DwarfAttributeKey(DwarfNative.DW_AT_use_UTF8);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfAttributeName extension = new DwarfAttributeName(DwarfNative.DW_AT_extension);
+        public static readonly DwarfAttributeKey extension = new DwarfAttributeKey(DwarfNative.DW_AT_extension);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfAttributeName ranges = new DwarfAttributeName(DwarfNative.DW_AT_ranges);
+        public static readonly DwarfAttributeKey ranges = new DwarfAttributeKey(DwarfNative.DW_AT_ranges);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfAttributeName trampoline = new DwarfAttributeName(DwarfNative.DW_AT_trampoline);
+        public static readonly DwarfAttributeKey trampoline = new DwarfAttributeKey(DwarfNative.DW_AT_trampoline);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfAttributeName call_column = new DwarfAttributeName(DwarfNative.DW_AT_call_column);
+        public static readonly DwarfAttributeKey call_column = new DwarfAttributeKey(DwarfNative.DW_AT_call_column);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfAttributeName call_file = new DwarfAttributeName(DwarfNative.DW_AT_call_file);
+        public static readonly DwarfAttributeKey call_file = new DwarfAttributeKey(DwarfNative.DW_AT_call_file);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfAttributeName call_line = new DwarfAttributeName(DwarfNative.DW_AT_call_line);
+        public static readonly DwarfAttributeKey call_line = new DwarfAttributeKey(DwarfNative.DW_AT_call_line);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfAttributeName description = new DwarfAttributeName(DwarfNative.DW_AT_description);
+        public static readonly DwarfAttributeKey description = new DwarfAttributeKey(DwarfNative.DW_AT_description);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeName binary_scale = new DwarfAttributeName(DwarfNative.DW_AT_binary_scale);
+        public static readonly DwarfAttributeKey binary_scale = new DwarfAttributeKey(DwarfNative.DW_AT_binary_scale);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeName decimal_scale = new DwarfAttributeName(DwarfNative.DW_AT_decimal_scale);
+        public static readonly DwarfAttributeKey decimal_scale = new DwarfAttributeKey(DwarfNative.DW_AT_decimal_scale);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeName small = new DwarfAttributeName(DwarfNative.DW_AT_small);
+        public static readonly DwarfAttributeKey small = new DwarfAttributeKey(DwarfNative.DW_AT_small);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeName decimal_sign = new DwarfAttributeName(DwarfNative.DW_AT_decimal_sign);
+        public static readonly DwarfAttributeKey decimal_sign = new DwarfAttributeKey(DwarfNative.DW_AT_decimal_sign);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeName digit_count = new DwarfAttributeName(DwarfNative.DW_AT_digit_count);
+        public static readonly DwarfAttributeKey digit_count = new DwarfAttributeKey(DwarfNative.DW_AT_digit_count);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeName picture_string = new DwarfAttributeName(DwarfNative.DW_AT_picture_string);
+        public static readonly DwarfAttributeKey picture_string = new DwarfAttributeKey(DwarfNative.DW_AT_picture_string);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeName mutable = new DwarfAttributeName(DwarfNative.DW_AT_mutable);
+        public static readonly DwarfAttributeKey mutable = new DwarfAttributeKey(DwarfNative.DW_AT_mutable);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeName threads_scaled = new DwarfAttributeName(DwarfNative.DW_AT_threads_scaled);
+        public static readonly DwarfAttributeKey threads_scaled = new DwarfAttributeKey(DwarfNative.DW_AT_threads_scaled);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeName @explicit = new DwarfAttributeName(DwarfNative.DW_AT_explicit);
+        public static readonly DwarfAttributeKey @explicit = new DwarfAttributeKey(DwarfNative.DW_AT_explicit);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeName object_pointer = new DwarfAttributeName(DwarfNative.DW_AT_object_pointer);
+        public static readonly DwarfAttributeKey object_pointer = new DwarfAttributeKey(DwarfNative.DW_AT_object_pointer);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeName endianity = new DwarfAttributeName(DwarfNative.DW_AT_endianity);
+        public static readonly DwarfAttributeKey endianity = new DwarfAttributeKey(DwarfNative.DW_AT_endianity);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeName elemental = new DwarfAttributeName(DwarfNative.DW_AT_elemental);
+        public static readonly DwarfAttributeKey elemental = new DwarfAttributeKey(DwarfNative.DW_AT_elemental);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeName pure = new DwarfAttributeName(DwarfNative.DW_AT_pure);
+        public static readonly DwarfAttributeKey pure = new DwarfAttributeKey(DwarfNative.DW_AT_pure);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeName recursive = new DwarfAttributeName(DwarfNative.DW_AT_recursive);
+        public static readonly DwarfAttributeKey recursive = new DwarfAttributeKey(DwarfNative.DW_AT_recursive);
         
         /// <summary>
         /// DWARF4
         /// </summary>
-        public static readonly DwarfAttributeName signature = new DwarfAttributeName(DwarfNative.DW_AT_signature);
+        public static readonly DwarfAttributeKey signature = new DwarfAttributeKey(DwarfNative.DW_AT_signature);
         
         /// <summary>
         /// DWARF4
         /// </summary>
-        public static readonly DwarfAttributeName main_subprogram = new DwarfAttributeName(DwarfNative.DW_AT_main_subprogram);
+        public static readonly DwarfAttributeKey main_subprogram = new DwarfAttributeKey(DwarfNative.DW_AT_main_subprogram);
         
         /// <summary>
         /// DWARF4
         /// </summary>
-        public static readonly DwarfAttributeName data_bit_offset = new DwarfAttributeName(DwarfNative.DW_AT_data_bit_offset);
+        public static readonly DwarfAttributeKey data_bit_offset = new DwarfAttributeKey(DwarfNative.DW_AT_data_bit_offset);
         
         /// <summary>
         /// DWARF4
         /// </summary>
-        public static readonly DwarfAttributeName const_expr = new DwarfAttributeName(DwarfNative.DW_AT_const_expr);
+        public static readonly DwarfAttributeKey const_expr = new DwarfAttributeKey(DwarfNative.DW_AT_const_expr);
         
         /// <summary>
         /// DWARF4
         /// </summary>
-        public static readonly DwarfAttributeName enum_class = new DwarfAttributeName(DwarfNative.DW_AT_enum_class);
+        public static readonly DwarfAttributeKey enum_class = new DwarfAttributeKey(DwarfNative.DW_AT_enum_class);
         
         /// <summary>
         /// DWARF4
         /// </summary>
-        public static readonly DwarfAttributeName linkage_name = new DwarfAttributeName(DwarfNative.DW_AT_linkage_name);
+        public static readonly DwarfAttributeKey linkage_name = new DwarfAttributeKey(DwarfNative.DW_AT_linkage_name);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName string_length_bit_size = new DwarfAttributeName(DwarfNative.DW_AT_string_length_bit_size);
+        public static readonly DwarfAttributeKey string_length_bit_size = new DwarfAttributeKey(DwarfNative.DW_AT_string_length_bit_size);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName string_length_byte_size = new DwarfAttributeName(DwarfNative.DW_AT_string_length_byte_size);
+        public static readonly DwarfAttributeKey string_length_byte_size = new DwarfAttributeKey(DwarfNative.DW_AT_string_length_byte_size);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName rank = new DwarfAttributeName(DwarfNative.DW_AT_rank);
+        public static readonly DwarfAttributeKey rank = new DwarfAttributeKey(DwarfNative.DW_AT_rank);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName str_offsets_base = new DwarfAttributeName(DwarfNative.DW_AT_str_offsets_base);
+        public static readonly DwarfAttributeKey str_offsets_base = new DwarfAttributeKey(DwarfNative.DW_AT_str_offsets_base);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName addr_base = new DwarfAttributeName(DwarfNative.DW_AT_addr_base);
+        public static readonly DwarfAttributeKey addr_base = new DwarfAttributeKey(DwarfNative.DW_AT_addr_base);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName rnglists_base = new DwarfAttributeName(DwarfNative.DW_AT_rnglists_base);
+        public static readonly DwarfAttributeKey rnglists_base = new DwarfAttributeKey(DwarfNative.DW_AT_rnglists_base);
         
         /// <summary>
         /// DWARF4!
         /// </summary>
-        public static readonly DwarfAttributeName dwo_id = new DwarfAttributeName(DwarfNative.DW_AT_dwo_id);
+        public static readonly DwarfAttributeKey dwo_id = new DwarfAttributeKey(DwarfNative.DW_AT_dwo_id);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName dwo_name = new DwarfAttributeName(DwarfNative.DW_AT_dwo_name);
+        public static readonly DwarfAttributeKey dwo_name = new DwarfAttributeKey(DwarfNative.DW_AT_dwo_name);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName reference = new DwarfAttributeName(DwarfNative.DW_AT_reference);
+        public static readonly DwarfAttributeKey reference = new DwarfAttributeKey(DwarfNative.DW_AT_reference);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName rvalue_reference = new DwarfAttributeName(DwarfNative.DW_AT_rvalue_reference);
+        public static readonly DwarfAttributeKey rvalue_reference = new DwarfAttributeKey(DwarfNative.DW_AT_rvalue_reference);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName macros = new DwarfAttributeName(DwarfNative.DW_AT_macros);
+        public static readonly DwarfAttributeKey macros = new DwarfAttributeKey(DwarfNative.DW_AT_macros);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName call_all_calls = new DwarfAttributeName(DwarfNative.DW_AT_call_all_calls);
+        public static readonly DwarfAttributeKey call_all_calls = new DwarfAttributeKey(DwarfNative.DW_AT_call_all_calls);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName call_all_source_calls = new DwarfAttributeName(DwarfNative.DW_AT_call_all_source_calls);
+        public static readonly DwarfAttributeKey call_all_source_calls = new DwarfAttributeKey(DwarfNative.DW_AT_call_all_source_calls);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName call_all_tail_calls = new DwarfAttributeName(DwarfNative.DW_AT_call_all_tail_calls);
+        public static readonly DwarfAttributeKey call_all_tail_calls = new DwarfAttributeKey(DwarfNative.DW_AT_call_all_tail_calls);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName call_return_pc = new DwarfAttributeName(DwarfNative.DW_AT_call_return_pc);
+        public static readonly DwarfAttributeKey call_return_pc = new DwarfAttributeKey(DwarfNative.DW_AT_call_return_pc);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName call_value = new DwarfAttributeName(DwarfNative.DW_AT_call_value);
+        public static readonly DwarfAttributeKey call_value = new DwarfAttributeKey(DwarfNative.DW_AT_call_value);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName call_origin = new DwarfAttributeName(DwarfNative.DW_AT_call_origin);
+        public static readonly DwarfAttributeKey call_origin = new DwarfAttributeKey(DwarfNative.DW_AT_call_origin);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName call_parameter = new DwarfAttributeName(DwarfNative.DW_AT_call_parameter);
+        public static readonly DwarfAttributeKey call_parameter = new DwarfAttributeKey(DwarfNative.DW_AT_call_parameter);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName call_pc = new DwarfAttributeName(DwarfNative.DW_AT_call_pc);
+        public static readonly DwarfAttributeKey call_pc = new DwarfAttributeKey(DwarfNative.DW_AT_call_pc);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName call_tail_call = new DwarfAttributeName(DwarfNative.DW_AT_call_tail_call);
+        public static readonly DwarfAttributeKey call_tail_call = new DwarfAttributeKey(DwarfNative.DW_AT_call_tail_call);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName call_target = new DwarfAttributeName(DwarfNative.DW_AT_call_target);
+        public static readonly DwarfAttributeKey call_target = new DwarfAttributeKey(DwarfNative.DW_AT_call_target);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName call_target_clobbered = new DwarfAttributeName(DwarfNative.DW_AT_call_target_clobbered);
+        public static readonly DwarfAttributeKey call_target_clobbered = new DwarfAttributeKey(DwarfNative.DW_AT_call_target_clobbered);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName call_data_location = new DwarfAttributeName(DwarfNative.DW_AT_call_data_location);
+        public static readonly DwarfAttributeKey call_data_location = new DwarfAttributeKey(DwarfNative.DW_AT_call_data_location);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName call_data_value = new DwarfAttributeName(DwarfNative.DW_AT_call_data_value);
+        public static readonly DwarfAttributeKey call_data_value = new DwarfAttributeKey(DwarfNative.DW_AT_call_data_value);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName noreturn = new DwarfAttributeName(DwarfNative.DW_AT_noreturn);
+        public static readonly DwarfAttributeKey noreturn = new DwarfAttributeKey(DwarfNative.DW_AT_noreturn);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName alignment = new DwarfAttributeName(DwarfNative.DW_AT_alignment);
+        public static readonly DwarfAttributeKey alignment = new DwarfAttributeKey(DwarfNative.DW_AT_alignment);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName export_symbols = new DwarfAttributeName(DwarfNative.DW_AT_export_symbols);
+        public static readonly DwarfAttributeKey export_symbols = new DwarfAttributeKey(DwarfNative.DW_AT_export_symbols);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName deleted = new DwarfAttributeName(DwarfNative.DW_AT_deleted);
+        public static readonly DwarfAttributeKey deleted = new DwarfAttributeKey(DwarfNative.DW_AT_deleted);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName defaulted = new DwarfAttributeName(DwarfNative.DW_AT_defaulted);
+        public static readonly DwarfAttributeKey defaulted = new DwarfAttributeKey(DwarfNative.DW_AT_defaulted);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeName loclists_base = new DwarfAttributeName(DwarfNative.DW_AT_loclists_base);
+        public static readonly DwarfAttributeKey loclists_base = new DwarfAttributeKey(DwarfNative.DW_AT_loclists_base);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfAttributeName HP_block_index = new DwarfAttributeName(DwarfNative.DW_AT_HP_block_index);
+        public static readonly DwarfAttributeKey HP_block_index = new DwarfAttributeKey(DwarfNative.DW_AT_HP_block_index);
         
-        public static readonly DwarfAttributeName lo_user = new DwarfAttributeName(DwarfNative.DW_AT_lo_user);
-        
-        /// <summary>
-        /// MIPS/SGI
-        /// </summary>
-        public static readonly DwarfAttributeName MIPS_fde = new DwarfAttributeName(DwarfNative.DW_AT_MIPS_fde);
+        public static readonly DwarfAttributeKey lo_user = new DwarfAttributeKey(DwarfNative.DW_AT_lo_user);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeName MIPS_loop_begin = new DwarfAttributeName(DwarfNative.DW_AT_MIPS_loop_begin);
+        public static readonly DwarfAttributeKey MIPS_fde = new DwarfAttributeKey(DwarfNative.DW_AT_MIPS_fde);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeName MIPS_tail_loop_begin = new DwarfAttributeName(DwarfNative.DW_AT_MIPS_tail_loop_begin);
+        public static readonly DwarfAttributeKey MIPS_loop_begin = new DwarfAttributeKey(DwarfNative.DW_AT_MIPS_loop_begin);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeName MIPS_epilog_begin = new DwarfAttributeName(DwarfNative.DW_AT_MIPS_epilog_begin);
+        public static readonly DwarfAttributeKey MIPS_tail_loop_begin = new DwarfAttributeKey(DwarfNative.DW_AT_MIPS_tail_loop_begin);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeName MIPS_loop_unroll_factor = new DwarfAttributeName(DwarfNative.DW_AT_MIPS_loop_unroll_factor);
+        public static readonly DwarfAttributeKey MIPS_epilog_begin = new DwarfAttributeKey(DwarfNative.DW_AT_MIPS_epilog_begin);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeName MIPS_software_pipeline_depth = new DwarfAttributeName(DwarfNative.DW_AT_MIPS_software_pipeline_depth);
+        public static readonly DwarfAttributeKey MIPS_loop_unroll_factor = new DwarfAttributeKey(DwarfNative.DW_AT_MIPS_loop_unroll_factor);
+        
+        /// <summary>
+        /// MIPS/SGI
+        /// </summary>
+        public static readonly DwarfAttributeKey MIPS_software_pipeline_depth = new DwarfAttributeKey(DwarfNative.DW_AT_MIPS_software_pipeline_depth);
         
         /// <summary>
         /// MIPS/SGI, GNU, and others.
         /// </summary>
-        public static readonly DwarfAttributeName MIPS_linkage_name = new DwarfAttributeName(DwarfNative.DW_AT_MIPS_linkage_name);
+        public static readonly DwarfAttributeKey MIPS_linkage_name = new DwarfAttributeKey(DwarfNative.DW_AT_MIPS_linkage_name);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeName MIPS_stride = new DwarfAttributeName(DwarfNative.DW_AT_MIPS_stride);
+        public static readonly DwarfAttributeKey MIPS_stride = new DwarfAttributeKey(DwarfNative.DW_AT_MIPS_stride);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeName MIPS_abstract_name = new DwarfAttributeName(DwarfNative.DW_AT_MIPS_abstract_name);
+        public static readonly DwarfAttributeKey MIPS_abstract_name = new DwarfAttributeKey(DwarfNative.DW_AT_MIPS_abstract_name);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeName MIPS_clone_origin = new DwarfAttributeName(DwarfNative.DW_AT_MIPS_clone_origin);
+        public static readonly DwarfAttributeKey MIPS_clone_origin = new DwarfAttributeKey(DwarfNative.DW_AT_MIPS_clone_origin);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeName MIPS_has_inlines = new DwarfAttributeName(DwarfNative.DW_AT_MIPS_has_inlines);
+        public static readonly DwarfAttributeKey MIPS_has_inlines = new DwarfAttributeKey(DwarfNative.DW_AT_MIPS_has_inlines);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeName MIPS_stride_byte = new DwarfAttributeName(DwarfNative.DW_AT_MIPS_stride_byte);
+        public static readonly DwarfAttributeKey MIPS_stride_byte = new DwarfAttributeKey(DwarfNative.DW_AT_MIPS_stride_byte);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeName MIPS_stride_elem = new DwarfAttributeName(DwarfNative.DW_AT_MIPS_stride_elem);
+        public static readonly DwarfAttributeKey MIPS_stride_elem = new DwarfAttributeKey(DwarfNative.DW_AT_MIPS_stride_elem);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeName MIPS_ptr_dopetype = new DwarfAttributeName(DwarfNative.DW_AT_MIPS_ptr_dopetype);
+        public static readonly DwarfAttributeKey MIPS_ptr_dopetype = new DwarfAttributeKey(DwarfNative.DW_AT_MIPS_ptr_dopetype);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeName MIPS_allocatable_dopetype = new DwarfAttributeName(DwarfNative.DW_AT_MIPS_allocatable_dopetype);
+        public static readonly DwarfAttributeKey MIPS_allocatable_dopetype = new DwarfAttributeKey(DwarfNative.DW_AT_MIPS_allocatable_dopetype);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeName MIPS_assumed_shape_dopetype = new DwarfAttributeName(DwarfNative.DW_AT_MIPS_assumed_shape_dopetype);
+        public static readonly DwarfAttributeKey MIPS_assumed_shape_dopetype = new DwarfAttributeKey(DwarfNative.DW_AT_MIPS_assumed_shape_dopetype);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeName MIPS_assumed_size = new DwarfAttributeName(DwarfNative.DW_AT_MIPS_assumed_size);
+        public static readonly DwarfAttributeKey MIPS_assumed_size = new DwarfAttributeKey(DwarfNative.DW_AT_MIPS_assumed_size);
         
         /// <summary>
         /// conflict: MIPS
         /// </summary>
-        public static readonly DwarfAttributeName HP_unmodifiable = new DwarfAttributeName(DwarfNative.DW_AT_HP_unmodifiable);
+        public static readonly DwarfAttributeKey HP_unmodifiable = new DwarfAttributeKey(DwarfNative.DW_AT_HP_unmodifiable);
         
         /// <summary>
         /// conflict: MIPS
         /// </summary>
-        public static readonly DwarfAttributeName HP_actuals_stmt_list = new DwarfAttributeName(DwarfNative.DW_AT_HP_actuals_stmt_list);
+        public static readonly DwarfAttributeKey HP_actuals_stmt_list = new DwarfAttributeKey(DwarfNative.DW_AT_HP_actuals_stmt_list);
         
         /// <summary>
         /// conflict: MIPS
         /// </summary>
-        public static readonly DwarfAttributeName HP_proc_per_section = new DwarfAttributeName(DwarfNative.DW_AT_HP_proc_per_section);
+        public static readonly DwarfAttributeKey HP_proc_per_section = new DwarfAttributeKey(DwarfNative.DW_AT_HP_proc_per_section);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfAttributeName HP_raw_data_ptr = new DwarfAttributeName(DwarfNative.DW_AT_HP_raw_data_ptr);
+        public static readonly DwarfAttributeKey HP_raw_data_ptr = new DwarfAttributeKey(DwarfNative.DW_AT_HP_raw_data_ptr);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfAttributeName HP_pass_by_reference = new DwarfAttributeName(DwarfNative.DW_AT_HP_pass_by_reference);
+        public static readonly DwarfAttributeKey HP_pass_by_reference = new DwarfAttributeKey(DwarfNative.DW_AT_HP_pass_by_reference);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfAttributeName HP_opt_level = new DwarfAttributeName(DwarfNative.DW_AT_HP_opt_level);
+        public static readonly DwarfAttributeKey HP_opt_level = new DwarfAttributeKey(DwarfNative.DW_AT_HP_opt_level);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfAttributeName HP_prof_version_id = new DwarfAttributeName(DwarfNative.DW_AT_HP_prof_version_id);
+        public static readonly DwarfAttributeKey HP_prof_version_id = new DwarfAttributeKey(DwarfNative.DW_AT_HP_prof_version_id);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfAttributeName HP_opt_flags = new DwarfAttributeName(DwarfNative.DW_AT_HP_opt_flags);
+        public static readonly DwarfAttributeKey HP_opt_flags = new DwarfAttributeKey(DwarfNative.DW_AT_HP_opt_flags);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfAttributeName HP_cold_region_low_pc = new DwarfAttributeName(DwarfNative.DW_AT_HP_cold_region_low_pc);
+        public static readonly DwarfAttributeKey HP_cold_region_low_pc = new DwarfAttributeKey(DwarfNative.DW_AT_HP_cold_region_low_pc);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfAttributeName HP_cold_region_high_pc = new DwarfAttributeName(DwarfNative.DW_AT_HP_cold_region_high_pc);
+        public static readonly DwarfAttributeKey HP_cold_region_high_pc = new DwarfAttributeKey(DwarfNative.DW_AT_HP_cold_region_high_pc);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfAttributeName HP_all_variables_modifiable = new DwarfAttributeName(DwarfNative.DW_AT_HP_all_variables_modifiable);
+        public static readonly DwarfAttributeKey HP_all_variables_modifiable = new DwarfAttributeKey(DwarfNative.DW_AT_HP_all_variables_modifiable);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfAttributeName HP_linkage_name = new DwarfAttributeName(DwarfNative.DW_AT_HP_linkage_name);
+        public static readonly DwarfAttributeKey HP_linkage_name = new DwarfAttributeKey(DwarfNative.DW_AT_HP_linkage_name);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfAttributeName HP_prof_flags = new DwarfAttributeName(DwarfNative.DW_AT_HP_prof_flags);
+        public static readonly DwarfAttributeKey HP_prof_flags = new DwarfAttributeKey(DwarfNative.DW_AT_HP_prof_flags);
         
         /// <summary>
         /// COMPAQ/HP
         /// </summary>
-        public static readonly DwarfAttributeName CPQ_discontig_ranges = new DwarfAttributeName(DwarfNative.DW_AT_CPQ_discontig_ranges);
+        public static readonly DwarfAttributeKey CPQ_discontig_ranges = new DwarfAttributeKey(DwarfNative.DW_AT_CPQ_discontig_ranges);
         
         /// <summary>
         /// COMPAQ/HP
         /// </summary>
-        public static readonly DwarfAttributeName CPQ_semantic_events = new DwarfAttributeName(DwarfNative.DW_AT_CPQ_semantic_events);
+        public static readonly DwarfAttributeKey CPQ_semantic_events = new DwarfAttributeKey(DwarfNative.DW_AT_CPQ_semantic_events);
         
         /// <summary>
         /// COMPAQ/HP
         /// </summary>
-        public static readonly DwarfAttributeName CPQ_split_lifetimes_var = new DwarfAttributeName(DwarfNative.DW_AT_CPQ_split_lifetimes_var);
+        public static readonly DwarfAttributeKey CPQ_split_lifetimes_var = new DwarfAttributeKey(DwarfNative.DW_AT_CPQ_split_lifetimes_var);
         
         /// <summary>
         /// COMPAQ/HP
         /// </summary>
-        public static readonly DwarfAttributeName CPQ_split_lifetimes_rtn = new DwarfAttributeName(DwarfNative.DW_AT_CPQ_split_lifetimes_rtn);
+        public static readonly DwarfAttributeKey CPQ_split_lifetimes_rtn = new DwarfAttributeKey(DwarfNative.DW_AT_CPQ_split_lifetimes_rtn);
         
         /// <summary>
         /// COMPAQ/HP
         /// </summary>
-        public static readonly DwarfAttributeName CPQ_prologue_length = new DwarfAttributeName(DwarfNative.DW_AT_CPQ_prologue_length);
+        public static readonly DwarfAttributeKey CPQ_prologue_length = new DwarfAttributeKey(DwarfNative.DW_AT_CPQ_prologue_length);
         
         /// <summary>
         /// Intel, 1 if byte swapped.
         /// </summary>
-        public static readonly DwarfAttributeName INTEL_other_endian = new DwarfAttributeName(DwarfNative.DW_AT_INTEL_other_endian);
+        public static readonly DwarfAttributeKey INTEL_other_endian = new DwarfAttributeKey(DwarfNative.DW_AT_INTEL_other_endian);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName sf_names = new DwarfAttributeName(DwarfNative.DW_AT_sf_names);
+        public static readonly DwarfAttributeKey sf_names = new DwarfAttributeKey(DwarfNative.DW_AT_sf_names);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName src_info = new DwarfAttributeName(DwarfNative.DW_AT_src_info);
+        public static readonly DwarfAttributeKey src_info = new DwarfAttributeKey(DwarfNative.DW_AT_src_info);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName mac_info = new DwarfAttributeName(DwarfNative.DW_AT_mac_info);
+        public static readonly DwarfAttributeKey mac_info = new DwarfAttributeKey(DwarfNative.DW_AT_mac_info);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName src_coords = new DwarfAttributeName(DwarfNative.DW_AT_src_coords);
+        public static readonly DwarfAttributeKey src_coords = new DwarfAttributeKey(DwarfNative.DW_AT_src_coords);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName body_begin = new DwarfAttributeName(DwarfNative.DW_AT_body_begin);
+        public static readonly DwarfAttributeKey body_begin = new DwarfAttributeKey(DwarfNative.DW_AT_body_begin);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName body_end = new DwarfAttributeName(DwarfNative.DW_AT_body_end);
+        public static readonly DwarfAttributeKey body_end = new DwarfAttributeKey(DwarfNative.DW_AT_body_end);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_vector = new DwarfAttributeName(DwarfNative.DW_AT_GNU_vector);
+        public static readonly DwarfAttributeKey GNU_vector = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_vector);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_guarded_by = new DwarfAttributeName(DwarfNative.DW_AT_GNU_guarded_by);
+        public static readonly DwarfAttributeKey GNU_guarded_by = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_guarded_by);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_pt_guarded_by = new DwarfAttributeName(DwarfNative.DW_AT_GNU_pt_guarded_by);
+        public static readonly DwarfAttributeKey GNU_pt_guarded_by = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_pt_guarded_by);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_guarded = new DwarfAttributeName(DwarfNative.DW_AT_GNU_guarded);
+        public static readonly DwarfAttributeKey GNU_guarded = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_guarded);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_pt_guarded = new DwarfAttributeName(DwarfNative.DW_AT_GNU_pt_guarded);
+        public static readonly DwarfAttributeKey GNU_pt_guarded = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_pt_guarded);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_locks_excluded = new DwarfAttributeName(DwarfNative.DW_AT_GNU_locks_excluded);
+        public static readonly DwarfAttributeKey GNU_locks_excluded = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_locks_excluded);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_exclusive_locks_required = new DwarfAttributeName(DwarfNative.DW_AT_GNU_exclusive_locks_required);
+        public static readonly DwarfAttributeKey GNU_exclusive_locks_required = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_exclusive_locks_required);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_shared_locks_required = new DwarfAttributeName(DwarfNative.DW_AT_GNU_shared_locks_required);
+        public static readonly DwarfAttributeKey GNU_shared_locks_required = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_shared_locks_required);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_odr_signature = new DwarfAttributeName(DwarfNative.DW_AT_GNU_odr_signature);
+        public static readonly DwarfAttributeKey GNU_odr_signature = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_odr_signature);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_template_name = new DwarfAttributeName(DwarfNative.DW_AT_GNU_template_name);
+        public static readonly DwarfAttributeKey GNU_template_name = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_template_name);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_call_site_value = new DwarfAttributeName(DwarfNative.DW_AT_GNU_call_site_value);
+        public static readonly DwarfAttributeKey GNU_call_site_value = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_call_site_value);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_call_site_data_value = new DwarfAttributeName(DwarfNative.DW_AT_GNU_call_site_data_value);
+        public static readonly DwarfAttributeKey GNU_call_site_data_value = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_call_site_data_value);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_call_site_target = new DwarfAttributeName(DwarfNative.DW_AT_GNU_call_site_target);
+        public static readonly DwarfAttributeKey GNU_call_site_target = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_call_site_target);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_call_site_target_clobbered = new DwarfAttributeName(DwarfNative.DW_AT_GNU_call_site_target_clobbered);
+        public static readonly DwarfAttributeKey GNU_call_site_target_clobbered = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_call_site_target_clobbered);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_tail_call = new DwarfAttributeName(DwarfNative.DW_AT_GNU_tail_call);
+        public static readonly DwarfAttributeKey GNU_tail_call = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_tail_call);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_all_tail_call_sites = new DwarfAttributeName(DwarfNative.DW_AT_GNU_all_tail_call_sites);
+        public static readonly DwarfAttributeKey GNU_all_tail_call_sites = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_all_tail_call_sites);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_all_call_sites = new DwarfAttributeName(DwarfNative.DW_AT_GNU_all_call_sites);
+        public static readonly DwarfAttributeKey GNU_all_call_sites = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_all_call_sites);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_all_source_call_sites = new DwarfAttributeName(DwarfNative.DW_AT_GNU_all_source_call_sites);
+        public static readonly DwarfAttributeKey GNU_all_source_call_sites = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_all_source_call_sites);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_macros = new DwarfAttributeName(DwarfNative.DW_AT_GNU_macros);
+        public static readonly DwarfAttributeKey GNU_macros = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_macros);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_dwo_name = new DwarfAttributeName(DwarfNative.DW_AT_GNU_dwo_name);
+        public static readonly DwarfAttributeKey GNU_dwo_name = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_dwo_name);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_dwo_id = new DwarfAttributeName(DwarfNative.DW_AT_GNU_dwo_id);
+        public static readonly DwarfAttributeKey GNU_dwo_id = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_dwo_id);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_ranges_base = new DwarfAttributeName(DwarfNative.DW_AT_GNU_ranges_base);
+        public static readonly DwarfAttributeKey GNU_ranges_base = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_ranges_base);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_addr_base = new DwarfAttributeName(DwarfNative.DW_AT_GNU_addr_base);
+        public static readonly DwarfAttributeKey GNU_addr_base = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_addr_base);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_pubnames = new DwarfAttributeName(DwarfNative.DW_AT_GNU_pubnames);
+        public static readonly DwarfAttributeKey GNU_pubnames = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_pubnames);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_pubtypes = new DwarfAttributeName(DwarfNative.DW_AT_GNU_pubtypes);
+        public static readonly DwarfAttributeKey GNU_pubtypes = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_pubtypes);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_discriminator = new DwarfAttributeName(DwarfNative.DW_AT_GNU_discriminator);
+        public static readonly DwarfAttributeKey GNU_discriminator = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_discriminator);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_numerator = new DwarfAttributeName(DwarfNative.DW_AT_GNU_numerator);
+        public static readonly DwarfAttributeKey GNU_numerator = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_numerator);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_denominator = new DwarfAttributeName(DwarfNative.DW_AT_GNU_denominator);
+        public static readonly DwarfAttributeKey GNU_denominator = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_denominator);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeName GNU_bias = new DwarfAttributeName(DwarfNative.DW_AT_GNU_bias);
+        public static readonly DwarfAttributeKey GNU_bias = new DwarfAttributeKey(DwarfNative.DW_AT_GNU_bias);
         
         /// <summary>
         /// ALTIUM
         /// </summary>
-        public static readonly DwarfAttributeName ALTIUM_loclist = new DwarfAttributeName(DwarfNative.DW_AT_ALTIUM_loclist);
+        public static readonly DwarfAttributeKey ALTIUM_loclist = new DwarfAttributeKey(DwarfNative.DW_AT_ALTIUM_loclist);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_template = new DwarfAttributeName(DwarfNative.DW_AT_SUN_template);
+        public static readonly DwarfAttributeKey SUN_template = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_template);
         
         /// <summary>
         /// VMS
         /// </summary>
-        public static readonly DwarfAttributeName VMS_rtnbeg_pd_address = new DwarfAttributeName(DwarfNative.DW_AT_VMS_rtnbeg_pd_address);
+        public static readonly DwarfAttributeKey VMS_rtnbeg_pd_address = new DwarfAttributeKey(DwarfNative.DW_AT_VMS_rtnbeg_pd_address);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_alignment = new DwarfAttributeName(DwarfNative.DW_AT_SUN_alignment);
+        public static readonly DwarfAttributeKey SUN_alignment = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_alignment);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_vtable = new DwarfAttributeName(DwarfNative.DW_AT_SUN_vtable);
+        public static readonly DwarfAttributeKey SUN_vtable = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_vtable);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_count_guarantee = new DwarfAttributeName(DwarfNative.DW_AT_SUN_count_guarantee);
+        public static readonly DwarfAttributeKey SUN_count_guarantee = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_count_guarantee);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_command_line = new DwarfAttributeName(DwarfNative.DW_AT_SUN_command_line);
+        public static readonly DwarfAttributeKey SUN_command_line = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_command_line);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_vbase = new DwarfAttributeName(DwarfNative.DW_AT_SUN_vbase);
+        public static readonly DwarfAttributeKey SUN_vbase = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_vbase);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_compile_options = new DwarfAttributeName(DwarfNative.DW_AT_SUN_compile_options);
+        public static readonly DwarfAttributeKey SUN_compile_options = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_compile_options);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_language = new DwarfAttributeName(DwarfNative.DW_AT_SUN_language);
+        public static readonly DwarfAttributeKey SUN_language = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_language);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_browser_file = new DwarfAttributeName(DwarfNative.DW_AT_SUN_browser_file);
+        public static readonly DwarfAttributeKey SUN_browser_file = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_browser_file);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_vtable_abi = new DwarfAttributeName(DwarfNative.DW_AT_SUN_vtable_abi);
+        public static readonly DwarfAttributeKey SUN_vtable_abi = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_vtable_abi);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_func_offsets = new DwarfAttributeName(DwarfNative.DW_AT_SUN_func_offsets);
+        public static readonly DwarfAttributeKey SUN_func_offsets = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_func_offsets);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_cf_kind = new DwarfAttributeName(DwarfNative.DW_AT_SUN_cf_kind);
+        public static readonly DwarfAttributeKey SUN_cf_kind = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_cf_kind);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_vtable_index = new DwarfAttributeName(DwarfNative.DW_AT_SUN_vtable_index);
+        public static readonly DwarfAttributeKey SUN_vtable_index = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_vtable_index);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_omp_tpriv_addr = new DwarfAttributeName(DwarfNative.DW_AT_SUN_omp_tpriv_addr);
+        public static readonly DwarfAttributeKey SUN_omp_tpriv_addr = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_omp_tpriv_addr);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_omp_child_func = new DwarfAttributeName(DwarfNative.DW_AT_SUN_omp_child_func);
+        public static readonly DwarfAttributeKey SUN_omp_child_func = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_omp_child_func);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_func_offset = new DwarfAttributeName(DwarfNative.DW_AT_SUN_func_offset);
+        public static readonly DwarfAttributeKey SUN_func_offset = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_func_offset);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_memop_type_ref = new DwarfAttributeName(DwarfNative.DW_AT_SUN_memop_type_ref);
+        public static readonly DwarfAttributeKey SUN_memop_type_ref = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_memop_type_ref);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_profile_id = new DwarfAttributeName(DwarfNative.DW_AT_SUN_profile_id);
+        public static readonly DwarfAttributeKey SUN_profile_id = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_profile_id);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_memop_signature = new DwarfAttributeName(DwarfNative.DW_AT_SUN_memop_signature);
+        public static readonly DwarfAttributeKey SUN_memop_signature = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_memop_signature);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_obj_dir = new DwarfAttributeName(DwarfNative.DW_AT_SUN_obj_dir);
+        public static readonly DwarfAttributeKey SUN_obj_dir = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_obj_dir);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_obj_file = new DwarfAttributeName(DwarfNative.DW_AT_SUN_obj_file);
+        public static readonly DwarfAttributeKey SUN_obj_file = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_obj_file);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_original_name = new DwarfAttributeName(DwarfNative.DW_AT_SUN_original_name);
+        public static readonly DwarfAttributeKey SUN_original_name = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_original_name);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_hwcprof_signature = new DwarfAttributeName(DwarfNative.DW_AT_SUN_hwcprof_signature);
+        public static readonly DwarfAttributeKey SUN_hwcprof_signature = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_hwcprof_signature);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_amd64_parmdump = new DwarfAttributeName(DwarfNative.DW_AT_SUN_amd64_parmdump);
+        public static readonly DwarfAttributeKey SUN_amd64_parmdump = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_amd64_parmdump);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_part_link_name = new DwarfAttributeName(DwarfNative.DW_AT_SUN_part_link_name);
+        public static readonly DwarfAttributeKey SUN_part_link_name = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_part_link_name);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_link_name = new DwarfAttributeName(DwarfNative.DW_AT_SUN_link_name);
+        public static readonly DwarfAttributeKey SUN_link_name = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_link_name);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_pass_with_const = new DwarfAttributeName(DwarfNative.DW_AT_SUN_pass_with_const);
+        public static readonly DwarfAttributeKey SUN_pass_with_const = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_pass_with_const);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_return_with_const = new DwarfAttributeName(DwarfNative.DW_AT_SUN_return_with_const);
+        public static readonly DwarfAttributeKey SUN_return_with_const = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_return_with_const);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_import_by_name = new DwarfAttributeName(DwarfNative.DW_AT_SUN_import_by_name);
+        public static readonly DwarfAttributeKey SUN_import_by_name = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_import_by_name);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_f90_pointer = new DwarfAttributeName(DwarfNative.DW_AT_SUN_f90_pointer);
+        public static readonly DwarfAttributeKey SUN_f90_pointer = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_f90_pointer);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_pass_by_ref = new DwarfAttributeName(DwarfNative.DW_AT_SUN_pass_by_ref);
+        public static readonly DwarfAttributeKey SUN_pass_by_ref = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_pass_by_ref);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_f90_allocatable = new DwarfAttributeName(DwarfNative.DW_AT_SUN_f90_allocatable);
+        public static readonly DwarfAttributeKey SUN_f90_allocatable = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_f90_allocatable);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_f90_assumed_shape_array = new DwarfAttributeName(DwarfNative.DW_AT_SUN_f90_assumed_shape_array);
+        public static readonly DwarfAttributeKey SUN_f90_assumed_shape_array = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_f90_assumed_shape_array);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_c_vla = new DwarfAttributeName(DwarfNative.DW_AT_SUN_c_vla);
+        public static readonly DwarfAttributeKey SUN_c_vla = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_c_vla);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_return_value_ptr = new DwarfAttributeName(DwarfNative.DW_AT_SUN_return_value_ptr);
+        public static readonly DwarfAttributeKey SUN_return_value_ptr = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_return_value_ptr);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_dtor_start = new DwarfAttributeName(DwarfNative.DW_AT_SUN_dtor_start);
+        public static readonly DwarfAttributeKey SUN_dtor_start = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_dtor_start);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_dtor_length = new DwarfAttributeName(DwarfNative.DW_AT_SUN_dtor_length);
+        public static readonly DwarfAttributeKey SUN_dtor_length = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_dtor_length);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_dtor_state_initial = new DwarfAttributeName(DwarfNative.DW_AT_SUN_dtor_state_initial);
+        public static readonly DwarfAttributeKey SUN_dtor_state_initial = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_dtor_state_initial);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_dtor_state_final = new DwarfAttributeName(DwarfNative.DW_AT_SUN_dtor_state_final);
+        public static readonly DwarfAttributeKey SUN_dtor_state_final = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_dtor_state_final);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_dtor_state_deltas = new DwarfAttributeName(DwarfNative.DW_AT_SUN_dtor_state_deltas);
+        public static readonly DwarfAttributeKey SUN_dtor_state_deltas = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_dtor_state_deltas);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_import_by_lname = new DwarfAttributeName(DwarfNative.DW_AT_SUN_import_by_lname);
+        public static readonly DwarfAttributeKey SUN_import_by_lname = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_import_by_lname);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_f90_use_only = new DwarfAttributeName(DwarfNative.DW_AT_SUN_f90_use_only);
+        public static readonly DwarfAttributeKey SUN_f90_use_only = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_f90_use_only);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_namelist_spec = new DwarfAttributeName(DwarfNative.DW_AT_SUN_namelist_spec);
+        public static readonly DwarfAttributeKey SUN_namelist_spec = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_namelist_spec);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_is_omp_child_func = new DwarfAttributeName(DwarfNative.DW_AT_SUN_is_omp_child_func);
+        public static readonly DwarfAttributeKey SUN_is_omp_child_func = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_is_omp_child_func);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_fortran_main_alias = new DwarfAttributeName(DwarfNative.DW_AT_SUN_fortran_main_alias);
+        public static readonly DwarfAttributeKey SUN_fortran_main_alias = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_fortran_main_alias);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeName SUN_fortran_based = new DwarfAttributeName(DwarfNative.DW_AT_SUN_fortran_based);
+        public static readonly DwarfAttributeKey SUN_fortran_based = new DwarfAttributeKey(DwarfNative.DW_AT_SUN_fortran_based);
         
         /// <summary>
         /// GNAT
         /// </summary>
-        public static readonly DwarfAttributeName use_GNAT_descriptive_type = new DwarfAttributeName(DwarfNative.DW_AT_use_GNAT_descriptive_type);
+        public static readonly DwarfAttributeKey use_GNAT_descriptive_type = new DwarfAttributeKey(DwarfNative.DW_AT_use_GNAT_descriptive_type);
         
         /// <summary>
         /// GNAT
         /// </summary>
-        public static readonly DwarfAttributeName GNAT_descriptive_type = new DwarfAttributeName(DwarfNative.DW_AT_GNAT_descriptive_type);
+        public static readonly DwarfAttributeKey GNAT_descriptive_type = new DwarfAttributeKey(DwarfNative.DW_AT_GNAT_descriptive_type);
         
         /// <summary>
         /// UPC
         /// </summary>
-        public static readonly DwarfAttributeName upc_threads_scaled = new DwarfAttributeName(DwarfNative.DW_AT_upc_threads_scaled);
+        public static readonly DwarfAttributeKey upc_threads_scaled = new DwarfAttributeKey(DwarfNative.DW_AT_upc_threads_scaled);
         
         /// <summary>
         /// PGI. Block, constant, reference. This attribute is an ASTPLAB extension used to describe the array local base.
         /// </summary>
-        public static readonly DwarfAttributeName PGI_lbase = new DwarfAttributeName(DwarfNative.DW_AT_PGI_lbase);
+        public static readonly DwarfAttributeKey PGI_lbase = new DwarfAttributeKey(DwarfNative.DW_AT_PGI_lbase);
         
         /// <summary>
         /// PGI. Block, constant, reference. ASTPLAB adds this attribute to describe the section offset, or the offset to the first element in the dimension.
         /// </summary>
-        public static readonly DwarfAttributeName PGI_soffset = new DwarfAttributeName(DwarfNative.DW_AT_PGI_soffset);
+        public static readonly DwarfAttributeKey PGI_soffset = new DwarfAttributeKey(DwarfNative.DW_AT_PGI_soffset);
         
         /// <summary>
         /// PGI. Block, constant, reference. ASTPLAB adds this attribute to describe the linear stride or the distance between elements in the dimension.
         /// </summary>
-        public static readonly DwarfAttributeName PGI_lstride = new DwarfAttributeName(DwarfNative.DW_AT_PGI_lstride);
+        public static readonly DwarfAttributeKey PGI_lstride = new DwarfAttributeKey(DwarfNative.DW_AT_PGI_lstride);
         
         /// <summary>
         /// Apple
         /// </summary>
-        public static readonly DwarfAttributeName APPLE_optimized = new DwarfAttributeName(DwarfNative.DW_AT_APPLE_optimized);
+        public static readonly DwarfAttributeKey APPLE_optimized = new DwarfAttributeKey(DwarfNative.DW_AT_APPLE_optimized);
         
         /// <summary>
         /// Apple
         /// </summary>
-        public static readonly DwarfAttributeName APPLE_flags = new DwarfAttributeName(DwarfNative.DW_AT_APPLE_flags);
+        public static readonly DwarfAttributeKey APPLE_flags = new DwarfAttributeKey(DwarfNative.DW_AT_APPLE_flags);
         
         /// <summary>
         /// Apple
         /// </summary>
-        public static readonly DwarfAttributeName APPLE_isa = new DwarfAttributeName(DwarfNative.DW_AT_APPLE_isa);
+        public static readonly DwarfAttributeKey APPLE_isa = new DwarfAttributeKey(DwarfNative.DW_AT_APPLE_isa);
         
         /// <summary>
         /// Apple
         /// </summary>
-        public static readonly DwarfAttributeName APPLE_block = new DwarfAttributeName(DwarfNative.DW_AT_APPLE_block);
+        public static readonly DwarfAttributeKey APPLE_block = new DwarfAttributeKey(DwarfNative.DW_AT_APPLE_block);
         
         /// <summary>
         /// Apple
         /// </summary>
-        public static readonly DwarfAttributeName APPLE_major_runtime_vers = new DwarfAttributeName(DwarfNative.DW_AT_APPLE_major_runtime_vers);
+        public static readonly DwarfAttributeKey APPLE_major_runtime_vers = new DwarfAttributeKey(DwarfNative.DW_AT_APPLE_major_runtime_vers);
         
         /// <summary>
         /// Apple
         /// </summary>
-        public static readonly DwarfAttributeName APPLE_runtime_class = new DwarfAttributeName(DwarfNative.DW_AT_APPLE_runtime_class);
+        public static readonly DwarfAttributeKey APPLE_runtime_class = new DwarfAttributeKey(DwarfNative.DW_AT_APPLE_runtime_class);
         
         /// <summary>
         /// Apple
         /// </summary>
-        public static readonly DwarfAttributeName APPLE_omit_frame_ptr = new DwarfAttributeName(DwarfNative.DW_AT_APPLE_omit_frame_ptr);
+        public static readonly DwarfAttributeKey APPLE_omit_frame_ptr = new DwarfAttributeKey(DwarfNative.DW_AT_APPLE_omit_frame_ptr);
         
         /// <summary>
         /// Apple
         /// </summary>
-        public static readonly DwarfAttributeName APPLE_closure = new DwarfAttributeName(DwarfNative.DW_AT_APPLE_closure);
+        public static readonly DwarfAttributeKey APPLE_closure = new DwarfAttributeKey(DwarfNative.DW_AT_APPLE_closure);
         
-        public static readonly DwarfAttributeName hi_user = new DwarfAttributeName(DwarfNative.DW_AT_hi_user);
+        public static readonly DwarfAttributeKey hi_user = new DwarfAttributeKey(DwarfNative.DW_AT_hi_user);
         
         private string ToStringInternal()
         {
@@ -3318,7 +3318,7 @@ namespace LibObjectFile.Dwarf
                 case DwarfNative.DW_AT_prototyped: return "DW_AT_prototyped";
                 case DwarfNative.DW_AT_return_addr: return "DW_AT_return_addr";
                 case DwarfNative.DW_AT_start_scope: return "DW_AT_start_scope";
-                case DwarfNative.DW_AT_bit_stride: return "DW_AT_bit_stride - DWARF3 name";
+                case DwarfNative.DW_AT_bit_stride: return "DW_AT_bit_stride";
                 case DwarfNative.DW_AT_upper_bound: return "DW_AT_upper_bound";
                 case DwarfNative.DW_AT_abstract_origin: return "DW_AT_abstract_origin";
                 case DwarfNative.DW_AT_accessibility: return "DW_AT_accessibility";
@@ -3332,13 +3332,13 @@ namespace LibObjectFile.Dwarf
                 case DwarfNative.DW_AT_decl_file: return "DW_AT_decl_file";
                 case DwarfNative.DW_AT_decl_line: return "DW_AT_decl_line";
                 case DwarfNative.DW_AT_declaration: return "DW_AT_declaration";
-                case DwarfNative.DW_AT_discr_list: return "DW_AT_discr_list - DWARF2";
+                case DwarfNative.DW_AT_discr_list: return "DW_AT_discr_list";
                 case DwarfNative.DW_AT_encoding: return "DW_AT_encoding";
                 case DwarfNative.DW_AT_external: return "DW_AT_external";
                 case DwarfNative.DW_AT_frame_base: return "DW_AT_frame_base";
                 case DwarfNative.DW_AT_friend: return "DW_AT_friend";
                 case DwarfNative.DW_AT_identifier_case: return "DW_AT_identifier_case";
-                case DwarfNative.DW_AT_macro_info: return "DW_AT_macro_info - DWARF{234} not DWARF5";
+                case DwarfNative.DW_AT_macro_info: return "DW_AT_macro_info";
                 case DwarfNative.DW_AT_namelist_item: return "DW_AT_namelist_item";
                 case DwarfNative.DW_AT_priority: return "DW_AT_priority";
                 case DwarfNative.DW_AT_segment: return "DW_AT_segment";
@@ -3349,195 +3349,195 @@ namespace LibObjectFile.Dwarf
                 case DwarfNative.DW_AT_variable_parameter: return "DW_AT_variable_parameter";
                 case DwarfNative.DW_AT_virtuality: return "DW_AT_virtuality";
                 case DwarfNative.DW_AT_vtable_elem_location: return "DW_AT_vtable_elem_location";
-                case DwarfNative.DW_AT_allocated: return "DW_AT_allocated - DWARF3";
-                case DwarfNative.DW_AT_associated: return "DW_AT_associated - DWARF3";
-                case DwarfNative.DW_AT_data_location: return "DW_AT_data_location - DWARF3";
-                case DwarfNative.DW_AT_byte_stride: return "DW_AT_byte_stride - DWARF3f";
-                case DwarfNative.DW_AT_entry_pc: return "DW_AT_entry_pc - DWARF3";
-                case DwarfNative.DW_AT_use_UTF8: return "DW_AT_use_UTF8 - DWARF3";
-                case DwarfNative.DW_AT_extension: return "DW_AT_extension - DWARF3";
-                case DwarfNative.DW_AT_ranges: return "DW_AT_ranges - DWARF3";
-                case DwarfNative.DW_AT_trampoline: return "DW_AT_trampoline - DWARF3";
-                case DwarfNative.DW_AT_call_column: return "DW_AT_call_column - DWARF3";
-                case DwarfNative.DW_AT_call_file: return "DW_AT_call_file - DWARF3";
-                case DwarfNative.DW_AT_call_line: return "DW_AT_call_line - DWARF3";
-                case DwarfNative.DW_AT_description: return "DW_AT_description - DWARF3";
-                case DwarfNative.DW_AT_binary_scale: return "DW_AT_binary_scale - DWARF3f";
-                case DwarfNative.DW_AT_decimal_scale: return "DW_AT_decimal_scale - DWARF3f";
-                case DwarfNative.DW_AT_small: return "DW_AT_small - DWARF3f";
-                case DwarfNative.DW_AT_decimal_sign: return "DW_AT_decimal_sign - DWARF3f";
-                case DwarfNative.DW_AT_digit_count: return "DW_AT_digit_count - DWARF3f";
-                case DwarfNative.DW_AT_picture_string: return "DW_AT_picture_string - DWARF3f";
-                case DwarfNative.DW_AT_mutable: return "DW_AT_mutable - DWARF3f";
-                case DwarfNative.DW_AT_threads_scaled: return "DW_AT_threads_scaled - DWARF3f";
-                case DwarfNative.DW_AT_explicit: return "DW_AT_explicit - DWARF3f";
-                case DwarfNative.DW_AT_object_pointer: return "DW_AT_object_pointer - DWARF3f";
-                case DwarfNative.DW_AT_endianity: return "DW_AT_endianity - DWARF3f";
-                case DwarfNative.DW_AT_elemental: return "DW_AT_elemental - DWARF3f";
-                case DwarfNative.DW_AT_pure: return "DW_AT_pure - DWARF3f";
-                case DwarfNative.DW_AT_recursive: return "DW_AT_recursive - DWARF3f";
-                case DwarfNative.DW_AT_signature: return "DW_AT_signature - DWARF4";
-                case DwarfNative.DW_AT_main_subprogram: return "DW_AT_main_subprogram - DWARF4";
-                case DwarfNative.DW_AT_data_bit_offset: return "DW_AT_data_bit_offset - DWARF4";
-                case DwarfNative.DW_AT_const_expr: return "DW_AT_const_expr - DWARF4";
-                case DwarfNative.DW_AT_enum_class: return "DW_AT_enum_class - DWARF4";
-                case DwarfNative.DW_AT_linkage_name: return "DW_AT_linkage_name - DWARF4";
-                case DwarfNative.DW_AT_string_length_bit_size: return "DW_AT_string_length_bit_size - DWARF5";
-                case DwarfNative.DW_AT_string_length_byte_size: return "DW_AT_string_length_byte_size - DWARF5";
-                case DwarfNative.DW_AT_rank: return "DW_AT_rank - DWARF5";
-                case DwarfNative.DW_AT_str_offsets_base: return "DW_AT_str_offsets_base - DWARF5";
-                case DwarfNative.DW_AT_addr_base: return "DW_AT_addr_base - DWARF5";
-                case DwarfNative.DW_AT_rnglists_base: return "DW_AT_rnglists_base - DWARF5";
-                case DwarfNative.DW_AT_dwo_id: return "DW_AT_dwo_id - DWARF4!";
-                case DwarfNative.DW_AT_dwo_name: return "DW_AT_dwo_name - DWARF5";
-                case DwarfNative.DW_AT_reference: return "DW_AT_reference - DWARF5";
-                case DwarfNative.DW_AT_rvalue_reference: return "DW_AT_rvalue_reference - DWARF5";
-                case DwarfNative.DW_AT_macros: return "DW_AT_macros - DWARF5";
-                case DwarfNative.DW_AT_call_all_calls: return "DW_AT_call_all_calls - DWARF5";
-                case DwarfNative.DW_AT_call_all_source_calls: return "DW_AT_call_all_source_calls - DWARF5";
-                case DwarfNative.DW_AT_call_all_tail_calls: return "DW_AT_call_all_tail_calls - DWARF5";
-                case DwarfNative.DW_AT_call_return_pc: return "DW_AT_call_return_pc - DWARF5";
-                case DwarfNative.DW_AT_call_value: return "DW_AT_call_value - DWARF5";
-                case DwarfNative.DW_AT_call_origin: return "DW_AT_call_origin - DWARF5";
-                case DwarfNative.DW_AT_call_parameter: return "DW_AT_call_parameter - DWARF5";
-                case DwarfNative.DW_AT_call_pc: return "DW_AT_call_pc - DWARF5";
-                case DwarfNative.DW_AT_call_tail_call: return "DW_AT_call_tail_call - DWARF5";
-                case DwarfNative.DW_AT_call_target: return "DW_AT_call_target - DWARF5";
-                case DwarfNative.DW_AT_call_target_clobbered: return "DW_AT_call_target_clobbered - DWARF5";
-                case DwarfNative.DW_AT_call_data_location: return "DW_AT_call_data_location - DWARF5";
-                case DwarfNative.DW_AT_call_data_value: return "DW_AT_call_data_value - DWARF5";
-                case DwarfNative.DW_AT_noreturn: return "DW_AT_noreturn - DWARF5";
-                case DwarfNative.DW_AT_alignment: return "DW_AT_alignment - DWARF5";
-                case DwarfNative.DW_AT_export_symbols: return "DW_AT_export_symbols - DWARF5";
-                case DwarfNative.DW_AT_deleted: return "DW_AT_deleted - DWARF5";
-                case DwarfNative.DW_AT_defaulted: return "DW_AT_defaulted - DWARF5";
-                case DwarfNative.DW_AT_loclists_base: return "DW_AT_loclists_base - DWARF5";
-                case DwarfNative.DW_AT_HP_block_index: return "DW_AT_HP_block_index - HP";
-                case DwarfNative.DW_AT_MIPS_fde: return "DW_AT_MIPS_fde - MIPS/SGI";
-                case DwarfNative.DW_AT_MIPS_loop_begin: return "DW_AT_MIPS_loop_begin - MIPS/SGI";
-                case DwarfNative.DW_AT_MIPS_tail_loop_begin: return "DW_AT_MIPS_tail_loop_begin - MIPS/SGI";
-                case DwarfNative.DW_AT_MIPS_epilog_begin: return "DW_AT_MIPS_epilog_begin - MIPS/SGI";
-                case DwarfNative.DW_AT_MIPS_loop_unroll_factor: return "DW_AT_MIPS_loop_unroll_factor - MIPS/SGI";
-                case DwarfNative.DW_AT_MIPS_software_pipeline_depth: return "DW_AT_MIPS_software_pipeline_depth - MIPS/SGI";
-                case DwarfNative.DW_AT_MIPS_linkage_name: return "DW_AT_MIPS_linkage_name - MIPS/SGI, GNU, and others.";
-                case DwarfNative.DW_AT_MIPS_stride: return "DW_AT_MIPS_stride - MIPS/SGI";
-                case DwarfNative.DW_AT_MIPS_abstract_name: return "DW_AT_MIPS_abstract_name - MIPS/SGI";
-                case DwarfNative.DW_AT_MIPS_clone_origin: return "DW_AT_MIPS_clone_origin - MIPS/SGI";
-                case DwarfNative.DW_AT_MIPS_has_inlines: return "DW_AT_MIPS_has_inlines - MIPS/SGI";
-                case DwarfNative.DW_AT_MIPS_stride_byte: return "DW_AT_MIPS_stride_byte - MIPS/SGI";
-                case DwarfNative.DW_AT_MIPS_stride_elem: return "DW_AT_MIPS_stride_elem - MIPS/SGI";
-                case DwarfNative.DW_AT_MIPS_ptr_dopetype: return "DW_AT_MIPS_ptr_dopetype - MIPS/SGI";
-                case DwarfNative.DW_AT_MIPS_allocatable_dopetype: return "DW_AT_MIPS_allocatable_dopetype - MIPS/SGI";
-                case DwarfNative.DW_AT_MIPS_assumed_shape_dopetype: return "DW_AT_MIPS_assumed_shape_dopetype - MIPS/SGI";
-                case DwarfNative.DW_AT_MIPS_assumed_size: return "DW_AT_MIPS_assumed_size - MIPS/SGI";
-                case DwarfNative.DW_AT_HP_raw_data_ptr: return "DW_AT_HP_raw_data_ptr - HP";
-                case DwarfNative.DW_AT_HP_pass_by_reference: return "DW_AT_HP_pass_by_reference - HP";
-                case DwarfNative.DW_AT_HP_opt_level: return "DW_AT_HP_opt_level - HP";
-                case DwarfNative.DW_AT_HP_prof_version_id: return "DW_AT_HP_prof_version_id - HP";
-                case DwarfNative.DW_AT_HP_opt_flags: return "DW_AT_HP_opt_flags - HP";
-                case DwarfNative.DW_AT_HP_cold_region_low_pc: return "DW_AT_HP_cold_region_low_pc - HP";
-                case DwarfNative.DW_AT_HP_cold_region_high_pc: return "DW_AT_HP_cold_region_high_pc - HP";
-                case DwarfNative.DW_AT_HP_all_variables_modifiable: return "DW_AT_HP_all_variables_modifiable - HP";
-                case DwarfNative.DW_AT_HP_linkage_name: return "DW_AT_HP_linkage_name - HP";
-                case DwarfNative.DW_AT_HP_prof_flags: return "DW_AT_HP_prof_flags - HP";
-                case DwarfNative.DW_AT_INTEL_other_endian: return "DW_AT_INTEL_other_endian - Intel, 1 if byte swapped.";
-                case DwarfNative.DW_AT_sf_names: return "DW_AT_sf_names - GNU";
-                case DwarfNative.DW_AT_src_info: return "DW_AT_src_info - GNU";
-                case DwarfNative.DW_AT_mac_info: return "DW_AT_mac_info - GNU";
-                case DwarfNative.DW_AT_src_coords: return "DW_AT_src_coords - GNU";
-                case DwarfNative.DW_AT_body_begin: return "DW_AT_body_begin - GNU";
-                case DwarfNative.DW_AT_body_end: return "DW_AT_body_end - GNU";
-                case DwarfNative.DW_AT_GNU_vector: return "DW_AT_GNU_vector - GNU";
-                case DwarfNative.DW_AT_GNU_guarded_by: return "DW_AT_GNU_guarded_by - GNU";
-                case DwarfNative.DW_AT_GNU_pt_guarded_by: return "DW_AT_GNU_pt_guarded_by - GNU";
-                case DwarfNative.DW_AT_GNU_guarded: return "DW_AT_GNU_guarded - GNU";
-                case DwarfNative.DW_AT_GNU_pt_guarded: return "DW_AT_GNU_pt_guarded - GNU";
-                case DwarfNative.DW_AT_GNU_locks_excluded: return "DW_AT_GNU_locks_excluded - GNU";
-                case DwarfNative.DW_AT_GNU_exclusive_locks_required: return "DW_AT_GNU_exclusive_locks_required - GNU";
-                case DwarfNative.DW_AT_GNU_shared_locks_required: return "DW_AT_GNU_shared_locks_required - GNU";
-                case DwarfNative.DW_AT_GNU_odr_signature: return "DW_AT_GNU_odr_signature - GNU";
-                case DwarfNative.DW_AT_GNU_template_name: return "DW_AT_GNU_template_name - GNU";
-                case DwarfNative.DW_AT_GNU_call_site_value: return "DW_AT_GNU_call_site_value - GNU";
-                case DwarfNative.DW_AT_GNU_call_site_data_value: return "DW_AT_GNU_call_site_data_value - GNU";
-                case DwarfNative.DW_AT_GNU_call_site_target: return "DW_AT_GNU_call_site_target - GNU";
-                case DwarfNative.DW_AT_GNU_call_site_target_clobbered: return "DW_AT_GNU_call_site_target_clobbered - GNU";
-                case DwarfNative.DW_AT_GNU_tail_call: return "DW_AT_GNU_tail_call - GNU";
-                case DwarfNative.DW_AT_GNU_all_tail_call_sites: return "DW_AT_GNU_all_tail_call_sites - GNU";
-                case DwarfNative.DW_AT_GNU_all_call_sites: return "DW_AT_GNU_all_call_sites - GNU";
-                case DwarfNative.DW_AT_GNU_all_source_call_sites: return "DW_AT_GNU_all_source_call_sites - GNU";
-                case DwarfNative.DW_AT_GNU_macros: return "DW_AT_GNU_macros - GNU";
-                case DwarfNative.DW_AT_GNU_dwo_name: return "DW_AT_GNU_dwo_name - GNU";
-                case DwarfNative.DW_AT_GNU_dwo_id: return "DW_AT_GNU_dwo_id - GNU";
-                case DwarfNative.DW_AT_GNU_ranges_base: return "DW_AT_GNU_ranges_base - GNU";
-                case DwarfNative.DW_AT_GNU_addr_base: return "DW_AT_GNU_addr_base - GNU";
-                case DwarfNative.DW_AT_GNU_pubnames: return "DW_AT_GNU_pubnames - GNU";
-                case DwarfNative.DW_AT_GNU_pubtypes: return "DW_AT_GNU_pubtypes - GNU";
-                case DwarfNative.DW_AT_GNU_discriminator: return "DW_AT_GNU_discriminator - GNU";
-                case DwarfNative.DW_AT_GNU_numerator: return "DW_AT_GNU_numerator - GNU";
-                case DwarfNative.DW_AT_GNU_denominator: return "DW_AT_GNU_denominator - GNU";
-                case DwarfNative.DW_AT_GNU_bias: return "DW_AT_GNU_bias - GNU";
-                case DwarfNative.DW_AT_ALTIUM_loclist: return "DW_AT_ALTIUM_loclist - ALTIUM";
-                case DwarfNative.DW_AT_SUN_template: return "DW_AT_SUN_template - SUN";
-                case DwarfNative.DW_AT_SUN_alignment: return "DW_AT_SUN_alignment - SUN";
-                case DwarfNative.DW_AT_SUN_vtable: return "DW_AT_SUN_vtable - SUN";
-                case DwarfNative.DW_AT_SUN_count_guarantee: return "DW_AT_SUN_count_guarantee - SUN";
-                case DwarfNative.DW_AT_SUN_command_line: return "DW_AT_SUN_command_line - SUN";
-                case DwarfNative.DW_AT_SUN_vbase: return "DW_AT_SUN_vbase - SUN";
-                case DwarfNative.DW_AT_SUN_compile_options: return "DW_AT_SUN_compile_options - SUN";
-                case DwarfNative.DW_AT_SUN_language: return "DW_AT_SUN_language - SUN";
-                case DwarfNative.DW_AT_SUN_browser_file: return "DW_AT_SUN_browser_file - SUN";
-                case DwarfNative.DW_AT_SUN_vtable_abi: return "DW_AT_SUN_vtable_abi - SUN";
-                case DwarfNative.DW_AT_SUN_func_offsets: return "DW_AT_SUN_func_offsets - SUN";
-                case DwarfNative.DW_AT_SUN_cf_kind: return "DW_AT_SUN_cf_kind - SUN";
-                case DwarfNative.DW_AT_SUN_vtable_index: return "DW_AT_SUN_vtable_index - SUN";
-                case DwarfNative.DW_AT_SUN_omp_tpriv_addr: return "DW_AT_SUN_omp_tpriv_addr - SUN";
-                case DwarfNative.DW_AT_SUN_omp_child_func: return "DW_AT_SUN_omp_child_func - SUN";
-                case DwarfNative.DW_AT_SUN_func_offset: return "DW_AT_SUN_func_offset - SUN";
-                case DwarfNative.DW_AT_SUN_memop_type_ref: return "DW_AT_SUN_memop_type_ref - SUN";
-                case DwarfNative.DW_AT_SUN_profile_id: return "DW_AT_SUN_profile_id - SUN";
-                case DwarfNative.DW_AT_SUN_memop_signature: return "DW_AT_SUN_memop_signature - SUN";
-                case DwarfNative.DW_AT_SUN_obj_dir: return "DW_AT_SUN_obj_dir - SUN";
-                case DwarfNative.DW_AT_SUN_obj_file: return "DW_AT_SUN_obj_file - SUN";
-                case DwarfNative.DW_AT_SUN_original_name: return "DW_AT_SUN_original_name - SUN";
-                case DwarfNative.DW_AT_SUN_hwcprof_signature: return "DW_AT_SUN_hwcprof_signature - SUN";
-                case DwarfNative.DW_AT_SUN_amd64_parmdump: return "DW_AT_SUN_amd64_parmdump - SUN";
-                case DwarfNative.DW_AT_SUN_part_link_name: return "DW_AT_SUN_part_link_name - SUN";
-                case DwarfNative.DW_AT_SUN_link_name: return "DW_AT_SUN_link_name - SUN";
-                case DwarfNative.DW_AT_SUN_pass_with_const: return "DW_AT_SUN_pass_with_const - SUN";
-                case DwarfNative.DW_AT_SUN_return_with_const: return "DW_AT_SUN_return_with_const - SUN";
-                case DwarfNative.DW_AT_SUN_import_by_name: return "DW_AT_SUN_import_by_name - SUN";
-                case DwarfNative.DW_AT_SUN_f90_pointer: return "DW_AT_SUN_f90_pointer - SUN";
-                case DwarfNative.DW_AT_SUN_pass_by_ref: return "DW_AT_SUN_pass_by_ref - SUN";
-                case DwarfNative.DW_AT_SUN_f90_allocatable: return "DW_AT_SUN_f90_allocatable - SUN";
-                case DwarfNative.DW_AT_SUN_f90_assumed_shape_array: return "DW_AT_SUN_f90_assumed_shape_array - SUN";
-                case DwarfNative.DW_AT_SUN_c_vla: return "DW_AT_SUN_c_vla - SUN";
-                case DwarfNative.DW_AT_SUN_return_value_ptr: return "DW_AT_SUN_return_value_ptr - SUN";
-                case DwarfNative.DW_AT_SUN_dtor_start: return "DW_AT_SUN_dtor_start - SUN";
-                case DwarfNative.DW_AT_SUN_dtor_length: return "DW_AT_SUN_dtor_length - SUN";
-                case DwarfNative.DW_AT_SUN_dtor_state_initial: return "DW_AT_SUN_dtor_state_initial - SUN";
-                case DwarfNative.DW_AT_SUN_dtor_state_final: return "DW_AT_SUN_dtor_state_final - SUN";
-                case DwarfNative.DW_AT_SUN_dtor_state_deltas: return "DW_AT_SUN_dtor_state_deltas - SUN";
-                case DwarfNative.DW_AT_SUN_import_by_lname: return "DW_AT_SUN_import_by_lname - SUN";
-                case DwarfNative.DW_AT_SUN_f90_use_only: return "DW_AT_SUN_f90_use_only - SUN";
-                case DwarfNative.DW_AT_SUN_namelist_spec: return "DW_AT_SUN_namelist_spec - SUN";
-                case DwarfNative.DW_AT_SUN_is_omp_child_func: return "DW_AT_SUN_is_omp_child_func - SUN";
-                case DwarfNative.DW_AT_SUN_fortran_main_alias: return "DW_AT_SUN_fortran_main_alias - SUN";
-                case DwarfNative.DW_AT_SUN_fortran_based: return "DW_AT_SUN_fortran_based - SUN";
-                case DwarfNative.DW_AT_use_GNAT_descriptive_type: return "DW_AT_use_GNAT_descriptive_type - GNAT";
-                case DwarfNative.DW_AT_GNAT_descriptive_type: return "DW_AT_GNAT_descriptive_type - GNAT";
-                case DwarfNative.DW_AT_upc_threads_scaled: return "DW_AT_upc_threads_scaled - UPC";
-                case DwarfNative.DW_AT_PGI_lbase: return "DW_AT_PGI_lbase - PGI. Block, constant, reference. This attribute is an ASTPLAB extension used to describe the array local base.";
-                case DwarfNative.DW_AT_PGI_soffset: return "DW_AT_PGI_soffset - PGI. Block, constant, reference. ASTPLAB adds this attribute to describe the section offset, or the offset to the first element in the dimension.";
-                case DwarfNative.DW_AT_PGI_lstride: return "DW_AT_PGI_lstride - PGI. Block, constant, reference. ASTPLAB adds this attribute to describe the linear stride or the distance between elements in the dimension.";
-                case DwarfNative.DW_AT_APPLE_optimized: return "DW_AT_APPLE_optimized - Apple";
-                case DwarfNative.DW_AT_APPLE_flags: return "DW_AT_APPLE_flags - Apple";
-                case DwarfNative.DW_AT_APPLE_isa: return "DW_AT_APPLE_isa - Apple";
-                case DwarfNative.DW_AT_APPLE_block: return "DW_AT_APPLE_block - Apple";
-                case DwarfNative.DW_AT_APPLE_major_runtime_vers: return "DW_AT_APPLE_major_runtime_vers - Apple";
-                case DwarfNative.DW_AT_APPLE_runtime_class: return "DW_AT_APPLE_runtime_class - Apple";
-                case DwarfNative.DW_AT_APPLE_omit_frame_ptr: return "DW_AT_APPLE_omit_frame_ptr - Apple";
+                case DwarfNative.DW_AT_allocated: return "DW_AT_allocated";
+                case DwarfNative.DW_AT_associated: return "DW_AT_associated";
+                case DwarfNative.DW_AT_data_location: return "DW_AT_data_location";
+                case DwarfNative.DW_AT_byte_stride: return "DW_AT_byte_stride";
+                case DwarfNative.DW_AT_entry_pc: return "DW_AT_entry_pc";
+                case DwarfNative.DW_AT_use_UTF8: return "DW_AT_use_UTF8";
+                case DwarfNative.DW_AT_extension: return "DW_AT_extension";
+                case DwarfNative.DW_AT_ranges: return "DW_AT_ranges";
+                case DwarfNative.DW_AT_trampoline: return "DW_AT_trampoline";
+                case DwarfNative.DW_AT_call_column: return "DW_AT_call_column";
+                case DwarfNative.DW_AT_call_file: return "DW_AT_call_file";
+                case DwarfNative.DW_AT_call_line: return "DW_AT_call_line";
+                case DwarfNative.DW_AT_description: return "DW_AT_description";
+                case DwarfNative.DW_AT_binary_scale: return "DW_AT_binary_scale";
+                case DwarfNative.DW_AT_decimal_scale: return "DW_AT_decimal_scale";
+                case DwarfNative.DW_AT_small: return "DW_AT_small";
+                case DwarfNative.DW_AT_decimal_sign: return "DW_AT_decimal_sign";
+                case DwarfNative.DW_AT_digit_count: return "DW_AT_digit_count";
+                case DwarfNative.DW_AT_picture_string: return "DW_AT_picture_string";
+                case DwarfNative.DW_AT_mutable: return "DW_AT_mutable";
+                case DwarfNative.DW_AT_threads_scaled: return "DW_AT_threads_scaled";
+                case DwarfNative.DW_AT_explicit: return "DW_AT_explicit";
+                case DwarfNative.DW_AT_object_pointer: return "DW_AT_object_pointer";
+                case DwarfNative.DW_AT_endianity: return "DW_AT_endianity";
+                case DwarfNative.DW_AT_elemental: return "DW_AT_elemental";
+                case DwarfNative.DW_AT_pure: return "DW_AT_pure";
+                case DwarfNative.DW_AT_recursive: return "DW_AT_recursive";
+                case DwarfNative.DW_AT_signature: return "DW_AT_signature";
+                case DwarfNative.DW_AT_main_subprogram: return "DW_AT_main_subprogram";
+                case DwarfNative.DW_AT_data_bit_offset: return "DW_AT_data_bit_offset";
+                case DwarfNative.DW_AT_const_expr: return "DW_AT_const_expr";
+                case DwarfNative.DW_AT_enum_class: return "DW_AT_enum_class";
+                case DwarfNative.DW_AT_linkage_name: return "DW_AT_linkage_name";
+                case DwarfNative.DW_AT_string_length_bit_size: return "DW_AT_string_length_bit_size";
+                case DwarfNative.DW_AT_string_length_byte_size: return "DW_AT_string_length_byte_size";
+                case DwarfNative.DW_AT_rank: return "DW_AT_rank";
+                case DwarfNative.DW_AT_str_offsets_base: return "DW_AT_str_offsets_base";
+                case DwarfNative.DW_AT_addr_base: return "DW_AT_addr_base";
+                case DwarfNative.DW_AT_rnglists_base: return "DW_AT_rnglists_base";
+                case DwarfNative.DW_AT_dwo_id: return "DW_AT_dwo_id";
+                case DwarfNative.DW_AT_dwo_name: return "DW_AT_dwo_name";
+                case DwarfNative.DW_AT_reference: return "DW_AT_reference";
+                case DwarfNative.DW_AT_rvalue_reference: return "DW_AT_rvalue_reference";
+                case DwarfNative.DW_AT_macros: return "DW_AT_macros";
+                case DwarfNative.DW_AT_call_all_calls: return "DW_AT_call_all_calls";
+                case DwarfNative.DW_AT_call_all_source_calls: return "DW_AT_call_all_source_calls";
+                case DwarfNative.DW_AT_call_all_tail_calls: return "DW_AT_call_all_tail_calls";
+                case DwarfNative.DW_AT_call_return_pc: return "DW_AT_call_return_pc";
+                case DwarfNative.DW_AT_call_value: return "DW_AT_call_value";
+                case DwarfNative.DW_AT_call_origin: return "DW_AT_call_origin";
+                case DwarfNative.DW_AT_call_parameter: return "DW_AT_call_parameter";
+                case DwarfNative.DW_AT_call_pc: return "DW_AT_call_pc";
+                case DwarfNative.DW_AT_call_tail_call: return "DW_AT_call_tail_call";
+                case DwarfNative.DW_AT_call_target: return "DW_AT_call_target";
+                case DwarfNative.DW_AT_call_target_clobbered: return "DW_AT_call_target_clobbered";
+                case DwarfNative.DW_AT_call_data_location: return "DW_AT_call_data_location";
+                case DwarfNative.DW_AT_call_data_value: return "DW_AT_call_data_value";
+                case DwarfNative.DW_AT_noreturn: return "DW_AT_noreturn";
+                case DwarfNative.DW_AT_alignment: return "DW_AT_alignment";
+                case DwarfNative.DW_AT_export_symbols: return "DW_AT_export_symbols";
+                case DwarfNative.DW_AT_deleted: return "DW_AT_deleted";
+                case DwarfNative.DW_AT_defaulted: return "DW_AT_defaulted";
+                case DwarfNative.DW_AT_loclists_base: return "DW_AT_loclists_base";
+                case DwarfNative.DW_AT_HP_block_index: return "DW_AT_HP_block_index";
+                case DwarfNative.DW_AT_MIPS_fde: return "DW_AT_MIPS_fde";
+                case DwarfNative.DW_AT_MIPS_loop_begin: return "DW_AT_MIPS_loop_begin";
+                case DwarfNative.DW_AT_MIPS_tail_loop_begin: return "DW_AT_MIPS_tail_loop_begin";
+                case DwarfNative.DW_AT_MIPS_epilog_begin: return "DW_AT_MIPS_epilog_begin";
+                case DwarfNative.DW_AT_MIPS_loop_unroll_factor: return "DW_AT_MIPS_loop_unroll_factor";
+                case DwarfNative.DW_AT_MIPS_software_pipeline_depth: return "DW_AT_MIPS_software_pipeline_depth";
+                case DwarfNative.DW_AT_MIPS_linkage_name: return "DW_AT_MIPS_linkage_name";
+                case DwarfNative.DW_AT_MIPS_stride: return "DW_AT_MIPS_stride";
+                case DwarfNative.DW_AT_MIPS_abstract_name: return "DW_AT_MIPS_abstract_name";
+                case DwarfNative.DW_AT_MIPS_clone_origin: return "DW_AT_MIPS_clone_origin";
+                case DwarfNative.DW_AT_MIPS_has_inlines: return "DW_AT_MIPS_has_inlines";
+                case DwarfNative.DW_AT_MIPS_stride_byte: return "DW_AT_MIPS_stride_byte";
+                case DwarfNative.DW_AT_MIPS_stride_elem: return "DW_AT_MIPS_stride_elem";
+                case DwarfNative.DW_AT_MIPS_ptr_dopetype: return "DW_AT_MIPS_ptr_dopetype";
+                case DwarfNative.DW_AT_MIPS_allocatable_dopetype: return "DW_AT_MIPS_allocatable_dopetype";
+                case DwarfNative.DW_AT_MIPS_assumed_shape_dopetype: return "DW_AT_MIPS_assumed_shape_dopetype";
+                case DwarfNative.DW_AT_MIPS_assumed_size: return "DW_AT_MIPS_assumed_size";
+                case DwarfNative.DW_AT_HP_raw_data_ptr: return "DW_AT_HP_raw_data_ptr";
+                case DwarfNative.DW_AT_HP_pass_by_reference: return "DW_AT_HP_pass_by_reference";
+                case DwarfNative.DW_AT_HP_opt_level: return "DW_AT_HP_opt_level";
+                case DwarfNative.DW_AT_HP_prof_version_id: return "DW_AT_HP_prof_version_id";
+                case DwarfNative.DW_AT_HP_opt_flags: return "DW_AT_HP_opt_flags";
+                case DwarfNative.DW_AT_HP_cold_region_low_pc: return "DW_AT_HP_cold_region_low_pc";
+                case DwarfNative.DW_AT_HP_cold_region_high_pc: return "DW_AT_HP_cold_region_high_pc";
+                case DwarfNative.DW_AT_HP_all_variables_modifiable: return "DW_AT_HP_all_variables_modifiable";
+                case DwarfNative.DW_AT_HP_linkage_name: return "DW_AT_HP_linkage_name";
+                case DwarfNative.DW_AT_HP_prof_flags: return "DW_AT_HP_prof_flags";
+                case DwarfNative.DW_AT_INTEL_other_endian: return "DW_AT_INTEL_other_endian";
+                case DwarfNative.DW_AT_sf_names: return "DW_AT_sf_names";
+                case DwarfNative.DW_AT_src_info: return "DW_AT_src_info";
+                case DwarfNative.DW_AT_mac_info: return "DW_AT_mac_info";
+                case DwarfNative.DW_AT_src_coords: return "DW_AT_src_coords";
+                case DwarfNative.DW_AT_body_begin: return "DW_AT_body_begin";
+                case DwarfNative.DW_AT_body_end: return "DW_AT_body_end";
+                case DwarfNative.DW_AT_GNU_vector: return "DW_AT_GNU_vector";
+                case DwarfNative.DW_AT_GNU_guarded_by: return "DW_AT_GNU_guarded_by";
+                case DwarfNative.DW_AT_GNU_pt_guarded_by: return "DW_AT_GNU_pt_guarded_by";
+                case DwarfNative.DW_AT_GNU_guarded: return "DW_AT_GNU_guarded";
+                case DwarfNative.DW_AT_GNU_pt_guarded: return "DW_AT_GNU_pt_guarded";
+                case DwarfNative.DW_AT_GNU_locks_excluded: return "DW_AT_GNU_locks_excluded";
+                case DwarfNative.DW_AT_GNU_exclusive_locks_required: return "DW_AT_GNU_exclusive_locks_required";
+                case DwarfNative.DW_AT_GNU_shared_locks_required: return "DW_AT_GNU_shared_locks_required";
+                case DwarfNative.DW_AT_GNU_odr_signature: return "DW_AT_GNU_odr_signature";
+                case DwarfNative.DW_AT_GNU_template_name: return "DW_AT_GNU_template_name";
+                case DwarfNative.DW_AT_GNU_call_site_value: return "DW_AT_GNU_call_site_value";
+                case DwarfNative.DW_AT_GNU_call_site_data_value: return "DW_AT_GNU_call_site_data_value";
+                case DwarfNative.DW_AT_GNU_call_site_target: return "DW_AT_GNU_call_site_target";
+                case DwarfNative.DW_AT_GNU_call_site_target_clobbered: return "DW_AT_GNU_call_site_target_clobbered";
+                case DwarfNative.DW_AT_GNU_tail_call: return "DW_AT_GNU_tail_call";
+                case DwarfNative.DW_AT_GNU_all_tail_call_sites: return "DW_AT_GNU_all_tail_call_sites";
+                case DwarfNative.DW_AT_GNU_all_call_sites: return "DW_AT_GNU_all_call_sites";
+                case DwarfNative.DW_AT_GNU_all_source_call_sites: return "DW_AT_GNU_all_source_call_sites";
+                case DwarfNative.DW_AT_GNU_macros: return "DW_AT_GNU_macros";
+                case DwarfNative.DW_AT_GNU_dwo_name: return "DW_AT_GNU_dwo_name";
+                case DwarfNative.DW_AT_GNU_dwo_id: return "DW_AT_GNU_dwo_id";
+                case DwarfNative.DW_AT_GNU_ranges_base: return "DW_AT_GNU_ranges_base";
+                case DwarfNative.DW_AT_GNU_addr_base: return "DW_AT_GNU_addr_base";
+                case DwarfNative.DW_AT_GNU_pubnames: return "DW_AT_GNU_pubnames";
+                case DwarfNative.DW_AT_GNU_pubtypes: return "DW_AT_GNU_pubtypes";
+                case DwarfNative.DW_AT_GNU_discriminator: return "DW_AT_GNU_discriminator";
+                case DwarfNative.DW_AT_GNU_numerator: return "DW_AT_GNU_numerator";
+                case DwarfNative.DW_AT_GNU_denominator: return "DW_AT_GNU_denominator";
+                case DwarfNative.DW_AT_GNU_bias: return "DW_AT_GNU_bias";
+                case DwarfNative.DW_AT_ALTIUM_loclist: return "DW_AT_ALTIUM_loclist";
+                case DwarfNative.DW_AT_SUN_template: return "DW_AT_SUN_template";
+                case DwarfNative.DW_AT_SUN_alignment: return "DW_AT_SUN_alignment";
+                case DwarfNative.DW_AT_SUN_vtable: return "DW_AT_SUN_vtable";
+                case DwarfNative.DW_AT_SUN_count_guarantee: return "DW_AT_SUN_count_guarantee";
+                case DwarfNative.DW_AT_SUN_command_line: return "DW_AT_SUN_command_line";
+                case DwarfNative.DW_AT_SUN_vbase: return "DW_AT_SUN_vbase";
+                case DwarfNative.DW_AT_SUN_compile_options: return "DW_AT_SUN_compile_options";
+                case DwarfNative.DW_AT_SUN_language: return "DW_AT_SUN_language";
+                case DwarfNative.DW_AT_SUN_browser_file: return "DW_AT_SUN_browser_file";
+                case DwarfNative.DW_AT_SUN_vtable_abi: return "DW_AT_SUN_vtable_abi";
+                case DwarfNative.DW_AT_SUN_func_offsets: return "DW_AT_SUN_func_offsets";
+                case DwarfNative.DW_AT_SUN_cf_kind: return "DW_AT_SUN_cf_kind";
+                case DwarfNative.DW_AT_SUN_vtable_index: return "DW_AT_SUN_vtable_index";
+                case DwarfNative.DW_AT_SUN_omp_tpriv_addr: return "DW_AT_SUN_omp_tpriv_addr";
+                case DwarfNative.DW_AT_SUN_omp_child_func: return "DW_AT_SUN_omp_child_func";
+                case DwarfNative.DW_AT_SUN_func_offset: return "DW_AT_SUN_func_offset";
+                case DwarfNative.DW_AT_SUN_memop_type_ref: return "DW_AT_SUN_memop_type_ref";
+                case DwarfNative.DW_AT_SUN_profile_id: return "DW_AT_SUN_profile_id";
+                case DwarfNative.DW_AT_SUN_memop_signature: return "DW_AT_SUN_memop_signature";
+                case DwarfNative.DW_AT_SUN_obj_dir: return "DW_AT_SUN_obj_dir";
+                case DwarfNative.DW_AT_SUN_obj_file: return "DW_AT_SUN_obj_file";
+                case DwarfNative.DW_AT_SUN_original_name: return "DW_AT_SUN_original_name";
+                case DwarfNative.DW_AT_SUN_hwcprof_signature: return "DW_AT_SUN_hwcprof_signature";
+                case DwarfNative.DW_AT_SUN_amd64_parmdump: return "DW_AT_SUN_amd64_parmdump";
+                case DwarfNative.DW_AT_SUN_part_link_name: return "DW_AT_SUN_part_link_name";
+                case DwarfNative.DW_AT_SUN_link_name: return "DW_AT_SUN_link_name";
+                case DwarfNative.DW_AT_SUN_pass_with_const: return "DW_AT_SUN_pass_with_const";
+                case DwarfNative.DW_AT_SUN_return_with_const: return "DW_AT_SUN_return_with_const";
+                case DwarfNative.DW_AT_SUN_import_by_name: return "DW_AT_SUN_import_by_name";
+                case DwarfNative.DW_AT_SUN_f90_pointer: return "DW_AT_SUN_f90_pointer";
+                case DwarfNative.DW_AT_SUN_pass_by_ref: return "DW_AT_SUN_pass_by_ref";
+                case DwarfNative.DW_AT_SUN_f90_allocatable: return "DW_AT_SUN_f90_allocatable";
+                case DwarfNative.DW_AT_SUN_f90_assumed_shape_array: return "DW_AT_SUN_f90_assumed_shape_array";
+                case DwarfNative.DW_AT_SUN_c_vla: return "DW_AT_SUN_c_vla";
+                case DwarfNative.DW_AT_SUN_return_value_ptr: return "DW_AT_SUN_return_value_ptr";
+                case DwarfNative.DW_AT_SUN_dtor_start: return "DW_AT_SUN_dtor_start";
+                case DwarfNative.DW_AT_SUN_dtor_length: return "DW_AT_SUN_dtor_length";
+                case DwarfNative.DW_AT_SUN_dtor_state_initial: return "DW_AT_SUN_dtor_state_initial";
+                case DwarfNative.DW_AT_SUN_dtor_state_final: return "DW_AT_SUN_dtor_state_final";
+                case DwarfNative.DW_AT_SUN_dtor_state_deltas: return "DW_AT_SUN_dtor_state_deltas";
+                case DwarfNative.DW_AT_SUN_import_by_lname: return "DW_AT_SUN_import_by_lname";
+                case DwarfNative.DW_AT_SUN_f90_use_only: return "DW_AT_SUN_f90_use_only";
+                case DwarfNative.DW_AT_SUN_namelist_spec: return "DW_AT_SUN_namelist_spec";
+                case DwarfNative.DW_AT_SUN_is_omp_child_func: return "DW_AT_SUN_is_omp_child_func";
+                case DwarfNative.DW_AT_SUN_fortran_main_alias: return "DW_AT_SUN_fortran_main_alias";
+                case DwarfNative.DW_AT_SUN_fortran_based: return "DW_AT_SUN_fortran_based";
+                case DwarfNative.DW_AT_use_GNAT_descriptive_type: return "DW_AT_use_GNAT_descriptive_type";
+                case DwarfNative.DW_AT_GNAT_descriptive_type: return "DW_AT_GNAT_descriptive_type";
+                case DwarfNative.DW_AT_upc_threads_scaled: return "DW_AT_upc_threads_scaled";
+                case DwarfNative.DW_AT_PGI_lbase: return "DW_AT_PGI_lbase";
+                case DwarfNative.DW_AT_PGI_soffset: return "DW_AT_PGI_soffset";
+                case DwarfNative.DW_AT_PGI_lstride: return "DW_AT_PGI_lstride";
+                case DwarfNative.DW_AT_APPLE_optimized: return "DW_AT_APPLE_optimized";
+                case DwarfNative.DW_AT_APPLE_flags: return "DW_AT_APPLE_flags";
+                case DwarfNative.DW_AT_APPLE_isa: return "DW_AT_APPLE_isa";
+                case DwarfNative.DW_AT_APPLE_block: return "DW_AT_APPLE_block";
+                case DwarfNative.DW_AT_APPLE_major_runtime_vers: return "DW_AT_APPLE_major_runtime_vers";
+                case DwarfNative.DW_AT_APPLE_runtime_class: return "DW_AT_APPLE_runtime_class";
+                case DwarfNative.DW_AT_APPLE_omit_frame_ptr: return "DW_AT_APPLE_omit_frame_ptr";
                 case DwarfNative.DW_AT_hi_user: return "DW_AT_hi_user";
-                default: return "Unknown DwarfAttributeName";
+                default: return null;
             }
         }
     }
@@ -3741,33 +3741,33 @@ namespace LibObjectFile.Dwarf
                 case DwarfNative.DW_FORM_ref8: return "DW_FORM_ref8";
                 case DwarfNative.DW_FORM_ref_udata: return "DW_FORM_ref_udata";
                 case DwarfNative.DW_FORM_indirect: return "DW_FORM_indirect";
-                case DwarfNative.DW_FORM_sec_offset: return "DW_FORM_sec_offset - DWARF4";
-                case DwarfNative.DW_FORM_exprloc: return "DW_FORM_exprloc - DWARF4";
-                case DwarfNative.DW_FORM_flag_present: return "DW_FORM_flag_present - DWARF4";
-                case DwarfNative.DW_FORM_strx: return "DW_FORM_strx - DWARF5";
-                case DwarfNative.DW_FORM_addrx: return "DW_FORM_addrx - DWARF5";
-                case DwarfNative.DW_FORM_ref_sup4: return "DW_FORM_ref_sup4 - DWARF5";
-                case DwarfNative.DW_FORM_strp_sup: return "DW_FORM_strp_sup - DWARF5";
-                case DwarfNative.DW_FORM_data16: return "DW_FORM_data16 - DWARF5";
-                case DwarfNative.DW_FORM_line_strp: return "DW_FORM_line_strp - DWARF5";
-                case DwarfNative.DW_FORM_ref_sig8: return "DW_FORM_ref_sig8 - DWARF4";
-                case DwarfNative.DW_FORM_implicit_const: return "DW_FORM_implicit_const - DWARF5";
-                case DwarfNative.DW_FORM_loclistx: return "DW_FORM_loclistx - DWARF5";
-                case DwarfNative.DW_FORM_rnglistx: return "DW_FORM_rnglistx - DWARF5";
-                case DwarfNative.DW_FORM_ref_sup8: return "DW_FORM_ref_sup8 - DWARF5";
-                case DwarfNative.DW_FORM_strx1: return "DW_FORM_strx1 - DWARF5";
-                case DwarfNative.DW_FORM_strx2: return "DW_FORM_strx2 - DWARF5";
-                case DwarfNative.DW_FORM_strx3: return "DW_FORM_strx3 - DWARF5";
-                case DwarfNative.DW_FORM_strx4: return "DW_FORM_strx4 - DWARF5";
-                case DwarfNative.DW_FORM_addrx1: return "DW_FORM_addrx1 - DWARF5";
-                case DwarfNative.DW_FORM_addrx2: return "DW_FORM_addrx2 - DWARF5";
-                case DwarfNative.DW_FORM_addrx3: return "DW_FORM_addrx3 - DWARF5";
-                case DwarfNative.DW_FORM_addrx4: return "DW_FORM_addrx4 - DWARF5";
-                case DwarfNative.DW_FORM_GNU_addr_index: return "DW_FORM_GNU_addr_index - GNU extension in debug_info.dwo.";
-                case DwarfNative.DW_FORM_GNU_str_index: return "DW_FORM_GNU_str_index - GNU extension, somewhat like DW_FORM_strp";
-                case DwarfNative.DW_FORM_GNU_ref_alt: return "DW_FORM_GNU_ref_alt - GNU extension. Offset in .debug_info.";
-                case DwarfNative.DW_FORM_GNU_strp_alt: return "DW_FORM_GNU_strp_alt - GNU extension. Offset in .debug_str of another object file.";
-                default: return "Unknown DwarfAttributeForm";
+                case DwarfNative.DW_FORM_sec_offset: return "DW_FORM_sec_offset";
+                case DwarfNative.DW_FORM_exprloc: return "DW_FORM_exprloc";
+                case DwarfNative.DW_FORM_flag_present: return "DW_FORM_flag_present";
+                case DwarfNative.DW_FORM_strx: return "DW_FORM_strx";
+                case DwarfNative.DW_FORM_addrx: return "DW_FORM_addrx";
+                case DwarfNative.DW_FORM_ref_sup4: return "DW_FORM_ref_sup4";
+                case DwarfNative.DW_FORM_strp_sup: return "DW_FORM_strp_sup";
+                case DwarfNative.DW_FORM_data16: return "DW_FORM_data16";
+                case DwarfNative.DW_FORM_line_strp: return "DW_FORM_line_strp";
+                case DwarfNative.DW_FORM_ref_sig8: return "DW_FORM_ref_sig8";
+                case DwarfNative.DW_FORM_implicit_const: return "DW_FORM_implicit_const";
+                case DwarfNative.DW_FORM_loclistx: return "DW_FORM_loclistx";
+                case DwarfNative.DW_FORM_rnglistx: return "DW_FORM_rnglistx";
+                case DwarfNative.DW_FORM_ref_sup8: return "DW_FORM_ref_sup8";
+                case DwarfNative.DW_FORM_strx1: return "DW_FORM_strx1";
+                case DwarfNative.DW_FORM_strx2: return "DW_FORM_strx2";
+                case DwarfNative.DW_FORM_strx3: return "DW_FORM_strx3";
+                case DwarfNative.DW_FORM_strx4: return "DW_FORM_strx4";
+                case DwarfNative.DW_FORM_addrx1: return "DW_FORM_addrx1";
+                case DwarfNative.DW_FORM_addrx2: return "DW_FORM_addrx2";
+                case DwarfNative.DW_FORM_addrx3: return "DW_FORM_addrx3";
+                case DwarfNative.DW_FORM_addrx4: return "DW_FORM_addrx4";
+                case DwarfNative.DW_FORM_GNU_addr_index: return "DW_FORM_GNU_addr_index";
+                case DwarfNative.DW_FORM_GNU_str_index: return "DW_FORM_GNU_str_index";
+                case DwarfNative.DW_FORM_GNU_ref_alt: return "DW_FORM_GNU_ref_alt";
+                case DwarfNative.DW_FORM_GNU_strp_alt: return "DW_FORM_GNU_strp_alt";
+                default: return null;
             }
         }
     }
@@ -4224,76 +4224,6724 @@ namespace LibObjectFile.Dwarf
                 case DwarfNative.DW_TAG_file_type: return "DW_TAG_file_type";
                 case DwarfNative.DW_TAG_friend: return "DW_TAG_friend";
                 case DwarfNative.DW_TAG_namelist: return "DW_TAG_namelist";
-                case DwarfNative.DW_TAG_namelist_item: return "DW_TAG_namelist_item - DWARF3/2 spelling";
+                case DwarfNative.DW_TAG_namelist_item: return "DW_TAG_namelist_item";
                 case DwarfNative.DW_TAG_packed_type: return "DW_TAG_packed_type";
                 case DwarfNative.DW_TAG_subprogram: return "DW_TAG_subprogram";
-                case DwarfNative.DW_TAG_template_type_parameter: return "DW_TAG_template_type_parameter - DWARF3/2 spelling";
-                case DwarfNative.DW_TAG_template_value_parameter: return "DW_TAG_template_value_parameter - DWARF3/2 spelling";
+                case DwarfNative.DW_TAG_template_type_parameter: return "DW_TAG_template_type_parameter";
+                case DwarfNative.DW_TAG_template_value_parameter: return "DW_TAG_template_value_parameter";
                 case DwarfNative.DW_TAG_thrown_type: return "DW_TAG_thrown_type";
                 case DwarfNative.DW_TAG_try_block: return "DW_TAG_try_block";
                 case DwarfNative.DW_TAG_variant_part: return "DW_TAG_variant_part";
                 case DwarfNative.DW_TAG_variable: return "DW_TAG_variable";
                 case DwarfNative.DW_TAG_volatile_type: return "DW_TAG_volatile_type";
-                case DwarfNative.DW_TAG_dwarf_procedure: return "DW_TAG_dwarf_procedure - DWARF3";
-                case DwarfNative.DW_TAG_restrict_type: return "DW_TAG_restrict_type - DWARF3";
-                case DwarfNative.DW_TAG_interface_type: return "DW_TAG_interface_type - DWARF3";
-                case DwarfNative.DW_TAG_namespace: return "DW_TAG_namespace - DWARF3";
-                case DwarfNative.DW_TAG_imported_module: return "DW_TAG_imported_module - DWARF3";
-                case DwarfNative.DW_TAG_unspecified_type: return "DW_TAG_unspecified_type - DWARF3";
-                case DwarfNative.DW_TAG_partial_unit: return "DW_TAG_partial_unit - DWARF3";
-                case DwarfNative.DW_TAG_imported_unit: return "DW_TAG_imported_unit - DWARF3";
-                case DwarfNative.DW_TAG_mutable_type: return "DW_TAG_mutable_type - Withdrawn from DWARF3 by DWARF3f.";
-                case DwarfNative.DW_TAG_condition: return "DW_TAG_condition - DWARF3f";
-                case DwarfNative.DW_TAG_shared_type: return "DW_TAG_shared_type - DWARF3f";
-                case DwarfNative.DW_TAG_type_unit: return "DW_TAG_type_unit - DWARF4";
-                case DwarfNative.DW_TAG_rvalue_reference_type: return "DW_TAG_rvalue_reference_type - DWARF4";
-                case DwarfNative.DW_TAG_template_alias: return "DW_TAG_template_alias - DWARF4";
-                case DwarfNative.DW_TAG_coarray_type: return "DW_TAG_coarray_type - DWARF5";
-                case DwarfNative.DW_TAG_generic_subrange: return "DW_TAG_generic_subrange - DWARF5";
-                case DwarfNative.DW_TAG_dynamic_type: return "DW_TAG_dynamic_type - DWARF5";
-                case DwarfNative.DW_TAG_atomic_type: return "DW_TAG_atomic_type - DWARF5";
-                case DwarfNative.DW_TAG_call_site: return "DW_TAG_call_site - DWARF5";
-                case DwarfNative.DW_TAG_call_site_parameter: return "DW_TAG_call_site_parameter - DWARF5";
-                case DwarfNative.DW_TAG_skeleton_unit: return "DW_TAG_skeleton_unit - DWARF5";
-                case DwarfNative.DW_TAG_immutable_type: return "DW_TAG_immutable_type - DWARF5";
+                case DwarfNative.DW_TAG_dwarf_procedure: return "DW_TAG_dwarf_procedure";
+                case DwarfNative.DW_TAG_restrict_type: return "DW_TAG_restrict_type";
+                case DwarfNative.DW_TAG_interface_type: return "DW_TAG_interface_type";
+                case DwarfNative.DW_TAG_namespace: return "DW_TAG_namespace";
+                case DwarfNative.DW_TAG_imported_module: return "DW_TAG_imported_module";
+                case DwarfNative.DW_TAG_unspecified_type: return "DW_TAG_unspecified_type";
+                case DwarfNative.DW_TAG_partial_unit: return "DW_TAG_partial_unit";
+                case DwarfNative.DW_TAG_imported_unit: return "DW_TAG_imported_unit";
+                case DwarfNative.DW_TAG_mutable_type: return "DW_TAG_mutable_type";
+                case DwarfNative.DW_TAG_condition: return "DW_TAG_condition";
+                case DwarfNative.DW_TAG_shared_type: return "DW_TAG_shared_type";
+                case DwarfNative.DW_TAG_type_unit: return "DW_TAG_type_unit";
+                case DwarfNative.DW_TAG_rvalue_reference_type: return "DW_TAG_rvalue_reference_type";
+                case DwarfNative.DW_TAG_template_alias: return "DW_TAG_template_alias";
+                case DwarfNative.DW_TAG_coarray_type: return "DW_TAG_coarray_type";
+                case DwarfNative.DW_TAG_generic_subrange: return "DW_TAG_generic_subrange";
+                case DwarfNative.DW_TAG_dynamic_type: return "DW_TAG_dynamic_type";
+                case DwarfNative.DW_TAG_atomic_type: return "DW_TAG_atomic_type";
+                case DwarfNative.DW_TAG_call_site: return "DW_TAG_call_site";
+                case DwarfNative.DW_TAG_call_site_parameter: return "DW_TAG_call_site_parameter";
+                case DwarfNative.DW_TAG_skeleton_unit: return "DW_TAG_skeleton_unit";
+                case DwarfNative.DW_TAG_immutable_type: return "DW_TAG_immutable_type";
                 case DwarfNative.DW_TAG_lo_user: return "DW_TAG_lo_user";
                 case DwarfNative.DW_TAG_MIPS_loop: return "DW_TAG_MIPS_loop";
-                case DwarfNative.DW_TAG_HP_array_descriptor: return "DW_TAG_HP_array_descriptor - HP";
-                case DwarfNative.DW_TAG_format_label: return "DW_TAG_format_label - GNU. Fortran.";
-                case DwarfNative.DW_TAG_function_template: return "DW_TAG_function_template - GNU. For C++";
-                case DwarfNative.DW_TAG_class_template: return "DW_TAG_class_template - GNU. For C++";
-                case DwarfNative.DW_TAG_GNU_BINCL: return "DW_TAG_GNU_BINCL - GNU";
-                case DwarfNative.DW_TAG_GNU_EINCL: return "DW_TAG_GNU_EINCL - GNU";
-                case DwarfNative.DW_TAG_GNU_template_template_parameter: return "DW_TAG_GNU_template_template_parameter - GNU";
-                case DwarfNative.DW_TAG_GNU_template_parameter_pack: return "DW_TAG_GNU_template_parameter_pack - GNU";
-                case DwarfNative.DW_TAG_GNU_formal_parameter_pack: return "DW_TAG_GNU_formal_parameter_pack - GNU";
-                case DwarfNative.DW_TAG_GNU_call_site: return "DW_TAG_GNU_call_site - GNU";
-                case DwarfNative.DW_TAG_GNU_call_site_parameter: return "DW_TAG_GNU_call_site_parameter - GNU";
-                case DwarfNative.DW_TAG_ALTIUM_circ_type: return "DW_TAG_ALTIUM_circ_type - ALTIUM";
-                case DwarfNative.DW_TAG_ALTIUM_mwa_circ_type: return "DW_TAG_ALTIUM_mwa_circ_type - ALTIUM";
-                case DwarfNative.DW_TAG_ALTIUM_rev_carry_type: return "DW_TAG_ALTIUM_rev_carry_type - ALTIUM";
-                case DwarfNative.DW_TAG_ALTIUM_rom: return "DW_TAG_ALTIUM_rom - ALTIUM";
-                case DwarfNative.DW_TAG_upc_shared_type: return "DW_TAG_upc_shared_type - UPC";
-                case DwarfNative.DW_TAG_upc_strict_type: return "DW_TAG_upc_strict_type - UPC";
-                case DwarfNative.DW_TAG_upc_relaxed_type: return "DW_TAG_upc_relaxed_type - UPC";
-                case DwarfNative.DW_TAG_PGI_kanji_type: return "DW_TAG_PGI_kanji_type - PGI";
-                case DwarfNative.DW_TAG_PGI_interface_block: return "DW_TAG_PGI_interface_block - PGI";
-                case DwarfNative.DW_TAG_SUN_function_template: return "DW_TAG_SUN_function_template - SUN";
-                case DwarfNative.DW_TAG_SUN_class_template: return "DW_TAG_SUN_class_template - SUN";
-                case DwarfNative.DW_TAG_SUN_struct_template: return "DW_TAG_SUN_struct_template - SUN";
-                case DwarfNative.DW_TAG_SUN_union_template: return "DW_TAG_SUN_union_template - SUN";
-                case DwarfNative.DW_TAG_SUN_indirect_inheritance: return "DW_TAG_SUN_indirect_inheritance - SUN";
-                case DwarfNative.DW_TAG_SUN_codeflags: return "DW_TAG_SUN_codeflags - SUN";
-                case DwarfNative.DW_TAG_SUN_memop_info: return "DW_TAG_SUN_memop_info - SUN";
-                case DwarfNative.DW_TAG_SUN_omp_child_func: return "DW_TAG_SUN_omp_child_func - SUN";
-                case DwarfNative.DW_TAG_SUN_rtti_descriptor: return "DW_TAG_SUN_rtti_descriptor - SUN";
-                case DwarfNative.DW_TAG_SUN_dtor_info: return "DW_TAG_SUN_dtor_info - SUN";
-                case DwarfNative.DW_TAG_SUN_dtor: return "DW_TAG_SUN_dtor - SUN";
-                case DwarfNative.DW_TAG_SUN_f90_interface: return "DW_TAG_SUN_f90_interface - SUN";
-                case DwarfNative.DW_TAG_SUN_fortran_vax_structure: return "DW_TAG_SUN_fortran_vax_structure - SUN";
-                case DwarfNative.DW_TAG_SUN_hi: return "DW_TAG_SUN_hi - SUN";
+                case DwarfNative.DW_TAG_HP_array_descriptor: return "DW_TAG_HP_array_descriptor";
+                case DwarfNative.DW_TAG_format_label: return "DW_TAG_format_label";
+                case DwarfNative.DW_TAG_function_template: return "DW_TAG_function_template";
+                case DwarfNative.DW_TAG_class_template: return "DW_TAG_class_template";
+                case DwarfNative.DW_TAG_GNU_BINCL: return "DW_TAG_GNU_BINCL";
+                case DwarfNative.DW_TAG_GNU_EINCL: return "DW_TAG_GNU_EINCL";
+                case DwarfNative.DW_TAG_GNU_template_template_parameter: return "DW_TAG_GNU_template_template_parameter";
+                case DwarfNative.DW_TAG_GNU_template_parameter_pack: return "DW_TAG_GNU_template_parameter_pack";
+                case DwarfNative.DW_TAG_GNU_formal_parameter_pack: return "DW_TAG_GNU_formal_parameter_pack";
+                case DwarfNative.DW_TAG_GNU_call_site: return "DW_TAG_GNU_call_site";
+                case DwarfNative.DW_TAG_GNU_call_site_parameter: return "DW_TAG_GNU_call_site_parameter";
+                case DwarfNative.DW_TAG_ALTIUM_circ_type: return "DW_TAG_ALTIUM_circ_type";
+                case DwarfNative.DW_TAG_ALTIUM_mwa_circ_type: return "DW_TAG_ALTIUM_mwa_circ_type";
+                case DwarfNative.DW_TAG_ALTIUM_rev_carry_type: return "DW_TAG_ALTIUM_rev_carry_type";
+                case DwarfNative.DW_TAG_ALTIUM_rom: return "DW_TAG_ALTIUM_rom";
+                case DwarfNative.DW_TAG_upc_shared_type: return "DW_TAG_upc_shared_type";
+                case DwarfNative.DW_TAG_upc_strict_type: return "DW_TAG_upc_strict_type";
+                case DwarfNative.DW_TAG_upc_relaxed_type: return "DW_TAG_upc_relaxed_type";
+                case DwarfNative.DW_TAG_PGI_kanji_type: return "DW_TAG_PGI_kanji_type";
+                case DwarfNative.DW_TAG_PGI_interface_block: return "DW_TAG_PGI_interface_block";
+                case DwarfNative.DW_TAG_SUN_function_template: return "DW_TAG_SUN_function_template";
+                case DwarfNative.DW_TAG_SUN_class_template: return "DW_TAG_SUN_class_template";
+                case DwarfNative.DW_TAG_SUN_struct_template: return "DW_TAG_SUN_struct_template";
+                case DwarfNative.DW_TAG_SUN_union_template: return "DW_TAG_SUN_union_template";
+                case DwarfNative.DW_TAG_SUN_indirect_inheritance: return "DW_TAG_SUN_indirect_inheritance";
+                case DwarfNative.DW_TAG_SUN_codeflags: return "DW_TAG_SUN_codeflags";
+                case DwarfNative.DW_TAG_SUN_memop_info: return "DW_TAG_SUN_memop_info";
+                case DwarfNative.DW_TAG_SUN_omp_child_func: return "DW_TAG_SUN_omp_child_func";
+                case DwarfNative.DW_TAG_SUN_rtti_descriptor: return "DW_TAG_SUN_rtti_descriptor";
+                case DwarfNative.DW_TAG_SUN_dtor_info: return "DW_TAG_SUN_dtor_info";
+                case DwarfNative.DW_TAG_SUN_dtor: return "DW_TAG_SUN_dtor";
+                case DwarfNative.DW_TAG_SUN_f90_interface: return "DW_TAG_SUN_f90_interface";
+                case DwarfNative.DW_TAG_SUN_fortran_vax_structure: return "DW_TAG_SUN_fortran_vax_structure";
+                case DwarfNative.DW_TAG_SUN_hi: return "DW_TAG_SUN_hi";
                 case DwarfNative.DW_TAG_hi_user: return "DW_TAG_hi_user";
-                default: return "Unknown DwarfTag";
+                default: return null;
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_access_declaration : DwarfDIEDecl
+    {
+        public ulong? Accessibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_array_type : DwarfDIEDecl
+    {
+        public ulong? Accessibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+            }
+        }
+        
+        public ulong? Alignment
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment, value);
+            }
+        }
+        
+        public DwarfConstant? Allocated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+            }
+        }
+        
+        public DwarfConstant? Associated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+            }
+        }
+        
+        public DwarfConstant? BitSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+            }
+        }
+        
+        public DwarfConstant? BitStride
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_stride);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_stride, value);
+            }
+        }
+        
+        public DwarfConstant? ByteSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+            }
+        }
+        
+        public object DataLocation
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.data_location);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.data_location, value);
+            }
+        }
+        
+        public bool? Declaration
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.declaration);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.declaration, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public ulong? Ordering
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.ordering);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.ordering, value);
+            }
+        }
+        
+        public DwarfConstant? Rank
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.rank);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.rank, value);
+            }
+        }
+        
+        public DwarfDIE Specification
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.specification);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.specification, value);
+            }
+        }
+        
+        public DwarfConstant? StartScope
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+        
+        public ulong? Visibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_atomic_type : DwarfDIEDecl
+    {
+        public ulong? Alignment
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_base_type : DwarfDIEDecl
+    {
+        public ulong? Alignment
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment, value);
+            }
+        }
+        
+        public DwarfConstant? Allocated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+            }
+        }
+        
+        public DwarfConstant? Associated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+            }
+        }
+        
+        public ulong? BinaryScale
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.binary_scale);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.binary_scale, value);
+            }
+        }
+        
+        public DwarfConstant? BitSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+            }
+        }
+        
+        public DwarfConstant? ByteSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+            }
+        }
+        
+        public ulong? DataBitOffset
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.data_bit_offset);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.data_bit_offset, value);
+            }
+        }
+        
+        public object DataLocation
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.data_location);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.data_location, value);
+            }
+        }
+        
+        public ulong? DecimalScale
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.decimal_scale);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.decimal_scale, value);
+            }
+        }
+        
+        public ulong? DecimalSign
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.decimal_sign);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.decimal_sign, value);
+            }
+        }
+        
+        public ulong? DigitCount
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.digit_count);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.digit_count, value);
+            }
+        }
+        
+        public ulong? Encoding
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.encoding);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.encoding, value);
+            }
+        }
+        
+        public ulong? Endianity
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.endianity);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.endianity, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public string PictureString
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.picture_string);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.picture_string, value);
+            }
+        }
+        
+        public DwarfDIE Small
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.small);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.small, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_call_site : DwarfDIE
+    {
+        public ulong? CallColumn
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.call_column);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.call_column, value);
+            }
+        }
+        
+        public ulong? CallFile
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.call_file);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.call_file, value);
+            }
+        }
+        
+        public ulong? CallLine
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.call_line);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.call_line, value);
+            }
+        }
+        
+        public object CallOrigin
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.call_origin);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.call_origin, value);
+            }
+        }
+        
+        public ulong? CallPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.call_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.call_pc, value);
+            }
+        }
+        
+        public ulong? CallReturnPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.call_return_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.call_return_pc, value);
+            }
+        }
+        
+        public bool? CallTailCall
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.call_tail_call);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.call_tail_call, value);
+            }
+        }
+        
+        public object CallTarget
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.call_target);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.call_target, value);
+            }
+        }
+        
+        public object CallTargetClobbered
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.call_target_clobbered);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.call_target_clobbered, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_call_site_parameter : DwarfDIE
+    {
+        public object CallDataLocation
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.call_data_location);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.call_data_location, value);
+            }
+        }
+        
+        public object CallDataValue
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.call_data_value);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.call_data_value, value);
+            }
+        }
+        
+        public DwarfDIE CallParameter
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.call_parameter);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.call_parameter, value);
+            }
+        }
+        
+        public object CallValue
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.call_value);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.call_value, value);
+            }
+        }
+        
+        public object Location
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.location);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.location, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_catch_block : DwarfDIEDecl
+    {
+        public ulong? EntryPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.entry_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.entry_pc, value);
+            }
+        }
+        
+        public DwarfConstant? HighPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc, value);
+            }
+        }
+        
+        public ulong? LowPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.low_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.low_pc, value);
+            }
+        }
+        
+        public object Ranges
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.ranges);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.ranges, value);
+            }
+        }
+        
+        public object Segment
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.segment);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.segment, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_class_type : DwarfDIEDecl
+    {
+        public ulong? Accessibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+            }
+        }
+        
+        public ulong? Alignment
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment, value);
+            }
+        }
+        
+        public DwarfConstant? Allocated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+            }
+        }
+        
+        public DwarfConstant? Associated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+            }
+        }
+        
+        public DwarfConstant? BitSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+            }
+        }
+        
+        public DwarfConstant? ByteSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+            }
+        }
+        
+        public ulong? CallingConvention
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.calling_convention);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.calling_convention, value);
+            }
+        }
+        
+        public object DataLocation
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.data_location);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.data_location, value);
+            }
+        }
+        
+        public bool? Declaration
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.declaration);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.declaration, value);
+            }
+        }
+        
+        public bool? ExportSymbols
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.export_symbols);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.export_symbols, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfDIE Signature
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.signature);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.signature, value);
+            }
+        }
+        
+        public DwarfDIE Specification
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.specification);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.specification, value);
+            }
+        }
+        
+        public DwarfConstant? StartScope
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+            }
+        }
+        
+        public ulong? Visibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_coarray_type : DwarfDIEDecl
+    {
+        public ulong? Alignment
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment, value);
+            }
+        }
+        
+        public DwarfConstant? BitSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+            }
+        }
+        
+        public DwarfConstant? ByteSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_common_block : DwarfDIEDecl
+    {
+        public bool? Declaration
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.declaration);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.declaration, value);
+            }
+        }
+        
+        public string LinkageName
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.linkage_name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.linkage_name, value);
+            }
+        }
+        
+        public object Location
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.location);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.location, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public object Segment
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.segment);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.segment, value);
+            }
+        }
+        
+        public ulong? Visibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_common_inclusion : DwarfDIEDecl
+    {
+        public DwarfDIE CommonReference
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.common_reference);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.common_reference, value);
+            }
+        }
+        
+        public bool? Declaration
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.declaration);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.declaration, value);
+            }
+        }
+        
+        public ulong? Visibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_compile_unit : DwarfDIE
+    {
+        public object AddrBase
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.addr_base);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.addr_base, value);
+            }
+        }
+        
+        public DwarfDIE BaseTypes
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.base_types);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.base_types, value);
+            }
+        }
+        
+        public string CompDir
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.comp_dir);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.comp_dir, value);
+            }
+        }
+        
+        public ulong? EntryPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.entry_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.entry_pc, value);
+            }
+        }
+        
+        public ulong? IdentifierCase
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.identifier_case);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.identifier_case, value);
+            }
+        }
+        
+        public DwarfConstant? HighPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc, value);
+            }
+        }
+        
+        public ulong? Language
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.language);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.language, value);
+            }
+        }
+        
+        public ulong? LowPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.low_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.low_pc, value);
+            }
+        }
+        
+        public DwarfElement Macros
+        {
+            get
+            {
+                return GetAttributeValue<DwarfElement>(DwarfAttributeKey.macros);
+            }
+            set
+            {
+                SetAttributeValue<DwarfElement>(DwarfAttributeKey.macros, value);
+            }
+        }
+        
+        public bool? MainSubprogram
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.main_subprogram);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.main_subprogram, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public string Producer
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.producer);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.producer, value);
+            }
+        }
+        
+        public object Ranges
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.ranges);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.ranges, value);
+            }
+        }
+        
+        public object RnglistsBase
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.rnglists_base);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.rnglists_base, value);
+            }
+        }
+        
+        public object Segment
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.segment);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.segment, value);
+            }
+        }
+        
+        public DwarfDebugLine StmtList
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDebugLine>(DwarfAttributeKey.stmt_list);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDebugLine>(DwarfAttributeKey.stmt_list, value);
+            }
+        }
+        
+        public DwarfElement StrOffsetsBase
+        {
+            get
+            {
+                return GetAttributeValue<DwarfElement>(DwarfAttributeKey.str_offsets_base);
+            }
+            set
+            {
+                SetAttributeValue<DwarfElement>(DwarfAttributeKey.str_offsets_base, value);
+            }
+        }
+        
+        public bool? UseUTF8
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.use_UTF8);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.use_UTF8, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_condition : DwarfDIEDecl
+    {
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_const_type : DwarfDIEDecl
+    {
+        public ulong? Alignment
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_constant : DwarfDIEDecl
+    {
+        public ulong? Accessibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+            }
+        }
+        
+        public DwarfConstant? ConstValue
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.const_value);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.const_value, value);
+            }
+        }
+        
+        public bool? Declaration
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.declaration);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.declaration, value);
+            }
+        }
+        
+        public ulong? Endianity
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.endianity);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.endianity, value);
+            }
+        }
+        
+        public bool? External
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.external);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.external, value);
+            }
+        }
+        
+        public string LinkageName
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.linkage_name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.linkage_name, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfConstant? StartScope
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+        
+        public ulong? Visibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_dwarf_procedure : DwarfDIE
+    {
+        public object Location
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.location);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.location, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_dynamic_type : DwarfDIEDecl
+    {
+        public ulong? Alignment
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment, value);
+            }
+        }
+        
+        public DwarfConstant? Allocated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+            }
+        }
+        
+        public DwarfConstant? Associated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+            }
+        }
+        
+        public object DataLocation
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.data_location);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.data_location, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_entry_point : DwarfDIEDecl
+    {
+        public ulong? AddressClass
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.address_class);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.address_class, value);
+            }
+        }
+        
+        public object FrameBase
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.frame_base);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.frame_base, value);
+            }
+        }
+        
+        public string LinkageName
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.linkage_name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.linkage_name, value);
+            }
+        }
+        
+        public ulong? LowPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.low_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.low_pc, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public object ReturnAddr
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.return_addr);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.return_addr, value);
+            }
+        }
+        
+        public object Segment
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.segment);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.segment, value);
+            }
+        }
+        
+        public object StaticLink
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.static_link);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.static_link, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_enumeration_type : DwarfDIEDecl
+    {
+        public ulong? Accessibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+            }
+        }
+        
+        public ulong? Alignment
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment, value);
+            }
+        }
+        
+        public DwarfConstant? Allocated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+            }
+        }
+        
+        public DwarfConstant? Associated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+            }
+        }
+        
+        public DwarfConstant? BitSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+            }
+        }
+        
+        public DwarfConstant? BitStride
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_stride);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_stride, value);
+            }
+        }
+        
+        public DwarfConstant? ByteSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+            }
+        }
+        
+        public DwarfConstant? ByteStride
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_stride);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_stride, value);
+            }
+        }
+        
+        public object DataLocation
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.data_location);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.data_location, value);
+            }
+        }
+        
+        public bool? Declaration
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.declaration);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.declaration, value);
+            }
+        }
+        
+        public bool? EnumClass
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.enum_class);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.enum_class, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfDIE Signature
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.signature);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.signature, value);
+            }
+        }
+        
+        public DwarfDIE Specification
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.specification);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.specification, value);
+            }
+        }
+        
+        public DwarfConstant? StartScope
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+        
+        public ulong? Visibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_enumerator : DwarfDIEDecl
+    {
+        public DwarfConstant? ConstValue
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.const_value);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.const_value, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_file_type : DwarfDIEDecl
+    {
+        public ulong? Alignment
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment, value);
+            }
+        }
+        
+        public DwarfConstant? Allocated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+            }
+        }
+        
+        public DwarfConstant? Associated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+            }
+        }
+        
+        public DwarfConstant? BitSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+            }
+        }
+        
+        public DwarfConstant? ByteSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+            }
+        }
+        
+        public object DataLocation
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.data_location);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.data_location, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfConstant? StartScope
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+        
+        public ulong? Visibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_formal_parameter : DwarfDIEDecl
+    {
+        public bool? Artificial
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.artificial);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.artificial, value);
+            }
+        }
+        
+        public DwarfConstant? ConstValue
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.const_value);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.const_value, value);
+            }
+        }
+        
+        public DwarfDIE DefaultValue
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.default_value);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.default_value, value);
+            }
+        }
+        
+        public ulong? Endianity
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.endianity);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.endianity, value);
+            }
+        }
+        
+        public bool? IsOptional
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.is_optional);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.is_optional, value);
+            }
+        }
+        
+        public object Location
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.location);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.location, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public object Segment
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.segment);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.segment, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+        
+        public bool? VariableParameter
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.variable_parameter);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.variable_parameter, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_friend : DwarfDIEDecl
+    {
+        public DwarfDIE Friend
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.friend);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.friend, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_generic_subrange : DwarfDIEDecl
+    {
+        public ulong? Accessibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+            }
+        }
+        
+        public ulong? Alignment
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment, value);
+            }
+        }
+        
+        public DwarfConstant? Allocated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+            }
+        }
+        
+        public DwarfConstant? Associated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+            }
+        }
+        
+        public DwarfConstant? BitSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+            }
+        }
+        
+        public DwarfConstant? BitStride
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_stride);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_stride, value);
+            }
+        }
+        
+        public DwarfConstant? ByteSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+            }
+        }
+        
+        public DwarfConstant? ByteStride
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_stride);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_stride, value);
+            }
+        }
+        
+        public DwarfConstant? Count
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.count);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.count, value);
+            }
+        }
+        
+        public object DataLocation
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.data_location);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.data_location, value);
+            }
+        }
+        
+        public bool? Declaration
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.declaration);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.declaration, value);
+            }
+        }
+        
+        public DwarfConstant? LowerBound
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.lower_bound);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.lower_bound, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public bool? ThreadsScaled
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.threads_scaled);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.threads_scaled, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+        
+        public DwarfConstant? UpperBound
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.upper_bound);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.upper_bound, value);
+            }
+        }
+        
+        public ulong? Visibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_immutable_type : DwarfDIEDecl
+    {
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_imported_declaration : DwarfDIEDecl
+    {
+        public ulong? Accessibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+            }
+        }
+        
+        public DwarfDIE Import
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.import);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.import, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfConstant? StartScope
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_imported_module : DwarfDIEDecl
+    {
+        public DwarfDIE Import
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.import);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.import, value);
+            }
+        }
+        
+        public DwarfConstant? StartScope
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_imported_unit : DwarfDIE
+    {
+        public DwarfDIE Import
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.import);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.import, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_inheritance : DwarfDIEDecl
+    {
+        public ulong? Accessibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+            }
+        }
+        
+        public DwarfConstant? DataMemberLocation
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.data_member_location);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.data_member_location, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+        
+        public ulong? Virtuality
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.virtuality);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.virtuality, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_inlined_subroutine : DwarfDIE
+    {
+        public ulong? CallColumn
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.call_column);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.call_column, value);
+            }
+        }
+        
+        public ulong? CallFile
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.call_file);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.call_file, value);
+            }
+        }
+        
+        public ulong? CallLine
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.call_line);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.call_line, value);
+            }
+        }
+        
+        public bool? ConstExpr
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.const_expr);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.const_expr, value);
+            }
+        }
+        
+        public ulong? EntryPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.entry_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.entry_pc, value);
+            }
+        }
+        
+        public DwarfConstant? HighPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc, value);
+            }
+        }
+        
+        public ulong? LowPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.low_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.low_pc, value);
+            }
+        }
+        
+        public object Ranges
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.ranges);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.ranges, value);
+            }
+        }
+        
+        public object ReturnAddr
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.return_addr);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.return_addr, value);
+            }
+        }
+        
+        public object Segment
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.segment);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.segment, value);
+            }
+        }
+        
+        public DwarfConstant? StartScope
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+            }
+        }
+        
+        public object Trampoline
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.trampoline);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.trampoline, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_interface_type : DwarfDIEDecl
+    {
+        public ulong? Accessibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+            }
+        }
+        
+        public ulong? Alignment
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfDIE Signature
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.signature);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.signature, value);
+            }
+        }
+        
+        public DwarfConstant? StartScope
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_label : DwarfDIEDecl
+    {
+        public ulong? LowPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.low_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.low_pc, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public object Segment
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.segment);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.segment, value);
+            }
+        }
+        
+        public DwarfConstant? StartScope
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_lexical_block : DwarfDIEDecl
+    {
+        public ulong? EntryPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.entry_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.entry_pc, value);
+            }
+        }
+        
+        public DwarfConstant? HighPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc, value);
+            }
+        }
+        
+        public ulong? LowPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.low_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.low_pc, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public object Ranges
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.ranges);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.ranges, value);
+            }
+        }
+        
+        public object Segment
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.segment);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.segment, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_member : DwarfDIEDecl
+    {
+        public ulong? Accessibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+            }
+        }
+        
+        public bool? Artificial
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.artificial);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.artificial, value);
+            }
+        }
+        
+        public DwarfConstant? BitSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+            }
+        }
+        
+        public DwarfConstant? ByteSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+            }
+        }
+        
+        public ulong? DataBitOffset
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.data_bit_offset);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.data_bit_offset, value);
+            }
+        }
+        
+        public DwarfConstant? DataMemberLocation
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.data_member_location);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.data_member_location, value);
+            }
+        }
+        
+        public bool? Declaration
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.declaration);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.declaration, value);
+            }
+        }
+        
+        public bool? Mutable
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.mutable);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.mutable, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+        
+        public ulong? Visibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_module : DwarfDIEDecl
+    {
+        public ulong? Accessibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+            }
+        }
+        
+        public bool? Declaration
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.declaration);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.declaration, value);
+            }
+        }
+        
+        public ulong? EntryPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.entry_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.entry_pc, value);
+            }
+        }
+        
+        public DwarfConstant? HighPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc, value);
+            }
+        }
+        
+        public ulong? LowPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.low_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.low_pc, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfDIE Priority
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.priority);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.priority, value);
+            }
+        }
+        
+        public object Ranges
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.ranges);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.ranges, value);
+            }
+        }
+        
+        public object Segment
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.segment);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.segment, value);
+            }
+        }
+        
+        public DwarfDIE Specification
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.specification);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.specification, value);
+            }
+        }
+        
+        public ulong? Visibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_namelist : DwarfDIEDecl
+    {
+        public ulong? Accessibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+            }
+        }
+        
+        public bool? Declaration
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.declaration);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.declaration, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public ulong? Visibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_namelist_item : DwarfDIEDecl
+    {
+        public DwarfDIE NamelistItem
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.namelist_item);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.namelist_item, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_namespace : DwarfDIEDecl
+    {
+        public bool? ExportSymbols
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.export_symbols);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.export_symbols, value);
+            }
+        }
+        
+        public DwarfDIE Extension
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.extension);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.extension, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfConstant? StartScope
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_packed_type : DwarfDIEDecl
+    {
+        public ulong? Alignment
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_partial_unit : DwarfDIE
+    {
+        public object AddrBase
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.addr_base);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.addr_base, value);
+            }
+        }
+        
+        public DwarfDIE BaseTypes
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.base_types);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.base_types, value);
+            }
+        }
+        
+        public string CompDir
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.comp_dir);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.comp_dir, value);
+            }
+        }
+        
+        public string DwoName
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.dwo_name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.dwo_name, value);
+            }
+        }
+        
+        public ulong? EntryPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.entry_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.entry_pc, value);
+            }
+        }
+        
+        public ulong? IdentifierCase
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.identifier_case);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.identifier_case, value);
+            }
+        }
+        
+        public DwarfConstant? HighPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc, value);
+            }
+        }
+        
+        public ulong? Language
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.language);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.language, value);
+            }
+        }
+        
+        public ulong? LowPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.low_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.low_pc, value);
+            }
+        }
+        
+        public DwarfElement Macros
+        {
+            get
+            {
+                return GetAttributeValue<DwarfElement>(DwarfAttributeKey.macros);
+            }
+            set
+            {
+                SetAttributeValue<DwarfElement>(DwarfAttributeKey.macros, value);
+            }
+        }
+        
+        public bool? MainSubprogram
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.main_subprogram);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.main_subprogram, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public string Producer
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.producer);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.producer, value);
+            }
+        }
+        
+        public object Ranges
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.ranges);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.ranges, value);
+            }
+        }
+        
+        public object RnglistsBase
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.rnglists_base);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.rnglists_base, value);
+            }
+        }
+        
+        public object Segment
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.segment);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.segment, value);
+            }
+        }
+        
+        public DwarfDebugLine StmtList
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDebugLine>(DwarfAttributeKey.stmt_list);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDebugLine>(DwarfAttributeKey.stmt_list, value);
+            }
+        }
+        
+        public DwarfElement StrOffsetsBase
+        {
+            get
+            {
+                return GetAttributeValue<DwarfElement>(DwarfAttributeKey.str_offsets_base);
+            }
+            set
+            {
+                SetAttributeValue<DwarfElement>(DwarfAttributeKey.str_offsets_base, value);
+            }
+        }
+        
+        public bool? UseUTF8
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.use_UTF8);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.use_UTF8, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_pointer_type : DwarfDIEDecl
+    {
+        public ulong? AddressClass
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.address_class);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.address_class, value);
+            }
+        }
+        
+        public ulong? Alignment
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment, value);
+            }
+        }
+        
+        public DwarfConstant? BitSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+            }
+        }
+        
+        public DwarfConstant? ByteSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_ptr_to_member_type : DwarfDIEDecl
+    {
+        public ulong? AddressClass
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.address_class);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.address_class, value);
+            }
+        }
+        
+        public ulong? Alignment
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment, value);
+            }
+        }
+        
+        public DwarfConstant? Allocated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+            }
+        }
+        
+        public DwarfConstant? Associated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+            }
+        }
+        
+        public DwarfDIE ContainingType
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.containing_type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.containing_type, value);
+            }
+        }
+        
+        public object DataLocation
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.data_location);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.data_location, value);
+            }
+        }
+        
+        public bool? Declaration
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.declaration);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.declaration, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+        
+        public object UseLocation
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.use_location);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.use_location, value);
+            }
+        }
+        
+        public ulong? Visibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_reference_type : DwarfDIEDecl
+    {
+        public ulong? AddressClass
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.address_class);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.address_class, value);
+            }
+        }
+        
+        public ulong? Alignment
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment, value);
+            }
+        }
+        
+        public DwarfConstant? BitSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+            }
+        }
+        
+        public DwarfConstant? ByteSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_restrict_type : DwarfDIEDecl
+    {
+        public ulong? Alignment
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_rvalue_reference_type : DwarfDIEDecl
+    {
+        public ulong? AddressClass
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.address_class);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.address_class, value);
+            }
+        }
+        
+        public ulong? Alignment
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment, value);
+            }
+        }
+        
+        public DwarfConstant? BitSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+            }
+        }
+        
+        public DwarfConstant? ByteSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_set_type : DwarfDIEDecl
+    {
+        public ulong? Accessibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+            }
+        }
+        
+        public ulong? Alignment
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment, value);
+            }
+        }
+        
+        public DwarfConstant? Allocated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+            }
+        }
+        
+        public DwarfConstant? Associated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+            }
+        }
+        
+        public DwarfConstant? BitSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+            }
+        }
+        
+        public DwarfConstant? ByteSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+            }
+        }
+        
+        public object DataLocation
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.data_location);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.data_location, value);
+            }
+        }
+        
+        public bool? Declaration
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.declaration);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.declaration, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfConstant? StartScope
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+        
+        public ulong? Visibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_shared_type : DwarfDIEDecl
+    {
+        public DwarfConstant? Count
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.count);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.count, value);
+            }
+        }
+        
+        public ulong? Alignment
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_skeleton_unit : DwarfDIE
+    {
+        public object AddrBase
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.addr_base);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.addr_base, value);
+            }
+        }
+        
+        public string CompDir
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.comp_dir);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.comp_dir, value);
+            }
+        }
+        
+        public string DwoName
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.dwo_name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.dwo_name, value);
+            }
+        }
+        
+        public DwarfConstant? HighPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc, value);
+            }
+        }
+        
+        public ulong? LowPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.low_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.low_pc, value);
+            }
+        }
+        
+        public object Ranges
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.ranges);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.ranges, value);
+            }
+        }
+        
+        public object RnglistsBase
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.rnglists_base);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.rnglists_base, value);
+            }
+        }
+        
+        public DwarfDebugLine StmtList
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDebugLine>(DwarfAttributeKey.stmt_list);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDebugLine>(DwarfAttributeKey.stmt_list, value);
+            }
+        }
+        
+        public DwarfElement StrOffsetsBase
+        {
+            get
+            {
+                return GetAttributeValue<DwarfElement>(DwarfAttributeKey.str_offsets_base);
+            }
+            set
+            {
+                SetAttributeValue<DwarfElement>(DwarfAttributeKey.str_offsets_base, value);
+            }
+        }
+        
+        public bool? UseUTF8
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.use_UTF8);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.use_UTF8, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_string_type : DwarfDIEDecl
+    {
+        public ulong? Alignment
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment, value);
+            }
+        }
+        
+        public ulong? Accessibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+            }
+        }
+        
+        public DwarfConstant? Allocated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+            }
+        }
+        
+        public DwarfConstant? Associated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+            }
+        }
+        
+        public DwarfConstant? BitSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+            }
+        }
+        
+        public DwarfConstant? ByteSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+            }
+        }
+        
+        public object DataLocation
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.data_location);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.data_location, value);
+            }
+        }
+        
+        public bool? Declaration
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.declaration);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.declaration, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfConstant? StartScope
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+            }
+        }
+        
+        public object StringLength
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.string_length);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.string_length, value);
+            }
+        }
+        
+        public ulong? StringLengthBitSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.string_length_bit_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.string_length_bit_size, value);
+            }
+        }
+        
+        public ulong? StringLengthByteSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.string_length_byte_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.string_length_byte_size, value);
+            }
+        }
+        
+        public ulong? Visibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_structure_type : DwarfDIEDecl
+    {
+        public ulong? Accessibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+            }
+        }
+        
+        public ulong? Alignment
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment, value);
+            }
+        }
+        
+        public DwarfConstant? Allocated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+            }
+        }
+        
+        public DwarfConstant? Associated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+            }
+        }
+        
+        public DwarfConstant? BitSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+            }
+        }
+        
+        public DwarfConstant? ByteSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+            }
+        }
+        
+        public ulong? CallingConvention
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.calling_convention);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.calling_convention, value);
+            }
+        }
+        
+        public object DataLocation
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.data_location);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.data_location, value);
+            }
+        }
+        
+        public bool? Declaration
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.declaration);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.declaration, value);
+            }
+        }
+        
+        public bool? ExportSymbols
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.export_symbols);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.export_symbols, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfDIE Signature
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.signature);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.signature, value);
+            }
+        }
+        
+        public DwarfDIE Specification
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.specification);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.specification, value);
+            }
+        }
+        
+        public DwarfConstant? StartScope
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+            }
+        }
+        
+        public ulong? Visibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_subprogram : DwarfDIEDecl
+    {
+        public ulong? Accessibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+            }
+        }
+        
+        public ulong? AddressClass
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.address_class);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.address_class, value);
+            }
+        }
+        
+        public ulong? Alignment
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment, value);
+            }
+        }
+        
+        public bool? Artificial
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.artificial);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.artificial, value);
+            }
+        }
+        
+        public ulong? CallingConvention
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.calling_convention);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.calling_convention, value);
+            }
+        }
+        
+        public bool? Declaration
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.declaration);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.declaration, value);
+            }
+        }
+        
+        public ulong? Defaulted
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.defaulted);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.defaulted, value);
+            }
+        }
+        
+        public bool? Deleted
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.deleted);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.deleted, value);
+            }
+        }
+        
+        public bool? Elemental
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.elemental);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.elemental, value);
+            }
+        }
+        
+        public ulong? EntryPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.entry_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.entry_pc, value);
+            }
+        }
+        
+        public bool? Explicit
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.@explicit);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.@explicit, value);
+            }
+        }
+        
+        public bool? External
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.external);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.external, value);
+            }
+        }
+        
+        public object FrameBase
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.frame_base);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.frame_base, value);
+            }
+        }
+        
+        public DwarfConstant? HighPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc, value);
+            }
+        }
+        
+        public ulong? Inline
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.inline);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.inline, value);
+            }
+        }
+        
+        public string LinkageName
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.linkage_name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.linkage_name, value);
+            }
+        }
+        
+        public ulong? LowPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.low_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.low_pc, value);
+            }
+        }
+        
+        public bool? MainSubprogram
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.main_subprogram);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.main_subprogram, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public bool? Noreturn
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.noreturn);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.noreturn, value);
+            }
+        }
+        
+        public DwarfDIE ObjectPointer
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.object_pointer);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.object_pointer, value);
+            }
+        }
+        
+        public bool? Prototyped
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.prototyped);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.prototyped, value);
+            }
+        }
+        
+        public bool? Pure
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.pure);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.pure, value);
+            }
+        }
+        
+        public object Ranges
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.ranges);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.ranges, value);
+            }
+        }
+        
+        public bool? Recursive
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.recursive);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.recursive, value);
+            }
+        }
+        
+        public bool? Reference
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.reference);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.reference, value);
+            }
+        }
+        
+        public object ReturnAddr
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.return_addr);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.return_addr, value);
+            }
+        }
+        
+        public bool? RvalueReference
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.rvalue_reference);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.rvalue_reference, value);
+            }
+        }
+        
+        public object Segment
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.segment);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.segment, value);
+            }
+        }
+        
+        public DwarfDIE Specification
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.specification);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.specification, value);
+            }
+        }
+        
+        public DwarfConstant? StartScope
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+            }
+        }
+        
+        public object StaticLink
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.static_link);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.static_link, value);
+            }
+        }
+        
+        public object Trampoline
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.trampoline);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.trampoline, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+        
+        public ulong? Visibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+            }
+        }
+        
+        public ulong? Virtuality
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.virtuality);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.virtuality, value);
+            }
+        }
+        
+        public object VtableElemLocation
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.vtable_elem_location);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.vtable_elem_location, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_subrange_type : DwarfDIEDecl
+    {
+        public ulong? Accessibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+            }
+        }
+        
+        public ulong? Alignment
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment, value);
+            }
+        }
+        
+        public DwarfConstant? Allocated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+            }
+        }
+        
+        public DwarfConstant? Associated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+            }
+        }
+        
+        public DwarfConstant? BitSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+            }
+        }
+        
+        public DwarfConstant? BitStride
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_stride);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_stride, value);
+            }
+        }
+        
+        public DwarfConstant? ByteSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+            }
+        }
+        
+        public DwarfConstant? ByteStride
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_stride);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_stride, value);
+            }
+        }
+        
+        public DwarfConstant? Count
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.count);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.count, value);
+            }
+        }
+        
+        public object DataLocation
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.data_location);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.data_location, value);
+            }
+        }
+        
+        public bool? Declaration
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.declaration);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.declaration, value);
+            }
+        }
+        
+        public DwarfConstant? LowerBound
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.lower_bound);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.lower_bound, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public bool? ThreadsScaled
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.threads_scaled);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.threads_scaled, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+        
+        public DwarfConstant? UpperBound
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.upper_bound);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.upper_bound, value);
+            }
+        }
+        
+        public ulong? Visibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_subroutine_type : DwarfDIEDecl
+    {
+        public ulong? Accessibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+            }
+        }
+        
+        public ulong? AddressClass
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.address_class);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.address_class, value);
+            }
+        }
+        
+        public ulong? Alignment
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment, value);
+            }
+        }
+        
+        public DwarfConstant? Allocated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+            }
+        }
+        
+        public DwarfConstant? Associated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+            }
+        }
+        
+        public object DataLocation
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.data_location);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.data_location, value);
+            }
+        }
+        
+        public bool? Declaration
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.declaration);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.declaration, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public bool? Prototyped
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.prototyped);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.prototyped, value);
+            }
+        }
+        
+        public bool? Reference
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.reference);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.reference, value);
+            }
+        }
+        
+        public bool? RvalueReference
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.rvalue_reference);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.rvalue_reference, value);
+            }
+        }
+        
+        public DwarfConstant? StartScope
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+        
+        public ulong? Visibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_template_alias : DwarfDIEDecl
+    {
+        public ulong? Accessibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+            }
+        }
+        
+        public DwarfConstant? Allocated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+            }
+        }
+        
+        public DwarfConstant? Associated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+            }
+        }
+        
+        public object DataLocation
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.data_location);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.data_location, value);
+            }
+        }
+        
+        public bool? Declaration
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.declaration);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.declaration, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfDIE Signature
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.signature);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.signature, value);
+            }
+        }
+        
+        public DwarfConstant? StartScope
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+        
+        public ulong? Visibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_template_type_parameter : DwarfDIEDecl
+    {
+        public DwarfDIE DefaultValue
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.default_value);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.default_value, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_template_value_parameter : DwarfDIEDecl
+    {
+        public DwarfConstant? ConstValue
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.const_value);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.const_value, value);
+            }
+        }
+        
+        public DwarfDIE DefaultValue
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.default_value);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.default_value, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_thrown_type : DwarfDIEDecl
+    {
+        public ulong? Alignment
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment, value);
+            }
+        }
+        
+        public DwarfConstant? Allocated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+            }
+        }
+        
+        public DwarfConstant? Associated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+            }
+        }
+        
+        public object DataLocation
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.data_location);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.data_location, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_try_block : DwarfDIEDecl
+    {
+        public ulong? EntryPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.entry_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.entry_pc, value);
+            }
+        }
+        
+        public DwarfConstant? HighPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc, value);
+            }
+        }
+        
+        public ulong? LowPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.low_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.low_pc, value);
+            }
+        }
+        
+        public object Ranges
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.ranges);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.ranges, value);
+            }
+        }
+        
+        public object Segment
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.segment);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.segment, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_typedef : DwarfDIEDecl
+    {
+        public ulong? Accessibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+            }
+        }
+        
+        public ulong? Alignment
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment, value);
+            }
+        }
+        
+        public DwarfConstant? Allocated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+            }
+        }
+        
+        public DwarfConstant? Associated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+            }
+        }
+        
+        public object DataLocation
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.data_location);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.data_location, value);
+            }
+        }
+        
+        public bool? Declaration
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.declaration);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.declaration, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfConstant? StartScope
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+        
+        public ulong? Visibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_type_unit : DwarfDIE
+    {
+        public ulong? Language
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.language);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.language, value);
+            }
+        }
+        
+        public DwarfDebugLine StmtList
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDebugLine>(DwarfAttributeKey.stmt_list);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDebugLine>(DwarfAttributeKey.stmt_list, value);
+            }
+        }
+        
+        public DwarfElement StrOffsetsBase
+        {
+            get
+            {
+                return GetAttributeValue<DwarfElement>(DwarfAttributeKey.str_offsets_base);
+            }
+            set
+            {
+                SetAttributeValue<DwarfElement>(DwarfAttributeKey.str_offsets_base, value);
+            }
+        }
+        
+        public bool? UseUTF8
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.use_UTF8);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.use_UTF8, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_union_type : DwarfDIEDecl
+    {
+        public ulong? Accessibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+            }
+        }
+        
+        public ulong? Alignment
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment, value);
+            }
+        }
+        
+        public DwarfConstant? Allocated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+            }
+        }
+        
+        public DwarfConstant? Associated
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+            }
+        }
+        
+        public DwarfConstant? BitSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+            }
+        }
+        
+        public DwarfConstant? ByteSize
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+            }
+        }
+        
+        public ulong? CallingConvention
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.calling_convention);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.calling_convention, value);
+            }
+        }
+        
+        public object DataLocation
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.data_location);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.data_location, value);
+            }
+        }
+        
+        public bool? Declaration
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.declaration);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.declaration, value);
+            }
+        }
+        
+        public bool? ExportSymbols
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.export_symbols);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.export_symbols, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfDIE Signature
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.signature);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.signature, value);
+            }
+        }
+        
+        public DwarfDIE Specification
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.specification);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.specification, value);
+            }
+        }
+        
+        public DwarfConstant? StartScope
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+            }
+        }
+        
+        public ulong? Visibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_unspecified_parameters : DwarfDIEDecl
+    {
+        public bool? Artificial
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.artificial);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.artificial, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_unspecified_type : DwarfDIEDecl
+    {
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_variable : DwarfDIEDecl
+    {
+        public ulong? Accessibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+            }
+        }
+        
+        public ulong? Alignment
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.alignment, value);
+            }
+        }
+        
+        public bool? Artificial
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.artificial);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.artificial, value);
+            }
+        }
+        
+        public bool? ConstExpr
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.const_expr);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.const_expr, value);
+            }
+        }
+        
+        public DwarfConstant? ConstValue
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.const_value);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.const_value, value);
+            }
+        }
+        
+        public bool? Declaration
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.declaration);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.declaration, value);
+            }
+        }
+        
+        public ulong? Endianity
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.endianity);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.endianity, value);
+            }
+        }
+        
+        public bool? External
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.external);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.external, value);
+            }
+        }
+        
+        public string LinkageName
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.linkage_name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.linkage_name, value);
+            }
+        }
+        
+        public object Location
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.location);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.location, value);
+            }
+        }
+        
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public object Segment
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.segment);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.segment, value);
+            }
+        }
+        
+        public DwarfDIE Specification
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.specification);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.specification, value);
+            }
+        }
+        
+        public DwarfConstant? StartScope
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+        
+        public ulong? Visibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_variant : DwarfDIEDecl
+    {
+        public ulong? Accessibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+            }
+        }
+        
+        public bool? Declaration
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.declaration);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.declaration, value);
+            }
+        }
+        
+        public object DiscrList
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.discr_list);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.discr_list, value);
+            }
+        }
+        
+        public ulong? DiscrValue
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.discr_value);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.discr_value, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_variant_part : DwarfDIEDecl
+    {
+        public ulong? Accessibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+            }
+        }
+        
+        public bool? Declaration
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.declaration);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.declaration, value);
+            }
+        }
+        
+        public DwarfDIE Discr
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.discr);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.discr, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_volatile_type : DwarfDIEDecl
+    {
+        public string Name
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.name);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+    }
+    
+    public partial class DwarfDIE_with_stmt : DwarfDIEDecl
+    {
+        public ulong? Accessibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+            }
+        }
+        
+        public ulong? AddressClass
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.address_class);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.address_class, value);
+            }
+        }
+        
+        public bool? Declaration
+        {
+            get
+            {
+                return GetAttributeValueOpt<bool>(DwarfAttributeKey.declaration);
+            }
+            set
+            {
+                SetAttributeValueOpt<bool>(DwarfAttributeKey.declaration, value);
+            }
+        }
+        
+        public ulong? EntryPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.entry_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.entry_pc, value);
+            }
+        }
+        
+        public DwarfConstant? HighPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc, value);
+            }
+        }
+        
+        public object Location
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.location);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.location, value);
+            }
+        }
+        
+        public ulong? LowPc
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.low_pc);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.low_pc, value);
+            }
+        }
+        
+        public object Ranges
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.ranges);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.ranges, value);
+            }
+        }
+        
+        public object Segment
+        {
+            get
+            {
+                return GetAttributeValue<object>(DwarfAttributeKey.segment);
+            }
+            set
+            {
+                SetAttributeValue<object>(DwarfAttributeKey.segment, value);
+            }
+        }
+        
+        public DwarfDIE Type
+        {
+            get
+            {
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKey.type);
+            }
+            set
+            {
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKey.type, value);
+            }
+        }
+        
+        public ulong? Visibility
+        {
+            get
+            {
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+            }
+            set
+            {
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
             }
         }
     }

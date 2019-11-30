@@ -6,6 +6,8 @@ namespace LibObjectFile.Dwarf
 {
     public abstract class DwarfSection : DwarfContainer
     {
+        public new DwarfFile Parent => (DwarfFile) base.Parent;
+
         public override void Verify(DiagnosticBag diagnostics)
         {
         }

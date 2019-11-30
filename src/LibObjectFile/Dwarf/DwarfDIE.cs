@@ -2,7 +2,9 @@
 // This attribute is licensed under the BSD-Clause 2 license.
 // See the license.txt attribute in the project root for more information.
 
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace LibObjectFile.Dwarf
 {
@@ -76,17 +78,7 @@ namespace LibObjectFile.Dwarf
         /// <param name="attribute">A attribute</param>
         public void AddAttribute(DwarfAttribute attribute)
         {
-            _attributes.Add(this, attribute);
-        }
-
-        /// <summary>
-        /// Inserts an attribute into <see cref="Attributes"/> at the specified index.
-        /// </summary>
-        /// <param name="index">Index into <see cref="Attributes"/> to insert the specified attribute</param>
-        /// <param name="attribute">The attribute to insert</param>
-        public void InsertAttributeAt(int index, DwarfAttribute attribute)
-        {
-            _attributes.InsertAt(this, index, attribute);
+            _attributes.AddSorted(this, attribute, true);
         }
 
         /// <summary>
@@ -110,6 +102,133 @@ namespace LibObjectFile.Dwarf
         public override string ToString()
         {
             return $"{nameof(Tag)}: {Tag}, {nameof(Attributes)}: {Attributes.Count}, {nameof(Children)}: {Children.Count}";
+        }
+
+        protected TValue GetAttributeValue<TValue>(DwarfAttributeKey key)
+        {
+            foreach (var attr in _attributes)
+            {
+                if (attr.Key == key)
+                {
+                    return (TValue)attr.ValueAsObject;
+                }
+            }
+
+            return default;
+        }
+
+        protected unsafe TValue? GetAttributeValueOpt<TValue>(DwarfAttributeKey key) where TValue : unmanaged
+        {
+            Debug.Assert(sizeof(TValue) <= sizeof(ulong));
+            
+            foreach (var attr in _attributes)
+            {
+                if (attr.Key == key)
+                {
+                    ulong localU64 = attr.ValueAsU64;
+                    return *(TValue*) &localU64;
+                }
+            }
+
+            return default;
+        }
+
+        public DwarfAttribute FindAttributeByKey(DwarfAttributeKey key)
+        {
+            foreach (var attr in _attributes)
+            {
+                if (attr.Key == key)
+                {
+                    return attr;
+                }
+            }
+
+            return null;
+        }
+
+        protected unsafe void SetAttributeValue<TValue>(DwarfAttributeKey key, TValue value)
+        {
+            for (int i = 0; i < _attributes.Count; i++)
+            {
+                var attr = _attributes[i];
+                if (attr.Key == key)
+                {
+                    if (value == null)
+                    {
+                        RemoveAttributeAt(i);
+                    }
+                    else
+                    {
+                        attr.ValueAsObject = value;
+                    }
+                    return;
+                }
+            }
+
+            if (value == null) return;
+            AddAttribute(new DwarfAttribute() {  Key = key, ValueAsObject = value});
+        }
+
+        protected void SetAttributeLinkValue<TLink>(DwarfAttributeKey key, TLink link) where TLink : IObjectFileNodeLink
+        {
+            for (int i = 0; i < _attributes.Count; i++)
+            {
+                var attr = _attributes[i];
+                if (attr.Key == key)
+                {
+                    if (link == null)
+                    {
+                        RemoveAttributeAt(i);
+                    }
+                    else
+                    {
+                        attr.ValueAsU64 = link.GetRelativeOffset();
+                        attr.ValueAsObject = link.GetObjectFileNode();
+                    }
+                    return;
+                }
+            }
+
+            AddAttribute(new DwarfAttribute()
+            {
+                Key = key, 
+                ValueAsU64 = link.GetRelativeOffset(),
+                ValueAsObject = link.GetObjectFileNode()
+            });
+        }
+
+        protected unsafe void SetAttributeValueOpt<TValue>(DwarfAttributeKey key, TValue? value) where TValue : unmanaged
+        {
+            Debug.Assert(sizeof(TValue) <= sizeof(ulong));
+
+            for (int i = 0; i < _attributes.Count; i++)
+            {
+                var attr = _attributes[i];
+                if (attr.Key == key)
+                {
+                    if (!value.HasValue)
+                    {
+                        RemoveAttributeAt(i);
+                    }
+                    else
+                    {
+                        ulong valueU64 = 0;
+                        *((TValue*) &valueU64) = value.Value;
+                        attr.ValueAsU64 = valueU64;
+                        attr.ValueAsObject = null;
+                    }
+                    return;
+                }
+            }
+
+            if (value.HasValue)
+            {
+                var attr = new DwarfAttribute() {Key = key};
+                ulong valueU64 = 0;
+                *((TValue*)&valueU64) = value.Value;
+                attr.ValueAsU64 = valueU64;
+                AddAttribute(attr);
+            }
         }
     }
 }

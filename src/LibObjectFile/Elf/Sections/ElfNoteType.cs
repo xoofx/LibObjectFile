@@ -23,7 +23,7 @@ namespace LibObjectFile.Elf
 
         public override string ToString()
         {
-            return $"{ToStringInternal()} 0x{Value:x8}";
+            return ToStringInternal() ?? $"Unknown {nameof(ElfNoteType)} (0x{Value:X4})";
         }
 
         public bool Equals(ElfNoteType other)

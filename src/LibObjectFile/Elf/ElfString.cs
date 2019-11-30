@@ -9,7 +9,7 @@ namespace LibObjectFile.Elf
     /// <summary>
     /// Defines a string with the associated index in the string table.
     /// </summary>
-    public struct ElfString : IEquatable<ElfString>
+    public readonly struct ElfString : IEquatable<ElfString>
     {
         private ElfString(string value, uint index)
         {
@@ -32,6 +32,8 @@ namespace LibObjectFile.Elf
         public readonly string Value;
 
         public readonly uint Index;
+
+        public bool IsEmpty => Value == null && Index == 0;
 
         public bool Equals(ElfString other)
         {

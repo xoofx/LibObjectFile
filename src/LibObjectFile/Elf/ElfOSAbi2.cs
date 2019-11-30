@@ -22,7 +22,7 @@ namespace LibObjectFile.Elf
 
         public override string ToString()
         {
-            return $"{ToStringInternal()} (0x{Value:X4})";
+            return ToStringInternal() ?? $"Unknown {nameof(ElfOSABI)} (0x{Value:X4})";
         }
 
         public bool Equals(ElfOSABI other)

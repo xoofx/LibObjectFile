@@ -19,10 +19,14 @@ namespace LibObjectFile
     {
         private Stream _stream;
 
-        protected ObjectFileReaderWriter(Stream stream)
+        protected ObjectFileReaderWriter(Stream stream) : this(stream, new DiagnosticBag())
         {
-            Stream = stream ?? throw new ArgumentNullException(nameof(stream));
-            Diagnostics = new DiagnosticBag();
+        }
+
+        protected ObjectFileReaderWriter(Stream stream, DiagnosticBag diagnostics)
+        {
+            Stream = stream;
+            Diagnostics = diagnostics;
             IsLittleEndian = true;
         }
 
@@ -32,7 +36,7 @@ namespace LibObjectFile
         public Stream Stream
         {
             get => _stream;
-            set => _stream = value ?? throw new ArgumentNullException(nameof(value));
+            set => _stream = value;
         }
 
         public ulong Offset
@@ -68,68 +72,16 @@ namespace LibObjectFile
         {
             return Stream.Read(buffer, offset, count);
         }
-
-
+        
         /// <summary>
         /// Reads a null terminated UTF8 string from the stream.
         /// </summary>
         /// <returns><c>true</c> if the string was successfully read from the stream, false otherwise</returns>
         public string ReadStringUTF8NullTerminated()
         {
-            if (!TryReadStringUTF8NullTerminated(out var text))
-            {
-                throw new EndOfStreamException();
-            }
-            return text;
+            return Stream.ReadStringUTF8NullTerminated();
         }
-
-        /// <summary>
-        /// Reads a null terminated UTF8 string from the stream.
-        /// </summary>
-        /// <returns><c>true</c> if the string was successfully read from the stream, false otherwise</returns>
-        public bool TryReadStringUTF8NullTerminated(out string text)
-        {
-            text = null;
-            var buffer = ArrayPool<byte>.Shared.Rent((int)128);
-            int textLength = 0;
-            try
-            {
-                while (true)
-                {
-                    // TODO: not efficient to read byte by byte
-                    int nextByte = Stream.ReadByte();
-                    if (nextByte < 0)
-                    {
-                        return false;
-                    }
-
-                    if (nextByte == 0)
-                    {
-                        break;
-                    }
-
-                    if (textLength > buffer.Length)
-                    {
-                        var newBuffer = ArrayPool<byte>.Shared.Rent((int)textLength * 2);
-                        Array.Copy(buffer, 0, newBuffer, 0, buffer.Length);
-                        ArrayPool<byte>.Shared.Return(buffer);
-                        buffer = newBuffer;
-                    }
-
-                    buffer[textLength++] = (byte)nextByte;
-                }
-
-                text = Encoding.UTF8.GetString(buffer, 0, textLength);
-            }
-            finally
-            {
-                ArrayPool<byte>.Shared.Return(buffer);
-            }
-
-            return true;
-        }
-
-
+     
         /// <summary>
         /// Reads a null terminated UTF8 string from the stream.
         /// </summary>
@@ -137,177 +89,57 @@ namespace LibObjectFile
         /// <returns>A string</returns>
         public string ReadStringUTF8NullTerminated(uint byteLength)
         {
-            if (byteLength == 0) return string.Empty;
-
-            var buffer = ArrayPool<byte>.Shared.Rent((int)byteLength);
-            try
-            {
-                var dataLength = Stream.Read(buffer, 0, (int) byteLength);
-                if (dataLength < 0) throw new EndOfStreamException("Unexpected end of stream while trying to read data");
-
-                var byteReadLength = (uint) dataLength;
-                if (byteReadLength != byteLength) throw new EndOfStreamException($"Not enough data read {byteReadLength} bytes while expecting to read {byteLength} bytes");
-
-                var isNullTerminated = buffer[byteReadLength - 1] == 0;
-
-                var text = Encoding.UTF8.GetString(buffer, 0, (int) (isNullTerminated ? byteReadLength - 1 : byteReadLength));
-                return text;
-            } 
-            finally
-            {
-                ArrayPool<byte>.Shared.Return(buffer);
-            }
-        }
-
-        public bool TryReadU8(out byte value)
-        {
-            value = 0;
-            int nextValue = Stream.ReadByte();
-            if (nextValue < 0) return false;
-            value = (byte)nextValue;
-
-            return true;
-        }
-
-        /// <summary>
-        /// Read little endian from the stream
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public bool TryReadU16(out ushort value)
-        {
-            return TryReadU16(IsLittleEndian, out value);
+            return Stream.ReadStringUTF8NullTerminated(byteLength);
         }
 
         public byte ReadU8()
         {
-            if (TryReadU8(out var value))
-            {
-                return value;
-            }
-            throw new EndOfStreamException();
+            return Stream.ReadU8();
+        }
+
+        public sbyte ReadI8()
+        {
+            return Stream.ReadI8();
         }
 
         public ushort ReadU16()
         {
-            if (TryReadU16(out var value))
-            {
-                return value;
-            }
-            throw new EndOfStreamException();
+            return Stream.ReadU16(IsLittleEndian);
         }
 
         public uint ReadU32()
         {
-            if (TryReadU32(out var value))
-            {
-                return value;
-            }
-            throw new EndOfStreamException();
+            return Stream.ReadU32(IsLittleEndian);
         }
 
         public ulong ReadU64()
         {
-            if (TryReadU64(out var value))
-            {
-                return value;
-            }
-            throw new EndOfStreamException();
+            return Stream.ReadU64(IsLittleEndian);
+        }
+
+        public void WriteI8(sbyte value)
+        {
+            Stream.WriteI8(value);
+        }
+
+        public void WriteU8(byte value)
+        {
+            Stream.WriteU8(value);
         }
         
-        public bool TryReadU16(bool isLittleEndian, out ushort value)
+        public void WriteU16(ushort value)
         {
-            value = 0;
-            int nextValue = Stream.ReadByte();
-            if (nextValue < 0) return false;
-            value = (byte)nextValue;
-
-            nextValue = Stream.ReadByte();
-            if (nextValue < 0) return false;
-            value = (ushort)((nextValue << 8) | (byte)value);
-
-            if (isLittleEndian != BitConverter.IsLittleEndian)
-            {
-                value = BinaryPrimitives.ReverseEndianness(value);
-            }
-
-            return true;
+            Stream.WriteU16(IsLittleEndian, value);
         }
 
-        public unsafe bool TryReadU32(out uint value)
+        public void WriteU32(uint value)
         {
-            return TryReadU32(IsLittleEndian, out value);
+            Stream.WriteU32(IsLittleEndian, value);
         }
 
-        public unsafe bool TryReadU32(bool isLittleEndian, out uint value)
+        public void WriteU64(ulong value)
         {
-            fixed (uint* pBufferInt = &value)
-            {
-                var span = new Span<byte>((byte*) pBufferInt, sizeof(uint));
-                if (Stream.Read(span) != sizeof(uint))
-                {
-                    return false;
-                }
-
-                if (isLittleEndian != BitConverter.IsLittleEndian)
-                {
-                    value = BinaryPrimitives.ReverseEndianness(value);
-                }
-            }
-            return true;
-        }
-
-        public unsafe bool TryReadU64(out ulong value)
-        {
-            return TryReadU64(IsLittleEndian, out value);
-        }
-
-        public unsafe bool TryReadU64(bool isLittleEndian, out ulong value)
-        {
-            fixed (ulong* pBufferInt = &value)
-            {
-                var span = new Span<byte>((byte*)pBufferInt, sizeof(ulong));
-                if (Stream.Read(span) != sizeof(ulong))
-                {
-                    return false;
-                }
-
-                if (isLittleEndian != BitConverter.IsLittleEndian)
-                {
-                    value = BinaryPrimitives.ReverseEndianness(value);
-                }
-            }
-            return true;
-        }
-
-        public unsafe void WriteU16(bool isLittleEndian, ushort value)
-        {
-            if (isLittleEndian != BitConverter.IsLittleEndian)
-            {
-                value = BinaryPrimitives.ReverseEndianness(value);
-            }
-            var span = new Span<byte>((byte*)&value, sizeof(ushort));
-            Stream.Write(span);
-        }
-
-        public unsafe void WriteU32(bool isLittleEndian, uint value)
-        {
-            if (isLittleEndian != BitConverter.IsLittleEndian)
-            {
-                value = BinaryPrimitives.ReverseEndianness(value);
-            }
-            var span = new Span<byte>((byte*)&value, sizeof(uint));
-            Stream.Write(span);
-        }
-
-        public unsafe void WriteU64(bool isLittleEndian, ulong value)
-        {
-            if (isLittleEndian != BitConverter.IsLittleEndian)
-            {
-                value = BinaryPrimitives.ReverseEndianness(value);
-            }
-            var span = new Span<byte>((byte*)&value, sizeof(ulong));
-            Stream.Write(span);
+            Stream.WriteU64(IsLittleEndian, value);
         }
 
         /// <summary>
@@ -315,20 +147,7 @@ namespace LibObjectFile
         /// </summary>
         public void WriteStringUTF8NullTerminated(string text)
         {
-            if (text == null) throw new ArgumentNullException(nameof(text));
-            
-            int byteLength = Encoding.UTF8.GetByteCount(text);
-            var buffer = ArrayPool<byte>.Shared.Rent(byteLength + 1);
-            try
-            {
-                Encoding.UTF8.GetBytes(text, 0, text.Length, buffer, 0);
-                buffer[byteLength] = 0;
-                Stream.Write(buffer, 0, byteLength + 1);
-            }
-            finally
-            {
-                ArrayPool<byte>.Shared.Return(buffer);
-            }
+            Stream.WriteStringUTF8NullTerminated(text);
         }
 
         /// <summary>

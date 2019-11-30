@@ -140,7 +140,7 @@ namespace LibObjectFile.Tests.Ar
                 stream.Position = 0;
 
                 Assert.False(ArArchiveFile.TryRead(stream, ArArchiveKind.GNU, out _, out var diagnostics));
-                ExpectDiagnostics(diagnostics, DiagnosticId.AR_ERR_UnexpectedEndOfFile);
+                ExpectDiagnostics(diagnostics, DiagnosticId.CMN_ERR_UnexpectedEndOfFile);
 
                 stream.Position = continuePosition;
 
@@ -189,7 +189,7 @@ namespace LibObjectFile.Tests.Ar
                 stream.Position = 0;
 
                 Assert.False(ArArchiveFile.TryRead(stream, ArArchiveKind.GNU, out _, out var diagnostics));
-                ExpectDiagnostics(diagnostics, DiagnosticId.AR_ERR_UnexpectedEndOfFile);
+                ExpectDiagnostics(diagnostics, DiagnosticId.CMN_ERR_UnexpectedEndOfFile);
 
                 stream.Position = continuePosition;
                 stream.WriteByte(0);
@@ -250,7 +250,7 @@ namespace LibObjectFile.Tests.Ar
                 stream.Position = 0;
 
                 Assert.False(ArArchiveFile.TryRead(stream, ArArchiveKind.BSD, out _, out var diagnostics));
-                ExpectDiagnostics(diagnostics, DiagnosticId.AR_ERR_UnexpectedEndOfFile);
+                ExpectDiagnostics(diagnostics, DiagnosticId.CMN_ERR_UnexpectedEndOfFile);
 
                 // Check validity of BSD name
 

@@ -39,10 +39,6 @@ namespace LibObjectFile.Elf
         /// </summary>
         public List<ElfSymbol> Entries { get;  }
 
-        public override unsafe ulong Size =>
-            Parent == null || Parent.FileClass == ElfFileClass.None ? 0 :
-            Parent.FileClass == ElfFileClass.Is32 ? (ulong) (Entries.Count * sizeof(ElfNative.Elf32_Sym)) : (ulong) (Entries.Count * sizeof(ElfNative.Elf64_Sym));
-
         public override unsafe ulong TableEntrySize =>
             Parent == null || Parent.FileClass == ElfFileClass.None ? 0 :
             Parent.FileClass == ElfFileClass.Is32 ? (ulong) sizeof(ElfNative.Elf32_Sym) : (ulong) sizeof(ElfNative.Elf64_Sym);
@@ -250,5 +246,12 @@ namespace LibObjectFile.Elf
             }
         }
 
+        public override unsafe bool TryUpdateLayout(DiagnosticBag diagnostics)
+        {
+            if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
+            Size = Parent == null || Parent.FileClass == ElfFileClass.None ? 0 :
+                Parent.FileClass == ElfFileClass.Is32 ? (ulong)(Entries.Count * sizeof(ElfNative.Elf32_Sym)) : (ulong)(Entries.Count * sizeof(ElfNative.Elf64_Sym));
+            return true;
+        }
     }
 }

@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace LibObjectFile.Dwarf
 {
@@ -42,7 +43,7 @@ namespace LibObjectFile.Dwarf
             return false;
         }
 
-        public static DwarfAbbreviation Read(DwarfReaderWriter reader, ulong abbreviationOffset)
+        public static DwarfAbbreviation Read(Stream reader, ulong abbreviationOffset)
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));
             if (TryRead(reader, abbreviationOffset, out var abbrev, out var diagnostics))
@@ -52,7 +53,7 @@ namespace LibObjectFile.Dwarf
             throw new ObjectFileException($"Unexpected error while trying to read abbreviation at offset {abbreviationOffset}", diagnostics);
         }
 
-        public static bool TryRead(DwarfReaderWriter reader, ulong abbreviationOffset, out DwarfAbbreviation abbrev, out DiagnosticBag diagnostics)
+        public static bool TryRead(Stream reader, ulong abbreviationOffset, out DwarfAbbreviation abbrev, out DiagnosticBag diagnostics)
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));
             abbrev = new DwarfAbbreviation();
@@ -60,9 +61,9 @@ namespace LibObjectFile.Dwarf
             return abbrev.TryReadInternal(reader, abbreviationOffset, diagnostics);
         }
 
-        private bool TryReadInternal(DwarfReaderWriter reader, ulong abbreviationOffset, DiagnosticBag diagnostics)
+        private bool TryReadInternal(Stream reader, ulong abbreviationOffset, DiagnosticBag diagnostics)
         {
-            reader.Offset = abbreviationOffset;
+            reader.Position = (long)abbreviationOffset;
             while (TryReadNext(reader, diagnostics))
             {
             }
@@ -70,7 +71,7 @@ namespace LibObjectFile.Dwarf
             return !diagnostics.HasErrors;
         }
 
-        private bool TryReadNext(DwarfReaderWriter reader, DiagnosticBag diagnostics)
+        private bool TryReadNext(Stream reader, DiagnosticBag diagnostics)
         {
             var code = reader.ReadLEB128();
             if (code == 0)
@@ -130,7 +131,7 @@ namespace LibObjectFile.Dwarf
 
             while (true)
             {
-                var attributeName = reader.ReadLEB128As<DwarfAttributeName>();
+                var attributeName = reader.ReadLEB128As<DwarfAttributeKey>();
                 var attributeForm = reader.ReadLEB128As<DwarfAttributeForm>();
 
                 if (attributeForm.Value == 0 && attributeForm.Value == 0)

@@ -228,7 +228,7 @@ namespace LibObjectFile.Ar
                 var dataReadCount = Stream.Read(bufferForName, 0, nameLength);
                 if (dataReadCount != nameLength)
                 {
-                    Diagnostics.Error(DiagnosticId.AR_ERR_UnexpectedEndOfFile, $"Unexpected end of file while trying to read the filename from the data section of the file entry at offset of {streamPosition}. Expecting {nameLength} bytes while only {dataReadCount} bytes were read from the stream.");
+                    Diagnostics.Error(DiagnosticId.CMN_ERR_UnexpectedEndOfFile, $"Unexpected end of file while trying to read the filename from the data section of the file entry at offset of {streamPosition}. Expecting {nameLength} bytes while only {dataReadCount} bytes were read from the stream.");
                     return false;
                 }
                 name = Encoding.UTF8.GetString(bufferForName, 0, nameLength);
@@ -253,7 +253,7 @@ namespace LibObjectFile.Ar
                 int pad = Stream.ReadByte();
                 if (pad < 0)
                 {
-                    Diagnostics.Error(DiagnosticId.AR_ERR_UnexpectedEndOfFile, $"Unexpected end of file while trying to Invalid character 0x{pad:x} found at offset {padOffset} while expecting \\n 0xa");
+                    Diagnostics.Error(DiagnosticId.CMN_ERR_UnexpectedEndOfFile, $"Unexpected end of file while trying to Invalid character 0x{pad:x} found at offset {padOffset} while expecting \\n 0xa");
                     return false;
                 }
                 if (pad != '\n')

@@ -6,18 +6,6 @@ using System;
 
 namespace LibObjectFile
 {
-    internal class EndOfStreamException : Exception
-    {
-        public EndOfStreamException()
-        {
-        }
-
-        public EndOfStreamException(string message) : base(message)
-        {
-        }
-    }
-
-
     /// <summary>
     /// An exception used when diagnostics error are happening during read/write.
     /// </summary>

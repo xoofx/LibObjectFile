@@ -2,6 +2,7 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -39,38 +40,6 @@ namespace LibObjectFile.Ar
         /// </summary>
         public List<ArSymbol> Symbols { get; }
 
-        protected override ulong GetSizeAuto()
-        {
-            if (Parent == null) return 0;
-
-            // number of entries (both for BSD and GNU)
-            ulong sizeOfTable = sizeof(uint);
-
-            foreach (var symbol in Symbols)
-            {
-                if (symbol.Name != null)
-                {
-                    sizeOfTable += (ulong)Encoding.UTF8.GetByteCount(symbol.Name) + 1;
-
-                    // uint file_offset
-                    sizeOfTable += sizeof(uint);
-
-                    if (Parent.Kind == ArArchiveKind.BSD)
-                    {
-                        // uint string_offset
-                        sizeOfTable += sizeof(uint);
-                    }
-                }
-            }
-
-            if ((sizeOfTable & 1) != 0)
-            {
-                sizeOfTable++;
-            }
-
-            return sizeOfTable;
-        }
-
         protected override void Read(ArArchiveFileReader reader)
         {
             long startOffset = reader.Stream.Position;
@@ -78,11 +47,7 @@ namespace LibObjectFile.Ar
             bool isBSD = reader.ArArchiveFile.Kind == ArArchiveKind.BSD;
 
             // A 32-bit big endian integer, giving the number of entries in the table.
-            if (!reader.TryReadU32(false, out uint entryCount))
-            {
-                reader.Diagnostics.Error(DiagnosticId.AR_ERR_UnexpectedEndOfFile, $"Unexpected EOF while trying to read the number of entries in {this}");
-                return;
-            }
+            uint entryCount = reader.Stream.ReadU32(false);
 
             // A set of 32-bit big endian integers. One for each symbol, recording the position within the archive of the header for the file containing this symbol.
             for (uint i = 0; i < entryCount; i++)
@@ -91,18 +56,10 @@ namespace LibObjectFile.Ar
 
                 if (isBSD)
                 {
-                    if (!reader.TryReadU32(false, out stringOffset))
-                    {
-                        reader.Diagnostics.Error(DiagnosticId.AR_ERR_UnexpectedEndOfFile, $"Unexpected EOF while trying to read the string offset for symbol entry [{i}] in {this}");
-                        return;
-                    }
+                    stringOffset = reader.Stream.ReadU32(false);
                 }
 
-                if (!reader.TryReadU32(false, out uint offsetOfFile))
-                {
-                    reader.Diagnostics.Error(DiagnosticId.AR_ERR_UnexpectedEndOfFile, $"Unexpected EOF while trying to read the symbol entry [{i}] in {this}");
-                    return;
-                }
+                uint offsetOfFile = reader.Stream.ReadU32(false);
 
                 var symbol = new ArSymbol
                 {
@@ -134,20 +91,14 @@ namespace LibObjectFile.Ar
                         reader.Stream.Position = absoluteStringOffset;
                     }
 
-                    if (!reader.TryReadStringUTF8NullTerminated(out var text))
-                    {
-                        hasError = true;
-                    }
-                    else
-                    {
-                        symbol.Name = text;
-                        Symbols[(int)i] = symbol;
-                    }
+                    var text = reader.ReadStringUTF8NullTerminated();
+                    symbol.Name = text;
+                    Symbols[(int)i] = symbol;
                 }
 
                 if (hasError)
                 {
-                    reader.Diagnostics.Error(DiagnosticId.AR_ERR_UnexpectedEndOfFile, $"Unexpected EOF while trying to read the string name [{i}] at file offset {absoluteStringOffset} in {this}");
+                    reader.Diagnostics.Error(DiagnosticId.CMN_ERR_UnexpectedEndOfFile, $"Unexpected EOF while trying to read the string name [{i}] at file offset {absoluteStringOffset} in {this}");
                     return;
                 }
             }
@@ -161,7 +112,6 @@ namespace LibObjectFile.Ar
                 }
             }
             Debug.Assert(Size == sizeRead);
-            SizeKind = ValueKind.Auto;
         }
 
         protected override void AfterRead(DiagnosticBag diagnostics)
@@ -190,7 +140,7 @@ namespace LibObjectFile.Ar
         protected override void Write(ArArchiveFileWriter writer)
         {
             long startOffset = writer.Stream.Position;
-            writer.WriteU32(false, (uint)Symbols.Count);
+            writer.Stream.WriteU32(false, (uint)Symbols.Count);
 
             uint stringOffset = 0;
             bool isBSD = Parent.Kind == ArArchiveKind.BSD;
@@ -198,10 +148,10 @@ namespace LibObjectFile.Ar
             {
                 if (isBSD)
                 {
-                    writer.WriteU32(false, stringOffset);
+                    writer.Stream.WriteU32(false, stringOffset);
                 }
 
-                writer.WriteU32(false, (uint)symbol.File.Offset);
+                writer.Stream.WriteU32(false, (uint)symbol.File.Offset);
 
                 if (isBSD)
                 {
@@ -254,6 +204,39 @@ namespace LibObjectFile.Ar
         public override string ToString()
         {
             return $"{base.ToString()}, {nameof(Symbols)} Count: {Symbols.Count}";
+        }
+
+        public override bool TryUpdateLayout(DiagnosticBag diagnostics)
+        {
+            if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
+
+            // number of entries (both for BSD and GNU)
+            ulong sizeOfTable = sizeof(uint);
+
+            foreach (var symbol in Symbols)
+            {
+                if (symbol.Name != null)
+                {
+                    sizeOfTable += (ulong)Encoding.UTF8.GetByteCount(symbol.Name) + 1;
+
+                    // uint file_offset
+                    sizeOfTable += sizeof(uint);
+
+                    if (Parent.Kind == ArArchiveKind.BSD)
+                    {
+                        // uint string_offset
+                        sizeOfTable += sizeof(uint);
+                    }
+                }
+            }
+
+            if ((sizeOfTable & 1) != 0)
+            {
+                sizeOfTable++;
+            }
+
+            Size = sizeOfTable;
+            return true;
         }
     }
 }

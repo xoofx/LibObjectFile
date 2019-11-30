@@ -2,6 +2,7 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
+using System;
 using System.Buffers;
 using System.Collections.Generic;
 using System.Text;
@@ -26,40 +27,6 @@ namespace LibObjectFile.Ar
         }
 
         public Dictionary<int, string> FileNames { get; private set; }
-
-        protected override ulong GetSizeAuto()
-        {
-            if (Parent == null) return 0;
-
-            ulong size = 0;
-            for (var i = (int) Index; i < Parent.Files.Count; i++)
-            {
-                var file = Parent.Files[i];
-                if (file is ArLongNamesTable) break;
-
-                if (file.Name == null || file.Name.StartsWith("/"))
-                {
-                    continue;
-                }
-
-                var byteCount = Encoding.UTF8.GetByteCount(file.Name);
-                // byte count + `/` 
-                if (byteCount + 1 > FieldNameLength)
-                {
-                    // byte count + `/` + `\n`
-                    size += (ulong) byteCount + 2;
-                }
-            }
-
-            if ((size & 1) != 0)
-            {
-                size++;
-            }
-
-            // Once it is calculated freeze it
-            Size = size;
-            return size;
-        }
 
         public override bool IsSystem => true;
 
@@ -90,9 +57,6 @@ namespace LibObjectFile.Ar
                 }
             }
             ArrayPool<byte>.Shared.Return(buffer);
-
-            // Once loaded the size is auto
-            SizeKind = ValueKind.Auto;
         }
 
         protected override void Write(ArArchiveFileWriter writer)
@@ -143,6 +107,43 @@ namespace LibObjectFile.Ar
                 writer.Stream.WriteByte((byte)'\n');
             }
             ArrayPool<byte>.Shared.Return(buffer);
+        }
+
+        public override bool TryUpdateLayout(DiagnosticBag diagnostics)
+        {
+            if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
+            Size = 0;
+
+            if (Parent == null) return false;
+
+            ulong size = 0;
+            for (var i = (int)Index; i < Parent.Files.Count; i++)
+            {
+                var file = Parent.Files[i];
+                if (file is ArLongNamesTable) break;
+
+                if (file.Name == null || file.Name.StartsWith("/"))
+                {
+                    continue;
+                }
+
+                var byteCount = Encoding.UTF8.GetByteCount(file.Name);
+                // byte count + `/` 
+                if (byteCount + 1 > FieldNameLength)
+                {
+                    // byte count + `/` + `\n`
+                    size += (ulong)byteCount + 2;
+                }
+            }
+
+            if ((size & 1) != 0)
+            {
+                size++;
+            }
+
+            // Once it is calculated freeze it
+            Size = size;
+            return true;
         }
     }
 }

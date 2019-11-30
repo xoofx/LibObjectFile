@@ -4,8 +4,51 @@
 
 namespace LibObjectFile.Dwarf
 {
-    internal static class DwarfHelper
+    public static class DwarfHelper
     {
+        public static uint SizeOfUnitLength(bool is64Bit)
+        {
+            return is64Bit ? 12U : 4U;
+        }
+
+        public static uint SizeOfNativeInt(bool is64Bit)
+        {
+            return is64Bit ? 8U : 4U;
+        }
+
+        public static uint SizeOfLEB128(ulong value)
+        {
+            if (value == 0) return 1;
+
+            uint sizeOf = 0;
+            while (value != 0)
+            {
+                value >>= 7;
+                sizeOf++;
+            }
+
+            return sizeOf;
+        }
+
+        public static uint SizeOfSignedLEB128(long value)
+        {
+            if (value == 0) return 1;
+            uint sizeOf = 0;
+            while (true)
+            {
+                sizeOf++;
+                var b = (byte) value;
+                value >>= 7;
+                bool isSignBitSet = (b & 0x40) != 0;
+                if ((value == 0 && !isSignBitSet) || (value == -1 && isSignBitSet))
+                {
+                    break;
+                }
+            }
+
+            return sizeOf;
+        }
+
         private static readonly DwarfAttributeEncoding[] Encodings = new DwarfAttributeEncoding[]
         {
             DwarfAttributeEncoding.None               , // 0

@@ -96,7 +96,7 @@ namespace LibObjectFile.Disasm
             var section = symbol.Section.Section;
             Output.WriteLine($"Function: {symbol.Name}");
 
-            if (section is ElfCustomSection binarySection)
+            if (section is ElfBinarySection binarySection)
             {
                 binarySection.Stream.Position = (long)symbol.Value;
 

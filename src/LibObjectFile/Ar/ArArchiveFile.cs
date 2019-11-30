@@ -12,7 +12,7 @@ namespace LibObjectFile.Ar
     /// <summary>
     /// An 'ar' archive file.
     /// </summary>
-    public sealed class ArArchiveFile : ObjectFilePart
+    public sealed class ArArchiveFile : ObjectFileNode
     {
         private readonly List<ArFile> _files;
 
@@ -314,6 +314,8 @@ namespace LibObjectFile.Ar
         {
             if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
 
+            Size = 0;
+
             // Check first that we have a valid object file
             var localDiagnostics = new DiagnosticBag();
             Verify(localDiagnostics);
@@ -343,9 +345,6 @@ namespace LibObjectFile.Ar
                 {
                     LongNamesTable.Index = 1;
                 }
-
-                // Reset the calculation of the size of headers
-                LongNamesTable.SizeKind = ValueKind.Auto;
             }
             else
             {
@@ -365,9 +364,19 @@ namespace LibObjectFile.Ar
             {
                 var entry = Files[i];
 
+                if (!entry.TryUpdateLayout(diagnostics))
+                {
+                    return false;
+                }
+
                 // If we have a GNU headers and they are required, add them to the offset and size
                 if (LongNamesTable != null && LongNamesTable.Index == i)
                 {
+                    if (!LongNamesTable.TryUpdateLayout(diagnostics))
+                    {
+                        return false;
+                    }
+
                     var headerSize = LongNamesTable.Size;
                     if (headerSize > 0)
                     {
@@ -381,6 +390,8 @@ namespace LibObjectFile.Ar
                 size += ArFile.FileEntrySizeInBytes + entry.Size;
                 if ((size & 1) != 0) size++;
             }
+
+            Size = size;
 
             return true;
         }
