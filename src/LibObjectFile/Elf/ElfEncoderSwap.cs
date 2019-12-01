@@ -2,7 +2,7 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
-using LibObjectFile.Utils;
+using System.Buffers.Binary;
 
 namespace LibObjectFile.Elf
 {
@@ -13,92 +13,92 @@ namespace LibObjectFile.Elf
     {
         public void Encode(out ElfNative.Elf32_Half dest, ushort value)
         {
-            dest = BinaryUtil.SwapBits(value);
+            dest = BinaryPrimitives.ReverseEndianness(value);
         }
 
         public void Encode(out ElfNative.Elf64_Half dest, ushort value)
         {
-            dest = BinaryUtil.SwapBits(value);
+            dest = BinaryPrimitives.ReverseEndianness(value);
         }
 
         public void Encode(out ElfNative.Elf32_Word dest, uint value)
         {
-            dest = BinaryUtil.SwapBits(value);
+            dest = BinaryPrimitives.ReverseEndianness(value);
         }
 
         public void Encode(out ElfNative.Elf64_Word dest, uint value)
         {
-            dest = BinaryUtil.SwapBits(value);
+            dest = BinaryPrimitives.ReverseEndianness(value);
         }
 
         public void Encode(out ElfNative.Elf32_Sword dest, int value)
         {
-            dest = BinaryUtil.SwapBits(value);
+            dest = BinaryPrimitives.ReverseEndianness(value);
         }
 
         public void Encode(out ElfNative.Elf64_Sword dest, int value)
         {
-            dest = BinaryUtil.SwapBits(value);
+            dest = BinaryPrimitives.ReverseEndianness(value);
         }
 
         public void Encode(out ElfNative.Elf32_Xword dest, ulong value)
         {
-            dest = BinaryUtil.SwapBits(value);
+            dest = BinaryPrimitives.ReverseEndianness(value);
         }
 
         public void Encode(out ElfNative.Elf32_Sxword dest, long value)
         {
-            dest = BinaryUtil.SwapBits(value);
+            dest = BinaryPrimitives.ReverseEndianness(value);
         }
 
         public void Encode(out ElfNative.Elf64_Xword dest, ulong value)
         {
-            dest = BinaryUtil.SwapBits(value);
+            dest = BinaryPrimitives.ReverseEndianness(value);
         }
 
         public void Encode(out ElfNative.Elf64_Sxword dest, long value)
         {
-            dest = BinaryUtil.SwapBits(value);
+            dest = BinaryPrimitives.ReverseEndianness(value);
         }
 
         public void Encode(out ElfNative.Elf32_Addr dest, uint value)
         {
-            dest = BinaryUtil.SwapBits(value);
+            dest = BinaryPrimitives.ReverseEndianness(value);
         }
 
         public void Encode(out ElfNative.Elf64_Addr dest, ulong value)
         {
-            dest = BinaryUtil.SwapBits(value);
+            dest = BinaryPrimitives.ReverseEndianness(value);
         }
 
         public void Encode(out ElfNative.Elf32_Off dest, uint offset)
         {
-            dest = BinaryUtil.SwapBits(offset);
+            dest = BinaryPrimitives.ReverseEndianness(offset);
         }
 
         public void Encode(out ElfNative.Elf64_Off dest, ulong offset)
         {
-            dest = BinaryUtil.SwapBits(offset);
+            dest = BinaryPrimitives.ReverseEndianness(offset);
         }
 
         public void Encode(out ElfNative.Elf32_Section dest, ushort index)
         {
-            dest = BinaryUtil.SwapBits(index);
+            dest = BinaryPrimitives.ReverseEndianness(index);
         }
 
         public void Encode(out ElfNative.Elf64_Section dest, ushort index)
         {
-            dest = BinaryUtil.SwapBits(index);
+            dest = BinaryPrimitives.ReverseEndianness(index);
         }
 
         public void Encode(out ElfNative.Elf32_Versym dest, ushort value)
         {
-            dest = (ElfNative.Elf32_Half)BinaryUtil.SwapBits(value);
+            dest = (ElfNative.Elf32_Half)BinaryPrimitives.ReverseEndianness(value);
         }
 
         public void Encode(out ElfNative.Elf64_Versym dest, ushort value)
         {
-            dest = (ElfNative.Elf64_Half)BinaryUtil.SwapBits(value);
+            dest = (ElfNative.Elf64_Half)BinaryPrimitives.ReverseEndianness(value);
         }
     }
 }

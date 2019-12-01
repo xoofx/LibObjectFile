@@ -4,7 +4,7 @@
 
 using System;
 using System.Buffers;
-using System.Collections.Generic;
+using System.Buffers.Binary;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -228,7 +228,7 @@ namespace LibObjectFile
 
             if (isLittleEndian != BitConverter.IsLittleEndian)
             {
-                value = BinaryUtil.SwapBits(value);
+                value = BinaryPrimitives.ReverseEndianness(value);
             }
 
             return true;
@@ -251,7 +251,7 @@ namespace LibObjectFile
 
                 if (isLittleEndian != BitConverter.IsLittleEndian)
                 {
-                    value = BinaryUtil.SwapBits(value);
+                    value = BinaryPrimitives.ReverseEndianness(value);
                 }
             }
             return true;
@@ -274,7 +274,7 @@ namespace LibObjectFile
 
                 if (isLittleEndian != BitConverter.IsLittleEndian)
                 {
-                    value = BinaryUtil.SwapBits(value);
+                    value = BinaryPrimitives.ReverseEndianness(value);
                 }
             }
             return true;
@@ -284,7 +284,7 @@ namespace LibObjectFile
         {
             if (isLittleEndian != BitConverter.IsLittleEndian)
             {
-                value = BinaryUtil.SwapBits(value);
+                value = BinaryPrimitives.ReverseEndianness(value);
             }
             var span = new Span<byte>((byte*)&value, sizeof(ushort));
             Stream.Write(span);
@@ -294,7 +294,7 @@ namespace LibObjectFile
         {
             if (isLittleEndian != BitConverter.IsLittleEndian)
             {
-                value = BinaryUtil.SwapBits(value);
+                value = BinaryPrimitives.ReverseEndianness(value);
             }
             var span = new Span<byte>((byte*)&value, sizeof(uint));
             Stream.Write(span);
@@ -304,7 +304,7 @@ namespace LibObjectFile
         {
             if (isLittleEndian != BitConverter.IsLittleEndian)
             {
-                value = BinaryUtil.SwapBits(value);
+                value = BinaryPrimitives.ReverseEndianness(value);
             }
             var span = new Span<byte>((byte*)&value, sizeof(ulong));
             Stream.Write(span);
