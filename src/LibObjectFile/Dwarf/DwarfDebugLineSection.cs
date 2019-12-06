@@ -40,9 +40,9 @@ namespace LibObjectFile.Dwarf
             }
         }
 
-        public bool Is64Bit { get; set; }
+        public bool Is64BitDwarfFormat { get; set; }
 
-        public bool IsTarget64Bit { get; set; }
+        public bool Is64BitCpu { get; set; }
 
         public ushort Version { get; set; }
 
@@ -85,7 +85,7 @@ namespace LibObjectFile.Dwarf
         
         internal void Read(DwarfReaderWriter reader)
         {
-            if (reader.InputOutputContext.DebugLineStream.Stream == null)
+            if (reader.FileContext.DebugLineStream.Stream == null)
             {
                 return;
             }
@@ -93,8 +93,8 @@ namespace LibObjectFile.Dwarf
             var currentStream = reader.Stream;
             try
             {
-                reader.Stream = reader.InputOutputContext.DebugLineStream;
-                ReadInternal(reader, reader.InputOutputContext.DebugLineStream.RawDump);
+                reader.Stream = reader.FileContext.DebugLineStream;
+                ReadInternal(reader, reader.FileContext.DebugLineStream.RawDump);
             }
             finally
             {
@@ -106,8 +106,8 @@ namespace LibObjectFile.Dwarf
         {
             var startOfSection = reader.Offset;
             var unitLength = reader.ReadUnitLength();
-            Is64Bit = reader.Is64Bit;
-            IsTarget64Bit = reader.IsTargetAddress64Bit;
+            Is64BitDwarfFormat = reader.Is64BitDwarfFormat;
+            Is64BitCpu = reader.Is64BitCpu;
             var startPosition = reader.Offset;
             var version = reader.ReadU16();
 
@@ -659,9 +659,9 @@ namespace LibObjectFile.Dwarf
                 return false;
             }
             
-            ulong sizeOf = DwarfHelper.SizeOfUnitLength(Is64Bit);
+            ulong sizeOf = DwarfHelper.SizeOfUnitLength(Is64BitDwarfFormat);
             // unit_length
-            sizeOf += DwarfHelper.SizeOfNativeInt(Is64Bit);
+            sizeOf += DwarfHelper.SizeOfNativeInt(Is64BitDwarfFormat);
 
             sizeOf += 2; // version (uhalf)
 
@@ -730,8 +730,8 @@ namespace LibObjectFile.Dwarf
             var currentStream = writer.Stream;
             try
             {
-                writer.Stream = writer.InputOutputContext.DebugLineStream;
-                Write(writer, writer.InputOutputContext.DebugLineStream.RawDump);
+                writer.Stream = writer.FileContext.DebugLineStream;
+                Write(writer, writer.FileContext.DebugLineStream.RawDump);
             }
             finally
             {
@@ -743,8 +743,8 @@ namespace LibObjectFile.Dwarf
         {
             var startOffset = writer.Offset;
 
-            writer.Is64Bit = Is64Bit;
-            writer.WriteUnitLength(Size - DwarfHelper.SizeOfUnitLength(Is64Bit));
+            writer.Is64BitDwarfFormat = Is64BitDwarfFormat;
+            writer.WriteUnitLength(Size - DwarfHelper.SizeOfUnitLength(Is64BitDwarfFormat));
             
             writer.WriteU16(Version);
             writer.WriteNativeUInt(HeaderLength);
@@ -986,7 +986,7 @@ namespace LibObjectFile.Dwarf
                         if (previousLine.Address == 0)
                         {
                             writer.WriteU8(0);
-                            writer.WriteLEB128(1 + DwarfHelper.SizeOfNativeInt(writer.IsTargetAddress64Bit));
+                            writer.WriteLEB128(1 + DwarfHelper.SizeOfNativeInt(writer.Is64BitCpu));
                             writer.WriteU8(DwarfNative.DW_LNE_set_address);
                             writer.WriteTargetUInt(debugLine.Address);
                             operationAdvancedEncoded = true;
@@ -1199,7 +1199,7 @@ namespace LibObjectFile.Dwarf
                         if (previousLine.Address == 0)
                         {
                             sizeOf += 1; // writer.WriteU8(0);
-                            var sizeOfAddress = DwarfHelper.SizeOfNativeInt(IsTarget64Bit);
+                            var sizeOfAddress = DwarfHelper.SizeOfNativeInt(Is64BitCpu);
                             sizeOf += DwarfHelper.SizeOfLEB128(1 + sizeOfAddress); // writer.WriteLEB128(DwarfHelper.SizeOfNativeInt(writer.IsTargetAddress64Bit));
                             sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNE_set_address);
                             sizeOf += sizeOfAddress; // writer.WriteLEB128(debugLine.Address);
@@ -1257,7 +1257,7 @@ namespace LibObjectFile.Dwarf
 
         public override string ToString()
         {
-            return $"Section .debug_line, {nameof(Version)}: {Version}, {nameof(Is64Bit)}: {Is64Bit}, {nameof(FileNames)}: {FileNames.Count}, {nameof(Lines)}: {Lines.Count}";
+            return $"Section .debug_line, {nameof(Version)}: {Version}, {nameof(Is64BitDwarfFormat)}: {Is64BitDwarfFormat}, {nameof(FileNames)}: {FileNames.Count}, {nameof(Lines)}: {Lines.Count}";
         }
     }
 }

@@ -41,7 +41,7 @@ namespace LibObjectFile.Dwarf
 
         internal void Read(DwarfReaderWriter reader)
         {
-            if (reader.InputOutputContext.DebugStringStream.Stream == null)
+            if (reader.FileContext.DebugStringStream.Stream == null)
             {
                 return;
             }
@@ -49,7 +49,7 @@ namespace LibObjectFile.Dwarf
             var previousStream = reader.Stream;
             try
             {
-                reader.Stream = reader.InputOutputContext.DebugStringStream;
+                reader.Stream = reader.FileContext.DebugStringStream;
                 Stream = reader.ReadAsStream((ulong) reader.Stream.Length);
             }
             finally

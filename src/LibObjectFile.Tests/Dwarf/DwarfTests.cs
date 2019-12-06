@@ -90,7 +90,7 @@ namespace LibObjectFile.Tests.Dwarf
                 elf.Print(Console.Out);
             }
 
-            var inputContext = DwarfInputOutputContext.FromElf(elf);
+            var inputContext = DwarfFileContext.FromElf(elf);
             inputContext.DebugLineStream.RawDump = Console.Out;
             var dwarf = DwarfFile.Read(inputContext);
 
@@ -100,10 +100,10 @@ namespace LibObjectFile.Tests.Dwarf
             inputContext.DebugLineStream.Stream.CopyTo(copyInputDebugLineStream);
             inputContext.DebugLineStream.Stream.Position = 0;
 
-            var outputContext = new DwarfInputOutputContext
+            var outputContext = new DwarfFileContext
             {
                 IsLittleEndian = inputContext.IsLittleEndian,
-                IsTarget64Bit = inputContext.IsTarget64Bit,
+                Is64BitCpu = inputContext.Is64BitCpu,
                 DebugLineStream = new MemoryStream()
             };
             dwarf.Write(outputContext);

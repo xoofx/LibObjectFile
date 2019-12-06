@@ -9,32 +9,31 @@ namespace LibObjectFile.Dwarf
 {
     public sealed class DwarfReaderWriter : ObjectFileReaderWriter
     {
-        internal DwarfReaderWriter(DwarfInputOutputContext inputOutputContext, DiagnosticBag diagnostics) : base(inputOutputContext.DebugInfoStream, diagnostics)
+        internal DwarfReaderWriter(DwarfFileContext fileContext, DiagnosticBag diagnostics) : base(fileContext.DebugInfoStream, diagnostics)
         {
-            IsReadOnly = inputOutputContext.IsInputReadOnly;
-            InputOutputContext = inputOutputContext;
-            IsLittleEndian = inputOutputContext.IsLittleEndian;
-            IsTargetAddress64Bit = inputOutputContext.IsTarget64Bit;
+            IsReadOnly = fileContext.IsInputReadOnly;
+            FileContext = fileContext;
+            IsLittleEndian = fileContext.IsLittleEndian;
+            Is64BitCpu = fileContext.Is64BitCpu;
         }
 
-        public DwarfInputOutputContext InputOutputContext { get; }
-
-
+        public DwarfFileContext FileContext { get; }
+        
         public override bool IsReadOnly { get; }
 
-        public bool Is64Bit { get; set; }
+        public bool Is64BitDwarfFormat { get; set; }
 
-        public bool IsTargetAddress64Bit { get; private set; }
+        public bool Is64BitCpu { get; }
        
         public ulong ReadUnitLength()
         {
-            Is64Bit = false;
+            Is64BitDwarfFormat = false;
             ulong length = ReadU32();
             if (length >= 0xFFFFFFF0 && length <= 0xFFFFFFFF)
             {
                 if (length == 0xFFFFFFFF)
                 {
-                    Is64Bit = true;
+                    Is64BitDwarfFormat = true;
                     return ReadU64();
                 }
             }
@@ -43,7 +42,7 @@ namespace LibObjectFile.Dwarf
 
         public void WriteUnitLength(ulong length)
         {
-            if (Is64Bit)
+            if (Is64BitDwarfFormat)
             {
                 WriteU32(0xFFFFFFFF);
                 WriteU64(length);
@@ -60,12 +59,12 @@ namespace LibObjectFile.Dwarf
 
         public ulong ReadNativeUInt()
         {
-            return Is64Bit ? ReadU64() : ReadU32();
+            return Is64BitDwarfFormat ? ReadU64() : ReadU32();
         }
 
         public void WriteNativeUInt(ulong value)
         {
-            if (Is64Bit)
+            if (Is64BitDwarfFormat)
             {
                 WriteU64(value);
             }
@@ -77,12 +76,12 @@ namespace LibObjectFile.Dwarf
 
         public ulong ReadTargetUInt()
         {
-            return IsTargetAddress64Bit ? ReadU64() : ReadU32();
+            return Is64BitCpu ? ReadU64() : ReadU32();
         }
 
         public void WriteTargetUInt(ulong target)
         {
-            if (IsTargetAddress64Bit)
+            if (Is64BitCpu)
             {
                 WriteU64(target);
             }
@@ -125,18 +124,5 @@ namespace LibObjectFile.Dwarf
         {
             Stream.WriteSignedLEB128(value);
         }
-    }
-
-    public readonly struct DwarfReadAttributeFormContext
-    {
-        public DwarfReadAttributeFormContext(uint addressSize, DwarfFile dwarf)
-        {
-            AddressSize = addressSize;
-            DwarfFile = dwarf;
-        }
-
-        public readonly uint AddressSize;
-
-        public readonly DwarfFile DwarfFile;
     }
 }

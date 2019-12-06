@@ -63,7 +63,7 @@ namespace LibObjectFile.Dwarf
             DebugInfoSection?.Read(reader);
         }
 
-        public void Write(DwarfInputOutputContext outputContext)
+        public void Write(DwarfFileContext outputContext)
         {
             if (outputContext == null) throw new ArgumentNullException(nameof(outputContext));
 
@@ -90,7 +90,7 @@ namespace LibObjectFile.Dwarf
             Write(writer);
         }
 
-        public static DwarfFile Read(DwarfInputOutputContext inputContext)
+        public static DwarfFile Read(DwarfFileContext inputContext)
         {
             if (inputContext == null) throw new ArgumentNullException(nameof(inputContext));
 
@@ -102,7 +102,7 @@ namespace LibObjectFile.Dwarf
 
         public static DwarfFile ReadFromElf(ElfObjectFile elf)
         {
-            var readerContext = DwarfInputOutputContext.FromElf(elf);
+            var readerContext = DwarfFileContext.FromElf(elf);
             return Read(readerContext);
         }
 

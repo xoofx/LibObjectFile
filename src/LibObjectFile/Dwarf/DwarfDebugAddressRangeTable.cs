@@ -31,7 +31,7 @@ namespace LibObjectFile.Dwarf
         public static DwarfDebugAddressRangeTable Read(Stream stream, bool isLittleEndian, TextWriter rawDump = null)
         {
             var dwarfDebugAddressRangeTable = new DwarfDebugAddressRangeTable();
-            var reader = new DwarfReaderWriter(new DwarfInputOutputContext()
+            var reader = new DwarfReaderWriter(new DwarfFileContext()
             {
                 IsLittleEndian = isLittleEndian, 
                 DebugAddressRangeStream = new DwarfStreamAndDump(stream, rawDump)
@@ -46,7 +46,7 @@ namespace LibObjectFile.Dwarf
 
         internal void Read(DwarfReaderWriter reader)
         {
-            if (reader.InputOutputContext.DebugAddressRangeStream.Stream == null)
+            if (reader.FileContext.DebugAddressRangeStream.Stream == null)
             {
                 return;
             }
@@ -54,8 +54,8 @@ namespace LibObjectFile.Dwarf
             var currentStream = reader.Stream;
             try
             {
-                reader.Stream = reader.InputOutputContext.DebugAddressRangeStream;
-                ReadInternal(reader, reader.InputOutputContext.DebugAddressRangeStream.RawDump);
+                reader.Stream = reader.FileContext.DebugAddressRangeStream;
+                ReadInternal(reader, reader.FileContext.DebugAddressRangeStream.RawDump);
             }
             finally
             {

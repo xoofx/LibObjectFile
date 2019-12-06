@@ -37,7 +37,7 @@ namespace LibObjectFile.Dwarf
 
         internal void Read(DwarfReaderWriter reader)
         {
-            if (reader.InputOutputContext.DebugInfoStream.Stream == null)
+            if (reader.FileContext.DebugInfoStream.Stream == null)
             {
                 return;
             }
@@ -75,7 +75,7 @@ namespace LibObjectFile.Dwarf
                 var cu = new DwarfCompilationUnit
                 {
                     Offset = (ulong)startOffset,
-                    Is64 = reader.Is64Bit,
+                    Is64 = reader.Is64BitDwarfFormat,
                     Version = header.version,
                     AddressSize = header.address_size
                 };
@@ -86,7 +86,7 @@ namespace LibObjectFile.Dwarf
                 
                 internalContext.AddressSize = header.address_size;
 
-                var abbreviation = Parent.DebugAbbrevTable.Read(reader.InputOutputContext.DebugAbbrevStream, header.debug_abbrev_offset);
+                var abbreviation = Parent.DebugAbbrevTable.Read(reader.FileContext.DebugAbbrevStream, header.debug_abbrev_offset);
                 
                 // Each debugging information entry begins with an unsigned LEB128 number containing the abbreviation code for the entry.
                 cu.Root = ReadDIE(reader, ref internalContext, abbreviation, 0);

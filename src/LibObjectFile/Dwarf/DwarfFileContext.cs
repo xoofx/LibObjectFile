@@ -8,11 +8,11 @@ using LibObjectFile.Elf;
 
 namespace LibObjectFile.Dwarf
 {
-    public class DwarfInputOutputContext
+    public class DwarfFileContext
     {
         public bool IsLittleEndian { get; set; }
 
-        public bool IsTarget64Bit { get; set; }
+        public bool Is64BitCpu { get; set; }
 
         public bool IsInputReadOnly { get; set; }
 
@@ -26,14 +26,14 @@ namespace LibObjectFile.Dwarf
 
         public DwarfStreamAndDump DebugInfoStream;
         
-        public static DwarfInputOutputContext FromElf(ElfObjectFile elf)
+        public static DwarfFileContext FromElf(ElfObjectFile elf)
         {
             if (elf == null) throw new ArgumentNullException(nameof(elf));
 
-            var readerContext = new DwarfInputOutputContext()
+            var readerContext = new DwarfFileContext()
             {
                 IsLittleEndian = elf.Encoding == ElfEncoding.Lsb,
-                IsTarget64Bit = elf.FileClass == ElfFileClass.Is64
+                Is64BitCpu = elf.FileClass == ElfFileClass.Is64
             };
 
             foreach (var section in elf.Sections)
