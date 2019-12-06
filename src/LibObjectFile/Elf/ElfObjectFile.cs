@@ -183,19 +183,8 @@ namespace LibObjectFile.Elf
         {
             if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
 
-            // Check first that we have a valid object file
-            var localDiagnostics = new DiagnosticBag();
-            Verify(localDiagnostics);
-
             Size = 0;
             
-            // If we have any any errors
-            if (localDiagnostics.HasErrors)
-            {
-                localDiagnostics.CopyTo(diagnostics);
-                return false;
-            }
-
             ulong offset = FileClass == ElfFileClass.Is32 ? (uint)sizeof(ElfNative.Elf32_Ehdr) : (uint)sizeof(ElfNative.Elf64_Ehdr);
             Layout.SizeOfElfHeader = (ushort)offset;
             Layout.OffsetOfProgramHeaderTable = 0;
@@ -253,7 +242,7 @@ namespace LibObjectFile.Elf
                         return false;
                     }
 
-                    Console.WriteLine($"{section.ToString(),-50} Offset: {section.Offset:x4} Size: {section.Size:x4}");
+                    // Console.WriteLine($"{section.ToString(),-50} Offset: {section.Offset:x4} Size: {section.Size:x4}");
 
                     // A section without content doesn't count with its size
                     if (!section.HasContent)
@@ -572,6 +561,12 @@ namespace LibObjectFile.Elf
             var elfWriter = ElfWriter.Create(this, stream);
             diagnostics = elfWriter.Diagnostics;
 
+            Verify(diagnostics);
+            if (diagnostics.HasErrors)
+            {
+                return false;
+            }
+            
             if (!TryUpdateLayout(diagnostics))
             {
                 return false;

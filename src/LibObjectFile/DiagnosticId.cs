@@ -68,6 +68,7 @@ namespace LibObjectFile
         ELF_ERR_InvalidSegmentAlignmentForLoad = 155,
         ELF_ERR_InvalidStreamForSectionNoBits = 156,
         ELF_ERR_InvalidNullSection = 157,
+        ELF_ERR_InvalidAlignmentOutOfRange = 158,
 
         AR_ERR_InvalidMagicLength = 1000,
         AR_ERR_MagicNotFound = 1001,

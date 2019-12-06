@@ -335,5 +335,33 @@ namespace LibObjectFile.Tests.Elf
                 Assert.AreEqual(expected, result);
             }
         }
+
+        [Test]
+        public void TestAlignedSection()
+        {
+            var elf = new ElfObjectFile();
+
+            // By default 0x1000
+            var alignedSection = new ElfAlignedShadowSection();
+            elf.AddSection(alignedSection);
+
+            var codeStream = new MemoryStream();
+            codeStream.Write(Encoding.UTF8.GetBytes("This is a text"));
+            codeStream.Position = 0;
+
+            var codeSection = new ElfBinarySection(codeStream).ConfigureAs(ElfSectionSpecialType.Text);
+            elf.AddSection(codeSection);
+
+            elf.AddSection(new ElfSectionHeaderStringTable());
+
+            var diagnostics = elf.Verify();
+            Assert.False(diagnostics.HasErrors);
+
+            Assert.True(elf.TryUpdateLayout(diagnostics));
+
+            elf.Print(Console.Out);
+
+            Assert.AreEqual(alignedSection.UpperAlignment, codeSection.Offset, "Invalid alignment");
+        }
     }
 }
