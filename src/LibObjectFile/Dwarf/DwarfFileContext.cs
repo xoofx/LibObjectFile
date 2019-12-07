@@ -12,7 +12,7 @@ namespace LibObjectFile.Dwarf
     {
         public bool IsLittleEndian { get; set; }
 
-        public bool Is64BitCpu { get; set; }
+        public bool Is64BitAddress { get; set; }
 
         public bool IsInputReadOnly { get; set; }
 
@@ -33,7 +33,7 @@ namespace LibObjectFile.Dwarf
             var readerContext = new DwarfFileContext()
             {
                 IsLittleEndian = elf.Encoding == ElfEncoding.Lsb,
-                Is64BitCpu = elf.FileClass == ElfFileClass.Is64
+                Is64BitAddress = elf.FileClass == ElfFileClass.Is64
             };
 
             foreach (var section in elf.Sections)

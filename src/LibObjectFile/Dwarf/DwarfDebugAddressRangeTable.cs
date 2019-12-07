@@ -2,7 +2,6 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -20,7 +19,9 @@ namespace LibObjectFile.Dwarf
 
         public ushort Version { get; set; }
 
-        public byte AddressSize { get; set; }
+        public bool Is64BitEncoding { get; set; }
+
+        public bool Is64BitAddress { get; set; }
 
         public byte SegmentSelectorSize { get; set; }
 
@@ -66,6 +67,7 @@ namespace LibObjectFile.Dwarf
         private void ReadInternal(DwarfReaderWriter reader, TextWriter dumpLog)
         {
             var unitLength = reader.ReadUnitLength();
+            Is64BitEncoding = reader.Is64BitEncoding;
             var startPosition = reader.Offset;
             Version = reader.ReadU16();
 
@@ -78,7 +80,12 @@ namespace LibObjectFile.Dwarf
             DebugInfoOffset = reader.ReadDwarfUInt();
 
             var address_size = reader.ReadU8();
-            AddressSize = address_size;
+            if (address_size != 4 && address_size != 8)
+            {
+                reader.Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidAddressSize, $"Unsupported address size {address_size}. Must be 4 (32 bits) or 8 (64 bits).");
+                return;
+            }
+            Is64BitAddress = address_size == 8;
 
             var segment_selector_size = reader.ReadU8();
             SegmentSelectorSize = segment_selector_size;

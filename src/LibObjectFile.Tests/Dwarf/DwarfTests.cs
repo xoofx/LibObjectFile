@@ -103,7 +103,7 @@ namespace LibObjectFile.Tests.Dwarf
             var outputContext = new DwarfFileContext
             {
                 IsLittleEndian = inputContext.IsLittleEndian,
-                Is64BitCpu = inputContext.Is64BitCpu,
+                Is64BitAddress = inputContext.Is64BitAddress,
                 DebugLineStream = new MemoryStream()
             };
             dwarf.Write(outputContext);

@@ -12,16 +12,24 @@ namespace LibObjectFile.Dwarf
         {
         }
 
-        public bool Is64 { get; set; }
+        public bool Is64BitEncoding { get; set; }
+
+        public bool Is64BitAddress { get; set; }
 
         public ushort Version { get; set; }
         
-        public byte AddressSize { get; set; }
-
+        /// <summary>
+        /// Gets or sets the root <see cref="DwarfDIE"/> of this compilation unit.
+        /// </summary>
         public DwarfDIE Root
         {
             get => _root;
             set => AttachChild<DwarfContainer, DwarfDIE>(this, value, ref _root);
         }
+
+        /// <summary>
+        /// Gets or sets the abbreviation associated with the <see cref="Root"/> <see cref="DwarfDIE"/>
+        /// </summary>
+        public DwarfAbbreviation Abbreviation { get; set; }
     }
 }

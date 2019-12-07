@@ -9,23 +9,8 @@ namespace LibObjectFile.Dwarf
 {
     public class DwarfDebugAbbrevTable : DwarfSection
     {
-        private readonly Dictionary<ulong, DwarfAbbreviation> _offsetToAbbreviation;
-
         public DwarfDebugAbbrevTable()
         {
-            _offsetToAbbreviation = new Dictionary<ulong, DwarfAbbreviation>();
-        }
-
-        internal DwarfAbbreviation Read(Stream stream, ulong abbreviationOffset)
-        {
-            if (_offsetToAbbreviation.TryGetValue(abbreviationOffset, out var abbreviation))
-            {
-                return abbreviation;
-            }
-            
-            abbreviation = DwarfAbbreviation.Read(stream, abbreviationOffset);
-            _offsetToAbbreviation[abbreviationOffset] = abbreviation;
-            return abbreviation;
         }
 
         public override bool TryUpdateLayout(DiagnosticBag diagnostics)

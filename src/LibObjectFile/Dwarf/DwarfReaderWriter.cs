@@ -14,26 +14,26 @@ namespace LibObjectFile.Dwarf
             IsReadOnly = fileContext.IsInputReadOnly;
             FileContext = fileContext;
             IsLittleEndian = fileContext.IsLittleEndian;
-            Is64BitCpu = fileContext.Is64BitCpu;
+            Is64BitAddress = fileContext.Is64BitAddress;
         }
 
         public DwarfFileContext FileContext { get; }
         
         public override bool IsReadOnly { get; }
 
-        public bool Is64BitDwarfFormat { get; set; }
+        public bool Is64BitEncoding { get; set; }
 
-        public bool Is64BitCpu { get; }
+        public bool Is64BitAddress { get; }
        
         public ulong ReadUnitLength()
         {
-            Is64BitDwarfFormat = false;
+            Is64BitEncoding = false;
             ulong length = ReadU32();
             if (length >= 0xFFFFFFF0 && length <= 0xFFFFFFFF)
             {
                 if (length == 0xFFFFFFFF)
                 {
-                    Is64BitDwarfFormat = true;
+                    Is64BitEncoding = true;
                     return ReadU64();
                 }
             }
@@ -42,7 +42,7 @@ namespace LibObjectFile.Dwarf
 
         public void WriteUnitLength(ulong length)
         {
-            if (Is64BitDwarfFormat)
+            if (Is64BitEncoding)
             {
                 WriteU32(0xFFFFFFFF);
                 WriteU64(length);
@@ -59,12 +59,12 @@ namespace LibObjectFile.Dwarf
 
         public ulong ReadDwarfUInt()
         {
-            return Is64BitDwarfFormat ? ReadU64() : ReadU32();
+            return Is64BitEncoding ? ReadU64() : ReadU32();
         }
 
         public void WriteNativeUInt(ulong value)
         {
-            if (Is64BitDwarfFormat)
+            if (Is64BitEncoding)
             {
                 WriteU64(value);
             }
@@ -76,12 +76,12 @@ namespace LibObjectFile.Dwarf
 
         public ulong ReadUInt()
         {
-            return Is64BitCpu ? ReadU64() : ReadU32();
+            return Is64BitAddress ? ReadU64() : ReadU32();
         }
 
         public void WriteTargetUInt(ulong target)
         {
-            if (Is64BitCpu)
+            if (Is64BitAddress)
             {
                 WriteU64(target);
             }

@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace LibObjectFile.Dwarf
 {
@@ -61,10 +62,16 @@ namespace LibObjectFile.Dwarf
                 var cu = new DwarfCompilationUnit
                 {
                     Offset = (ulong)startOffset,
-                    Is64 = reader.Is64BitDwarfFormat,
+                    Is64BitEncoding = reader.Is64BitEncoding,
                     Version = header.version,
-                    AddressSize = header.address_size
                 };
+
+                if (header.address_size != 4 && header.address_size != 8)
+                {
+                    reader.Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidAddressSize, $"Unsupported address size {header.address_size} for compilation unit at offset {startOffset} in {this}. Must be 4 (32 bits) or 8 (64 bits).");
+                    return;
+                }
+                cu.Is64BitAddress = header.address_size == 8;
 
                 internalContext.Version = header.version;
                 internalContext.OffsetOfCompilationUnitInSection = startOffset;
@@ -73,9 +80,10 @@ namespace LibObjectFile.Dwarf
                 
                 internalContext.Is64Address = header.address_size == 8;
 
-                var abbreviation = Parent.DebugAbbrevTable.Read(reader.FileContext.DebugAbbrevStream, header.debug_abbrev_offset);
+                var abbreviation = ReadAbbreviation(reader.FileContext.DebugAbbrevStream, header.debug_abbrev_offset, internalContext);
                 
                 // Each debugging information entry begins with an unsigned LEB128 number containing the abbreviation code for the entry.
+                cu.Abbreviation = abbreviation;
                 cu.Root = ReadDIE(reader, ref internalContext, abbreviation, 0);
 
                 // Resolve attribute reference within the CU
@@ -94,6 +102,18 @@ namespace LibObjectFile.Dwarf
             }
         }
 
+        private DwarfAbbreviation ReadAbbreviation(Stream stream, ulong abbreviationOffset, in DebugInfoReaderContext context)
+        {
+            if (context.Abbreviations.TryGetValue(abbreviationOffset, out var abbreviation))
+            {
+                return abbreviation;
+            }
+
+            abbreviation = DwarfAbbreviation.Read(stream, abbreviationOffset);
+            context.Abbreviations[abbreviationOffset] = abbreviation;
+            return abbreviation;
+        }
+        
         private DwarfDIE ReadDIE(DwarfReaderWriter reader, ref DebugInfoReaderContext internalContext, DwarfAbbreviation abbreviation, int level)
         {
             var startDIEOffset = reader.Offset;
@@ -984,6 +1004,7 @@ namespace LibObjectFile.Dwarf
             {
                 return new DebugInfoReaderContext()
                 {
+                    Abbreviations = new Dictionary<ulong, DwarfAbbreviation>(),
                     RegisteredDIEPerCompilationUnit = new Dictionary<ulong, DwarfDIE>(),
                     RegisteredDIEPerSection = new Dictionary<ulong, DwarfDIE>(),
                     UnresolvedDIECompilationUnitReference = new List<DwarfDIEReference>(),
@@ -991,6 +1012,8 @@ namespace LibObjectFile.Dwarf
                     OffsetToDebugLine = new Dictionary<ulong, DwarfDebugLine>(lineCount)
                 };
             }
+
+            public Dictionary<ulong, DwarfAbbreviation> Abbreviations;
 
             public Dictionary<ulong, DwarfDIE> RegisteredDIEPerCompilationUnit;
 

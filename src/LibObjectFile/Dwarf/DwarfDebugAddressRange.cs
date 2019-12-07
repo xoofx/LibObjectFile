@@ -12,8 +12,7 @@ namespace LibObjectFile.Dwarf
             Address = address;
             Length = length;
         }
-
-
+        
         public ulong Segment { get; set; }
 
         public ulong Address { get; set; }
