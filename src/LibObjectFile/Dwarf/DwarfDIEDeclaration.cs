@@ -4,7 +4,7 @@
 
 namespace LibObjectFile.Dwarf
 {
-    public abstract class DwarfDIEDecl : DwarfDIE
+    public abstract class DwarfDIEDeclaration : DwarfDIE
     {
         //  DW_AT_decl_column, DW_AT_decl_file, and DW_AT_decl_line
         public ulong? DeclColumn

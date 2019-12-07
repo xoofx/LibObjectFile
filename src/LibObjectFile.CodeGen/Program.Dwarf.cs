@@ -226,57 +226,70 @@ namespace LibObjectFile.CodeGen
                     if (match.Success)
                     {
                         var compactAttrName = match.Groups[1].Value;
-                        if (compactAttrName == "DWATuseUTFeight")
-                        {
-                            compactAttrName = "DWATuseUTF8";
-                        }
-
-                        var map = MapAttributeCompactNameToType[compactAttrName];
-                        var rawAttrName = map.RawName;
-                        var attrType = map.AttributeType;
-
-                        var propertyName = CSharpifyName(map.RawName);
-
-                        var csProperty = new CSharpProperty(propertyName)
-                        {
-                            Visibility = CSharpVisibility.Public,
-                            ReturnType = new CSharpFreeType(map.Kind == AttributeKind.Managed ? attrType : $"{attrType}?"),
-                        };
-
-                        switch (map.Kind)
-                        {
-                            case AttributeKind.Managed:
-                                csProperty.GetBody = (writer, element) => writer.WriteLine($"return GetAttributeValue<{attrType}>(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)});");
-                                csProperty.SetBody = (writer, element) => writer.WriteLine($"SetAttributeValue<{attrType}>(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)}, value);");
-                                break;
-                            case AttributeKind.ValueType:
-                                csProperty.GetBody = (writer, element) => writer.WriteLine($"return GetAttributeValueOpt<{attrType}>(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)});");
-                                csProperty.SetBody = (writer, element) => writer.WriteLine($"SetAttributeValueOpt<{attrType}>(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)}, value);");
-                                break;
-                            case AttributeKind.Link:
-                                csProperty.GetBody = (writer, element) =>
-                                {
-                                    writer.WriteLine($"var attr = FindAttributeByKey(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)});");
-                                    writer.WriteLine($"return attr == null ? null : new {attrType}(attr.ValueAsU64, attr.ValueAsObject);");
-                                };
-                                csProperty.SetBody = (writer, element) =>
-                                {
-                                    writer.WriteLine($"SetAttributeLinkValue(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)}, value);");
-                                };
-                                break;
-                            default:
-                                throw new ArgumentOutOfRangeException();
-                        }
-                        
-                        
+                        var csProperty = CreatePropertyFromDwarfAttributeName(compactAttrName);
                         currentDIE.Members.Add(csProperty);
+
+                        // The DW_AT_description attribute can be used on any debugging information
+                        // entry that may have a DW_AT_name attribute. For simplicity, this attribute is
+                        // not explicitly shown.
+                        if (compactAttrName == "DWATname")
+                        {
+                            csProperty = CreatePropertyFromDwarfAttributeName("DWATdescription");
+                            currentDIE.Members.Add(csProperty);
+                        }
+
+
                     }
                     else if (currentDIE != null && line.Contains("{DECL}"))
                     {
-                        currentDIE.BaseTypes[0] = new CSharpFreeType("DwarfDIEDecl");
+                        currentDIE.BaseTypes[0] = new CSharpFreeType("DwarfDIEDeclaration");
                     }
                 }
             }
+        }
+
+        private static CSharpProperty CreatePropertyFromDwarfAttributeName(string compactAttrName)
+        {
+            if (compactAttrName == "DWATuseUTFeight")
+            {
+                compactAttrName = "DWATuseUTF8";
+            }
+
+            var map = MapAttributeCompactNameToType[compactAttrName];
+            var rawAttrName = map.RawName;
+            var attrType = map.AttributeType;
+
+            var propertyName = CSharpifyName(map.RawName);
+
+            var csProperty = new CSharpProperty(propertyName)
+            {
+                Visibility = CSharpVisibility.Public,
+                ReturnType = new CSharpFreeType(map.Kind == AttributeKind.Managed ? attrType : $"{attrType}?"),
+            };
+
+            switch (map.Kind)
+            {
+                case AttributeKind.Managed:
+                    csProperty.GetBody = (writer, element) => writer.WriteLine($"return GetAttributeValue<{attrType}>(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)});");
+                    csProperty.SetBody = (writer, element) => writer.WriteLine($"SetAttributeValue<{attrType}>(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)}, value);");
+                    break;
+                case AttributeKind.ValueType:
+                    csProperty.GetBody = (writer, element) => writer.WriteLine($"return GetAttributeValueOpt<{attrType}>(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)});");
+                    csProperty.SetBody = (writer, element) => writer.WriteLine($"SetAttributeValueOpt<{attrType}>(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)}, value);");
+                    break;
+                case AttributeKind.Link:
+                    csProperty.GetBody = (writer, element) =>
+                    {
+                        writer.WriteLine($"var attr = FindAttributeByKey(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)});");
+                        writer.WriteLine($"return attr == null ? null : new {attrType}(attr.ValueAsU64, attr.ValueAsObject);");
+                    };
+                    csProperty.SetBody = (writer, element) => { writer.WriteLine($"SetAttributeLinkValue(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)}, value);"); };
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            return csProperty;
         }
 
         private static string CSharpifyName(string rawName)

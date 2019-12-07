@@ -5503,7 +5503,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_access_declaration : DwarfDIEDecl
+    public partial class DwarfDIE_access_declaration : DwarfDIEDeclaration
     {
         public ulong? Accessibility
         {
@@ -5528,9 +5528,21 @@ namespace LibObjectFile.Dwarf
                 SetAttributeValue<string>(DwarfAttributeKey.name, value);
             }
         }
+        
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
     }
     
-    public partial class DwarfDIE_array_type : DwarfDIEDecl
+    public partial class DwarfDIE_array_type : DwarfDIEDeclaration
     {
         public ulong? Accessibility
         {
@@ -5652,6 +5664,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public ulong? Ordering
         {
             get
@@ -5725,7 +5749,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_atomic_type : DwarfDIEDecl
+    public partial class DwarfDIE_atomic_type : DwarfDIEDeclaration
     {
         public ulong? Alignment
         {
@@ -5751,6 +5775,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public DwarfDIE Type
         {
             get
@@ -5764,7 +5800,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_base_type : DwarfDIEDecl
+    public partial class DwarfDIE_base_type : DwarfDIEDeclaration
     {
         public ulong? Alignment
         {
@@ -5931,6 +5967,18 @@ namespace LibObjectFile.Dwarf
             set
             {
                 SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
             }
         }
         
@@ -6156,6 +6204,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public DwarfDIE Type
         {
             get
@@ -6169,7 +6229,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_catch_block : DwarfDIEDecl
+    public partial class DwarfDIE_catch_block : DwarfDIEDeclaration
     {
         public ulong? EntryPc
         {
@@ -6232,7 +6292,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_class_type : DwarfDIEDecl
+    public partial class DwarfDIE_class_type : DwarfDIEDeclaration
     {
         public ulong? Accessibility
         {
@@ -6366,6 +6426,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public DwarfDIE Signature
         {
             get
@@ -6415,7 +6487,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_coarray_type : DwarfDIEDecl
+    public partial class DwarfDIE_coarray_type : DwarfDIEDeclaration
     {
         public ulong? Alignment
         {
@@ -6465,6 +6537,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public DwarfDIE Type
         {
             get
@@ -6478,7 +6562,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_common_block : DwarfDIEDecl
+    public partial class DwarfDIE_common_block : DwarfDIEDeclaration
     {
         public bool? Declaration
         {
@@ -6528,6 +6612,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public object Segment
         {
             get
@@ -6553,7 +6649,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_common_inclusion : DwarfDIEDecl
+    public partial class DwarfDIE_common_inclusion : DwarfDIEDeclaration
     {
         public DwarfDIE CommonReference
         {
@@ -6726,6 +6822,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public string Producer
         {
             get
@@ -6811,7 +6919,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_condition : DwarfDIEDecl
+    public partial class DwarfDIE_condition : DwarfDIEDeclaration
     {
         public string Name
         {
@@ -6824,9 +6932,21 @@ namespace LibObjectFile.Dwarf
                 SetAttributeValue<string>(DwarfAttributeKey.name, value);
             }
         }
+        
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
     }
     
-    public partial class DwarfDIE_const_type : DwarfDIEDecl
+    public partial class DwarfDIE_const_type : DwarfDIEDeclaration
     {
         public ulong? Alignment
         {
@@ -6852,6 +6972,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public DwarfDIE Type
         {
             get
@@ -6865,7 +6997,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_constant : DwarfDIEDecl
+    public partial class DwarfDIE_constant : DwarfDIEDeclaration
     {
         public ulong? Accessibility
         {
@@ -6951,6 +7083,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public DwarfConstant? StartScope
         {
             get
@@ -7003,7 +7147,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_dynamic_type : DwarfDIEDecl
+    public partial class DwarfDIE_dynamic_type : DwarfDIEDeclaration
     {
         public ulong? Alignment
         {
@@ -7065,6 +7209,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public DwarfDIE Type
         {
             get
@@ -7078,7 +7234,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_entry_point : DwarfDIEDecl
+    public partial class DwarfDIE_entry_point : DwarfDIEDeclaration
     {
         public ulong? AddressClass
         {
@@ -7140,6 +7296,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public object ReturnAddr
         {
             get
@@ -7189,7 +7357,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_enumeration_type : DwarfDIEDecl
+    public partial class DwarfDIE_enumeration_type : DwarfDIEDeclaration
     {
         public ulong? Accessibility
         {
@@ -7335,6 +7503,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public DwarfDIE Signature
         {
             get
@@ -7396,7 +7576,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_enumerator : DwarfDIEDecl
+    public partial class DwarfDIE_enumerator : DwarfDIEDeclaration
     {
         public DwarfConstant? ConstValue
         {
@@ -7421,9 +7601,21 @@ namespace LibObjectFile.Dwarf
                 SetAttributeValue<string>(DwarfAttributeKey.name, value);
             }
         }
+        
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
     }
     
-    public partial class DwarfDIE_file_type : DwarfDIEDecl
+    public partial class DwarfDIE_file_type : DwarfDIEDeclaration
     {
         public ulong? Alignment
         {
@@ -7509,6 +7701,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public DwarfConstant? StartScope
         {
             get
@@ -7546,7 +7750,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_formal_parameter : DwarfDIEDecl
+    public partial class DwarfDIE_formal_parameter : DwarfDIEDeclaration
     {
         public bool? Artificial
         {
@@ -7632,6 +7836,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public object Segment
         {
             get
@@ -7669,7 +7885,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_friend : DwarfDIEDecl
+    public partial class DwarfDIE_friend : DwarfDIEDeclaration
     {
         public DwarfDIE Friend
         {
@@ -7684,7 +7900,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_generic_subrange : DwarfDIEDecl
+    public partial class DwarfDIE_generic_subrange : DwarfDIEDeclaration
     {
         public ulong? Accessibility
         {
@@ -7842,6 +8058,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public bool? ThreadsScaled
         {
             get
@@ -7891,7 +8119,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_immutable_type : DwarfDIEDecl
+    public partial class DwarfDIE_immutable_type : DwarfDIEDeclaration
     {
         public string Name
         {
@@ -7902,6 +8130,18 @@ namespace LibObjectFile.Dwarf
             set
             {
                 SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
             }
         }
         
@@ -7918,7 +8158,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_imported_declaration : DwarfDIEDecl
+    public partial class DwarfDIE_imported_declaration : DwarfDIEDeclaration
     {
         public ulong? Accessibility
         {
@@ -7956,6 +8196,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public DwarfConstant? StartScope
         {
             get
@@ -7969,7 +8221,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_imported_module : DwarfDIEDecl
+    public partial class DwarfDIE_imported_module : DwarfDIEDeclaration
     {
         public DwarfDIE Import
         {
@@ -8011,7 +8263,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_inheritance : DwarfDIEDecl
+    public partial class DwarfDIE_inheritance : DwarfDIEDeclaration
     {
         public ulong? Accessibility
         {
@@ -8209,7 +8461,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_interface_type : DwarfDIEDecl
+    public partial class DwarfDIE_interface_type : DwarfDIEDeclaration
     {
         public ulong? Accessibility
         {
@@ -8247,6 +8499,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public DwarfDIE Signature
         {
             get
@@ -8272,7 +8536,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_label : DwarfDIEDecl
+    public partial class DwarfDIE_label : DwarfDIEDeclaration
     {
         public ulong? LowPc
         {
@@ -8295,6 +8559,18 @@ namespace LibObjectFile.Dwarf
             set
             {
                 SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
             }
         }
         
@@ -8323,7 +8599,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_lexical_block : DwarfDIEDecl
+    public partial class DwarfDIE_lexical_block : DwarfDIEDeclaration
     {
         public ulong? EntryPc
         {
@@ -8373,6 +8649,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public object Ranges
         {
             get
@@ -8398,7 +8686,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_member : DwarfDIEDecl
+    public partial class DwarfDIE_member : DwarfDIEDeclaration
     {
         public ulong? Accessibility
         {
@@ -8508,6 +8796,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public DwarfDIE Type
         {
             get
@@ -8533,7 +8833,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_module : DwarfDIEDecl
+    public partial class DwarfDIE_module : DwarfDIEDeclaration
     {
         public ulong? Accessibility
         {
@@ -8607,6 +8907,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public DwarfDIE Priority
         {
             get
@@ -8668,7 +8980,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_namelist : DwarfDIEDecl
+    public partial class DwarfDIE_namelist : DwarfDIEDeclaration
     {
         public ulong? Accessibility
         {
@@ -8706,6 +9018,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public ulong? Visibility
         {
             get
@@ -8719,7 +9043,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_namelist_item : DwarfDIEDecl
+    public partial class DwarfDIE_namelist_item : DwarfDIEDeclaration
     {
         public DwarfDIE NamelistItem
         {
@@ -8734,7 +9058,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_namespace : DwarfDIEDecl
+    public partial class DwarfDIE_namespace : DwarfDIEDeclaration
     {
         public bool? ExportSymbols
         {
@@ -8772,6 +9096,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public DwarfConstant? StartScope
         {
             get
@@ -8785,7 +9121,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_packed_type : DwarfDIEDecl
+    public partial class DwarfDIE_packed_type : DwarfDIEDeclaration
     {
         public ulong? Alignment
         {
@@ -8808,6 +9144,18 @@ namespace LibObjectFile.Dwarf
             set
             {
                 SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
             }
         }
         
@@ -8970,6 +9318,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public string Producer
         {
             get
@@ -9055,7 +9415,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_pointer_type : DwarfDIEDecl
+    public partial class DwarfDIE_pointer_type : DwarfDIEDeclaration
     {
         public ulong? AddressClass
         {
@@ -9117,6 +9477,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public DwarfDIE Type
         {
             get
@@ -9130,7 +9502,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_ptr_to_member_type : DwarfDIEDecl
+    public partial class DwarfDIE_ptr_to_member_type : DwarfDIEDeclaration
     {
         public ulong? AddressClass
         {
@@ -9228,6 +9600,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public DwarfDIE Type
         {
             get
@@ -9265,7 +9649,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_reference_type : DwarfDIEDecl
+    public partial class DwarfDIE_reference_type : DwarfDIEDeclaration
     {
         public ulong? AddressClass
         {
@@ -9327,6 +9711,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public DwarfDIE Type
         {
             get
@@ -9340,7 +9736,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_restrict_type : DwarfDIEDecl
+    public partial class DwarfDIE_restrict_type : DwarfDIEDeclaration
     {
         public ulong? Alignment
         {
@@ -9366,6 +9762,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public DwarfDIE Type
         {
             get
@@ -9379,7 +9787,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_rvalue_reference_type : DwarfDIEDecl
+    public partial class DwarfDIE_rvalue_reference_type : DwarfDIEDeclaration
     {
         public ulong? AddressClass
         {
@@ -9441,6 +9849,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public DwarfDIE Type
         {
             get
@@ -9454,7 +9874,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_set_type : DwarfDIEDecl
+    public partial class DwarfDIE_set_type : DwarfDIEDeclaration
     {
         public ulong? Accessibility
         {
@@ -9564,6 +9984,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public DwarfConstant? StartScope
         {
             get
@@ -9601,7 +10033,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_shared_type : DwarfDIEDecl
+    public partial class DwarfDIE_shared_type : DwarfDIEDeclaration
     {
         public DwarfConstant? Count
         {
@@ -9636,6 +10068,18 @@ namespace LibObjectFile.Dwarf
             set
             {
                 SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
             }
         }
         
@@ -9775,7 +10219,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_string_type : DwarfDIEDecl
+    public partial class DwarfDIE_string_type : DwarfDIEDeclaration
     {
         public ulong? Alignment
         {
@@ -9885,6 +10329,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public DwarfConstant? StartScope
         {
             get
@@ -9946,7 +10402,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_structure_type : DwarfDIEDecl
+    public partial class DwarfDIE_structure_type : DwarfDIEDeclaration
     {
         public ulong? Accessibility
         {
@@ -10080,6 +10536,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public DwarfDIE Signature
         {
             get
@@ -10129,7 +10597,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_subprogram : DwarfDIEDecl
+    public partial class DwarfDIE_subprogram : DwarfDIEDeclaration
     {
         public ulong? Accessibility
         {
@@ -10359,6 +10827,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public bool? Noreturn
         {
             get
@@ -10576,7 +11056,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_subrange_type : DwarfDIEDecl
+    public partial class DwarfDIE_subrange_type : DwarfDIEDeclaration
     {
         public ulong? Accessibility
         {
@@ -10734,6 +11214,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public bool? ThreadsScaled
         {
             get
@@ -10783,7 +11275,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_subroutine_type : DwarfDIEDecl
+    public partial class DwarfDIE_subroutine_type : DwarfDIEDeclaration
     {
         public ulong? Accessibility
         {
@@ -10881,6 +11373,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public bool? Prototyped
         {
             get
@@ -10954,7 +11458,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_template_alias : DwarfDIEDecl
+    public partial class DwarfDIE_template_alias : DwarfDIEDeclaration
     {
         public ulong? Accessibility
         {
@@ -11028,6 +11532,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public DwarfDIE Signature
         {
             get
@@ -11077,7 +11593,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_template_type_parameter : DwarfDIEDecl
+    public partial class DwarfDIE_template_type_parameter : DwarfDIEDeclaration
     {
         public DwarfDIE DefaultValue
         {
@@ -11103,6 +11619,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public DwarfDIE Type
         {
             get
@@ -11116,7 +11644,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_template_value_parameter : DwarfDIEDecl
+    public partial class DwarfDIE_template_value_parameter : DwarfDIEDeclaration
     {
         public DwarfConstant? ConstValue
         {
@@ -11154,6 +11682,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public DwarfDIE Type
         {
             get
@@ -11167,7 +11707,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_thrown_type : DwarfDIEDecl
+    public partial class DwarfDIE_thrown_type : DwarfDIEDeclaration
     {
         public ulong? Alignment
         {
@@ -11229,6 +11769,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public DwarfDIE Type
         {
             get
@@ -11242,7 +11794,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_try_block : DwarfDIEDecl
+    public partial class DwarfDIE_try_block : DwarfDIEDeclaration
     {
         public ulong? EntryPc
         {
@@ -11305,7 +11857,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_typedef : DwarfDIEDecl
+    public partial class DwarfDIE_typedef : DwarfDIEDeclaration
     {
         public ulong? Accessibility
         {
@@ -11388,6 +11940,18 @@ namespace LibObjectFile.Dwarf
             set
             {
                 SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
             }
         }
         
@@ -11479,7 +12043,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_union_type : DwarfDIEDecl
+    public partial class DwarfDIE_union_type : DwarfDIEDeclaration
     {
         public ulong? Accessibility
         {
@@ -11613,6 +12177,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public DwarfDIE Signature
         {
             get
@@ -11662,7 +12238,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_unspecified_parameters : DwarfDIEDecl
+    public partial class DwarfDIE_unspecified_parameters : DwarfDIEDeclaration
     {
         public bool? Artificial
         {
@@ -11677,7 +12253,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_unspecified_type : DwarfDIEDecl
+    public partial class DwarfDIE_unspecified_type : DwarfDIEDeclaration
     {
         public string Name
         {
@@ -11690,9 +12266,21 @@ namespace LibObjectFile.Dwarf
                 SetAttributeValue<string>(DwarfAttributeKey.name, value);
             }
         }
+        
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
     }
     
-    public partial class DwarfDIE_variable : DwarfDIEDecl
+    public partial class DwarfDIE_variable : DwarfDIEDeclaration
     {
         public ulong? Accessibility
         {
@@ -11826,6 +12414,18 @@ namespace LibObjectFile.Dwarf
             }
         }
         
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
+            }
+        }
+        
         public object Segment
         {
             get
@@ -11887,7 +12487,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_variant : DwarfDIEDecl
+    public partial class DwarfDIE_variant : DwarfDIEDeclaration
     {
         public ulong? Accessibility
         {
@@ -11938,7 +12538,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_variant_part : DwarfDIEDecl
+    public partial class DwarfDIE_variant_part : DwarfDIEDeclaration
     {
         public ulong? Accessibility
         {
@@ -11989,7 +12589,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_volatile_type : DwarfDIEDecl
+    public partial class DwarfDIE_volatile_type : DwarfDIEDeclaration
     {
         public string Name
         {
@@ -12000,6 +12600,18 @@ namespace LibObjectFile.Dwarf
             set
             {
                 SetAttributeValue<string>(DwarfAttributeKey.name, value);
+            }
+        }
+        
+        public string Description
+        {
+            get
+            {
+                return GetAttributeValue<string>(DwarfAttributeKey.description);
+            }
+            set
+            {
+                SetAttributeValue<string>(DwarfAttributeKey.description, value);
             }
         }
         
@@ -12016,7 +12628,7 @@ namespace LibObjectFile.Dwarf
         }
     }
     
-    public partial class DwarfDIE_with_stmt : DwarfDIEDecl
+    public partial class DwarfDIE_with_stmt : DwarfDIEDeclaration
     {
         public ulong? Accessibility
         {
