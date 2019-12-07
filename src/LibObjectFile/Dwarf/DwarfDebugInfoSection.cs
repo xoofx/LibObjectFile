@@ -4,20 +4,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace LibObjectFile.Dwarf
 {
-    public class DwarfExpressionLocation : ObjectFileNode
-    {
-        public Stream Stream { get; set; }
-
-        public override bool TryUpdateLayout(DiagnosticBag diagnostics)
-        {
-            return true;
-        }
-    }
-
     public class DwarfDebugInfoSection : DwarfSection
     {
         private readonly List<DwarfUnit> _units;
@@ -28,8 +17,7 @@ namespace LibObjectFile.Dwarf
         }
         
         public IReadOnlyList<DwarfUnit> Units => _units;
-
-
+        
         public void AddUnit(DwarfUnit unit)
         {
             _units.Add<DwarfContainer, DwarfUnit>(this, unit);
@@ -54,10 +42,9 @@ namespace LibObjectFile.Dwarf
                 }
             }
             
-            bool result = true;
             while (true)
             {
-                if (reader.Offset == reader.Length)
+                if (reader.Offset >= reader.Length)
                 {
                     break;
                 }
@@ -68,7 +55,6 @@ namespace LibObjectFile.Dwarf
                 if (!TryReadCompilationUnitHeader(reader, out var header, out var offsetEndOfUnit))
                 {
                     reader.Offset = offsetEndOfUnit;
-                    result = false;
                     continue;
                 }
 
@@ -80,11 +66,12 @@ namespace LibObjectFile.Dwarf
                     AddressSize = header.address_size
                 };
 
+                internalContext.Version = header.version;
                 internalContext.OffsetOfCompilationUnitInSection = startOffset;
                 internalContext.RegisteredDIEPerCompilationUnit.Clear();
-                internalContext.AttributesWithUnresolvedDIECompilationUnitReference.Clear();
+                internalContext.UnresolvedDIECompilationUnitReference.Clear();
                 
-                internalContext.AddressSize = header.address_size;
+                internalContext.Is64Address = header.address_size == 8;
 
                 var abbreviation = Parent.DebugAbbrevTable.Read(reader.FileContext.DebugAbbrevStream, header.debug_abbrev_offset);
                 
@@ -92,7 +79,7 @@ namespace LibObjectFile.Dwarf
                 cu.Root = ReadDIE(reader, ref internalContext, abbreviation, 0);
 
                 // Resolve attribute reference within the CU
-                foreach (var unresolvedAttrRef in internalContext.AttributesWithUnresolvedDIECompilationUnitReference)
+                foreach (var unresolvedAttrRef in internalContext.UnresolvedDIECompilationUnitReference)
                 {
                     ResolveAttributeReferenceWithinCompilationUnit(unresolvedAttrRef, internalContext, true);
                 }
@@ -110,7 +97,7 @@ namespace LibObjectFile.Dwarf
         private DwarfDIE ReadDIE(DwarfReaderWriter reader, ref DebugInfoReaderContext internalContext, DwarfAbbreviation abbreviation, int level)
         {
             var startDIEOffset = reader.Offset;
-            var abbreviationCode = reader.ReadLEB128();
+            var abbreviationCode = reader.ReadULEB128();
 
             if (abbreviationCode == 0)
             {
@@ -206,8 +193,7 @@ namespace LibObjectFile.Dwarf
                 }
             }
         }
-
-
+        
         private bool TryReadCompilationUnitHeader(DwarfReaderWriter reader, out DwarfCompilationUnitHeader header, out ulong offsetEndOfUnit)
         {
             header = new DwarfCompilationUnitHeader();
@@ -228,7 +214,7 @@ namespace LibObjectFile.Dwarf
             if (header.version < 5)
             {
                 // 3. debug_abbrev_offset (section offset) 
-                header.debug_abbrev_offset = reader.ReadNativeUInt();
+                header.debug_abbrev_offset = reader.ReadDwarfUInt();
 
                 // 4. address_size (ubyte) 
                 header.address_size = reader.ReadU8();
@@ -244,7 +230,7 @@ namespace LibObjectFile.Dwarf
                 header.address_size = reader.ReadU8();
 
                 // 5. debug_abbrev_offset (section offset) 
-                header.debug_abbrev_offset = reader.ReadNativeUInt();
+                header.debug_abbrev_offset = reader.ReadDwarfUInt();
 
             }
 
@@ -257,130 +243,135 @@ namespace LibObjectFile.Dwarf
             switch (attributeForm.Value)
             {
                 case DwarfNative.DW_FORM_addr:
-                    {
-                        attr.ValueAsU64 = context.AddressSize == 8 ? reader.ReadU64() : reader.ReadU32();
-                        break;
-                    }
+                {
+                    attr.ValueAsU64 = context.Is64Address ? reader.ReadU64() : reader.ReadU32();
+                    break;
+                }
+
+                case DwarfNative.DW_FORM_data1:
+                {
+                    attr.ValueAsU64 = reader.ReadU8();
+                    break;
+                }
                 case DwarfNative.DW_FORM_data2:
-                    {
-                        attr.ValueAsU64 = reader.ReadU16();
-                        break;
-                    }
+                {
+                    attr.ValueAsU64 = reader.ReadU16();
+                    break;
+                }
                 case DwarfNative.DW_FORM_data4:
-                    {
-                        attr.ValueAsU64 = reader.ReadU32();
-                        break;
-                    }
+                {
+                    attr.ValueAsU64 = reader.ReadU32();
+                    break;
+                }
                 case DwarfNative.DW_FORM_data8:
-                    {
-                        attr.ValueAsU64 = reader.ReadU64();
-                        break;
-                    }
+                {
+                    attr.ValueAsU64 = reader.ReadU64();
+                    break;
+                }
+
                 case DwarfNative.DW_FORM_string:
-                    {
-                        attr.ValueAsObject = reader.ReadStringUTF8NullTerminated();
-                        break;
-                    }
+                {
+                    attr.ValueAsObject = reader.ReadStringUTF8NullTerminated();
+                    break;
+                }
+
                 case DwarfNative.DW_FORM_block:
-                    {
-                        var length = reader.ReadLEB128();
-                        attr.ValueAsObject = reader.ReadAsStream(length);
-                        break;
-                    }
+                {
+                    var length = reader.ReadULEB128();
+                    attr.ValueAsObject = reader.ReadAsStream(length);
+                    break;
+                }
                 case DwarfNative.DW_FORM_block1:
-                    {
-                        var length = reader.ReadU8();
-                        attr.ValueAsObject = reader.ReadAsStream(length);
-                        break;
-                    }
+                {
+                    var length = reader.ReadU8();
+                    attr.ValueAsObject = reader.ReadAsStream(length);
+                    break;
+                }
                 case DwarfNative.DW_FORM_block2:
+                {
+                    var length = reader.ReadU16();
+                    attr.ValueAsObject = reader.ReadAsStream(length);
+                    break;
+                }
+                case DwarfNative.DW_FORM_block4:
+                {
+                    var length = reader.ReadU32();
+                    attr.ValueAsObject = reader.ReadAsStream(length);
+                    break;
+                }
+
+                case DwarfNative.DW_FORM_flag:
+                {
+                    attr.ValueAsBoolean = reader.ReadU8() != 0;
+                    break;
+                }
+                case DwarfNative.DW_FORM_sdata:
+                {
+                    attr.ValueAsI64 = reader.ReadILEB128();
+                    break;
+                }
+                case DwarfNative.DW_FORM_strp:
+                {
+                    var offset = reader.ReadDwarfUInt();
+                    if (Parent.DebugStringTable == null)
                     {
-                        var length = reader.ReadU16();
-                        attr.ValueAsObject = reader.ReadAsStream(length);
-                        break;
+                        attr.ValueAsU64 = offset;
+                        reader.Diagnostics.Error(DiagnosticId.DWARF_ERR_MissingStringTable, $"The .debug_str {nameof(DwarfFile.DebugStringTable)} is null while a DW_FORM_strp for attribute {attr.Key} is requesting an access to it");
+                    }
+                    else
+                    {
+                        attr.ValueAsObject = Parent.DebugStringTable.GetStringFromOffset(offset);
                     }
 
-                case DwarfNative.DW_FORM_block4:
-                    {
-                        var length = reader.ReadU32();
-                        attr.ValueAsObject = reader.ReadAsStream(length);
-                        break;
-                    }
-                case DwarfNative.DW_FORM_data1:
-                    {
-                        attr.ValueAsU64 = reader.ReadU8();
-                        break;
-                    }
-                case DwarfNative.DW_FORM_flag:
-                    {
-                        attr.ValueAsBoolean = reader.ReadU8() != 0;
-                        break;
-                    }
-                case DwarfNative.DW_FORM_sdata:
-                    {
-                        attr.ValueAsI64 = reader.ReadSignedLEB128();
-                        break;
-                    }
-                case DwarfNative.DW_FORM_strp:
-                    {
-                        var offset = reader.ReadNativeUInt();
-                        if (Parent.DebugStringTable == null)
-                        {
-                            attr.ValueAsU64 = offset;
-                            reader.Diagnostics.Error(DiagnosticId.DWARF_ERR_MissingStringTable, $"The .debug_str {nameof(DwarfFile.DebugStringTable)} is null while a DW_FORM_strp for attribute {attr.Key} is requesting an access to it");
-                        }
-                        else
-                        {
-                            attr.ValueAsObject = Parent.DebugStringTable.GetStringFromOffset(offset);
-                        }
-                        break;
-                    }
+                    break;
+                }
                 case DwarfNative.DW_FORM_udata:
-                    {
-                        attr.ValueAsU64 = reader.ReadLEB128();
-                        break;
-                    }
+                {
+                    attr.ValueAsU64 = reader.ReadULEB128();
+                    break;
+                }
                 case DwarfNative.DW_FORM_ref_addr:
-                    {
-                        attr.ValueAsU64 = reader.ReadNativeUInt();
-                        ResolveAttributeReferenceWithinSection(attr, context, false);
-                        break;
-                    }
+                {
+                    attr.ValueAsU64 = reader.ReadDwarfUInt();
+                    ResolveAttributeReferenceWithinSection(AttributeToDIERef(attr), context, false);
+                    break;
+                }
                 case DwarfNative.DW_FORM_ref1:
-                    {
-                        attr.ValueAsU64 = reader.ReadU8();
-                        ResolveAttributeReferenceWithinCompilationUnit(attr, context, false);
-                        break;
-                    }
+                {
+                    attr.ValueAsU64 = reader.ReadU8();
+                    ResolveAttributeReferenceWithinCompilationUnit(AttributeToDIERef(attr), context, false);
+                    break;
+                }
                 case DwarfNative.DW_FORM_ref2:
-                    {
-                        attr.ValueAsU64 = reader.ReadU16();
-                        ResolveAttributeReferenceWithinCompilationUnit(attr, context, false);
-                        break;
-                    }
+                {
+                    attr.ValueAsU64 = reader.ReadU16();
+                    ResolveAttributeReferenceWithinCompilationUnit(AttributeToDIERef(attr), context, false);
+                    break;
+                }
                 case DwarfNative.DW_FORM_ref4:
-                    {
-                        attr.ValueAsU64 = reader.ReadU32();
-                        ResolveAttributeReferenceWithinCompilationUnit(attr, context, false);
-                        break;
-                    }
+                {
+                    attr.ValueAsU64 = reader.ReadU32();
+                    ResolveAttributeReferenceWithinCompilationUnit(AttributeToDIERef(attr), context, false);
+                    break;
+                }
                 case DwarfNative.DW_FORM_ref8:
-                    {
-                        attr.ValueAsU64 = reader.ReadU64();
-                        ResolveAttributeReferenceWithinCompilationUnit(attr, context, false);
-                        break;
-                    }
+                {
+                    attr.ValueAsU64 = reader.ReadU64();
+                    ResolveAttributeReferenceWithinCompilationUnit(AttributeToDIERef(attr), context, false);
+                    break;
+                }
                 case DwarfNative.DW_FORM_ref_udata:
-                    {
-                        attr.ValueAsU64 = reader.ReadLEB128();
-                        ResolveAttributeReferenceWithinCompilationUnit(attr, context, false);
-                        break;
-                    }
+                {
+                    attr.ValueAsU64 = reader.ReadULEB128();
+                    ResolveAttributeReferenceWithinCompilationUnit(AttributeToDIERef(attr), context, false);
+                    break;
+                }
                 case DwarfNative.DW_FORM_indirect:
-                    {
-                        attributeForm = reader.ReadLEB128As<DwarfAttributeForm>();
-                        goto indirect;
-                    }
+                {
+                    attributeForm = reader.ReadLEB128As<DwarfAttributeForm>();
+                    goto indirect;
+                }
+
                 // addptr
                 // lineptr
                 // loclist
@@ -390,37 +381,31 @@ namespace LibObjectFile.Dwarf
                 // rngrlistptr
                 // stroffsetsptr
                 case DwarfNative.DW_FORM_sec_offset:
-                    {
-                        attr.ValueAsU64 = reader.ReadNativeUInt();
-                        //Console.WriteLine($"attribute {attr.Key} offset: {attr.ValueAsU64}");
-                        break;
-                    }
+                {
+                    attr.ValueAsU64 = reader.ReadDwarfUInt();
+                    //Console.WriteLine($"attribute {attr.Key} offset: {attr.ValueAsU64}");
+                    break;
+                }
+
                 case DwarfNative.DW_FORM_exprloc:
-                    {
-                        var length = reader.ReadLEB128();
-                        var offset = reader.Offset;
-                        var stream = reader.ReadAsStream(length);
-                        var expressionLocation = new DwarfExpressionLocation()
-                        {
-                            Offset = offset,
-                            Size = length,
-                            Stream = stream
-                        };
-                        attr.ValueAsObject = expressionLocation;
-                        break;
-                    }
+                {
+                    var length = reader.ReadULEB128();
+                    attr.ValueAsObject = ReadExpression(reader, length, context);
+                    break;
+                }
+
                 case DwarfNative.DW_FORM_flag_present:
-                    {
-                        attr.ValueAsBoolean = true;
-                        break;
-                    }
+                {
+                    attr.ValueAsBoolean = true;
+                    break;
+                }
 
                 case DwarfNative.DW_FORM_ref_sig8:
-                    {
-                        var offset = reader.ReadU64();
-                        attr.ValueAsU64 = offset;
-                        break;
-                    }
+                {
+                    var offset = reader.ReadU64();
+                    attr.ValueAsU64 = offset;
+                    break;
+                }
 
                 case DwarfNative.DW_FORM_strx: throw new NotSupportedException("DW_FORM_strx - DWARF5");
                 case DwarfNative.DW_FORM_addrx: throw new NotSupportedException("DW_FORM_addrx - DWARF5");
@@ -449,42 +434,480 @@ namespace LibObjectFile.Dwarf
             }
         }
 
-        private static void ResolveAttributeReferenceWithinCompilationUnit(DwarfAttribute attr, in DebugInfoReaderContext context, bool errorIfNotFound)
+        private DwarfExpression ReadExpression(DwarfReaderWriter reader, ulong size, in DebugInfoReaderContext context)
         {
-            if (context.RegisteredDIEPerCompilationUnit.TryGetValue(attr.ValueAsU64, out var die))
+            var stream = reader.Stream;
+            var startPosition = (ulong)stream.Position;
+            var exprLoc = new DwarfExpression {Offset = startPosition, Size = size};
+            var endPosition = startPosition + size;
+
+            while ((ulong)stream.Position < endPosition)
             {
-                attr.ValueAsU64 = 0;
-                attr.ValueAsObject = die;
+                var kind = new DwarfOperationKind(stream.ReadU8());
+                var op = new DwarfOperation
+                {
+                    Offset = reader.Offset,
+                    Kind = kind
+                };
+                exprLoc.AddOperation(op);
+
+                switch (kind.Value)
+                {
+                    case DwarfNative.DW_OP_addr:
+                        op.Operand1.U64 = reader.ReadUInt();
+                        break;
+                    case DwarfNative.DW_OP_const1u:
+                        op.Operand1.U64 = reader.ReadU8();
+                        break;
+                    case DwarfNative.DW_OP_const1s:
+                        op.Operand1.I64 = reader.ReadI8();
+                        break;
+                    case DwarfNative.DW_OP_const2u:
+                        op.Operand1.U64 = reader.ReadU16();
+                        break;
+                    case DwarfNative.DW_OP_const2s:
+                        op.Operand1.I64 = reader.ReadI16();
+                        break;
+
+                    case DwarfNative.DW_OP_const4u:
+                        op.Operand1.U64 = reader.ReadU32();
+                        break;
+                    case DwarfNative.DW_OP_const4s:
+                        op.Operand1.I64 = reader.ReadU32();
+                        break;
+
+                    case DwarfNative.DW_OP_const8u:
+                        op.Operand1.U64 = reader.ReadU64();
+                        break;
+
+                    case DwarfNative.DW_OP_const8s:
+                        op.Operand1.I64 = reader.ReadI64();
+                        break;
+
+                    case DwarfNative.DW_OP_constu:
+                        op.Operand1.U64 = reader.ReadULEB128();
+                        break;
+
+                    case DwarfNative.DW_OP_consts:
+                        op.Operand1.I64 = reader.ReadILEB128();
+                        break;
+
+                    case DwarfNative.DW_OP_deref:
+                    case DwarfNative.DW_OP_dup:
+                    case DwarfNative.DW_OP_drop:
+                    case DwarfNative.DW_OP_over:
+                    case DwarfNative.DW_OP_swap:
+                    case DwarfNative.DW_OP_rot:
+                    case DwarfNative.DW_OP_xderef:
+                    case DwarfNative.DW_OP_abs:
+                    case DwarfNative.DW_OP_and:
+                    case DwarfNative.DW_OP_div:
+                    case DwarfNative.DW_OP_minus:
+                    case DwarfNative.DW_OP_mod:
+                    case DwarfNative.DW_OP_mul:
+                    case DwarfNative.DW_OP_neg:
+                    case DwarfNative.DW_OP_not:
+                    case DwarfNative.DW_OP_or:
+                    case DwarfNative.DW_OP_plus:
+                    case DwarfNative.DW_OP_shl:
+                    case DwarfNative.DW_OP_shr:
+                    case DwarfNative.DW_OP_shra:
+                    case DwarfNative.DW_OP_xor:
+                    case DwarfNative.DW_OP_eq:
+                    case DwarfNative.DW_OP_ge:
+                    case DwarfNative.DW_OP_gt:
+                    case DwarfNative.DW_OP_le:
+                    case DwarfNative.DW_OP_lt:
+                    case DwarfNative.DW_OP_ne:
+                    case DwarfNative.DW_OP_nop:
+                    case DwarfNative.DW_OP_push_object_address:
+                    case DwarfNative.DW_OP_form_tls_address:
+                    case DwarfNative.DW_OP_call_frame_cfa:
+                        break;
+
+                    case DwarfNative.DW_OP_pick:
+                        op.Operand1.U64 = reader.ReadU8();
+                        break;
+
+                    case DwarfNative.DW_OP_plus_uconst:
+                        op.Operand1.U64 = reader.ReadULEB128();
+                        break;
+
+                    case DwarfNative.DW_OP_bra:
+                    case DwarfNative.DW_OP_skip:
+                        // TODO: resolve branches to DwarfOperation
+                        op.Operand1.I64 = reader.ReadI16();
+                        break;
+
+                    case DwarfNative.DW_OP_lit0:
+                    case DwarfNative.DW_OP_lit1:
+                    case DwarfNative.DW_OP_lit2:
+                    case DwarfNative.DW_OP_lit3:
+                    case DwarfNative.DW_OP_lit4:
+                    case DwarfNative.DW_OP_lit5:
+                    case DwarfNative.DW_OP_lit6:
+                    case DwarfNative.DW_OP_lit7:
+                    case DwarfNative.DW_OP_lit8:
+                    case DwarfNative.DW_OP_lit9:
+                    case DwarfNative.DW_OP_lit10:
+                    case DwarfNative.DW_OP_lit11:
+                    case DwarfNative.DW_OP_lit12:
+                    case DwarfNative.DW_OP_lit13:
+                    case DwarfNative.DW_OP_lit14:
+                    case DwarfNative.DW_OP_lit15:
+                    case DwarfNative.DW_OP_lit16:
+                    case DwarfNative.DW_OP_lit17:
+                    case DwarfNative.DW_OP_lit18:
+                    case DwarfNative.DW_OP_lit19:
+                    case DwarfNative.DW_OP_lit20:
+                    case DwarfNative.DW_OP_lit21:
+                    case DwarfNative.DW_OP_lit22:
+                    case DwarfNative.DW_OP_lit23:
+                    case DwarfNative.DW_OP_lit24:
+                    case DwarfNative.DW_OP_lit25:
+                    case DwarfNative.DW_OP_lit26:
+                    case DwarfNative.DW_OP_lit27:
+                    case DwarfNative.DW_OP_lit28:
+                    case DwarfNative.DW_OP_lit29:
+                    case DwarfNative.DW_OP_lit30:
+                    case DwarfNative.DW_OP_lit31:
+                        op.Operand1.U64 = (ulong)kind.Value - DwarfNative.DW_OP_lit0;
+                        break;
+
+                    case DwarfNative.DW_OP_reg0:
+                    case DwarfNative.DW_OP_reg1:
+                    case DwarfNative.DW_OP_reg2:
+                    case DwarfNative.DW_OP_reg3:
+                    case DwarfNative.DW_OP_reg4:
+                    case DwarfNative.DW_OP_reg5:
+                    case DwarfNative.DW_OP_reg6:
+                    case DwarfNative.DW_OP_reg7:
+                    case DwarfNative.DW_OP_reg8:
+                    case DwarfNative.DW_OP_reg9:
+                    case DwarfNative.DW_OP_reg10:
+                    case DwarfNative.DW_OP_reg11:
+                    case DwarfNative.DW_OP_reg12:
+                    case DwarfNative.DW_OP_reg13:
+                    case DwarfNative.DW_OP_reg14:
+                    case DwarfNative.DW_OP_reg15:
+                    case DwarfNative.DW_OP_reg16:
+                    case DwarfNative.DW_OP_reg17:
+                    case DwarfNative.DW_OP_reg18:
+                    case DwarfNative.DW_OP_reg19:
+                    case DwarfNative.DW_OP_reg20:
+                    case DwarfNative.DW_OP_reg21:
+                    case DwarfNative.DW_OP_reg22:
+                    case DwarfNative.DW_OP_reg23:
+                    case DwarfNative.DW_OP_reg24:
+                    case DwarfNative.DW_OP_reg25:
+                    case DwarfNative.DW_OP_reg26:
+                    case DwarfNative.DW_OP_reg27:
+                    case DwarfNative.DW_OP_reg28:
+                    case DwarfNative.DW_OP_reg29:
+                    case DwarfNative.DW_OP_reg30:
+                    case DwarfNative.DW_OP_reg31:
+                        op.Operand1.U64 = (ulong)kind.Value - DwarfNative.DW_OP_reg0;
+                        break;
+
+                    case DwarfNative.DW_OP_breg0:
+                    case DwarfNative.DW_OP_breg1:
+                    case DwarfNative.DW_OP_breg2:
+                    case DwarfNative.DW_OP_breg3:
+                    case DwarfNative.DW_OP_breg4:
+                    case DwarfNative.DW_OP_breg5:
+                    case DwarfNative.DW_OP_breg6:
+                    case DwarfNative.DW_OP_breg7:
+                    case DwarfNative.DW_OP_breg8:
+                    case DwarfNative.DW_OP_breg9:
+                    case DwarfNative.DW_OP_breg10:
+                    case DwarfNative.DW_OP_breg11:
+                    case DwarfNative.DW_OP_breg12:
+                    case DwarfNative.DW_OP_breg13:
+                    case DwarfNative.DW_OP_breg14:
+                    case DwarfNative.DW_OP_breg15:
+                    case DwarfNative.DW_OP_breg16:
+                    case DwarfNative.DW_OP_breg17:
+                    case DwarfNative.DW_OP_breg18:
+                    case DwarfNative.DW_OP_breg19:
+                    case DwarfNative.DW_OP_breg20:
+                    case DwarfNative.DW_OP_breg21:
+                    case DwarfNative.DW_OP_breg22:
+                    case DwarfNative.DW_OP_breg23:
+                    case DwarfNative.DW_OP_breg24:
+                    case DwarfNative.DW_OP_breg25:
+                    case DwarfNative.DW_OP_breg26:
+                    case DwarfNative.DW_OP_breg27:
+                    case DwarfNative.DW_OP_breg28:
+                    case DwarfNative.DW_OP_breg29:
+                    case DwarfNative.DW_OP_breg30:
+                    case DwarfNative.DW_OP_breg31:
+                        op.Operand1.U64 = (ulong)kind.Value - DwarfNative.DW_OP_reg0;
+                        op.Operand2.I64 = reader.ReadILEB128();
+                        break;
+
+                    case DwarfNative.DW_OP_regx:
+                        op.Operand1.U64 = reader.ReadULEB128();
+                        break;
+
+                    case DwarfNative.DW_OP_fbreg:
+                        op.Operand1.I64 = reader.ReadILEB128();
+                        break;
+
+                    case DwarfNative.DW_OP_bregx:
+                        op.Operand1.U64 = reader.ReadULEB128();
+                        op.Operand2.I64 = reader.ReadILEB128();
+                        break;
+
+                    case DwarfNative.DW_OP_piece:
+                        op.Operand1.U64 = reader.ReadULEB128();
+                        break;
+
+                    case DwarfNative.DW_OP_deref_size:
+                        op.Operand1.U64 = reader.ReadU8();
+                        break;
+
+                    case DwarfNative.DW_OP_xderef_size:
+                        op.Operand1.U64 = reader.ReadU8();
+                        break;
+
+                    case DwarfNative.DW_OP_call2:
+                    {
+                        var offset = reader.ReadU16();
+                        var dieRef = new DwarfDIEReference(offset, op, DwarfExpressionLocationDIEReferenceResolverInstance);
+                        ResolveAttributeReferenceWithinSection(dieRef, context, false);
+                        break;
+                    }
+
+                    case DwarfNative.DW_OP_call4:
+                    {
+                        var offset = reader.ReadU32();
+                        var dieRef = new DwarfDIEReference(offset, op, DwarfExpressionLocationDIEReferenceResolverInstance);
+                        ResolveAttributeReferenceWithinSection(dieRef, context, false);
+                        break;
+                    }
+
+                    case DwarfNative.DW_OP_call_ref:
+                    {
+                        var offset = reader.ReadDwarfUInt();
+                        var dieRef = new DwarfDIEReference(offset, op, DwarfExpressionLocationDIEReferenceResolverInstance);
+                        ResolveAttributeReferenceWithinSection(dieRef, context, false);
+                        break;
+                    }
+
+                    case DwarfNative.DW_OP_bit_piece:
+                        op.Operand1.U64 = reader.ReadULEB128();
+                        op.Operand2.U64 = reader.ReadULEB128();
+                        break;
+
+                    case DwarfNative.DW_OP_implicit_value:
+                        {
+                            var length = reader.ReadULEB128();
+                            op.Operand0 = reader.ReadAsStream(length);
+                            break;
+                        }
+
+                    case DwarfNative.DW_OP_stack_value:
+                        break;
+
+                    case DwarfNative.DW_OP_implicit_pointer:
+                    case DwarfNative.DW_OP_GNU_implicit_pointer:
+                    {
+                        ulong offset;
+                        //  a reference to a debugging information entry that describes the dereferenced object’s value
+                        if (context.Version == 2)
+                        {
+                            offset = reader.ReadUInt();
+                        }
+                        else
+                        {
+                            offset = reader.ReadDwarfUInt();
+                        }
+                        //  a signed number that is treated as a byte offset from the start of that value
+                        op.Operand1.I64 = reader.ReadILEB128();
+
+                        if (offset != 0)
+                        {
+                            var dieRef = new DwarfDIEReference(offset, op, DwarfExpressionLocationDIEReferenceResolverInstance);
+                            ResolveAttributeReferenceWithinSection(dieRef, context, false);
+                        }
+                        break;
+                    }
+
+                    case DwarfNative.DW_OP_addrx:
+                    case DwarfNative.DW_OP_GNU_addr_index:
+                    case DwarfNative.DW_OP_constx:
+                    case DwarfNative.DW_OP_GNU_const_index:
+                        op.Operand1.U64 = reader.ReadULEB128();
+                        break;
+
+                    case DwarfNative.DW_OP_entry_value:
+                    case DwarfNative.DW_OP_GNU_entry_value:
+                    {
+                        var length = reader.ReadULEB128();
+                        var nested = ReadExpression(reader, length, context);
+                        break;
+                    }
+
+                    case DwarfNative.DW_OP_const_type:
+                    case DwarfNative.DW_OP_GNU_const_type:
+                    {
+                        // The DW_OP_const_type operation takes three operands
+
+                        // The first operand is an unsigned LEB128 integer that represents the offset
+                        // of a debugging information entry in the current compilation unit, which
+                        // must be a DW_TAG_base_type entry that provides the type of the constant provided
+                        var offset = reader.ReadULEB128();
+                        if (offset != 0)
+                        {
+                            var dieRef = new DwarfDIEReference(offset, op, DwarfExpressionLocationDIEReferenceResolverInstance);
+                            ResolveAttributeReferenceWithinCompilationUnit(dieRef, context, false);
+                        }
+                        op.Operand1.U64 = ReadEncodedValue(reader, kind);
+                        break;
+                    }
+
+                    case DwarfNative.DW_OP_regval_type:
+                    case DwarfNative.DW_OP_GNU_regval_type:
+                    {
+                        // The DW_OP_regval_type operation provides the contents of a given register
+                        // interpreted as a value of a given type
+
+                        // The first operand is an unsigned LEB128 number, which identifies a register
+                        // whose contents is to be pushed onto the stack
+                        op.Operand1.U64 = reader.ReadULEB128();
+
+                        // The second operand is an unsigned LEB128 number that represents the offset
+                        // of a debugging information entry in the current compilation unit
+                        var offset = reader.ReadULEB128();
+                        if (offset != 0)
+                        {
+                            var dieRef = new DwarfDIEReference(offset, op, DwarfExpressionLocationDIEReferenceResolverInstance);
+                            ResolveAttributeReferenceWithinCompilationUnit(dieRef, context, false);
+                        }
+                        break;
+                    }
+
+                    case DwarfNative.DW_OP_deref_type:
+                    case DwarfNative.DW_OP_GNU_deref_type:
+                    case DwarfNative.DW_OP_xderef_type:
+                    {
+                        // The DW_OP_deref_type operation behaves like the DW_OP_deref_size operation:
+                        // it pops the top stack entry and treats it as an address.
+
+                        // This operand is a 1-byte unsigned integral constant whose value which is the
+                        // same as the size of the base type referenced by the second operand
+                        op.Operand1.U64 = reader.ReadU8();
+
+                        // The second operand is an unsigned LEB128 number that represents the offset
+                        // of a debugging information entry in the current compilation unit
+                        var offset = reader.ReadULEB128();
+                        if (offset != 0)
+                        {
+                            var dieRef = new DwarfDIEReference(offset, op, DwarfExpressionLocationDIEReferenceResolverInstance);
+                            ResolveAttributeReferenceWithinCompilationUnit(dieRef, context, false);
+                        }
+                        break;
+                    }
+
+                    case DwarfNative.DW_OP_convert:
+                    case DwarfNative.DW_OP_GNU_convert:
+                    case DwarfNative.DW_OP_reinterpret:
+                    case DwarfNative.DW_OP_GNU_reinterpret:
+                    {
+                        ulong offset = reader.ReadULEB128();
+                        if (offset != 0)
+                        {
+                            var dieRef = new DwarfDIEReference(offset, op, DwarfExpressionLocationDIEReferenceResolverInstance);
+                            ResolveAttributeReferenceWithinCompilationUnit(dieRef, context, false);
+                        }
+                        break;
+                    }
+
+                    case DwarfNative.DW_OP_GNU_push_tls_address:
+                    case DwarfNative.DW_OP_GNU_uninit:
+                        break;
+
+                    case DwarfNative.DW_OP_GNU_encoded_addr:
+                        op.Operand1.U64 = ReadEncodedValue(reader, kind);
+                        break;
+
+                    case DwarfNative.DW_OP_GNU_parameter_ref:
+                        op.Operand1.U64 = reader.ReadU32();
+                        break;
+
+                    default:
+                        throw new NotSupportedException($"The {nameof(DwarfOperationKind)} {kind} is not supported");
+                }
+
+                // Store the size of the current op
+                op.Size = reader.Offset - op.Offset;
+            }
+
+            return exprLoc;
+        }
+
+        private static ulong ReadEncodedValue(DwarfReaderWriter reader, DwarfOperationKind kind)
+        {
+            var size = reader.ReadU8();
+            switch (size)
+            {
+                case 0:
+                    return reader.ReadUInt();
+                case 1:
+                    return reader.ReadU8();
+                case 2:
+                    return reader.ReadU16();
+                case 4:
+                    return reader.ReadU32();
+                case 8:
+                    return reader.ReadU64();
+                default:
+                    throw new InvalidOperationException($"Invalid Encoded address size {size} for {kind}");
+            }
+        }
+
+        private static void ResolveAttributeReferenceWithinCompilationUnit(DwarfDIEReference dieRef, in DebugInfoReaderContext context, bool errorIfNotFound)
+        {
+            if (context.RegisteredDIEPerCompilationUnit.TryGetValue(dieRef.Offset, out var die))
+            {
+                dieRef.Resolved = die;
+                dieRef.Resolver(ref dieRef);
             }
             else
             {
                 if (errorIfNotFound)
                 {
-                    context.Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidReference, $"Unable to resolve DIE reference (0x{attr.ValueAsI64:x}, section 0x{(attr.ValueAsU64 + context.OffsetOfCompilationUnitInSection):x}) for attribute {attr.Key} at offset 0x{attr.Offset:x}");
+                    if (dieRef.Offset != 0)
+                    {
+                        context.Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidReference, $"Unable to resolve DIE reference (0x{dieRef.Offset:x}, section 0x{(dieRef.Offset + context.OffsetOfCompilationUnitInSection):x}) for {dieRef.DwarfObject} at offset 0x{dieRef.Offset:x}");
+                    }
                 }
                 else
                 {
-                    context.AttributesWithUnresolvedDIECompilationUnitReference.Add(attr);
+                    context.UnresolvedDIECompilationUnitReference.Add(dieRef);
                 }
             }
         }
 
-        private static void ResolveAttributeReferenceWithinSection(DwarfAttribute attr, in DebugInfoReaderContext context, bool errorIfNotFound)
+        private static void ResolveAttributeReferenceWithinSection(DwarfDIEReference dieRef, in DebugInfoReaderContext context, bool errorIfNotFound)
         {
-            if (context.RegisteredDIEPerSection.TryGetValue(attr.ValueAsU64, out var die))
+            if (context.RegisteredDIEPerSection.TryGetValue(dieRef.Offset, out var die))
             {
-                attr.ValueAsU64 = 0;
-                attr.ValueAsObject = die;
+                dieRef.Resolved = die;
+                dieRef.Resolver(ref dieRef);
             }
             else
             {
                 if (errorIfNotFound)
                 {
-                    context.Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidReference, $"Unable to resolve DIE reference (0x{attr.ValueAsI64:x}) for attribute {attr.Key} at offset 0x{attr.Offset:x}");
+                    if (dieRef.Offset != 0)
+                    {
+                        context.Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidReference, $"Unable to resolve DIE reference (0x{dieRef.Offset:x}) for {dieRef.DwarfObject} at offset 0x{dieRef.Offset:x}");
+                    }
                 }
                 else
                 {
-                    context.AttributesWithUnresolvedDIESectionReference.Add(attr);
+                    context.AttributesWithUnresolvedDIESectionReference.Add(dieRef);
                 }
             }
         }
@@ -512,6 +935,49 @@ namespace LibObjectFile.Dwarf
             public byte address_size;
         }
 
+        private static readonly DwarfDIEReferenceResolver DwarfAttributeDIEReferenceResolverInstance = DwarfAttributeDIEReferenceResolver;
+
+        private static DwarfDIEReference AttributeToDIERef(DwarfAttribute attr)
+        {
+            return new DwarfDIEReference(attr.ValueAsU64, attr, DwarfAttributeDIEReferenceResolverInstance);
+        }
+
+        private static void DwarfAttributeDIEReferenceResolver(ref DwarfDIEReference dieRef)
+        {
+            var attr = (DwarfAttribute) dieRef.DwarfObject;
+            attr.ValueAsU64 = 0;
+            attr.ValueAsObject = dieRef.Resolved;
+        }
+
+
+        private static readonly DwarfDIEReferenceResolver DwarfExpressionLocationDIEReferenceResolverInstance = DwarfExpressionLocationDIEReferenceResolver;
+
+        private static void DwarfExpressionLocationDIEReferenceResolver(ref DwarfDIEReference dieRef)
+        {
+            var op = (DwarfOperation)dieRef.DwarfObject;
+            op.Operand0 = dieRef.Resolved;
+        }
+
+        private struct DwarfDIEReference
+        {
+            public DwarfDIEReference(ulong offset, object dwarfObject, DwarfDIEReferenceResolver resolver) : this()
+            {
+                Offset = offset;
+                DwarfObject = dwarfObject;
+                Resolver = resolver;
+            }
+
+            public ulong Offset;
+
+            public object DwarfObject;
+
+            public DwarfDIEReferenceResolver Resolver;
+
+            public DwarfDIE Resolved;
+        }
+
+        private delegate void DwarfDIEReferenceResolver(ref DwarfDIEReference reference);
+
         private struct DebugInfoReaderContext
         {
             public static DebugInfoReaderContext Create(int lineCount)
@@ -520,8 +986,8 @@ namespace LibObjectFile.Dwarf
                 {
                     RegisteredDIEPerCompilationUnit = new Dictionary<ulong, DwarfDIE>(),
                     RegisteredDIEPerSection = new Dictionary<ulong, DwarfDIE>(),
-                    AttributesWithUnresolvedDIECompilationUnitReference = new List<DwarfAttribute>(),
-                    AttributesWithUnresolvedDIESectionReference = new List<DwarfAttribute>(),
+                    UnresolvedDIECompilationUnitReference = new List<DwarfDIEReference>(),
+                    AttributesWithUnresolvedDIESectionReference = new List<DwarfDIEReference>(),
                     OffsetToDebugLine = new Dictionary<ulong, DwarfDebugLine>(lineCount)
                 };
             }
@@ -530,15 +996,17 @@ namespace LibObjectFile.Dwarf
 
             public Dictionary<ulong, DwarfDIE> RegisteredDIEPerSection;
 
-            public List<DwarfAttribute> AttributesWithUnresolvedDIECompilationUnitReference;
+            public List<DwarfDIEReference> UnresolvedDIECompilationUnitReference;
 
-            public List<DwarfAttribute> AttributesWithUnresolvedDIESectionReference;
+            public List<DwarfDIEReference> AttributesWithUnresolvedDIESectionReference;
 
             public Dictionary<ulong, DwarfDebugLine> OffsetToDebugLine;
 
             public DiagnosticBag Diagnostics;
 
-            public uint AddressSize;
+            public bool Is64Address;
+
+            public ushort Version;
 
             public ulong OffsetOfCompilationUnitInSection;
         }

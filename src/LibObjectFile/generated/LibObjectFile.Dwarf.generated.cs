@@ -1727,6 +1727,510 @@ namespace LibObjectFile.Dwarf
         
         public const ushort DW_AT_hi_user = 16383;
         
+        public const byte DW_OP_addr = 3;
+        
+        public const byte DW_OP_deref = 6;
+        
+        public const byte DW_OP_const1u = 8;
+        
+        public const byte DW_OP_const1s = 9;
+        
+        public const byte DW_OP_const2u = 10;
+        
+        public const byte DW_OP_const2s = 11;
+        
+        public const byte DW_OP_const4u = 12;
+        
+        public const byte DW_OP_const4s = 13;
+        
+        public const byte DW_OP_const8u = 14;
+        
+        public const byte DW_OP_const8s = 15;
+        
+        public const byte DW_OP_constu = 16;
+        
+        public const byte DW_OP_consts = 17;
+        
+        public const byte DW_OP_dup = 18;
+        
+        public const byte DW_OP_drop = 19;
+        
+        public const byte DW_OP_over = 20;
+        
+        public const byte DW_OP_pick = 21;
+        
+        public const byte DW_OP_swap = 22;
+        
+        public const byte DW_OP_rot = 23;
+        
+        public const byte DW_OP_xderef = 24;
+        
+        public const byte DW_OP_abs = 25;
+        
+        public const byte DW_OP_and = 26;
+        
+        public const byte DW_OP_div = 27;
+        
+        public const byte DW_OP_minus = 28;
+        
+        public const byte DW_OP_mod = 29;
+        
+        public const byte DW_OP_mul = 30;
+        
+        public const byte DW_OP_neg = 31;
+        
+        public const byte DW_OP_not = 32;
+        
+        public const byte DW_OP_or = 33;
+        
+        public const byte DW_OP_plus = 34;
+        
+        public const byte DW_OP_plus_uconst = 35;
+        
+        public const byte DW_OP_shl = 36;
+        
+        public const byte DW_OP_shr = 37;
+        
+        public const byte DW_OP_shra = 38;
+        
+        public const byte DW_OP_xor = 39;
+        
+        public const byte DW_OP_bra = 40;
+        
+        public const byte DW_OP_eq = 41;
+        
+        public const byte DW_OP_ge = 42;
+        
+        public const byte DW_OP_gt = 43;
+        
+        public const byte DW_OP_le = 44;
+        
+        public const byte DW_OP_lt = 45;
+        
+        public const byte DW_OP_ne = 46;
+        
+        public const byte DW_OP_skip = 47;
+        
+        public const byte DW_OP_lit0 = 48;
+        
+        public const byte DW_OP_lit1 = 49;
+        
+        public const byte DW_OP_lit2 = 50;
+        
+        public const byte DW_OP_lit3 = 51;
+        
+        public const byte DW_OP_lit4 = 52;
+        
+        public const byte DW_OP_lit5 = 53;
+        
+        public const byte DW_OP_lit6 = 54;
+        
+        public const byte DW_OP_lit7 = 55;
+        
+        public const byte DW_OP_lit8 = 56;
+        
+        public const byte DW_OP_lit9 = 57;
+        
+        public const byte DW_OP_lit10 = 58;
+        
+        public const byte DW_OP_lit11 = 59;
+        
+        public const byte DW_OP_lit12 = 60;
+        
+        public const byte DW_OP_lit13 = 61;
+        
+        public const byte DW_OP_lit14 = 62;
+        
+        public const byte DW_OP_lit15 = 63;
+        
+        public const byte DW_OP_lit16 = 64;
+        
+        public const byte DW_OP_lit17 = 65;
+        
+        public const byte DW_OP_lit18 = 66;
+        
+        public const byte DW_OP_lit19 = 67;
+        
+        public const byte DW_OP_lit20 = 68;
+        
+        public const byte DW_OP_lit21 = 69;
+        
+        public const byte DW_OP_lit22 = 70;
+        
+        public const byte DW_OP_lit23 = 71;
+        
+        public const byte DW_OP_lit24 = 72;
+        
+        public const byte DW_OP_lit25 = 73;
+        
+        public const byte DW_OP_lit26 = 74;
+        
+        public const byte DW_OP_lit27 = 75;
+        
+        public const byte DW_OP_lit28 = 76;
+        
+        public const byte DW_OP_lit29 = 77;
+        
+        public const byte DW_OP_lit30 = 78;
+        
+        public const byte DW_OP_lit31 = 79;
+        
+        public const byte DW_OP_reg0 = 80;
+        
+        public const byte DW_OP_reg1 = 81;
+        
+        public const byte DW_OP_reg2 = 82;
+        
+        public const byte DW_OP_reg3 = 83;
+        
+        public const byte DW_OP_reg4 = 84;
+        
+        public const byte DW_OP_reg5 = 85;
+        
+        public const byte DW_OP_reg6 = 86;
+        
+        public const byte DW_OP_reg7 = 87;
+        
+        public const byte DW_OP_reg8 = 88;
+        
+        public const byte DW_OP_reg9 = 89;
+        
+        public const byte DW_OP_reg10 = 90;
+        
+        public const byte DW_OP_reg11 = 91;
+        
+        public const byte DW_OP_reg12 = 92;
+        
+        public const byte DW_OP_reg13 = 93;
+        
+        public const byte DW_OP_reg14 = 94;
+        
+        public const byte DW_OP_reg15 = 95;
+        
+        public const byte DW_OP_reg16 = 96;
+        
+        public const byte DW_OP_reg17 = 97;
+        
+        public const byte DW_OP_reg18 = 98;
+        
+        public const byte DW_OP_reg19 = 99;
+        
+        public const byte DW_OP_reg20 = 100;
+        
+        public const byte DW_OP_reg21 = 101;
+        
+        public const byte DW_OP_reg22 = 102;
+        
+        public const byte DW_OP_reg23 = 103;
+        
+        public const byte DW_OP_reg24 = 104;
+        
+        public const byte DW_OP_reg25 = 105;
+        
+        public const byte DW_OP_reg26 = 106;
+        
+        public const byte DW_OP_reg27 = 107;
+        
+        public const byte DW_OP_reg28 = 108;
+        
+        public const byte DW_OP_reg29 = 109;
+        
+        public const byte DW_OP_reg30 = 110;
+        
+        public const byte DW_OP_reg31 = 111;
+        
+        public const byte DW_OP_breg0 = 112;
+        
+        public const byte DW_OP_breg1 = 113;
+        
+        public const byte DW_OP_breg2 = 114;
+        
+        public const byte DW_OP_breg3 = 115;
+        
+        public const byte DW_OP_breg4 = 116;
+        
+        public const byte DW_OP_breg5 = 117;
+        
+        public const byte DW_OP_breg6 = 118;
+        
+        public const byte DW_OP_breg7 = 119;
+        
+        public const byte DW_OP_breg8 = 120;
+        
+        public const byte DW_OP_breg9 = 121;
+        
+        public const byte DW_OP_breg10 = 122;
+        
+        public const byte DW_OP_breg11 = 123;
+        
+        public const byte DW_OP_breg12 = 124;
+        
+        public const byte DW_OP_breg13 = 125;
+        
+        public const byte DW_OP_breg14 = 126;
+        
+        public const byte DW_OP_breg15 = 127;
+        
+        public const byte DW_OP_breg16 = 128;
+        
+        public const byte DW_OP_breg17 = 129;
+        
+        public const byte DW_OP_breg18 = 130;
+        
+        public const byte DW_OP_breg19 = 131;
+        
+        public const byte DW_OP_breg20 = 132;
+        
+        public const byte DW_OP_breg21 = 133;
+        
+        public const byte DW_OP_breg22 = 134;
+        
+        public const byte DW_OP_breg23 = 135;
+        
+        public const byte DW_OP_breg24 = 136;
+        
+        public const byte DW_OP_breg25 = 137;
+        
+        public const byte DW_OP_breg26 = 138;
+        
+        public const byte DW_OP_breg27 = 139;
+        
+        public const byte DW_OP_breg28 = 140;
+        
+        public const byte DW_OP_breg29 = 141;
+        
+        public const byte DW_OP_breg30 = 142;
+        
+        public const byte DW_OP_breg31 = 143;
+        
+        public const byte DW_OP_regx = 144;
+        
+        public const byte DW_OP_fbreg = 145;
+        
+        public const byte DW_OP_bregx = 146;
+        
+        public const byte DW_OP_piece = 147;
+        
+        public const byte DW_OP_deref_size = 148;
+        
+        public const byte DW_OP_xderef_size = 149;
+        
+        public const byte DW_OP_nop = 150;
+        
+        /// <summary>
+        /// DWARF3
+        /// </summary>
+        public const byte DW_OP_push_object_address = 151;
+        
+        /// <summary>
+        /// DWARF3
+        /// </summary>
+        public const byte DW_OP_call2 = 152;
+        
+        /// <summary>
+        /// DWARF3
+        /// </summary>
+        public const byte DW_OP_call4 = 153;
+        
+        /// <summary>
+        /// DWARF3
+        /// </summary>
+        public const byte DW_OP_call_ref = 154;
+        
+        /// <summary>
+        /// DWARF3f
+        /// </summary>
+        public const byte DW_OP_form_tls_address = 155;
+        
+        /// <summary>
+        /// DWARF3f
+        /// </summary>
+        public const byte DW_OP_call_frame_cfa = 156;
+        
+        /// <summary>
+        /// DWARF3f
+        /// </summary>
+        public const byte DW_OP_bit_piece = 157;
+        
+        /// <summary>
+        /// DWARF4
+        /// </summary>
+        public const byte DW_OP_implicit_value = 158;
+        
+        /// <summary>
+        /// DWARF4
+        /// </summary>
+        public const byte DW_OP_stack_value = 159;
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public const byte DW_OP_implicit_pointer = 160;
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public const byte DW_OP_addrx = 161;
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public const byte DW_OP_constx = 162;
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public const byte DW_OP_entry_value = 163;
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public const byte DW_OP_const_type = 164;
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public const byte DW_OP_regval_type = 165;
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public const byte DW_OP_deref_type = 166;
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public const byte DW_OP_xderef_type = 167;
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public const byte DW_OP_convert = 168;
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public const byte DW_OP_reinterpret = 169;
+        
+        /// <summary>
+        /// GNU
+        /// </summary>
+        public const byte DW_OP_GNU_push_tls_address = 224;
+        
+        public const byte DW_OP_lo_user = 224;
+        
+        /// <summary>
+        /// GNU
+        /// </summary>
+        public const byte DW_OP_GNU_uninit = 240;
+        
+        /// <summary>
+        /// GNU
+        /// </summary>
+        public const byte DW_OP_GNU_encoded_addr = 241;
+        
+        /// <summary>
+        /// GNU
+        /// </summary>
+        public const byte DW_OP_GNU_implicit_pointer = 242;
+        
+        /// <summary>
+        /// GNU
+        /// </summary>
+        public const byte DW_OP_GNU_entry_value = 243;
+        
+        /// <summary>
+        /// GNU
+        /// </summary>
+        public const byte DW_OP_GNU_const_type = 244;
+        
+        /// <summary>
+        /// GNU
+        /// </summary>
+        public const byte DW_OP_GNU_regval_type = 245;
+        
+        /// <summary>
+        /// GNU
+        /// </summary>
+        public const byte DW_OP_GNU_deref_type = 246;
+        
+        /// <summary>
+        /// GNU
+        /// </summary>
+        public const byte DW_OP_GNU_convert = 247;
+        
+        /// <summary>
+        /// GNU
+        /// </summary>
+        public const byte DW_OP_GNU_reinterpret = 249;
+        
+        /// <summary>
+        /// GNU
+        /// </summary>
+        public const byte DW_OP_GNU_parameter_ref = 250;
+        
+        /// <summary>
+        /// GNU DebugFission
+        /// </summary>
+        public const byte DW_OP_GNU_addr_index = 251;
+        
+        /// <summary>
+        /// GNU DebugFission
+        /// </summary>
+        public const byte DW_OP_GNU_const_index = 252;
+        
+        /// <summary>
+        /// HP conflict: GNU
+        /// </summary>
+        public const byte DW_OP_HP_unknown = 224;
+        
+        /// <summary>
+        /// HP
+        /// </summary>
+        public const byte DW_OP_HP_is_value = 225;
+        
+        /// <summary>
+        /// HP
+        /// </summary>
+        public const byte DW_OP_HP_fltconst4 = 226;
+        
+        /// <summary>
+        /// HP
+        /// </summary>
+        public const byte DW_OP_HP_fltconst8 = 227;
+        
+        /// <summary>
+        /// HP
+        /// </summary>
+        public const byte DW_OP_HP_mod_range = 228;
+        
+        /// <summary>
+        /// HP
+        /// </summary>
+        public const byte DW_OP_HP_unmod_range = 229;
+        
+        /// <summary>
+        /// HP
+        /// </summary>
+        public const byte DW_OP_HP_tls = 230;
+        
+        /// <summary>
+        /// Intel: made obsolete by DW_OP_bit_piece above.
+        /// </summary>
+        public const byte DW_OP_INTEL_bit_piece = 232;
+        
+        /// <summary>
+        /// Apple
+        /// </summary>
+        public const byte DW_OP_APPLE_uninit = 240;
+        
+        /// <summary>
+        /// PGI (STMicroelectronics)
+        /// </summary>
+        public const byte DW_OP_PGI_omp_thread_num = 248;
+        
+        public const byte DW_OP_hi_user = 255;
+        
         /// <summary>
         /// DWARF5
         /// </summary>
@@ -4293,6 +4797,707 @@ namespace LibObjectFile.Dwarf
                 case DwarfNative.DW_TAG_SUN_fortran_vax_structure: return "DW_TAG_SUN_fortran_vax_structure";
                 case DwarfNative.DW_TAG_SUN_hi: return "DW_TAG_SUN_hi";
                 case DwarfNative.DW_TAG_hi_user: return "DW_TAG_hi_user";
+                default: return null;
+            }
+        }
+    }
+    
+    public readonly partial struct DwarfOperationKind
+    {
+        public static readonly DwarfOperationKind addr = new DwarfOperationKind(DwarfNative.DW_OP_addr);
+        
+        public static readonly DwarfOperationKind deref = new DwarfOperationKind(DwarfNative.DW_OP_deref);
+        
+        public static readonly DwarfOperationKind const1u = new DwarfOperationKind(DwarfNative.DW_OP_const1u);
+        
+        public static readonly DwarfOperationKind const1s = new DwarfOperationKind(DwarfNative.DW_OP_const1s);
+        
+        public static readonly DwarfOperationKind const2u = new DwarfOperationKind(DwarfNative.DW_OP_const2u);
+        
+        public static readonly DwarfOperationKind const2s = new DwarfOperationKind(DwarfNative.DW_OP_const2s);
+        
+        public static readonly DwarfOperationKind const4u = new DwarfOperationKind(DwarfNative.DW_OP_const4u);
+        
+        public static readonly DwarfOperationKind const4s = new DwarfOperationKind(DwarfNative.DW_OP_const4s);
+        
+        public static readonly DwarfOperationKind const8u = new DwarfOperationKind(DwarfNative.DW_OP_const8u);
+        
+        public static readonly DwarfOperationKind const8s = new DwarfOperationKind(DwarfNative.DW_OP_const8s);
+        
+        public static readonly DwarfOperationKind constu = new DwarfOperationKind(DwarfNative.DW_OP_constu);
+        
+        public static readonly DwarfOperationKind consts = new DwarfOperationKind(DwarfNative.DW_OP_consts);
+        
+        public static readonly DwarfOperationKind dup = new DwarfOperationKind(DwarfNative.DW_OP_dup);
+        
+        public static readonly DwarfOperationKind drop = new DwarfOperationKind(DwarfNative.DW_OP_drop);
+        
+        public static readonly DwarfOperationKind over = new DwarfOperationKind(DwarfNative.DW_OP_over);
+        
+        public static readonly DwarfOperationKind pick = new DwarfOperationKind(DwarfNative.DW_OP_pick);
+        
+        public static readonly DwarfOperationKind swap = new DwarfOperationKind(DwarfNative.DW_OP_swap);
+        
+        public static readonly DwarfOperationKind rot = new DwarfOperationKind(DwarfNative.DW_OP_rot);
+        
+        public static readonly DwarfOperationKind xderef = new DwarfOperationKind(DwarfNative.DW_OP_xderef);
+        
+        public static readonly DwarfOperationKind abs = new DwarfOperationKind(DwarfNative.DW_OP_abs);
+        
+        public static readonly DwarfOperationKind and = new DwarfOperationKind(DwarfNative.DW_OP_and);
+        
+        public static readonly DwarfOperationKind div = new DwarfOperationKind(DwarfNative.DW_OP_div);
+        
+        public static readonly DwarfOperationKind minus = new DwarfOperationKind(DwarfNative.DW_OP_minus);
+        
+        public static readonly DwarfOperationKind mod = new DwarfOperationKind(DwarfNative.DW_OP_mod);
+        
+        public static readonly DwarfOperationKind mul = new DwarfOperationKind(DwarfNative.DW_OP_mul);
+        
+        public static readonly DwarfOperationKind neg = new DwarfOperationKind(DwarfNative.DW_OP_neg);
+        
+        public static readonly DwarfOperationKind not = new DwarfOperationKind(DwarfNative.DW_OP_not);
+        
+        public static readonly DwarfOperationKind or = new DwarfOperationKind(DwarfNative.DW_OP_or);
+        
+        public static readonly DwarfOperationKind plus = new DwarfOperationKind(DwarfNative.DW_OP_plus);
+        
+        public static readonly DwarfOperationKind plus_uconst = new DwarfOperationKind(DwarfNative.DW_OP_plus_uconst);
+        
+        public static readonly DwarfOperationKind shl = new DwarfOperationKind(DwarfNative.DW_OP_shl);
+        
+        public static readonly DwarfOperationKind shr = new DwarfOperationKind(DwarfNative.DW_OP_shr);
+        
+        public static readonly DwarfOperationKind shra = new DwarfOperationKind(DwarfNative.DW_OP_shra);
+        
+        public static readonly DwarfOperationKind xor = new DwarfOperationKind(DwarfNative.DW_OP_xor);
+        
+        public static readonly DwarfOperationKind bra = new DwarfOperationKind(DwarfNative.DW_OP_bra);
+        
+        public static readonly DwarfOperationKind eq = new DwarfOperationKind(DwarfNative.DW_OP_eq);
+        
+        public static readonly DwarfOperationKind ge = new DwarfOperationKind(DwarfNative.DW_OP_ge);
+        
+        public static readonly DwarfOperationKind gt = new DwarfOperationKind(DwarfNative.DW_OP_gt);
+        
+        public static readonly DwarfOperationKind le = new DwarfOperationKind(DwarfNative.DW_OP_le);
+        
+        public static readonly DwarfOperationKind lt = new DwarfOperationKind(DwarfNative.DW_OP_lt);
+        
+        public static readonly DwarfOperationKind ne = new DwarfOperationKind(DwarfNative.DW_OP_ne);
+        
+        public static readonly DwarfOperationKind skip = new DwarfOperationKind(DwarfNative.DW_OP_skip);
+        
+        public static readonly DwarfOperationKind lit0 = new DwarfOperationKind(DwarfNative.DW_OP_lit0);
+        
+        public static readonly DwarfOperationKind lit1 = new DwarfOperationKind(DwarfNative.DW_OP_lit1);
+        
+        public static readonly DwarfOperationKind lit2 = new DwarfOperationKind(DwarfNative.DW_OP_lit2);
+        
+        public static readonly DwarfOperationKind lit3 = new DwarfOperationKind(DwarfNative.DW_OP_lit3);
+        
+        public static readonly DwarfOperationKind lit4 = new DwarfOperationKind(DwarfNative.DW_OP_lit4);
+        
+        public static readonly DwarfOperationKind lit5 = new DwarfOperationKind(DwarfNative.DW_OP_lit5);
+        
+        public static readonly DwarfOperationKind lit6 = new DwarfOperationKind(DwarfNative.DW_OP_lit6);
+        
+        public static readonly DwarfOperationKind lit7 = new DwarfOperationKind(DwarfNative.DW_OP_lit7);
+        
+        public static readonly DwarfOperationKind lit8 = new DwarfOperationKind(DwarfNative.DW_OP_lit8);
+        
+        public static readonly DwarfOperationKind lit9 = new DwarfOperationKind(DwarfNative.DW_OP_lit9);
+        
+        public static readonly DwarfOperationKind lit10 = new DwarfOperationKind(DwarfNative.DW_OP_lit10);
+        
+        public static readonly DwarfOperationKind lit11 = new DwarfOperationKind(DwarfNative.DW_OP_lit11);
+        
+        public static readonly DwarfOperationKind lit12 = new DwarfOperationKind(DwarfNative.DW_OP_lit12);
+        
+        public static readonly DwarfOperationKind lit13 = new DwarfOperationKind(DwarfNative.DW_OP_lit13);
+        
+        public static readonly DwarfOperationKind lit14 = new DwarfOperationKind(DwarfNative.DW_OP_lit14);
+        
+        public static readonly DwarfOperationKind lit15 = new DwarfOperationKind(DwarfNative.DW_OP_lit15);
+        
+        public static readonly DwarfOperationKind lit16 = new DwarfOperationKind(DwarfNative.DW_OP_lit16);
+        
+        public static readonly DwarfOperationKind lit17 = new DwarfOperationKind(DwarfNative.DW_OP_lit17);
+        
+        public static readonly DwarfOperationKind lit18 = new DwarfOperationKind(DwarfNative.DW_OP_lit18);
+        
+        public static readonly DwarfOperationKind lit19 = new DwarfOperationKind(DwarfNative.DW_OP_lit19);
+        
+        public static readonly DwarfOperationKind lit20 = new DwarfOperationKind(DwarfNative.DW_OP_lit20);
+        
+        public static readonly DwarfOperationKind lit21 = new DwarfOperationKind(DwarfNative.DW_OP_lit21);
+        
+        public static readonly DwarfOperationKind lit22 = new DwarfOperationKind(DwarfNative.DW_OP_lit22);
+        
+        public static readonly DwarfOperationKind lit23 = new DwarfOperationKind(DwarfNative.DW_OP_lit23);
+        
+        public static readonly DwarfOperationKind lit24 = new DwarfOperationKind(DwarfNative.DW_OP_lit24);
+        
+        public static readonly DwarfOperationKind lit25 = new DwarfOperationKind(DwarfNative.DW_OP_lit25);
+        
+        public static readonly DwarfOperationKind lit26 = new DwarfOperationKind(DwarfNative.DW_OP_lit26);
+        
+        public static readonly DwarfOperationKind lit27 = new DwarfOperationKind(DwarfNative.DW_OP_lit27);
+        
+        public static readonly DwarfOperationKind lit28 = new DwarfOperationKind(DwarfNative.DW_OP_lit28);
+        
+        public static readonly DwarfOperationKind lit29 = new DwarfOperationKind(DwarfNative.DW_OP_lit29);
+        
+        public static readonly DwarfOperationKind lit30 = new DwarfOperationKind(DwarfNative.DW_OP_lit30);
+        
+        public static readonly DwarfOperationKind lit31 = new DwarfOperationKind(DwarfNative.DW_OP_lit31);
+        
+        public static readonly DwarfOperationKind reg0 = new DwarfOperationKind(DwarfNative.DW_OP_reg0);
+        
+        public static readonly DwarfOperationKind reg1 = new DwarfOperationKind(DwarfNative.DW_OP_reg1);
+        
+        public static readonly DwarfOperationKind reg2 = new DwarfOperationKind(DwarfNative.DW_OP_reg2);
+        
+        public static readonly DwarfOperationKind reg3 = new DwarfOperationKind(DwarfNative.DW_OP_reg3);
+        
+        public static readonly DwarfOperationKind reg4 = new DwarfOperationKind(DwarfNative.DW_OP_reg4);
+        
+        public static readonly DwarfOperationKind reg5 = new DwarfOperationKind(DwarfNative.DW_OP_reg5);
+        
+        public static readonly DwarfOperationKind reg6 = new DwarfOperationKind(DwarfNative.DW_OP_reg6);
+        
+        public static readonly DwarfOperationKind reg7 = new DwarfOperationKind(DwarfNative.DW_OP_reg7);
+        
+        public static readonly DwarfOperationKind reg8 = new DwarfOperationKind(DwarfNative.DW_OP_reg8);
+        
+        public static readonly DwarfOperationKind reg9 = new DwarfOperationKind(DwarfNative.DW_OP_reg9);
+        
+        public static readonly DwarfOperationKind reg10 = new DwarfOperationKind(DwarfNative.DW_OP_reg10);
+        
+        public static readonly DwarfOperationKind reg11 = new DwarfOperationKind(DwarfNative.DW_OP_reg11);
+        
+        public static readonly DwarfOperationKind reg12 = new DwarfOperationKind(DwarfNative.DW_OP_reg12);
+        
+        public static readonly DwarfOperationKind reg13 = new DwarfOperationKind(DwarfNative.DW_OP_reg13);
+        
+        public static readonly DwarfOperationKind reg14 = new DwarfOperationKind(DwarfNative.DW_OP_reg14);
+        
+        public static readonly DwarfOperationKind reg15 = new DwarfOperationKind(DwarfNative.DW_OP_reg15);
+        
+        public static readonly DwarfOperationKind reg16 = new DwarfOperationKind(DwarfNative.DW_OP_reg16);
+        
+        public static readonly DwarfOperationKind reg17 = new DwarfOperationKind(DwarfNative.DW_OP_reg17);
+        
+        public static readonly DwarfOperationKind reg18 = new DwarfOperationKind(DwarfNative.DW_OP_reg18);
+        
+        public static readonly DwarfOperationKind reg19 = new DwarfOperationKind(DwarfNative.DW_OP_reg19);
+        
+        public static readonly DwarfOperationKind reg20 = new DwarfOperationKind(DwarfNative.DW_OP_reg20);
+        
+        public static readonly DwarfOperationKind reg21 = new DwarfOperationKind(DwarfNative.DW_OP_reg21);
+        
+        public static readonly DwarfOperationKind reg22 = new DwarfOperationKind(DwarfNative.DW_OP_reg22);
+        
+        public static readonly DwarfOperationKind reg23 = new DwarfOperationKind(DwarfNative.DW_OP_reg23);
+        
+        public static readonly DwarfOperationKind reg24 = new DwarfOperationKind(DwarfNative.DW_OP_reg24);
+        
+        public static readonly DwarfOperationKind reg25 = new DwarfOperationKind(DwarfNative.DW_OP_reg25);
+        
+        public static readonly DwarfOperationKind reg26 = new DwarfOperationKind(DwarfNative.DW_OP_reg26);
+        
+        public static readonly DwarfOperationKind reg27 = new DwarfOperationKind(DwarfNative.DW_OP_reg27);
+        
+        public static readonly DwarfOperationKind reg28 = new DwarfOperationKind(DwarfNative.DW_OP_reg28);
+        
+        public static readonly DwarfOperationKind reg29 = new DwarfOperationKind(DwarfNative.DW_OP_reg29);
+        
+        public static readonly DwarfOperationKind reg30 = new DwarfOperationKind(DwarfNative.DW_OP_reg30);
+        
+        public static readonly DwarfOperationKind reg31 = new DwarfOperationKind(DwarfNative.DW_OP_reg31);
+        
+        public static readonly DwarfOperationKind breg0 = new DwarfOperationKind(DwarfNative.DW_OP_breg0);
+        
+        public static readonly DwarfOperationKind breg1 = new DwarfOperationKind(DwarfNative.DW_OP_breg1);
+        
+        public static readonly DwarfOperationKind breg2 = new DwarfOperationKind(DwarfNative.DW_OP_breg2);
+        
+        public static readonly DwarfOperationKind breg3 = new DwarfOperationKind(DwarfNative.DW_OP_breg3);
+        
+        public static readonly DwarfOperationKind breg4 = new DwarfOperationKind(DwarfNative.DW_OP_breg4);
+        
+        public static readonly DwarfOperationKind breg5 = new DwarfOperationKind(DwarfNative.DW_OP_breg5);
+        
+        public static readonly DwarfOperationKind breg6 = new DwarfOperationKind(DwarfNative.DW_OP_breg6);
+        
+        public static readonly DwarfOperationKind breg7 = new DwarfOperationKind(DwarfNative.DW_OP_breg7);
+        
+        public static readonly DwarfOperationKind breg8 = new DwarfOperationKind(DwarfNative.DW_OP_breg8);
+        
+        public static readonly DwarfOperationKind breg9 = new DwarfOperationKind(DwarfNative.DW_OP_breg9);
+        
+        public static readonly DwarfOperationKind breg10 = new DwarfOperationKind(DwarfNative.DW_OP_breg10);
+        
+        public static readonly DwarfOperationKind breg11 = new DwarfOperationKind(DwarfNative.DW_OP_breg11);
+        
+        public static readonly DwarfOperationKind breg12 = new DwarfOperationKind(DwarfNative.DW_OP_breg12);
+        
+        public static readonly DwarfOperationKind breg13 = new DwarfOperationKind(DwarfNative.DW_OP_breg13);
+        
+        public static readonly DwarfOperationKind breg14 = new DwarfOperationKind(DwarfNative.DW_OP_breg14);
+        
+        public static readonly DwarfOperationKind breg15 = new DwarfOperationKind(DwarfNative.DW_OP_breg15);
+        
+        public static readonly DwarfOperationKind breg16 = new DwarfOperationKind(DwarfNative.DW_OP_breg16);
+        
+        public static readonly DwarfOperationKind breg17 = new DwarfOperationKind(DwarfNative.DW_OP_breg17);
+        
+        public static readonly DwarfOperationKind breg18 = new DwarfOperationKind(DwarfNative.DW_OP_breg18);
+        
+        public static readonly DwarfOperationKind breg19 = new DwarfOperationKind(DwarfNative.DW_OP_breg19);
+        
+        public static readonly DwarfOperationKind breg20 = new DwarfOperationKind(DwarfNative.DW_OP_breg20);
+        
+        public static readonly DwarfOperationKind breg21 = new DwarfOperationKind(DwarfNative.DW_OP_breg21);
+        
+        public static readonly DwarfOperationKind breg22 = new DwarfOperationKind(DwarfNative.DW_OP_breg22);
+        
+        public static readonly DwarfOperationKind breg23 = new DwarfOperationKind(DwarfNative.DW_OP_breg23);
+        
+        public static readonly DwarfOperationKind breg24 = new DwarfOperationKind(DwarfNative.DW_OP_breg24);
+        
+        public static readonly DwarfOperationKind breg25 = new DwarfOperationKind(DwarfNative.DW_OP_breg25);
+        
+        public static readonly DwarfOperationKind breg26 = new DwarfOperationKind(DwarfNative.DW_OP_breg26);
+        
+        public static readonly DwarfOperationKind breg27 = new DwarfOperationKind(DwarfNative.DW_OP_breg27);
+        
+        public static readonly DwarfOperationKind breg28 = new DwarfOperationKind(DwarfNative.DW_OP_breg28);
+        
+        public static readonly DwarfOperationKind breg29 = new DwarfOperationKind(DwarfNative.DW_OP_breg29);
+        
+        public static readonly DwarfOperationKind breg30 = new DwarfOperationKind(DwarfNative.DW_OP_breg30);
+        
+        public static readonly DwarfOperationKind breg31 = new DwarfOperationKind(DwarfNative.DW_OP_breg31);
+        
+        public static readonly DwarfOperationKind regx = new DwarfOperationKind(DwarfNative.DW_OP_regx);
+        
+        public static readonly DwarfOperationKind fbreg = new DwarfOperationKind(DwarfNative.DW_OP_fbreg);
+        
+        public static readonly DwarfOperationKind bregx = new DwarfOperationKind(DwarfNative.DW_OP_bregx);
+        
+        public static readonly DwarfOperationKind piece = new DwarfOperationKind(DwarfNative.DW_OP_piece);
+        
+        public static readonly DwarfOperationKind deref_size = new DwarfOperationKind(DwarfNative.DW_OP_deref_size);
+        
+        public static readonly DwarfOperationKind xderef_size = new DwarfOperationKind(DwarfNative.DW_OP_xderef_size);
+        
+        public static readonly DwarfOperationKind nop = new DwarfOperationKind(DwarfNative.DW_OP_nop);
+        
+        /// <summary>
+        /// DWARF3
+        /// </summary>
+        public static readonly DwarfOperationKind push_object_address = new DwarfOperationKind(DwarfNative.DW_OP_push_object_address);
+        
+        /// <summary>
+        /// DWARF3
+        /// </summary>
+        public static readonly DwarfOperationKind call2 = new DwarfOperationKind(DwarfNative.DW_OP_call2);
+        
+        /// <summary>
+        /// DWARF3
+        /// </summary>
+        public static readonly DwarfOperationKind call4 = new DwarfOperationKind(DwarfNative.DW_OP_call4);
+        
+        /// <summary>
+        /// DWARF3
+        /// </summary>
+        public static readonly DwarfOperationKind call_ref = new DwarfOperationKind(DwarfNative.DW_OP_call_ref);
+        
+        /// <summary>
+        /// DWARF3f
+        /// </summary>
+        public static readonly DwarfOperationKind form_tls_address = new DwarfOperationKind(DwarfNative.DW_OP_form_tls_address);
+        
+        /// <summary>
+        /// DWARF3f
+        /// </summary>
+        public static readonly DwarfOperationKind call_frame_cfa = new DwarfOperationKind(DwarfNative.DW_OP_call_frame_cfa);
+        
+        /// <summary>
+        /// DWARF3f
+        /// </summary>
+        public static readonly DwarfOperationKind bit_piece = new DwarfOperationKind(DwarfNative.DW_OP_bit_piece);
+        
+        /// <summary>
+        /// DWARF4
+        /// </summary>
+        public static readonly DwarfOperationKind implicit_value = new DwarfOperationKind(DwarfNative.DW_OP_implicit_value);
+        
+        /// <summary>
+        /// DWARF4
+        /// </summary>
+        public static readonly DwarfOperationKind stack_value = new DwarfOperationKind(DwarfNative.DW_OP_stack_value);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfOperationKind implicit_pointer = new DwarfOperationKind(DwarfNative.DW_OP_implicit_pointer);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfOperationKind addrx = new DwarfOperationKind(DwarfNative.DW_OP_addrx);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfOperationKind constx = new DwarfOperationKind(DwarfNative.DW_OP_constx);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfOperationKind entry_value = new DwarfOperationKind(DwarfNative.DW_OP_entry_value);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfOperationKind const_type = new DwarfOperationKind(DwarfNative.DW_OP_const_type);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfOperationKind regval_type = new DwarfOperationKind(DwarfNative.DW_OP_regval_type);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfOperationKind deref_type = new DwarfOperationKind(DwarfNative.DW_OP_deref_type);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfOperationKind xderef_type = new DwarfOperationKind(DwarfNative.DW_OP_xderef_type);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfOperationKind convert = new DwarfOperationKind(DwarfNative.DW_OP_convert);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfOperationKind reinterpret = new DwarfOperationKind(DwarfNative.DW_OP_reinterpret);
+        
+        /// <summary>
+        /// GNU
+        /// </summary>
+        public static readonly DwarfOperationKind GNU_push_tls_address = new DwarfOperationKind(DwarfNative.DW_OP_GNU_push_tls_address);
+        
+        public static readonly DwarfOperationKind lo_user = new DwarfOperationKind(DwarfNative.DW_OP_lo_user);
+        
+        /// <summary>
+        /// GNU
+        /// </summary>
+        public static readonly DwarfOperationKind GNU_uninit = new DwarfOperationKind(DwarfNative.DW_OP_GNU_uninit);
+        
+        /// <summary>
+        /// GNU
+        /// </summary>
+        public static readonly DwarfOperationKind GNU_encoded_addr = new DwarfOperationKind(DwarfNative.DW_OP_GNU_encoded_addr);
+        
+        /// <summary>
+        /// GNU
+        /// </summary>
+        public static readonly DwarfOperationKind GNU_implicit_pointer = new DwarfOperationKind(DwarfNative.DW_OP_GNU_implicit_pointer);
+        
+        /// <summary>
+        /// GNU
+        /// </summary>
+        public static readonly DwarfOperationKind GNU_entry_value = new DwarfOperationKind(DwarfNative.DW_OP_GNU_entry_value);
+        
+        /// <summary>
+        /// GNU
+        /// </summary>
+        public static readonly DwarfOperationKind GNU_const_type = new DwarfOperationKind(DwarfNative.DW_OP_GNU_const_type);
+        
+        /// <summary>
+        /// GNU
+        /// </summary>
+        public static readonly DwarfOperationKind GNU_regval_type = new DwarfOperationKind(DwarfNative.DW_OP_GNU_regval_type);
+        
+        /// <summary>
+        /// GNU
+        /// </summary>
+        public static readonly DwarfOperationKind GNU_deref_type = new DwarfOperationKind(DwarfNative.DW_OP_GNU_deref_type);
+        
+        /// <summary>
+        /// GNU
+        /// </summary>
+        public static readonly DwarfOperationKind GNU_convert = new DwarfOperationKind(DwarfNative.DW_OP_GNU_convert);
+        
+        /// <summary>
+        /// GNU
+        /// </summary>
+        public static readonly DwarfOperationKind GNU_reinterpret = new DwarfOperationKind(DwarfNative.DW_OP_GNU_reinterpret);
+        
+        /// <summary>
+        /// GNU
+        /// </summary>
+        public static readonly DwarfOperationKind GNU_parameter_ref = new DwarfOperationKind(DwarfNative.DW_OP_GNU_parameter_ref);
+        
+        /// <summary>
+        /// GNU DebugFission
+        /// </summary>
+        public static readonly DwarfOperationKind GNU_addr_index = new DwarfOperationKind(DwarfNative.DW_OP_GNU_addr_index);
+        
+        /// <summary>
+        /// GNU DebugFission
+        /// </summary>
+        public static readonly DwarfOperationKind GNU_const_index = new DwarfOperationKind(DwarfNative.DW_OP_GNU_const_index);
+        
+        /// <summary>
+        /// HP conflict: GNU
+        /// </summary>
+        public static readonly DwarfOperationKind HP_unknown = new DwarfOperationKind(DwarfNative.DW_OP_HP_unknown);
+        
+        /// <summary>
+        /// HP
+        /// </summary>
+        public static readonly DwarfOperationKind HP_is_value = new DwarfOperationKind(DwarfNative.DW_OP_HP_is_value);
+        
+        /// <summary>
+        /// HP
+        /// </summary>
+        public static readonly DwarfOperationKind HP_fltconst4 = new DwarfOperationKind(DwarfNative.DW_OP_HP_fltconst4);
+        
+        /// <summary>
+        /// HP
+        /// </summary>
+        public static readonly DwarfOperationKind HP_fltconst8 = new DwarfOperationKind(DwarfNative.DW_OP_HP_fltconst8);
+        
+        /// <summary>
+        /// HP
+        /// </summary>
+        public static readonly DwarfOperationKind HP_mod_range = new DwarfOperationKind(DwarfNative.DW_OP_HP_mod_range);
+        
+        /// <summary>
+        /// HP
+        /// </summary>
+        public static readonly DwarfOperationKind HP_unmod_range = new DwarfOperationKind(DwarfNative.DW_OP_HP_unmod_range);
+        
+        /// <summary>
+        /// HP
+        /// </summary>
+        public static readonly DwarfOperationKind HP_tls = new DwarfOperationKind(DwarfNative.DW_OP_HP_tls);
+        
+        /// <summary>
+        /// Intel: made obsolete by DW_OP_bit_piece above.
+        /// </summary>
+        public static readonly DwarfOperationKind INTEL_bit_piece = new DwarfOperationKind(DwarfNative.DW_OP_INTEL_bit_piece);
+        
+        /// <summary>
+        /// Apple
+        /// </summary>
+        public static readonly DwarfOperationKind APPLE_uninit = new DwarfOperationKind(DwarfNative.DW_OP_APPLE_uninit);
+        
+        /// <summary>
+        /// PGI (STMicroelectronics)
+        /// </summary>
+        public static readonly DwarfOperationKind PGI_omp_thread_num = new DwarfOperationKind(DwarfNative.DW_OP_PGI_omp_thread_num);
+        
+        public static readonly DwarfOperationKind hi_user = new DwarfOperationKind(DwarfNative.DW_OP_hi_user);
+        
+        private string ToStringInternal()
+        {
+            switch (Value)
+            {
+                case DwarfNative.DW_OP_addr: return "DW_OP_addr";
+                case DwarfNative.DW_OP_deref: return "DW_OP_deref";
+                case DwarfNative.DW_OP_const1u: return "DW_OP_const1u";
+                case DwarfNative.DW_OP_const1s: return "DW_OP_const1s";
+                case DwarfNative.DW_OP_const2u: return "DW_OP_const2u";
+                case DwarfNative.DW_OP_const2s: return "DW_OP_const2s";
+                case DwarfNative.DW_OP_const4u: return "DW_OP_const4u";
+                case DwarfNative.DW_OP_const4s: return "DW_OP_const4s";
+                case DwarfNative.DW_OP_const8u: return "DW_OP_const8u";
+                case DwarfNative.DW_OP_const8s: return "DW_OP_const8s";
+                case DwarfNative.DW_OP_constu: return "DW_OP_constu";
+                case DwarfNative.DW_OP_consts: return "DW_OP_consts";
+                case DwarfNative.DW_OP_dup: return "DW_OP_dup";
+                case DwarfNative.DW_OP_drop: return "DW_OP_drop";
+                case DwarfNative.DW_OP_over: return "DW_OP_over";
+                case DwarfNative.DW_OP_pick: return "DW_OP_pick";
+                case DwarfNative.DW_OP_swap: return "DW_OP_swap";
+                case DwarfNative.DW_OP_rot: return "DW_OP_rot";
+                case DwarfNative.DW_OP_xderef: return "DW_OP_xderef";
+                case DwarfNative.DW_OP_abs: return "DW_OP_abs";
+                case DwarfNative.DW_OP_and: return "DW_OP_and";
+                case DwarfNative.DW_OP_div: return "DW_OP_div";
+                case DwarfNative.DW_OP_minus: return "DW_OP_minus";
+                case DwarfNative.DW_OP_mod: return "DW_OP_mod";
+                case DwarfNative.DW_OP_mul: return "DW_OP_mul";
+                case DwarfNative.DW_OP_neg: return "DW_OP_neg";
+                case DwarfNative.DW_OP_not: return "DW_OP_not";
+                case DwarfNative.DW_OP_or: return "DW_OP_or";
+                case DwarfNative.DW_OP_plus: return "DW_OP_plus";
+                case DwarfNative.DW_OP_plus_uconst: return "DW_OP_plus_uconst";
+                case DwarfNative.DW_OP_shl: return "DW_OP_shl";
+                case DwarfNative.DW_OP_shr: return "DW_OP_shr";
+                case DwarfNative.DW_OP_shra: return "DW_OP_shra";
+                case DwarfNative.DW_OP_xor: return "DW_OP_xor";
+                case DwarfNative.DW_OP_bra: return "DW_OP_bra";
+                case DwarfNative.DW_OP_eq: return "DW_OP_eq";
+                case DwarfNative.DW_OP_ge: return "DW_OP_ge";
+                case DwarfNative.DW_OP_gt: return "DW_OP_gt";
+                case DwarfNative.DW_OP_le: return "DW_OP_le";
+                case DwarfNative.DW_OP_lt: return "DW_OP_lt";
+                case DwarfNative.DW_OP_ne: return "DW_OP_ne";
+                case DwarfNative.DW_OP_skip: return "DW_OP_skip";
+                case DwarfNative.DW_OP_lit0: return "DW_OP_lit0";
+                case DwarfNative.DW_OP_lit1: return "DW_OP_lit1";
+                case DwarfNative.DW_OP_lit2: return "DW_OP_lit2";
+                case DwarfNative.DW_OP_lit3: return "DW_OP_lit3";
+                case DwarfNative.DW_OP_lit4: return "DW_OP_lit4";
+                case DwarfNative.DW_OP_lit5: return "DW_OP_lit5";
+                case DwarfNative.DW_OP_lit6: return "DW_OP_lit6";
+                case DwarfNative.DW_OP_lit7: return "DW_OP_lit7";
+                case DwarfNative.DW_OP_lit8: return "DW_OP_lit8";
+                case DwarfNative.DW_OP_lit9: return "DW_OP_lit9";
+                case DwarfNative.DW_OP_lit10: return "DW_OP_lit10";
+                case DwarfNative.DW_OP_lit11: return "DW_OP_lit11";
+                case DwarfNative.DW_OP_lit12: return "DW_OP_lit12";
+                case DwarfNative.DW_OP_lit13: return "DW_OP_lit13";
+                case DwarfNative.DW_OP_lit14: return "DW_OP_lit14";
+                case DwarfNative.DW_OP_lit15: return "DW_OP_lit15";
+                case DwarfNative.DW_OP_lit16: return "DW_OP_lit16";
+                case DwarfNative.DW_OP_lit17: return "DW_OP_lit17";
+                case DwarfNative.DW_OP_lit18: return "DW_OP_lit18";
+                case DwarfNative.DW_OP_lit19: return "DW_OP_lit19";
+                case DwarfNative.DW_OP_lit20: return "DW_OP_lit20";
+                case DwarfNative.DW_OP_lit21: return "DW_OP_lit21";
+                case DwarfNative.DW_OP_lit22: return "DW_OP_lit22";
+                case DwarfNative.DW_OP_lit23: return "DW_OP_lit23";
+                case DwarfNative.DW_OP_lit24: return "DW_OP_lit24";
+                case DwarfNative.DW_OP_lit25: return "DW_OP_lit25";
+                case DwarfNative.DW_OP_lit26: return "DW_OP_lit26";
+                case DwarfNative.DW_OP_lit27: return "DW_OP_lit27";
+                case DwarfNative.DW_OP_lit28: return "DW_OP_lit28";
+                case DwarfNative.DW_OP_lit29: return "DW_OP_lit29";
+                case DwarfNative.DW_OP_lit30: return "DW_OP_lit30";
+                case DwarfNative.DW_OP_lit31: return "DW_OP_lit31";
+                case DwarfNative.DW_OP_reg0: return "DW_OP_reg0";
+                case DwarfNative.DW_OP_reg1: return "DW_OP_reg1";
+                case DwarfNative.DW_OP_reg2: return "DW_OP_reg2";
+                case DwarfNative.DW_OP_reg3: return "DW_OP_reg3";
+                case DwarfNative.DW_OP_reg4: return "DW_OP_reg4";
+                case DwarfNative.DW_OP_reg5: return "DW_OP_reg5";
+                case DwarfNative.DW_OP_reg6: return "DW_OP_reg6";
+                case DwarfNative.DW_OP_reg7: return "DW_OP_reg7";
+                case DwarfNative.DW_OP_reg8: return "DW_OP_reg8";
+                case DwarfNative.DW_OP_reg9: return "DW_OP_reg9";
+                case DwarfNative.DW_OP_reg10: return "DW_OP_reg10";
+                case DwarfNative.DW_OP_reg11: return "DW_OP_reg11";
+                case DwarfNative.DW_OP_reg12: return "DW_OP_reg12";
+                case DwarfNative.DW_OP_reg13: return "DW_OP_reg13";
+                case DwarfNative.DW_OP_reg14: return "DW_OP_reg14";
+                case DwarfNative.DW_OP_reg15: return "DW_OP_reg15";
+                case DwarfNative.DW_OP_reg16: return "DW_OP_reg16";
+                case DwarfNative.DW_OP_reg17: return "DW_OP_reg17";
+                case DwarfNative.DW_OP_reg18: return "DW_OP_reg18";
+                case DwarfNative.DW_OP_reg19: return "DW_OP_reg19";
+                case DwarfNative.DW_OP_reg20: return "DW_OP_reg20";
+                case DwarfNative.DW_OP_reg21: return "DW_OP_reg21";
+                case DwarfNative.DW_OP_reg22: return "DW_OP_reg22";
+                case DwarfNative.DW_OP_reg23: return "DW_OP_reg23";
+                case DwarfNative.DW_OP_reg24: return "DW_OP_reg24";
+                case DwarfNative.DW_OP_reg25: return "DW_OP_reg25";
+                case DwarfNative.DW_OP_reg26: return "DW_OP_reg26";
+                case DwarfNative.DW_OP_reg27: return "DW_OP_reg27";
+                case DwarfNative.DW_OP_reg28: return "DW_OP_reg28";
+                case DwarfNative.DW_OP_reg29: return "DW_OP_reg29";
+                case DwarfNative.DW_OP_reg30: return "DW_OP_reg30";
+                case DwarfNative.DW_OP_reg31: return "DW_OP_reg31";
+                case DwarfNative.DW_OP_breg0: return "DW_OP_breg0";
+                case DwarfNative.DW_OP_breg1: return "DW_OP_breg1";
+                case DwarfNative.DW_OP_breg2: return "DW_OP_breg2";
+                case DwarfNative.DW_OP_breg3: return "DW_OP_breg3";
+                case DwarfNative.DW_OP_breg4: return "DW_OP_breg4";
+                case DwarfNative.DW_OP_breg5: return "DW_OP_breg5";
+                case DwarfNative.DW_OP_breg6: return "DW_OP_breg6";
+                case DwarfNative.DW_OP_breg7: return "DW_OP_breg7";
+                case DwarfNative.DW_OP_breg8: return "DW_OP_breg8";
+                case DwarfNative.DW_OP_breg9: return "DW_OP_breg9";
+                case DwarfNative.DW_OP_breg10: return "DW_OP_breg10";
+                case DwarfNative.DW_OP_breg11: return "DW_OP_breg11";
+                case DwarfNative.DW_OP_breg12: return "DW_OP_breg12";
+                case DwarfNative.DW_OP_breg13: return "DW_OP_breg13";
+                case DwarfNative.DW_OP_breg14: return "DW_OP_breg14";
+                case DwarfNative.DW_OP_breg15: return "DW_OP_breg15";
+                case DwarfNative.DW_OP_breg16: return "DW_OP_breg16";
+                case DwarfNative.DW_OP_breg17: return "DW_OP_breg17";
+                case DwarfNative.DW_OP_breg18: return "DW_OP_breg18";
+                case DwarfNative.DW_OP_breg19: return "DW_OP_breg19";
+                case DwarfNative.DW_OP_breg20: return "DW_OP_breg20";
+                case DwarfNative.DW_OP_breg21: return "DW_OP_breg21";
+                case DwarfNative.DW_OP_breg22: return "DW_OP_breg22";
+                case DwarfNative.DW_OP_breg23: return "DW_OP_breg23";
+                case DwarfNative.DW_OP_breg24: return "DW_OP_breg24";
+                case DwarfNative.DW_OP_breg25: return "DW_OP_breg25";
+                case DwarfNative.DW_OP_breg26: return "DW_OP_breg26";
+                case DwarfNative.DW_OP_breg27: return "DW_OP_breg27";
+                case DwarfNative.DW_OP_breg28: return "DW_OP_breg28";
+                case DwarfNative.DW_OP_breg29: return "DW_OP_breg29";
+                case DwarfNative.DW_OP_breg30: return "DW_OP_breg30";
+                case DwarfNative.DW_OP_breg31: return "DW_OP_breg31";
+                case DwarfNative.DW_OP_regx: return "DW_OP_regx";
+                case DwarfNative.DW_OP_fbreg: return "DW_OP_fbreg";
+                case DwarfNative.DW_OP_bregx: return "DW_OP_bregx";
+                case DwarfNative.DW_OP_piece: return "DW_OP_piece";
+                case DwarfNative.DW_OP_deref_size: return "DW_OP_deref_size";
+                case DwarfNative.DW_OP_xderef_size: return "DW_OP_xderef_size";
+                case DwarfNative.DW_OP_nop: return "DW_OP_nop";
+                case DwarfNative.DW_OP_push_object_address: return "DW_OP_push_object_address";
+                case DwarfNative.DW_OP_call2: return "DW_OP_call2";
+                case DwarfNative.DW_OP_call4: return "DW_OP_call4";
+                case DwarfNative.DW_OP_call_ref: return "DW_OP_call_ref";
+                case DwarfNative.DW_OP_form_tls_address: return "DW_OP_form_tls_address";
+                case DwarfNative.DW_OP_call_frame_cfa: return "DW_OP_call_frame_cfa";
+                case DwarfNative.DW_OP_bit_piece: return "DW_OP_bit_piece";
+                case DwarfNative.DW_OP_implicit_value: return "DW_OP_implicit_value";
+                case DwarfNative.DW_OP_stack_value: return "DW_OP_stack_value";
+                case DwarfNative.DW_OP_implicit_pointer: return "DW_OP_implicit_pointer";
+                case DwarfNative.DW_OP_addrx: return "DW_OP_addrx";
+                case DwarfNative.DW_OP_constx: return "DW_OP_constx";
+                case DwarfNative.DW_OP_entry_value: return "DW_OP_entry_value";
+                case DwarfNative.DW_OP_const_type: return "DW_OP_const_type";
+                case DwarfNative.DW_OP_regval_type: return "DW_OP_regval_type";
+                case DwarfNative.DW_OP_deref_type: return "DW_OP_deref_type";
+                case DwarfNative.DW_OP_xderef_type: return "DW_OP_xderef_type";
+                case DwarfNative.DW_OP_convert: return "DW_OP_convert";
+                case DwarfNative.DW_OP_reinterpret: return "DW_OP_reinterpret";
+                case DwarfNative.DW_OP_GNU_push_tls_address: return "DW_OP_GNU_push_tls_address";
+                case DwarfNative.DW_OP_GNU_uninit: return "DW_OP_GNU_uninit";
+                case DwarfNative.DW_OP_GNU_encoded_addr: return "DW_OP_GNU_encoded_addr";
+                case DwarfNative.DW_OP_GNU_implicit_pointer: return "DW_OP_GNU_implicit_pointer";
+                case DwarfNative.DW_OP_GNU_entry_value: return "DW_OP_GNU_entry_value";
+                case DwarfNative.DW_OP_GNU_const_type: return "DW_OP_GNU_const_type";
+                case DwarfNative.DW_OP_GNU_regval_type: return "DW_OP_GNU_regval_type";
+                case DwarfNative.DW_OP_GNU_deref_type: return "DW_OP_GNU_deref_type";
+                case DwarfNative.DW_OP_GNU_convert: return "DW_OP_GNU_convert";
+                case DwarfNative.DW_OP_GNU_reinterpret: return "DW_OP_GNU_reinterpret";
+                case DwarfNative.DW_OP_GNU_parameter_ref: return "DW_OP_GNU_parameter_ref";
+                case DwarfNative.DW_OP_GNU_addr_index: return "DW_OP_GNU_addr_index";
+                case DwarfNative.DW_OP_GNU_const_index: return "DW_OP_GNU_const_index";
+                case DwarfNative.DW_OP_HP_is_value: return "DW_OP_HP_is_value";
+                case DwarfNative.DW_OP_HP_fltconst4: return "DW_OP_HP_fltconst4";
+                case DwarfNative.DW_OP_HP_fltconst8: return "DW_OP_HP_fltconst8";
+                case DwarfNative.DW_OP_HP_mod_range: return "DW_OP_HP_mod_range";
+                case DwarfNative.DW_OP_HP_unmod_range: return "DW_OP_HP_unmod_range";
+                case DwarfNative.DW_OP_HP_tls: return "DW_OP_HP_tls";
+                case DwarfNative.DW_OP_INTEL_bit_piece: return "DW_OP_INTEL_bit_piece";
+                case DwarfNative.DW_OP_PGI_omp_thread_num: return "DW_OP_PGI_omp_thread_num";
+                case DwarfNative.DW_OP_hi_user: return "DW_OP_hi_user";
                 default: return null;
             }
         }

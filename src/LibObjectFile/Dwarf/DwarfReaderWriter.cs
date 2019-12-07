@@ -57,7 +57,7 @@ namespace LibObjectFile.Dwarf
             }
         }
 
-        public ulong ReadNativeUInt()
+        public ulong ReadDwarfUInt()
         {
             return Is64BitDwarfFormat ? ReadU64() : ReadU32();
         }
@@ -74,7 +74,7 @@ namespace LibObjectFile.Dwarf
             }
         }
 
-        public ulong ReadTargetUInt()
+        public ulong ReadUInt()
         {
             return Is64BitCpu ? ReadU64() : ReadU32();
         }
@@ -91,7 +91,7 @@ namespace LibObjectFile.Dwarf
             }
         }
 
-        public ulong ReadLEB128()
+        public ulong ReadULEB128()
         {
             return Stream.ReadLEB128();
         }
@@ -106,7 +106,7 @@ namespace LibObjectFile.Dwarf
             return Stream.ReadLEB128AsI32();
         }
 
-        public long ReadSignedLEB128()
+        public long ReadILEB128()
         {
             return Stream.ReadSignedLEB128();
         }

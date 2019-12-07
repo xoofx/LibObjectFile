@@ -118,7 +118,7 @@ namespace LibObjectFile.Dwarf
 
             Version = version;
 
-            var header_length = reader.ReadNativeUInt();
+            var header_length = reader.ReadDwarfUInt();
             HeaderLength = header_length;
             var minimum_instruction_length = reader.ReadU8();
             MinimumInstructionLength = minimum_instruction_length;
@@ -220,7 +220,7 @@ namespace LibObjectFile.Dwarf
 
                 var fileName = new DwarfDebugFileName {Name = name};
 
-                var directoryIndex = reader.ReadLEB128();
+                var directoryIndex = reader.ReadULEB128();
                 if (!name.Contains('/') && !name.Contains('\\') && directoryIndex > 0 && (directoryIndex - 1) < (ulong) directories.Count)
                 {
                     fileName.Directory = directories[(int) directoryIndex - 1];
@@ -230,8 +230,8 @@ namespace LibObjectFile.Dwarf
                     // log error
                 }
 
-                fileName.Time = reader.ReadLEB128();
-                fileName.Size = reader.ReadLEB128();
+                fileName.Time = reader.ReadULEB128();
+                fileName.Size = reader.ReadULEB128();
 
                 if (rawDump != null)
                 {
@@ -296,7 +296,7 @@ namespace LibObjectFile.Dwarf
                         break;
                     case DwarfNative.DW_LNS_advance_pc:
                     {
-                        var operation_advance = reader.ReadLEB128() * minimum_instruction_length;
+                        var operation_advance = reader.ReadULEB128() * minimum_instruction_length;
 
                         ulong deltaAddress = operation_advance;
                         if (version >= 4)
@@ -320,7 +320,7 @@ namespace LibObjectFile.Dwarf
                         break;
                     }
                     case DwarfNative.DW_LNS_advance_line:
-                        var deltaLine = reader.ReadSignedLEB128();
+                        var deltaLine = reader.ReadILEB128();
                         state.Line = (uint) (state.Line + deltaLine);
                         if (rawDump != null)
                         {
@@ -414,14 +414,14 @@ namespace LibObjectFile.Dwarf
                         }
                         break;
                     case DwarfNative.DW_LNS_set_isa: // DWARF 3
-                        state.Isa = reader.ReadLEB128();
+                        state.Isa = reader.ReadULEB128();
                         if (rawDump != null)
                         {
                             rawDump.WriteLine($"  Set ISA to {state.Isa}");
                         }
                         break;
                     case 0:
-                        var sizeOfExtended = reader.ReadLEB128();
+                        var sizeOfExtended = reader.ReadULEB128();
                         var endOffset = reader.Offset + sizeOfExtended;
                         while (reader.Offset < endOffset)
                         {
@@ -448,7 +448,7 @@ namespace LibObjectFile.Dwarf
                                     }
                                     break;
                                 case DwarfNative.DW_LNE_set_address:
-                                    state.Address = reader.ReadTargetUInt();
+                                    state.Address = reader.ReadUInt();
                                     state.OperationIndex = 0;
                                     if (rawDump != null)
                                     {
@@ -458,8 +458,8 @@ namespace LibObjectFile.Dwarf
                                 case DwarfNative.DW_LNE_define_file:
                                     var fileName = reader.ReadStringUTF8NullTerminated();
                                     var fileDirectoryIndex = reader.ReadLEB128AsI32();
-                                    var fileTime = reader.ReadLEB128();
-                                    var fileSize = reader.ReadLEB128();
+                                    var fileTime = reader.ReadULEB128();
+                                    var fileSize = reader.ReadULEB128();
 
                                     var debugFileName = new DwarfDebugFileName() {Name = fileName};
                                     debugFileName.Directory = fileDirectoryIndex == 0 || fileDirectoryIndex >= directories.Count ? null : directories[fileDirectoryIndex - 1];
@@ -479,7 +479,7 @@ namespace LibObjectFile.Dwarf
 
                                     break;
                                 case DwarfNative.DW_LNE_set_discriminator: // DWARF 4
-                                    state.Discriminator = reader.ReadLEB128();
+                                    state.Discriminator = reader.ReadULEB128();
                                     if (rawDump != null)
                                     {
                                         rawDump.WriteLine($"set Discriminator to {state.Discriminator}");
@@ -513,7 +513,7 @@ namespace LibObjectFile.Dwarf
                             var numberOfLEB128Args = _standardOpCodeLengths[opcode - 1];
                             for (ulong i = 0; i < numberOfLEB128Args; i++)
                             {
-                                reader.ReadLEB128();
+                                reader.ReadULEB128();
                             }
 
                             if (rawDump != null)

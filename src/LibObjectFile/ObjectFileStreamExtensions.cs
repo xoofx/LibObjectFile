@@ -108,6 +108,12 @@ namespace LibObjectFile
             }
         }
 
+
+        public static short ReadI16(this Stream stream, bool isLittleEndian)
+        {
+            return (short) ReadU16(stream, isLittleEndian);
+        }
+
         public static ushort ReadU16(this Stream stream, bool isLittleEndian)
         {
             ushort value = 0;
@@ -127,6 +133,11 @@ namespace LibObjectFile
             return value;
         }
 
+        public static int ReadI32(this Stream stream, bool isLittleEndian)
+        {
+            return (int)ReadU32(stream, isLittleEndian);
+        }
+
         public static unsafe uint ReadU32(this Stream stream, bool isLittleEndian)
         {
             uint value = 0;
@@ -142,7 +153,11 @@ namespace LibObjectFile
             }
             return value;
         }
-        
+        public static long ReadI64(this Stream stream, bool isLittleEndian)
+        {
+            return (long)ReadU64(stream, isLittleEndian);
+        }
+
         public static unsafe ulong ReadU64(this Stream stream, bool isLittleEndian)
         {
             ulong value = 0;

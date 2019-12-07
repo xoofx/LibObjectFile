@@ -102,14 +102,29 @@ namespace LibObjectFile
             return Stream.ReadI8();
         }
 
+        public short ReadI16()
+        {
+            return Stream.ReadI16(IsLittleEndian);
+        }
+
         public ushort ReadU16()
         {
             return Stream.ReadU16(IsLittleEndian);
         }
 
+        public int ReadI32()
+        {
+            return Stream.ReadI32(IsLittleEndian);
+        }
+
         public uint ReadU32()
         {
             return Stream.ReadU32(IsLittleEndian);
+        }
+        
+        public long ReadI64()
+        {
+            return Stream.ReadI64(IsLittleEndian);
         }
 
         public ulong ReadU64()

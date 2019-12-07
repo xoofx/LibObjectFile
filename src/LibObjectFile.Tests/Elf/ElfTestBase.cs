@@ -13,7 +13,6 @@ namespace LibObjectFile.Tests.Elf
     {
         protected static void AssertReadElf(ElfObjectFile elf, string fileName)
         {
-            elf.Print(Console.Out);
             AssertReadElfInternal(elf, fileName);
             AssertReadBack(elf, fileName, readAsReadOnly: false);
             AssertReadBack(elf, fileName, readAsReadOnly: true);
@@ -36,6 +35,7 @@ namespace LibObjectFile.Tests.Elf
             elf.Print(stringWriter);
 
             var result = stringWriter.ToString().Replace("\r\n", "\n").TrimEnd();
+            Console.WriteLine(result);
             var readelf = LinuxUtil.ReadElf(fileName).TrimEnd();
             if (readelf != result)
             {

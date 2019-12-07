@@ -34,6 +34,7 @@ namespace LibObjectFile.CodeGen
                     map => map.MapMacroToConst("^DW_CC_.*", "unsigned char"),
                     map => map.MapMacroToConst("^DW_ISA_.*", "unsigned char"),
                     map => map.MapMacroToConst("^DW_CHILDREN_.*", "unsigned char"),
+                    map => map.MapMacroToConst("^DW_OP_.*", "unsigned char"),
                 }
             };
 
@@ -52,7 +53,8 @@ namespace LibObjectFile.CodeGen
             ProcessElfEnum(cppOptions, csCompilation, "DW_AT_", "DwarfAttributeKey");
             ProcessElfEnum(cppOptions, csCompilation, "DW_FORM_", "DwarfAttributeForm");
             ProcessElfEnum(cppOptions, csCompilation, "DW_TAG_", "DwarfTag");
-
+            ProcessElfEnum(cppOptions, csCompilation, "DW_OP_", "DwarfOperationKind");
+            
             GenerateDwarfAttributes(ns);
             GenerateDwarfDIE(ns);
 
