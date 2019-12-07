@@ -110,6 +110,8 @@ namespace LibObjectFile.Dwarf
             }
 
             abbreviation = DwarfAbbreviation.Read(stream, abbreviationOffset);
+            Parent.DebugAbbrevTable.AddAbbreviation(abbreviation);
+
             context.Abbreviations[abbreviationOffset] = abbreviation;
             return abbreviation;
         }

@@ -8,7 +8,7 @@ using System.IO;
 
 namespace LibObjectFile.Dwarf
 {
-    public sealed class DwarfAbbreviation
+    public sealed class DwarfAbbreviation : ObjectFileNode<DwarfDebugAbbrevTable>
     {
         private readonly List<DwarfAbbreviationItem> _items;
         private Dictionary<ulong, DwarfAbbreviationItem> _mapItems;
@@ -57,6 +57,7 @@ namespace LibObjectFile.Dwarf
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));
             abbrev = new DwarfAbbreviation();
+            abbrev.Offset = abbreviationOffset;
             diagnostics = new DiagnosticBag();
             return abbrev.TryReadInternal(reader, abbreviationOffset, diagnostics);
         }
@@ -67,6 +68,8 @@ namespace LibObjectFile.Dwarf
             while (TryReadNext(reader, diagnostics))
             {
             }
+
+            Size = (ulong) reader.Position - abbreviationOffset;
 
             return !diagnostics.HasErrors;
         }
@@ -148,6 +151,11 @@ namespace LibObjectFile.Dwarf
                 item.Descriptors = descriptors;
             }
             
+            return true;
+        }
+
+        public override bool TryUpdateLayout(DiagnosticBag diagnostics)
+        {
             return true;
         }
     }
