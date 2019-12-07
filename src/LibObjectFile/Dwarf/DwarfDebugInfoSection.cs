@@ -234,7 +234,7 @@ namespace LibObjectFile.Dwarf
             if (header.version < 5)
             {
                 // 3. debug_abbrev_offset (section offset) 
-                header.debug_abbrev_offset = reader.ReadDwarfUInt();
+                header.debug_abbrev_offset = reader.ReadUIntFromEncoding();
 
                 // 4. address_size (ubyte) 
                 header.address_size = reader.ReadU8();
@@ -250,7 +250,7 @@ namespace LibObjectFile.Dwarf
                 header.address_size = reader.ReadU8();
 
                 // 5. debug_abbrev_offset (section offset) 
-                header.debug_abbrev_offset = reader.ReadDwarfUInt();
+                header.debug_abbrev_offset = reader.ReadUIntFromEncoding();
 
             }
 
@@ -332,7 +332,7 @@ namespace LibObjectFile.Dwarf
                 }
                 case DwarfNative.DW_FORM_strp:
                 {
-                    var offset = reader.ReadDwarfUInt();
+                    var offset = reader.ReadUIntFromEncoding();
                     if (Parent.DebugStringTable == null)
                     {
                         attr.ValueAsU64 = offset;
@@ -352,7 +352,7 @@ namespace LibObjectFile.Dwarf
                 }
                 case DwarfNative.DW_FORM_ref_addr:
                 {
-                    attr.ValueAsU64 = reader.ReadDwarfUInt();
+                    attr.ValueAsU64 = reader.ReadUIntFromEncoding();
                     ResolveAttributeReferenceWithinSection(AttributeToDIERef(attr), context, false);
                     break;
                 }
@@ -402,7 +402,7 @@ namespace LibObjectFile.Dwarf
                 // stroffsetsptr
                 case DwarfNative.DW_FORM_sec_offset:
                 {
-                    attr.ValueAsU64 = reader.ReadDwarfUInt();
+                    attr.ValueAsU64 = reader.ReadUIntFromEncoding();
                     //Console.WriteLine($"attribute {attr.Key} offset: {attr.ValueAsU64}");
                     break;
                 }
@@ -708,7 +708,7 @@ namespace LibObjectFile.Dwarf
 
                     case DwarfNative.DW_OP_call_ref:
                     {
-                        var offset = reader.ReadDwarfUInt();
+                        var offset = reader.ReadUIntFromEncoding();
                         var dieRef = new DwarfDIEReference(offset, op, DwarfExpressionLocationDIEReferenceResolverInstance);
                         ResolveAttributeReferenceWithinSection(dieRef, context, false);
                         break;
@@ -740,7 +740,7 @@ namespace LibObjectFile.Dwarf
                         }
                         else
                         {
-                            offset = reader.ReadDwarfUInt();
+                            offset = reader.ReadUIntFromEncoding();
                         }
                         //  a signed number that is treated as a byte offset from the start of that value
                         op.Operand1.I64 = reader.ReadILEB128();

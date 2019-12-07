@@ -26,12 +26,12 @@ namespace LibObjectFile.Tests.Dwarf
         {
             var stream = new MemoryStream();
 
-            stream.WriteLEB128(value);
+            stream.WriteULEB128(value);
             
             Assert.AreEqual((uint)stream.Position, DwarfHelper.SizeOfLEB128(value));
 
             stream.Position = 0;
-            var readbackValue = stream.ReadLEB128();
+            var readbackValue = stream.ReadULEB128();
 
             Assert.AreEqual(value, readbackValue);
         }
@@ -53,7 +53,7 @@ namespace LibObjectFile.Tests.Dwarf
 
             {
                 // check positive
-                stream.WriteSignedLEB128(value);
+                stream.WriteILEB128(value);
                 Assert.AreEqual((uint)stream.Position, DwarfHelper.SizeOfSignedLEB128(value));
 
                 stream.Position = 0;
@@ -65,7 +65,7 @@ namespace LibObjectFile.Tests.Dwarf
                 stream.Position = 0;
                 // Check negative
                 value = -value;
-                stream.WriteSignedLEB128(value);
+                stream.WriteILEB128(value);
                 Assert.AreEqual((uint)stream.Position, DwarfHelper.SizeOfSignedLEB128(value));
 
                 stream.Position = 0;

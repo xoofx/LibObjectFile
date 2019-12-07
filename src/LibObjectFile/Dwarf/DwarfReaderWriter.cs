@@ -28,14 +28,16 @@ namespace LibObjectFile.Dwarf
         public ulong ReadUnitLength()
         {
             Is64BitEncoding = false;
-            ulong length = ReadU32();
-            if (length >= 0xFFFFFFF0 && length <= 0xFFFFFFFF)
+            uint length = ReadU32();
+            if (length >= 0xFFFFFFF0)
             {
-                if (length == 0xFFFFFFFF)
+                if (length != 0xFFFFFFFF)
                 {
-                    Is64BitEncoding = true;
-                    return ReadU64();
+                    throw new InvalidOperationException($"Unsupported unit length prefix 0x{length:x8}");
                 }
+
+                Is64BitEncoding = true;
+                return ReadU64();
             }
             return length;
         }
@@ -57,12 +59,12 @@ namespace LibObjectFile.Dwarf
             }
         }
 
-        public ulong ReadDwarfUInt()
+        public ulong ReadUIntFromEncoding()
         {
             return Is64BitEncoding ? ReadU64() : ReadU32();
         }
 
-        public void WriteNativeUInt(ulong value)
+        public void WriteUIntFromEncoding(ulong value)
         {
             if (Is64BitEncoding)
             {
@@ -79,7 +81,7 @@ namespace LibObjectFile.Dwarf
             return Is64BitAddress ? ReadU64() : ReadU32();
         }
 
-        public void WriteTargetUInt(ulong target)
+        public void WriteUInt(ulong target)
         {
             if (Is64BitAddress)
             {
@@ -93,7 +95,7 @@ namespace LibObjectFile.Dwarf
 
         public ulong ReadULEB128()
         {
-            return Stream.ReadLEB128();
+            return Stream.ReadULEB128();
         }
 
         public uint ReadLEB128AsU32()
@@ -116,13 +118,13 @@ namespace LibObjectFile.Dwarf
             return Stream.ReadLEB128As<T>();
         }
         
-        public void WriteLEB128(ulong value)
+        public void WriteULEB128(ulong value)
         {
-            Stream.WriteLEB128(value);
+            Stream.WriteULEB128(value);
         }
-        public void WriteSignedLEB128(long value)
+        public void WriteILEB128(long value)
         {
-            Stream.WriteSignedLEB128(value);
+            Stream.WriteILEB128(value);
         }
     }
 }

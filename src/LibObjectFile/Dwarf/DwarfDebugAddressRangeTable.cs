@@ -77,7 +77,7 @@ namespace LibObjectFile.Dwarf
                 return;
             }
 
-            DebugInfoOffset = reader.ReadDwarfUInt();
+            DebugInfoOffset = reader.ReadUIntFromEncoding();
 
             var address_size = reader.ReadU8();
             if (address_size != 4 && address_size != 8)

@@ -73,7 +73,7 @@ namespace LibObjectFile.Dwarf
 
         private bool TryReadNext(Stream reader, DiagnosticBag diagnostics)
         {
-            var code = reader.ReadLEB128();
+            var code = reader.ReadULEB128();
             if (code == 0)
             {
                 return false;

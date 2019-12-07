@@ -9,7 +9,7 @@ namespace LibObjectFile.Dwarf
 {
     public static class DwarfStreamExtensions
     {
-        public static ulong ReadLEB128(this Stream stream)
+        public static ulong ReadULEB128(this Stream stream)
         {
             ulong value = 0;
             int shift = 0;
@@ -26,7 +26,7 @@ namespace LibObjectFile.Dwarf
             return value;
         }
 
-        public static void WriteLEB128(this Stream stream, ulong value)
+        public static void WriteULEB128(this Stream stream, ulong value)
         {
             do
             {
@@ -38,7 +38,7 @@ namespace LibObjectFile.Dwarf
             } while (value != 0);
         }
 
-        public static void WriteSignedLEB128(this Stream stream, long value)
+        public static void WriteILEB128(this Stream stream, long value)
         {
             bool cont = true;
             while (cont)
@@ -61,7 +61,7 @@ namespace LibObjectFile.Dwarf
         public static uint ReadLEB128AsU32(this Stream stream)
         {
             var offset = stream.Position;
-            var value = stream.ReadLEB128();
+            var value = stream.ReadULEB128();
             if (value >= uint.MaxValue) throw new InvalidOperationException($"The LEB128 0x{value:x16} read from stream at offset {offset} is out of range of uint >= {uint.MaxValue}");
             return (uint)value;
         }
@@ -69,7 +69,7 @@ namespace LibObjectFile.Dwarf
         public static int ReadLEB128AsI32(this Stream stream)
         {
             var offset = stream.Position;
-            var value = stream.ReadLEB128();
+            var value = stream.ReadULEB128();
             if (value >= int.MaxValue) throw new InvalidOperationException($"The LEB128 0x{value:x16} read from stream at offset {offset} is out of range of int >= {int.MaxValue}");
             return (int)value;
         }
@@ -102,7 +102,7 @@ namespace LibObjectFile.Dwarf
                 throw new ArgumentException($"Invalid sizeof(T) = {sizeof(T)} must be either 4 bytes or 8 bytes");
 
             var offset = stream.Position;
-            var rawLEB = ReadLEB128(stream);
+            var rawLEB = ReadULEB128(stream);
             T* value = (T*)&rawLEB;
             if (isU32)
             {
