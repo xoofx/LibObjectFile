@@ -927,12 +927,6 @@ namespace LibObjectFile.Dwarf
                     }
                 }
 
-                // DW_LNS_negate_stmt
-                if (isStatementChanged)
-                {
-                    writer.WriteU8(DwarfNative.DW_LNS_negate_stmt);
-                }
-
                 // DW_LNS_copy
                 if (isBasicBlockChanged && !debugLine.IsBasicBlock ||
                     isPrologueEndChanged && !debugLine.IsPrologueEnd ||
@@ -976,7 +970,13 @@ namespace LibObjectFile.Dwarf
                     writer.WriteU8(DwarfNative.DW_LNE_set_discriminator);
                     writer.WriteULEB128(debugLine.Discriminator);
                 }
-                
+
+                // DW_LNS_negate_stmt
+                if (isStatementChanged)
+                {
+                    writer.WriteU8(DwarfNative.DW_LNS_negate_stmt);
+                }
+
                 bool canEncodeSpecial = !debugLine.IsEndSequence;
                 bool canEncodeLineInSpecialCode = canEncodeSpecial && deltaLine >= LineBase && deltaLine < LineBase + LineRange;
 
@@ -993,7 +993,21 @@ namespace LibObjectFile.Dwarf
                     deltaAddress = 0;
                     hasSetAddress = true;
                 }
-                else if (deltaAddress > maxDeltaAddressPerSpecialCode && deltaAddress <= (2U * maxDeltaAddressPerSpecialCode))
+
+                // DW_LNS_advance_line
+                // In case we can't encode the line advance via special code
+                if (!canEncodeLineInSpecialCode)
+                {
+                    if (deltaLine != 0)
+                    {
+                        writer.WriteU8(DwarfNative.DW_LNS_advance_line);
+                        writer.WriteILEB128(deltaLine);
+                        deltaLine = 0;
+                    }
+                }
+
+
+                if (deltaAddress > maxDeltaAddressPerSpecialCode && deltaAddress <= (2U * maxDeltaAddressPerSpecialCode))
                 {
                     ulong deltaAddressSpecialOpCode255;
 
@@ -1014,18 +1028,6 @@ namespace LibObjectFile.Dwarf
                     writer.WriteU8(DwarfNative.DW_LNS_const_add_pc);
                 }
 
-                // DW_LNS_advance_line
-                // In case we can't encode the line advance via special code
-                if (!canEncodeLineInSpecialCode)
-                {
-                    if (deltaLine != 0)
-                    {
-                        writer.WriteU8(DwarfNative.DW_LNS_advance_line);
-                        writer.WriteILEB128(deltaLine);
-                        deltaLine = 0;
-                    }
-                }
-                
                 var operation_advance = deltaAddress * MaximumOperationsPerInstruction / MinimumInstructionLength + debugLine.OperationIndex;
 
                 bool canEncodeAddressInSpecialCode = false;
@@ -1178,12 +1180,6 @@ namespace LibObjectFile.Dwarf
                     }
                 }
 
-                // DW_LNS_negate_stmt
-                if (isStatementChanged)
-                {
-                    sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNS_negate_stmt);
-                }
-
                 // DW_LNS_copy
                 if (isBasicBlockChanged && !debugLine.IsBasicBlock ||
                     isPrologueEndChanged && !debugLine.IsPrologueEnd ||
@@ -1227,6 +1223,12 @@ namespace LibObjectFile.Dwarf
                     sizeOf += DwarfHelper.SizeOfLEB128(1 + sizeOfDiscriminator); // writer.WriteLEB128(1 + DwarfHelper.SizeOfLEB128(debugLine.Discriminator));
                     sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNE_set_discriminator);
                     sizeOf += sizeOfDiscriminator; // writer.WriteLEB128(debugLine.Discriminator);
+                }
+
+                // DW_LNS_negate_stmt
+                if (isStatementChanged)
+                {
+                    sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNS_negate_stmt);
                 }
 
                 bool canEncodeSpecial = !debugLine.IsEndSequence;
