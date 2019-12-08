@@ -165,7 +165,7 @@ ElfObjectFile elf = ...;
 var diagnostics = elf.Verify();
 
 // If we have any errors, we can iterate on diagnostic messages
-if (diagnostics.HasError)
+if (diagnostics.HasErrors)
 {
     foreach(var message in diagnostics.Messages)
     {
