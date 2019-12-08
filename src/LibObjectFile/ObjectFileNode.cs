@@ -9,6 +9,7 @@ namespace LibObjectFile
 {
     public abstract class ObjectFileNode
     {
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private ObjectFileNode _parent;
 
         /// <summary>

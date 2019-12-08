@@ -13103,4 +13103,151 @@ namespace LibObjectFile.Dwarf
             }
         }
     }
+    
+    internal static partial class DIEHelper
+    {
+        public static DwarfDIE ConvertTagToDwarfDIE(ushort tag)
+        {
+            switch (tag)
+            {
+                case DwarfNative.DW_TAG_access_declaration:
+                    return new DwarfDIE_access_declaration();
+                case DwarfNative.DW_TAG_array_type:
+                    return new DwarfDIE_array_type();
+                case DwarfNative.DW_TAG_atomic_type:
+                    return new DwarfDIE_atomic_type();
+                case DwarfNative.DW_TAG_base_type:
+                    return new DwarfDIE_base_type();
+                case DwarfNative.DW_TAG_call_site:
+                    return new DwarfDIE_call_site();
+                case DwarfNative.DW_TAG_call_site_parameter:
+                    return new DwarfDIE_call_site_parameter();
+                case DwarfNative.DW_TAG_catch_block:
+                    return new DwarfDIE_catch_block();
+                case DwarfNative.DW_TAG_class_type:
+                    return new DwarfDIE_class_type();
+                case DwarfNative.DW_TAG_coarray_type:
+                    return new DwarfDIE_coarray_type();
+                case DwarfNative.DW_TAG_common_block:
+                    return new DwarfDIE_common_block();
+                case DwarfNative.DW_TAG_common_inclusion:
+                    return new DwarfDIE_common_inclusion();
+                case DwarfNative.DW_TAG_compile_unit:
+                    return new DwarfDIE_compile_unit();
+                case DwarfNative.DW_TAG_condition:
+                    return new DwarfDIE_condition();
+                case DwarfNative.DW_TAG_const_type:
+                    return new DwarfDIE_const_type();
+                case DwarfNative.DW_TAG_constant:
+                    return new DwarfDIE_constant();
+                case DwarfNative.DW_TAG_dwarf_procedure:
+                    return new DwarfDIE_dwarf_procedure();
+                case DwarfNative.DW_TAG_dynamic_type:
+                    return new DwarfDIE_dynamic_type();
+                case DwarfNative.DW_TAG_entry_point:
+                    return new DwarfDIE_entry_point();
+                case DwarfNative.DW_TAG_enumeration_type:
+                    return new DwarfDIE_enumeration_type();
+                case DwarfNative.DW_TAG_enumerator:
+                    return new DwarfDIE_enumerator();
+                case DwarfNative.DW_TAG_file_type:
+                    return new DwarfDIE_file_type();
+                case DwarfNative.DW_TAG_formal_parameter:
+                    return new DwarfDIE_formal_parameter();
+                case DwarfNative.DW_TAG_friend:
+                    return new DwarfDIE_friend();
+                case DwarfNative.DW_TAG_generic_subrange:
+                    return new DwarfDIE_generic_subrange();
+                case DwarfNative.DW_TAG_immutable_type:
+                    return new DwarfDIE_immutable_type();
+                case DwarfNative.DW_TAG_imported_declaration:
+                    return new DwarfDIE_imported_declaration();
+                case DwarfNative.DW_TAG_imported_module:
+                    return new DwarfDIE_imported_module();
+                case DwarfNative.DW_TAG_imported_unit:
+                    return new DwarfDIE_imported_unit();
+                case DwarfNative.DW_TAG_inheritance:
+                    return new DwarfDIE_inheritance();
+                case DwarfNative.DW_TAG_inlined_subroutine:
+                    return new DwarfDIE_inlined_subroutine();
+                case DwarfNative.DW_TAG_interface_type:
+                    return new DwarfDIE_interface_type();
+                case DwarfNative.DW_TAG_label:
+                    return new DwarfDIE_label();
+                case DwarfNative.DW_TAG_lexical_block:
+                    return new DwarfDIE_lexical_block();
+                case DwarfNative.DW_TAG_member:
+                    return new DwarfDIE_member();
+                case DwarfNative.DW_TAG_module:
+                    return new DwarfDIE_module();
+                case DwarfNative.DW_TAG_namelist:
+                    return new DwarfDIE_namelist();
+                case DwarfNative.DW_TAG_namelist_item:
+                    return new DwarfDIE_namelist_item();
+                case DwarfNative.DW_TAG_namespace:
+                    return new DwarfDIE_namespace();
+                case DwarfNative.DW_TAG_packed_type:
+                    return new DwarfDIE_packed_type();
+                case DwarfNative.DW_TAG_partial_unit:
+                    return new DwarfDIE_partial_unit();
+                case DwarfNative.DW_TAG_pointer_type:
+                    return new DwarfDIE_pointer_type();
+                case DwarfNative.DW_TAG_ptr_to_member_type:
+                    return new DwarfDIE_ptr_to_member_type();
+                case DwarfNative.DW_TAG_reference_type:
+                    return new DwarfDIE_reference_type();
+                case DwarfNative.DW_TAG_restrict_type:
+                    return new DwarfDIE_restrict_type();
+                case DwarfNative.DW_TAG_rvalue_reference_type:
+                    return new DwarfDIE_rvalue_reference_type();
+                case DwarfNative.DW_TAG_set_type:
+                    return new DwarfDIE_set_type();
+                case DwarfNative.DW_TAG_shared_type:
+                    return new DwarfDIE_shared_type();
+                case DwarfNative.DW_TAG_skeleton_unit:
+                    return new DwarfDIE_skeleton_unit();
+                case DwarfNative.DW_TAG_string_type:
+                    return new DwarfDIE_string_type();
+                case DwarfNative.DW_TAG_structure_type:
+                    return new DwarfDIE_structure_type();
+                case DwarfNative.DW_TAG_subprogram:
+                    return new DwarfDIE_subprogram();
+                case DwarfNative.DW_TAG_subrange_type:
+                    return new DwarfDIE_subrange_type();
+                case DwarfNative.DW_TAG_subroutine_type:
+                    return new DwarfDIE_subroutine_type();
+                case DwarfNative.DW_TAG_template_alias:
+                    return new DwarfDIE_template_alias();
+                case DwarfNative.DW_TAG_template_type_parameter:
+                    return new DwarfDIE_template_type_parameter();
+                case DwarfNative.DW_TAG_template_value_parameter:
+                    return new DwarfDIE_template_value_parameter();
+                case DwarfNative.DW_TAG_thrown_type:
+                    return new DwarfDIE_thrown_type();
+                case DwarfNative.DW_TAG_try_block:
+                    return new DwarfDIE_try_block();
+                case DwarfNative.DW_TAG_typedef:
+                    return new DwarfDIE_typedef();
+                case DwarfNative.DW_TAG_type_unit:
+                    return new DwarfDIE_type_unit();
+                case DwarfNative.DW_TAG_union_type:
+                    return new DwarfDIE_union_type();
+                case DwarfNative.DW_TAG_unspecified_parameters:
+                    return new DwarfDIE_unspecified_parameters();
+                case DwarfNative.DW_TAG_unspecified_type:
+                    return new DwarfDIE_unspecified_type();
+                case DwarfNative.DW_TAG_variable:
+                    return new DwarfDIE_variable();
+                case DwarfNative.DW_TAG_variant:
+                    return new DwarfDIE_variant();
+                case DwarfNative.DW_TAG_variant_part:
+                    return new DwarfDIE_variant_part();
+                case DwarfNative.DW_TAG_volatile_type:
+                    return new DwarfDIE_volatile_type();
+                case DwarfNative.DW_TAG_with_stmt:
+                    return new DwarfDIE_with_stmt();
+            }
+            return new DwarfDIE();
+        }
+    }
 }

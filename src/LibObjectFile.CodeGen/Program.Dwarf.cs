@@ -256,6 +256,9 @@ namespace LibObjectFile.CodeGen
             string currentCompactTagName = null;
             CSharpClass currentDIE = null;
 
+            var dieClasses = new List<CSharpClass>();
+            var dieTags = new List<string>();
+
             foreach (var line in file)
             {
                 if (state == 0)
@@ -279,9 +282,11 @@ namespace LibObjectFile.CodeGen
                     }
                     currentCompactTagName = compactTagName;
                     var fullTagName = MapTagCompactNameToFullName[compactTagName];
+                    dieTags.Add(fullTagName);
                     currentDIE = new CSharpClass($"DwarfDIE_{fullTagName.Substring("DW_TAG_".Length)}");
                     currentDIE.BaseTypes.Add(new CSharpFreeType("DwarfDIE"));
                     ns.Members.Add(currentDIE);
+                    dieClasses.Add(currentDIE);
                 }
                 else
                 {
@@ -309,6 +314,43 @@ namespace LibObjectFile.CodeGen
                     }
                 }
             }
+
+            // Generate the DIEHelper class
+            var dieHelperClass = new CSharpClass("DIEHelper")
+            {
+                Modifiers = CSharpModifiers.Partial | CSharpModifiers.Static,
+                Visibility = CSharpVisibility.Internal
+            };
+            ns.Members.Add(dieHelperClass);
+            var dieHelperMethod = new CSharpMethod()
+            {
+                Name = "ConvertTagToDwarfDIE",
+                Modifiers =  CSharpModifiers.Static,
+                Visibility =  CSharpVisibility.Public
+            };
+            dieHelperClass.Members.Add(dieHelperMethod);
+
+            dieHelperMethod.Parameters.Add(new CSharpParameter("tag") { ParameterType = CSharpPrimitiveType.UShort });
+            dieHelperMethod.ReturnType = new CSharpFreeType("DwarfDIE");
+
+            dieHelperMethod.Body = (writer, element) => { 
+                
+                writer.WriteLine("switch (tag)"); 
+                writer.OpenBraceBlock();
+
+                for (var i = 0; i < dieClasses.Count; i++)
+                {
+                    var dieCls = dieClasses[i];
+                    var dieTag = dieTags[i];
+                    writer.WriteLine($"case DwarfNative.{dieTag}:");
+                    writer.Indent();
+                    writer.WriteLine($"return new {dieCls.Name}();");
+                    writer.UnIndent();
+                }
+
+                writer.CloseBraceBlock();
+                writer.WriteLine("return new DwarfDIE();");
+            };
         }
 
         private static CSharpProperty CreatePropertyFromDwarfAttributeName(string compactAttrName)

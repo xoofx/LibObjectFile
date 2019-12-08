@@ -10,8 +10,11 @@ namespace LibObjectFile.Dwarf
 {
     public class DwarfDIE : DwarfContainer
     {
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly List<DwarfAttribute> _attributes;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly List<DwarfDIE> _children;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private DwarfTag _tag;
 
         public DwarfDIE()

@@ -116,12 +116,11 @@ namespace LibObjectFile.Dwarf
             {
                 throw new InvalidOperationException($"Invalid abbreviation code {abbreviationCode}");
             }
-
-            var die = new DwarfDIE
-            {
-                Offset = startDIEOffset,
-                Tag = abbreviationItem.Tag
-            };
+            
+            var die = DIEHelper.ConvertTagToDwarfDIE((ushort) abbreviationItem.Tag.Value);
+            
+            die.Offset = startDIEOffset ;
+            die.Tag = abbreviationItem.Tag;
 
             // Store map offset to DIE to resolve references
             internalContext.RegisteredDIEPerCompilationUnit.Add(startDIEOffset - internalContext.OffsetOfCompilationUnitInSection, die);

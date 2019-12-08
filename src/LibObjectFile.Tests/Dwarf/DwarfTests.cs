@@ -76,7 +76,7 @@ namespace LibObjectFile.Tests.Dwarf
 
 
         [Test]
-        public void SimpleDwarf()
+        public void TestDebugLineHelloWorld()
         {
             var cppName = "helloworld";
             var cppExe = $"{cppName}_debug";
@@ -124,16 +124,16 @@ namespace LibObjectFile.Tests.Dwarf
         }
 
         [Test]
-        public void SmallDebug()
+        public void TestDebugLineSmall()
         {
             var cppName = "small";
-            var cppExe = $"{cppName}_debug";
-            LinuxUtil.RunLinuxExe("gcc", $"{cppName}.cpp -g -c -o {cppExe}");
+            var cppObj = $"{cppName}_debug.o";
+            LinuxUtil.RunLinuxExe("gcc", $"{cppName}.cpp -g -c -o {cppObj}");
 
             ElfObjectFile elf;
-            using (var inStream = File.OpenRead(cppExe))
+            using (var inStream = File.OpenRead(cppObj))
             {
-                Console.WriteLine($"ReadBack from {cppExe}");
+                Console.WriteLine($"ReadBack from {cppObj}");
                 elf = ElfObjectFile.Read(inStream);
                 elf.Print(Console.Out);
             }
