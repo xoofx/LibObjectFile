@@ -35,6 +35,9 @@ namespace LibObjectFile.CodeGen
                     map => map.MapMacroToConst("^DW_ISA_.*", "unsigned char"),
                     map => map.MapMacroToConst("^DW_CHILDREN_.*", "unsigned char"),
                     map => map.MapMacroToConst("^DW_OP_.*", "unsigned char"),
+                    map => map.MapMacroToConst("^DW_ACCESS_.*", "unsigned char"),
+                    map => map.MapMacroToConst("^DW_VIS_.*", "unsigned char"),
+                    map => map.MapMacroToConst("^DW_VIRTUALITY_.*", "unsigned char"),
                 }
             };
 
@@ -73,12 +76,15 @@ namespace LibObjectFile.CodeGen
                 var rawName = attrEncodingParts[0].Substring("DW_AT_".Length);
                 //var csharpName = CSharpifyName(rawName);
 
-                var csAttrName = $"DwarfAttribute_{rawName}";
-                
                 string attrType = "object";
                 var kind = AttributeKind.Managed;
 
-                if (attrEncodingParts.Length == 3)
+                if (attrEncodingParts[0] == "DW_AT_accessibility")
+                {
+                    attrType = "DwarfAccessibility";
+                    kind = AttributeKind.ValueType;
+                }
+                else if (attrEncodingParts.Length == 3)
                 {
                     switch (attrEncodingParts[2])
                     {
@@ -116,7 +122,8 @@ namespace LibObjectFile.CodeGen
                         case "rnglist":
                         case "rngrlistptr":
                         case "stroffsetsptr":
-                            attrType = "DwarfElement";
+                            attrType = "ulong";
+                            kind = AttributeKind.ValueType;
                             break;
                     }
                 }
@@ -274,8 +281,16 @@ namespace LibObjectFile.CodeGen
                     csProperty.SetBody = (writer, element) => writer.WriteLine($"SetAttributeValue<{attrType}>(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)}, value);");
                     break;
                 case AttributeKind.ValueType:
-                    csProperty.GetBody = (writer, element) => writer.WriteLine($"return GetAttributeValueOpt<{attrType}>(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)});");
-                    csProperty.SetBody = (writer, element) => writer.WriteLine($"SetAttributeValueOpt<{attrType}>(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)}, value);");
+                    if (map.AttributeType == "DwarfConstant")
+                    {
+                        csProperty.GetBody = (writer, element) => writer.WriteLine($"return GetAttributeConstantOpt(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)});");
+                        csProperty.SetBody = (writer, element) => writer.WriteLine($"SetAttributeConstantOpt(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)}, value);");
+                    }
+                    else
+                    {
+                        csProperty.GetBody = (writer, element) => writer.WriteLine($"return GetAttributeValueOpt<{attrType}>(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)});");
+                        csProperty.SetBody = (writer, element) => writer.WriteLine($"SetAttributeValueOpt<{attrType}>(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)}, value);");
+                    }
                     break;
                 case AttributeKind.Link:
                     csProperty.GetBody = (writer, element) =>

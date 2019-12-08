@@ -2,9 +2,7 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
-using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace LibObjectFile.Dwarf
 {
@@ -23,15 +21,15 @@ namespace LibObjectFile.Dwarf
         {
             _units.Add<DwarfContainer, DwarfUnit>(this, unit);
         }
-        
-        public override bool TryUpdateLayout(DiagnosticBag diagnostics)
+
+        public void RemoveUnit(DwarfUnit unit)
         {
-            return true;
+            _units.Remove<DwarfContainer, DwarfUnit>(this, unit);
         }
 
-        internal void Write(DwarfReaderWriter writer)
+        public DwarfUnit RemoveUnitAt(int index)
         {
-            
+            return _units.RemoveAt<DwarfContainer, DwarfUnit>(this, index);
         }
     }
 }

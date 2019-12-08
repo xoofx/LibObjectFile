@@ -32,7 +32,7 @@ namespace LibObjectFile.Dwarf
 
         [FieldOffset(0)]
         public uint U32;
-        
+
         public override string ToString()
         {
             return $"0x{U64:x16}";

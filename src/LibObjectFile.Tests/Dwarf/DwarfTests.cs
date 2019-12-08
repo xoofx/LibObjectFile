@@ -122,5 +122,53 @@ namespace LibObjectFile.Tests.Dwarf
             var outputDebugLineBuffer = ((MemoryStream) outputContext.DebugLineStream.Stream).ToArray();
             Assert.AreEqual(inputDebugLineBuffer, outputDebugLineBuffer);
         }
+
+        [Test]
+        public void SmallDebug()
+        {
+            var cppName = "small";
+            var cppExe = $"{cppName}_debug";
+            LinuxUtil.RunLinuxExe("gcc", $"{cppName}.cpp -g -c -o {cppExe}");
+
+            ElfObjectFile elf;
+            using (var inStream = File.OpenRead(cppExe))
+            {
+                Console.WriteLine($"ReadBack from {cppExe}");
+                elf = ElfObjectFile.Read(inStream);
+                elf.Print(Console.Out);
+            }
+
+            var inputContext = DwarfFileContext.FromElf(elf);
+            inputContext.DebugLineStream.RawDump = Console.Out;
+            var dwarf = DwarfFile.Read(inputContext);
+
+            inputContext.DebugLineStream.Stream.Position = 0;
+
+            var copyInputDebugLineStream = new MemoryStream();
+            inputContext.DebugLineStream.Stream.CopyTo(copyInputDebugLineStream);
+            inputContext.DebugLineStream.Stream.Position = 0;
+
+            var outputContext = new DwarfFileContext
+            {
+                IsLittleEndian = inputContext.IsLittleEndian,
+                Is64BitAddress = inputContext.Is64BitAddress,
+                DebugLineStream = new MemoryStream()
+            };
+            dwarf.Write(outputContext);
+
+            Console.WriteLine();
+            Console.WriteLine("=====================================================");
+            Console.WriteLine("Readback");
+            Console.WriteLine("=====================================================");
+            Console.WriteLine();
+
+            ((MemoryStream)outputContext.DebugLineStream).Position = 0;
+            outputContext.DebugLineStream.RawDump = Console.Out;
+            var dwarf2 = DwarfFile.Read(outputContext);
+
+            var inputDebugLineBuffer = copyInputDebugLineStream.ToArray();
+            var outputDebugLineBuffer = ((MemoryStream)outputContext.DebugLineStream.Stream).ToArray();
+            Assert.AreEqual(inputDebugLineBuffer, outputDebugLineBuffer);
+        }
     }
 }

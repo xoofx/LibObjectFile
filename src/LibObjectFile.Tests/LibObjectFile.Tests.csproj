@@ -9,9 +9,13 @@
 
   <ItemGroup>
     <None Remove="helloworld.cpp" />
+    <None Remove="small.cpp" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="small.cpp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="helloworld.cpp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

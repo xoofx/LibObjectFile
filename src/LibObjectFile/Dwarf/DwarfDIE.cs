@@ -133,6 +133,59 @@ namespace LibObjectFile.Dwarf
             return default;
         }
 
+        protected DwarfConstant? GetAttributeConstantOpt(DwarfAttributeKey key)
+        {
+            foreach (var attr in _attributes)
+            {
+                if (attr.Key == key)
+                {
+                    return new DwarfConstant
+                    {
+                        AsValue =
+                        {
+                            U64 = attr.ValueAsU64
+                        },
+                        AsExpression = attr.ValueAsObject as DwarfExpression
+                    };
+                }
+            }
+
+            return null;
+        }
+
+        protected void SetAttributeConstantOpt(DwarfAttributeKey key, DwarfConstant? cst)
+        {
+            for (int i = 0; i < _attributes.Count; i++)
+            {
+                var attr = _attributes[i];
+                if (attr.Key == key)
+                {
+                    if (!cst.HasValue)
+                    {
+                        RemoveAttributeAt(i);
+                    }
+                    else
+                    {
+                        var value = cst.Value;
+                        attr.ValueAsU64 = value.AsValue.U64;
+                        attr.ValueAsObject = value.AsExpression;
+                    }
+                    return;
+                }
+            }
+
+            if (cst.HasValue)
+            {
+                var value = cst.Value;
+                AddAttribute(new DwarfAttribute()
+                {
+                    Key = key,
+                    ValueAsU64 = value.AsValue.U64,
+                    ValueAsObject = value.AsExpression
+                });
+            }
+        }
+
         public DwarfAttribute FindAttributeByKey(DwarfAttributeKey key)
         {
             foreach (var attr in _attributes)

@@ -2266,6 +2266,24 @@ namespace LibObjectFile.Dwarf
         /// </summary>
         public const ushort DW_IDX_hi_user = 4095;
         
+        public const byte DW_ACCESS_public = 1;
+        
+        public const byte DW_ACCESS_protected = 2;
+        
+        public const byte DW_ACCESS_private = 3;
+        
+        public const byte DW_VIS_local = 1;
+        
+        public const byte DW_VIS_exported = 2;
+        
+        public const byte DW_VIS_qualified = 3;
+        
+        public const byte DW_VIRTUALITY_none = 0;
+        
+        public const byte DW_VIRTUALITY_virtual = 1;
+        
+        public const byte DW_VIRTUALITY_pure_virtual = 2;
+        
         public const ushort DW_LANG_C89 = 1;
         
         public const ushort DW_LANG_C = 2;
@@ -5505,15 +5523,15 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIE_access_declaration : DwarfDIEDeclaration
     {
-        public ulong? Accessibility
+        public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility, value);
             }
         }
         
@@ -5544,15 +5562,15 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIE_array_type : DwarfDIEDeclaration
     {
-        public ulong? Accessibility
+        public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility, value);
             }
         }
         
@@ -5572,11 +5590,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.allocated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.allocated, value);
             }
         }
         
@@ -5584,11 +5602,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.associated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.associated, value);
             }
         }
         
@@ -5596,11 +5614,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.bit_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.bit_size, value);
             }
         }
         
@@ -5608,11 +5626,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_stride);
+                return GetAttributeConstantOpt(DwarfAttributeKey.bit_stride);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_stride, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.bit_stride, value);
             }
         }
         
@@ -5620,11 +5638,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.byte_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.byte_size, value);
             }
         }
         
@@ -5692,11 +5710,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.rank);
+                return GetAttributeConstantOpt(DwarfAttributeKey.rank);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.rank, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.rank, value);
             }
         }
         
@@ -5716,11 +5734,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKey.start_scope);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.start_scope, value);
             }
         }
         
@@ -5818,11 +5836,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.allocated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.allocated, value);
             }
         }
         
@@ -5830,11 +5848,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.associated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.associated, value);
             }
         }
         
@@ -5854,11 +5872,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.bit_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.bit_size, value);
             }
         }
         
@@ -5866,11 +5884,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.byte_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.byte_size, value);
             }
         }
         
@@ -6247,11 +6265,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc);
+                return GetAttributeConstantOpt(DwarfAttributeKey.high_pc);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.high_pc, value);
             }
         }
         
@@ -6294,15 +6312,15 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIE_class_type : DwarfDIEDeclaration
     {
-        public ulong? Accessibility
+        public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility, value);
             }
         }
         
@@ -6322,11 +6340,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.allocated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.allocated, value);
             }
         }
         
@@ -6334,11 +6352,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.associated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.associated, value);
             }
         }
         
@@ -6346,11 +6364,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.bit_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.bit_size, value);
             }
         }
         
@@ -6358,11 +6376,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.byte_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.byte_size, value);
             }
         }
         
@@ -6466,11 +6484,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKey.start_scope);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.start_scope, value);
             }
         }
         
@@ -6505,11 +6523,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.bit_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.bit_size, value);
             }
         }
         
@@ -6517,11 +6535,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.byte_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.byte_size, value);
             }
         }
         
@@ -6754,11 +6772,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc);
+                return GetAttributeConstantOpt(DwarfAttributeKey.high_pc);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.high_pc, value);
             }
         }
         
@@ -6786,15 +6804,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfElement Macros
+        public ulong? Macros
         {
             get
             {
-                return GetAttributeValue<DwarfElement>(DwarfAttributeKey.macros);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.macros);
             }
             set
             {
-                SetAttributeValue<DwarfElement>(DwarfAttributeKey.macros, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.macros, value);
             }
         }
         
@@ -6894,15 +6912,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfElement StrOffsetsBase
+        public ulong? StrOffsetsBase
         {
             get
             {
-                return GetAttributeValue<DwarfElement>(DwarfAttributeKey.str_offsets_base);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.str_offsets_base);
             }
             set
             {
-                SetAttributeValue<DwarfElement>(DwarfAttributeKey.str_offsets_base, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.str_offsets_base, value);
             }
         }
         
@@ -6999,15 +7017,15 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIE_constant : DwarfDIEDeclaration
     {
-        public ulong? Accessibility
+        public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility, value);
             }
         }
         
@@ -7015,11 +7033,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.const_value);
+                return GetAttributeConstantOpt(DwarfAttributeKey.const_value);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.const_value, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.const_value, value);
             }
         }
         
@@ -7099,11 +7117,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKey.start_scope);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.start_scope, value);
             }
         }
         
@@ -7165,11 +7183,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.allocated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.allocated, value);
             }
         }
         
@@ -7177,11 +7195,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.associated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.associated, value);
             }
         }
         
@@ -7359,15 +7377,15 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIE_enumeration_type : DwarfDIEDeclaration
     {
-        public ulong? Accessibility
+        public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility, value);
             }
         }
         
@@ -7387,11 +7405,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.allocated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.allocated, value);
             }
         }
         
@@ -7399,11 +7417,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.associated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.associated, value);
             }
         }
         
@@ -7411,11 +7429,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.bit_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.bit_size, value);
             }
         }
         
@@ -7423,11 +7441,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_stride);
+                return GetAttributeConstantOpt(DwarfAttributeKey.bit_stride);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_stride, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.bit_stride, value);
             }
         }
         
@@ -7435,11 +7453,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.byte_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.byte_size, value);
             }
         }
         
@@ -7447,11 +7465,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_stride);
+                return GetAttributeConstantOpt(DwarfAttributeKey.byte_stride);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_stride, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.byte_stride, value);
             }
         }
         
@@ -7543,11 +7561,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKey.start_scope);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.start_scope, value);
             }
         }
         
@@ -7582,11 +7600,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.const_value);
+                return GetAttributeConstantOpt(DwarfAttributeKey.const_value);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.const_value, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.const_value, value);
             }
         }
         
@@ -7633,11 +7651,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.allocated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.allocated, value);
             }
         }
         
@@ -7645,11 +7663,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.associated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.associated, value);
             }
         }
         
@@ -7657,11 +7675,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.bit_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.bit_size, value);
             }
         }
         
@@ -7669,11 +7687,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.byte_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.byte_size, value);
             }
         }
         
@@ -7717,11 +7735,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKey.start_scope);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.start_scope, value);
             }
         }
         
@@ -7768,11 +7786,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.const_value);
+                return GetAttributeConstantOpt(DwarfAttributeKey.const_value);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.const_value, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.const_value, value);
             }
         }
         
@@ -7902,15 +7920,15 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIE_generic_subrange : DwarfDIEDeclaration
     {
-        public ulong? Accessibility
+        public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility, value);
             }
         }
         
@@ -7930,11 +7948,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.allocated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.allocated, value);
             }
         }
         
@@ -7942,11 +7960,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.associated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.associated, value);
             }
         }
         
@@ -7954,11 +7972,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.bit_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.bit_size, value);
             }
         }
         
@@ -7966,11 +7984,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_stride);
+                return GetAttributeConstantOpt(DwarfAttributeKey.bit_stride);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_stride, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.bit_stride, value);
             }
         }
         
@@ -7978,11 +7996,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.byte_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.byte_size, value);
             }
         }
         
@@ -7990,11 +8008,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_stride);
+                return GetAttributeConstantOpt(DwarfAttributeKey.byte_stride);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_stride, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.byte_stride, value);
             }
         }
         
@@ -8002,11 +8020,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.count);
+                return GetAttributeConstantOpt(DwarfAttributeKey.count);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.count, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.count, value);
             }
         }
         
@@ -8038,11 +8056,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.lower_bound);
+                return GetAttributeConstantOpt(DwarfAttributeKey.lower_bound);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.lower_bound, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.lower_bound, value);
             }
         }
         
@@ -8098,11 +8116,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.upper_bound);
+                return GetAttributeConstantOpt(DwarfAttributeKey.upper_bound);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.upper_bound, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.upper_bound, value);
             }
         }
         
@@ -8160,15 +8178,15 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIE_imported_declaration : DwarfDIEDeclaration
     {
-        public ulong? Accessibility
+        public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility, value);
             }
         }
         
@@ -8212,11 +8230,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKey.start_scope);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.start_scope, value);
             }
         }
     }
@@ -8239,11 +8257,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKey.start_scope);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.start_scope, value);
             }
         }
     }
@@ -8265,15 +8283,15 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIE_inheritance : DwarfDIEDeclaration
     {
-        public ulong? Accessibility
+        public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility, value);
             }
         }
         
@@ -8281,11 +8299,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.data_member_location);
+                return GetAttributeConstantOpt(DwarfAttributeKey.data_member_location);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.data_member_location, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.data_member_location, value);
             }
         }
         
@@ -8380,11 +8398,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc);
+                return GetAttributeConstantOpt(DwarfAttributeKey.high_pc);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.high_pc, value);
             }
         }
         
@@ -8440,11 +8458,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKey.start_scope);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.start_scope, value);
             }
         }
         
@@ -8463,15 +8481,15 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIE_interface_type : DwarfDIEDeclaration
     {
-        public ulong? Accessibility
+        public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility, value);
             }
         }
         
@@ -8527,11 +8545,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKey.start_scope);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.start_scope, value);
             }
         }
     }
@@ -8590,11 +8608,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKey.start_scope);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.start_scope, value);
             }
         }
     }
@@ -8617,11 +8635,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc);
+                return GetAttributeConstantOpt(DwarfAttributeKey.high_pc);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.high_pc, value);
             }
         }
         
@@ -8688,15 +8706,15 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIE_member : DwarfDIEDeclaration
     {
-        public ulong? Accessibility
+        public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility, value);
             }
         }
         
@@ -8716,11 +8734,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.bit_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.bit_size, value);
             }
         }
         
@@ -8728,11 +8746,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.byte_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.byte_size, value);
             }
         }
         
@@ -8752,11 +8770,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.data_member_location);
+                return GetAttributeConstantOpt(DwarfAttributeKey.data_member_location);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.data_member_location, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.data_member_location, value);
             }
         }
         
@@ -8835,15 +8853,15 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIE_module : DwarfDIEDeclaration
     {
-        public ulong? Accessibility
+        public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility, value);
             }
         }
         
@@ -8875,11 +8893,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc);
+                return GetAttributeConstantOpt(DwarfAttributeKey.high_pc);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.high_pc, value);
             }
         }
         
@@ -8982,15 +9000,15 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIE_namelist : DwarfDIEDeclaration
     {
-        public ulong? Accessibility
+        public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility, value);
             }
         }
         
@@ -9112,11 +9130,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKey.start_scope);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.start_scope, value);
             }
         }
     }
@@ -9250,11 +9268,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc);
+                return GetAttributeConstantOpt(DwarfAttributeKey.high_pc);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.high_pc, value);
             }
         }
         
@@ -9282,15 +9300,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfElement Macros
+        public ulong? Macros
         {
             get
             {
-                return GetAttributeValue<DwarfElement>(DwarfAttributeKey.macros);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.macros);
             }
             set
             {
-                SetAttributeValue<DwarfElement>(DwarfAttributeKey.macros, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.macros, value);
             }
         }
         
@@ -9390,15 +9408,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfElement StrOffsetsBase
+        public ulong? StrOffsetsBase
         {
             get
             {
-                return GetAttributeValue<DwarfElement>(DwarfAttributeKey.str_offsets_base);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.str_offsets_base);
             }
             set
             {
-                SetAttributeValue<DwarfElement>(DwarfAttributeKey.str_offsets_base, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.str_offsets_base, value);
             }
         }
         
@@ -9445,11 +9463,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.bit_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.bit_size, value);
             }
         }
         
@@ -9457,11 +9475,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.byte_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.byte_size, value);
             }
         }
         
@@ -9532,11 +9550,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.allocated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.allocated, value);
             }
         }
         
@@ -9544,11 +9562,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.associated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.associated, value);
             }
         }
         
@@ -9679,11 +9697,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.bit_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.bit_size, value);
             }
         }
         
@@ -9691,11 +9709,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.byte_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.byte_size, value);
             }
         }
         
@@ -9817,11 +9835,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.bit_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.bit_size, value);
             }
         }
         
@@ -9829,11 +9847,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.byte_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.byte_size, value);
             }
         }
         
@@ -9876,15 +9894,15 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIE_set_type : DwarfDIEDeclaration
     {
-        public ulong? Accessibility
+        public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility, value);
             }
         }
         
@@ -9904,11 +9922,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.allocated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.allocated, value);
             }
         }
         
@@ -9916,11 +9934,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.associated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.associated, value);
             }
         }
         
@@ -9928,11 +9946,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.bit_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.bit_size, value);
             }
         }
         
@@ -9940,11 +9958,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.byte_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.byte_size, value);
             }
         }
         
@@ -10000,11 +10018,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKey.start_scope);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.start_scope, value);
             }
         }
         
@@ -10039,11 +10057,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.count);
+                return GetAttributeConstantOpt(DwarfAttributeKey.count);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.count, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.count, value);
             }
         }
         
@@ -10138,11 +10156,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc);
+                return GetAttributeConstantOpt(DwarfAttributeKey.high_pc);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.high_pc, value);
             }
         }
         
@@ -10194,15 +10212,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfElement StrOffsetsBase
+        public ulong? StrOffsetsBase
         {
             get
             {
-                return GetAttributeValue<DwarfElement>(DwarfAttributeKey.str_offsets_base);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.str_offsets_base);
             }
             set
             {
-                SetAttributeValue<DwarfElement>(DwarfAttributeKey.str_offsets_base, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.str_offsets_base, value);
             }
         }
         
@@ -10233,15 +10251,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Accessibility
+        public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility, value);
             }
         }
         
@@ -10249,11 +10267,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.allocated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.allocated, value);
             }
         }
         
@@ -10261,11 +10279,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.associated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.associated, value);
             }
         }
         
@@ -10273,11 +10291,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.bit_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.bit_size, value);
             }
         }
         
@@ -10285,11 +10303,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.byte_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.byte_size, value);
             }
         }
         
@@ -10345,11 +10363,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKey.start_scope);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.start_scope, value);
             }
         }
         
@@ -10404,15 +10422,15 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIE_structure_type : DwarfDIEDeclaration
     {
-        public ulong? Accessibility
+        public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility, value);
             }
         }
         
@@ -10432,11 +10450,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.allocated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.allocated, value);
             }
         }
         
@@ -10444,11 +10462,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.associated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.associated, value);
             }
         }
         
@@ -10456,11 +10474,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.bit_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.bit_size, value);
             }
         }
         
@@ -10468,11 +10486,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.byte_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.byte_size, value);
             }
         }
         
@@ -10576,11 +10594,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKey.start_scope);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.start_scope, value);
             }
         }
         
@@ -10599,15 +10617,15 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIE_subprogram : DwarfDIEDeclaration
     {
-        public ulong? Accessibility
+        public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility, value);
             }
         }
         
@@ -10759,11 +10777,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc);
+                return GetAttributeConstantOpt(DwarfAttributeKey.high_pc);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.high_pc, value);
             }
         }
         
@@ -10975,11 +10993,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKey.start_scope);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.start_scope, value);
             }
         }
         
@@ -11058,15 +11076,15 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIE_subrange_type : DwarfDIEDeclaration
     {
-        public ulong? Accessibility
+        public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility, value);
             }
         }
         
@@ -11086,11 +11104,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.allocated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.allocated, value);
             }
         }
         
@@ -11098,11 +11116,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.associated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.associated, value);
             }
         }
         
@@ -11110,11 +11128,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.bit_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.bit_size, value);
             }
         }
         
@@ -11122,11 +11140,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_stride);
+                return GetAttributeConstantOpt(DwarfAttributeKey.bit_stride);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_stride, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.bit_stride, value);
             }
         }
         
@@ -11134,11 +11152,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.byte_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.byte_size, value);
             }
         }
         
@@ -11146,11 +11164,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_stride);
+                return GetAttributeConstantOpt(DwarfAttributeKey.byte_stride);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_stride, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.byte_stride, value);
             }
         }
         
@@ -11158,11 +11176,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.count);
+                return GetAttributeConstantOpt(DwarfAttributeKey.count);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.count, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.count, value);
             }
         }
         
@@ -11194,11 +11212,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.lower_bound);
+                return GetAttributeConstantOpt(DwarfAttributeKey.lower_bound);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.lower_bound, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.lower_bound, value);
             }
         }
         
@@ -11254,11 +11272,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.upper_bound);
+                return GetAttributeConstantOpt(DwarfAttributeKey.upper_bound);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.upper_bound, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.upper_bound, value);
             }
         }
         
@@ -11277,15 +11295,15 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIE_subroutine_type : DwarfDIEDeclaration
     {
-        public ulong? Accessibility
+        public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility, value);
             }
         }
         
@@ -11317,11 +11335,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.allocated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.allocated, value);
             }
         }
         
@@ -11329,11 +11347,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.associated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.associated, value);
             }
         }
         
@@ -11425,11 +11443,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKey.start_scope);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.start_scope, value);
             }
         }
         
@@ -11460,15 +11478,15 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIE_template_alias : DwarfDIEDeclaration
     {
-        public ulong? Accessibility
+        public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility, value);
             }
         }
         
@@ -11476,11 +11494,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.allocated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.allocated, value);
             }
         }
         
@@ -11488,11 +11506,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.associated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.associated, value);
             }
         }
         
@@ -11560,11 +11578,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKey.start_scope);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.start_scope, value);
             }
         }
         
@@ -11650,11 +11668,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.const_value);
+                return GetAttributeConstantOpt(DwarfAttributeKey.const_value);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.const_value, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.const_value, value);
             }
         }
         
@@ -11725,11 +11743,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.allocated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.allocated, value);
             }
         }
         
@@ -11737,11 +11755,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.associated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.associated, value);
             }
         }
         
@@ -11812,11 +11830,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc);
+                return GetAttributeConstantOpt(DwarfAttributeKey.high_pc);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.high_pc, value);
             }
         }
         
@@ -11859,15 +11877,15 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIE_typedef : DwarfDIEDeclaration
     {
-        public ulong? Accessibility
+        public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility, value);
             }
         }
         
@@ -11887,11 +11905,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.allocated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.allocated, value);
             }
         }
         
@@ -11899,11 +11917,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.associated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.associated, value);
             }
         }
         
@@ -11959,11 +11977,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKey.start_scope);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.start_scope, value);
             }
         }
         
@@ -12018,15 +12036,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfElement StrOffsetsBase
+        public ulong? StrOffsetsBase
         {
             get
             {
-                return GetAttributeValue<DwarfElement>(DwarfAttributeKey.str_offsets_base);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.str_offsets_base);
             }
             set
             {
-                SetAttributeValue<DwarfElement>(DwarfAttributeKey.str_offsets_base, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKey.str_offsets_base, value);
             }
         }
         
@@ -12045,15 +12063,15 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIE_union_type : DwarfDIEDeclaration
     {
-        public ulong? Accessibility
+        public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility, value);
             }
         }
         
@@ -12073,11 +12091,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.allocated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.allocated, value);
             }
         }
         
@@ -12085,11 +12103,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKey.associated);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.associated, value);
             }
         }
         
@@ -12097,11 +12115,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.bit_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.bit_size, value);
             }
         }
         
@@ -12109,11 +12127,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKey.byte_size);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.byte_size, value);
             }
         }
         
@@ -12217,11 +12235,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKey.start_scope);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.start_scope, value);
             }
         }
         
@@ -12282,15 +12300,15 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIE_variable : DwarfDIEDeclaration
     {
-        public ulong? Accessibility
+        public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility, value);
             }
         }
         
@@ -12334,11 +12352,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.const_value);
+                return GetAttributeConstantOpt(DwarfAttributeKey.const_value);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.const_value, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.const_value, value);
             }
         }
         
@@ -12454,11 +12472,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKey.start_scope);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.start_scope, value);
             }
         }
         
@@ -12489,15 +12507,15 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIE_variant : DwarfDIEDeclaration
     {
-        public ulong? Accessibility
+        public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility, value);
             }
         }
         
@@ -12540,15 +12558,15 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIE_variant_part : DwarfDIEDeclaration
     {
-        public ulong? Accessibility
+        public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility, value);
             }
         }
         
@@ -12630,15 +12648,15 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIE_with_stmt : DwarfDIEDeclaration
     {
-        public ulong? Accessibility
+        public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKey.accessibility, value);
             }
         }
         
@@ -12682,11 +12700,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc);
+                return GetAttributeConstantOpt(DwarfAttributeKey.high_pc);
             }
             set
             {
-                SetAttributeValueOpt<DwarfConstant>(DwarfAttributeKey.high_pc, value);
+                SetAttributeConstantOpt(DwarfAttributeKey.high_pc, value);
             }
         }
         
