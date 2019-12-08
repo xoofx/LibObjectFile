@@ -145,7 +145,7 @@ namespace LibObjectFile.Dwarf
                         {
                             U64 = attr.ValueAsU64
                         },
-                        AsExpression = attr.ValueAsObject as DwarfExpression
+                        AsObject = attr.ValueAsObject
                     };
                 }
             }
@@ -154,6 +154,59 @@ namespace LibObjectFile.Dwarf
         }
 
         protected void SetAttributeConstantOpt(DwarfAttributeKey key, DwarfConstant? cst)
+        {
+            for (int i = 0; i < _attributes.Count; i++)
+            {
+                var attr = _attributes[i];
+                if (attr.Key == key)
+                {
+                    if (!cst.HasValue)
+                    {
+                        RemoveAttributeAt(i);
+                    }
+                    else
+                    {
+                        var value = cst.Value;
+                        attr.ValueAsU64 = value.AsValue.U64;
+                        attr.ValueAsObject = value.AsExpression;
+                    }
+                    return;
+                }
+            }
+
+            if (cst.HasValue)
+            {
+                var value = cst.Value;
+                AddAttribute(new DwarfAttribute()
+                {
+                    Key = key,
+                    ValueAsU64 = value.AsValue.U64,
+                    ValueAsObject = value.AsExpression
+                });
+            }
+        }
+
+        protected DwarfLocation? GetAttributeLocationOpt(DwarfAttributeKey key)
+        {
+            foreach (var attr in _attributes)
+            {
+                if (attr.Key == key)
+                {
+                    return new DwarfLocation
+                    {
+                        AsValue =
+                        {
+                            U64 = attr.ValueAsU64
+                        },
+                        AsObject = attr.ValueAsObject
+                    };
+                }
+            }
+
+            return null;
+        }
+
+        protected void SetAttributeLocationOpt(DwarfAttributeKey key, DwarfLocation? cst)
         {
             for (int i = 0; i < _attributes.Count; i++)
             {

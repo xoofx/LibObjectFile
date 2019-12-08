@@ -9,21 +9,47 @@ namespace LibObjectFile.Dwarf
         public DwarfConstant(int value)
         {
             AsValue = new DwarfInteger() {I64 = value};
-            AsExpression = null;
+            AsObject = null;
         }
 
+        public DwarfConstant(DwarfExpression expression)
+        {
+            AsValue = default;
+            AsObject = expression;
+        }
+
+        public DwarfConstant(DwarfDIE dieRef)
+        {
+            AsValue = default;
+            AsObject = dieRef;
+        }
+        
         public DwarfInteger AsValue;
 
-        public DwarfExpression AsExpression;
+        public object AsObject;
 
+        public DwarfExpression AsExpression => AsObject as DwarfExpression;
 
+        public DwarfDIE AsReference => AsObject as DwarfDIE;
+        
         public override string ToString()
         {
             if (AsExpression != null) return $"Constant Expression: {AsExpression}";
+            if (AsReference != null) return $"Constant Reference: {AsReference}";
             return $"Constant Value: {AsValue}";
         }
 
         public static implicit operator DwarfConstant(int value)
+        {
+            return new DwarfConstant(value);
+        }
+
+        public static implicit operator DwarfConstant(DwarfExpression value)
+        {
+            return new DwarfConstant(value);
+        }
+        
+        public static implicit operator DwarfConstant(DwarfDIE value)
         {
             return new DwarfConstant(value);
         }

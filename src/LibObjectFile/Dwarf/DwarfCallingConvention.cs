@@ -6,9 +6,9 @@ using System;
 
 namespace LibObjectFile.Dwarf
 {
-    public readonly partial struct DwarfOperationKind : IEquatable<DwarfOperationKind>
+    public readonly partial struct DwarfCallingConvention : IEquatable<DwarfCallingConvention>
     {
-        public DwarfOperationKind(byte value)
+        public DwarfCallingConvention(byte value)
         {
             Value = value;
         }
@@ -17,17 +17,17 @@ namespace LibObjectFile.Dwarf
 
         public override string ToString()
         {
-            return ToStringInternal() ?? $"Unknown {nameof(DwarfOperationKind)} (0x{Value:x2})";
+            return ToStringInternal() ?? $"Unknown {nameof(DwarfCallingConvention)} (0x{Value:x2})";
         }
 
-        public bool Equals(DwarfOperationKind other)
+        public bool Equals(DwarfCallingConvention other)
         {
             return Value == other.Value;
         }
 
         public override bool Equals(object obj)
         {
-            return obj is DwarfOperationKind other && Equals(other);
+            return obj is DwarfCallingConvention other && Equals(other);
         }
 
         public override int GetHashCode()
@@ -35,12 +35,12 @@ namespace LibObjectFile.Dwarf
             return Value.GetHashCode();
         }
 
-        public static bool operator ==(DwarfOperationKind left, DwarfOperationKind right)
+        public static bool operator ==(DwarfCallingConvention left, DwarfCallingConvention right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(DwarfOperationKind left, DwarfOperationKind right)
+        public static bool operator !=(DwarfCallingConvention left, DwarfCallingConvention right)
         {
             return !left.Equals(right);
         }

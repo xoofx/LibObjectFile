@@ -2522,6 +2522,22 @@ namespace LibObjectFile.Dwarf
         
         public const byte DW_CC_hi_user = 255;
         
+        public const byte DW_INL_not_inlined = 0;
+        
+        public const byte DW_INL_inlined = 1;
+        
+        public const byte DW_INL_declared_not_inlined = 2;
+        
+        public const byte DW_INL_declared_inlined = 3;
+        
+        public const byte DW_ORD_row_major = 0;
+        
+        public const byte DW_ORD_col_major = 1;
+        
+        public const byte DW_DSC_label = 0;
+        
+        public const byte DW_DSC_range = 1;
+        
         public const byte DW_LNS_copy = 1;
         
         public const byte DW_LNS_advance_pc = 2;
@@ -5521,6 +5537,313 @@ namespace LibObjectFile.Dwarf
         }
     }
     
+    public readonly partial struct DwarfLanguageKind
+    {
+        public static readonly DwarfLanguageKind C89 = new DwarfLanguageKind(DwarfNative.DW_LANG_C89);
+        
+        public static readonly DwarfLanguageKind C = new DwarfLanguageKind(DwarfNative.DW_LANG_C);
+        
+        public static readonly DwarfLanguageKind Ada83 = new DwarfLanguageKind(DwarfNative.DW_LANG_Ada83);
+        
+        public static readonly DwarfLanguageKind C_plus_plus = new DwarfLanguageKind(DwarfNative.DW_LANG_C_plus_plus);
+        
+        public static readonly DwarfLanguageKind Cobol74 = new DwarfLanguageKind(DwarfNative.DW_LANG_Cobol74);
+        
+        public static readonly DwarfLanguageKind Cobol85 = new DwarfLanguageKind(DwarfNative.DW_LANG_Cobol85);
+        
+        public static readonly DwarfLanguageKind Fortran77 = new DwarfLanguageKind(DwarfNative.DW_LANG_Fortran77);
+        
+        public static readonly DwarfLanguageKind Fortran90 = new DwarfLanguageKind(DwarfNative.DW_LANG_Fortran90);
+        
+        public static readonly DwarfLanguageKind Pascal83 = new DwarfLanguageKind(DwarfNative.DW_LANG_Pascal83);
+        
+        public static readonly DwarfLanguageKind Modula2 = new DwarfLanguageKind(DwarfNative.DW_LANG_Modula2);
+        
+        /// <summary>
+        /// DWARF3
+        /// </summary>
+        public static readonly DwarfLanguageKind Java = new DwarfLanguageKind(DwarfNative.DW_LANG_Java);
+        
+        /// <summary>
+        /// DWARF3
+        /// </summary>
+        public static readonly DwarfLanguageKind C99 = new DwarfLanguageKind(DwarfNative.DW_LANG_C99);
+        
+        /// <summary>
+        /// DWARF3
+        /// </summary>
+        public static readonly DwarfLanguageKind Ada95 = new DwarfLanguageKind(DwarfNative.DW_LANG_Ada95);
+        
+        /// <summary>
+        /// DWARF3
+        /// </summary>
+        public static readonly DwarfLanguageKind Fortran95 = new DwarfLanguageKind(DwarfNative.DW_LANG_Fortran95);
+        
+        /// <summary>
+        /// DWARF3
+        /// </summary>
+        public static readonly DwarfLanguageKind PLI = new DwarfLanguageKind(DwarfNative.DW_LANG_PLI);
+        
+        /// <summary>
+        /// DWARF3f
+        /// </summary>
+        public static readonly DwarfLanguageKind ObjC = new DwarfLanguageKind(DwarfNative.DW_LANG_ObjC);
+        
+        /// <summary>
+        /// DWARF3f
+        /// </summary>
+        public static readonly DwarfLanguageKind ObjC_plus_plus = new DwarfLanguageKind(DwarfNative.DW_LANG_ObjC_plus_plus);
+        
+        /// <summary>
+        /// DWARF3f
+        /// </summary>
+        public static readonly DwarfLanguageKind UPC = new DwarfLanguageKind(DwarfNative.DW_LANG_UPC);
+        
+        /// <summary>
+        /// DWARF3f
+        /// </summary>
+        public static readonly DwarfLanguageKind D = new DwarfLanguageKind(DwarfNative.DW_LANG_D);
+        
+        /// <summary>
+        /// DWARF4
+        /// </summary>
+        public static readonly DwarfLanguageKind Python = new DwarfLanguageKind(DwarfNative.DW_LANG_Python);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfLanguageKind OpenCL = new DwarfLanguageKind(DwarfNative.DW_LANG_OpenCL);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfLanguageKind Go = new DwarfLanguageKind(DwarfNative.DW_LANG_Go);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfLanguageKind Modula3 = new DwarfLanguageKind(DwarfNative.DW_LANG_Modula3);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfLanguageKind Haskel = new DwarfLanguageKind(DwarfNative.DW_LANG_Haskel);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfLanguageKind C_plus_plus_03 = new DwarfLanguageKind(DwarfNative.DW_LANG_C_plus_plus_03);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfLanguageKind C_plus_plus_11 = new DwarfLanguageKind(DwarfNative.DW_LANG_C_plus_plus_11);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfLanguageKind OCaml = new DwarfLanguageKind(DwarfNative.DW_LANG_OCaml);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfLanguageKind Rust = new DwarfLanguageKind(DwarfNative.DW_LANG_Rust);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfLanguageKind C11 = new DwarfLanguageKind(DwarfNative.DW_LANG_C11);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfLanguageKind Swift = new DwarfLanguageKind(DwarfNative.DW_LANG_Swift);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfLanguageKind Julia = new DwarfLanguageKind(DwarfNative.DW_LANG_Julia);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfLanguageKind Dylan = new DwarfLanguageKind(DwarfNative.DW_LANG_Dylan);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfLanguageKind C_plus_plus_14 = new DwarfLanguageKind(DwarfNative.DW_LANG_C_plus_plus_14);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfLanguageKind Fortran03 = new DwarfLanguageKind(DwarfNative.DW_LANG_Fortran03);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfLanguageKind Fortran08 = new DwarfLanguageKind(DwarfNative.DW_LANG_Fortran08);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfLanguageKind RenderScript = new DwarfLanguageKind(DwarfNative.DW_LANG_RenderScript);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfLanguageKind BLISS = new DwarfLanguageKind(DwarfNative.DW_LANG_BLISS);
+        
+        public static readonly DwarfLanguageKind lo_user = new DwarfLanguageKind(DwarfNative.DW_LANG_lo_user);
+        
+        /// <summary>
+        /// MIPS
+        /// </summary>
+        public static readonly DwarfLanguageKind Mips_Assembler = new DwarfLanguageKind(DwarfNative.DW_LANG_Mips_Assembler);
+        
+        /// <summary>
+        /// UPC, use
+        /// DW_LANG_UPC instead.
+        /// </summary>
+        public static readonly DwarfLanguageKind Upc = new DwarfLanguageKind(DwarfNative.DW_LANG_Upc);
+        
+        /// <summary>
+        /// ALTIUM
+        /// </summary>
+        public static readonly DwarfLanguageKind ALTIUM_Assembler = new DwarfLanguageKind(DwarfNative.DW_LANG_ALTIUM_Assembler);
+        
+        /// <summary>
+        /// SUN
+        /// </summary>
+        public static readonly DwarfLanguageKind SUN_Assembler = new DwarfLanguageKind(DwarfNative.DW_LANG_SUN_Assembler);
+        
+        public static readonly DwarfLanguageKind hi_user = new DwarfLanguageKind(DwarfNative.DW_LANG_hi_user);
+        
+        private string ToStringInternal()
+        {
+            switch (Value)
+            {
+                case DwarfNative.DW_LANG_C89: return "DW_LANG_C89";
+                case DwarfNative.DW_LANG_C: return "DW_LANG_C";
+                case DwarfNative.DW_LANG_Ada83: return "DW_LANG_Ada83";
+                case DwarfNative.DW_LANG_C_plus_plus: return "DW_LANG_C_plus_plus";
+                case DwarfNative.DW_LANG_Cobol74: return "DW_LANG_Cobol74";
+                case DwarfNative.DW_LANG_Cobol85: return "DW_LANG_Cobol85";
+                case DwarfNative.DW_LANG_Fortran77: return "DW_LANG_Fortran77";
+                case DwarfNative.DW_LANG_Fortran90: return "DW_LANG_Fortran90";
+                case DwarfNative.DW_LANG_Pascal83: return "DW_LANG_Pascal83";
+                case DwarfNative.DW_LANG_Modula2: return "DW_LANG_Modula2";
+                case DwarfNative.DW_LANG_Java: return "DW_LANG_Java";
+                case DwarfNative.DW_LANG_C99: return "DW_LANG_C99";
+                case DwarfNative.DW_LANG_Ada95: return "DW_LANG_Ada95";
+                case DwarfNative.DW_LANG_Fortran95: return "DW_LANG_Fortran95";
+                case DwarfNative.DW_LANG_PLI: return "DW_LANG_PLI";
+                case DwarfNative.DW_LANG_ObjC: return "DW_LANG_ObjC";
+                case DwarfNative.DW_LANG_ObjC_plus_plus: return "DW_LANG_ObjC_plus_plus";
+                case DwarfNative.DW_LANG_UPC: return "DW_LANG_UPC";
+                case DwarfNative.DW_LANG_D: return "DW_LANG_D";
+                case DwarfNative.DW_LANG_Python: return "DW_LANG_Python";
+                case DwarfNative.DW_LANG_OpenCL: return "DW_LANG_OpenCL";
+                case DwarfNative.DW_LANG_Go: return "DW_LANG_Go";
+                case DwarfNative.DW_LANG_Modula3: return "DW_LANG_Modula3";
+                case DwarfNative.DW_LANG_Haskel: return "DW_LANG_Haskel";
+                case DwarfNative.DW_LANG_C_plus_plus_03: return "DW_LANG_C_plus_plus_03";
+                case DwarfNative.DW_LANG_C_plus_plus_11: return "DW_LANG_C_plus_plus_11";
+                case DwarfNative.DW_LANG_OCaml: return "DW_LANG_OCaml";
+                case DwarfNative.DW_LANG_Rust: return "DW_LANG_Rust";
+                case DwarfNative.DW_LANG_C11: return "DW_LANG_C11";
+                case DwarfNative.DW_LANG_Swift: return "DW_LANG_Swift";
+                case DwarfNative.DW_LANG_Julia: return "DW_LANG_Julia";
+                case DwarfNative.DW_LANG_Dylan: return "DW_LANG_Dylan";
+                case DwarfNative.DW_LANG_C_plus_plus_14: return "DW_LANG_C_plus_plus_14";
+                case DwarfNative.DW_LANG_Fortran03: return "DW_LANG_Fortran03";
+                case DwarfNative.DW_LANG_Fortran08: return "DW_LANG_Fortran08";
+                case DwarfNative.DW_LANG_RenderScript: return "DW_LANG_RenderScript";
+                case DwarfNative.DW_LANG_BLISS: return "DW_LANG_BLISS";
+                case DwarfNative.DW_LANG_lo_user: return "DW_LANG_lo_user";
+                case DwarfNative.DW_LANG_Mips_Assembler: return "DW_LANG_Mips_Assembler";
+                case DwarfNative.DW_LANG_Upc: return "DW_LANG_Upc";
+                case DwarfNative.DW_LANG_ALTIUM_Assembler: return "DW_LANG_ALTIUM_Assembler";
+                case DwarfNative.DW_LANG_SUN_Assembler: return "DW_LANG_SUN_Assembler";
+                case DwarfNative.DW_LANG_hi_user: return "DW_LANG_hi_user";
+                default: return null;
+            }
+        }
+    }
+    
+    public readonly partial struct DwarfCallingConvention
+    {
+        public static readonly DwarfCallingConvention normal = new DwarfCallingConvention(DwarfNative.DW_CC_normal);
+        
+        public static readonly DwarfCallingConvention program = new DwarfCallingConvention(DwarfNative.DW_CC_program);
+        
+        public static readonly DwarfCallingConvention nocall = new DwarfCallingConvention(DwarfNative.DW_CC_nocall);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfCallingConvention pass_by_reference = new DwarfCallingConvention(DwarfNative.DW_CC_pass_by_reference);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfCallingConvention pass_by_value = new DwarfCallingConvention(DwarfNative.DW_CC_pass_by_value);
+        
+        public static readonly DwarfCallingConvention lo_user = new DwarfCallingConvention(DwarfNative.DW_CC_lo_user);
+        
+        /// <summary>
+        /// GNU
+        /// </summary>
+        public static readonly DwarfCallingConvention GNU_renesas_sh = new DwarfCallingConvention(DwarfNative.DW_CC_GNU_renesas_sh);
+        
+        /// <summary>
+        /// GNU
+        /// </summary>
+        public static readonly DwarfCallingConvention GNU_borland_fastcall_i386 = new DwarfCallingConvention(DwarfNative.DW_CC_GNU_borland_fastcall_i386);
+        
+        /// <summary>
+        /// ALTIUM
+        /// </summary>
+        public static readonly DwarfCallingConvention ALTIUM_interrupt = new DwarfCallingConvention(DwarfNative.DW_CC_ALTIUM_interrupt);
+        
+        /// <summary>
+        /// ALTIUM
+        /// </summary>
+        public static readonly DwarfCallingConvention ALTIUM_near_system_stack = new DwarfCallingConvention(DwarfNative.DW_CC_ALTIUM_near_system_stack);
+        
+        /// <summary>
+        /// ALTIUM
+        /// </summary>
+        public static readonly DwarfCallingConvention ALTIUM_near_user_stack = new DwarfCallingConvention(DwarfNative.DW_CC_ALTIUM_near_user_stack);
+        
+        /// <summary>
+        /// ALTIUM
+        /// </summary>
+        public static readonly DwarfCallingConvention ALTIUM_huge_user_stack = new DwarfCallingConvention(DwarfNative.DW_CC_ALTIUM_huge_user_stack);
+        
+        public static readonly DwarfCallingConvention hi_user = new DwarfCallingConvention(DwarfNative.DW_CC_hi_user);
+        
+        private string ToStringInternal()
+        {
+            switch (Value)
+            {
+                case DwarfNative.DW_CC_normal: return "DW_CC_normal";
+                case DwarfNative.DW_CC_program: return "DW_CC_program";
+                case DwarfNative.DW_CC_nocall: return "DW_CC_nocall";
+                case DwarfNative.DW_CC_pass_by_reference: return "DW_CC_pass_by_reference";
+                case DwarfNative.DW_CC_pass_by_value: return "DW_CC_pass_by_value";
+                case DwarfNative.DW_CC_lo_user: return "DW_CC_lo_user";
+                case DwarfNative.DW_CC_GNU_borland_fastcall_i386: return "DW_CC_GNU_borland_fastcall_i386";
+                case DwarfNative.DW_CC_ALTIUM_interrupt: return "DW_CC_ALTIUM_interrupt";
+                case DwarfNative.DW_CC_ALTIUM_near_system_stack: return "DW_CC_ALTIUM_near_system_stack";
+                case DwarfNative.DW_CC_ALTIUM_near_user_stack: return "DW_CC_ALTIUM_near_user_stack";
+                case DwarfNative.DW_CC_ALTIUM_huge_user_stack: return "DW_CC_ALTIUM_huge_user_stack";
+                case DwarfNative.DW_CC_hi_user: return "DW_CC_hi_user";
+                default: return null;
+            }
+        }
+    }
+    
     public partial class DwarfDIE_access_declaration : DwarfDIEDeclaration
     {
         public DwarfAccessibility? Accessibility
@@ -5694,15 +6017,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Ordering
+        public DwarfArrayOrderingKind? Ordering
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.ordering);
+                return GetAttributeValueOpt<DwarfArrayOrderingKind>(DwarfAttributeKey.ordering);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.ordering, value);
+                SetAttributeValueOpt<DwarfArrayOrderingKind>(DwarfAttributeKey.ordering, value);
             }
         }
         
@@ -5754,15 +6077,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Visibility
+        public DwarfVisibility? Visibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility, value);
             }
         }
     }
@@ -6198,15 +6521,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public object Location
+        public DwarfLocation? Location
         {
             get
             {
-                return GetAttributeValue<object>(DwarfAttributeKey.location);
+                return GetAttributeLocationOpt(DwarfAttributeKey.location);
             }
             set
             {
-                SetAttributeValue<object>(DwarfAttributeKey.location, value);
+                SetAttributeLocationOpt(DwarfAttributeKey.location, value);
             }
         }
         
@@ -6384,15 +6707,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? CallingConvention
+        public DwarfCallingConvention? CallingConvention
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.calling_convention);
+                return GetAttributeValueOpt<DwarfCallingConvention>(DwarfAttributeKey.calling_convention);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.calling_convention, value);
+                SetAttributeValueOpt<DwarfCallingConvention>(DwarfAttributeKey.calling_convention, value);
             }
         }
         
@@ -6492,15 +6815,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Visibility
+        public DwarfVisibility? Visibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility, value);
             }
         }
     }
@@ -6606,15 +6929,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public object Location
+        public DwarfLocation? Location
         {
             get
             {
-                return GetAttributeValue<object>(DwarfAttributeKey.location);
+                return GetAttributeLocationOpt(DwarfAttributeKey.location);
             }
             set
             {
-                SetAttributeValue<object>(DwarfAttributeKey.location, value);
+                SetAttributeLocationOpt(DwarfAttributeKey.location, value);
             }
         }
         
@@ -6654,15 +6977,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Visibility
+        public DwarfVisibility? Visibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility, value);
             }
         }
     }
@@ -6693,15 +7016,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Visibility
+        public DwarfVisibility? Visibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility, value);
             }
         }
     }
@@ -6756,15 +7079,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? IdentifierCase
+        public DwarfIdentifierCaseKind? IdentifierCase
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.identifier_case);
+                return GetAttributeValueOpt<DwarfIdentifierCaseKind>(DwarfAttributeKey.identifier_case);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.identifier_case, value);
+                SetAttributeValueOpt<DwarfIdentifierCaseKind>(DwarfAttributeKey.identifier_case, value);
             }
         }
         
@@ -6780,15 +7103,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Language
+        public DwarfLanguageKind? Language
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.language);
+                return GetAttributeValueOpt<DwarfLanguageKind>(DwarfAttributeKey.language);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.language, value);
+                SetAttributeValueOpt<DwarfLanguageKind>(DwarfAttributeKey.language, value);
             }
         }
         
@@ -7137,30 +7460,30 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Visibility
+        public DwarfVisibility? Visibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility, value);
             }
         }
     }
     
     public partial class DwarfDIE_dwarf_procedure : DwarfDIE
     {
-        public object Location
+        public DwarfLocation? Location
         {
             get
             {
-                return GetAttributeValue<object>(DwarfAttributeKey.location);
+                return GetAttributeLocationOpt(DwarfAttributeKey.location);
             }
             set
             {
-                SetAttributeValue<object>(DwarfAttributeKey.location, value);
+                SetAttributeLocationOpt(DwarfAttributeKey.location, value);
             }
         }
     }
@@ -7581,15 +7904,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Visibility
+        public DwarfVisibility? Visibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility, value);
             }
         }
     }
@@ -7755,15 +8078,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Visibility
+        public DwarfVisibility? Visibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility, value);
             }
         }
     }
@@ -7830,15 +8153,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public object Location
+        public DwarfLocation? Location
         {
             get
             {
-                return GetAttributeValue<object>(DwarfAttributeKey.location);
+                return GetAttributeLocationOpt(DwarfAttributeKey.location);
             }
             set
             {
-                SetAttributeValue<object>(DwarfAttributeKey.location, value);
+                SetAttributeLocationOpt(DwarfAttributeKey.location, value);
             }
         }
         
@@ -8124,15 +8447,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Visibility
+        public DwarfVisibility? Visibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility, value);
             }
         }
     }
@@ -8319,15 +8642,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Virtuality
+        public DwarfVirtuality? Virtuality
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.virtuality);
+                return GetAttributeValueOpt<DwarfVirtuality>(DwarfAttributeKey.virtuality);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.virtuality, value);
+                SetAttributeValueOpt<DwarfVirtuality>(DwarfAttributeKey.virtuality, value);
             }
         }
     }
@@ -8838,15 +9161,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Visibility
+        public DwarfVisibility? Visibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility, value);
             }
         }
     }
@@ -8985,15 +9308,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Visibility
+        public DwarfVisibility? Visibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility, value);
             }
         }
     }
@@ -9048,15 +9371,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Visibility
+        public DwarfVisibility? Visibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility, value);
             }
         }
     }
@@ -9252,15 +9575,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? IdentifierCase
+        public DwarfIdentifierCaseKind? IdentifierCase
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.identifier_case);
+                return GetAttributeValueOpt<DwarfIdentifierCaseKind>(DwarfAttributeKey.identifier_case);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.identifier_case, value);
+                SetAttributeValueOpt<DwarfIdentifierCaseKind>(DwarfAttributeKey.identifier_case, value);
             }
         }
         
@@ -9276,15 +9599,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Language
+        public DwarfLanguageKind? Language
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.language);
+                return GetAttributeValueOpt<DwarfLanguageKind>(DwarfAttributeKey.language);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.language, value);
+                SetAttributeValueOpt<DwarfLanguageKind>(DwarfAttributeKey.language, value);
             }
         }
         
@@ -9654,15 +9977,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Visibility
+        public DwarfVisibility? Visibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility, value);
             }
         }
     }
@@ -10038,15 +10361,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Visibility
+        public DwarfVisibility? Visibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility, value);
             }
         }
     }
@@ -10407,15 +10730,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Visibility
+        public DwarfVisibility? Visibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility, value);
             }
         }
     }
@@ -10494,15 +10817,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? CallingConvention
+        public DwarfCallingConvention? CallingConvention
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.calling_convention);
+                return GetAttributeValueOpt<DwarfCallingConvention>(DwarfAttributeKey.calling_convention);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.calling_convention, value);
+                SetAttributeValueOpt<DwarfCallingConvention>(DwarfAttributeKey.calling_convention, value);
             }
         }
         
@@ -10602,15 +10925,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Visibility
+        public DwarfVisibility? Visibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility, value);
             }
         }
     }
@@ -10665,15 +10988,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? CallingConvention
+        public DwarfCallingConvention? CallingConvention
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.calling_convention);
+                return GetAttributeValueOpt<DwarfCallingConvention>(DwarfAttributeKey.calling_convention);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.calling_convention, value);
+                SetAttributeValueOpt<DwarfCallingConvention>(DwarfAttributeKey.calling_convention, value);
             }
         }
         
@@ -10785,15 +11108,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Inline
+        public DwarfInlineKind? Inline
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.inline);
+                return GetAttributeValueOpt<DwarfInlineKind>(DwarfAttributeKey.inline);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.inline, value);
+                SetAttributeValueOpt<DwarfInlineKind>(DwarfAttributeKey.inline, value);
             }
         }
         
@@ -11037,27 +11360,27 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Visibility
+        public DwarfVisibility? Visibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility, value);
             }
         }
         
-        public ulong? Virtuality
+        public DwarfVirtuality? Virtuality
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.virtuality);
+                return GetAttributeValueOpt<DwarfVirtuality>(DwarfAttributeKey.virtuality);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.virtuality, value);
+                SetAttributeValueOpt<DwarfVirtuality>(DwarfAttributeKey.virtuality, value);
             }
         }
         
@@ -11280,15 +11603,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Visibility
+        public DwarfVisibility? Visibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility, value);
             }
         }
     }
@@ -11463,15 +11786,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Visibility
+        public DwarfVisibility? Visibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility, value);
             }
         }
     }
@@ -11598,15 +11921,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Visibility
+        public DwarfVisibility? Visibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility, value);
             }
         }
     }
@@ -11997,30 +12320,30 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Visibility
+        public DwarfVisibility? Visibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility, value);
             }
         }
     }
     
     public partial class DwarfDIE_type_unit : DwarfDIE
     {
-        public ulong? Language
+        public DwarfLanguageKind? Language
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.language);
+                return GetAttributeValueOpt<DwarfLanguageKind>(DwarfAttributeKey.language);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.language, value);
+                SetAttributeValueOpt<DwarfLanguageKind>(DwarfAttributeKey.language, value);
             }
         }
         
@@ -12135,15 +12458,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? CallingConvention
+        public DwarfCallingConvention? CallingConvention
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.calling_convention);
+                return GetAttributeValueOpt<DwarfCallingConvention>(DwarfAttributeKey.calling_convention);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.calling_convention, value);
+                SetAttributeValueOpt<DwarfCallingConvention>(DwarfAttributeKey.calling_convention, value);
             }
         }
         
@@ -12243,15 +12566,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Visibility
+        public DwarfVisibility? Visibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility, value);
             }
         }
     }
@@ -12408,15 +12731,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public object Location
+        public DwarfLocation? Location
         {
             get
             {
-                return GetAttributeValue<object>(DwarfAttributeKey.location);
+                return GetAttributeLocationOpt(DwarfAttributeKey.location);
             }
             set
             {
-                SetAttributeValue<object>(DwarfAttributeKey.location, value);
+                SetAttributeLocationOpt(DwarfAttributeKey.location, value);
             }
         }
         
@@ -12492,15 +12815,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Visibility
+        public DwarfVisibility? Visibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility, value);
             }
         }
     }
@@ -12531,15 +12854,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public object DiscrList
+        public DwarfDiscriminantListKind? DiscrList
         {
             get
             {
-                return GetAttributeValue<object>(DwarfAttributeKey.discr_list);
+                return GetAttributeValueOpt<DwarfDiscriminantListKind>(DwarfAttributeKey.discr_list);
             }
             set
             {
-                SetAttributeValue<object>(DwarfAttributeKey.discr_list, value);
+                SetAttributeValueOpt<DwarfDiscriminantListKind>(DwarfAttributeKey.discr_list, value);
             }
         }
         
@@ -12708,15 +13031,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public object Location
+        public DwarfLocation? Location
         {
             get
             {
-                return GetAttributeValue<object>(DwarfAttributeKey.location);
+                return GetAttributeLocationOpt(DwarfAttributeKey.location);
             }
             set
             {
-                SetAttributeValue<object>(DwarfAttributeKey.location, value);
+                SetAttributeLocationOpt(DwarfAttributeKey.location, value);
             }
         }
         
@@ -12768,15 +13091,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public ulong? Visibility
+        public DwarfVisibility? Visibility
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKey.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKey.visibility, value);
             }
         }
     }

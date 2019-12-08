@@ -6,28 +6,28 @@ using System;
 
 namespace LibObjectFile.Dwarf
 {
-    public readonly partial struct DwarfOperationKind : IEquatable<DwarfOperationKind>
+    public readonly partial struct DwarfLanguageKind : IEquatable<DwarfLanguageKind>
     {
-        public DwarfOperationKind(byte value)
+        public DwarfLanguageKind(ushort value)
         {
             Value = value;
         }
         
-        public readonly byte Value;
+        public readonly ushort Value;
 
         public override string ToString()
         {
-            return ToStringInternal() ?? $"Unknown {nameof(DwarfOperationKind)} (0x{Value:x2})";
+            return ToStringInternal() ?? $"Unknown {nameof(DwarfLanguageKind)} (0x{Value:x4})";
         }
 
-        public bool Equals(DwarfOperationKind other)
+        public bool Equals(DwarfLanguageKind other)
         {
             return Value == other.Value;
         }
 
         public override bool Equals(object obj)
         {
-            return obj is DwarfOperationKind other && Equals(other);
+            return obj is DwarfLanguageKind other && Equals(other);
         }
 
         public override int GetHashCode()
@@ -35,12 +35,12 @@ namespace LibObjectFile.Dwarf
             return Value.GetHashCode();
         }
 
-        public static bool operator ==(DwarfOperationKind left, DwarfOperationKind right)
+        public static bool operator ==(DwarfLanguageKind left, DwarfLanguageKind right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(DwarfOperationKind left, DwarfOperationKind right)
+        public static bool operator !=(DwarfLanguageKind left, DwarfLanguageKind right)
         {
             return !left.Equals(right);
         }

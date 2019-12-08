@@ -38,6 +38,9 @@ namespace LibObjectFile.CodeGen
                     map => map.MapMacroToConst("^DW_ACCESS_.*", "unsigned char"),
                     map => map.MapMacroToConst("^DW_VIS_.*", "unsigned char"),
                     map => map.MapMacroToConst("^DW_VIRTUALITY_.*", "unsigned char"),
+                    map => map.MapMacroToConst("^DW_INL_.*", "unsigned char"),
+                    map => map.MapMacroToConst("^DW_ORD_.*", "unsigned char"),
+                    map => map.MapMacroToConst("^DW_DSC_.*", "unsigned char"),
                 }
             };
 
@@ -57,7 +60,9 @@ namespace LibObjectFile.CodeGen
             ProcessElfEnum(cppOptions, csCompilation, "DW_FORM_", "DwarfAttributeForm");
             ProcessElfEnum(cppOptions, csCompilation, "DW_TAG_", "DwarfTag");
             ProcessElfEnum(cppOptions, csCompilation, "DW_OP_", "DwarfOperationKind");
-            
+            ProcessElfEnum(cppOptions, csCompilation, "DW_LANG_", "DwarfLanguageKind");
+            ProcessElfEnum(cppOptions, csCompilation, "DW_CC_", "DwarfCallingConvention");
+
             GenerateDwarfAttributes(ns);
             GenerateDwarfDIE(ns);
 
@@ -73,15 +78,56 @@ namespace LibObjectFile.CodeGen
             foreach (var attrEncoding in MapAttributeToEncoding)
             {
                 var attrEncodingParts = attrEncoding.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-                var rawName = attrEncodingParts[0].Substring("DW_AT_".Length);
+                var attributeName = attrEncodingParts[0];
+                var rawName = attributeName.Substring("DW_AT_".Length);
                 //var csharpName = CSharpifyName(rawName);
 
                 string attrType = "object";
                 var kind = AttributeKind.Managed;
 
-                if (attrEncodingParts[0] == "DW_AT_accessibility")
+                if (attributeName == "DW_AT_accessibility")
                 {
                     attrType = "DwarfAccessibility";
+                    kind = AttributeKind.ValueType;
+                }
+                else if (attributeName == "DW_AT_visibility")
+                {
+                    attrType = "DwarfVisibility";
+                    kind = AttributeKind.ValueType;
+                }
+                else if (attributeName == "DW_AT_virtuality")
+                {
+                    attrType = "DwarfVirtuality";
+                    kind = AttributeKind.ValueType;
+                }
+                else if (attributeName == "DW_AT_language")
+                {
+                    attrType = "DwarfLanguageKind";
+                    kind = AttributeKind.ValueType;
+                }
+                else if (attributeName == "DW_AT_identifier_case")
+                {
+                    attrType = "DwarfIdentifierCaseKind";
+                    kind = AttributeKind.ValueType;
+                }
+                else if (attributeName == "DW_AT_calling_convention")
+                {
+                    attrType = "DwarfCallingConvention";
+                    kind = AttributeKind.ValueType;
+                }
+                else if (attributeName == "DW_AT_inline")
+                {
+                    attrType = "DwarfInlineKind";
+                    kind = AttributeKind.ValueType;
+                }
+                else if (attributeName == "DW_AT_ordering")
+                {
+                    attrType = "DwarfArrayOrderingKind";
+                    kind = AttributeKind.ValueType;
+                }
+                else if (attributeName == "DW_AT_discr_list")
+                {
+                    attrType = "DwarfDiscriminantListKind";
                     kind = AttributeKind.ValueType;
                 }
                 else if (attrEncodingParts.Length == 3)
@@ -134,21 +180,31 @@ namespace LibObjectFile.CodeGen
 
                     Console.WriteLine(attrEncoding);
 
+                    bool hasConstant = false;
                     for (int i = 2; i < attrEncodingParts.Length; i++)
                     {
                         switch (attrEncodingParts[i])
                         {
-                            case "constant":
-                                attrType = "DwarfConstant";
+                            case "loclist":
+                                attrType = "DwarfLocation";
                                 kind = AttributeKind.ValueType;
                                 goto next;
+                            case "constant":
+                                hasConstant = true;
+                                break;
                         }
+                    }
+
+                    if (hasConstant)
+                    {
+                        attrType = "DwarfConstant";
+                        kind = AttributeKind.ValueType;
                     }
                 }
 
                 next:
 
-                MapAttributeCompactNameToType.Add(attrEncodingParts[0].Replace("_", string.Empty), new AttributeMapping(rawName, attrType, kind));
+                MapAttributeCompactNameToType.Add(attributeName.Replace("_", string.Empty), new AttributeMapping(rawName, attrType, kind));
             }
 
             Console.WriteLine();
@@ -285,6 +341,11 @@ namespace LibObjectFile.CodeGen
                     {
                         csProperty.GetBody = (writer, element) => writer.WriteLine($"return GetAttributeConstantOpt(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)});");
                         csProperty.SetBody = (writer, element) => writer.WriteLine($"SetAttributeConstantOpt(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)}, value);");
+                    }
+                    else if (map.AttributeType == "DwarfLocation")
+                    {
+                        csProperty.GetBody = (writer, element) => writer.WriteLine($"return GetAttributeLocationOpt(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)});");
+                        csProperty.SetBody = (writer, element) => writer.WriteLine($"SetAttributeLocationOpt(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)}, value);");
                     }
                     else
                     {
