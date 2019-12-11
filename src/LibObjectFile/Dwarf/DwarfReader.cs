@@ -137,10 +137,13 @@ namespace LibObjectFile.Dwarf
 
             // Console.WriteLine($" <{level}><{die.Offset:x}> Abbrev Number: {abbreviationCode} ({die.Tag})");
 
-            if (abbreviationItem.Descriptors.Length > 0)
+            var descriptors = abbreviationItem.Descriptors;
+            if (descriptors.Length > 0)
             {
-                foreach (var descriptor in abbreviationItem.Descriptors)
+                for(int i = 0; i < descriptors.Length; i++)
                 {
+                    var descriptor = descriptors[i];
+
                     var attribute = new DwarfAttribute()
                     {
                         Offset = Offset,

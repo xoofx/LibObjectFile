@@ -4,18 +4,66 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 
 namespace LibObjectFile.Dwarf
 {
+    [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
     public sealed class DwarfAbbreviation : ObjectFileNode<DwarfDebugAbbrevTable>
     {
         private readonly List<DwarfAbbreviationItem> _items;
-        private Dictionary<ulong, DwarfAbbreviationItem> _mapItems;
+        private readonly Dictionary<ulong, DwarfAbbreviationItem> _mapItems; // Only used if code are non contiguous
+        private readonly Dictionary<DwarfAbbreviationItemKey, DwarfAbbreviationItem> _mapKeyToItem;
+        private ulong _nextCode;
 
         public DwarfAbbreviation()
         {
             _items = new List<DwarfAbbreviationItem>();
+            _mapItems = new Dictionary<ulong, DwarfAbbreviationItem>();
+            _mapKeyToItem = new Dictionary<DwarfAbbreviationItemKey, DwarfAbbreviationItem>();
+            _nextCode = 1;
+        }
+
+        public void Reset()
+        {
+            _items.Clear();
+            _mapItems.Clear();
+            _mapKeyToItem.Clear();
+            _nextCode = 1;
+        }
+
+        public IEnumerable<DwarfAbbreviationItem> Items => _mapItems.Count > 0 ? GetMapItems() : _items;
+
+        private IEnumerable<DwarfAbbreviationItem> GetMapItems()
+        {
+            foreach (var item in _mapItems.Values)
+            {
+                yield return item;
+            }
+        }
+        
+        public DwarfAbbreviationItem GetOrCreate(DwarfAbbreviationItemKey itemKey)
+        {
+            if (!_mapKeyToItem.TryGetValue(itemKey, out var item))
+            {
+                item = new DwarfAbbreviationItem(_nextCode, this, itemKey.Tag, itemKey.HasChildren, itemKey.Descriptors);
+
+                if (_mapItems.Count > 0)
+                {
+
+                    _mapItems[_nextCode] = item;
+                    _mapKeyToItem[itemKey] = item;
+                }
+                else
+                {
+                    _items.Add(item);
+                }
+
+                _nextCode++;
+            }
+
+            return item;
         }
 
         public bool TryFindByCode(ulong code, out DwarfAbbreviationItem item)
@@ -28,7 +76,7 @@ namespace LibObjectFile.Dwarf
 
             code--;
 
-            if (_mapItems != null)
+            if (_mapItems.Count > 0)
             {
                 return _mapItems.TryGetValue(code, out item);
             }
@@ -42,6 +90,8 @@ namespace LibObjectFile.Dwarf
             item = null;
             return false;
         }
+
+        private string DebuggerDisplay => $"Count = {(_mapItems.Count > 0 ? _mapItems.Count : _items.Count)}";
 
         public static DwarfAbbreviation Read(Stream reader, ulong abbreviationOffset)
         {
@@ -57,13 +107,13 @@ namespace LibObjectFile.Dwarf
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));
             abbrev = new DwarfAbbreviation();
-            abbrev.Offset = abbreviationOffset;
             diagnostics = new DiagnosticBag();
             return abbrev.TryReadInternal(reader, abbreviationOffset, diagnostics);
         }
 
-        private bool TryReadInternal(Stream reader, ulong abbreviationOffset, DiagnosticBag diagnostics)
+        internal bool TryReadInternal(Stream reader, ulong abbreviationOffset, DiagnosticBag diagnostics)
         {
+            Offset = abbreviationOffset;
             reader.Position = (long)abbreviationOffset;
             while (TryReadNext(reader, diagnostics))
             {
@@ -82,12 +132,10 @@ namespace LibObjectFile.Dwarf
                 return false;
             }
 
-            var item = new DwarfAbbreviationItem();
-
             var index = code - 1;
-            bool canAddToList = _mapItems == null && index < int.MaxValue &&_items.Count == (int)index;
+            bool canAddToList = _mapItems.Count == 0 && index < int.MaxValue &&_items.Count == (int)index;
             
-            item.Tag = new DwarfTagEx(reader.ReadULEB128AsU32());
+            var itemTag = new DwarfTagEx(reader.ReadULEB128AsU32());
             var hasChildrenRaw = reader.ReadU8();
             bool hasChildren = false;
             if (hasChildrenRaw == DwarfNative.DW_CHILDREN_yes)
@@ -100,35 +148,8 @@ namespace LibObjectFile.Dwarf
                 return false;
             }
 
-            item.Code = code;
-
-            item.HasChildren = hasChildren;
-
-            if (canAddToList)
-            {
-                _items.Add(item);
-            }
-            else
-            {
-                if (_mapItems == null)
-                {
-                    _mapItems = new Dictionary<ulong, DwarfAbbreviationItem>();
-                    for (var i = 0; i < _items.Count; i++)
-                    {
-                        var previousItem = _items[i];
-                        _mapItems.Add((ulong)i + 1, previousItem);
-                    }
-                    _items.Clear();
-                }
-
-                // TODO: check collisions
-                if (_mapItems.ContainsKey(code))
-                {
-                    diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"Invalid code {code} found while another code already exists in this abbreviation.");
-                    return false;
-                }
-                _mapItems.Add(code, item);
-            }
+            var itemCode = code;
+            var itemHasChildren = hasChildren;
 
             List<DwarfAttributeDescriptor> descriptors = null;
 
@@ -146,10 +167,40 @@ namespace LibObjectFile.Dwarf
                 descriptors.Add(new DwarfAttributeDescriptor(attributeName, attributeForm));
             }
 
-            if (descriptors != null)
+            var itemDescriptors = descriptors != null ? new DwarfAttributeDescriptors(descriptors.ToArray()) : new DwarfAttributeDescriptors();
+
+            var item = new DwarfAbbreviationItem(itemCode, this, itemTag, itemHasChildren, itemDescriptors);
+
+            if (canAddToList)
             {
-                item.Descriptors = new DwarfAttributeDescriptors(descriptors);
+                _items.Add(item);
+                _nextCode++;
             }
+            else
+            {
+                if (_mapItems.Count == 0)
+                {
+                    for (var i = 0; i < _items.Count; i++)
+                    {
+                        var previousItem = _items[i];
+                        _mapItems.Add((ulong)i + 1, previousItem);
+                    }
+                    _items.Clear();
+                }
+
+                // TODO: check collisions
+                if (_mapItems.ContainsKey(code))
+                {
+                    diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"Invalid code {code} found while another code already exists in this abbreviation.");
+                    return false;
+                }
+                _mapItems.Add(code, item);
+
+                _nextCode = Math.Max(code, _nextCode) + 1;
+            }
+
+            var key = new DwarfAbbreviationItemKey(item.Tag, item.HasChildren, item.Descriptors);
+            _mapKeyToItem.Add(key, item);
             
             return true;
         }

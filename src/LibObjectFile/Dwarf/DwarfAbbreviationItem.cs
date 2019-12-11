@@ -6,14 +6,25 @@ using System.Collections.Generic;
 
 namespace LibObjectFile.Dwarf
 {
-    public class DwarfAbbreviationItem
+    public sealed class DwarfAbbreviationItem
     {
-        public ulong Code { get; internal set; }
+        internal DwarfAbbreviationItem(ulong code, DwarfAbbreviation parent, DwarfTagEx tag, bool hasChildren, DwarfAttributeDescriptors descriptors)
+        {
+            Code = code;
+            Parent = parent;
+            Tag = tag;
+            HasChildren = hasChildren;
+            Descriptors = descriptors;
+        }
+        
+        public ulong Code { get; }
 
-        public DwarfTagEx Tag { get; set; }
+        public DwarfAbbreviation Parent { get; }
 
-        public bool HasChildren { get; set; }
+        public DwarfTagEx Tag { get; }
 
-        public DwarfAttributeDescriptors Descriptors { get; set; }
+        public bool HasChildren { get; }
+
+        public DwarfAttributeDescriptors Descriptors { get; }
     }
 }

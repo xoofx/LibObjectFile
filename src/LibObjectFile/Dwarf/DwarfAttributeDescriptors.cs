@@ -4,22 +4,21 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace LibObjectFile.Dwarf
 {
     [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
-    public readonly struct DwarfAttributeDescriptors : IEquatable<DwarfAttributeDescriptors>, IEnumerable<DwarfAttributeDescriptor>
+    public readonly struct DwarfAttributeDescriptors : IEquatable<DwarfAttributeDescriptors>
     {
-        private readonly List<DwarfAttributeDescriptor> _descriptors;
+        private readonly DwarfAttributeDescriptor[] _descriptors;
 
-        internal DwarfAttributeDescriptors(List<DwarfAttributeDescriptor> descriptors)
+        public DwarfAttributeDescriptors(DwarfAttributeDescriptor[] descriptors)
         {
-            _descriptors = descriptors;
+            _descriptors = descriptors ?? throw new ArgumentNullException(nameof(descriptors));
         }
 
-        public int Length => _descriptors?.Count ?? 0;
+        public int Length => _descriptors?.Length ?? 0;
 
         public DwarfAttributeDescriptor this[int index]
         {
@@ -34,9 +33,9 @@ namespace LibObjectFile.Dwarf
         {
             if (ReferenceEquals(_descriptors, other._descriptors)) return true;
             if (_descriptors == null || other._descriptors == null) return false;
-            if (_descriptors.Count != other._descriptors.Count) return false;
+            if (_descriptors.Length != other._descriptors.Length) return false;
 
-            for (int i = 0; i < _descriptors.Count; i++)
+            for (int i = 0; i < _descriptors.Length; i++)
             {
                 if (_descriptors[i] != other._descriptors[i])
                 {
@@ -46,16 +45,7 @@ namespace LibObjectFile.Dwarf
             return true;
         }
 
-        public List<DwarfAttributeDescriptor>.Enumerator GetEnumerator()
-        {
-            return _descriptors.GetEnumerator();
-        }
-
-        IEnumerator<DwarfAttributeDescriptor> IEnumerable<DwarfAttributeDescriptor>.GetEnumerator()
-        {
-            return _descriptors.GetEnumerator();
-        }
-
+       
         public override bool Equals(object obj)
         {
             return obj is DwarfAttributeDescriptors other && Equals(other);
@@ -63,7 +53,7 @@ namespace LibObjectFile.Dwarf
 
         public override int GetHashCode()
         {
-            int hashCode = _descriptors == null ? 0 : _descriptors.Count;
+            int hashCode = _descriptors == null ? 0 : _descriptors.Length;
             if (hashCode == 0) return hashCode;
             foreach (var descriptor in _descriptors)
             {
@@ -72,12 +62,7 @@ namespace LibObjectFile.Dwarf
             return hashCode;
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return ((IEnumerable) _descriptors).GetEnumerator();
-        }
-
-        private string DebuggerDisplay => $"Count = {_descriptors.Count}";
+        private string DebuggerDisplay => ToString();
 
         public static bool operator ==(DwarfAttributeDescriptors left, DwarfAttributeDescriptors right)
         {
@@ -87,6 +72,11 @@ namespace LibObjectFile.Dwarf
         public static bool operator !=(DwarfAttributeDescriptors left, DwarfAttributeDescriptors right)
         {
             return !left.Equals(right);
+        }
+
+        public override string ToString()
+        {
+            return $"Count = {_descriptors.Length}";
         }
     }
 }

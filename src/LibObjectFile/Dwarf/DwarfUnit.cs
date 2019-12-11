@@ -33,7 +33,7 @@ namespace LibObjectFile.Dwarf
         /// Gets or sets the abbreviation associated with the <see cref="Root"/> <see cref="DwarfDIE"/>
         /// </summary>
         public DwarfAbbreviation Abbreviation { get; set; }
-
+        
         public ulong GetRelocatableValue(ulong relativeOffset, RelocationSize size)
         {
             throw new NotImplementedException();
