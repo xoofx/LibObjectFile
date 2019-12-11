@@ -9,20 +9,20 @@ namespace LibObjectFile.Dwarf
         //  DW_AT_decl_column, DW_AT_decl_file, and DW_AT_decl_line
         public ulong? DeclColumn
         {
-            get => GetAttributeValueOpt<ulong>(DwarfAttributeKind.decl_column);
-            set => SetAttributeValueOpt<ulong>(DwarfAttributeKind.decl_column, value);
+            get => GetAttributeValueOpt<ulong>(DwarfAttributeKind.DeclColumn);
+            set => SetAttributeValueOpt<ulong>(DwarfAttributeKind.DeclColumn, value);
         }
 
         public DwarfDebugFileName DeclFile
         {
-            get => GetAttributeValue<DwarfDebugFileName>(DwarfAttributeKind.decl_file);
-            set => SetAttributeValue<DwarfDebugFileName>(DwarfAttributeKind.decl_file, value);
+            get => GetAttributeValue<DwarfDebugFileName>(DwarfAttributeKind.DeclFile);
+            set => SetAttributeValue<DwarfDebugFileName>(DwarfAttributeKind.DeclFile, value);
         }
 
         public ulong? DeclLine
         {
-            get => GetAttributeValueOpt<ulong>(DwarfAttributeKind.decl_line);
-            set => SetAttributeValueOpt<ulong>(DwarfAttributeKind.decl_line, value);
+            get => GetAttributeValueOpt<ulong>(DwarfAttributeKind.DeclLine);
+            set => SetAttributeValueOpt<ulong>(DwarfAttributeKind.DeclLine, value);
         }
     }
 }

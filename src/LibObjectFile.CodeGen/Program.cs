@@ -103,10 +103,10 @@ namespace LibObjectFile.CodeGen
             var ns = csFile.Members.OfType<CSharpNamespace>().First();
             csFile.Members.Insert(csFile.Members.IndexOf(ns), new CSharpLineElement("#pragma warning disable 1591") ); 
 
-            ProcessElfEnum(cppOptions, csCompilation, "EM_", "ElfArch");
-            ProcessElfEnum(cppOptions, csCompilation, "ELFOSABI_", "ElfOSABI");
-            ProcessElfEnum(cppOptions, csCompilation, "R_", "ElfRelocationType");
-            ProcessElfEnum(cppOptions, csCompilation, "NT_", "ElfNoteType");
+            ProcessEnum(cppOptions, csCompilation, "EM_", "ElfArch");
+            ProcessEnum(cppOptions, csCompilation, "ELFOSABI_", "ElfOSABI");
+            ProcessEnum(cppOptions, csCompilation, "R_", "ElfRelocationType");
+            ProcessEnum(cppOptions, csCompilation, "NT_", "ElfNoteType");
 
             csCompilation.DumpTo(GetCodeWriter(Path.Combine("LibObjectFile", "generated")));
         }
@@ -127,7 +127,7 @@ namespace LibObjectFile.CodeGen
             {"R_AARCH64_", "EM_AARCH64"},
         };
 
-        private static void ProcessElfEnum(CSharpConverterOptions cppOptions, CSharpCompilation csCompilation, string enumPrefix, string enumClassName)
+        private static void ProcessEnum(CSharpConverterOptions cppOptions, CSharpCompilation csCompilation, string enumPrefix, string enumClassName)
         {
             var ns = csCompilation.Members.OfType<CSharpGeneratedFile>().First().Members.OfType<CSharpNamespace>().First();
 
@@ -226,6 +226,11 @@ namespace LibObjectFile.CodeGen
                 if (char.IsDigit(csFieldName[0]))
                 {
                     throw new InvalidOperationException($"The enum name `{rawName}` starts with a number and needs to be modified");
+                }
+
+                if (rawName.StartsWith("DW_"))
+                {
+                    csFieldName = CSharpifyName(csFieldName);
                 }
 
                 csFieldName = CSharpHelper.EscapeName(csFieldName);

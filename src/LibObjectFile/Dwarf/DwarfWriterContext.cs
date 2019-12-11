@@ -12,7 +12,7 @@ namespace LibObjectFile.Dwarf
 
         public DwarfWriterContext()
         {
-            DefaultAttributeFormForReference = DwarfAttributeForm.ref4;
+            DefaultAttributeFormForReference = DwarfAttributeForm.Ref4;
         }
 
         public DwarfAttributeFormEx DefaultAttributeFormForReference
@@ -22,9 +22,9 @@ namespace LibObjectFile.Dwarf
             {
                 switch (value.Value)
                 {
-                    case DwarfAttributeForm.ref1:
-                    case DwarfAttributeForm.ref2:
-                    case DwarfAttributeForm.ref4:
+                    case DwarfAttributeForm.Ref1:
+                    case DwarfAttributeForm.Ref2:
+                    case DwarfAttributeForm.Ref4:
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(value));

@@ -57,13 +57,13 @@ namespace LibObjectFile.CodeGen
             var ns = csFile.Members.OfType<CSharpNamespace>().First();
             csFile.Members.Insert(csFile.Members.IndexOf(ns), new CSharpLineElement("#pragma warning disable 1591") );
 
-            ProcessElfEnum(cppOptions, csCompilation, "DW_AT_", "DwarfAttributeKind");
-            ProcessElfEnum(cppOptions, csCompilation, "DW_FORM_", "DwarfAttributeForm");
-            ProcessElfEnum(cppOptions, csCompilation, "DW_TAG_", "DwarfTag");
-            ProcessElfEnum(cppOptions, csCompilation, "DW_OP_", "DwarfOperationKind");
-            ProcessElfEnum(cppOptions, csCompilation, "DW_LANG_", "DwarfLanguageKind");
-            ProcessElfEnum(cppOptions, csCompilation, "DW_CC_", "DwarfCallingConvention");
-            ProcessElfEnum(cppOptions, csCompilation, "DW_UT_", "DwarfUnitKind");
+            ProcessEnum(cppOptions, csCompilation, "DW_AT_", "DwarfAttributeKind");
+            ProcessEnum(cppOptions, csCompilation, "DW_FORM_", "DwarfAttributeForm");
+            ProcessEnum(cppOptions, csCompilation, "DW_TAG_", "DwarfTag");
+            ProcessEnum(cppOptions, csCompilation, "DW_OP_", "DwarfOperationKind");
+            ProcessEnum(cppOptions, csCompilation, "DW_LANG_", "DwarfLanguageKind");
+            ProcessEnum(cppOptions, csCompilation, "DW_CC_", "DwarfCallingConvention");
+            ProcessEnum(cppOptions, csCompilation, "DW_UT_", "DwarfUnitKind");
 
             GenerateDwarfAttributes(ns);
             GenerateDwarfDIE(ns);
@@ -415,7 +415,9 @@ namespace LibObjectFile.CodeGen
                     currentCompactTagName = compactTagName;
                     var fullTagName = MapTagCompactNameToFullName[compactTagName];
                     dieTags.Add(fullTagName);
-                    currentDIE = new CSharpClass($"DwarfDIE_{fullTagName.Substring("DW_TAG_".Length)}");
+                    var csDIEName = fullTagName.Substring("DW_TAG_".Length);
+                    csDIEName = CSharpifyName(csDIEName);
+                    currentDIE = new CSharpClass($"DwarfDIE{csDIEName}");
                     currentDIE.BaseTypes.Add(new CSharpFreeType("DwarfDIE"));
                     ns.Members.Add(currentDIE);
                     dieClasses.Add(currentDIE);
@@ -504,36 +506,38 @@ namespace LibObjectFile.CodeGen
                 ReturnType = new CSharpFreeType(map.Kind == AttributeKind.Managed ? attrType : $"{attrType}?"),
             };
 
+            var attrName = CSharpifyName(rawAttrName);
+
             switch (map.Kind)
             {
                 case AttributeKind.Managed:
-                    csProperty.GetBody = (writer, element) => writer.WriteLine($"return GetAttributeValue<{attrType}>(DwarfAttributeKind.{CSharpHelper.EscapeName(rawAttrName)});");
-                    csProperty.SetBody = (writer, element) => writer.WriteLine($"SetAttributeValue<{attrType}>(DwarfAttributeKind.{CSharpHelper.EscapeName(rawAttrName)}, value);");
+                    csProperty.GetBody = (writer, element) => writer.WriteLine($"return GetAttributeValue<{attrType}>(DwarfAttributeKind.{attrName});");
+                    csProperty.SetBody = (writer, element) => writer.WriteLine($"SetAttributeValue<{attrType}>(DwarfAttributeKind.{attrName}, value);");
                     break;
                 case AttributeKind.ValueType:
                     if (map.AttributeType == "DwarfConstant")
                     {
-                        csProperty.GetBody = (writer, element) => writer.WriteLine($"return GetAttributeConstantOpt(DwarfAttributeKind.{CSharpHelper.EscapeName(rawAttrName)});");
-                        csProperty.SetBody = (writer, element) => writer.WriteLine($"SetAttributeConstantOpt(DwarfAttributeKind.{CSharpHelper.EscapeName(rawAttrName)}, value);");
+                        csProperty.GetBody = (writer, element) => writer.WriteLine($"return GetAttributeConstantOpt(DwarfAttributeKind.{attrName});");
+                        csProperty.SetBody = (writer, element) => writer.WriteLine($"SetAttributeConstantOpt(DwarfAttributeKind.{attrName}, value);");
                     }
                     else if (map.AttributeType == "DwarfLocation")
                     {
-                        csProperty.GetBody = (writer, element) => writer.WriteLine($"return GetAttributeLocationOpt(DwarfAttributeKind.{CSharpHelper.EscapeName(rawAttrName)});");
-                        csProperty.SetBody = (writer, element) => writer.WriteLine($"SetAttributeLocationOpt(DwarfAttributeKind.{CSharpHelper.EscapeName(rawAttrName)}, value);");
+                        csProperty.GetBody = (writer, element) => writer.WriteLine($"return GetAttributeLocationOpt(DwarfAttributeKind.{attrName});");
+                        csProperty.SetBody = (writer, element) => writer.WriteLine($"SetAttributeLocationOpt(DwarfAttributeKind.{attrName}, value);");
                     }
                     else
                     {
-                        csProperty.GetBody = (writer, element) => writer.WriteLine($"return GetAttributeValueOpt<{attrType}>(DwarfAttributeKind.{CSharpHelper.EscapeName(rawAttrName)});");
-                        csProperty.SetBody = (writer, element) => writer.WriteLine($"SetAttributeValueOpt<{attrType}>(DwarfAttributeKind.{CSharpHelper.EscapeName(rawAttrName)}, value);");
+                        csProperty.GetBody = (writer, element) => writer.WriteLine($"return GetAttributeValueOpt<{attrType}>(DwarfAttributeKind.{attrName});");
+                        csProperty.SetBody = (writer, element) => writer.WriteLine($"SetAttributeValueOpt<{attrType}>(DwarfAttributeKind.{attrName}, value);");
                     }
                     break;
                 case AttributeKind.Link:
                     csProperty.GetBody = (writer, element) =>
                     {
-                        writer.WriteLine($"var attr = FindAttributeByKey(DwarfAttributeKind.{CSharpHelper.EscapeName(rawAttrName)});");
+                        writer.WriteLine($"var attr = FindAttributeByKey(DwarfAttributeKind.{attrName});");
                         writer.WriteLine($"return attr == null ? null : new {attrType}(attr.ValueAsU64, attr.ValueAsObject);");
                     };
-                    csProperty.SetBody = (writer, element) => { writer.WriteLine($"SetAttributeLinkValue(DwarfAttributeKind.{CSharpHelper.EscapeName(rawAttrName)}, value);"); };
+                    csProperty.SetBody = (writer, element) => { writer.WriteLine($"SetAttributeLinkValue(DwarfAttributeKind.{attrName}, value);"); };
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

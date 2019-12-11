@@ -61,7 +61,7 @@ namespace LibObjectFile.Dwarf
             DebugLineSection?.Read(reader);
             DebugAddressRangeTable?.Read(reader);
 
-            DebugInfoSection?.Read(reader, reader.Context.DebugInfoStream, DwarfUnitKind.compile);
+            DebugInfoSection?.Read(reader, reader.Context.DebugInfoStream, DwarfUnitKind.Compile);
         }
 
         public void Write(DwarfWriterContext writerContext)

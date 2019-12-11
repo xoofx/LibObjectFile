@@ -2729,1133 +2729,1133 @@ namespace LibObjectFile.Dwarf
     
     public readonly partial struct DwarfAttributeKindEx
     {
-        public static readonly DwarfAttributeKindEx sibling = new DwarfAttributeKindEx(DwarfNative.DW_AT_sibling);
+        public static readonly DwarfAttributeKindEx Sibling = new DwarfAttributeKindEx(DwarfNative.DW_AT_sibling);
         
-        public static readonly DwarfAttributeKindEx location = new DwarfAttributeKindEx(DwarfNative.DW_AT_location);
+        public static readonly DwarfAttributeKindEx Location = new DwarfAttributeKindEx(DwarfNative.DW_AT_location);
         
-        public static readonly DwarfAttributeKindEx name = new DwarfAttributeKindEx(DwarfNative.DW_AT_name);
+        public static readonly DwarfAttributeKindEx Name = new DwarfAttributeKindEx(DwarfNative.DW_AT_name);
         
-        public static readonly DwarfAttributeKindEx ordering = new DwarfAttributeKindEx(DwarfNative.DW_AT_ordering);
+        public static readonly DwarfAttributeKindEx Ordering = new DwarfAttributeKindEx(DwarfNative.DW_AT_ordering);
         
-        public static readonly DwarfAttributeKindEx subscr_data = new DwarfAttributeKindEx(DwarfNative.DW_AT_subscr_data);
+        public static readonly DwarfAttributeKindEx SubscrData = new DwarfAttributeKindEx(DwarfNative.DW_AT_subscr_data);
         
-        public static readonly DwarfAttributeKindEx byte_size = new DwarfAttributeKindEx(DwarfNative.DW_AT_byte_size);
+        public static readonly DwarfAttributeKindEx ByteSize = new DwarfAttributeKindEx(DwarfNative.DW_AT_byte_size);
         
-        public static readonly DwarfAttributeKindEx bit_offset = new DwarfAttributeKindEx(DwarfNative.DW_AT_bit_offset);
+        public static readonly DwarfAttributeKindEx BitOffset = new DwarfAttributeKindEx(DwarfNative.DW_AT_bit_offset);
         
-        public static readonly DwarfAttributeKindEx bit_size = new DwarfAttributeKindEx(DwarfNative.DW_AT_bit_size);
+        public static readonly DwarfAttributeKindEx BitSize = new DwarfAttributeKindEx(DwarfNative.DW_AT_bit_size);
         
-        public static readonly DwarfAttributeKindEx element_list = new DwarfAttributeKindEx(DwarfNative.DW_AT_element_list);
+        public static readonly DwarfAttributeKindEx ElementList = new DwarfAttributeKindEx(DwarfNative.DW_AT_element_list);
         
-        public static readonly DwarfAttributeKindEx stmt_list = new DwarfAttributeKindEx(DwarfNative.DW_AT_stmt_list);
+        public static readonly DwarfAttributeKindEx StmtList = new DwarfAttributeKindEx(DwarfNative.DW_AT_stmt_list);
         
-        public static readonly DwarfAttributeKindEx low_pc = new DwarfAttributeKindEx(DwarfNative.DW_AT_low_pc);
+        public static readonly DwarfAttributeKindEx LowPC = new DwarfAttributeKindEx(DwarfNative.DW_AT_low_pc);
         
-        public static readonly DwarfAttributeKindEx high_pc = new DwarfAttributeKindEx(DwarfNative.DW_AT_high_pc);
+        public static readonly DwarfAttributeKindEx HighPC = new DwarfAttributeKindEx(DwarfNative.DW_AT_high_pc);
         
-        public static readonly DwarfAttributeKindEx language = new DwarfAttributeKindEx(DwarfNative.DW_AT_language);
+        public static readonly DwarfAttributeKindEx Language = new DwarfAttributeKindEx(DwarfNative.DW_AT_language);
         
-        public static readonly DwarfAttributeKindEx member = new DwarfAttributeKindEx(DwarfNative.DW_AT_member);
+        public static readonly DwarfAttributeKindEx Member = new DwarfAttributeKindEx(DwarfNative.DW_AT_member);
         
-        public static readonly DwarfAttributeKindEx discr = new DwarfAttributeKindEx(DwarfNative.DW_AT_discr);
+        public static readonly DwarfAttributeKindEx Discr = new DwarfAttributeKindEx(DwarfNative.DW_AT_discr);
         
-        public static readonly DwarfAttributeKindEx discr_value = new DwarfAttributeKindEx(DwarfNative.DW_AT_discr_value);
+        public static readonly DwarfAttributeKindEx DiscrValue = new DwarfAttributeKindEx(DwarfNative.DW_AT_discr_value);
         
-        public static readonly DwarfAttributeKindEx visibility = new DwarfAttributeKindEx(DwarfNative.DW_AT_visibility);
+        public static readonly DwarfAttributeKindEx Visibility = new DwarfAttributeKindEx(DwarfNative.DW_AT_visibility);
         
-        public static readonly DwarfAttributeKindEx import = new DwarfAttributeKindEx(DwarfNative.DW_AT_import);
+        public static readonly DwarfAttributeKindEx Import = new DwarfAttributeKindEx(DwarfNative.DW_AT_import);
         
-        public static readonly DwarfAttributeKindEx string_length = new DwarfAttributeKindEx(DwarfNative.DW_AT_string_length);
+        public static readonly DwarfAttributeKindEx StringLength = new DwarfAttributeKindEx(DwarfNative.DW_AT_string_length);
         
-        public static readonly DwarfAttributeKindEx common_reference = new DwarfAttributeKindEx(DwarfNative.DW_AT_common_reference);
+        public static readonly DwarfAttributeKindEx CommonReference = new DwarfAttributeKindEx(DwarfNative.DW_AT_common_reference);
         
-        public static readonly DwarfAttributeKindEx comp_dir = new DwarfAttributeKindEx(DwarfNative.DW_AT_comp_dir);
+        public static readonly DwarfAttributeKindEx CompDir = new DwarfAttributeKindEx(DwarfNative.DW_AT_comp_dir);
         
-        public static readonly DwarfAttributeKindEx const_value = new DwarfAttributeKindEx(DwarfNative.DW_AT_const_value);
+        public static readonly DwarfAttributeKindEx ConstValue = new DwarfAttributeKindEx(DwarfNative.DW_AT_const_value);
         
-        public static readonly DwarfAttributeKindEx containing_type = new DwarfAttributeKindEx(DwarfNative.DW_AT_containing_type);
+        public static readonly DwarfAttributeKindEx ContainingType = new DwarfAttributeKindEx(DwarfNative.DW_AT_containing_type);
         
-        public static readonly DwarfAttributeKindEx default_value = new DwarfAttributeKindEx(DwarfNative.DW_AT_default_value);
+        public static readonly DwarfAttributeKindEx DefaultValue = new DwarfAttributeKindEx(DwarfNative.DW_AT_default_value);
         
-        public static readonly DwarfAttributeKindEx inline = new DwarfAttributeKindEx(DwarfNative.DW_AT_inline);
+        public static readonly DwarfAttributeKindEx Inline = new DwarfAttributeKindEx(DwarfNative.DW_AT_inline);
         
-        public static readonly DwarfAttributeKindEx is_optional = new DwarfAttributeKindEx(DwarfNative.DW_AT_is_optional);
+        public static readonly DwarfAttributeKindEx IsOptional = new DwarfAttributeKindEx(DwarfNative.DW_AT_is_optional);
         
-        public static readonly DwarfAttributeKindEx lower_bound = new DwarfAttributeKindEx(DwarfNative.DW_AT_lower_bound);
+        public static readonly DwarfAttributeKindEx LowerBound = new DwarfAttributeKindEx(DwarfNative.DW_AT_lower_bound);
         
-        public static readonly DwarfAttributeKindEx producer = new DwarfAttributeKindEx(DwarfNative.DW_AT_producer);
+        public static readonly DwarfAttributeKindEx Producer = new DwarfAttributeKindEx(DwarfNative.DW_AT_producer);
         
-        public static readonly DwarfAttributeKindEx prototyped = new DwarfAttributeKindEx(DwarfNative.DW_AT_prototyped);
+        public static readonly DwarfAttributeKindEx Prototyped = new DwarfAttributeKindEx(DwarfNative.DW_AT_prototyped);
         
-        public static readonly DwarfAttributeKindEx return_addr = new DwarfAttributeKindEx(DwarfNative.DW_AT_return_addr);
+        public static readonly DwarfAttributeKindEx ReturnAddr = new DwarfAttributeKindEx(DwarfNative.DW_AT_return_addr);
         
-        public static readonly DwarfAttributeKindEx start_scope = new DwarfAttributeKindEx(DwarfNative.DW_AT_start_scope);
+        public static readonly DwarfAttributeKindEx StartScope = new DwarfAttributeKindEx(DwarfNative.DW_AT_start_scope);
         
         /// <summary>
         /// DWARF3 name
         /// </summary>
-        public static readonly DwarfAttributeKindEx bit_stride = new DwarfAttributeKindEx(DwarfNative.DW_AT_bit_stride);
+        public static readonly DwarfAttributeKindEx BitStride = new DwarfAttributeKindEx(DwarfNative.DW_AT_bit_stride);
         
         /// <summary>
         /// DWARF2 name
         /// </summary>
-        public static readonly DwarfAttributeKindEx stride_size = new DwarfAttributeKindEx(DwarfNative.DW_AT_stride_size);
+        public static readonly DwarfAttributeKindEx StrideSize = new DwarfAttributeKindEx(DwarfNative.DW_AT_stride_size);
         
-        public static readonly DwarfAttributeKindEx upper_bound = new DwarfAttributeKindEx(DwarfNative.DW_AT_upper_bound);
+        public static readonly DwarfAttributeKindEx UpperBound = new DwarfAttributeKindEx(DwarfNative.DW_AT_upper_bound);
         
-        public static readonly DwarfAttributeKindEx abstract_origin = new DwarfAttributeKindEx(DwarfNative.DW_AT_abstract_origin);
+        public static readonly DwarfAttributeKindEx AbstractOrigin = new DwarfAttributeKindEx(DwarfNative.DW_AT_abstract_origin);
         
-        public static readonly DwarfAttributeKindEx accessibility = new DwarfAttributeKindEx(DwarfNative.DW_AT_accessibility);
+        public static readonly DwarfAttributeKindEx Accessibility = new DwarfAttributeKindEx(DwarfNative.DW_AT_accessibility);
         
-        public static readonly DwarfAttributeKindEx address_class = new DwarfAttributeKindEx(DwarfNative.DW_AT_address_class);
+        public static readonly DwarfAttributeKindEx AddressClass = new DwarfAttributeKindEx(DwarfNative.DW_AT_address_class);
         
-        public static readonly DwarfAttributeKindEx artificial = new DwarfAttributeKindEx(DwarfNative.DW_AT_artificial);
+        public static readonly DwarfAttributeKindEx Artificial = new DwarfAttributeKindEx(DwarfNative.DW_AT_artificial);
         
-        public static readonly DwarfAttributeKindEx base_types = new DwarfAttributeKindEx(DwarfNative.DW_AT_base_types);
+        public static readonly DwarfAttributeKindEx BaseTypes = new DwarfAttributeKindEx(DwarfNative.DW_AT_base_types);
         
-        public static readonly DwarfAttributeKindEx calling_convention = new DwarfAttributeKindEx(DwarfNative.DW_AT_calling_convention);
+        public static readonly DwarfAttributeKindEx CallingConvention = new DwarfAttributeKindEx(DwarfNative.DW_AT_calling_convention);
         
-        public static readonly DwarfAttributeKindEx count = new DwarfAttributeKindEx(DwarfNative.DW_AT_count);
+        public static readonly DwarfAttributeKindEx Count = new DwarfAttributeKindEx(DwarfNative.DW_AT_count);
         
-        public static readonly DwarfAttributeKindEx data_member_location = new DwarfAttributeKindEx(DwarfNative.DW_AT_data_member_location);
+        public static readonly DwarfAttributeKindEx DataMemberLocation = new DwarfAttributeKindEx(DwarfNative.DW_AT_data_member_location);
         
-        public static readonly DwarfAttributeKindEx decl_column = new DwarfAttributeKindEx(DwarfNative.DW_AT_decl_column);
+        public static readonly DwarfAttributeKindEx DeclColumn = new DwarfAttributeKindEx(DwarfNative.DW_AT_decl_column);
         
-        public static readonly DwarfAttributeKindEx decl_file = new DwarfAttributeKindEx(DwarfNative.DW_AT_decl_file);
+        public static readonly DwarfAttributeKindEx DeclFile = new DwarfAttributeKindEx(DwarfNative.DW_AT_decl_file);
         
-        public static readonly DwarfAttributeKindEx decl_line = new DwarfAttributeKindEx(DwarfNative.DW_AT_decl_line);
+        public static readonly DwarfAttributeKindEx DeclLine = new DwarfAttributeKindEx(DwarfNative.DW_AT_decl_line);
         
-        public static readonly DwarfAttributeKindEx declaration = new DwarfAttributeKindEx(DwarfNative.DW_AT_declaration);
+        public static readonly DwarfAttributeKindEx Declaration = new DwarfAttributeKindEx(DwarfNative.DW_AT_declaration);
         
         /// <summary>
         /// DWARF2
         /// </summary>
-        public static readonly DwarfAttributeKindEx discr_list = new DwarfAttributeKindEx(DwarfNative.DW_AT_discr_list);
+        public static readonly DwarfAttributeKindEx DiscrList = new DwarfAttributeKindEx(DwarfNative.DW_AT_discr_list);
         
-        public static readonly DwarfAttributeKindEx encoding = new DwarfAttributeKindEx(DwarfNative.DW_AT_encoding);
+        public static readonly DwarfAttributeKindEx Encoding = new DwarfAttributeKindEx(DwarfNative.DW_AT_encoding);
         
-        public static readonly DwarfAttributeKindEx external = new DwarfAttributeKindEx(DwarfNative.DW_AT_external);
+        public static readonly DwarfAttributeKindEx External = new DwarfAttributeKindEx(DwarfNative.DW_AT_external);
         
-        public static readonly DwarfAttributeKindEx frame_base = new DwarfAttributeKindEx(DwarfNative.DW_AT_frame_base);
+        public static readonly DwarfAttributeKindEx FrameBase = new DwarfAttributeKindEx(DwarfNative.DW_AT_frame_base);
         
-        public static readonly DwarfAttributeKindEx friend = new DwarfAttributeKindEx(DwarfNative.DW_AT_friend);
+        public static readonly DwarfAttributeKindEx Friend = new DwarfAttributeKindEx(DwarfNative.DW_AT_friend);
         
-        public static readonly DwarfAttributeKindEx identifier_case = new DwarfAttributeKindEx(DwarfNative.DW_AT_identifier_case);
+        public static readonly DwarfAttributeKindEx IdentifierCase = new DwarfAttributeKindEx(DwarfNative.DW_AT_identifier_case);
         
         /// <summary>
         /// DWARF{234} not DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx macro_info = new DwarfAttributeKindEx(DwarfNative.DW_AT_macro_info);
+        public static readonly DwarfAttributeKindEx MacroInfo = new DwarfAttributeKindEx(DwarfNative.DW_AT_macro_info);
         
-        public static readonly DwarfAttributeKindEx namelist_item = new DwarfAttributeKindEx(DwarfNative.DW_AT_namelist_item);
+        public static readonly DwarfAttributeKindEx NamelistItem = new DwarfAttributeKindEx(DwarfNative.DW_AT_namelist_item);
         
-        public static readonly DwarfAttributeKindEx priority = new DwarfAttributeKindEx(DwarfNative.DW_AT_priority);
+        public static readonly DwarfAttributeKindEx Priority = new DwarfAttributeKindEx(DwarfNative.DW_AT_priority);
         
-        public static readonly DwarfAttributeKindEx segment = new DwarfAttributeKindEx(DwarfNative.DW_AT_segment);
+        public static readonly DwarfAttributeKindEx Segment = new DwarfAttributeKindEx(DwarfNative.DW_AT_segment);
         
-        public static readonly DwarfAttributeKindEx specification = new DwarfAttributeKindEx(DwarfNative.DW_AT_specification);
+        public static readonly DwarfAttributeKindEx Specification = new DwarfAttributeKindEx(DwarfNative.DW_AT_specification);
         
-        public static readonly DwarfAttributeKindEx static_link = new DwarfAttributeKindEx(DwarfNative.DW_AT_static_link);
+        public static readonly DwarfAttributeKindEx StaticLink = new DwarfAttributeKindEx(DwarfNative.DW_AT_static_link);
         
-        public static readonly DwarfAttributeKindEx type = new DwarfAttributeKindEx(DwarfNative.DW_AT_type);
+        public static readonly DwarfAttributeKindEx Type = new DwarfAttributeKindEx(DwarfNative.DW_AT_type);
         
-        public static readonly DwarfAttributeKindEx use_location = new DwarfAttributeKindEx(DwarfNative.DW_AT_use_location);
+        public static readonly DwarfAttributeKindEx UseLocation = new DwarfAttributeKindEx(DwarfNative.DW_AT_use_location);
         
-        public static readonly DwarfAttributeKindEx variable_parameter = new DwarfAttributeKindEx(DwarfNative.DW_AT_variable_parameter);
+        public static readonly DwarfAttributeKindEx VariableParameter = new DwarfAttributeKindEx(DwarfNative.DW_AT_variable_parameter);
         
-        public static readonly DwarfAttributeKindEx virtuality = new DwarfAttributeKindEx(DwarfNative.DW_AT_virtuality);
+        public static readonly DwarfAttributeKindEx Virtuality = new DwarfAttributeKindEx(DwarfNative.DW_AT_virtuality);
         
-        public static readonly DwarfAttributeKindEx vtable_elem_location = new DwarfAttributeKindEx(DwarfNative.DW_AT_vtable_elem_location);
-        
-        /// <summary>
-        /// DWARF3
-        /// </summary>
-        public static readonly DwarfAttributeKindEx allocated = new DwarfAttributeKindEx(DwarfNative.DW_AT_allocated);
+        public static readonly DwarfAttributeKindEx VtableElemLocation = new DwarfAttributeKindEx(DwarfNative.DW_AT_vtable_elem_location);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfAttributeKindEx associated = new DwarfAttributeKindEx(DwarfNative.DW_AT_associated);
+        public static readonly DwarfAttributeKindEx Allocated = new DwarfAttributeKindEx(DwarfNative.DW_AT_allocated);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfAttributeKindEx data_location = new DwarfAttributeKindEx(DwarfNative.DW_AT_data_location);
+        public static readonly DwarfAttributeKindEx Associated = new DwarfAttributeKindEx(DwarfNative.DW_AT_associated);
+        
+        /// <summary>
+        /// DWARF3
+        /// </summary>
+        public static readonly DwarfAttributeKindEx DataLocation = new DwarfAttributeKindEx(DwarfNative.DW_AT_data_location);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeKindEx byte_stride = new DwarfAttributeKindEx(DwarfNative.DW_AT_byte_stride);
+        public static readonly DwarfAttributeKindEx ByteStride = new DwarfAttributeKindEx(DwarfNative.DW_AT_byte_stride);
         
         /// <summary>
         /// DWARF3 (do not use)
         /// </summary>
-        public static readonly DwarfAttributeKindEx stride = new DwarfAttributeKindEx(DwarfNative.DW_AT_stride);
+        public static readonly DwarfAttributeKindEx Stride = new DwarfAttributeKindEx(DwarfNative.DW_AT_stride);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfAttributeKindEx entry_pc = new DwarfAttributeKindEx(DwarfNative.DW_AT_entry_pc);
+        public static readonly DwarfAttributeKindEx EntryPC = new DwarfAttributeKindEx(DwarfNative.DW_AT_entry_pc);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfAttributeKindEx use_UTF8 = new DwarfAttributeKindEx(DwarfNative.DW_AT_use_UTF8);
+        public static readonly DwarfAttributeKindEx UseUTF8 = new DwarfAttributeKindEx(DwarfNative.DW_AT_use_UTF8);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfAttributeKindEx extension = new DwarfAttributeKindEx(DwarfNative.DW_AT_extension);
+        public static readonly DwarfAttributeKindEx Extension = new DwarfAttributeKindEx(DwarfNative.DW_AT_extension);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfAttributeKindEx ranges = new DwarfAttributeKindEx(DwarfNative.DW_AT_ranges);
+        public static readonly DwarfAttributeKindEx Ranges = new DwarfAttributeKindEx(DwarfNative.DW_AT_ranges);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfAttributeKindEx trampoline = new DwarfAttributeKindEx(DwarfNative.DW_AT_trampoline);
+        public static readonly DwarfAttributeKindEx Trampoline = new DwarfAttributeKindEx(DwarfNative.DW_AT_trampoline);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfAttributeKindEx call_column = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_column);
+        public static readonly DwarfAttributeKindEx CallColumn = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_column);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfAttributeKindEx call_file = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_file);
+        public static readonly DwarfAttributeKindEx CallFile = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_file);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfAttributeKindEx call_line = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_line);
+        public static readonly DwarfAttributeKindEx CallLine = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_line);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfAttributeKindEx description = new DwarfAttributeKindEx(DwarfNative.DW_AT_description);
+        public static readonly DwarfAttributeKindEx Description = new DwarfAttributeKindEx(DwarfNative.DW_AT_description);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeKindEx binary_scale = new DwarfAttributeKindEx(DwarfNative.DW_AT_binary_scale);
+        public static readonly DwarfAttributeKindEx BinaryScale = new DwarfAttributeKindEx(DwarfNative.DW_AT_binary_scale);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeKindEx decimal_scale = new DwarfAttributeKindEx(DwarfNative.DW_AT_decimal_scale);
+        public static readonly DwarfAttributeKindEx DecimalScale = new DwarfAttributeKindEx(DwarfNative.DW_AT_decimal_scale);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeKindEx small = new DwarfAttributeKindEx(DwarfNative.DW_AT_small);
+        public static readonly DwarfAttributeKindEx Small = new DwarfAttributeKindEx(DwarfNative.DW_AT_small);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeKindEx decimal_sign = new DwarfAttributeKindEx(DwarfNative.DW_AT_decimal_sign);
+        public static readonly DwarfAttributeKindEx DecimalSign = new DwarfAttributeKindEx(DwarfNative.DW_AT_decimal_sign);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeKindEx digit_count = new DwarfAttributeKindEx(DwarfNative.DW_AT_digit_count);
+        public static readonly DwarfAttributeKindEx DigitCount = new DwarfAttributeKindEx(DwarfNative.DW_AT_digit_count);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeKindEx picture_string = new DwarfAttributeKindEx(DwarfNative.DW_AT_picture_string);
+        public static readonly DwarfAttributeKindEx PictureString = new DwarfAttributeKindEx(DwarfNative.DW_AT_picture_string);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeKindEx mutable = new DwarfAttributeKindEx(DwarfNative.DW_AT_mutable);
+        public static readonly DwarfAttributeKindEx Mutable = new DwarfAttributeKindEx(DwarfNative.DW_AT_mutable);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeKindEx threads_scaled = new DwarfAttributeKindEx(DwarfNative.DW_AT_threads_scaled);
+        public static readonly DwarfAttributeKindEx ThreadsScaled = new DwarfAttributeKindEx(DwarfNative.DW_AT_threads_scaled);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeKindEx @explicit = new DwarfAttributeKindEx(DwarfNative.DW_AT_explicit);
+        public static readonly DwarfAttributeKindEx Explicit = new DwarfAttributeKindEx(DwarfNative.DW_AT_explicit);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeKindEx object_pointer = new DwarfAttributeKindEx(DwarfNative.DW_AT_object_pointer);
+        public static readonly DwarfAttributeKindEx ObjectPointer = new DwarfAttributeKindEx(DwarfNative.DW_AT_object_pointer);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeKindEx endianity = new DwarfAttributeKindEx(DwarfNative.DW_AT_endianity);
+        public static readonly DwarfAttributeKindEx Endianity = new DwarfAttributeKindEx(DwarfNative.DW_AT_endianity);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeKindEx elemental = new DwarfAttributeKindEx(DwarfNative.DW_AT_elemental);
+        public static readonly DwarfAttributeKindEx Elemental = new DwarfAttributeKindEx(DwarfNative.DW_AT_elemental);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeKindEx pure = new DwarfAttributeKindEx(DwarfNative.DW_AT_pure);
+        public static readonly DwarfAttributeKindEx Pure = new DwarfAttributeKindEx(DwarfNative.DW_AT_pure);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfAttributeKindEx recursive = new DwarfAttributeKindEx(DwarfNative.DW_AT_recursive);
+        public static readonly DwarfAttributeKindEx Recursive = new DwarfAttributeKindEx(DwarfNative.DW_AT_recursive);
         
         /// <summary>
         /// DWARF4
         /// </summary>
-        public static readonly DwarfAttributeKindEx signature = new DwarfAttributeKindEx(DwarfNative.DW_AT_signature);
+        public static readonly DwarfAttributeKindEx Signature = new DwarfAttributeKindEx(DwarfNative.DW_AT_signature);
         
         /// <summary>
         /// DWARF4
         /// </summary>
-        public static readonly DwarfAttributeKindEx main_subprogram = new DwarfAttributeKindEx(DwarfNative.DW_AT_main_subprogram);
+        public static readonly DwarfAttributeKindEx MainSubprogram = new DwarfAttributeKindEx(DwarfNative.DW_AT_main_subprogram);
         
         /// <summary>
         /// DWARF4
         /// </summary>
-        public static readonly DwarfAttributeKindEx data_bit_offset = new DwarfAttributeKindEx(DwarfNative.DW_AT_data_bit_offset);
+        public static readonly DwarfAttributeKindEx DataBitOffset = new DwarfAttributeKindEx(DwarfNative.DW_AT_data_bit_offset);
         
         /// <summary>
         /// DWARF4
         /// </summary>
-        public static readonly DwarfAttributeKindEx const_expr = new DwarfAttributeKindEx(DwarfNative.DW_AT_const_expr);
+        public static readonly DwarfAttributeKindEx ConstExpr = new DwarfAttributeKindEx(DwarfNative.DW_AT_const_expr);
         
         /// <summary>
         /// DWARF4
         /// </summary>
-        public static readonly DwarfAttributeKindEx enum_class = new DwarfAttributeKindEx(DwarfNative.DW_AT_enum_class);
+        public static readonly DwarfAttributeKindEx EnumClass = new DwarfAttributeKindEx(DwarfNative.DW_AT_enum_class);
         
         /// <summary>
         /// DWARF4
         /// </summary>
-        public static readonly DwarfAttributeKindEx linkage_name = new DwarfAttributeKindEx(DwarfNative.DW_AT_linkage_name);
+        public static readonly DwarfAttributeKindEx LinkageName = new DwarfAttributeKindEx(DwarfNative.DW_AT_linkage_name);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx string_length_bit_size = new DwarfAttributeKindEx(DwarfNative.DW_AT_string_length_bit_size);
+        public static readonly DwarfAttributeKindEx StringLengthBitSize = new DwarfAttributeKindEx(DwarfNative.DW_AT_string_length_bit_size);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx string_length_byte_size = new DwarfAttributeKindEx(DwarfNative.DW_AT_string_length_byte_size);
+        public static readonly DwarfAttributeKindEx StringLengthByteSize = new DwarfAttributeKindEx(DwarfNative.DW_AT_string_length_byte_size);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx rank = new DwarfAttributeKindEx(DwarfNative.DW_AT_rank);
+        public static readonly DwarfAttributeKindEx Rank = new DwarfAttributeKindEx(DwarfNative.DW_AT_rank);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx str_offsets_base = new DwarfAttributeKindEx(DwarfNative.DW_AT_str_offsets_base);
+        public static readonly DwarfAttributeKindEx StrOffsetsBase = new DwarfAttributeKindEx(DwarfNative.DW_AT_str_offsets_base);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx addr_base = new DwarfAttributeKindEx(DwarfNative.DW_AT_addr_base);
+        public static readonly DwarfAttributeKindEx AddrBase = new DwarfAttributeKindEx(DwarfNative.DW_AT_addr_base);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx rnglists_base = new DwarfAttributeKindEx(DwarfNative.DW_AT_rnglists_base);
+        public static readonly DwarfAttributeKindEx RnglistsBase = new DwarfAttributeKindEx(DwarfNative.DW_AT_rnglists_base);
         
         /// <summary>
         /// DWARF4!
         /// </summary>
-        public static readonly DwarfAttributeKindEx dwo_id = new DwarfAttributeKindEx(DwarfNative.DW_AT_dwo_id);
+        public static readonly DwarfAttributeKindEx DwoId = new DwarfAttributeKindEx(DwarfNative.DW_AT_dwo_id);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx dwo_name = new DwarfAttributeKindEx(DwarfNative.DW_AT_dwo_name);
+        public static readonly DwarfAttributeKindEx DwoName = new DwarfAttributeKindEx(DwarfNative.DW_AT_dwo_name);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx reference = new DwarfAttributeKindEx(DwarfNative.DW_AT_reference);
+        public static readonly DwarfAttributeKindEx Reference = new DwarfAttributeKindEx(DwarfNative.DW_AT_reference);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx rvalue_reference = new DwarfAttributeKindEx(DwarfNative.DW_AT_rvalue_reference);
+        public static readonly DwarfAttributeKindEx RvalueReference = new DwarfAttributeKindEx(DwarfNative.DW_AT_rvalue_reference);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx macros = new DwarfAttributeKindEx(DwarfNative.DW_AT_macros);
+        public static readonly DwarfAttributeKindEx Macros = new DwarfAttributeKindEx(DwarfNative.DW_AT_macros);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx call_all_calls = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_all_calls);
+        public static readonly DwarfAttributeKindEx CallAllCalls = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_all_calls);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx call_all_source_calls = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_all_source_calls);
+        public static readonly DwarfAttributeKindEx CallAllSourceCalls = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_all_source_calls);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx call_all_tail_calls = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_all_tail_calls);
+        public static readonly DwarfAttributeKindEx CallAllTailCalls = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_all_tail_calls);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx call_return_pc = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_return_pc);
+        public static readonly DwarfAttributeKindEx CallReturnPC = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_return_pc);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx call_value = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_value);
+        public static readonly DwarfAttributeKindEx CallValue = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_value);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx call_origin = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_origin);
+        public static readonly DwarfAttributeKindEx CallOrigin = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_origin);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx call_parameter = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_parameter);
+        public static readonly DwarfAttributeKindEx CallParameter = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_parameter);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx call_pc = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_pc);
+        public static readonly DwarfAttributeKindEx CallPC = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_pc);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx call_tail_call = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_tail_call);
+        public static readonly DwarfAttributeKindEx CallTailCall = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_tail_call);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx call_target = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_target);
+        public static readonly DwarfAttributeKindEx CallTarget = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_target);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx call_target_clobbered = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_target_clobbered);
+        public static readonly DwarfAttributeKindEx CallTargetClobbered = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_target_clobbered);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx call_data_location = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_data_location);
+        public static readonly DwarfAttributeKindEx CallDataLocation = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_data_location);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx call_data_value = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_data_value);
+        public static readonly DwarfAttributeKindEx CallDataValue = new DwarfAttributeKindEx(DwarfNative.DW_AT_call_data_value);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx noreturn = new DwarfAttributeKindEx(DwarfNative.DW_AT_noreturn);
+        public static readonly DwarfAttributeKindEx Noreturn = new DwarfAttributeKindEx(DwarfNative.DW_AT_noreturn);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx alignment = new DwarfAttributeKindEx(DwarfNative.DW_AT_alignment);
+        public static readonly DwarfAttributeKindEx Alignment = new DwarfAttributeKindEx(DwarfNative.DW_AT_alignment);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx export_symbols = new DwarfAttributeKindEx(DwarfNative.DW_AT_export_symbols);
+        public static readonly DwarfAttributeKindEx ExportSymbols = new DwarfAttributeKindEx(DwarfNative.DW_AT_export_symbols);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx deleted = new DwarfAttributeKindEx(DwarfNative.DW_AT_deleted);
+        public static readonly DwarfAttributeKindEx Deleted = new DwarfAttributeKindEx(DwarfNative.DW_AT_deleted);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx defaulted = new DwarfAttributeKindEx(DwarfNative.DW_AT_defaulted);
+        public static readonly DwarfAttributeKindEx Defaulted = new DwarfAttributeKindEx(DwarfNative.DW_AT_defaulted);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeKindEx loclists_base = new DwarfAttributeKindEx(DwarfNative.DW_AT_loclists_base);
+        public static readonly DwarfAttributeKindEx LoclistsBase = new DwarfAttributeKindEx(DwarfNative.DW_AT_loclists_base);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfAttributeKindEx HP_block_index = new DwarfAttributeKindEx(DwarfNative.DW_AT_HP_block_index);
+        public static readonly DwarfAttributeKindEx HPBlockIndex = new DwarfAttributeKindEx(DwarfNative.DW_AT_HP_block_index);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeKindEx MIPS_fde = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_fde);
+        public static readonly DwarfAttributeKindEx MIPSFde = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_fde);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeKindEx MIPS_loop_begin = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_loop_begin);
+        public static readonly DwarfAttributeKindEx MIPSLoopBegin = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_loop_begin);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeKindEx MIPS_tail_loop_begin = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_tail_loop_begin);
+        public static readonly DwarfAttributeKindEx MIPSTailLoopBegin = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_tail_loop_begin);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeKindEx MIPS_epilog_begin = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_epilog_begin);
+        public static readonly DwarfAttributeKindEx MIPSEpilogBegin = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_epilog_begin);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeKindEx MIPS_loop_unroll_factor = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_loop_unroll_factor);
+        public static readonly DwarfAttributeKindEx MIPSLoopUnrollFactor = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_loop_unroll_factor);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeKindEx MIPS_software_pipeline_depth = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_software_pipeline_depth);
+        public static readonly DwarfAttributeKindEx MIPSSoftwarePipelineDepth = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_software_pipeline_depth);
         
         /// <summary>
         /// MIPS/SGI, GNU, and others.
         /// </summary>
-        public static readonly DwarfAttributeKindEx MIPS_linkage_name = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_linkage_name);
+        public static readonly DwarfAttributeKindEx MIPSLinkageName = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_linkage_name);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeKindEx MIPS_stride = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_stride);
+        public static readonly DwarfAttributeKindEx MIPSStride = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_stride);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeKindEx MIPS_abstract_name = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_abstract_name);
+        public static readonly DwarfAttributeKindEx MIPSAbstractName = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_abstract_name);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeKindEx MIPS_clone_origin = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_clone_origin);
+        public static readonly DwarfAttributeKindEx MIPSCloneOrigin = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_clone_origin);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeKindEx MIPS_has_inlines = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_has_inlines);
+        public static readonly DwarfAttributeKindEx MIPSHasInlines = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_has_inlines);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeKindEx MIPS_stride_byte = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_stride_byte);
+        public static readonly DwarfAttributeKindEx MIPSStrideByte = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_stride_byte);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeKindEx MIPS_stride_elem = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_stride_elem);
+        public static readonly DwarfAttributeKindEx MIPSStrideElem = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_stride_elem);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeKindEx MIPS_ptr_dopetype = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_ptr_dopetype);
+        public static readonly DwarfAttributeKindEx MIPSPtrDopetype = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_ptr_dopetype);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeKindEx MIPS_allocatable_dopetype = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_allocatable_dopetype);
+        public static readonly DwarfAttributeKindEx MIPSAllocatableDopetype = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_allocatable_dopetype);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeKindEx MIPS_assumed_shape_dopetype = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_assumed_shape_dopetype);
+        public static readonly DwarfAttributeKindEx MIPSAssumedShapeDopetype = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_assumed_shape_dopetype);
         
         /// <summary>
         /// MIPS/SGI
         /// </summary>
-        public static readonly DwarfAttributeKindEx MIPS_assumed_size = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_assumed_size);
+        public static readonly DwarfAttributeKindEx MIPSAssumedSize = new DwarfAttributeKindEx(DwarfNative.DW_AT_MIPS_assumed_size);
         
         /// <summary>
         /// conflict: MIPS
         /// </summary>
-        public static readonly DwarfAttributeKindEx HP_unmodifiable = new DwarfAttributeKindEx(DwarfNative.DW_AT_HP_unmodifiable);
+        public static readonly DwarfAttributeKindEx HPUnmodifiable = new DwarfAttributeKindEx(DwarfNative.DW_AT_HP_unmodifiable);
         
         /// <summary>
         /// conflict: MIPS
         /// </summary>
-        public static readonly DwarfAttributeKindEx HP_actuals_stmt_list = new DwarfAttributeKindEx(DwarfNative.DW_AT_HP_actuals_stmt_list);
+        public static readonly DwarfAttributeKindEx HPActualsStmtList = new DwarfAttributeKindEx(DwarfNative.DW_AT_HP_actuals_stmt_list);
         
         /// <summary>
         /// conflict: MIPS
         /// </summary>
-        public static readonly DwarfAttributeKindEx HP_proc_per_section = new DwarfAttributeKindEx(DwarfNative.DW_AT_HP_proc_per_section);
+        public static readonly DwarfAttributeKindEx HPProcPerSection = new DwarfAttributeKindEx(DwarfNative.DW_AT_HP_proc_per_section);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfAttributeKindEx HP_raw_data_ptr = new DwarfAttributeKindEx(DwarfNative.DW_AT_HP_raw_data_ptr);
+        public static readonly DwarfAttributeKindEx HPRawDataPtr = new DwarfAttributeKindEx(DwarfNative.DW_AT_HP_raw_data_ptr);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfAttributeKindEx HP_pass_by_reference = new DwarfAttributeKindEx(DwarfNative.DW_AT_HP_pass_by_reference);
+        public static readonly DwarfAttributeKindEx HPPassByReference = new DwarfAttributeKindEx(DwarfNative.DW_AT_HP_pass_by_reference);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfAttributeKindEx HP_opt_level = new DwarfAttributeKindEx(DwarfNative.DW_AT_HP_opt_level);
+        public static readonly DwarfAttributeKindEx HPOptLevel = new DwarfAttributeKindEx(DwarfNative.DW_AT_HP_opt_level);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfAttributeKindEx HP_prof_version_id = new DwarfAttributeKindEx(DwarfNative.DW_AT_HP_prof_version_id);
+        public static readonly DwarfAttributeKindEx HPProfVersionId = new DwarfAttributeKindEx(DwarfNative.DW_AT_HP_prof_version_id);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfAttributeKindEx HP_opt_flags = new DwarfAttributeKindEx(DwarfNative.DW_AT_HP_opt_flags);
+        public static readonly DwarfAttributeKindEx HPOptFlags = new DwarfAttributeKindEx(DwarfNative.DW_AT_HP_opt_flags);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfAttributeKindEx HP_cold_region_low_pc = new DwarfAttributeKindEx(DwarfNative.DW_AT_HP_cold_region_low_pc);
+        public static readonly DwarfAttributeKindEx HPColdRegionLowPC = new DwarfAttributeKindEx(DwarfNative.DW_AT_HP_cold_region_low_pc);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfAttributeKindEx HP_cold_region_high_pc = new DwarfAttributeKindEx(DwarfNative.DW_AT_HP_cold_region_high_pc);
+        public static readonly DwarfAttributeKindEx HPColdRegionHighPC = new DwarfAttributeKindEx(DwarfNative.DW_AT_HP_cold_region_high_pc);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfAttributeKindEx HP_all_variables_modifiable = new DwarfAttributeKindEx(DwarfNative.DW_AT_HP_all_variables_modifiable);
+        public static readonly DwarfAttributeKindEx HPAllVariablesModifiable = new DwarfAttributeKindEx(DwarfNative.DW_AT_HP_all_variables_modifiable);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfAttributeKindEx HP_linkage_name = new DwarfAttributeKindEx(DwarfNative.DW_AT_HP_linkage_name);
+        public static readonly DwarfAttributeKindEx HPLinkageName = new DwarfAttributeKindEx(DwarfNative.DW_AT_HP_linkage_name);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfAttributeKindEx HP_prof_flags = new DwarfAttributeKindEx(DwarfNative.DW_AT_HP_prof_flags);
+        public static readonly DwarfAttributeKindEx HPProfFlags = new DwarfAttributeKindEx(DwarfNative.DW_AT_HP_prof_flags);
         
         /// <summary>
         /// COMPAQ/HP
         /// </summary>
-        public static readonly DwarfAttributeKindEx CPQ_discontig_ranges = new DwarfAttributeKindEx(DwarfNative.DW_AT_CPQ_discontig_ranges);
+        public static readonly DwarfAttributeKindEx CPQDiscontigRanges = new DwarfAttributeKindEx(DwarfNative.DW_AT_CPQ_discontig_ranges);
         
         /// <summary>
         /// COMPAQ/HP
         /// </summary>
-        public static readonly DwarfAttributeKindEx CPQ_semantic_events = new DwarfAttributeKindEx(DwarfNative.DW_AT_CPQ_semantic_events);
+        public static readonly DwarfAttributeKindEx CPQSemanticEvents = new DwarfAttributeKindEx(DwarfNative.DW_AT_CPQ_semantic_events);
         
         /// <summary>
         /// COMPAQ/HP
         /// </summary>
-        public static readonly DwarfAttributeKindEx CPQ_split_lifetimes_var = new DwarfAttributeKindEx(DwarfNative.DW_AT_CPQ_split_lifetimes_var);
+        public static readonly DwarfAttributeKindEx CPQSplitLifetimesVar = new DwarfAttributeKindEx(DwarfNative.DW_AT_CPQ_split_lifetimes_var);
         
         /// <summary>
         /// COMPAQ/HP
         /// </summary>
-        public static readonly DwarfAttributeKindEx CPQ_split_lifetimes_rtn = new DwarfAttributeKindEx(DwarfNative.DW_AT_CPQ_split_lifetimes_rtn);
+        public static readonly DwarfAttributeKindEx CPQSplitLifetimesRtn = new DwarfAttributeKindEx(DwarfNative.DW_AT_CPQ_split_lifetimes_rtn);
         
         /// <summary>
         /// COMPAQ/HP
         /// </summary>
-        public static readonly DwarfAttributeKindEx CPQ_prologue_length = new DwarfAttributeKindEx(DwarfNative.DW_AT_CPQ_prologue_length);
+        public static readonly DwarfAttributeKindEx CPQPrologueLength = new DwarfAttributeKindEx(DwarfNative.DW_AT_CPQ_prologue_length);
         
         /// <summary>
         /// Intel, 1 if byte swapped.
         /// </summary>
-        public static readonly DwarfAttributeKindEx INTEL_other_endian = new DwarfAttributeKindEx(DwarfNative.DW_AT_INTEL_other_endian);
+        public static readonly DwarfAttributeKindEx INTELOtherEndian = new DwarfAttributeKindEx(DwarfNative.DW_AT_INTEL_other_endian);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx sf_names = new DwarfAttributeKindEx(DwarfNative.DW_AT_sf_names);
+        public static readonly DwarfAttributeKindEx SfNames = new DwarfAttributeKindEx(DwarfNative.DW_AT_sf_names);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx src_info = new DwarfAttributeKindEx(DwarfNative.DW_AT_src_info);
+        public static readonly DwarfAttributeKindEx SrcInfo = new DwarfAttributeKindEx(DwarfNative.DW_AT_src_info);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx mac_info = new DwarfAttributeKindEx(DwarfNative.DW_AT_mac_info);
+        public static readonly DwarfAttributeKindEx MacInfo = new DwarfAttributeKindEx(DwarfNative.DW_AT_mac_info);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx src_coords = new DwarfAttributeKindEx(DwarfNative.DW_AT_src_coords);
+        public static readonly DwarfAttributeKindEx SrcCoords = new DwarfAttributeKindEx(DwarfNative.DW_AT_src_coords);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx body_begin = new DwarfAttributeKindEx(DwarfNative.DW_AT_body_begin);
+        public static readonly DwarfAttributeKindEx BodyBegin = new DwarfAttributeKindEx(DwarfNative.DW_AT_body_begin);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx body_end = new DwarfAttributeKindEx(DwarfNative.DW_AT_body_end);
+        public static readonly DwarfAttributeKindEx BodyEnd = new DwarfAttributeKindEx(DwarfNative.DW_AT_body_end);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_vector = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_vector);
+        public static readonly DwarfAttributeKindEx GNUVector = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_vector);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_guarded_by = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_guarded_by);
+        public static readonly DwarfAttributeKindEx GNUGuardedBy = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_guarded_by);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_pt_guarded_by = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_pt_guarded_by);
+        public static readonly DwarfAttributeKindEx GNUPtGuardedBy = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_pt_guarded_by);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_guarded = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_guarded);
+        public static readonly DwarfAttributeKindEx GNUGuarded = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_guarded);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_pt_guarded = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_pt_guarded);
+        public static readonly DwarfAttributeKindEx GNUPtGuarded = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_pt_guarded);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_locks_excluded = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_locks_excluded);
+        public static readonly DwarfAttributeKindEx GNULocksExcluded = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_locks_excluded);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_exclusive_locks_required = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_exclusive_locks_required);
+        public static readonly DwarfAttributeKindEx GNUExclusiveLocksRequired = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_exclusive_locks_required);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_shared_locks_required = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_shared_locks_required);
+        public static readonly DwarfAttributeKindEx GNUSharedLocksRequired = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_shared_locks_required);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_odr_signature = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_odr_signature);
+        public static readonly DwarfAttributeKindEx GNUOdrSignature = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_odr_signature);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_template_name = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_template_name);
+        public static readonly DwarfAttributeKindEx GNUTemplateName = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_template_name);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_call_site_value = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_call_site_value);
+        public static readonly DwarfAttributeKindEx GNUCallSiteValue = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_call_site_value);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_call_site_data_value = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_call_site_data_value);
+        public static readonly DwarfAttributeKindEx GNUCallSiteDataValue = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_call_site_data_value);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_call_site_target = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_call_site_target);
+        public static readonly DwarfAttributeKindEx GNUCallSiteTarget = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_call_site_target);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_call_site_target_clobbered = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_call_site_target_clobbered);
+        public static readonly DwarfAttributeKindEx GNUCallSiteTargetClobbered = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_call_site_target_clobbered);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_tail_call = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_tail_call);
+        public static readonly DwarfAttributeKindEx GNUTailCall = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_tail_call);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_all_tail_call_sites = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_all_tail_call_sites);
+        public static readonly DwarfAttributeKindEx GNUAllTailCallSites = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_all_tail_call_sites);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_all_call_sites = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_all_call_sites);
+        public static readonly DwarfAttributeKindEx GNUAllCallSites = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_all_call_sites);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_all_source_call_sites = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_all_source_call_sites);
+        public static readonly DwarfAttributeKindEx GNUAllSourceCallSites = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_all_source_call_sites);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_macros = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_macros);
+        public static readonly DwarfAttributeKindEx GNUMacros = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_macros);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_dwo_name = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_dwo_name);
+        public static readonly DwarfAttributeKindEx GNUDwoName = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_dwo_name);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_dwo_id = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_dwo_id);
+        public static readonly DwarfAttributeKindEx GNUDwoId = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_dwo_id);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_ranges_base = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_ranges_base);
+        public static readonly DwarfAttributeKindEx GNURangesBase = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_ranges_base);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_addr_base = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_addr_base);
+        public static readonly DwarfAttributeKindEx GNUAddrBase = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_addr_base);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_pubnames = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_pubnames);
+        public static readonly DwarfAttributeKindEx GNUPubnames = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_pubnames);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_pubtypes = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_pubtypes);
+        public static readonly DwarfAttributeKindEx GNUPubtypes = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_pubtypes);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_discriminator = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_discriminator);
+        public static readonly DwarfAttributeKindEx GNUDiscriminator = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_discriminator);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_numerator = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_numerator);
+        public static readonly DwarfAttributeKindEx GNUNumerator = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_numerator);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_denominator = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_denominator);
+        public static readonly DwarfAttributeKindEx GNUDenominator = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_denominator);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNU_bias = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_bias);
+        public static readonly DwarfAttributeKindEx GNUBias = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNU_bias);
         
         /// <summary>
         /// ALTIUM
         /// </summary>
-        public static readonly DwarfAttributeKindEx ALTIUM_loclist = new DwarfAttributeKindEx(DwarfNative.DW_AT_ALTIUM_loclist);
+        public static readonly DwarfAttributeKindEx ALTIUMLoclist = new DwarfAttributeKindEx(DwarfNative.DW_AT_ALTIUM_loclist);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_template = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_template);
+        public static readonly DwarfAttributeKindEx SUNTemplate = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_template);
         
         /// <summary>
         /// VMS
         /// </summary>
-        public static readonly DwarfAttributeKindEx VMS_rtnbeg_pd_address = new DwarfAttributeKindEx(DwarfNative.DW_AT_VMS_rtnbeg_pd_address);
+        public static readonly DwarfAttributeKindEx VMSRtnbegPdAddress = new DwarfAttributeKindEx(DwarfNative.DW_AT_VMS_rtnbeg_pd_address);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_alignment = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_alignment);
+        public static readonly DwarfAttributeKindEx SUNAlignment = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_alignment);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_vtable = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_vtable);
+        public static readonly DwarfAttributeKindEx SUNVtable = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_vtable);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_count_guarantee = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_count_guarantee);
+        public static readonly DwarfAttributeKindEx SUNCountGuarantee = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_count_guarantee);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_command_line = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_command_line);
+        public static readonly DwarfAttributeKindEx SUNCommandLine = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_command_line);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_vbase = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_vbase);
+        public static readonly DwarfAttributeKindEx SUNVbase = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_vbase);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_compile_options = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_compile_options);
+        public static readonly DwarfAttributeKindEx SUNCompileOptions = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_compile_options);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_language = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_language);
+        public static readonly DwarfAttributeKindEx SUNLanguage = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_language);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_browser_file = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_browser_file);
+        public static readonly DwarfAttributeKindEx SUNBrowserFile = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_browser_file);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_vtable_abi = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_vtable_abi);
+        public static readonly DwarfAttributeKindEx SUNVtableAbi = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_vtable_abi);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_func_offsets = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_func_offsets);
+        public static readonly DwarfAttributeKindEx SUNFuncOffsets = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_func_offsets);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_cf_kind = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_cf_kind);
+        public static readonly DwarfAttributeKindEx SUNCfKind = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_cf_kind);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_vtable_index = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_vtable_index);
+        public static readonly DwarfAttributeKindEx SUNVtableIndex = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_vtable_index);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_omp_tpriv_addr = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_omp_tpriv_addr);
+        public static readonly DwarfAttributeKindEx SUNOmpTprivAddr = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_omp_tpriv_addr);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_omp_child_func = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_omp_child_func);
+        public static readonly DwarfAttributeKindEx SUNOmpChildFunc = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_omp_child_func);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_func_offset = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_func_offset);
+        public static readonly DwarfAttributeKindEx SUNFuncOffset = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_func_offset);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_memop_type_ref = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_memop_type_ref);
+        public static readonly DwarfAttributeKindEx SUNMemopTypeRef = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_memop_type_ref);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_profile_id = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_profile_id);
+        public static readonly DwarfAttributeKindEx SUNProfileId = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_profile_id);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_memop_signature = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_memop_signature);
+        public static readonly DwarfAttributeKindEx SUNMemopSignature = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_memop_signature);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_obj_dir = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_obj_dir);
+        public static readonly DwarfAttributeKindEx SUNObjDir = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_obj_dir);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_obj_file = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_obj_file);
+        public static readonly DwarfAttributeKindEx SUNObjFile = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_obj_file);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_original_name = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_original_name);
+        public static readonly DwarfAttributeKindEx SUNOriginalName = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_original_name);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_hwcprof_signature = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_hwcprof_signature);
+        public static readonly DwarfAttributeKindEx SUNHwcprofSignature = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_hwcprof_signature);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_amd64_parmdump = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_amd64_parmdump);
+        public static readonly DwarfAttributeKindEx SUNAmd64Parmdump = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_amd64_parmdump);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_part_link_name = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_part_link_name);
+        public static readonly DwarfAttributeKindEx SUNPartLinkName = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_part_link_name);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_link_name = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_link_name);
+        public static readonly DwarfAttributeKindEx SUNLinkName = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_link_name);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_pass_with_const = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_pass_with_const);
+        public static readonly DwarfAttributeKindEx SUNPassWithConst = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_pass_with_const);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_return_with_const = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_return_with_const);
+        public static readonly DwarfAttributeKindEx SUNReturnWithConst = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_return_with_const);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_import_by_name = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_import_by_name);
+        public static readonly DwarfAttributeKindEx SUNImportByName = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_import_by_name);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_f90_pointer = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_f90_pointer);
+        public static readonly DwarfAttributeKindEx SUNF90Pointer = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_f90_pointer);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_pass_by_ref = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_pass_by_ref);
+        public static readonly DwarfAttributeKindEx SUNPassByRef = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_pass_by_ref);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_f90_allocatable = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_f90_allocatable);
+        public static readonly DwarfAttributeKindEx SUNF90Allocatable = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_f90_allocatable);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_f90_assumed_shape_array = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_f90_assumed_shape_array);
+        public static readonly DwarfAttributeKindEx SUNF90AssumedShapeArray = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_f90_assumed_shape_array);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_c_vla = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_c_vla);
+        public static readonly DwarfAttributeKindEx SUNCVla = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_c_vla);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_return_value_ptr = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_return_value_ptr);
+        public static readonly DwarfAttributeKindEx SUNReturnValuePtr = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_return_value_ptr);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_dtor_start = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_dtor_start);
+        public static readonly DwarfAttributeKindEx SUNDtorStart = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_dtor_start);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_dtor_length = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_dtor_length);
+        public static readonly DwarfAttributeKindEx SUNDtorLength = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_dtor_length);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_dtor_state_initial = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_dtor_state_initial);
+        public static readonly DwarfAttributeKindEx SUNDtorStateInitial = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_dtor_state_initial);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_dtor_state_final = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_dtor_state_final);
+        public static readonly DwarfAttributeKindEx SUNDtorStateFinal = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_dtor_state_final);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_dtor_state_deltas = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_dtor_state_deltas);
+        public static readonly DwarfAttributeKindEx SUNDtorStateDeltas = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_dtor_state_deltas);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_import_by_lname = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_import_by_lname);
+        public static readonly DwarfAttributeKindEx SUNImportByLname = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_import_by_lname);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_f90_use_only = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_f90_use_only);
+        public static readonly DwarfAttributeKindEx SUNF90UseOnly = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_f90_use_only);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_namelist_spec = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_namelist_spec);
+        public static readonly DwarfAttributeKindEx SUNNamelistSpec = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_namelist_spec);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_is_omp_child_func = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_is_omp_child_func);
+        public static readonly DwarfAttributeKindEx SUNIsOmpChildFunc = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_is_omp_child_func);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_fortran_main_alias = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_fortran_main_alias);
+        public static readonly DwarfAttributeKindEx SUNFortranMainAlias = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_fortran_main_alias);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfAttributeKindEx SUN_fortran_based = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_fortran_based);
+        public static readonly DwarfAttributeKindEx SUNFortranBased = new DwarfAttributeKindEx(DwarfNative.DW_AT_SUN_fortran_based);
         
         /// <summary>
         /// GNAT
         /// </summary>
-        public static readonly DwarfAttributeKindEx use_GNAT_descriptive_type = new DwarfAttributeKindEx(DwarfNative.DW_AT_use_GNAT_descriptive_type);
+        public static readonly DwarfAttributeKindEx UseGNATDescriptiveType = new DwarfAttributeKindEx(DwarfNative.DW_AT_use_GNAT_descriptive_type);
         
         /// <summary>
         /// GNAT
         /// </summary>
-        public static readonly DwarfAttributeKindEx GNAT_descriptive_type = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNAT_descriptive_type);
+        public static readonly DwarfAttributeKindEx GNATDescriptiveType = new DwarfAttributeKindEx(DwarfNative.DW_AT_GNAT_descriptive_type);
         
         /// <summary>
         /// UPC
         /// </summary>
-        public static readonly DwarfAttributeKindEx upc_threads_scaled = new DwarfAttributeKindEx(DwarfNative.DW_AT_upc_threads_scaled);
+        public static readonly DwarfAttributeKindEx UpcThreadsScaled = new DwarfAttributeKindEx(DwarfNative.DW_AT_upc_threads_scaled);
         
         /// <summary>
         /// PGI. Block, constant, reference. This attribute is an ASTPLAB extension used to describe the array local base.
         /// </summary>
-        public static readonly DwarfAttributeKindEx PGI_lbase = new DwarfAttributeKindEx(DwarfNative.DW_AT_PGI_lbase);
+        public static readonly DwarfAttributeKindEx PGILbase = new DwarfAttributeKindEx(DwarfNative.DW_AT_PGI_lbase);
         
         /// <summary>
         /// PGI. Block, constant, reference. ASTPLAB adds this attribute to describe the section offset, or the offset to the first element in the dimension.
         /// </summary>
-        public static readonly DwarfAttributeKindEx PGI_soffset = new DwarfAttributeKindEx(DwarfNative.DW_AT_PGI_soffset);
+        public static readonly DwarfAttributeKindEx PGISoffset = new DwarfAttributeKindEx(DwarfNative.DW_AT_PGI_soffset);
         
         /// <summary>
         /// PGI. Block, constant, reference. ASTPLAB adds this attribute to describe the linear stride or the distance between elements in the dimension.
         /// </summary>
-        public static readonly DwarfAttributeKindEx PGI_lstride = new DwarfAttributeKindEx(DwarfNative.DW_AT_PGI_lstride);
+        public static readonly DwarfAttributeKindEx PGILstride = new DwarfAttributeKindEx(DwarfNative.DW_AT_PGI_lstride);
         
         /// <summary>
         /// Apple
         /// </summary>
-        public static readonly DwarfAttributeKindEx APPLE_optimized = new DwarfAttributeKindEx(DwarfNative.DW_AT_APPLE_optimized);
+        public static readonly DwarfAttributeKindEx APPLEOptimized = new DwarfAttributeKindEx(DwarfNative.DW_AT_APPLE_optimized);
         
         /// <summary>
         /// Apple
         /// </summary>
-        public static readonly DwarfAttributeKindEx APPLE_flags = new DwarfAttributeKindEx(DwarfNative.DW_AT_APPLE_flags);
+        public static readonly DwarfAttributeKindEx APPLEFlags = new DwarfAttributeKindEx(DwarfNative.DW_AT_APPLE_flags);
         
         /// <summary>
         /// Apple
         /// </summary>
-        public static readonly DwarfAttributeKindEx APPLE_isa = new DwarfAttributeKindEx(DwarfNative.DW_AT_APPLE_isa);
+        public static readonly DwarfAttributeKindEx APPLEIsa = new DwarfAttributeKindEx(DwarfNative.DW_AT_APPLE_isa);
         
         /// <summary>
         /// Apple
         /// </summary>
-        public static readonly DwarfAttributeKindEx APPLE_block = new DwarfAttributeKindEx(DwarfNative.DW_AT_APPLE_block);
+        public static readonly DwarfAttributeKindEx APPLEBlock = new DwarfAttributeKindEx(DwarfNative.DW_AT_APPLE_block);
         
         /// <summary>
         /// Apple
         /// </summary>
-        public static readonly DwarfAttributeKindEx APPLE_major_runtime_vers = new DwarfAttributeKindEx(DwarfNative.DW_AT_APPLE_major_runtime_vers);
+        public static readonly DwarfAttributeKindEx APPLEMajorRuntimeVers = new DwarfAttributeKindEx(DwarfNative.DW_AT_APPLE_major_runtime_vers);
         
         /// <summary>
         /// Apple
         /// </summary>
-        public static readonly DwarfAttributeKindEx APPLE_runtime_class = new DwarfAttributeKindEx(DwarfNative.DW_AT_APPLE_runtime_class);
+        public static readonly DwarfAttributeKindEx APPLERuntimeClass = new DwarfAttributeKindEx(DwarfNative.DW_AT_APPLE_runtime_class);
         
         /// <summary>
         /// Apple
         /// </summary>
-        public static readonly DwarfAttributeKindEx APPLE_omit_frame_ptr = new DwarfAttributeKindEx(DwarfNative.DW_AT_APPLE_omit_frame_ptr);
+        public static readonly DwarfAttributeKindEx APPLEOmitFramePtr = new DwarfAttributeKindEx(DwarfNative.DW_AT_APPLE_omit_frame_ptr);
         
         /// <summary>
         /// Apple
         /// </summary>
-        public static readonly DwarfAttributeKindEx APPLE_closure = new DwarfAttributeKindEx(DwarfNative.DW_AT_APPLE_closure);
+        public static readonly DwarfAttributeKindEx APPLEClosure = new DwarfAttributeKindEx(DwarfNative.DW_AT_APPLE_closure);
         
         private string ToStringInternal()
         {
@@ -4117,702 +4117,702 @@ namespace LibObjectFile.Dwarf
     
     public enum DwarfAttributeKind : ushort
     {
-        sibling = DwarfNative.DW_AT_sibling,
+        Sibling = DwarfNative.DW_AT_sibling,
         
-        location = DwarfNative.DW_AT_location,
+        Location = DwarfNative.DW_AT_location,
         
-        name = DwarfNative.DW_AT_name,
+        Name = DwarfNative.DW_AT_name,
         
-        ordering = DwarfNative.DW_AT_ordering,
+        Ordering = DwarfNative.DW_AT_ordering,
         
-        subscr_data = DwarfNative.DW_AT_subscr_data,
+        SubscrData = DwarfNative.DW_AT_subscr_data,
         
-        byte_size = DwarfNative.DW_AT_byte_size,
+        ByteSize = DwarfNative.DW_AT_byte_size,
         
-        bit_offset = DwarfNative.DW_AT_bit_offset,
+        BitOffset = DwarfNative.DW_AT_bit_offset,
         
-        bit_size = DwarfNative.DW_AT_bit_size,
+        BitSize = DwarfNative.DW_AT_bit_size,
         
-        element_list = DwarfNative.DW_AT_element_list,
+        ElementList = DwarfNative.DW_AT_element_list,
         
-        stmt_list = DwarfNative.DW_AT_stmt_list,
+        StmtList = DwarfNative.DW_AT_stmt_list,
         
-        low_pc = DwarfNative.DW_AT_low_pc,
+        LowPC = DwarfNative.DW_AT_low_pc,
         
-        high_pc = DwarfNative.DW_AT_high_pc,
+        HighPC = DwarfNative.DW_AT_high_pc,
         
-        language = DwarfNative.DW_AT_language,
+        Language = DwarfNative.DW_AT_language,
         
-        member = DwarfNative.DW_AT_member,
+        Member = DwarfNative.DW_AT_member,
         
-        discr = DwarfNative.DW_AT_discr,
+        Discr = DwarfNative.DW_AT_discr,
         
-        discr_value = DwarfNative.DW_AT_discr_value,
+        DiscrValue = DwarfNative.DW_AT_discr_value,
         
-        visibility = DwarfNative.DW_AT_visibility,
+        Visibility = DwarfNative.DW_AT_visibility,
         
-        import = DwarfNative.DW_AT_import,
+        Import = DwarfNative.DW_AT_import,
         
-        string_length = DwarfNative.DW_AT_string_length,
+        StringLength = DwarfNative.DW_AT_string_length,
         
-        common_reference = DwarfNative.DW_AT_common_reference,
+        CommonReference = DwarfNative.DW_AT_common_reference,
         
-        comp_dir = DwarfNative.DW_AT_comp_dir,
+        CompDir = DwarfNative.DW_AT_comp_dir,
         
-        const_value = DwarfNative.DW_AT_const_value,
+        ConstValue = DwarfNative.DW_AT_const_value,
         
-        containing_type = DwarfNative.DW_AT_containing_type,
+        ContainingType = DwarfNative.DW_AT_containing_type,
         
-        default_value = DwarfNative.DW_AT_default_value,
+        DefaultValue = DwarfNative.DW_AT_default_value,
         
-        inline = DwarfNative.DW_AT_inline,
+        Inline = DwarfNative.DW_AT_inline,
         
-        is_optional = DwarfNative.DW_AT_is_optional,
+        IsOptional = DwarfNative.DW_AT_is_optional,
         
-        lower_bound = DwarfNative.DW_AT_lower_bound,
+        LowerBound = DwarfNative.DW_AT_lower_bound,
         
-        producer = DwarfNative.DW_AT_producer,
+        Producer = DwarfNative.DW_AT_producer,
         
-        prototyped = DwarfNative.DW_AT_prototyped,
+        Prototyped = DwarfNative.DW_AT_prototyped,
         
-        return_addr = DwarfNative.DW_AT_return_addr,
+        ReturnAddr = DwarfNative.DW_AT_return_addr,
         
-        start_scope = DwarfNative.DW_AT_start_scope,
+        StartScope = DwarfNative.DW_AT_start_scope,
         
-        bit_stride = DwarfNative.DW_AT_bit_stride,
+        BitStride = DwarfNative.DW_AT_bit_stride,
         
-        stride_size = DwarfNative.DW_AT_stride_size,
+        StrideSize = DwarfNative.DW_AT_stride_size,
         
-        upper_bound = DwarfNative.DW_AT_upper_bound,
+        UpperBound = DwarfNative.DW_AT_upper_bound,
         
-        abstract_origin = DwarfNative.DW_AT_abstract_origin,
+        AbstractOrigin = DwarfNative.DW_AT_abstract_origin,
         
-        accessibility = DwarfNative.DW_AT_accessibility,
+        Accessibility = DwarfNative.DW_AT_accessibility,
         
-        address_class = DwarfNative.DW_AT_address_class,
+        AddressClass = DwarfNative.DW_AT_address_class,
         
-        artificial = DwarfNative.DW_AT_artificial,
+        Artificial = DwarfNative.DW_AT_artificial,
         
-        base_types = DwarfNative.DW_AT_base_types,
+        BaseTypes = DwarfNative.DW_AT_base_types,
         
-        calling_convention = DwarfNative.DW_AT_calling_convention,
+        CallingConvention = DwarfNative.DW_AT_calling_convention,
         
-        count = DwarfNative.DW_AT_count,
+        Count = DwarfNative.DW_AT_count,
         
-        data_member_location = DwarfNative.DW_AT_data_member_location,
+        DataMemberLocation = DwarfNative.DW_AT_data_member_location,
         
-        decl_column = DwarfNative.DW_AT_decl_column,
+        DeclColumn = DwarfNative.DW_AT_decl_column,
         
-        decl_file = DwarfNative.DW_AT_decl_file,
+        DeclFile = DwarfNative.DW_AT_decl_file,
         
-        decl_line = DwarfNative.DW_AT_decl_line,
+        DeclLine = DwarfNative.DW_AT_decl_line,
         
-        declaration = DwarfNative.DW_AT_declaration,
+        Declaration = DwarfNative.DW_AT_declaration,
         
-        discr_list = DwarfNative.DW_AT_discr_list,
+        DiscrList = DwarfNative.DW_AT_discr_list,
         
-        encoding = DwarfNative.DW_AT_encoding,
+        Encoding = DwarfNative.DW_AT_encoding,
         
-        external = DwarfNative.DW_AT_external,
+        External = DwarfNative.DW_AT_external,
         
-        frame_base = DwarfNative.DW_AT_frame_base,
+        FrameBase = DwarfNative.DW_AT_frame_base,
         
-        friend = DwarfNative.DW_AT_friend,
+        Friend = DwarfNative.DW_AT_friend,
         
-        identifier_case = DwarfNative.DW_AT_identifier_case,
+        IdentifierCase = DwarfNative.DW_AT_identifier_case,
         
-        macro_info = DwarfNative.DW_AT_macro_info,
+        MacroInfo = DwarfNative.DW_AT_macro_info,
         
-        namelist_item = DwarfNative.DW_AT_namelist_item,
+        NamelistItem = DwarfNative.DW_AT_namelist_item,
         
-        priority = DwarfNative.DW_AT_priority,
+        Priority = DwarfNative.DW_AT_priority,
         
-        segment = DwarfNative.DW_AT_segment,
+        Segment = DwarfNative.DW_AT_segment,
         
-        specification = DwarfNative.DW_AT_specification,
+        Specification = DwarfNative.DW_AT_specification,
         
-        static_link = DwarfNative.DW_AT_static_link,
+        StaticLink = DwarfNative.DW_AT_static_link,
         
-        type = DwarfNative.DW_AT_type,
+        Type = DwarfNative.DW_AT_type,
         
-        use_location = DwarfNative.DW_AT_use_location,
+        UseLocation = DwarfNative.DW_AT_use_location,
         
-        variable_parameter = DwarfNative.DW_AT_variable_parameter,
+        VariableParameter = DwarfNative.DW_AT_variable_parameter,
         
-        virtuality = DwarfNative.DW_AT_virtuality,
+        Virtuality = DwarfNative.DW_AT_virtuality,
         
-        vtable_elem_location = DwarfNative.DW_AT_vtable_elem_location,
+        VtableElemLocation = DwarfNative.DW_AT_vtable_elem_location,
         
-        allocated = DwarfNative.DW_AT_allocated,
+        Allocated = DwarfNative.DW_AT_allocated,
         
-        associated = DwarfNative.DW_AT_associated,
+        Associated = DwarfNative.DW_AT_associated,
         
-        data_location = DwarfNative.DW_AT_data_location,
+        DataLocation = DwarfNative.DW_AT_data_location,
         
-        byte_stride = DwarfNative.DW_AT_byte_stride,
+        ByteStride = DwarfNative.DW_AT_byte_stride,
         
-        stride = DwarfNative.DW_AT_stride,
+        Stride = DwarfNative.DW_AT_stride,
         
-        entry_pc = DwarfNative.DW_AT_entry_pc,
+        EntryPC = DwarfNative.DW_AT_entry_pc,
         
-        use_UTF8 = DwarfNative.DW_AT_use_UTF8,
+        UseUTF8 = DwarfNative.DW_AT_use_UTF8,
         
-        extension = DwarfNative.DW_AT_extension,
+        Extension = DwarfNative.DW_AT_extension,
         
-        ranges = DwarfNative.DW_AT_ranges,
+        Ranges = DwarfNative.DW_AT_ranges,
         
-        trampoline = DwarfNative.DW_AT_trampoline,
+        Trampoline = DwarfNative.DW_AT_trampoline,
         
-        call_column = DwarfNative.DW_AT_call_column,
+        CallColumn = DwarfNative.DW_AT_call_column,
         
-        call_file = DwarfNative.DW_AT_call_file,
+        CallFile = DwarfNative.DW_AT_call_file,
         
-        call_line = DwarfNative.DW_AT_call_line,
+        CallLine = DwarfNative.DW_AT_call_line,
         
-        description = DwarfNative.DW_AT_description,
+        Description = DwarfNative.DW_AT_description,
         
-        binary_scale = DwarfNative.DW_AT_binary_scale,
+        BinaryScale = DwarfNative.DW_AT_binary_scale,
         
-        decimal_scale = DwarfNative.DW_AT_decimal_scale,
+        DecimalScale = DwarfNative.DW_AT_decimal_scale,
         
-        small = DwarfNative.DW_AT_small,
+        Small = DwarfNative.DW_AT_small,
         
-        decimal_sign = DwarfNative.DW_AT_decimal_sign,
+        DecimalSign = DwarfNative.DW_AT_decimal_sign,
         
-        digit_count = DwarfNative.DW_AT_digit_count,
+        DigitCount = DwarfNative.DW_AT_digit_count,
         
-        picture_string = DwarfNative.DW_AT_picture_string,
+        PictureString = DwarfNative.DW_AT_picture_string,
         
-        mutable = DwarfNative.DW_AT_mutable,
+        Mutable = DwarfNative.DW_AT_mutable,
         
-        threads_scaled = DwarfNative.DW_AT_threads_scaled,
+        ThreadsScaled = DwarfNative.DW_AT_threads_scaled,
         
-        @explicit = DwarfNative.DW_AT_explicit,
+        Explicit = DwarfNative.DW_AT_explicit,
         
-        object_pointer = DwarfNative.DW_AT_object_pointer,
+        ObjectPointer = DwarfNative.DW_AT_object_pointer,
         
-        endianity = DwarfNative.DW_AT_endianity,
+        Endianity = DwarfNative.DW_AT_endianity,
         
-        elemental = DwarfNative.DW_AT_elemental,
+        Elemental = DwarfNative.DW_AT_elemental,
         
-        pure = DwarfNative.DW_AT_pure,
+        Pure = DwarfNative.DW_AT_pure,
         
-        recursive = DwarfNative.DW_AT_recursive,
+        Recursive = DwarfNative.DW_AT_recursive,
         
-        signature = DwarfNative.DW_AT_signature,
+        Signature = DwarfNative.DW_AT_signature,
         
-        main_subprogram = DwarfNative.DW_AT_main_subprogram,
+        MainSubprogram = DwarfNative.DW_AT_main_subprogram,
         
-        data_bit_offset = DwarfNative.DW_AT_data_bit_offset,
+        DataBitOffset = DwarfNative.DW_AT_data_bit_offset,
         
-        const_expr = DwarfNative.DW_AT_const_expr,
+        ConstExpr = DwarfNative.DW_AT_const_expr,
         
-        enum_class = DwarfNative.DW_AT_enum_class,
+        EnumClass = DwarfNative.DW_AT_enum_class,
         
-        linkage_name = DwarfNative.DW_AT_linkage_name,
+        LinkageName = DwarfNative.DW_AT_linkage_name,
         
-        string_length_bit_size = DwarfNative.DW_AT_string_length_bit_size,
+        StringLengthBitSize = DwarfNative.DW_AT_string_length_bit_size,
         
-        string_length_byte_size = DwarfNative.DW_AT_string_length_byte_size,
+        StringLengthByteSize = DwarfNative.DW_AT_string_length_byte_size,
         
-        rank = DwarfNative.DW_AT_rank,
+        Rank = DwarfNative.DW_AT_rank,
         
-        str_offsets_base = DwarfNative.DW_AT_str_offsets_base,
+        StrOffsetsBase = DwarfNative.DW_AT_str_offsets_base,
         
-        addr_base = DwarfNative.DW_AT_addr_base,
+        AddrBase = DwarfNative.DW_AT_addr_base,
         
-        rnglists_base = DwarfNative.DW_AT_rnglists_base,
+        RnglistsBase = DwarfNative.DW_AT_rnglists_base,
         
-        dwo_id = DwarfNative.DW_AT_dwo_id,
+        DwoId = DwarfNative.DW_AT_dwo_id,
         
-        dwo_name = DwarfNative.DW_AT_dwo_name,
+        DwoName = DwarfNative.DW_AT_dwo_name,
         
-        reference = DwarfNative.DW_AT_reference,
+        Reference = DwarfNative.DW_AT_reference,
         
-        rvalue_reference = DwarfNative.DW_AT_rvalue_reference,
+        RvalueReference = DwarfNative.DW_AT_rvalue_reference,
         
-        macros = DwarfNative.DW_AT_macros,
+        Macros = DwarfNative.DW_AT_macros,
         
-        call_all_calls = DwarfNative.DW_AT_call_all_calls,
+        CallAllCalls = DwarfNative.DW_AT_call_all_calls,
         
-        call_all_source_calls = DwarfNative.DW_AT_call_all_source_calls,
+        CallAllSourceCalls = DwarfNative.DW_AT_call_all_source_calls,
         
-        call_all_tail_calls = DwarfNative.DW_AT_call_all_tail_calls,
+        CallAllTailCalls = DwarfNative.DW_AT_call_all_tail_calls,
         
-        call_return_pc = DwarfNative.DW_AT_call_return_pc,
+        CallReturnPC = DwarfNative.DW_AT_call_return_pc,
         
-        call_value = DwarfNative.DW_AT_call_value,
+        CallValue = DwarfNative.DW_AT_call_value,
         
-        call_origin = DwarfNative.DW_AT_call_origin,
+        CallOrigin = DwarfNative.DW_AT_call_origin,
         
-        call_parameter = DwarfNative.DW_AT_call_parameter,
+        CallParameter = DwarfNative.DW_AT_call_parameter,
         
-        call_pc = DwarfNative.DW_AT_call_pc,
+        CallPC = DwarfNative.DW_AT_call_pc,
         
-        call_tail_call = DwarfNative.DW_AT_call_tail_call,
+        CallTailCall = DwarfNative.DW_AT_call_tail_call,
         
-        call_target = DwarfNative.DW_AT_call_target,
+        CallTarget = DwarfNative.DW_AT_call_target,
         
-        call_target_clobbered = DwarfNative.DW_AT_call_target_clobbered,
+        CallTargetClobbered = DwarfNative.DW_AT_call_target_clobbered,
         
-        call_data_location = DwarfNative.DW_AT_call_data_location,
+        CallDataLocation = DwarfNative.DW_AT_call_data_location,
         
-        call_data_value = DwarfNative.DW_AT_call_data_value,
+        CallDataValue = DwarfNative.DW_AT_call_data_value,
         
-        noreturn = DwarfNative.DW_AT_noreturn,
+        Noreturn = DwarfNative.DW_AT_noreturn,
         
-        alignment = DwarfNative.DW_AT_alignment,
+        Alignment = DwarfNative.DW_AT_alignment,
         
-        export_symbols = DwarfNative.DW_AT_export_symbols,
+        ExportSymbols = DwarfNative.DW_AT_export_symbols,
         
-        deleted = DwarfNative.DW_AT_deleted,
+        Deleted = DwarfNative.DW_AT_deleted,
         
-        defaulted = DwarfNative.DW_AT_defaulted,
+        Defaulted = DwarfNative.DW_AT_defaulted,
         
-        loclists_base = DwarfNative.DW_AT_loclists_base,
+        LoclistsBase = DwarfNative.DW_AT_loclists_base,
         
-        HP_block_index = DwarfNative.DW_AT_HP_block_index,
+        HPBlockIndex = DwarfNative.DW_AT_HP_block_index,
         
-        MIPS_fde = DwarfNative.DW_AT_MIPS_fde,
+        MIPSFde = DwarfNative.DW_AT_MIPS_fde,
         
-        MIPS_loop_begin = DwarfNative.DW_AT_MIPS_loop_begin,
+        MIPSLoopBegin = DwarfNative.DW_AT_MIPS_loop_begin,
         
-        MIPS_tail_loop_begin = DwarfNative.DW_AT_MIPS_tail_loop_begin,
+        MIPSTailLoopBegin = DwarfNative.DW_AT_MIPS_tail_loop_begin,
         
-        MIPS_epilog_begin = DwarfNative.DW_AT_MIPS_epilog_begin,
+        MIPSEpilogBegin = DwarfNative.DW_AT_MIPS_epilog_begin,
         
-        MIPS_loop_unroll_factor = DwarfNative.DW_AT_MIPS_loop_unroll_factor,
+        MIPSLoopUnrollFactor = DwarfNative.DW_AT_MIPS_loop_unroll_factor,
         
-        MIPS_software_pipeline_depth = DwarfNative.DW_AT_MIPS_software_pipeline_depth,
+        MIPSSoftwarePipelineDepth = DwarfNative.DW_AT_MIPS_software_pipeline_depth,
         
-        MIPS_linkage_name = DwarfNative.DW_AT_MIPS_linkage_name,
+        MIPSLinkageName = DwarfNative.DW_AT_MIPS_linkage_name,
         
-        MIPS_stride = DwarfNative.DW_AT_MIPS_stride,
+        MIPSStride = DwarfNative.DW_AT_MIPS_stride,
         
-        MIPS_abstract_name = DwarfNative.DW_AT_MIPS_abstract_name,
+        MIPSAbstractName = DwarfNative.DW_AT_MIPS_abstract_name,
         
-        MIPS_clone_origin = DwarfNative.DW_AT_MIPS_clone_origin,
+        MIPSCloneOrigin = DwarfNative.DW_AT_MIPS_clone_origin,
         
-        MIPS_has_inlines = DwarfNative.DW_AT_MIPS_has_inlines,
+        MIPSHasInlines = DwarfNative.DW_AT_MIPS_has_inlines,
         
-        MIPS_stride_byte = DwarfNative.DW_AT_MIPS_stride_byte,
+        MIPSStrideByte = DwarfNative.DW_AT_MIPS_stride_byte,
         
-        MIPS_stride_elem = DwarfNative.DW_AT_MIPS_stride_elem,
+        MIPSStrideElem = DwarfNative.DW_AT_MIPS_stride_elem,
         
-        MIPS_ptr_dopetype = DwarfNative.DW_AT_MIPS_ptr_dopetype,
+        MIPSPtrDopetype = DwarfNative.DW_AT_MIPS_ptr_dopetype,
         
-        MIPS_allocatable_dopetype = DwarfNative.DW_AT_MIPS_allocatable_dopetype,
+        MIPSAllocatableDopetype = DwarfNative.DW_AT_MIPS_allocatable_dopetype,
         
-        MIPS_assumed_shape_dopetype = DwarfNative.DW_AT_MIPS_assumed_shape_dopetype,
+        MIPSAssumedShapeDopetype = DwarfNative.DW_AT_MIPS_assumed_shape_dopetype,
         
-        MIPS_assumed_size = DwarfNative.DW_AT_MIPS_assumed_size,
+        MIPSAssumedSize = DwarfNative.DW_AT_MIPS_assumed_size,
         
-        HP_unmodifiable = DwarfNative.DW_AT_HP_unmodifiable,
+        HPUnmodifiable = DwarfNative.DW_AT_HP_unmodifiable,
         
-        HP_actuals_stmt_list = DwarfNative.DW_AT_HP_actuals_stmt_list,
+        HPActualsStmtList = DwarfNative.DW_AT_HP_actuals_stmt_list,
         
-        HP_proc_per_section = DwarfNative.DW_AT_HP_proc_per_section,
+        HPProcPerSection = DwarfNative.DW_AT_HP_proc_per_section,
         
-        HP_raw_data_ptr = DwarfNative.DW_AT_HP_raw_data_ptr,
+        HPRawDataPtr = DwarfNative.DW_AT_HP_raw_data_ptr,
         
-        HP_pass_by_reference = DwarfNative.DW_AT_HP_pass_by_reference,
+        HPPassByReference = DwarfNative.DW_AT_HP_pass_by_reference,
         
-        HP_opt_level = DwarfNative.DW_AT_HP_opt_level,
+        HPOptLevel = DwarfNative.DW_AT_HP_opt_level,
         
-        HP_prof_version_id = DwarfNative.DW_AT_HP_prof_version_id,
+        HPProfVersionId = DwarfNative.DW_AT_HP_prof_version_id,
         
-        HP_opt_flags = DwarfNative.DW_AT_HP_opt_flags,
+        HPOptFlags = DwarfNative.DW_AT_HP_opt_flags,
         
-        HP_cold_region_low_pc = DwarfNative.DW_AT_HP_cold_region_low_pc,
+        HPColdRegionLowPC = DwarfNative.DW_AT_HP_cold_region_low_pc,
         
-        HP_cold_region_high_pc = DwarfNative.DW_AT_HP_cold_region_high_pc,
+        HPColdRegionHighPC = DwarfNative.DW_AT_HP_cold_region_high_pc,
         
-        HP_all_variables_modifiable = DwarfNative.DW_AT_HP_all_variables_modifiable,
+        HPAllVariablesModifiable = DwarfNative.DW_AT_HP_all_variables_modifiable,
         
-        HP_linkage_name = DwarfNative.DW_AT_HP_linkage_name,
+        HPLinkageName = DwarfNative.DW_AT_HP_linkage_name,
         
-        HP_prof_flags = DwarfNative.DW_AT_HP_prof_flags,
+        HPProfFlags = DwarfNative.DW_AT_HP_prof_flags,
         
-        CPQ_discontig_ranges = DwarfNative.DW_AT_CPQ_discontig_ranges,
+        CPQDiscontigRanges = DwarfNative.DW_AT_CPQ_discontig_ranges,
         
-        CPQ_semantic_events = DwarfNative.DW_AT_CPQ_semantic_events,
+        CPQSemanticEvents = DwarfNative.DW_AT_CPQ_semantic_events,
         
-        CPQ_split_lifetimes_var = DwarfNative.DW_AT_CPQ_split_lifetimes_var,
+        CPQSplitLifetimesVar = DwarfNative.DW_AT_CPQ_split_lifetimes_var,
         
-        CPQ_split_lifetimes_rtn = DwarfNative.DW_AT_CPQ_split_lifetimes_rtn,
+        CPQSplitLifetimesRtn = DwarfNative.DW_AT_CPQ_split_lifetimes_rtn,
         
-        CPQ_prologue_length = DwarfNative.DW_AT_CPQ_prologue_length,
+        CPQPrologueLength = DwarfNative.DW_AT_CPQ_prologue_length,
         
-        INTEL_other_endian = DwarfNative.DW_AT_INTEL_other_endian,
+        INTELOtherEndian = DwarfNative.DW_AT_INTEL_other_endian,
         
-        sf_names = DwarfNative.DW_AT_sf_names,
+        SfNames = DwarfNative.DW_AT_sf_names,
         
-        src_info = DwarfNative.DW_AT_src_info,
+        SrcInfo = DwarfNative.DW_AT_src_info,
         
-        mac_info = DwarfNative.DW_AT_mac_info,
+        MacInfo = DwarfNative.DW_AT_mac_info,
         
-        src_coords = DwarfNative.DW_AT_src_coords,
+        SrcCoords = DwarfNative.DW_AT_src_coords,
         
-        body_begin = DwarfNative.DW_AT_body_begin,
+        BodyBegin = DwarfNative.DW_AT_body_begin,
         
-        body_end = DwarfNative.DW_AT_body_end,
+        BodyEnd = DwarfNative.DW_AT_body_end,
         
-        GNU_vector = DwarfNative.DW_AT_GNU_vector,
+        GNUVector = DwarfNative.DW_AT_GNU_vector,
         
-        GNU_guarded_by = DwarfNative.DW_AT_GNU_guarded_by,
+        GNUGuardedBy = DwarfNative.DW_AT_GNU_guarded_by,
         
-        GNU_pt_guarded_by = DwarfNative.DW_AT_GNU_pt_guarded_by,
+        GNUPtGuardedBy = DwarfNative.DW_AT_GNU_pt_guarded_by,
         
-        GNU_guarded = DwarfNative.DW_AT_GNU_guarded,
+        GNUGuarded = DwarfNative.DW_AT_GNU_guarded,
         
-        GNU_pt_guarded = DwarfNative.DW_AT_GNU_pt_guarded,
+        GNUPtGuarded = DwarfNative.DW_AT_GNU_pt_guarded,
         
-        GNU_locks_excluded = DwarfNative.DW_AT_GNU_locks_excluded,
+        GNULocksExcluded = DwarfNative.DW_AT_GNU_locks_excluded,
         
-        GNU_exclusive_locks_required = DwarfNative.DW_AT_GNU_exclusive_locks_required,
+        GNUExclusiveLocksRequired = DwarfNative.DW_AT_GNU_exclusive_locks_required,
         
-        GNU_shared_locks_required = DwarfNative.DW_AT_GNU_shared_locks_required,
+        GNUSharedLocksRequired = DwarfNative.DW_AT_GNU_shared_locks_required,
         
-        GNU_odr_signature = DwarfNative.DW_AT_GNU_odr_signature,
+        GNUOdrSignature = DwarfNative.DW_AT_GNU_odr_signature,
         
-        GNU_template_name = DwarfNative.DW_AT_GNU_template_name,
+        GNUTemplateName = DwarfNative.DW_AT_GNU_template_name,
         
-        GNU_call_site_value = DwarfNative.DW_AT_GNU_call_site_value,
+        GNUCallSiteValue = DwarfNative.DW_AT_GNU_call_site_value,
         
-        GNU_call_site_data_value = DwarfNative.DW_AT_GNU_call_site_data_value,
+        GNUCallSiteDataValue = DwarfNative.DW_AT_GNU_call_site_data_value,
         
-        GNU_call_site_target = DwarfNative.DW_AT_GNU_call_site_target,
+        GNUCallSiteTarget = DwarfNative.DW_AT_GNU_call_site_target,
         
-        GNU_call_site_target_clobbered = DwarfNative.DW_AT_GNU_call_site_target_clobbered,
+        GNUCallSiteTargetClobbered = DwarfNative.DW_AT_GNU_call_site_target_clobbered,
         
-        GNU_tail_call = DwarfNative.DW_AT_GNU_tail_call,
+        GNUTailCall = DwarfNative.DW_AT_GNU_tail_call,
         
-        GNU_all_tail_call_sites = DwarfNative.DW_AT_GNU_all_tail_call_sites,
+        GNUAllTailCallSites = DwarfNative.DW_AT_GNU_all_tail_call_sites,
         
-        GNU_all_call_sites = DwarfNative.DW_AT_GNU_all_call_sites,
+        GNUAllCallSites = DwarfNative.DW_AT_GNU_all_call_sites,
         
-        GNU_all_source_call_sites = DwarfNative.DW_AT_GNU_all_source_call_sites,
+        GNUAllSourceCallSites = DwarfNative.DW_AT_GNU_all_source_call_sites,
         
-        GNU_macros = DwarfNative.DW_AT_GNU_macros,
+        GNUMacros = DwarfNative.DW_AT_GNU_macros,
         
-        GNU_dwo_name = DwarfNative.DW_AT_GNU_dwo_name,
+        GNUDwoName = DwarfNative.DW_AT_GNU_dwo_name,
         
-        GNU_dwo_id = DwarfNative.DW_AT_GNU_dwo_id,
+        GNUDwoId = DwarfNative.DW_AT_GNU_dwo_id,
         
-        GNU_ranges_base = DwarfNative.DW_AT_GNU_ranges_base,
+        GNURangesBase = DwarfNative.DW_AT_GNU_ranges_base,
         
-        GNU_addr_base = DwarfNative.DW_AT_GNU_addr_base,
+        GNUAddrBase = DwarfNative.DW_AT_GNU_addr_base,
         
-        GNU_pubnames = DwarfNative.DW_AT_GNU_pubnames,
+        GNUPubnames = DwarfNative.DW_AT_GNU_pubnames,
         
-        GNU_pubtypes = DwarfNative.DW_AT_GNU_pubtypes,
+        GNUPubtypes = DwarfNative.DW_AT_GNU_pubtypes,
         
-        GNU_discriminator = DwarfNative.DW_AT_GNU_discriminator,
+        GNUDiscriminator = DwarfNative.DW_AT_GNU_discriminator,
         
-        GNU_numerator = DwarfNative.DW_AT_GNU_numerator,
+        GNUNumerator = DwarfNative.DW_AT_GNU_numerator,
         
-        GNU_denominator = DwarfNative.DW_AT_GNU_denominator,
+        GNUDenominator = DwarfNative.DW_AT_GNU_denominator,
         
-        GNU_bias = DwarfNative.DW_AT_GNU_bias,
+        GNUBias = DwarfNative.DW_AT_GNU_bias,
         
-        ALTIUM_loclist = DwarfNative.DW_AT_ALTIUM_loclist,
+        ALTIUMLoclist = DwarfNative.DW_AT_ALTIUM_loclist,
         
-        SUN_template = DwarfNative.DW_AT_SUN_template,
+        SUNTemplate = DwarfNative.DW_AT_SUN_template,
         
-        VMS_rtnbeg_pd_address = DwarfNative.DW_AT_VMS_rtnbeg_pd_address,
+        VMSRtnbegPdAddress = DwarfNative.DW_AT_VMS_rtnbeg_pd_address,
         
-        SUN_alignment = DwarfNative.DW_AT_SUN_alignment,
+        SUNAlignment = DwarfNative.DW_AT_SUN_alignment,
         
-        SUN_vtable = DwarfNative.DW_AT_SUN_vtable,
+        SUNVtable = DwarfNative.DW_AT_SUN_vtable,
         
-        SUN_count_guarantee = DwarfNative.DW_AT_SUN_count_guarantee,
+        SUNCountGuarantee = DwarfNative.DW_AT_SUN_count_guarantee,
         
-        SUN_command_line = DwarfNative.DW_AT_SUN_command_line,
+        SUNCommandLine = DwarfNative.DW_AT_SUN_command_line,
         
-        SUN_vbase = DwarfNative.DW_AT_SUN_vbase,
+        SUNVbase = DwarfNative.DW_AT_SUN_vbase,
         
-        SUN_compile_options = DwarfNative.DW_AT_SUN_compile_options,
+        SUNCompileOptions = DwarfNative.DW_AT_SUN_compile_options,
         
-        SUN_language = DwarfNative.DW_AT_SUN_language,
+        SUNLanguage = DwarfNative.DW_AT_SUN_language,
         
-        SUN_browser_file = DwarfNative.DW_AT_SUN_browser_file,
+        SUNBrowserFile = DwarfNative.DW_AT_SUN_browser_file,
         
-        SUN_vtable_abi = DwarfNative.DW_AT_SUN_vtable_abi,
+        SUNVtableAbi = DwarfNative.DW_AT_SUN_vtable_abi,
         
-        SUN_func_offsets = DwarfNative.DW_AT_SUN_func_offsets,
+        SUNFuncOffsets = DwarfNative.DW_AT_SUN_func_offsets,
         
-        SUN_cf_kind = DwarfNative.DW_AT_SUN_cf_kind,
+        SUNCfKind = DwarfNative.DW_AT_SUN_cf_kind,
         
-        SUN_vtable_index = DwarfNative.DW_AT_SUN_vtable_index,
+        SUNVtableIndex = DwarfNative.DW_AT_SUN_vtable_index,
         
-        SUN_omp_tpriv_addr = DwarfNative.DW_AT_SUN_omp_tpriv_addr,
+        SUNOmpTprivAddr = DwarfNative.DW_AT_SUN_omp_tpriv_addr,
         
-        SUN_omp_child_func = DwarfNative.DW_AT_SUN_omp_child_func,
+        SUNOmpChildFunc = DwarfNative.DW_AT_SUN_omp_child_func,
         
-        SUN_func_offset = DwarfNative.DW_AT_SUN_func_offset,
+        SUNFuncOffset = DwarfNative.DW_AT_SUN_func_offset,
         
-        SUN_memop_type_ref = DwarfNative.DW_AT_SUN_memop_type_ref,
+        SUNMemopTypeRef = DwarfNative.DW_AT_SUN_memop_type_ref,
         
-        SUN_profile_id = DwarfNative.DW_AT_SUN_profile_id,
+        SUNProfileId = DwarfNative.DW_AT_SUN_profile_id,
         
-        SUN_memop_signature = DwarfNative.DW_AT_SUN_memop_signature,
+        SUNMemopSignature = DwarfNative.DW_AT_SUN_memop_signature,
         
-        SUN_obj_dir = DwarfNative.DW_AT_SUN_obj_dir,
+        SUNObjDir = DwarfNative.DW_AT_SUN_obj_dir,
         
-        SUN_obj_file = DwarfNative.DW_AT_SUN_obj_file,
+        SUNObjFile = DwarfNative.DW_AT_SUN_obj_file,
         
-        SUN_original_name = DwarfNative.DW_AT_SUN_original_name,
+        SUNOriginalName = DwarfNative.DW_AT_SUN_original_name,
         
-        SUN_hwcprof_signature = DwarfNative.DW_AT_SUN_hwcprof_signature,
+        SUNHwcprofSignature = DwarfNative.DW_AT_SUN_hwcprof_signature,
         
-        SUN_amd64_parmdump = DwarfNative.DW_AT_SUN_amd64_parmdump,
+        SUNAmd64Parmdump = DwarfNative.DW_AT_SUN_amd64_parmdump,
         
-        SUN_part_link_name = DwarfNative.DW_AT_SUN_part_link_name,
+        SUNPartLinkName = DwarfNative.DW_AT_SUN_part_link_name,
         
-        SUN_link_name = DwarfNative.DW_AT_SUN_link_name,
+        SUNLinkName = DwarfNative.DW_AT_SUN_link_name,
         
-        SUN_pass_with_const = DwarfNative.DW_AT_SUN_pass_with_const,
+        SUNPassWithConst = DwarfNative.DW_AT_SUN_pass_with_const,
         
-        SUN_return_with_const = DwarfNative.DW_AT_SUN_return_with_const,
+        SUNReturnWithConst = DwarfNative.DW_AT_SUN_return_with_const,
         
-        SUN_import_by_name = DwarfNative.DW_AT_SUN_import_by_name,
+        SUNImportByName = DwarfNative.DW_AT_SUN_import_by_name,
         
-        SUN_f90_pointer = DwarfNative.DW_AT_SUN_f90_pointer,
+        SUNF90Pointer = DwarfNative.DW_AT_SUN_f90_pointer,
         
-        SUN_pass_by_ref = DwarfNative.DW_AT_SUN_pass_by_ref,
+        SUNPassByRef = DwarfNative.DW_AT_SUN_pass_by_ref,
         
-        SUN_f90_allocatable = DwarfNative.DW_AT_SUN_f90_allocatable,
+        SUNF90Allocatable = DwarfNative.DW_AT_SUN_f90_allocatable,
         
-        SUN_f90_assumed_shape_array = DwarfNative.DW_AT_SUN_f90_assumed_shape_array,
+        SUNF90AssumedShapeArray = DwarfNative.DW_AT_SUN_f90_assumed_shape_array,
         
-        SUN_c_vla = DwarfNative.DW_AT_SUN_c_vla,
+        SUNCVla = DwarfNative.DW_AT_SUN_c_vla,
         
-        SUN_return_value_ptr = DwarfNative.DW_AT_SUN_return_value_ptr,
+        SUNReturnValuePtr = DwarfNative.DW_AT_SUN_return_value_ptr,
         
-        SUN_dtor_start = DwarfNative.DW_AT_SUN_dtor_start,
+        SUNDtorStart = DwarfNative.DW_AT_SUN_dtor_start,
         
-        SUN_dtor_length = DwarfNative.DW_AT_SUN_dtor_length,
+        SUNDtorLength = DwarfNative.DW_AT_SUN_dtor_length,
         
-        SUN_dtor_state_initial = DwarfNative.DW_AT_SUN_dtor_state_initial,
+        SUNDtorStateInitial = DwarfNative.DW_AT_SUN_dtor_state_initial,
         
-        SUN_dtor_state_final = DwarfNative.DW_AT_SUN_dtor_state_final,
+        SUNDtorStateFinal = DwarfNative.DW_AT_SUN_dtor_state_final,
         
-        SUN_dtor_state_deltas = DwarfNative.DW_AT_SUN_dtor_state_deltas,
+        SUNDtorStateDeltas = DwarfNative.DW_AT_SUN_dtor_state_deltas,
         
-        SUN_import_by_lname = DwarfNative.DW_AT_SUN_import_by_lname,
+        SUNImportByLname = DwarfNative.DW_AT_SUN_import_by_lname,
         
-        SUN_f90_use_only = DwarfNative.DW_AT_SUN_f90_use_only,
+        SUNF90UseOnly = DwarfNative.DW_AT_SUN_f90_use_only,
         
-        SUN_namelist_spec = DwarfNative.DW_AT_SUN_namelist_spec,
+        SUNNamelistSpec = DwarfNative.DW_AT_SUN_namelist_spec,
         
-        SUN_is_omp_child_func = DwarfNative.DW_AT_SUN_is_omp_child_func,
+        SUNIsOmpChildFunc = DwarfNative.DW_AT_SUN_is_omp_child_func,
         
-        SUN_fortran_main_alias = DwarfNative.DW_AT_SUN_fortran_main_alias,
+        SUNFortranMainAlias = DwarfNative.DW_AT_SUN_fortran_main_alias,
         
-        SUN_fortran_based = DwarfNative.DW_AT_SUN_fortran_based,
+        SUNFortranBased = DwarfNative.DW_AT_SUN_fortran_based,
         
-        use_GNAT_descriptive_type = DwarfNative.DW_AT_use_GNAT_descriptive_type,
+        UseGNATDescriptiveType = DwarfNative.DW_AT_use_GNAT_descriptive_type,
         
-        GNAT_descriptive_type = DwarfNative.DW_AT_GNAT_descriptive_type,
+        GNATDescriptiveType = DwarfNative.DW_AT_GNAT_descriptive_type,
         
-        upc_threads_scaled = DwarfNative.DW_AT_upc_threads_scaled,
+        UpcThreadsScaled = DwarfNative.DW_AT_upc_threads_scaled,
         
-        PGI_lbase = DwarfNative.DW_AT_PGI_lbase,
+        PGILbase = DwarfNative.DW_AT_PGI_lbase,
         
-        PGI_soffset = DwarfNative.DW_AT_PGI_soffset,
+        PGISoffset = DwarfNative.DW_AT_PGI_soffset,
         
-        PGI_lstride = DwarfNative.DW_AT_PGI_lstride,
+        PGILstride = DwarfNative.DW_AT_PGI_lstride,
         
-        APPLE_optimized = DwarfNative.DW_AT_APPLE_optimized,
+        APPLEOptimized = DwarfNative.DW_AT_APPLE_optimized,
         
-        APPLE_flags = DwarfNative.DW_AT_APPLE_flags,
+        APPLEFlags = DwarfNative.DW_AT_APPLE_flags,
         
-        APPLE_isa = DwarfNative.DW_AT_APPLE_isa,
+        APPLEIsa = DwarfNative.DW_AT_APPLE_isa,
         
-        APPLE_block = DwarfNative.DW_AT_APPLE_block,
+        APPLEBlock = DwarfNative.DW_AT_APPLE_block,
         
-        APPLE_major_runtime_vers = DwarfNative.DW_AT_APPLE_major_runtime_vers,
+        APPLEMajorRuntimeVers = DwarfNative.DW_AT_APPLE_major_runtime_vers,
         
-        APPLE_runtime_class = DwarfNative.DW_AT_APPLE_runtime_class,
+        APPLERuntimeClass = DwarfNative.DW_AT_APPLE_runtime_class,
         
-        APPLE_omit_frame_ptr = DwarfNative.DW_AT_APPLE_omit_frame_ptr,
+        APPLEOmitFramePtr = DwarfNative.DW_AT_APPLE_omit_frame_ptr,
         
-        APPLE_closure = DwarfNative.DW_AT_APPLE_closure,
+        APPLEClosure = DwarfNative.DW_AT_APPLE_closure,
     }
     
     public readonly partial struct DwarfAttributeFormEx
     {
-        public static readonly DwarfAttributeFormEx addr = new DwarfAttributeFormEx(DwarfNative.DW_FORM_addr);
+        public static readonly DwarfAttributeFormEx Addr = new DwarfAttributeFormEx(DwarfNative.DW_FORM_addr);
         
-        public static readonly DwarfAttributeFormEx block2 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_block2);
+        public static readonly DwarfAttributeFormEx Block2 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_block2);
         
-        public static readonly DwarfAttributeFormEx block4 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_block4);
+        public static readonly DwarfAttributeFormEx Block4 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_block4);
         
-        public static readonly DwarfAttributeFormEx data2 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_data2);
+        public static readonly DwarfAttributeFormEx Data2 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_data2);
         
-        public static readonly DwarfAttributeFormEx data4 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_data4);
+        public static readonly DwarfAttributeFormEx Data4 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_data4);
         
-        public static readonly DwarfAttributeFormEx data8 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_data8);
+        public static readonly DwarfAttributeFormEx Data8 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_data8);
         
-        public static readonly DwarfAttributeFormEx @string = new DwarfAttributeFormEx(DwarfNative.DW_FORM_string);
+        public static readonly DwarfAttributeFormEx String = new DwarfAttributeFormEx(DwarfNative.DW_FORM_string);
         
-        public static readonly DwarfAttributeFormEx block = new DwarfAttributeFormEx(DwarfNative.DW_FORM_block);
+        public static readonly DwarfAttributeFormEx Block = new DwarfAttributeFormEx(DwarfNative.DW_FORM_block);
         
-        public static readonly DwarfAttributeFormEx block1 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_block1);
+        public static readonly DwarfAttributeFormEx Block1 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_block1);
         
-        public static readonly DwarfAttributeFormEx data1 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_data1);
+        public static readonly DwarfAttributeFormEx Data1 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_data1);
         
-        public static readonly DwarfAttributeFormEx flag = new DwarfAttributeFormEx(DwarfNative.DW_FORM_flag);
+        public static readonly DwarfAttributeFormEx Flag = new DwarfAttributeFormEx(DwarfNative.DW_FORM_flag);
         
-        public static readonly DwarfAttributeFormEx sdata = new DwarfAttributeFormEx(DwarfNative.DW_FORM_sdata);
+        public static readonly DwarfAttributeFormEx Sdata = new DwarfAttributeFormEx(DwarfNative.DW_FORM_sdata);
         
-        public static readonly DwarfAttributeFormEx strp = new DwarfAttributeFormEx(DwarfNative.DW_FORM_strp);
+        public static readonly DwarfAttributeFormEx Strp = new DwarfAttributeFormEx(DwarfNative.DW_FORM_strp);
         
-        public static readonly DwarfAttributeFormEx udata = new DwarfAttributeFormEx(DwarfNative.DW_FORM_udata);
+        public static readonly DwarfAttributeFormEx Udata = new DwarfAttributeFormEx(DwarfNative.DW_FORM_udata);
         
-        public static readonly DwarfAttributeFormEx ref_addr = new DwarfAttributeFormEx(DwarfNative.DW_FORM_ref_addr);
+        public static readonly DwarfAttributeFormEx RefAddr = new DwarfAttributeFormEx(DwarfNative.DW_FORM_ref_addr);
         
-        public static readonly DwarfAttributeFormEx ref1 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_ref1);
+        public static readonly DwarfAttributeFormEx Ref1 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_ref1);
         
-        public static readonly DwarfAttributeFormEx ref2 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_ref2);
+        public static readonly DwarfAttributeFormEx Ref2 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_ref2);
         
-        public static readonly DwarfAttributeFormEx ref4 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_ref4);
+        public static readonly DwarfAttributeFormEx Ref4 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_ref4);
         
-        public static readonly DwarfAttributeFormEx ref8 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_ref8);
+        public static readonly DwarfAttributeFormEx Ref8 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_ref8);
         
-        public static readonly DwarfAttributeFormEx ref_udata = new DwarfAttributeFormEx(DwarfNative.DW_FORM_ref_udata);
+        public static readonly DwarfAttributeFormEx RefUdata = new DwarfAttributeFormEx(DwarfNative.DW_FORM_ref_udata);
         
-        public static readonly DwarfAttributeFormEx indirect = new DwarfAttributeFormEx(DwarfNative.DW_FORM_indirect);
-        
-        /// <summary>
-        /// DWARF4
-        /// </summary>
-        public static readonly DwarfAttributeFormEx sec_offset = new DwarfAttributeFormEx(DwarfNative.DW_FORM_sec_offset);
+        public static readonly DwarfAttributeFormEx Indirect = new DwarfAttributeFormEx(DwarfNative.DW_FORM_indirect);
         
         /// <summary>
         /// DWARF4
         /// </summary>
-        public static readonly DwarfAttributeFormEx exprloc = new DwarfAttributeFormEx(DwarfNative.DW_FORM_exprloc);
+        public static readonly DwarfAttributeFormEx SecOffset = new DwarfAttributeFormEx(DwarfNative.DW_FORM_sec_offset);
         
         /// <summary>
         /// DWARF4
         /// </summary>
-        public static readonly DwarfAttributeFormEx flag_present = new DwarfAttributeFormEx(DwarfNative.DW_FORM_flag_present);
-        
-        /// <summary>
-        /// DWARF5
-        /// </summary>
-        public static readonly DwarfAttributeFormEx strx = new DwarfAttributeFormEx(DwarfNative.DW_FORM_strx);
-        
-        /// <summary>
-        /// DWARF5
-        /// </summary>
-        public static readonly DwarfAttributeFormEx addrx = new DwarfAttributeFormEx(DwarfNative.DW_FORM_addrx);
-        
-        /// <summary>
-        /// DWARF5
-        /// </summary>
-        public static readonly DwarfAttributeFormEx ref_sup4 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_ref_sup4);
-        
-        /// <summary>
-        /// DWARF5
-        /// </summary>
-        public static readonly DwarfAttributeFormEx strp_sup = new DwarfAttributeFormEx(DwarfNative.DW_FORM_strp_sup);
-        
-        /// <summary>
-        /// DWARF5
-        /// </summary>
-        public static readonly DwarfAttributeFormEx data16 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_data16);
-        
-        /// <summary>
-        /// DWARF5
-        /// </summary>
-        public static readonly DwarfAttributeFormEx line_strp = new DwarfAttributeFormEx(DwarfNative.DW_FORM_line_strp);
+        public static readonly DwarfAttributeFormEx Exprloc = new DwarfAttributeFormEx(DwarfNative.DW_FORM_exprloc);
         
         /// <summary>
         /// DWARF4
         /// </summary>
-        public static readonly DwarfAttributeFormEx ref_sig8 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_ref_sig8);
+        public static readonly DwarfAttributeFormEx FlagPresent = new DwarfAttributeFormEx(DwarfNative.DW_FORM_flag_present);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeFormEx implicit_const = new DwarfAttributeFormEx(DwarfNative.DW_FORM_implicit_const);
+        public static readonly DwarfAttributeFormEx Strx = new DwarfAttributeFormEx(DwarfNative.DW_FORM_strx);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeFormEx loclistx = new DwarfAttributeFormEx(DwarfNative.DW_FORM_loclistx);
+        public static readonly DwarfAttributeFormEx Addrx = new DwarfAttributeFormEx(DwarfNative.DW_FORM_addrx);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeFormEx rnglistx = new DwarfAttributeFormEx(DwarfNative.DW_FORM_rnglistx);
+        public static readonly DwarfAttributeFormEx RefSup4 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_ref_sup4);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeFormEx ref_sup8 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_ref_sup8);
+        public static readonly DwarfAttributeFormEx StrpSup = new DwarfAttributeFormEx(DwarfNative.DW_FORM_strp_sup);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeFormEx strx1 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_strx1);
+        public static readonly DwarfAttributeFormEx Data16 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_data16);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeFormEx strx2 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_strx2);
+        public static readonly DwarfAttributeFormEx LineStrp = new DwarfAttributeFormEx(DwarfNative.DW_FORM_line_strp);
+        
+        /// <summary>
+        /// DWARF4
+        /// </summary>
+        public static readonly DwarfAttributeFormEx RefSig8 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_ref_sig8);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeFormEx strx3 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_strx3);
+        public static readonly DwarfAttributeFormEx ImplicitConst = new DwarfAttributeFormEx(DwarfNative.DW_FORM_implicit_const);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeFormEx strx4 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_strx4);
+        public static readonly DwarfAttributeFormEx Loclistx = new DwarfAttributeFormEx(DwarfNative.DW_FORM_loclistx);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeFormEx addrx1 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_addrx1);
+        public static readonly DwarfAttributeFormEx Rnglistx = new DwarfAttributeFormEx(DwarfNative.DW_FORM_rnglistx);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeFormEx addrx2 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_addrx2);
+        public static readonly DwarfAttributeFormEx RefSup8 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_ref_sup8);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeFormEx addrx3 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_addrx3);
+        public static readonly DwarfAttributeFormEx Strx1 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_strx1);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfAttributeFormEx addrx4 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_addrx4);
+        public static readonly DwarfAttributeFormEx Strx2 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_strx2);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfAttributeFormEx Strx3 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_strx3);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfAttributeFormEx Strx4 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_strx4);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfAttributeFormEx Addrx1 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_addrx1);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfAttributeFormEx Addrx2 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_addrx2);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfAttributeFormEx Addrx3 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_addrx3);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfAttributeFormEx Addrx4 = new DwarfAttributeFormEx(DwarfNative.DW_FORM_addrx4);
         
         /// <summary>
         /// GNU extension in debug_info.dwo.
         /// </summary>
-        public static readonly DwarfAttributeFormEx GNU_addr_index = new DwarfAttributeFormEx(DwarfNative.DW_FORM_GNU_addr_index);
+        public static readonly DwarfAttributeFormEx GNUAddrIndex = new DwarfAttributeFormEx(DwarfNative.DW_FORM_GNU_addr_index);
         
         /// <summary>
         /// GNU extension, somewhat like DW_FORM_strp
         /// </summary>
-        public static readonly DwarfAttributeFormEx GNU_str_index = new DwarfAttributeFormEx(DwarfNative.DW_FORM_GNU_str_index);
+        public static readonly DwarfAttributeFormEx GNUStrIndex = new DwarfAttributeFormEx(DwarfNative.DW_FORM_GNU_str_index);
         
         /// <summary>
         /// GNU extension. Offset in .debug_info.
         /// </summary>
-        public static readonly DwarfAttributeFormEx GNU_ref_alt = new DwarfAttributeFormEx(DwarfNative.DW_FORM_GNU_ref_alt);
+        public static readonly DwarfAttributeFormEx GNURefAlt = new DwarfAttributeFormEx(DwarfNative.DW_FORM_GNU_ref_alt);
         
         /// <summary>
         /// GNU extension. Offset in .debug_str of another object file.
         /// </summary>
-        public static readonly DwarfAttributeFormEx GNU_strp_alt = new DwarfAttributeFormEx(DwarfNative.DW_FORM_GNU_strp_alt);
+        public static readonly DwarfAttributeFormEx GNUStrpAlt = new DwarfAttributeFormEx(DwarfNative.DW_FORM_GNU_strp_alt);
         
         private string ToStringInternal()
         {
@@ -4872,507 +4872,507 @@ namespace LibObjectFile.Dwarf
     
     public enum DwarfAttributeForm : ushort
     {
-        addr = DwarfNative.DW_FORM_addr,
+        Addr = DwarfNative.DW_FORM_addr,
         
-        block2 = DwarfNative.DW_FORM_block2,
+        Block2 = DwarfNative.DW_FORM_block2,
         
-        block4 = DwarfNative.DW_FORM_block4,
+        Block4 = DwarfNative.DW_FORM_block4,
         
-        data2 = DwarfNative.DW_FORM_data2,
+        Data2 = DwarfNative.DW_FORM_data2,
         
-        data4 = DwarfNative.DW_FORM_data4,
+        Data4 = DwarfNative.DW_FORM_data4,
         
-        data8 = DwarfNative.DW_FORM_data8,
+        Data8 = DwarfNative.DW_FORM_data8,
         
-        @string = DwarfNative.DW_FORM_string,
+        String = DwarfNative.DW_FORM_string,
         
-        block = DwarfNative.DW_FORM_block,
+        Block = DwarfNative.DW_FORM_block,
         
-        block1 = DwarfNative.DW_FORM_block1,
+        Block1 = DwarfNative.DW_FORM_block1,
         
-        data1 = DwarfNative.DW_FORM_data1,
+        Data1 = DwarfNative.DW_FORM_data1,
         
-        flag = DwarfNative.DW_FORM_flag,
+        Flag = DwarfNative.DW_FORM_flag,
         
-        sdata = DwarfNative.DW_FORM_sdata,
+        Sdata = DwarfNative.DW_FORM_sdata,
         
-        strp = DwarfNative.DW_FORM_strp,
+        Strp = DwarfNative.DW_FORM_strp,
         
-        udata = DwarfNative.DW_FORM_udata,
+        Udata = DwarfNative.DW_FORM_udata,
         
-        ref_addr = DwarfNative.DW_FORM_ref_addr,
+        RefAddr = DwarfNative.DW_FORM_ref_addr,
         
-        ref1 = DwarfNative.DW_FORM_ref1,
+        Ref1 = DwarfNative.DW_FORM_ref1,
         
-        ref2 = DwarfNative.DW_FORM_ref2,
+        Ref2 = DwarfNative.DW_FORM_ref2,
         
-        ref4 = DwarfNative.DW_FORM_ref4,
+        Ref4 = DwarfNative.DW_FORM_ref4,
         
-        ref8 = DwarfNative.DW_FORM_ref8,
+        Ref8 = DwarfNative.DW_FORM_ref8,
         
-        ref_udata = DwarfNative.DW_FORM_ref_udata,
+        RefUdata = DwarfNative.DW_FORM_ref_udata,
         
-        indirect = DwarfNative.DW_FORM_indirect,
+        Indirect = DwarfNative.DW_FORM_indirect,
         
-        sec_offset = DwarfNative.DW_FORM_sec_offset,
+        SecOffset = DwarfNative.DW_FORM_sec_offset,
         
-        exprloc = DwarfNative.DW_FORM_exprloc,
+        Exprloc = DwarfNative.DW_FORM_exprloc,
         
-        flag_present = DwarfNative.DW_FORM_flag_present,
+        FlagPresent = DwarfNative.DW_FORM_flag_present,
         
-        strx = DwarfNative.DW_FORM_strx,
+        Strx = DwarfNative.DW_FORM_strx,
         
-        addrx = DwarfNative.DW_FORM_addrx,
+        Addrx = DwarfNative.DW_FORM_addrx,
         
-        ref_sup4 = DwarfNative.DW_FORM_ref_sup4,
+        RefSup4 = DwarfNative.DW_FORM_ref_sup4,
         
-        strp_sup = DwarfNative.DW_FORM_strp_sup,
+        StrpSup = DwarfNative.DW_FORM_strp_sup,
         
-        data16 = DwarfNative.DW_FORM_data16,
+        Data16 = DwarfNative.DW_FORM_data16,
         
-        line_strp = DwarfNative.DW_FORM_line_strp,
+        LineStrp = DwarfNative.DW_FORM_line_strp,
         
-        ref_sig8 = DwarfNative.DW_FORM_ref_sig8,
+        RefSig8 = DwarfNative.DW_FORM_ref_sig8,
         
-        implicit_const = DwarfNative.DW_FORM_implicit_const,
+        ImplicitConst = DwarfNative.DW_FORM_implicit_const,
         
-        loclistx = DwarfNative.DW_FORM_loclistx,
+        Loclistx = DwarfNative.DW_FORM_loclistx,
         
-        rnglistx = DwarfNative.DW_FORM_rnglistx,
+        Rnglistx = DwarfNative.DW_FORM_rnglistx,
         
-        ref_sup8 = DwarfNative.DW_FORM_ref_sup8,
+        RefSup8 = DwarfNative.DW_FORM_ref_sup8,
         
-        strx1 = DwarfNative.DW_FORM_strx1,
+        Strx1 = DwarfNative.DW_FORM_strx1,
         
-        strx2 = DwarfNative.DW_FORM_strx2,
+        Strx2 = DwarfNative.DW_FORM_strx2,
         
-        strx3 = DwarfNative.DW_FORM_strx3,
+        Strx3 = DwarfNative.DW_FORM_strx3,
         
-        strx4 = DwarfNative.DW_FORM_strx4,
+        Strx4 = DwarfNative.DW_FORM_strx4,
         
-        addrx1 = DwarfNative.DW_FORM_addrx1,
+        Addrx1 = DwarfNative.DW_FORM_addrx1,
         
-        addrx2 = DwarfNative.DW_FORM_addrx2,
+        Addrx2 = DwarfNative.DW_FORM_addrx2,
         
-        addrx3 = DwarfNative.DW_FORM_addrx3,
+        Addrx3 = DwarfNative.DW_FORM_addrx3,
         
-        addrx4 = DwarfNative.DW_FORM_addrx4,
+        Addrx4 = DwarfNative.DW_FORM_addrx4,
         
-        GNU_addr_index = DwarfNative.DW_FORM_GNU_addr_index,
+        GNUAddrIndex = DwarfNative.DW_FORM_GNU_addr_index,
         
-        GNU_str_index = DwarfNative.DW_FORM_GNU_str_index,
+        GNUStrIndex = DwarfNative.DW_FORM_GNU_str_index,
         
-        GNU_ref_alt = DwarfNative.DW_FORM_GNU_ref_alt,
+        GNURefAlt = DwarfNative.DW_FORM_GNU_ref_alt,
         
-        GNU_strp_alt = DwarfNative.DW_FORM_GNU_strp_alt,
+        GNUStrpAlt = DwarfNative.DW_FORM_GNU_strp_alt,
     }
     
     public readonly partial struct DwarfTagEx
     {
-        public static readonly DwarfTagEx array_type = new DwarfTagEx(DwarfNative.DW_TAG_array_type);
+        public static readonly DwarfTagEx ArrayType = new DwarfTagEx(DwarfNative.DW_TAG_array_type);
         
-        public static readonly DwarfTagEx class_type = new DwarfTagEx(DwarfNative.DW_TAG_class_type);
+        public static readonly DwarfTagEx ClassType = new DwarfTagEx(DwarfNative.DW_TAG_class_type);
         
-        public static readonly DwarfTagEx entry_point = new DwarfTagEx(DwarfNative.DW_TAG_entry_point);
+        public static readonly DwarfTagEx EntryPoint = new DwarfTagEx(DwarfNative.DW_TAG_entry_point);
         
-        public static readonly DwarfTagEx enumeration_type = new DwarfTagEx(DwarfNative.DW_TAG_enumeration_type);
+        public static readonly DwarfTagEx EnumerationType = new DwarfTagEx(DwarfNative.DW_TAG_enumeration_type);
         
-        public static readonly DwarfTagEx formal_parameter = new DwarfTagEx(DwarfNative.DW_TAG_formal_parameter);
+        public static readonly DwarfTagEx FormalParameter = new DwarfTagEx(DwarfNative.DW_TAG_formal_parameter);
         
-        public static readonly DwarfTagEx imported_declaration = new DwarfTagEx(DwarfNative.DW_TAG_imported_declaration);
+        public static readonly DwarfTagEx ImportedDeclaration = new DwarfTagEx(DwarfNative.DW_TAG_imported_declaration);
         
-        public static readonly DwarfTagEx label = new DwarfTagEx(DwarfNative.DW_TAG_label);
+        public static readonly DwarfTagEx Label = new DwarfTagEx(DwarfNative.DW_TAG_label);
         
-        public static readonly DwarfTagEx lexical_block = new DwarfTagEx(DwarfNative.DW_TAG_lexical_block);
+        public static readonly DwarfTagEx LexicalBlock = new DwarfTagEx(DwarfNative.DW_TAG_lexical_block);
         
-        public static readonly DwarfTagEx member = new DwarfTagEx(DwarfNative.DW_TAG_member);
+        public static readonly DwarfTagEx Member = new DwarfTagEx(DwarfNative.DW_TAG_member);
         
-        public static readonly DwarfTagEx pointer_type = new DwarfTagEx(DwarfNative.DW_TAG_pointer_type);
+        public static readonly DwarfTagEx PointerType = new DwarfTagEx(DwarfNative.DW_TAG_pointer_type);
         
-        public static readonly DwarfTagEx reference_type = new DwarfTagEx(DwarfNative.DW_TAG_reference_type);
+        public static readonly DwarfTagEx ReferenceType = new DwarfTagEx(DwarfNative.DW_TAG_reference_type);
         
-        public static readonly DwarfTagEx compile_unit = new DwarfTagEx(DwarfNative.DW_TAG_compile_unit);
+        public static readonly DwarfTagEx CompileUnit = new DwarfTagEx(DwarfNative.DW_TAG_compile_unit);
         
-        public static readonly DwarfTagEx string_type = new DwarfTagEx(DwarfNative.DW_TAG_string_type);
+        public static readonly DwarfTagEx StringType = new DwarfTagEx(DwarfNative.DW_TAG_string_type);
         
-        public static readonly DwarfTagEx structure_type = new DwarfTagEx(DwarfNative.DW_TAG_structure_type);
+        public static readonly DwarfTagEx StructureType = new DwarfTagEx(DwarfNative.DW_TAG_structure_type);
         
-        public static readonly DwarfTagEx subroutine_type = new DwarfTagEx(DwarfNative.DW_TAG_subroutine_type);
+        public static readonly DwarfTagEx SubroutineType = new DwarfTagEx(DwarfNative.DW_TAG_subroutine_type);
         
-        public static readonly DwarfTagEx typedef = new DwarfTagEx(DwarfNative.DW_TAG_typedef);
+        public static readonly DwarfTagEx Typedef = new DwarfTagEx(DwarfNative.DW_TAG_typedef);
         
-        public static readonly DwarfTagEx union_type = new DwarfTagEx(DwarfNative.DW_TAG_union_type);
+        public static readonly DwarfTagEx UnionType = new DwarfTagEx(DwarfNative.DW_TAG_union_type);
         
-        public static readonly DwarfTagEx unspecified_parameters = new DwarfTagEx(DwarfNative.DW_TAG_unspecified_parameters);
+        public static readonly DwarfTagEx UnspecifiedParameters = new DwarfTagEx(DwarfNative.DW_TAG_unspecified_parameters);
         
-        public static readonly DwarfTagEx variant = new DwarfTagEx(DwarfNative.DW_TAG_variant);
+        public static readonly DwarfTagEx Variant = new DwarfTagEx(DwarfNative.DW_TAG_variant);
         
-        public static readonly DwarfTagEx common_block = new DwarfTagEx(DwarfNative.DW_TAG_common_block);
+        public static readonly DwarfTagEx CommonBlock = new DwarfTagEx(DwarfNative.DW_TAG_common_block);
         
-        public static readonly DwarfTagEx common_inclusion = new DwarfTagEx(DwarfNative.DW_TAG_common_inclusion);
+        public static readonly DwarfTagEx CommonInclusion = new DwarfTagEx(DwarfNative.DW_TAG_common_inclusion);
         
-        public static readonly DwarfTagEx inheritance = new DwarfTagEx(DwarfNative.DW_TAG_inheritance);
+        public static readonly DwarfTagEx Inheritance = new DwarfTagEx(DwarfNative.DW_TAG_inheritance);
         
-        public static readonly DwarfTagEx inlined_subroutine = new DwarfTagEx(DwarfNative.DW_TAG_inlined_subroutine);
+        public static readonly DwarfTagEx InlinedSubroutine = new DwarfTagEx(DwarfNative.DW_TAG_inlined_subroutine);
         
-        public static readonly DwarfTagEx module = new DwarfTagEx(DwarfNative.DW_TAG_module);
+        public static readonly DwarfTagEx Module = new DwarfTagEx(DwarfNative.DW_TAG_module);
         
-        public static readonly DwarfTagEx ptr_to_member_type = new DwarfTagEx(DwarfNative.DW_TAG_ptr_to_member_type);
+        public static readonly DwarfTagEx PtrToMemberType = new DwarfTagEx(DwarfNative.DW_TAG_ptr_to_member_type);
         
-        public static readonly DwarfTagEx set_type = new DwarfTagEx(DwarfNative.DW_TAG_set_type);
+        public static readonly DwarfTagEx SetType = new DwarfTagEx(DwarfNative.DW_TAG_set_type);
         
-        public static readonly DwarfTagEx subrange_type = new DwarfTagEx(DwarfNative.DW_TAG_subrange_type);
+        public static readonly DwarfTagEx SubrangeType = new DwarfTagEx(DwarfNative.DW_TAG_subrange_type);
         
-        public static readonly DwarfTagEx with_stmt = new DwarfTagEx(DwarfNative.DW_TAG_with_stmt);
+        public static readonly DwarfTagEx WithStmt = new DwarfTagEx(DwarfNative.DW_TAG_with_stmt);
         
-        public static readonly DwarfTagEx access_declaration = new DwarfTagEx(DwarfNative.DW_TAG_access_declaration);
+        public static readonly DwarfTagEx AccessDeclaration = new DwarfTagEx(DwarfNative.DW_TAG_access_declaration);
         
-        public static readonly DwarfTagEx base_type = new DwarfTagEx(DwarfNative.DW_TAG_base_type);
+        public static readonly DwarfTagEx BaseType = new DwarfTagEx(DwarfNative.DW_TAG_base_type);
         
-        public static readonly DwarfTagEx catch_block = new DwarfTagEx(DwarfNative.DW_TAG_catch_block);
+        public static readonly DwarfTagEx CatchBlock = new DwarfTagEx(DwarfNative.DW_TAG_catch_block);
         
-        public static readonly DwarfTagEx const_type = new DwarfTagEx(DwarfNative.DW_TAG_const_type);
+        public static readonly DwarfTagEx ConstType = new DwarfTagEx(DwarfNative.DW_TAG_const_type);
         
-        public static readonly DwarfTagEx constant = new DwarfTagEx(DwarfNative.DW_TAG_constant);
+        public static readonly DwarfTagEx Constant = new DwarfTagEx(DwarfNative.DW_TAG_constant);
         
-        public static readonly DwarfTagEx enumerator = new DwarfTagEx(DwarfNative.DW_TAG_enumerator);
+        public static readonly DwarfTagEx Enumerator = new DwarfTagEx(DwarfNative.DW_TAG_enumerator);
         
-        public static readonly DwarfTagEx file_type = new DwarfTagEx(DwarfNative.DW_TAG_file_type);
+        public static readonly DwarfTagEx FileType = new DwarfTagEx(DwarfNative.DW_TAG_file_type);
         
-        public static readonly DwarfTagEx friend = new DwarfTagEx(DwarfNative.DW_TAG_friend);
+        public static readonly DwarfTagEx Friend = new DwarfTagEx(DwarfNative.DW_TAG_friend);
         
-        public static readonly DwarfTagEx namelist = new DwarfTagEx(DwarfNative.DW_TAG_namelist);
+        public static readonly DwarfTagEx Namelist = new DwarfTagEx(DwarfNative.DW_TAG_namelist);
         
         /// <summary>
         /// DWARF3/2 spelling
         /// </summary>
-        public static readonly DwarfTagEx namelist_item = new DwarfTagEx(DwarfNative.DW_TAG_namelist_item);
+        public static readonly DwarfTagEx NamelistItem = new DwarfTagEx(DwarfNative.DW_TAG_namelist_item);
         
         /// <summary>
         /// SGI misspelling/typo
         /// </summary>
-        public static readonly DwarfTagEx namelist_items = new DwarfTagEx(DwarfNative.DW_TAG_namelist_items);
+        public static readonly DwarfTagEx NamelistItems = new DwarfTagEx(DwarfNative.DW_TAG_namelist_items);
         
-        public static readonly DwarfTagEx packed_type = new DwarfTagEx(DwarfNative.DW_TAG_packed_type);
+        public static readonly DwarfTagEx PackedType = new DwarfTagEx(DwarfNative.DW_TAG_packed_type);
         
-        public static readonly DwarfTagEx subprogram = new DwarfTagEx(DwarfNative.DW_TAG_subprogram);
-        
-        /// <summary>
-        /// DWARF3/2 spelling
-        /// </summary>
-        public static readonly DwarfTagEx template_type_parameter = new DwarfTagEx(DwarfNative.DW_TAG_template_type_parameter);
-        
-        /// <summary>
-        /// DWARF2   spelling
-        /// </summary>
-        public static readonly DwarfTagEx template_type_param = new DwarfTagEx(DwarfNative.DW_TAG_template_type_param);
+        public static readonly DwarfTagEx Subprogram = new DwarfTagEx(DwarfNative.DW_TAG_subprogram);
         
         /// <summary>
         /// DWARF3/2 spelling
         /// </summary>
-        public static readonly DwarfTagEx template_value_parameter = new DwarfTagEx(DwarfNative.DW_TAG_template_value_parameter);
+        public static readonly DwarfTagEx TemplateTypeParameter = new DwarfTagEx(DwarfNative.DW_TAG_template_type_parameter);
         
         /// <summary>
         /// DWARF2   spelling
         /// </summary>
-        public static readonly DwarfTagEx template_value_param = new DwarfTagEx(DwarfNative.DW_TAG_template_value_param);
+        public static readonly DwarfTagEx TemplateTypeParam = new DwarfTagEx(DwarfNative.DW_TAG_template_type_param);
         
-        public static readonly DwarfTagEx thrown_type = new DwarfTagEx(DwarfNative.DW_TAG_thrown_type);
+        /// <summary>
+        /// DWARF3/2 spelling
+        /// </summary>
+        public static readonly DwarfTagEx TemplateValueParameter = new DwarfTagEx(DwarfNative.DW_TAG_template_value_parameter);
         
-        public static readonly DwarfTagEx try_block = new DwarfTagEx(DwarfNative.DW_TAG_try_block);
+        /// <summary>
+        /// DWARF2   spelling
+        /// </summary>
+        public static readonly DwarfTagEx TemplateValueParam = new DwarfTagEx(DwarfNative.DW_TAG_template_value_param);
         
-        public static readonly DwarfTagEx variant_part = new DwarfTagEx(DwarfNative.DW_TAG_variant_part);
+        public static readonly DwarfTagEx ThrownType = new DwarfTagEx(DwarfNative.DW_TAG_thrown_type);
         
-        public static readonly DwarfTagEx variable = new DwarfTagEx(DwarfNative.DW_TAG_variable);
+        public static readonly DwarfTagEx TryBlock = new DwarfTagEx(DwarfNative.DW_TAG_try_block);
         
-        public static readonly DwarfTagEx volatile_type = new DwarfTagEx(DwarfNative.DW_TAG_volatile_type);
+        public static readonly DwarfTagEx VariantPart = new DwarfTagEx(DwarfNative.DW_TAG_variant_part);
+        
+        public static readonly DwarfTagEx Variable = new DwarfTagEx(DwarfNative.DW_TAG_variable);
+        
+        public static readonly DwarfTagEx VolatileType = new DwarfTagEx(DwarfNative.DW_TAG_volatile_type);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfTagEx dwarf_procedure = new DwarfTagEx(DwarfNative.DW_TAG_dwarf_procedure);
+        public static readonly DwarfTagEx DwarfProcedure = new DwarfTagEx(DwarfNative.DW_TAG_dwarf_procedure);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfTagEx restrict_type = new DwarfTagEx(DwarfNative.DW_TAG_restrict_type);
+        public static readonly DwarfTagEx RestrictType = new DwarfTagEx(DwarfNative.DW_TAG_restrict_type);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfTagEx interface_type = new DwarfTagEx(DwarfNative.DW_TAG_interface_type);
+        public static readonly DwarfTagEx InterfaceType = new DwarfTagEx(DwarfNative.DW_TAG_interface_type);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfTagEx @namespace = new DwarfTagEx(DwarfNative.DW_TAG_namespace);
+        public static readonly DwarfTagEx Namespace = new DwarfTagEx(DwarfNative.DW_TAG_namespace);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfTagEx imported_module = new DwarfTagEx(DwarfNative.DW_TAG_imported_module);
+        public static readonly DwarfTagEx ImportedModule = new DwarfTagEx(DwarfNative.DW_TAG_imported_module);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfTagEx unspecified_type = new DwarfTagEx(DwarfNative.DW_TAG_unspecified_type);
+        public static readonly DwarfTagEx UnspecifiedType = new DwarfTagEx(DwarfNative.DW_TAG_unspecified_type);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfTagEx partial_unit = new DwarfTagEx(DwarfNative.DW_TAG_partial_unit);
+        public static readonly DwarfTagEx PartialUnit = new DwarfTagEx(DwarfNative.DW_TAG_partial_unit);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfTagEx imported_unit = new DwarfTagEx(DwarfNative.DW_TAG_imported_unit);
+        public static readonly DwarfTagEx ImportedUnit = new DwarfTagEx(DwarfNative.DW_TAG_imported_unit);
         
         /// <summary>
         /// Withdrawn from DWARF3 by DWARF3f.
         /// </summary>
-        public static readonly DwarfTagEx mutable_type = new DwarfTagEx(DwarfNative.DW_TAG_mutable_type);
+        public static readonly DwarfTagEx MutableType = new DwarfTagEx(DwarfNative.DW_TAG_mutable_type);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfTagEx condition = new DwarfTagEx(DwarfNative.DW_TAG_condition);
+        public static readonly DwarfTagEx Condition = new DwarfTagEx(DwarfNative.DW_TAG_condition);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfTagEx shared_type = new DwarfTagEx(DwarfNative.DW_TAG_shared_type);
+        public static readonly DwarfTagEx SharedType = new DwarfTagEx(DwarfNative.DW_TAG_shared_type);
         
         /// <summary>
         /// DWARF4
         /// </summary>
-        public static readonly DwarfTagEx type_unit = new DwarfTagEx(DwarfNative.DW_TAG_type_unit);
+        public static readonly DwarfTagEx TypeUnit = new DwarfTagEx(DwarfNative.DW_TAG_type_unit);
         
         /// <summary>
         /// DWARF4
         /// </summary>
-        public static readonly DwarfTagEx rvalue_reference_type = new DwarfTagEx(DwarfNative.DW_TAG_rvalue_reference_type);
+        public static readonly DwarfTagEx RvalueReferenceType = new DwarfTagEx(DwarfNative.DW_TAG_rvalue_reference_type);
         
         /// <summary>
         /// DWARF4
         /// </summary>
-        public static readonly DwarfTagEx template_alias = new DwarfTagEx(DwarfNative.DW_TAG_template_alias);
+        public static readonly DwarfTagEx TemplateAlias = new DwarfTagEx(DwarfNative.DW_TAG_template_alias);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfTagEx coarray_type = new DwarfTagEx(DwarfNative.DW_TAG_coarray_type);
+        public static readonly DwarfTagEx CoarrayType = new DwarfTagEx(DwarfNative.DW_TAG_coarray_type);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfTagEx generic_subrange = new DwarfTagEx(DwarfNative.DW_TAG_generic_subrange);
+        public static readonly DwarfTagEx GenericSubrange = new DwarfTagEx(DwarfNative.DW_TAG_generic_subrange);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfTagEx dynamic_type = new DwarfTagEx(DwarfNative.DW_TAG_dynamic_type);
+        public static readonly DwarfTagEx DynamicType = new DwarfTagEx(DwarfNative.DW_TAG_dynamic_type);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfTagEx atomic_type = new DwarfTagEx(DwarfNative.DW_TAG_atomic_type);
+        public static readonly DwarfTagEx AtomicType = new DwarfTagEx(DwarfNative.DW_TAG_atomic_type);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfTagEx call_site = new DwarfTagEx(DwarfNative.DW_TAG_call_site);
+        public static readonly DwarfTagEx CallSite = new DwarfTagEx(DwarfNative.DW_TAG_call_site);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfTagEx call_site_parameter = new DwarfTagEx(DwarfNative.DW_TAG_call_site_parameter);
+        public static readonly DwarfTagEx CallSiteParameter = new DwarfTagEx(DwarfNative.DW_TAG_call_site_parameter);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfTagEx skeleton_unit = new DwarfTagEx(DwarfNative.DW_TAG_skeleton_unit);
+        public static readonly DwarfTagEx SkeletonUnit = new DwarfTagEx(DwarfNative.DW_TAG_skeleton_unit);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfTagEx immutable_type = new DwarfTagEx(DwarfNative.DW_TAG_immutable_type);
+        public static readonly DwarfTagEx ImmutableType = new DwarfTagEx(DwarfNative.DW_TAG_immutable_type);
         
-        public static readonly DwarfTagEx MIPS_loop = new DwarfTagEx(DwarfNative.DW_TAG_MIPS_loop);
+        public static readonly DwarfTagEx MIPSLoop = new DwarfTagEx(DwarfNative.DW_TAG_MIPS_loop);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfTagEx HP_array_descriptor = new DwarfTagEx(DwarfNative.DW_TAG_HP_array_descriptor);
+        public static readonly DwarfTagEx HPArrayDescriptor = new DwarfTagEx(DwarfNative.DW_TAG_HP_array_descriptor);
         
         /// <summary>
         /// GNU. Fortran.
         /// </summary>
-        public static readonly DwarfTagEx format_label = new DwarfTagEx(DwarfNative.DW_TAG_format_label);
+        public static readonly DwarfTagEx FormatLabel = new DwarfTagEx(DwarfNative.DW_TAG_format_label);
         
         /// <summary>
         /// GNU. For C++
         /// </summary>
-        public static readonly DwarfTagEx function_template = new DwarfTagEx(DwarfNative.DW_TAG_function_template);
+        public static readonly DwarfTagEx FunctionTemplate = new DwarfTagEx(DwarfNative.DW_TAG_function_template);
         
         /// <summary>
         /// GNU. For C++
         /// </summary>
-        public static readonly DwarfTagEx class_template = new DwarfTagEx(DwarfNative.DW_TAG_class_template);
+        public static readonly DwarfTagEx ClassTemplate = new DwarfTagEx(DwarfNative.DW_TAG_class_template);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfTagEx GNU_BINCL = new DwarfTagEx(DwarfNative.DW_TAG_GNU_BINCL);
+        public static readonly DwarfTagEx GNUBINCL = new DwarfTagEx(DwarfNative.DW_TAG_GNU_BINCL);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfTagEx GNU_EINCL = new DwarfTagEx(DwarfNative.DW_TAG_GNU_EINCL);
+        public static readonly DwarfTagEx GNUEINCL = new DwarfTagEx(DwarfNative.DW_TAG_GNU_EINCL);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfTagEx GNU_template_template_parameter = new DwarfTagEx(DwarfNative.DW_TAG_GNU_template_template_parameter);
+        public static readonly DwarfTagEx GNUTemplateTemplateParameter = new DwarfTagEx(DwarfNative.DW_TAG_GNU_template_template_parameter);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfTagEx GNU_template_template_param = new DwarfTagEx(DwarfNative.DW_TAG_GNU_template_template_param);
+        public static readonly DwarfTagEx GNUTemplateTemplateParam = new DwarfTagEx(DwarfNative.DW_TAG_GNU_template_template_param);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfTagEx GNU_template_parameter_pack = new DwarfTagEx(DwarfNative.DW_TAG_GNU_template_parameter_pack);
+        public static readonly DwarfTagEx GNUTemplateParameterPack = new DwarfTagEx(DwarfNative.DW_TAG_GNU_template_parameter_pack);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfTagEx GNU_formal_parameter_pack = new DwarfTagEx(DwarfNative.DW_TAG_GNU_formal_parameter_pack);
+        public static readonly DwarfTagEx GNUFormalParameterPack = new DwarfTagEx(DwarfNative.DW_TAG_GNU_formal_parameter_pack);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfTagEx GNU_call_site = new DwarfTagEx(DwarfNative.DW_TAG_GNU_call_site);
+        public static readonly DwarfTagEx GNUCallSite = new DwarfTagEx(DwarfNative.DW_TAG_GNU_call_site);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfTagEx GNU_call_site_parameter = new DwarfTagEx(DwarfNative.DW_TAG_GNU_call_site_parameter);
+        public static readonly DwarfTagEx GNUCallSiteParameter = new DwarfTagEx(DwarfNative.DW_TAG_GNU_call_site_parameter);
         
         /// <summary>
         /// ALTIUM
         /// </summary>
-        public static readonly DwarfTagEx ALTIUM_circ_type = new DwarfTagEx(DwarfNative.DW_TAG_ALTIUM_circ_type);
+        public static readonly DwarfTagEx ALTIUMCircType = new DwarfTagEx(DwarfNative.DW_TAG_ALTIUM_circ_type);
         
         /// <summary>
         /// ALTIUM
         /// </summary>
-        public static readonly DwarfTagEx ALTIUM_mwa_circ_type = new DwarfTagEx(DwarfNative.DW_TAG_ALTIUM_mwa_circ_type);
+        public static readonly DwarfTagEx ALTIUMMwaCircType = new DwarfTagEx(DwarfNative.DW_TAG_ALTIUM_mwa_circ_type);
         
         /// <summary>
         /// ALTIUM
         /// </summary>
-        public static readonly DwarfTagEx ALTIUM_rev_carry_type = new DwarfTagEx(DwarfNative.DW_TAG_ALTIUM_rev_carry_type);
+        public static readonly DwarfTagEx ALTIUMRevCarryType = new DwarfTagEx(DwarfNative.DW_TAG_ALTIUM_rev_carry_type);
         
         /// <summary>
         /// ALTIUM
         /// </summary>
-        public static readonly DwarfTagEx ALTIUM_rom = new DwarfTagEx(DwarfNative.DW_TAG_ALTIUM_rom);
+        public static readonly DwarfTagEx ALTIUMRom = new DwarfTagEx(DwarfNative.DW_TAG_ALTIUM_rom);
         
         /// <summary>
         /// UPC
         /// </summary>
-        public static readonly DwarfTagEx upc_shared_type = new DwarfTagEx(DwarfNative.DW_TAG_upc_shared_type);
+        public static readonly DwarfTagEx UpcSharedType = new DwarfTagEx(DwarfNative.DW_TAG_upc_shared_type);
         
         /// <summary>
         /// UPC
         /// </summary>
-        public static readonly DwarfTagEx upc_strict_type = new DwarfTagEx(DwarfNative.DW_TAG_upc_strict_type);
+        public static readonly DwarfTagEx UpcStrictType = new DwarfTagEx(DwarfNative.DW_TAG_upc_strict_type);
         
         /// <summary>
         /// UPC
         /// </summary>
-        public static readonly DwarfTagEx upc_relaxed_type = new DwarfTagEx(DwarfNative.DW_TAG_upc_relaxed_type);
+        public static readonly DwarfTagEx UpcRelaxedType = new DwarfTagEx(DwarfNative.DW_TAG_upc_relaxed_type);
         
         /// <summary>
         /// PGI
         /// </summary>
-        public static readonly DwarfTagEx PGI_kanji_type = new DwarfTagEx(DwarfNative.DW_TAG_PGI_kanji_type);
+        public static readonly DwarfTagEx PGIKanjiType = new DwarfTagEx(DwarfNative.DW_TAG_PGI_kanji_type);
         
         /// <summary>
         /// PGI
         /// </summary>
-        public static readonly DwarfTagEx PGI_interface_block = new DwarfTagEx(DwarfNative.DW_TAG_PGI_interface_block);
+        public static readonly DwarfTagEx PGIInterfaceBlock = new DwarfTagEx(DwarfNative.DW_TAG_PGI_interface_block);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfTagEx SUN_function_template = new DwarfTagEx(DwarfNative.DW_TAG_SUN_function_template);
+        public static readonly DwarfTagEx SUNFunctionTemplate = new DwarfTagEx(DwarfNative.DW_TAG_SUN_function_template);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfTagEx SUN_class_template = new DwarfTagEx(DwarfNative.DW_TAG_SUN_class_template);
+        public static readonly DwarfTagEx SUNClassTemplate = new DwarfTagEx(DwarfNative.DW_TAG_SUN_class_template);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfTagEx SUN_struct_template = new DwarfTagEx(DwarfNative.DW_TAG_SUN_struct_template);
+        public static readonly DwarfTagEx SUNStructTemplate = new DwarfTagEx(DwarfNative.DW_TAG_SUN_struct_template);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfTagEx SUN_union_template = new DwarfTagEx(DwarfNative.DW_TAG_SUN_union_template);
+        public static readonly DwarfTagEx SUNUnionTemplate = new DwarfTagEx(DwarfNative.DW_TAG_SUN_union_template);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfTagEx SUN_indirect_inheritance = new DwarfTagEx(DwarfNative.DW_TAG_SUN_indirect_inheritance);
+        public static readonly DwarfTagEx SUNIndirectInheritance = new DwarfTagEx(DwarfNative.DW_TAG_SUN_indirect_inheritance);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfTagEx SUN_codeflags = new DwarfTagEx(DwarfNative.DW_TAG_SUN_codeflags);
+        public static readonly DwarfTagEx SUNCodeflags = new DwarfTagEx(DwarfNative.DW_TAG_SUN_codeflags);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfTagEx SUN_memop_info = new DwarfTagEx(DwarfNative.DW_TAG_SUN_memop_info);
+        public static readonly DwarfTagEx SUNMemopInfo = new DwarfTagEx(DwarfNative.DW_TAG_SUN_memop_info);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfTagEx SUN_omp_child_func = new DwarfTagEx(DwarfNative.DW_TAG_SUN_omp_child_func);
+        public static readonly DwarfTagEx SUNOmpChildFunc = new DwarfTagEx(DwarfNative.DW_TAG_SUN_omp_child_func);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfTagEx SUN_rtti_descriptor = new DwarfTagEx(DwarfNative.DW_TAG_SUN_rtti_descriptor);
+        public static readonly DwarfTagEx SUNRttiDescriptor = new DwarfTagEx(DwarfNative.DW_TAG_SUN_rtti_descriptor);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfTagEx SUN_dtor_info = new DwarfTagEx(DwarfNative.DW_TAG_SUN_dtor_info);
+        public static readonly DwarfTagEx SUNDtorInfo = new DwarfTagEx(DwarfNative.DW_TAG_SUN_dtor_info);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfTagEx SUN_dtor = new DwarfTagEx(DwarfNative.DW_TAG_SUN_dtor);
+        public static readonly DwarfTagEx SUNDtor = new DwarfTagEx(DwarfNative.DW_TAG_SUN_dtor);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfTagEx SUN_f90_interface = new DwarfTagEx(DwarfNative.DW_TAG_SUN_f90_interface);
+        public static readonly DwarfTagEx SUNF90Interface = new DwarfTagEx(DwarfNative.DW_TAG_SUN_f90_interface);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfTagEx SUN_fortran_vax_structure = new DwarfTagEx(DwarfNative.DW_TAG_SUN_fortran_vax_structure);
+        public static readonly DwarfTagEx SUNFortranVaxStructure = new DwarfTagEx(DwarfNative.DW_TAG_SUN_fortran_vax_structure);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfTagEx SUN_hi = new DwarfTagEx(DwarfNative.DW_TAG_SUN_hi);
+        public static readonly DwarfTagEx SUNHi = new DwarfTagEx(DwarfNative.DW_TAG_SUN_hi);
         
         private string ToStringInternal()
         {
@@ -5489,724 +5489,724 @@ namespace LibObjectFile.Dwarf
     
     public enum DwarfTag : ushort
     {
-        array_type = DwarfNative.DW_TAG_array_type,
+        ArrayType = DwarfNative.DW_TAG_array_type,
         
-        class_type = DwarfNative.DW_TAG_class_type,
+        ClassType = DwarfNative.DW_TAG_class_type,
         
-        entry_point = DwarfNative.DW_TAG_entry_point,
+        EntryPoint = DwarfNative.DW_TAG_entry_point,
         
-        enumeration_type = DwarfNative.DW_TAG_enumeration_type,
+        EnumerationType = DwarfNative.DW_TAG_enumeration_type,
         
-        formal_parameter = DwarfNative.DW_TAG_formal_parameter,
+        FormalParameter = DwarfNative.DW_TAG_formal_parameter,
         
-        imported_declaration = DwarfNative.DW_TAG_imported_declaration,
+        ImportedDeclaration = DwarfNative.DW_TAG_imported_declaration,
         
-        label = DwarfNative.DW_TAG_label,
+        Label = DwarfNative.DW_TAG_label,
         
-        lexical_block = DwarfNative.DW_TAG_lexical_block,
+        LexicalBlock = DwarfNative.DW_TAG_lexical_block,
         
-        member = DwarfNative.DW_TAG_member,
+        Member = DwarfNative.DW_TAG_member,
         
-        pointer_type = DwarfNative.DW_TAG_pointer_type,
+        PointerType = DwarfNative.DW_TAG_pointer_type,
         
-        reference_type = DwarfNative.DW_TAG_reference_type,
+        ReferenceType = DwarfNative.DW_TAG_reference_type,
         
-        compile_unit = DwarfNative.DW_TAG_compile_unit,
+        CompileUnit = DwarfNative.DW_TAG_compile_unit,
         
-        string_type = DwarfNative.DW_TAG_string_type,
+        StringType = DwarfNative.DW_TAG_string_type,
         
-        structure_type = DwarfNative.DW_TAG_structure_type,
+        StructureType = DwarfNative.DW_TAG_structure_type,
         
-        subroutine_type = DwarfNative.DW_TAG_subroutine_type,
+        SubroutineType = DwarfNative.DW_TAG_subroutine_type,
         
-        typedef = DwarfNative.DW_TAG_typedef,
+        Typedef = DwarfNative.DW_TAG_typedef,
         
-        union_type = DwarfNative.DW_TAG_union_type,
+        UnionType = DwarfNative.DW_TAG_union_type,
         
-        unspecified_parameters = DwarfNative.DW_TAG_unspecified_parameters,
+        UnspecifiedParameters = DwarfNative.DW_TAG_unspecified_parameters,
         
-        variant = DwarfNative.DW_TAG_variant,
+        Variant = DwarfNative.DW_TAG_variant,
         
-        common_block = DwarfNative.DW_TAG_common_block,
+        CommonBlock = DwarfNative.DW_TAG_common_block,
         
-        common_inclusion = DwarfNative.DW_TAG_common_inclusion,
+        CommonInclusion = DwarfNative.DW_TAG_common_inclusion,
         
-        inheritance = DwarfNative.DW_TAG_inheritance,
+        Inheritance = DwarfNative.DW_TAG_inheritance,
         
-        inlined_subroutine = DwarfNative.DW_TAG_inlined_subroutine,
+        InlinedSubroutine = DwarfNative.DW_TAG_inlined_subroutine,
         
-        module = DwarfNative.DW_TAG_module,
+        Module = DwarfNative.DW_TAG_module,
         
-        ptr_to_member_type = DwarfNative.DW_TAG_ptr_to_member_type,
+        PtrToMemberType = DwarfNative.DW_TAG_ptr_to_member_type,
         
-        set_type = DwarfNative.DW_TAG_set_type,
+        SetType = DwarfNative.DW_TAG_set_type,
         
-        subrange_type = DwarfNative.DW_TAG_subrange_type,
+        SubrangeType = DwarfNative.DW_TAG_subrange_type,
         
-        with_stmt = DwarfNative.DW_TAG_with_stmt,
+        WithStmt = DwarfNative.DW_TAG_with_stmt,
         
-        access_declaration = DwarfNative.DW_TAG_access_declaration,
+        AccessDeclaration = DwarfNative.DW_TAG_access_declaration,
         
-        base_type = DwarfNative.DW_TAG_base_type,
+        BaseType = DwarfNative.DW_TAG_base_type,
         
-        catch_block = DwarfNative.DW_TAG_catch_block,
+        CatchBlock = DwarfNative.DW_TAG_catch_block,
         
-        const_type = DwarfNative.DW_TAG_const_type,
+        ConstType = DwarfNative.DW_TAG_const_type,
         
-        constant = DwarfNative.DW_TAG_constant,
+        Constant = DwarfNative.DW_TAG_constant,
         
-        enumerator = DwarfNative.DW_TAG_enumerator,
+        Enumerator = DwarfNative.DW_TAG_enumerator,
         
-        file_type = DwarfNative.DW_TAG_file_type,
+        FileType = DwarfNative.DW_TAG_file_type,
         
-        friend = DwarfNative.DW_TAG_friend,
+        Friend = DwarfNative.DW_TAG_friend,
         
-        namelist = DwarfNative.DW_TAG_namelist,
+        Namelist = DwarfNative.DW_TAG_namelist,
         
-        namelist_item = DwarfNative.DW_TAG_namelist_item,
+        NamelistItem = DwarfNative.DW_TAG_namelist_item,
         
-        namelist_items = DwarfNative.DW_TAG_namelist_items,
+        NamelistItems = DwarfNative.DW_TAG_namelist_items,
         
-        packed_type = DwarfNative.DW_TAG_packed_type,
+        PackedType = DwarfNative.DW_TAG_packed_type,
         
-        subprogram = DwarfNative.DW_TAG_subprogram,
+        Subprogram = DwarfNative.DW_TAG_subprogram,
         
-        template_type_parameter = DwarfNative.DW_TAG_template_type_parameter,
+        TemplateTypeParameter = DwarfNative.DW_TAG_template_type_parameter,
         
-        template_type_param = DwarfNative.DW_TAG_template_type_param,
+        TemplateTypeParam = DwarfNative.DW_TAG_template_type_param,
         
-        template_value_parameter = DwarfNative.DW_TAG_template_value_parameter,
+        TemplateValueParameter = DwarfNative.DW_TAG_template_value_parameter,
         
-        template_value_param = DwarfNative.DW_TAG_template_value_param,
+        TemplateValueParam = DwarfNative.DW_TAG_template_value_param,
         
-        thrown_type = DwarfNative.DW_TAG_thrown_type,
+        ThrownType = DwarfNative.DW_TAG_thrown_type,
         
-        try_block = DwarfNative.DW_TAG_try_block,
+        TryBlock = DwarfNative.DW_TAG_try_block,
         
-        variant_part = DwarfNative.DW_TAG_variant_part,
+        VariantPart = DwarfNative.DW_TAG_variant_part,
         
-        variable = DwarfNative.DW_TAG_variable,
+        Variable = DwarfNative.DW_TAG_variable,
         
-        volatile_type = DwarfNative.DW_TAG_volatile_type,
+        VolatileType = DwarfNative.DW_TAG_volatile_type,
         
-        dwarf_procedure = DwarfNative.DW_TAG_dwarf_procedure,
+        DwarfProcedure = DwarfNative.DW_TAG_dwarf_procedure,
         
-        restrict_type = DwarfNative.DW_TAG_restrict_type,
+        RestrictType = DwarfNative.DW_TAG_restrict_type,
         
-        interface_type = DwarfNative.DW_TAG_interface_type,
+        InterfaceType = DwarfNative.DW_TAG_interface_type,
         
-        @namespace = DwarfNative.DW_TAG_namespace,
+        Namespace = DwarfNative.DW_TAG_namespace,
         
-        imported_module = DwarfNative.DW_TAG_imported_module,
+        ImportedModule = DwarfNative.DW_TAG_imported_module,
         
-        unspecified_type = DwarfNative.DW_TAG_unspecified_type,
+        UnspecifiedType = DwarfNative.DW_TAG_unspecified_type,
         
-        partial_unit = DwarfNative.DW_TAG_partial_unit,
+        PartialUnit = DwarfNative.DW_TAG_partial_unit,
         
-        imported_unit = DwarfNative.DW_TAG_imported_unit,
+        ImportedUnit = DwarfNative.DW_TAG_imported_unit,
         
-        mutable_type = DwarfNative.DW_TAG_mutable_type,
+        MutableType = DwarfNative.DW_TAG_mutable_type,
         
-        condition = DwarfNative.DW_TAG_condition,
+        Condition = DwarfNative.DW_TAG_condition,
         
-        shared_type = DwarfNative.DW_TAG_shared_type,
+        SharedType = DwarfNative.DW_TAG_shared_type,
         
-        type_unit = DwarfNative.DW_TAG_type_unit,
+        TypeUnit = DwarfNative.DW_TAG_type_unit,
         
-        rvalue_reference_type = DwarfNative.DW_TAG_rvalue_reference_type,
+        RvalueReferenceType = DwarfNative.DW_TAG_rvalue_reference_type,
         
-        template_alias = DwarfNative.DW_TAG_template_alias,
+        TemplateAlias = DwarfNative.DW_TAG_template_alias,
         
-        coarray_type = DwarfNative.DW_TAG_coarray_type,
+        CoarrayType = DwarfNative.DW_TAG_coarray_type,
         
-        generic_subrange = DwarfNative.DW_TAG_generic_subrange,
+        GenericSubrange = DwarfNative.DW_TAG_generic_subrange,
         
-        dynamic_type = DwarfNative.DW_TAG_dynamic_type,
+        DynamicType = DwarfNative.DW_TAG_dynamic_type,
         
-        atomic_type = DwarfNative.DW_TAG_atomic_type,
+        AtomicType = DwarfNative.DW_TAG_atomic_type,
         
-        call_site = DwarfNative.DW_TAG_call_site,
+        CallSite = DwarfNative.DW_TAG_call_site,
         
-        call_site_parameter = DwarfNative.DW_TAG_call_site_parameter,
+        CallSiteParameter = DwarfNative.DW_TAG_call_site_parameter,
         
-        skeleton_unit = DwarfNative.DW_TAG_skeleton_unit,
+        SkeletonUnit = DwarfNative.DW_TAG_skeleton_unit,
         
-        immutable_type = DwarfNative.DW_TAG_immutable_type,
+        ImmutableType = DwarfNative.DW_TAG_immutable_type,
         
-        MIPS_loop = DwarfNative.DW_TAG_MIPS_loop,
+        MIPSLoop = DwarfNative.DW_TAG_MIPS_loop,
         
-        HP_array_descriptor = DwarfNative.DW_TAG_HP_array_descriptor,
+        HPArrayDescriptor = DwarfNative.DW_TAG_HP_array_descriptor,
         
-        format_label = DwarfNative.DW_TAG_format_label,
+        FormatLabel = DwarfNative.DW_TAG_format_label,
         
-        function_template = DwarfNative.DW_TAG_function_template,
+        FunctionTemplate = DwarfNative.DW_TAG_function_template,
         
-        class_template = DwarfNative.DW_TAG_class_template,
+        ClassTemplate = DwarfNative.DW_TAG_class_template,
         
-        GNU_BINCL = DwarfNative.DW_TAG_GNU_BINCL,
+        GNUBINCL = DwarfNative.DW_TAG_GNU_BINCL,
         
-        GNU_EINCL = DwarfNative.DW_TAG_GNU_EINCL,
+        GNUEINCL = DwarfNative.DW_TAG_GNU_EINCL,
         
-        GNU_template_template_parameter = DwarfNative.DW_TAG_GNU_template_template_parameter,
+        GNUTemplateTemplateParameter = DwarfNative.DW_TAG_GNU_template_template_parameter,
         
-        GNU_template_template_param = DwarfNative.DW_TAG_GNU_template_template_param,
+        GNUTemplateTemplateParam = DwarfNative.DW_TAG_GNU_template_template_param,
         
-        GNU_template_parameter_pack = DwarfNative.DW_TAG_GNU_template_parameter_pack,
+        GNUTemplateParameterPack = DwarfNative.DW_TAG_GNU_template_parameter_pack,
         
-        GNU_formal_parameter_pack = DwarfNative.DW_TAG_GNU_formal_parameter_pack,
+        GNUFormalParameterPack = DwarfNative.DW_TAG_GNU_formal_parameter_pack,
         
-        GNU_call_site = DwarfNative.DW_TAG_GNU_call_site,
+        GNUCallSite = DwarfNative.DW_TAG_GNU_call_site,
         
-        GNU_call_site_parameter = DwarfNative.DW_TAG_GNU_call_site_parameter,
+        GNUCallSiteParameter = DwarfNative.DW_TAG_GNU_call_site_parameter,
         
-        ALTIUM_circ_type = DwarfNative.DW_TAG_ALTIUM_circ_type,
+        ALTIUMCircType = DwarfNative.DW_TAG_ALTIUM_circ_type,
         
-        ALTIUM_mwa_circ_type = DwarfNative.DW_TAG_ALTIUM_mwa_circ_type,
+        ALTIUMMwaCircType = DwarfNative.DW_TAG_ALTIUM_mwa_circ_type,
         
-        ALTIUM_rev_carry_type = DwarfNative.DW_TAG_ALTIUM_rev_carry_type,
+        ALTIUMRevCarryType = DwarfNative.DW_TAG_ALTIUM_rev_carry_type,
         
-        ALTIUM_rom = DwarfNative.DW_TAG_ALTIUM_rom,
+        ALTIUMRom = DwarfNative.DW_TAG_ALTIUM_rom,
         
-        upc_shared_type = DwarfNative.DW_TAG_upc_shared_type,
+        UpcSharedType = DwarfNative.DW_TAG_upc_shared_type,
         
-        upc_strict_type = DwarfNative.DW_TAG_upc_strict_type,
+        UpcStrictType = DwarfNative.DW_TAG_upc_strict_type,
         
-        upc_relaxed_type = DwarfNative.DW_TAG_upc_relaxed_type,
+        UpcRelaxedType = DwarfNative.DW_TAG_upc_relaxed_type,
         
-        PGI_kanji_type = DwarfNative.DW_TAG_PGI_kanji_type,
+        PGIKanjiType = DwarfNative.DW_TAG_PGI_kanji_type,
         
-        PGI_interface_block = DwarfNative.DW_TAG_PGI_interface_block,
+        PGIInterfaceBlock = DwarfNative.DW_TAG_PGI_interface_block,
         
-        SUN_function_template = DwarfNative.DW_TAG_SUN_function_template,
+        SUNFunctionTemplate = DwarfNative.DW_TAG_SUN_function_template,
         
-        SUN_class_template = DwarfNative.DW_TAG_SUN_class_template,
+        SUNClassTemplate = DwarfNative.DW_TAG_SUN_class_template,
         
-        SUN_struct_template = DwarfNative.DW_TAG_SUN_struct_template,
+        SUNStructTemplate = DwarfNative.DW_TAG_SUN_struct_template,
         
-        SUN_union_template = DwarfNative.DW_TAG_SUN_union_template,
+        SUNUnionTemplate = DwarfNative.DW_TAG_SUN_union_template,
         
-        SUN_indirect_inheritance = DwarfNative.DW_TAG_SUN_indirect_inheritance,
+        SUNIndirectInheritance = DwarfNative.DW_TAG_SUN_indirect_inheritance,
         
-        SUN_codeflags = DwarfNative.DW_TAG_SUN_codeflags,
+        SUNCodeflags = DwarfNative.DW_TAG_SUN_codeflags,
         
-        SUN_memop_info = DwarfNative.DW_TAG_SUN_memop_info,
+        SUNMemopInfo = DwarfNative.DW_TAG_SUN_memop_info,
         
-        SUN_omp_child_func = DwarfNative.DW_TAG_SUN_omp_child_func,
+        SUNOmpChildFunc = DwarfNative.DW_TAG_SUN_omp_child_func,
         
-        SUN_rtti_descriptor = DwarfNative.DW_TAG_SUN_rtti_descriptor,
+        SUNRttiDescriptor = DwarfNative.DW_TAG_SUN_rtti_descriptor,
         
-        SUN_dtor_info = DwarfNative.DW_TAG_SUN_dtor_info,
+        SUNDtorInfo = DwarfNative.DW_TAG_SUN_dtor_info,
         
-        SUN_dtor = DwarfNative.DW_TAG_SUN_dtor,
+        SUNDtor = DwarfNative.DW_TAG_SUN_dtor,
         
-        SUN_f90_interface = DwarfNative.DW_TAG_SUN_f90_interface,
+        SUNF90Interface = DwarfNative.DW_TAG_SUN_f90_interface,
         
-        SUN_fortran_vax_structure = DwarfNative.DW_TAG_SUN_fortran_vax_structure,
+        SUNFortranVaxStructure = DwarfNative.DW_TAG_SUN_fortran_vax_structure,
         
-        SUN_hi = DwarfNative.DW_TAG_SUN_hi,
+        SUNHi = DwarfNative.DW_TAG_SUN_hi,
     }
     
     public readonly partial struct DwarfOperationKindEx
     {
-        public static readonly DwarfOperationKindEx addr = new DwarfOperationKindEx(DwarfNative.DW_OP_addr);
+        public static readonly DwarfOperationKindEx Addr = new DwarfOperationKindEx(DwarfNative.DW_OP_addr);
         
-        public static readonly DwarfOperationKindEx deref = new DwarfOperationKindEx(DwarfNative.DW_OP_deref);
+        public static readonly DwarfOperationKindEx Deref = new DwarfOperationKindEx(DwarfNative.DW_OP_deref);
         
-        public static readonly DwarfOperationKindEx const1u = new DwarfOperationKindEx(DwarfNative.DW_OP_const1u);
+        public static readonly DwarfOperationKindEx Const1u = new DwarfOperationKindEx(DwarfNative.DW_OP_const1u);
         
-        public static readonly DwarfOperationKindEx const1s = new DwarfOperationKindEx(DwarfNative.DW_OP_const1s);
+        public static readonly DwarfOperationKindEx Const1s = new DwarfOperationKindEx(DwarfNative.DW_OP_const1s);
         
-        public static readonly DwarfOperationKindEx const2u = new DwarfOperationKindEx(DwarfNative.DW_OP_const2u);
+        public static readonly DwarfOperationKindEx Const2u = new DwarfOperationKindEx(DwarfNative.DW_OP_const2u);
         
-        public static readonly DwarfOperationKindEx const2s = new DwarfOperationKindEx(DwarfNative.DW_OP_const2s);
+        public static readonly DwarfOperationKindEx Const2s = new DwarfOperationKindEx(DwarfNative.DW_OP_const2s);
         
-        public static readonly DwarfOperationKindEx const4u = new DwarfOperationKindEx(DwarfNative.DW_OP_const4u);
+        public static readonly DwarfOperationKindEx Const4u = new DwarfOperationKindEx(DwarfNative.DW_OP_const4u);
         
-        public static readonly DwarfOperationKindEx const4s = new DwarfOperationKindEx(DwarfNative.DW_OP_const4s);
+        public static readonly DwarfOperationKindEx Const4s = new DwarfOperationKindEx(DwarfNative.DW_OP_const4s);
         
-        public static readonly DwarfOperationKindEx const8u = new DwarfOperationKindEx(DwarfNative.DW_OP_const8u);
+        public static readonly DwarfOperationKindEx Const8u = new DwarfOperationKindEx(DwarfNative.DW_OP_const8u);
         
-        public static readonly DwarfOperationKindEx const8s = new DwarfOperationKindEx(DwarfNative.DW_OP_const8s);
+        public static readonly DwarfOperationKindEx Const8s = new DwarfOperationKindEx(DwarfNative.DW_OP_const8s);
         
-        public static readonly DwarfOperationKindEx constu = new DwarfOperationKindEx(DwarfNative.DW_OP_constu);
+        public static readonly DwarfOperationKindEx Constu = new DwarfOperationKindEx(DwarfNative.DW_OP_constu);
         
-        public static readonly DwarfOperationKindEx consts = new DwarfOperationKindEx(DwarfNative.DW_OP_consts);
+        public static readonly DwarfOperationKindEx Consts = new DwarfOperationKindEx(DwarfNative.DW_OP_consts);
         
-        public static readonly DwarfOperationKindEx dup = new DwarfOperationKindEx(DwarfNative.DW_OP_dup);
+        public static readonly DwarfOperationKindEx Dup = new DwarfOperationKindEx(DwarfNative.DW_OP_dup);
         
-        public static readonly DwarfOperationKindEx drop = new DwarfOperationKindEx(DwarfNative.DW_OP_drop);
+        public static readonly DwarfOperationKindEx Drop = new DwarfOperationKindEx(DwarfNative.DW_OP_drop);
         
-        public static readonly DwarfOperationKindEx over = new DwarfOperationKindEx(DwarfNative.DW_OP_over);
+        public static readonly DwarfOperationKindEx Over = new DwarfOperationKindEx(DwarfNative.DW_OP_over);
         
-        public static readonly DwarfOperationKindEx pick = new DwarfOperationKindEx(DwarfNative.DW_OP_pick);
+        public static readonly DwarfOperationKindEx Pick = new DwarfOperationKindEx(DwarfNative.DW_OP_pick);
         
-        public static readonly DwarfOperationKindEx swap = new DwarfOperationKindEx(DwarfNative.DW_OP_swap);
+        public static readonly DwarfOperationKindEx Swap = new DwarfOperationKindEx(DwarfNative.DW_OP_swap);
         
-        public static readonly DwarfOperationKindEx rot = new DwarfOperationKindEx(DwarfNative.DW_OP_rot);
+        public static readonly DwarfOperationKindEx Rot = new DwarfOperationKindEx(DwarfNative.DW_OP_rot);
         
-        public static readonly DwarfOperationKindEx xderef = new DwarfOperationKindEx(DwarfNative.DW_OP_xderef);
+        public static readonly DwarfOperationKindEx Xderef = new DwarfOperationKindEx(DwarfNative.DW_OP_xderef);
         
-        public static readonly DwarfOperationKindEx abs = new DwarfOperationKindEx(DwarfNative.DW_OP_abs);
+        public static readonly DwarfOperationKindEx Abs = new DwarfOperationKindEx(DwarfNative.DW_OP_abs);
         
-        public static readonly DwarfOperationKindEx and = new DwarfOperationKindEx(DwarfNative.DW_OP_and);
+        public static readonly DwarfOperationKindEx And = new DwarfOperationKindEx(DwarfNative.DW_OP_and);
         
-        public static readonly DwarfOperationKindEx div = new DwarfOperationKindEx(DwarfNative.DW_OP_div);
+        public static readonly DwarfOperationKindEx Div = new DwarfOperationKindEx(DwarfNative.DW_OP_div);
         
-        public static readonly DwarfOperationKindEx minus = new DwarfOperationKindEx(DwarfNative.DW_OP_minus);
+        public static readonly DwarfOperationKindEx Minus = new DwarfOperationKindEx(DwarfNative.DW_OP_minus);
         
-        public static readonly DwarfOperationKindEx mod = new DwarfOperationKindEx(DwarfNative.DW_OP_mod);
+        public static readonly DwarfOperationKindEx Mod = new DwarfOperationKindEx(DwarfNative.DW_OP_mod);
         
-        public static readonly DwarfOperationKindEx mul = new DwarfOperationKindEx(DwarfNative.DW_OP_mul);
+        public static readonly DwarfOperationKindEx Mul = new DwarfOperationKindEx(DwarfNative.DW_OP_mul);
         
-        public static readonly DwarfOperationKindEx neg = new DwarfOperationKindEx(DwarfNative.DW_OP_neg);
+        public static readonly DwarfOperationKindEx Neg = new DwarfOperationKindEx(DwarfNative.DW_OP_neg);
         
-        public static readonly DwarfOperationKindEx not = new DwarfOperationKindEx(DwarfNative.DW_OP_not);
+        public static readonly DwarfOperationKindEx Not = new DwarfOperationKindEx(DwarfNative.DW_OP_not);
         
-        public static readonly DwarfOperationKindEx or = new DwarfOperationKindEx(DwarfNative.DW_OP_or);
+        public static readonly DwarfOperationKindEx Or = new DwarfOperationKindEx(DwarfNative.DW_OP_or);
         
-        public static readonly DwarfOperationKindEx plus = new DwarfOperationKindEx(DwarfNative.DW_OP_plus);
+        public static readonly DwarfOperationKindEx Plus = new DwarfOperationKindEx(DwarfNative.DW_OP_plus);
         
-        public static readonly DwarfOperationKindEx plus_uconst = new DwarfOperationKindEx(DwarfNative.DW_OP_plus_uconst);
+        public static readonly DwarfOperationKindEx PlusUconst = new DwarfOperationKindEx(DwarfNative.DW_OP_plus_uconst);
         
-        public static readonly DwarfOperationKindEx shl = new DwarfOperationKindEx(DwarfNative.DW_OP_shl);
+        public static readonly DwarfOperationKindEx Shl = new DwarfOperationKindEx(DwarfNative.DW_OP_shl);
         
-        public static readonly DwarfOperationKindEx shr = new DwarfOperationKindEx(DwarfNative.DW_OP_shr);
+        public static readonly DwarfOperationKindEx Shr = new DwarfOperationKindEx(DwarfNative.DW_OP_shr);
         
-        public static readonly DwarfOperationKindEx shra = new DwarfOperationKindEx(DwarfNative.DW_OP_shra);
+        public static readonly DwarfOperationKindEx Shra = new DwarfOperationKindEx(DwarfNative.DW_OP_shra);
         
-        public static readonly DwarfOperationKindEx xor = new DwarfOperationKindEx(DwarfNative.DW_OP_xor);
+        public static readonly DwarfOperationKindEx Xor = new DwarfOperationKindEx(DwarfNative.DW_OP_xor);
         
-        public static readonly DwarfOperationKindEx bra = new DwarfOperationKindEx(DwarfNative.DW_OP_bra);
+        public static readonly DwarfOperationKindEx Bra = new DwarfOperationKindEx(DwarfNative.DW_OP_bra);
         
-        public static readonly DwarfOperationKindEx eq = new DwarfOperationKindEx(DwarfNative.DW_OP_eq);
+        public static readonly DwarfOperationKindEx Eq = new DwarfOperationKindEx(DwarfNative.DW_OP_eq);
         
-        public static readonly DwarfOperationKindEx ge = new DwarfOperationKindEx(DwarfNative.DW_OP_ge);
+        public static readonly DwarfOperationKindEx Ge = new DwarfOperationKindEx(DwarfNative.DW_OP_ge);
         
-        public static readonly DwarfOperationKindEx gt = new DwarfOperationKindEx(DwarfNative.DW_OP_gt);
+        public static readonly DwarfOperationKindEx Gt = new DwarfOperationKindEx(DwarfNative.DW_OP_gt);
         
-        public static readonly DwarfOperationKindEx le = new DwarfOperationKindEx(DwarfNative.DW_OP_le);
+        public static readonly DwarfOperationKindEx Le = new DwarfOperationKindEx(DwarfNative.DW_OP_le);
         
-        public static readonly DwarfOperationKindEx lt = new DwarfOperationKindEx(DwarfNative.DW_OP_lt);
+        public static readonly DwarfOperationKindEx Lt = new DwarfOperationKindEx(DwarfNative.DW_OP_lt);
         
-        public static readonly DwarfOperationKindEx ne = new DwarfOperationKindEx(DwarfNative.DW_OP_ne);
+        public static readonly DwarfOperationKindEx Ne = new DwarfOperationKindEx(DwarfNative.DW_OP_ne);
         
-        public static readonly DwarfOperationKindEx skip = new DwarfOperationKindEx(DwarfNative.DW_OP_skip);
+        public static readonly DwarfOperationKindEx Skip = new DwarfOperationKindEx(DwarfNative.DW_OP_skip);
         
-        public static readonly DwarfOperationKindEx lit0 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit0);
+        public static readonly DwarfOperationKindEx Lit0 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit0);
         
-        public static readonly DwarfOperationKindEx lit1 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit1);
+        public static readonly DwarfOperationKindEx Lit1 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit1);
         
-        public static readonly DwarfOperationKindEx lit2 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit2);
+        public static readonly DwarfOperationKindEx Lit2 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit2);
         
-        public static readonly DwarfOperationKindEx lit3 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit3);
+        public static readonly DwarfOperationKindEx Lit3 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit3);
         
-        public static readonly DwarfOperationKindEx lit4 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit4);
+        public static readonly DwarfOperationKindEx Lit4 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit4);
         
-        public static readonly DwarfOperationKindEx lit5 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit5);
+        public static readonly DwarfOperationKindEx Lit5 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit5);
         
-        public static readonly DwarfOperationKindEx lit6 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit6);
+        public static readonly DwarfOperationKindEx Lit6 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit6);
         
-        public static readonly DwarfOperationKindEx lit7 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit7);
+        public static readonly DwarfOperationKindEx Lit7 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit7);
         
-        public static readonly DwarfOperationKindEx lit8 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit8);
+        public static readonly DwarfOperationKindEx Lit8 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit8);
         
-        public static readonly DwarfOperationKindEx lit9 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit9);
+        public static readonly DwarfOperationKindEx Lit9 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit9);
         
-        public static readonly DwarfOperationKindEx lit10 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit10);
+        public static readonly DwarfOperationKindEx Lit10 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit10);
         
-        public static readonly DwarfOperationKindEx lit11 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit11);
+        public static readonly DwarfOperationKindEx Lit11 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit11);
         
-        public static readonly DwarfOperationKindEx lit12 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit12);
+        public static readonly DwarfOperationKindEx Lit12 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit12);
         
-        public static readonly DwarfOperationKindEx lit13 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit13);
+        public static readonly DwarfOperationKindEx Lit13 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit13);
         
-        public static readonly DwarfOperationKindEx lit14 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit14);
+        public static readonly DwarfOperationKindEx Lit14 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit14);
         
-        public static readonly DwarfOperationKindEx lit15 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit15);
+        public static readonly DwarfOperationKindEx Lit15 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit15);
         
-        public static readonly DwarfOperationKindEx lit16 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit16);
+        public static readonly DwarfOperationKindEx Lit16 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit16);
         
-        public static readonly DwarfOperationKindEx lit17 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit17);
+        public static readonly DwarfOperationKindEx Lit17 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit17);
         
-        public static readonly DwarfOperationKindEx lit18 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit18);
+        public static readonly DwarfOperationKindEx Lit18 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit18);
         
-        public static readonly DwarfOperationKindEx lit19 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit19);
+        public static readonly DwarfOperationKindEx Lit19 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit19);
         
-        public static readonly DwarfOperationKindEx lit20 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit20);
+        public static readonly DwarfOperationKindEx Lit20 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit20);
         
-        public static readonly DwarfOperationKindEx lit21 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit21);
+        public static readonly DwarfOperationKindEx Lit21 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit21);
         
-        public static readonly DwarfOperationKindEx lit22 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit22);
+        public static readonly DwarfOperationKindEx Lit22 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit22);
         
-        public static readonly DwarfOperationKindEx lit23 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit23);
+        public static readonly DwarfOperationKindEx Lit23 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit23);
         
-        public static readonly DwarfOperationKindEx lit24 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit24);
+        public static readonly DwarfOperationKindEx Lit24 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit24);
         
-        public static readonly DwarfOperationKindEx lit25 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit25);
+        public static readonly DwarfOperationKindEx Lit25 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit25);
         
-        public static readonly DwarfOperationKindEx lit26 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit26);
+        public static readonly DwarfOperationKindEx Lit26 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit26);
         
-        public static readonly DwarfOperationKindEx lit27 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit27);
+        public static readonly DwarfOperationKindEx Lit27 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit27);
         
-        public static readonly DwarfOperationKindEx lit28 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit28);
+        public static readonly DwarfOperationKindEx Lit28 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit28);
         
-        public static readonly DwarfOperationKindEx lit29 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit29);
+        public static readonly DwarfOperationKindEx Lit29 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit29);
         
-        public static readonly DwarfOperationKindEx lit30 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit30);
+        public static readonly DwarfOperationKindEx Lit30 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit30);
         
-        public static readonly DwarfOperationKindEx lit31 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit31);
+        public static readonly DwarfOperationKindEx Lit31 = new DwarfOperationKindEx(DwarfNative.DW_OP_lit31);
         
-        public static readonly DwarfOperationKindEx reg0 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg0);
+        public static readonly DwarfOperationKindEx Reg0 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg0);
         
-        public static readonly DwarfOperationKindEx reg1 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg1);
+        public static readonly DwarfOperationKindEx Reg1 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg1);
         
-        public static readonly DwarfOperationKindEx reg2 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg2);
+        public static readonly DwarfOperationKindEx Reg2 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg2);
         
-        public static readonly DwarfOperationKindEx reg3 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg3);
+        public static readonly DwarfOperationKindEx Reg3 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg3);
         
-        public static readonly DwarfOperationKindEx reg4 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg4);
+        public static readonly DwarfOperationKindEx Reg4 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg4);
         
-        public static readonly DwarfOperationKindEx reg5 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg5);
+        public static readonly DwarfOperationKindEx Reg5 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg5);
         
-        public static readonly DwarfOperationKindEx reg6 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg6);
+        public static readonly DwarfOperationKindEx Reg6 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg6);
         
-        public static readonly DwarfOperationKindEx reg7 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg7);
+        public static readonly DwarfOperationKindEx Reg7 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg7);
         
-        public static readonly DwarfOperationKindEx reg8 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg8);
+        public static readonly DwarfOperationKindEx Reg8 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg8);
         
-        public static readonly DwarfOperationKindEx reg9 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg9);
+        public static readonly DwarfOperationKindEx Reg9 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg9);
         
-        public static readonly DwarfOperationKindEx reg10 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg10);
+        public static readonly DwarfOperationKindEx Reg10 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg10);
         
-        public static readonly DwarfOperationKindEx reg11 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg11);
+        public static readonly DwarfOperationKindEx Reg11 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg11);
         
-        public static readonly DwarfOperationKindEx reg12 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg12);
+        public static readonly DwarfOperationKindEx Reg12 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg12);
         
-        public static readonly DwarfOperationKindEx reg13 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg13);
+        public static readonly DwarfOperationKindEx Reg13 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg13);
         
-        public static readonly DwarfOperationKindEx reg14 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg14);
+        public static readonly DwarfOperationKindEx Reg14 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg14);
         
-        public static readonly DwarfOperationKindEx reg15 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg15);
+        public static readonly DwarfOperationKindEx Reg15 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg15);
         
-        public static readonly DwarfOperationKindEx reg16 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg16);
+        public static readonly DwarfOperationKindEx Reg16 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg16);
         
-        public static readonly DwarfOperationKindEx reg17 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg17);
+        public static readonly DwarfOperationKindEx Reg17 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg17);
         
-        public static readonly DwarfOperationKindEx reg18 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg18);
+        public static readonly DwarfOperationKindEx Reg18 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg18);
         
-        public static readonly DwarfOperationKindEx reg19 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg19);
+        public static readonly DwarfOperationKindEx Reg19 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg19);
         
-        public static readonly DwarfOperationKindEx reg20 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg20);
+        public static readonly DwarfOperationKindEx Reg20 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg20);
         
-        public static readonly DwarfOperationKindEx reg21 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg21);
+        public static readonly DwarfOperationKindEx Reg21 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg21);
         
-        public static readonly DwarfOperationKindEx reg22 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg22);
+        public static readonly DwarfOperationKindEx Reg22 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg22);
         
-        public static readonly DwarfOperationKindEx reg23 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg23);
+        public static readonly DwarfOperationKindEx Reg23 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg23);
         
-        public static readonly DwarfOperationKindEx reg24 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg24);
+        public static readonly DwarfOperationKindEx Reg24 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg24);
         
-        public static readonly DwarfOperationKindEx reg25 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg25);
+        public static readonly DwarfOperationKindEx Reg25 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg25);
         
-        public static readonly DwarfOperationKindEx reg26 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg26);
+        public static readonly DwarfOperationKindEx Reg26 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg26);
         
-        public static readonly DwarfOperationKindEx reg27 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg27);
+        public static readonly DwarfOperationKindEx Reg27 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg27);
         
-        public static readonly DwarfOperationKindEx reg28 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg28);
+        public static readonly DwarfOperationKindEx Reg28 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg28);
         
-        public static readonly DwarfOperationKindEx reg29 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg29);
+        public static readonly DwarfOperationKindEx Reg29 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg29);
         
-        public static readonly DwarfOperationKindEx reg30 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg30);
+        public static readonly DwarfOperationKindEx Reg30 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg30);
         
-        public static readonly DwarfOperationKindEx reg31 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg31);
+        public static readonly DwarfOperationKindEx Reg31 = new DwarfOperationKindEx(DwarfNative.DW_OP_reg31);
         
-        public static readonly DwarfOperationKindEx breg0 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg0);
+        public static readonly DwarfOperationKindEx Breg0 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg0);
         
-        public static readonly DwarfOperationKindEx breg1 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg1);
+        public static readonly DwarfOperationKindEx Breg1 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg1);
         
-        public static readonly DwarfOperationKindEx breg2 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg2);
+        public static readonly DwarfOperationKindEx Breg2 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg2);
         
-        public static readonly DwarfOperationKindEx breg3 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg3);
+        public static readonly DwarfOperationKindEx Breg3 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg3);
         
-        public static readonly DwarfOperationKindEx breg4 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg4);
+        public static readonly DwarfOperationKindEx Breg4 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg4);
         
-        public static readonly DwarfOperationKindEx breg5 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg5);
+        public static readonly DwarfOperationKindEx Breg5 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg5);
         
-        public static readonly DwarfOperationKindEx breg6 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg6);
+        public static readonly DwarfOperationKindEx Breg6 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg6);
         
-        public static readonly DwarfOperationKindEx breg7 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg7);
+        public static readonly DwarfOperationKindEx Breg7 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg7);
         
-        public static readonly DwarfOperationKindEx breg8 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg8);
+        public static readonly DwarfOperationKindEx Breg8 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg8);
         
-        public static readonly DwarfOperationKindEx breg9 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg9);
+        public static readonly DwarfOperationKindEx Breg9 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg9);
         
-        public static readonly DwarfOperationKindEx breg10 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg10);
+        public static readonly DwarfOperationKindEx Breg10 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg10);
         
-        public static readonly DwarfOperationKindEx breg11 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg11);
+        public static readonly DwarfOperationKindEx Breg11 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg11);
         
-        public static readonly DwarfOperationKindEx breg12 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg12);
+        public static readonly DwarfOperationKindEx Breg12 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg12);
         
-        public static readonly DwarfOperationKindEx breg13 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg13);
+        public static readonly DwarfOperationKindEx Breg13 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg13);
         
-        public static readonly DwarfOperationKindEx breg14 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg14);
+        public static readonly DwarfOperationKindEx Breg14 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg14);
         
-        public static readonly DwarfOperationKindEx breg15 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg15);
+        public static readonly DwarfOperationKindEx Breg15 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg15);
         
-        public static readonly DwarfOperationKindEx breg16 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg16);
+        public static readonly DwarfOperationKindEx Breg16 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg16);
         
-        public static readonly DwarfOperationKindEx breg17 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg17);
+        public static readonly DwarfOperationKindEx Breg17 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg17);
         
-        public static readonly DwarfOperationKindEx breg18 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg18);
+        public static readonly DwarfOperationKindEx Breg18 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg18);
         
-        public static readonly DwarfOperationKindEx breg19 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg19);
+        public static readonly DwarfOperationKindEx Breg19 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg19);
         
-        public static readonly DwarfOperationKindEx breg20 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg20);
+        public static readonly DwarfOperationKindEx Breg20 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg20);
         
-        public static readonly DwarfOperationKindEx breg21 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg21);
+        public static readonly DwarfOperationKindEx Breg21 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg21);
         
-        public static readonly DwarfOperationKindEx breg22 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg22);
+        public static readonly DwarfOperationKindEx Breg22 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg22);
         
-        public static readonly DwarfOperationKindEx breg23 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg23);
+        public static readonly DwarfOperationKindEx Breg23 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg23);
         
-        public static readonly DwarfOperationKindEx breg24 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg24);
+        public static readonly DwarfOperationKindEx Breg24 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg24);
         
-        public static readonly DwarfOperationKindEx breg25 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg25);
+        public static readonly DwarfOperationKindEx Breg25 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg25);
         
-        public static readonly DwarfOperationKindEx breg26 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg26);
+        public static readonly DwarfOperationKindEx Breg26 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg26);
         
-        public static readonly DwarfOperationKindEx breg27 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg27);
+        public static readonly DwarfOperationKindEx Breg27 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg27);
         
-        public static readonly DwarfOperationKindEx breg28 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg28);
+        public static readonly DwarfOperationKindEx Breg28 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg28);
         
-        public static readonly DwarfOperationKindEx breg29 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg29);
+        public static readonly DwarfOperationKindEx Breg29 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg29);
         
-        public static readonly DwarfOperationKindEx breg30 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg30);
+        public static readonly DwarfOperationKindEx Breg30 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg30);
         
-        public static readonly DwarfOperationKindEx breg31 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg31);
+        public static readonly DwarfOperationKindEx Breg31 = new DwarfOperationKindEx(DwarfNative.DW_OP_breg31);
         
-        public static readonly DwarfOperationKindEx regx = new DwarfOperationKindEx(DwarfNative.DW_OP_regx);
+        public static readonly DwarfOperationKindEx Regx = new DwarfOperationKindEx(DwarfNative.DW_OP_regx);
         
-        public static readonly DwarfOperationKindEx fbreg = new DwarfOperationKindEx(DwarfNative.DW_OP_fbreg);
+        public static readonly DwarfOperationKindEx Fbreg = new DwarfOperationKindEx(DwarfNative.DW_OP_fbreg);
         
-        public static readonly DwarfOperationKindEx bregx = new DwarfOperationKindEx(DwarfNative.DW_OP_bregx);
+        public static readonly DwarfOperationKindEx Bregx = new DwarfOperationKindEx(DwarfNative.DW_OP_bregx);
         
-        public static readonly DwarfOperationKindEx piece = new DwarfOperationKindEx(DwarfNative.DW_OP_piece);
+        public static readonly DwarfOperationKindEx Piece = new DwarfOperationKindEx(DwarfNative.DW_OP_piece);
         
-        public static readonly DwarfOperationKindEx deref_size = new DwarfOperationKindEx(DwarfNative.DW_OP_deref_size);
+        public static readonly DwarfOperationKindEx DerefSize = new DwarfOperationKindEx(DwarfNative.DW_OP_deref_size);
         
-        public static readonly DwarfOperationKindEx xderef_size = new DwarfOperationKindEx(DwarfNative.DW_OP_xderef_size);
+        public static readonly DwarfOperationKindEx XderefSize = new DwarfOperationKindEx(DwarfNative.DW_OP_xderef_size);
         
-        public static readonly DwarfOperationKindEx nop = new DwarfOperationKindEx(DwarfNative.DW_OP_nop);
+        public static readonly DwarfOperationKindEx Nop = new DwarfOperationKindEx(DwarfNative.DW_OP_nop);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfOperationKindEx push_object_address = new DwarfOperationKindEx(DwarfNative.DW_OP_push_object_address);
+        public static readonly DwarfOperationKindEx PushObjectAddress = new DwarfOperationKindEx(DwarfNative.DW_OP_push_object_address);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfOperationKindEx call2 = new DwarfOperationKindEx(DwarfNative.DW_OP_call2);
+        public static readonly DwarfOperationKindEx Call2 = new DwarfOperationKindEx(DwarfNative.DW_OP_call2);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfOperationKindEx call4 = new DwarfOperationKindEx(DwarfNative.DW_OP_call4);
+        public static readonly DwarfOperationKindEx Call4 = new DwarfOperationKindEx(DwarfNative.DW_OP_call4);
         
         /// <summary>
         /// DWARF3
         /// </summary>
-        public static readonly DwarfOperationKindEx call_ref = new DwarfOperationKindEx(DwarfNative.DW_OP_call_ref);
+        public static readonly DwarfOperationKindEx CallRef = new DwarfOperationKindEx(DwarfNative.DW_OP_call_ref);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfOperationKindEx form_tls_address = new DwarfOperationKindEx(DwarfNative.DW_OP_form_tls_address);
+        public static readonly DwarfOperationKindEx FormTlsAddress = new DwarfOperationKindEx(DwarfNative.DW_OP_form_tls_address);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfOperationKindEx call_frame_cfa = new DwarfOperationKindEx(DwarfNative.DW_OP_call_frame_cfa);
+        public static readonly DwarfOperationKindEx CallFrameCfa = new DwarfOperationKindEx(DwarfNative.DW_OP_call_frame_cfa);
         
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfOperationKindEx bit_piece = new DwarfOperationKindEx(DwarfNative.DW_OP_bit_piece);
+        public static readonly DwarfOperationKindEx BitPiece = new DwarfOperationKindEx(DwarfNative.DW_OP_bit_piece);
         
         /// <summary>
         /// DWARF4
         /// </summary>
-        public static readonly DwarfOperationKindEx implicit_value = new DwarfOperationKindEx(DwarfNative.DW_OP_implicit_value);
+        public static readonly DwarfOperationKindEx ImplicitValue = new DwarfOperationKindEx(DwarfNative.DW_OP_implicit_value);
         
         /// <summary>
         /// DWARF4
         /// </summary>
-        public static readonly DwarfOperationKindEx stack_value = new DwarfOperationKindEx(DwarfNative.DW_OP_stack_value);
+        public static readonly DwarfOperationKindEx StackValue = new DwarfOperationKindEx(DwarfNative.DW_OP_stack_value);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfOperationKindEx implicit_pointer = new DwarfOperationKindEx(DwarfNative.DW_OP_implicit_pointer);
+        public static readonly DwarfOperationKindEx ImplicitPointer = new DwarfOperationKindEx(DwarfNative.DW_OP_implicit_pointer);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfOperationKindEx addrx = new DwarfOperationKindEx(DwarfNative.DW_OP_addrx);
+        public static readonly DwarfOperationKindEx Addrx = new DwarfOperationKindEx(DwarfNative.DW_OP_addrx);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfOperationKindEx constx = new DwarfOperationKindEx(DwarfNative.DW_OP_constx);
+        public static readonly DwarfOperationKindEx Constx = new DwarfOperationKindEx(DwarfNative.DW_OP_constx);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfOperationKindEx entry_value = new DwarfOperationKindEx(DwarfNative.DW_OP_entry_value);
+        public static readonly DwarfOperationKindEx EntryValue = new DwarfOperationKindEx(DwarfNative.DW_OP_entry_value);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfOperationKindEx const_type = new DwarfOperationKindEx(DwarfNative.DW_OP_const_type);
+        public static readonly DwarfOperationKindEx ConstType = new DwarfOperationKindEx(DwarfNative.DW_OP_const_type);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfOperationKindEx regval_type = new DwarfOperationKindEx(DwarfNative.DW_OP_regval_type);
+        public static readonly DwarfOperationKindEx RegvalType = new DwarfOperationKindEx(DwarfNative.DW_OP_regval_type);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfOperationKindEx deref_type = new DwarfOperationKindEx(DwarfNative.DW_OP_deref_type);
+        public static readonly DwarfOperationKindEx DerefType = new DwarfOperationKindEx(DwarfNative.DW_OP_deref_type);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfOperationKindEx xderef_type = new DwarfOperationKindEx(DwarfNative.DW_OP_xderef_type);
+        public static readonly DwarfOperationKindEx XderefType = new DwarfOperationKindEx(DwarfNative.DW_OP_xderef_type);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfOperationKindEx convert = new DwarfOperationKindEx(DwarfNative.DW_OP_convert);
+        public static readonly DwarfOperationKindEx Convert = new DwarfOperationKindEx(DwarfNative.DW_OP_convert);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfOperationKindEx reinterpret = new DwarfOperationKindEx(DwarfNative.DW_OP_reinterpret);
+        public static readonly DwarfOperationKindEx Reinterpret = new DwarfOperationKindEx(DwarfNative.DW_OP_reinterpret);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfOperationKindEx GNU_push_tls_address = new DwarfOperationKindEx(DwarfNative.DW_OP_GNU_push_tls_address);
+        public static readonly DwarfOperationKindEx GNUPushTlsAddress = new DwarfOperationKindEx(DwarfNative.DW_OP_GNU_push_tls_address);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfOperationKindEx GNU_uninit = new DwarfOperationKindEx(DwarfNative.DW_OP_GNU_uninit);
+        public static readonly DwarfOperationKindEx GNUUninit = new DwarfOperationKindEx(DwarfNative.DW_OP_GNU_uninit);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfOperationKindEx GNU_encoded_addr = new DwarfOperationKindEx(DwarfNative.DW_OP_GNU_encoded_addr);
+        public static readonly DwarfOperationKindEx GNUEncodedAddr = new DwarfOperationKindEx(DwarfNative.DW_OP_GNU_encoded_addr);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfOperationKindEx GNU_implicit_pointer = new DwarfOperationKindEx(DwarfNative.DW_OP_GNU_implicit_pointer);
+        public static readonly DwarfOperationKindEx GNUImplicitPointer = new DwarfOperationKindEx(DwarfNative.DW_OP_GNU_implicit_pointer);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfOperationKindEx GNU_entry_value = new DwarfOperationKindEx(DwarfNative.DW_OP_GNU_entry_value);
+        public static readonly DwarfOperationKindEx GNUEntryValue = new DwarfOperationKindEx(DwarfNative.DW_OP_GNU_entry_value);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfOperationKindEx GNU_const_type = new DwarfOperationKindEx(DwarfNative.DW_OP_GNU_const_type);
+        public static readonly DwarfOperationKindEx GNUConstType = new DwarfOperationKindEx(DwarfNative.DW_OP_GNU_const_type);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfOperationKindEx GNU_regval_type = new DwarfOperationKindEx(DwarfNative.DW_OP_GNU_regval_type);
+        public static readonly DwarfOperationKindEx GNURegvalType = new DwarfOperationKindEx(DwarfNative.DW_OP_GNU_regval_type);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfOperationKindEx GNU_deref_type = new DwarfOperationKindEx(DwarfNative.DW_OP_GNU_deref_type);
+        public static readonly DwarfOperationKindEx GNUDerefType = new DwarfOperationKindEx(DwarfNative.DW_OP_GNU_deref_type);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfOperationKindEx GNU_convert = new DwarfOperationKindEx(DwarfNative.DW_OP_GNU_convert);
+        public static readonly DwarfOperationKindEx GNUConvert = new DwarfOperationKindEx(DwarfNative.DW_OP_GNU_convert);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfOperationKindEx GNU_reinterpret = new DwarfOperationKindEx(DwarfNative.DW_OP_GNU_reinterpret);
+        public static readonly DwarfOperationKindEx GNUReinterpret = new DwarfOperationKindEx(DwarfNative.DW_OP_GNU_reinterpret);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfOperationKindEx GNU_parameter_ref = new DwarfOperationKindEx(DwarfNative.DW_OP_GNU_parameter_ref);
+        public static readonly DwarfOperationKindEx GNUParameterRef = new DwarfOperationKindEx(DwarfNative.DW_OP_GNU_parameter_ref);
         
         /// <summary>
         /// GNU DebugFission
         /// </summary>
-        public static readonly DwarfOperationKindEx GNU_addr_index = new DwarfOperationKindEx(DwarfNative.DW_OP_GNU_addr_index);
+        public static readonly DwarfOperationKindEx GNUAddrIndex = new DwarfOperationKindEx(DwarfNative.DW_OP_GNU_addr_index);
         
         /// <summary>
         /// GNU DebugFission
         /// </summary>
-        public static readonly DwarfOperationKindEx GNU_const_index = new DwarfOperationKindEx(DwarfNative.DW_OP_GNU_const_index);
+        public static readonly DwarfOperationKindEx GNUConstIndex = new DwarfOperationKindEx(DwarfNative.DW_OP_GNU_const_index);
         
         /// <summary>
         /// HP conflict: GNU
         /// </summary>
-        public static readonly DwarfOperationKindEx HP_unknown = new DwarfOperationKindEx(DwarfNative.DW_OP_HP_unknown);
+        public static readonly DwarfOperationKindEx HPUnknown = new DwarfOperationKindEx(DwarfNative.DW_OP_HP_unknown);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfOperationKindEx HP_is_value = new DwarfOperationKindEx(DwarfNative.DW_OP_HP_is_value);
+        public static readonly DwarfOperationKindEx HPIsValue = new DwarfOperationKindEx(DwarfNative.DW_OP_HP_is_value);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfOperationKindEx HP_fltconst4 = new DwarfOperationKindEx(DwarfNative.DW_OP_HP_fltconst4);
+        public static readonly DwarfOperationKindEx HPFltconst4 = new DwarfOperationKindEx(DwarfNative.DW_OP_HP_fltconst4);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfOperationKindEx HP_fltconst8 = new DwarfOperationKindEx(DwarfNative.DW_OP_HP_fltconst8);
+        public static readonly DwarfOperationKindEx HPFltconst8 = new DwarfOperationKindEx(DwarfNative.DW_OP_HP_fltconst8);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfOperationKindEx HP_mod_range = new DwarfOperationKindEx(DwarfNative.DW_OP_HP_mod_range);
+        public static readonly DwarfOperationKindEx HPModRange = new DwarfOperationKindEx(DwarfNative.DW_OP_HP_mod_range);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfOperationKindEx HP_unmod_range = new DwarfOperationKindEx(DwarfNative.DW_OP_HP_unmod_range);
+        public static readonly DwarfOperationKindEx HPUnmodRange = new DwarfOperationKindEx(DwarfNative.DW_OP_HP_unmod_range);
         
         /// <summary>
         /// HP
         /// </summary>
-        public static readonly DwarfOperationKindEx HP_tls = new DwarfOperationKindEx(DwarfNative.DW_OP_HP_tls);
+        public static readonly DwarfOperationKindEx HPTls = new DwarfOperationKindEx(DwarfNative.DW_OP_HP_tls);
         
         /// <summary>
         /// Intel: made obsolete by DW_OP_bit_piece above.
         /// </summary>
-        public static readonly DwarfOperationKindEx INTEL_bit_piece = new DwarfOperationKindEx(DwarfNative.DW_OP_INTEL_bit_piece);
+        public static readonly DwarfOperationKindEx INTELBitPiece = new DwarfOperationKindEx(DwarfNative.DW_OP_INTEL_bit_piece);
         
         /// <summary>
         /// Apple
         /// </summary>
-        public static readonly DwarfOperationKindEx APPLE_uninit = new DwarfOperationKindEx(DwarfNative.DW_OP_APPLE_uninit);
+        public static readonly DwarfOperationKindEx APPLEUninit = new DwarfOperationKindEx(DwarfNative.DW_OP_APPLE_uninit);
         
         /// <summary>
         /// PGI (STMicroelectronics)
         /// </summary>
-        public static readonly DwarfOperationKindEx PGI_omp_thread_num = new DwarfOperationKindEx(DwarfNative.DW_OP_PGI_omp_thread_num);
+        public static readonly DwarfOperationKindEx PGIOmpThreadNum = new DwarfOperationKindEx(DwarfNative.DW_OP_PGI_omp_thread_num);
         
         private string ToStringInternal()
         {
@@ -6404,379 +6404,379 @@ namespace LibObjectFile.Dwarf
     
     public enum DwarfOperationKind : byte
     {
-        addr = DwarfNative.DW_OP_addr,
+        Addr = DwarfNative.DW_OP_addr,
         
-        deref = DwarfNative.DW_OP_deref,
+        Deref = DwarfNative.DW_OP_deref,
         
-        const1u = DwarfNative.DW_OP_const1u,
+        Const1u = DwarfNative.DW_OP_const1u,
         
-        const1s = DwarfNative.DW_OP_const1s,
+        Const1s = DwarfNative.DW_OP_const1s,
         
-        const2u = DwarfNative.DW_OP_const2u,
+        Const2u = DwarfNative.DW_OP_const2u,
         
-        const2s = DwarfNative.DW_OP_const2s,
+        Const2s = DwarfNative.DW_OP_const2s,
         
-        const4u = DwarfNative.DW_OP_const4u,
+        Const4u = DwarfNative.DW_OP_const4u,
         
-        const4s = DwarfNative.DW_OP_const4s,
+        Const4s = DwarfNative.DW_OP_const4s,
         
-        const8u = DwarfNative.DW_OP_const8u,
+        Const8u = DwarfNative.DW_OP_const8u,
         
-        const8s = DwarfNative.DW_OP_const8s,
+        Const8s = DwarfNative.DW_OP_const8s,
         
-        constu = DwarfNative.DW_OP_constu,
+        Constu = DwarfNative.DW_OP_constu,
         
-        consts = DwarfNative.DW_OP_consts,
+        Consts = DwarfNative.DW_OP_consts,
         
-        dup = DwarfNative.DW_OP_dup,
+        Dup = DwarfNative.DW_OP_dup,
         
-        drop = DwarfNative.DW_OP_drop,
+        Drop = DwarfNative.DW_OP_drop,
         
-        over = DwarfNative.DW_OP_over,
+        Over = DwarfNative.DW_OP_over,
         
-        pick = DwarfNative.DW_OP_pick,
+        Pick = DwarfNative.DW_OP_pick,
         
-        swap = DwarfNative.DW_OP_swap,
+        Swap = DwarfNative.DW_OP_swap,
         
-        rot = DwarfNative.DW_OP_rot,
+        Rot = DwarfNative.DW_OP_rot,
         
-        xderef = DwarfNative.DW_OP_xderef,
+        Xderef = DwarfNative.DW_OP_xderef,
         
-        abs = DwarfNative.DW_OP_abs,
+        Abs = DwarfNative.DW_OP_abs,
         
-        and = DwarfNative.DW_OP_and,
+        And = DwarfNative.DW_OP_and,
         
-        div = DwarfNative.DW_OP_div,
+        Div = DwarfNative.DW_OP_div,
         
-        minus = DwarfNative.DW_OP_minus,
+        Minus = DwarfNative.DW_OP_minus,
         
-        mod = DwarfNative.DW_OP_mod,
+        Mod = DwarfNative.DW_OP_mod,
         
-        mul = DwarfNative.DW_OP_mul,
+        Mul = DwarfNative.DW_OP_mul,
         
-        neg = DwarfNative.DW_OP_neg,
+        Neg = DwarfNative.DW_OP_neg,
         
-        not = DwarfNative.DW_OP_not,
+        Not = DwarfNative.DW_OP_not,
         
-        or = DwarfNative.DW_OP_or,
+        Or = DwarfNative.DW_OP_or,
         
-        plus = DwarfNative.DW_OP_plus,
+        Plus = DwarfNative.DW_OP_plus,
         
-        plus_uconst = DwarfNative.DW_OP_plus_uconst,
+        PlusUconst = DwarfNative.DW_OP_plus_uconst,
         
-        shl = DwarfNative.DW_OP_shl,
+        Shl = DwarfNative.DW_OP_shl,
         
-        shr = DwarfNative.DW_OP_shr,
+        Shr = DwarfNative.DW_OP_shr,
         
-        shra = DwarfNative.DW_OP_shra,
+        Shra = DwarfNative.DW_OP_shra,
         
-        xor = DwarfNative.DW_OP_xor,
+        Xor = DwarfNative.DW_OP_xor,
         
-        bra = DwarfNative.DW_OP_bra,
+        Bra = DwarfNative.DW_OP_bra,
         
-        eq = DwarfNative.DW_OP_eq,
+        Eq = DwarfNative.DW_OP_eq,
         
-        ge = DwarfNative.DW_OP_ge,
+        Ge = DwarfNative.DW_OP_ge,
         
-        gt = DwarfNative.DW_OP_gt,
+        Gt = DwarfNative.DW_OP_gt,
         
-        le = DwarfNative.DW_OP_le,
+        Le = DwarfNative.DW_OP_le,
         
-        lt = DwarfNative.DW_OP_lt,
+        Lt = DwarfNative.DW_OP_lt,
         
-        ne = DwarfNative.DW_OP_ne,
+        Ne = DwarfNative.DW_OP_ne,
         
-        skip = DwarfNative.DW_OP_skip,
+        Skip = DwarfNative.DW_OP_skip,
         
-        lit0 = DwarfNative.DW_OP_lit0,
+        Lit0 = DwarfNative.DW_OP_lit0,
         
-        lit1 = DwarfNative.DW_OP_lit1,
+        Lit1 = DwarfNative.DW_OP_lit1,
         
-        lit2 = DwarfNative.DW_OP_lit2,
+        Lit2 = DwarfNative.DW_OP_lit2,
         
-        lit3 = DwarfNative.DW_OP_lit3,
+        Lit3 = DwarfNative.DW_OP_lit3,
         
-        lit4 = DwarfNative.DW_OP_lit4,
+        Lit4 = DwarfNative.DW_OP_lit4,
         
-        lit5 = DwarfNative.DW_OP_lit5,
+        Lit5 = DwarfNative.DW_OP_lit5,
         
-        lit6 = DwarfNative.DW_OP_lit6,
+        Lit6 = DwarfNative.DW_OP_lit6,
         
-        lit7 = DwarfNative.DW_OP_lit7,
+        Lit7 = DwarfNative.DW_OP_lit7,
         
-        lit8 = DwarfNative.DW_OP_lit8,
+        Lit8 = DwarfNative.DW_OP_lit8,
         
-        lit9 = DwarfNative.DW_OP_lit9,
+        Lit9 = DwarfNative.DW_OP_lit9,
         
-        lit10 = DwarfNative.DW_OP_lit10,
+        Lit10 = DwarfNative.DW_OP_lit10,
         
-        lit11 = DwarfNative.DW_OP_lit11,
+        Lit11 = DwarfNative.DW_OP_lit11,
         
-        lit12 = DwarfNative.DW_OP_lit12,
+        Lit12 = DwarfNative.DW_OP_lit12,
         
-        lit13 = DwarfNative.DW_OP_lit13,
+        Lit13 = DwarfNative.DW_OP_lit13,
         
-        lit14 = DwarfNative.DW_OP_lit14,
+        Lit14 = DwarfNative.DW_OP_lit14,
         
-        lit15 = DwarfNative.DW_OP_lit15,
+        Lit15 = DwarfNative.DW_OP_lit15,
         
-        lit16 = DwarfNative.DW_OP_lit16,
+        Lit16 = DwarfNative.DW_OP_lit16,
         
-        lit17 = DwarfNative.DW_OP_lit17,
+        Lit17 = DwarfNative.DW_OP_lit17,
         
-        lit18 = DwarfNative.DW_OP_lit18,
+        Lit18 = DwarfNative.DW_OP_lit18,
         
-        lit19 = DwarfNative.DW_OP_lit19,
+        Lit19 = DwarfNative.DW_OP_lit19,
         
-        lit20 = DwarfNative.DW_OP_lit20,
+        Lit20 = DwarfNative.DW_OP_lit20,
         
-        lit21 = DwarfNative.DW_OP_lit21,
+        Lit21 = DwarfNative.DW_OP_lit21,
         
-        lit22 = DwarfNative.DW_OP_lit22,
+        Lit22 = DwarfNative.DW_OP_lit22,
         
-        lit23 = DwarfNative.DW_OP_lit23,
+        Lit23 = DwarfNative.DW_OP_lit23,
         
-        lit24 = DwarfNative.DW_OP_lit24,
+        Lit24 = DwarfNative.DW_OP_lit24,
         
-        lit25 = DwarfNative.DW_OP_lit25,
+        Lit25 = DwarfNative.DW_OP_lit25,
         
-        lit26 = DwarfNative.DW_OP_lit26,
+        Lit26 = DwarfNative.DW_OP_lit26,
         
-        lit27 = DwarfNative.DW_OP_lit27,
+        Lit27 = DwarfNative.DW_OP_lit27,
         
-        lit28 = DwarfNative.DW_OP_lit28,
+        Lit28 = DwarfNative.DW_OP_lit28,
         
-        lit29 = DwarfNative.DW_OP_lit29,
+        Lit29 = DwarfNative.DW_OP_lit29,
         
-        lit30 = DwarfNative.DW_OP_lit30,
+        Lit30 = DwarfNative.DW_OP_lit30,
         
-        lit31 = DwarfNative.DW_OP_lit31,
+        Lit31 = DwarfNative.DW_OP_lit31,
         
-        reg0 = DwarfNative.DW_OP_reg0,
+        Reg0 = DwarfNative.DW_OP_reg0,
         
-        reg1 = DwarfNative.DW_OP_reg1,
+        Reg1 = DwarfNative.DW_OP_reg1,
         
-        reg2 = DwarfNative.DW_OP_reg2,
+        Reg2 = DwarfNative.DW_OP_reg2,
         
-        reg3 = DwarfNative.DW_OP_reg3,
+        Reg3 = DwarfNative.DW_OP_reg3,
         
-        reg4 = DwarfNative.DW_OP_reg4,
+        Reg4 = DwarfNative.DW_OP_reg4,
         
-        reg5 = DwarfNative.DW_OP_reg5,
+        Reg5 = DwarfNative.DW_OP_reg5,
         
-        reg6 = DwarfNative.DW_OP_reg6,
+        Reg6 = DwarfNative.DW_OP_reg6,
         
-        reg7 = DwarfNative.DW_OP_reg7,
+        Reg7 = DwarfNative.DW_OP_reg7,
         
-        reg8 = DwarfNative.DW_OP_reg8,
+        Reg8 = DwarfNative.DW_OP_reg8,
         
-        reg9 = DwarfNative.DW_OP_reg9,
+        Reg9 = DwarfNative.DW_OP_reg9,
         
-        reg10 = DwarfNative.DW_OP_reg10,
+        Reg10 = DwarfNative.DW_OP_reg10,
         
-        reg11 = DwarfNative.DW_OP_reg11,
+        Reg11 = DwarfNative.DW_OP_reg11,
         
-        reg12 = DwarfNative.DW_OP_reg12,
+        Reg12 = DwarfNative.DW_OP_reg12,
         
-        reg13 = DwarfNative.DW_OP_reg13,
+        Reg13 = DwarfNative.DW_OP_reg13,
         
-        reg14 = DwarfNative.DW_OP_reg14,
+        Reg14 = DwarfNative.DW_OP_reg14,
         
-        reg15 = DwarfNative.DW_OP_reg15,
+        Reg15 = DwarfNative.DW_OP_reg15,
         
-        reg16 = DwarfNative.DW_OP_reg16,
+        Reg16 = DwarfNative.DW_OP_reg16,
         
-        reg17 = DwarfNative.DW_OP_reg17,
+        Reg17 = DwarfNative.DW_OP_reg17,
         
-        reg18 = DwarfNative.DW_OP_reg18,
+        Reg18 = DwarfNative.DW_OP_reg18,
         
-        reg19 = DwarfNative.DW_OP_reg19,
+        Reg19 = DwarfNative.DW_OP_reg19,
         
-        reg20 = DwarfNative.DW_OP_reg20,
+        Reg20 = DwarfNative.DW_OP_reg20,
         
-        reg21 = DwarfNative.DW_OP_reg21,
+        Reg21 = DwarfNative.DW_OP_reg21,
         
-        reg22 = DwarfNative.DW_OP_reg22,
+        Reg22 = DwarfNative.DW_OP_reg22,
         
-        reg23 = DwarfNative.DW_OP_reg23,
+        Reg23 = DwarfNative.DW_OP_reg23,
         
-        reg24 = DwarfNative.DW_OP_reg24,
+        Reg24 = DwarfNative.DW_OP_reg24,
         
-        reg25 = DwarfNative.DW_OP_reg25,
+        Reg25 = DwarfNative.DW_OP_reg25,
         
-        reg26 = DwarfNative.DW_OP_reg26,
+        Reg26 = DwarfNative.DW_OP_reg26,
         
-        reg27 = DwarfNative.DW_OP_reg27,
+        Reg27 = DwarfNative.DW_OP_reg27,
         
-        reg28 = DwarfNative.DW_OP_reg28,
+        Reg28 = DwarfNative.DW_OP_reg28,
         
-        reg29 = DwarfNative.DW_OP_reg29,
+        Reg29 = DwarfNative.DW_OP_reg29,
         
-        reg30 = DwarfNative.DW_OP_reg30,
+        Reg30 = DwarfNative.DW_OP_reg30,
         
-        reg31 = DwarfNative.DW_OP_reg31,
+        Reg31 = DwarfNative.DW_OP_reg31,
         
-        breg0 = DwarfNative.DW_OP_breg0,
+        Breg0 = DwarfNative.DW_OP_breg0,
         
-        breg1 = DwarfNative.DW_OP_breg1,
+        Breg1 = DwarfNative.DW_OP_breg1,
         
-        breg2 = DwarfNative.DW_OP_breg2,
+        Breg2 = DwarfNative.DW_OP_breg2,
         
-        breg3 = DwarfNative.DW_OP_breg3,
+        Breg3 = DwarfNative.DW_OP_breg3,
         
-        breg4 = DwarfNative.DW_OP_breg4,
+        Breg4 = DwarfNative.DW_OP_breg4,
         
-        breg5 = DwarfNative.DW_OP_breg5,
+        Breg5 = DwarfNative.DW_OP_breg5,
         
-        breg6 = DwarfNative.DW_OP_breg6,
+        Breg6 = DwarfNative.DW_OP_breg6,
         
-        breg7 = DwarfNative.DW_OP_breg7,
+        Breg7 = DwarfNative.DW_OP_breg7,
         
-        breg8 = DwarfNative.DW_OP_breg8,
+        Breg8 = DwarfNative.DW_OP_breg8,
         
-        breg9 = DwarfNative.DW_OP_breg9,
+        Breg9 = DwarfNative.DW_OP_breg9,
         
-        breg10 = DwarfNative.DW_OP_breg10,
+        Breg10 = DwarfNative.DW_OP_breg10,
         
-        breg11 = DwarfNative.DW_OP_breg11,
+        Breg11 = DwarfNative.DW_OP_breg11,
         
-        breg12 = DwarfNative.DW_OP_breg12,
+        Breg12 = DwarfNative.DW_OP_breg12,
         
-        breg13 = DwarfNative.DW_OP_breg13,
+        Breg13 = DwarfNative.DW_OP_breg13,
         
-        breg14 = DwarfNative.DW_OP_breg14,
+        Breg14 = DwarfNative.DW_OP_breg14,
         
-        breg15 = DwarfNative.DW_OP_breg15,
+        Breg15 = DwarfNative.DW_OP_breg15,
         
-        breg16 = DwarfNative.DW_OP_breg16,
+        Breg16 = DwarfNative.DW_OP_breg16,
         
-        breg17 = DwarfNative.DW_OP_breg17,
+        Breg17 = DwarfNative.DW_OP_breg17,
         
-        breg18 = DwarfNative.DW_OP_breg18,
+        Breg18 = DwarfNative.DW_OP_breg18,
         
-        breg19 = DwarfNative.DW_OP_breg19,
+        Breg19 = DwarfNative.DW_OP_breg19,
         
-        breg20 = DwarfNative.DW_OP_breg20,
+        Breg20 = DwarfNative.DW_OP_breg20,
         
-        breg21 = DwarfNative.DW_OP_breg21,
+        Breg21 = DwarfNative.DW_OP_breg21,
         
-        breg22 = DwarfNative.DW_OP_breg22,
+        Breg22 = DwarfNative.DW_OP_breg22,
         
-        breg23 = DwarfNative.DW_OP_breg23,
+        Breg23 = DwarfNative.DW_OP_breg23,
         
-        breg24 = DwarfNative.DW_OP_breg24,
+        Breg24 = DwarfNative.DW_OP_breg24,
         
-        breg25 = DwarfNative.DW_OP_breg25,
+        Breg25 = DwarfNative.DW_OP_breg25,
         
-        breg26 = DwarfNative.DW_OP_breg26,
+        Breg26 = DwarfNative.DW_OP_breg26,
         
-        breg27 = DwarfNative.DW_OP_breg27,
+        Breg27 = DwarfNative.DW_OP_breg27,
         
-        breg28 = DwarfNative.DW_OP_breg28,
+        Breg28 = DwarfNative.DW_OP_breg28,
         
-        breg29 = DwarfNative.DW_OP_breg29,
+        Breg29 = DwarfNative.DW_OP_breg29,
         
-        breg30 = DwarfNative.DW_OP_breg30,
+        Breg30 = DwarfNative.DW_OP_breg30,
         
-        breg31 = DwarfNative.DW_OP_breg31,
+        Breg31 = DwarfNative.DW_OP_breg31,
         
-        regx = DwarfNative.DW_OP_regx,
+        Regx = DwarfNative.DW_OP_regx,
         
-        fbreg = DwarfNative.DW_OP_fbreg,
+        Fbreg = DwarfNative.DW_OP_fbreg,
         
-        bregx = DwarfNative.DW_OP_bregx,
+        Bregx = DwarfNative.DW_OP_bregx,
         
-        piece = DwarfNative.DW_OP_piece,
+        Piece = DwarfNative.DW_OP_piece,
         
-        deref_size = DwarfNative.DW_OP_deref_size,
+        DerefSize = DwarfNative.DW_OP_deref_size,
         
-        xderef_size = DwarfNative.DW_OP_xderef_size,
+        XderefSize = DwarfNative.DW_OP_xderef_size,
         
-        nop = DwarfNative.DW_OP_nop,
+        Nop = DwarfNative.DW_OP_nop,
         
-        push_object_address = DwarfNative.DW_OP_push_object_address,
+        PushObjectAddress = DwarfNative.DW_OP_push_object_address,
         
-        call2 = DwarfNative.DW_OP_call2,
+        Call2 = DwarfNative.DW_OP_call2,
         
-        call4 = DwarfNative.DW_OP_call4,
+        Call4 = DwarfNative.DW_OP_call4,
         
-        call_ref = DwarfNative.DW_OP_call_ref,
+        CallRef = DwarfNative.DW_OP_call_ref,
         
-        form_tls_address = DwarfNative.DW_OP_form_tls_address,
+        FormTlsAddress = DwarfNative.DW_OP_form_tls_address,
         
-        call_frame_cfa = DwarfNative.DW_OP_call_frame_cfa,
+        CallFrameCfa = DwarfNative.DW_OP_call_frame_cfa,
         
-        bit_piece = DwarfNative.DW_OP_bit_piece,
+        BitPiece = DwarfNative.DW_OP_bit_piece,
         
-        implicit_value = DwarfNative.DW_OP_implicit_value,
+        ImplicitValue = DwarfNative.DW_OP_implicit_value,
         
-        stack_value = DwarfNative.DW_OP_stack_value,
+        StackValue = DwarfNative.DW_OP_stack_value,
         
-        implicit_pointer = DwarfNative.DW_OP_implicit_pointer,
+        ImplicitPointer = DwarfNative.DW_OP_implicit_pointer,
         
-        addrx = DwarfNative.DW_OP_addrx,
+        Addrx = DwarfNative.DW_OP_addrx,
         
-        constx = DwarfNative.DW_OP_constx,
+        Constx = DwarfNative.DW_OP_constx,
         
-        entry_value = DwarfNative.DW_OP_entry_value,
+        EntryValue = DwarfNative.DW_OP_entry_value,
         
-        const_type = DwarfNative.DW_OP_const_type,
+        ConstType = DwarfNative.DW_OP_const_type,
         
-        regval_type = DwarfNative.DW_OP_regval_type,
+        RegvalType = DwarfNative.DW_OP_regval_type,
         
-        deref_type = DwarfNative.DW_OP_deref_type,
+        DerefType = DwarfNative.DW_OP_deref_type,
         
-        xderef_type = DwarfNative.DW_OP_xderef_type,
+        XderefType = DwarfNative.DW_OP_xderef_type,
         
-        convert = DwarfNative.DW_OP_convert,
+        Convert = DwarfNative.DW_OP_convert,
         
-        reinterpret = DwarfNative.DW_OP_reinterpret,
+        Reinterpret = DwarfNative.DW_OP_reinterpret,
         
-        GNU_push_tls_address = DwarfNative.DW_OP_GNU_push_tls_address,
+        GNUPushTlsAddress = DwarfNative.DW_OP_GNU_push_tls_address,
         
-        GNU_uninit = DwarfNative.DW_OP_GNU_uninit,
+        GNUUninit = DwarfNative.DW_OP_GNU_uninit,
         
-        GNU_encoded_addr = DwarfNative.DW_OP_GNU_encoded_addr,
+        GNUEncodedAddr = DwarfNative.DW_OP_GNU_encoded_addr,
         
-        GNU_implicit_pointer = DwarfNative.DW_OP_GNU_implicit_pointer,
+        GNUImplicitPointer = DwarfNative.DW_OP_GNU_implicit_pointer,
         
-        GNU_entry_value = DwarfNative.DW_OP_GNU_entry_value,
+        GNUEntryValue = DwarfNative.DW_OP_GNU_entry_value,
         
-        GNU_const_type = DwarfNative.DW_OP_GNU_const_type,
+        GNUConstType = DwarfNative.DW_OP_GNU_const_type,
         
-        GNU_regval_type = DwarfNative.DW_OP_GNU_regval_type,
+        GNURegvalType = DwarfNative.DW_OP_GNU_regval_type,
         
-        GNU_deref_type = DwarfNative.DW_OP_GNU_deref_type,
+        GNUDerefType = DwarfNative.DW_OP_GNU_deref_type,
         
-        GNU_convert = DwarfNative.DW_OP_GNU_convert,
+        GNUConvert = DwarfNative.DW_OP_GNU_convert,
         
-        GNU_reinterpret = DwarfNative.DW_OP_GNU_reinterpret,
+        GNUReinterpret = DwarfNative.DW_OP_GNU_reinterpret,
         
-        GNU_parameter_ref = DwarfNative.DW_OP_GNU_parameter_ref,
+        GNUParameterRef = DwarfNative.DW_OP_GNU_parameter_ref,
         
-        GNU_addr_index = DwarfNative.DW_OP_GNU_addr_index,
+        GNUAddrIndex = DwarfNative.DW_OP_GNU_addr_index,
         
-        GNU_const_index = DwarfNative.DW_OP_GNU_const_index,
+        GNUConstIndex = DwarfNative.DW_OP_GNU_const_index,
         
-        HP_unknown = DwarfNative.DW_OP_HP_unknown,
+        HPUnknown = DwarfNative.DW_OP_HP_unknown,
         
-        HP_is_value = DwarfNative.DW_OP_HP_is_value,
+        HPIsValue = DwarfNative.DW_OP_HP_is_value,
         
-        HP_fltconst4 = DwarfNative.DW_OP_HP_fltconst4,
+        HPFltconst4 = DwarfNative.DW_OP_HP_fltconst4,
         
-        HP_fltconst8 = DwarfNative.DW_OP_HP_fltconst8,
+        HPFltconst8 = DwarfNative.DW_OP_HP_fltconst8,
         
-        HP_mod_range = DwarfNative.DW_OP_HP_mod_range,
+        HPModRange = DwarfNative.DW_OP_HP_mod_range,
         
-        HP_unmod_range = DwarfNative.DW_OP_HP_unmod_range,
+        HPUnmodRange = DwarfNative.DW_OP_HP_unmod_range,
         
-        HP_tls = DwarfNative.DW_OP_HP_tls,
+        HPTls = DwarfNative.DW_OP_HP_tls,
         
-        INTEL_bit_piece = DwarfNative.DW_OP_INTEL_bit_piece,
+        INTELBitPiece = DwarfNative.DW_OP_INTEL_bit_piece,
         
-        APPLE_uninit = DwarfNative.DW_OP_APPLE_uninit,
+        APPLEUninit = DwarfNative.DW_OP_APPLE_uninit,
         
-        PGI_omp_thread_num = DwarfNative.DW_OP_PGI_omp_thread_num,
+        PGIOmpThreadNum = DwarfNative.DW_OP_PGI_omp_thread_num,
     }
     
     public readonly partial struct DwarfLanguageKindEx
@@ -6787,7 +6787,7 @@ namespace LibObjectFile.Dwarf
         
         public static readonly DwarfLanguageKindEx Ada83 = new DwarfLanguageKindEx(DwarfNative.DW_LANG_Ada83);
         
-        public static readonly DwarfLanguageKindEx C_plus_plus = new DwarfLanguageKindEx(DwarfNative.DW_LANG_C_plus_plus);
+        public static readonly DwarfLanguageKindEx CPlusPlus = new DwarfLanguageKindEx(DwarfNative.DW_LANG_C_plus_plus);
         
         public static readonly DwarfLanguageKindEx Cobol74 = new DwarfLanguageKindEx(DwarfNative.DW_LANG_Cobol74);
         
@@ -6834,7 +6834,7 @@ namespace LibObjectFile.Dwarf
         /// <summary>
         /// DWARF3f
         /// </summary>
-        public static readonly DwarfLanguageKindEx ObjC_plus_plus = new DwarfLanguageKindEx(DwarfNative.DW_LANG_ObjC_plus_plus);
+        public static readonly DwarfLanguageKindEx ObjCPlusPlus = new DwarfLanguageKindEx(DwarfNative.DW_LANG_ObjC_plus_plus);
         
         /// <summary>
         /// DWARF3f
@@ -6874,12 +6874,12 @@ namespace LibObjectFile.Dwarf
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfLanguageKindEx C_plus_plus_03 = new DwarfLanguageKindEx(DwarfNative.DW_LANG_C_plus_plus_03);
+        public static readonly DwarfLanguageKindEx CPlusPlus03 = new DwarfLanguageKindEx(DwarfNative.DW_LANG_C_plus_plus_03);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfLanguageKindEx C_plus_plus_11 = new DwarfLanguageKindEx(DwarfNative.DW_LANG_C_plus_plus_11);
+        public static readonly DwarfLanguageKindEx CPlusPlus11 = new DwarfLanguageKindEx(DwarfNative.DW_LANG_C_plus_plus_11);
         
         /// <summary>
         /// DWARF5
@@ -6914,7 +6914,7 @@ namespace LibObjectFile.Dwarf
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfLanguageKindEx C_plus_plus_14 = new DwarfLanguageKindEx(DwarfNative.DW_LANG_C_plus_plus_14);
+        public static readonly DwarfLanguageKindEx CPlusPlus14 = new DwarfLanguageKindEx(DwarfNative.DW_LANG_C_plus_plus_14);
         
         /// <summary>
         /// DWARF5
@@ -6939,7 +6939,7 @@ namespace LibObjectFile.Dwarf
         /// <summary>
         /// MIPS
         /// </summary>
-        public static readonly DwarfLanguageKindEx Mips_Assembler = new DwarfLanguageKindEx(DwarfNative.DW_LANG_Mips_Assembler);
+        public static readonly DwarfLanguageKindEx MipsAssembler = new DwarfLanguageKindEx(DwarfNative.DW_LANG_Mips_Assembler);
         
         /// <summary>
         /// UPC, use
@@ -6950,12 +6950,12 @@ namespace LibObjectFile.Dwarf
         /// <summary>
         /// ALTIUM
         /// </summary>
-        public static readonly DwarfLanguageKindEx ALTIUM_Assembler = new DwarfLanguageKindEx(DwarfNative.DW_LANG_ALTIUM_Assembler);
+        public static readonly DwarfLanguageKindEx ALTIUMAssembler = new DwarfLanguageKindEx(DwarfNative.DW_LANG_ALTIUM_Assembler);
         
         /// <summary>
         /// SUN
         /// </summary>
-        public static readonly DwarfLanguageKindEx SUN_Assembler = new DwarfLanguageKindEx(DwarfNative.DW_LANG_SUN_Assembler);
+        public static readonly DwarfLanguageKindEx SUNAssembler = new DwarfLanguageKindEx(DwarfNative.DW_LANG_SUN_Assembler);
         
         private string ToStringInternal()
         {
@@ -7015,7 +7015,7 @@ namespace LibObjectFile.Dwarf
         
         Ada83 = DwarfNative.DW_LANG_Ada83,
         
-        C_plus_plus = DwarfNative.DW_LANG_C_plus_plus,
+        CPlusPlus = DwarfNative.DW_LANG_C_plus_plus,
         
         Cobol74 = DwarfNative.DW_LANG_Cobol74,
         
@@ -7041,7 +7041,7 @@ namespace LibObjectFile.Dwarf
         
         ObjC = DwarfNative.DW_LANG_ObjC,
         
-        ObjC_plus_plus = DwarfNative.DW_LANG_ObjC_plus_plus,
+        ObjCPlusPlus = DwarfNative.DW_LANG_ObjC_plus_plus,
         
         UPC = DwarfNative.DW_LANG_UPC,
         
@@ -7057,9 +7057,9 @@ namespace LibObjectFile.Dwarf
         
         Haskel = DwarfNative.DW_LANG_Haskel,
         
-        C_plus_plus_03 = DwarfNative.DW_LANG_C_plus_plus_03,
+        CPlusPlus03 = DwarfNative.DW_LANG_C_plus_plus_03,
         
-        C_plus_plus_11 = DwarfNative.DW_LANG_C_plus_plus_11,
+        CPlusPlus11 = DwarfNative.DW_LANG_C_plus_plus_11,
         
         OCaml = DwarfNative.DW_LANG_OCaml,
         
@@ -7073,7 +7073,7 @@ namespace LibObjectFile.Dwarf
         
         Dylan = DwarfNative.DW_LANG_Dylan,
         
-        C_plus_plus_14 = DwarfNative.DW_LANG_C_plus_plus_14,
+        CPlusPlus14 = DwarfNative.DW_LANG_C_plus_plus_14,
         
         Fortran03 = DwarfNative.DW_LANG_Fortran03,
         
@@ -7083,62 +7083,62 @@ namespace LibObjectFile.Dwarf
         
         BLISS = DwarfNative.DW_LANG_BLISS,
         
-        Mips_Assembler = DwarfNative.DW_LANG_Mips_Assembler,
+        MipsAssembler = DwarfNative.DW_LANG_Mips_Assembler,
         
         Upc = DwarfNative.DW_LANG_Upc,
         
-        ALTIUM_Assembler = DwarfNative.DW_LANG_ALTIUM_Assembler,
+        ALTIUMAssembler = DwarfNative.DW_LANG_ALTIUM_Assembler,
         
-        SUN_Assembler = DwarfNative.DW_LANG_SUN_Assembler,
+        SUNAssembler = DwarfNative.DW_LANG_SUN_Assembler,
     }
     
     public readonly partial struct DwarfCallingConventionEx
     {
-        public static readonly DwarfCallingConventionEx normal = new DwarfCallingConventionEx(DwarfNative.DW_CC_normal);
+        public static readonly DwarfCallingConventionEx Normal = new DwarfCallingConventionEx(DwarfNative.DW_CC_normal);
         
-        public static readonly DwarfCallingConventionEx program = new DwarfCallingConventionEx(DwarfNative.DW_CC_program);
+        public static readonly DwarfCallingConventionEx Program = new DwarfCallingConventionEx(DwarfNative.DW_CC_program);
         
-        public static readonly DwarfCallingConventionEx nocall = new DwarfCallingConventionEx(DwarfNative.DW_CC_nocall);
-        
-        /// <summary>
-        /// DWARF5
-        /// </summary>
-        public static readonly DwarfCallingConventionEx pass_by_reference = new DwarfCallingConventionEx(DwarfNative.DW_CC_pass_by_reference);
+        public static readonly DwarfCallingConventionEx Nocall = new DwarfCallingConventionEx(DwarfNative.DW_CC_nocall);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfCallingConventionEx pass_by_value = new DwarfCallingConventionEx(DwarfNative.DW_CC_pass_by_value);
+        public static readonly DwarfCallingConventionEx PassByReference = new DwarfCallingConventionEx(DwarfNative.DW_CC_pass_by_reference);
+        
+        /// <summary>
+        /// DWARF5
+        /// </summary>
+        public static readonly DwarfCallingConventionEx PassByValue = new DwarfCallingConventionEx(DwarfNative.DW_CC_pass_by_value);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfCallingConventionEx GNU_renesas_sh = new DwarfCallingConventionEx(DwarfNative.DW_CC_GNU_renesas_sh);
+        public static readonly DwarfCallingConventionEx GNURenesasSh = new DwarfCallingConventionEx(DwarfNative.DW_CC_GNU_renesas_sh);
         
         /// <summary>
         /// GNU
         /// </summary>
-        public static readonly DwarfCallingConventionEx GNU_borland_fastcall_i386 = new DwarfCallingConventionEx(DwarfNative.DW_CC_GNU_borland_fastcall_i386);
+        public static readonly DwarfCallingConventionEx GNUBorlandFastcallI386 = new DwarfCallingConventionEx(DwarfNative.DW_CC_GNU_borland_fastcall_i386);
         
         /// <summary>
         /// ALTIUM
         /// </summary>
-        public static readonly DwarfCallingConventionEx ALTIUM_interrupt = new DwarfCallingConventionEx(DwarfNative.DW_CC_ALTIUM_interrupt);
+        public static readonly DwarfCallingConventionEx ALTIUMInterrupt = new DwarfCallingConventionEx(DwarfNative.DW_CC_ALTIUM_interrupt);
         
         /// <summary>
         /// ALTIUM
         /// </summary>
-        public static readonly DwarfCallingConventionEx ALTIUM_near_system_stack = new DwarfCallingConventionEx(DwarfNative.DW_CC_ALTIUM_near_system_stack);
+        public static readonly DwarfCallingConventionEx ALTIUMNearSystemStack = new DwarfCallingConventionEx(DwarfNative.DW_CC_ALTIUM_near_system_stack);
         
         /// <summary>
         /// ALTIUM
         /// </summary>
-        public static readonly DwarfCallingConventionEx ALTIUM_near_user_stack = new DwarfCallingConventionEx(DwarfNative.DW_CC_ALTIUM_near_user_stack);
+        public static readonly DwarfCallingConventionEx ALTIUMNearUserStack = new DwarfCallingConventionEx(DwarfNative.DW_CC_ALTIUM_near_user_stack);
         
         /// <summary>
         /// ALTIUM
         /// </summary>
-        public static readonly DwarfCallingConventionEx ALTIUM_huge_user_stack = new DwarfCallingConventionEx(DwarfNative.DW_CC_ALTIUM_huge_user_stack);
+        public static readonly DwarfCallingConventionEx ALTIUMHugeUserStack = new DwarfCallingConventionEx(DwarfNative.DW_CC_ALTIUM_huge_user_stack);
         
         private string ToStringInternal()
         {
@@ -7162,27 +7162,27 @@ namespace LibObjectFile.Dwarf
     
     public enum DwarfCallingConvention : byte
     {
-        normal = DwarfNative.DW_CC_normal,
+        Normal = DwarfNative.DW_CC_normal,
         
-        program = DwarfNative.DW_CC_program,
+        Program = DwarfNative.DW_CC_program,
         
-        nocall = DwarfNative.DW_CC_nocall,
+        Nocall = DwarfNative.DW_CC_nocall,
         
-        pass_by_reference = DwarfNative.DW_CC_pass_by_reference,
+        PassByReference = DwarfNative.DW_CC_pass_by_reference,
         
-        pass_by_value = DwarfNative.DW_CC_pass_by_value,
+        PassByValue = DwarfNative.DW_CC_pass_by_value,
         
-        GNU_renesas_sh = DwarfNative.DW_CC_GNU_renesas_sh,
+        GNURenesasSh = DwarfNative.DW_CC_GNU_renesas_sh,
         
-        GNU_borland_fastcall_i386 = DwarfNative.DW_CC_GNU_borland_fastcall_i386,
+        GNUBorlandFastcallI386 = DwarfNative.DW_CC_GNU_borland_fastcall_i386,
         
-        ALTIUM_interrupt = DwarfNative.DW_CC_ALTIUM_interrupt,
+        ALTIUMInterrupt = DwarfNative.DW_CC_ALTIUM_interrupt,
         
-        ALTIUM_near_system_stack = DwarfNative.DW_CC_ALTIUM_near_system_stack,
+        ALTIUMNearSystemStack = DwarfNative.DW_CC_ALTIUM_near_system_stack,
         
-        ALTIUM_near_user_stack = DwarfNative.DW_CC_ALTIUM_near_user_stack,
+        ALTIUMNearUserStack = DwarfNative.DW_CC_ALTIUM_near_user_stack,
         
-        ALTIUM_huge_user_stack = DwarfNative.DW_CC_ALTIUM_huge_user_stack,
+        ALTIUMHugeUserStack = DwarfNative.DW_CC_ALTIUM_huge_user_stack,
     }
     
     public readonly partial struct DwarfUnitKindEx
@@ -7190,32 +7190,32 @@ namespace LibObjectFile.Dwarf
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfUnitKindEx compile = new DwarfUnitKindEx(DwarfNative.DW_UT_compile);
+        public static readonly DwarfUnitKindEx Compile = new DwarfUnitKindEx(DwarfNative.DW_UT_compile);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfUnitKindEx type = new DwarfUnitKindEx(DwarfNative.DW_UT_type);
+        public static readonly DwarfUnitKindEx Type = new DwarfUnitKindEx(DwarfNative.DW_UT_type);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfUnitKindEx partial = new DwarfUnitKindEx(DwarfNative.DW_UT_partial);
+        public static readonly DwarfUnitKindEx Partial = new DwarfUnitKindEx(DwarfNative.DW_UT_partial);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfUnitKindEx skeleton = new DwarfUnitKindEx(DwarfNative.DW_UT_skeleton);
+        public static readonly DwarfUnitKindEx Skeleton = new DwarfUnitKindEx(DwarfNative.DW_UT_skeleton);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfUnitKindEx split_compile = new DwarfUnitKindEx(DwarfNative.DW_UT_split_compile);
+        public static readonly DwarfUnitKindEx SplitCompile = new DwarfUnitKindEx(DwarfNative.DW_UT_split_compile);
         
         /// <summary>
         /// DWARF5
         /// </summary>
-        public static readonly DwarfUnitKindEx split_type = new DwarfUnitKindEx(DwarfNative.DW_UT_split_type);
+        public static readonly DwarfUnitKindEx SplitType = new DwarfUnitKindEx(DwarfNative.DW_UT_split_type);
         
         private string ToStringInternal()
         {
@@ -7234,17 +7234,17 @@ namespace LibObjectFile.Dwarf
     
     public enum DwarfUnitKind : byte
     {
-        compile = DwarfNative.DW_UT_compile,
+        Compile = DwarfNative.DW_UT_compile,
         
-        type = DwarfNative.DW_UT_type,
+        Type = DwarfNative.DW_UT_type,
         
-        partial = DwarfNative.DW_UT_partial,
+        Partial = DwarfNative.DW_UT_partial,
         
-        skeleton = DwarfNative.DW_UT_skeleton,
+        Skeleton = DwarfNative.DW_UT_skeleton,
         
-        split_compile = DwarfNative.DW_UT_split_compile,
+        SplitCompile = DwarfNative.DW_UT_split_compile,
         
-        split_type = DwarfNative.DW_UT_split_type,
+        SplitType = DwarfNative.DW_UT_split_type,
     }
     
     public static partial class DwarfHelper
@@ -7432,17 +7432,17 @@ namespace LibObjectFile.Dwarf
             };
     }
     
-    public partial class DwarfDIE_access_declaration : DwarfDIEDeclaration
+    public partial class DwarfDIEAccessDeclaration : DwarfDIEDeclaration
     {
         public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility, value);
             }
         }
         
@@ -7450,11 +7450,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -7462,26 +7462,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
     }
     
-    public partial class DwarfDIE_array_type : DwarfDIEDeclaration
+    public partial class DwarfDIEArrayType : DwarfDIEDeclaration
     {
         public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility, value);
             }
         }
         
@@ -7489,11 +7489,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.alignment);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Alignment);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.alignment, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Alignment, value);
             }
         }
         
@@ -7501,11 +7501,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Allocated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Allocated, value);
             }
         }
         
@@ -7513,11 +7513,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Associated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Associated, value);
             }
         }
         
@@ -7525,11 +7525,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.BitSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.BitSize, value);
             }
         }
         
@@ -7537,11 +7537,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.bit_stride);
+                return GetAttributeConstantOpt(DwarfAttributeKind.BitStride);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.bit_stride, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.BitStride, value);
             }
         }
         
@@ -7549,11 +7549,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.ByteSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.ByteSize, value);
             }
         }
         
@@ -7561,11 +7561,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location);
+                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation);
             }
             set
             {
-                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location, value);
+                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation, value);
             }
         }
         
@@ -7573,11 +7573,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.declaration);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.declaration, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration, value);
             }
         }
         
@@ -7585,11 +7585,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -7597,11 +7597,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -7609,11 +7609,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfArrayOrderingKind>(DwarfAttributeKind.ordering);
+                return GetAttributeValueOpt<DwarfArrayOrderingKind>(DwarfAttributeKind.Ordering);
             }
             set
             {
-                SetAttributeValueOpt<DwarfArrayOrderingKind>(DwarfAttributeKind.ordering, value);
+                SetAttributeValueOpt<DwarfArrayOrderingKind>(DwarfAttributeKind.Ordering, value);
             }
         }
         
@@ -7621,11 +7621,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.rank);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Rank);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.rank, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Rank, value);
             }
         }
         
@@ -7633,11 +7633,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.specification);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Specification);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.specification, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Specification, value);
             }
         }
         
@@ -7645,11 +7645,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKind.StartScope);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.StartScope, value);
             }
         }
         
@@ -7657,11 +7657,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
         
@@ -7669,26 +7669,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility, value);
             }
         }
     }
     
-    public partial class DwarfDIE_atomic_type : DwarfDIEDeclaration
+    public partial class DwarfDIEAtomicType : DwarfDIEDeclaration
     {
         public DwarfConstant? Alignment
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.alignment);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Alignment);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.alignment, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Alignment, value);
             }
         }
         
@@ -7696,11 +7696,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -7708,11 +7708,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -7720,26 +7720,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
     }
     
-    public partial class DwarfDIE_base_type : DwarfDIEDeclaration
+    public partial class DwarfDIEBaseType : DwarfDIEDeclaration
     {
         public DwarfConstant? Alignment
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.alignment);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Alignment);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.alignment, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Alignment, value);
             }
         }
         
@@ -7747,11 +7747,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Allocated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Allocated, value);
             }
         }
         
@@ -7759,11 +7759,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Associated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Associated, value);
             }
         }
         
@@ -7771,11 +7771,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.binary_scale);
+                return GetAttributeConstantOpt(DwarfAttributeKind.BinaryScale);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.binary_scale, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.BinaryScale, value);
             }
         }
         
@@ -7783,11 +7783,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.BitSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.BitSize, value);
             }
         }
         
@@ -7795,11 +7795,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.ByteSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.ByteSize, value);
             }
         }
         
@@ -7807,11 +7807,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.data_bit_offset);
+                return GetAttributeConstantOpt(DwarfAttributeKind.DataBitOffset);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.data_bit_offset, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.DataBitOffset, value);
             }
         }
         
@@ -7819,11 +7819,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location);
+                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation);
             }
             set
             {
-                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location, value);
+                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation, value);
             }
         }
         
@@ -7831,11 +7831,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.decimal_scale);
+                return GetAttributeConstantOpt(DwarfAttributeKind.DecimalScale);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.decimal_scale, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.DecimalScale, value);
             }
         }
         
@@ -7843,11 +7843,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.decimal_sign);
+                return GetAttributeConstantOpt(DwarfAttributeKind.DecimalSign);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.decimal_sign, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.DecimalSign, value);
             }
         }
         
@@ -7855,11 +7855,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.digit_count);
+                return GetAttributeConstantOpt(DwarfAttributeKind.DigitCount);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.digit_count, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.DigitCount, value);
             }
         }
         
@@ -7867,11 +7867,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.encoding);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Encoding);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.encoding, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Encoding, value);
             }
         }
         
@@ -7879,11 +7879,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.endianity);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Endianity);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.endianity, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Endianity, value);
             }
         }
         
@@ -7891,11 +7891,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -7903,11 +7903,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -7915,11 +7915,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.picture_string);
+                return GetAttributeValue<string>(DwarfAttributeKind.PictureString);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.picture_string, value);
+                SetAttributeValue<string>(DwarfAttributeKind.PictureString, value);
             }
         }
         
@@ -7927,26 +7927,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.small);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Small);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.small, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Small, value);
             }
         }
     }
     
-    public partial class DwarfDIE_call_site : DwarfDIE
+    public partial class DwarfDIECallSite : DwarfDIE
     {
         public DwarfConstant? CallColumn
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.call_column);
+                return GetAttributeConstantOpt(DwarfAttributeKind.CallColumn);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.call_column, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.CallColumn, value);
             }
         }
         
@@ -7954,11 +7954,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.call_file);
+                return GetAttributeConstantOpt(DwarfAttributeKind.CallFile);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.call_file, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.CallFile, value);
             }
         }
         
@@ -7966,11 +7966,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.call_line);
+                return GetAttributeConstantOpt(DwarfAttributeKind.CallLine);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.call_line, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.CallLine, value);
             }
         }
         
@@ -7978,11 +7978,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.call_origin);
+                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.CallOrigin);
             }
             set
             {
-                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.call_origin, value);
+                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.CallOrigin, value);
             }
         }
         
@@ -7990,11 +7990,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.call_pc);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.CallPC);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.call_pc, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.CallPC, value);
             }
         }
         
@@ -8002,11 +8002,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.call_return_pc);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.CallReturnPC);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.call_return_pc, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.CallReturnPC, value);
             }
         }
         
@@ -8014,11 +8014,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.call_tail_call);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.CallTailCall);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.call_tail_call, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.CallTailCall, value);
             }
         }
         
@@ -8026,11 +8026,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.call_target);
+                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.CallTarget);
             }
             set
             {
-                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.call_target, value);
+                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.CallTarget, value);
             }
         }
         
@@ -8038,11 +8038,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.call_target_clobbered);
+                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.CallTargetClobbered);
             }
             set
             {
-                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.call_target_clobbered, value);
+                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.CallTargetClobbered, value);
             }
         }
         
@@ -8050,26 +8050,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
     }
     
-    public partial class DwarfDIE_call_site_parameter : DwarfDIE
+    public partial class DwarfDIECallSiteParameter : DwarfDIE
     {
         public DwarfExpression CallDataLocation
         {
             get
             {
-                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.call_data_location);
+                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.CallDataLocation);
             }
             set
             {
-                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.call_data_location, value);
+                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.CallDataLocation, value);
             }
         }
         
@@ -8077,11 +8077,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.call_data_value);
+                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.CallDataValue);
             }
             set
             {
-                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.call_data_value, value);
+                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.CallDataValue, value);
             }
         }
         
@@ -8089,11 +8089,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.call_parameter);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.CallParameter);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.call_parameter, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.CallParameter, value);
             }
         }
         
@@ -8101,11 +8101,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.call_value);
+                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.CallValue);
             }
             set
             {
-                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.call_value, value);
+                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.CallValue, value);
             }
         }
         
@@ -8113,11 +8113,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.location);
+                return GetAttributeLocationOpt(DwarfAttributeKind.Location);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.location, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.Location, value);
             }
         }
         
@@ -8125,11 +8125,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -8137,11 +8137,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -8149,26 +8149,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
     }
     
-    public partial class DwarfDIE_catch_block : DwarfDIEDeclaration
+    public partial class DwarfDIECatchBlock : DwarfDIEDeclaration
     {
         public ulong? EntryPC
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.entry_pc);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.EntryPC);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.entry_pc, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.EntryPC, value);
             }
         }
         
@@ -8176,11 +8176,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.high_pc);
+                return GetAttributeConstantOpt(DwarfAttributeKind.HighPC);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.high_pc, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.HighPC, value);
             }
         }
         
@@ -8188,11 +8188,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.low_pc);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.LowPC);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.low_pc, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.LowPC, value);
             }
         }
         
@@ -8200,11 +8200,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.ranges);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.Ranges);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.ranges, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.Ranges, value);
             }
         }
         
@@ -8212,26 +8212,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.segment);
+                return GetAttributeLocationOpt(DwarfAttributeKind.Segment);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.segment, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.Segment, value);
             }
         }
     }
     
-    public partial class DwarfDIE_class_type : DwarfDIEDeclaration
+    public partial class DwarfDIEClassType : DwarfDIEDeclaration
     {
         public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility, value);
             }
         }
         
@@ -8239,11 +8239,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.alignment);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Alignment);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.alignment, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Alignment, value);
             }
         }
         
@@ -8251,11 +8251,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Allocated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Allocated, value);
             }
         }
         
@@ -8263,11 +8263,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Associated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Associated, value);
             }
         }
         
@@ -8275,11 +8275,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.BitSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.BitSize, value);
             }
         }
         
@@ -8287,11 +8287,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.ByteSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.ByteSize, value);
             }
         }
         
@@ -8299,11 +8299,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfCallingConvention>(DwarfAttributeKind.calling_convention);
+                return GetAttributeValueOpt<DwarfCallingConvention>(DwarfAttributeKind.CallingConvention);
             }
             set
             {
-                SetAttributeValueOpt<DwarfCallingConvention>(DwarfAttributeKind.calling_convention, value);
+                SetAttributeValueOpt<DwarfCallingConvention>(DwarfAttributeKind.CallingConvention, value);
             }
         }
         
@@ -8311,11 +8311,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location);
+                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation);
             }
             set
             {
-                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location, value);
+                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation, value);
             }
         }
         
@@ -8323,11 +8323,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.declaration);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.declaration, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration, value);
             }
         }
         
@@ -8335,11 +8335,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.export_symbols);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.ExportSymbols);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.export_symbols, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.ExportSymbols, value);
             }
         }
         
@@ -8347,11 +8347,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -8359,11 +8359,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -8371,11 +8371,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.signature);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Signature);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.signature, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Signature, value);
             }
         }
         
@@ -8383,11 +8383,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.specification);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Specification);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.specification, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Specification, value);
             }
         }
         
@@ -8395,11 +8395,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKind.StartScope);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.StartScope, value);
             }
         }
         
@@ -8407,26 +8407,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility, value);
             }
         }
     }
     
-    public partial class DwarfDIE_coarray_type : DwarfDIEDeclaration
+    public partial class DwarfDIECoarrayType : DwarfDIEDeclaration
     {
         public DwarfConstant? Alignment
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.alignment);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Alignment);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.alignment, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Alignment, value);
             }
         }
         
@@ -8434,11 +8434,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.BitSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.BitSize, value);
             }
         }
         
@@ -8446,11 +8446,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.ByteSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.ByteSize, value);
             }
         }
         
@@ -8458,11 +8458,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -8470,11 +8470,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -8482,26 +8482,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
     }
     
-    public partial class DwarfDIE_common_block : DwarfDIEDeclaration
+    public partial class DwarfDIECommonBlock : DwarfDIEDeclaration
     {
         public bool? Declaration
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.declaration);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.declaration, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration, value);
             }
         }
         
@@ -8509,11 +8509,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.linkage_name);
+                return GetAttributeValue<string>(DwarfAttributeKind.LinkageName);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.linkage_name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.LinkageName, value);
             }
         }
         
@@ -8521,11 +8521,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.location);
+                return GetAttributeLocationOpt(DwarfAttributeKind.Location);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.location, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.Location, value);
             }
         }
         
@@ -8533,11 +8533,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -8545,11 +8545,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -8557,11 +8557,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.segment);
+                return GetAttributeLocationOpt(DwarfAttributeKind.Segment);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.segment, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.Segment, value);
             }
         }
         
@@ -8569,26 +8569,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility, value);
             }
         }
     }
     
-    public partial class DwarfDIE_common_inclusion : DwarfDIEDeclaration
+    public partial class DwarfDIECommonInclusion : DwarfDIEDeclaration
     {
         public DwarfDIE CommonReference
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.common_reference);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.CommonReference);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.common_reference, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.CommonReference, value);
             }
         }
         
@@ -8596,11 +8596,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.declaration);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.declaration, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration, value);
             }
         }
         
@@ -8608,26 +8608,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility, value);
             }
         }
     }
     
-    public partial class DwarfDIE_compile_unit : DwarfDIE
+    public partial class DwarfDIECompileUnit : DwarfDIE
     {
         public ulong? AddrBase
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.addr_base);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.AddrBase);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.addr_base, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.AddrBase, value);
             }
         }
         
@@ -8635,11 +8635,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.base_types);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.BaseTypes);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.base_types, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.BaseTypes, value);
             }
         }
         
@@ -8647,11 +8647,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.comp_dir);
+                return GetAttributeValue<string>(DwarfAttributeKind.CompDir);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.comp_dir, value);
+                SetAttributeValue<string>(DwarfAttributeKind.CompDir, value);
             }
         }
         
@@ -8659,11 +8659,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.entry_pc);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.EntryPC);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.entry_pc, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.EntryPC, value);
             }
         }
         
@@ -8671,11 +8671,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfIdentifierCaseKind>(DwarfAttributeKind.identifier_case);
+                return GetAttributeValueOpt<DwarfIdentifierCaseKind>(DwarfAttributeKind.IdentifierCase);
             }
             set
             {
-                SetAttributeValueOpt<DwarfIdentifierCaseKind>(DwarfAttributeKind.identifier_case, value);
+                SetAttributeValueOpt<DwarfIdentifierCaseKind>(DwarfAttributeKind.IdentifierCase, value);
             }
         }
         
@@ -8683,11 +8683,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.high_pc);
+                return GetAttributeConstantOpt(DwarfAttributeKind.HighPC);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.high_pc, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.HighPC, value);
             }
         }
         
@@ -8695,11 +8695,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfLanguageKind>(DwarfAttributeKind.language);
+                return GetAttributeValueOpt<DwarfLanguageKind>(DwarfAttributeKind.Language);
             }
             set
             {
-                SetAttributeValueOpt<DwarfLanguageKind>(DwarfAttributeKind.language, value);
+                SetAttributeValueOpt<DwarfLanguageKind>(DwarfAttributeKind.Language, value);
             }
         }
         
@@ -8707,11 +8707,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.low_pc);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.LowPC);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.low_pc, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.LowPC, value);
             }
         }
         
@@ -8719,11 +8719,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.macros);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.Macros);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.macros, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.Macros, value);
             }
         }
         
@@ -8731,11 +8731,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.main_subprogram);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.MainSubprogram);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.main_subprogram, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.MainSubprogram, value);
             }
         }
         
@@ -8743,11 +8743,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -8755,11 +8755,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -8767,11 +8767,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.producer);
+                return GetAttributeValue<string>(DwarfAttributeKind.Producer);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.producer, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Producer, value);
             }
         }
         
@@ -8779,11 +8779,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.ranges);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.Ranges);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.ranges, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.Ranges, value);
             }
         }
         
@@ -8791,11 +8791,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.rnglists_base);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.RnglistsBase);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.rnglists_base, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.RnglistsBase, value);
             }
         }
         
@@ -8803,11 +8803,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.segment);
+                return GetAttributeLocationOpt(DwarfAttributeKind.Segment);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.segment, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.Segment, value);
             }
         }
         
@@ -8815,11 +8815,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDebugLine>(DwarfAttributeKind.stmt_list);
+                return GetAttributeValue<DwarfDebugLine>(DwarfAttributeKind.StmtList);
             }
             set
             {
-                SetAttributeValue<DwarfDebugLine>(DwarfAttributeKind.stmt_list, value);
+                SetAttributeValue<DwarfDebugLine>(DwarfAttributeKind.StmtList, value);
             }
         }
         
@@ -8827,11 +8827,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.str_offsets_base);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.StrOffsetsBase);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.str_offsets_base, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.StrOffsetsBase, value);
             }
         }
         
@@ -8839,26 +8839,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.use_UTF8);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.UseUTF8);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.use_UTF8, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.UseUTF8, value);
             }
         }
     }
     
-    public partial class DwarfDIE_condition : DwarfDIEDeclaration
+    public partial class DwarfDIECondition : DwarfDIEDeclaration
     {
         public string Name
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -8866,26 +8866,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
     }
     
-    public partial class DwarfDIE_const_type : DwarfDIEDeclaration
+    public partial class DwarfDIEConstType : DwarfDIEDeclaration
     {
         public DwarfConstant? Alignment
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.alignment);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Alignment);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.alignment, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Alignment, value);
             }
         }
         
@@ -8893,11 +8893,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -8905,11 +8905,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -8917,26 +8917,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
     }
     
-    public partial class DwarfDIE_constant : DwarfDIEDeclaration
+    public partial class DwarfDIEConstant : DwarfDIEDeclaration
     {
         public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility, value);
             }
         }
         
@@ -8944,11 +8944,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.const_value);
+                return GetAttributeConstantOpt(DwarfAttributeKind.ConstValue);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.const_value, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.ConstValue, value);
             }
         }
         
@@ -8956,11 +8956,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.declaration);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.declaration, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration, value);
             }
         }
         
@@ -8968,11 +8968,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.endianity);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Endianity);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.endianity, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Endianity, value);
             }
         }
         
@@ -8980,11 +8980,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.external);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.External);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.external, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.External, value);
             }
         }
         
@@ -8992,11 +8992,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.linkage_name);
+                return GetAttributeValue<string>(DwarfAttributeKind.LinkageName);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.linkage_name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.LinkageName, value);
             }
         }
         
@@ -9004,11 +9004,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -9016,11 +9016,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -9028,11 +9028,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKind.StartScope);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.StartScope, value);
             }
         }
         
@@ -9040,11 +9040,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
         
@@ -9052,41 +9052,41 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility, value);
             }
         }
     }
     
-    public partial class DwarfDIE_dwarf_procedure : DwarfDIE
+    public partial class DwarfDIEDwarfProcedure : DwarfDIE
     {
         public DwarfLocation? Location
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.location);
+                return GetAttributeLocationOpt(DwarfAttributeKind.Location);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.location, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.Location, value);
             }
         }
     }
     
-    public partial class DwarfDIE_dynamic_type : DwarfDIEDeclaration
+    public partial class DwarfDIEDynamicType : DwarfDIEDeclaration
     {
         public DwarfConstant? Alignment
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.alignment);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Alignment);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.alignment, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Alignment, value);
             }
         }
         
@@ -9094,11 +9094,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Allocated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Allocated, value);
             }
         }
         
@@ -9106,11 +9106,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Associated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Associated, value);
             }
         }
         
@@ -9118,11 +9118,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location);
+                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation);
             }
             set
             {
-                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location, value);
+                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation, value);
             }
         }
         
@@ -9130,11 +9130,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -9142,11 +9142,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -9154,26 +9154,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
     }
     
-    public partial class DwarfDIE_entry_point : DwarfDIEDeclaration
+    public partial class DwarfDIEEntryPoint : DwarfDIEDeclaration
     {
         public DwarfConstant? AddressClass
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.address_class);
+                return GetAttributeConstantOpt(DwarfAttributeKind.AddressClass);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.address_class, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.AddressClass, value);
             }
         }
         
@@ -9181,11 +9181,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.frame_base);
+                return GetAttributeLocationOpt(DwarfAttributeKind.FrameBase);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.frame_base, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.FrameBase, value);
             }
         }
         
@@ -9193,11 +9193,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.linkage_name);
+                return GetAttributeValue<string>(DwarfAttributeKind.LinkageName);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.linkage_name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.LinkageName, value);
             }
         }
         
@@ -9205,11 +9205,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.low_pc);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.LowPC);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.low_pc, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.LowPC, value);
             }
         }
         
@@ -9217,11 +9217,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -9229,11 +9229,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -9241,11 +9241,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.return_addr);
+                return GetAttributeLocationOpt(DwarfAttributeKind.ReturnAddr);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.return_addr, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.ReturnAddr, value);
             }
         }
         
@@ -9253,11 +9253,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.segment);
+                return GetAttributeLocationOpt(DwarfAttributeKind.Segment);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.segment, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.Segment, value);
             }
         }
         
@@ -9265,11 +9265,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.static_link);
+                return GetAttributeLocationOpt(DwarfAttributeKind.StaticLink);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.static_link, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.StaticLink, value);
             }
         }
         
@@ -9277,26 +9277,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
     }
     
-    public partial class DwarfDIE_enumeration_type : DwarfDIEDeclaration
+    public partial class DwarfDIEEnumerationType : DwarfDIEDeclaration
     {
         public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility, value);
             }
         }
         
@@ -9304,11 +9304,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.alignment);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Alignment);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.alignment, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Alignment, value);
             }
         }
         
@@ -9316,11 +9316,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Allocated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Allocated, value);
             }
         }
         
@@ -9328,11 +9328,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Associated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Associated, value);
             }
         }
         
@@ -9340,11 +9340,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.BitSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.BitSize, value);
             }
         }
         
@@ -9352,11 +9352,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.bit_stride);
+                return GetAttributeConstantOpt(DwarfAttributeKind.BitStride);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.bit_stride, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.BitStride, value);
             }
         }
         
@@ -9364,11 +9364,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.ByteSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.ByteSize, value);
             }
         }
         
@@ -9376,11 +9376,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.byte_stride);
+                return GetAttributeConstantOpt(DwarfAttributeKind.ByteStride);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.byte_stride, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.ByteStride, value);
             }
         }
         
@@ -9388,11 +9388,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location);
+                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation);
             }
             set
             {
-                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location, value);
+                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation, value);
             }
         }
         
@@ -9400,11 +9400,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.declaration);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.declaration, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration, value);
             }
         }
         
@@ -9412,11 +9412,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.enum_class);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.EnumClass);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.enum_class, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.EnumClass, value);
             }
         }
         
@@ -9424,11 +9424,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -9436,11 +9436,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -9448,11 +9448,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.signature);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Signature);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.signature, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Signature, value);
             }
         }
         
@@ -9460,11 +9460,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.specification);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Specification);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.specification, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Specification, value);
             }
         }
         
@@ -9472,11 +9472,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKind.StartScope);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.StartScope, value);
             }
         }
         
@@ -9484,11 +9484,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
         
@@ -9496,26 +9496,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility, value);
             }
         }
     }
     
-    public partial class DwarfDIE_enumerator : DwarfDIEDeclaration
+    public partial class DwarfDIEEnumerator : DwarfDIEDeclaration
     {
         public DwarfConstant? ConstValue
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.const_value);
+                return GetAttributeConstantOpt(DwarfAttributeKind.ConstValue);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.const_value, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.ConstValue, value);
             }
         }
         
@@ -9523,11 +9523,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -9535,26 +9535,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
     }
     
-    public partial class DwarfDIE_file_type : DwarfDIEDeclaration
+    public partial class DwarfDIEFileType : DwarfDIEDeclaration
     {
         public DwarfConstant? Alignment
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.alignment);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Alignment);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.alignment, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Alignment, value);
             }
         }
         
@@ -9562,11 +9562,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Allocated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Allocated, value);
             }
         }
         
@@ -9574,11 +9574,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Associated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Associated, value);
             }
         }
         
@@ -9586,11 +9586,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.BitSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.BitSize, value);
             }
         }
         
@@ -9598,11 +9598,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.ByteSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.ByteSize, value);
             }
         }
         
@@ -9610,11 +9610,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location);
+                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation);
             }
             set
             {
-                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location, value);
+                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation, value);
             }
         }
         
@@ -9622,11 +9622,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -9634,11 +9634,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -9646,11 +9646,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKind.StartScope);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.StartScope, value);
             }
         }
         
@@ -9658,11 +9658,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
         
@@ -9670,26 +9670,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility, value);
             }
         }
     }
     
-    public partial class DwarfDIE_formal_parameter : DwarfDIEDeclaration
+    public partial class DwarfDIEFormalParameter : DwarfDIEDeclaration
     {
         public bool? Artificial
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.artificial);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Artificial);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.artificial, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Artificial, value);
             }
         }
         
@@ -9697,11 +9697,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.const_value);
+                return GetAttributeConstantOpt(DwarfAttributeKind.ConstValue);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.const_value, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.ConstValue, value);
             }
         }
         
@@ -9709,11 +9709,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.default_value);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.DefaultValue);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.default_value, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.DefaultValue, value);
             }
         }
         
@@ -9721,11 +9721,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.endianity);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Endianity);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.endianity, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Endianity, value);
             }
         }
         
@@ -9733,11 +9733,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.is_optional);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.IsOptional);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.is_optional, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.IsOptional, value);
             }
         }
         
@@ -9745,11 +9745,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.location);
+                return GetAttributeLocationOpt(DwarfAttributeKind.Location);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.location, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.Location, value);
             }
         }
         
@@ -9757,11 +9757,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -9769,11 +9769,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -9781,11 +9781,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.segment);
+                return GetAttributeLocationOpt(DwarfAttributeKind.Segment);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.segment, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.Segment, value);
             }
         }
         
@@ -9793,11 +9793,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
         
@@ -9805,41 +9805,41 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.variable_parameter);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.VariableParameter);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.variable_parameter, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.VariableParameter, value);
             }
         }
     }
     
-    public partial class DwarfDIE_friend : DwarfDIEDeclaration
+    public partial class DwarfDIEFriend : DwarfDIEDeclaration
     {
         public DwarfDIE Friend
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.friend);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Friend);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.friend, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Friend, value);
             }
         }
     }
     
-    public partial class DwarfDIE_generic_subrange : DwarfDIEDeclaration
+    public partial class DwarfDIEGenericSubrange : DwarfDIEDeclaration
     {
         public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility, value);
             }
         }
         
@@ -9847,11 +9847,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.alignment);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Alignment);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.alignment, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Alignment, value);
             }
         }
         
@@ -9859,11 +9859,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Allocated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Allocated, value);
             }
         }
         
@@ -9871,11 +9871,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Associated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Associated, value);
             }
         }
         
@@ -9883,11 +9883,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.BitSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.BitSize, value);
             }
         }
         
@@ -9895,11 +9895,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.bit_stride);
+                return GetAttributeConstantOpt(DwarfAttributeKind.BitStride);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.bit_stride, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.BitStride, value);
             }
         }
         
@@ -9907,11 +9907,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.ByteSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.ByteSize, value);
             }
         }
         
@@ -9919,11 +9919,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.byte_stride);
+                return GetAttributeConstantOpt(DwarfAttributeKind.ByteStride);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.byte_stride, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.ByteStride, value);
             }
         }
         
@@ -9931,11 +9931,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.count);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Count);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.count, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Count, value);
             }
         }
         
@@ -9943,11 +9943,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location);
+                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation);
             }
             set
             {
-                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location, value);
+                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation, value);
             }
         }
         
@@ -9955,11 +9955,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.declaration);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.declaration, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration, value);
             }
         }
         
@@ -9967,11 +9967,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.lower_bound);
+                return GetAttributeConstantOpt(DwarfAttributeKind.LowerBound);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.lower_bound, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.LowerBound, value);
             }
         }
         
@@ -9979,11 +9979,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -9991,11 +9991,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -10003,11 +10003,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.threads_scaled);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.ThreadsScaled);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.threads_scaled, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.ThreadsScaled, value);
             }
         }
         
@@ -10015,11 +10015,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
         
@@ -10027,11 +10027,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.upper_bound);
+                return GetAttributeConstantOpt(DwarfAttributeKind.UpperBound);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.upper_bound, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.UpperBound, value);
             }
         }
         
@@ -10039,26 +10039,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility, value);
             }
         }
     }
     
-    public partial class DwarfDIE_immutable_type : DwarfDIEDeclaration
+    public partial class DwarfDIEImmutableType : DwarfDIEDeclaration
     {
         public string Name
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -10066,11 +10066,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -10078,26 +10078,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
     }
     
-    public partial class DwarfDIE_imported_declaration : DwarfDIEDeclaration
+    public partial class DwarfDIEImportedDeclaration : DwarfDIEDeclaration
     {
         public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility, value);
             }
         }
         
@@ -10105,11 +10105,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.import);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Import);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.import, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Import, value);
             }
         }
         
@@ -10117,11 +10117,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -10129,11 +10129,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -10141,26 +10141,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKind.StartScope);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.StartScope, value);
             }
         }
     }
     
-    public partial class DwarfDIE_imported_module : DwarfDIEDeclaration
+    public partial class DwarfDIEImportedModule : DwarfDIEDeclaration
     {
         public DwarfDIE Import
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.import);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Import);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.import, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Import, value);
             }
         }
         
@@ -10168,41 +10168,41 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKind.StartScope);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.StartScope, value);
             }
         }
     }
     
-    public partial class DwarfDIE_imported_unit : DwarfDIE
+    public partial class DwarfDIEImportedUnit : DwarfDIE
     {
         public DwarfDIE Import
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.import);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Import);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.import, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Import, value);
             }
         }
     }
     
-    public partial class DwarfDIE_inheritance : DwarfDIEDeclaration
+    public partial class DwarfDIEInheritance : DwarfDIEDeclaration
     {
         public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility, value);
             }
         }
         
@@ -10210,11 +10210,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.data_member_location);
+                return GetAttributeLocationOpt(DwarfAttributeKind.DataMemberLocation);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.data_member_location, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.DataMemberLocation, value);
             }
         }
         
@@ -10222,11 +10222,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
         
@@ -10234,26 +10234,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfVirtuality>(DwarfAttributeKind.virtuality);
+                return GetAttributeValueOpt<DwarfVirtuality>(DwarfAttributeKind.Virtuality);
             }
             set
             {
-                SetAttributeValueOpt<DwarfVirtuality>(DwarfAttributeKind.virtuality, value);
+                SetAttributeValueOpt<DwarfVirtuality>(DwarfAttributeKind.Virtuality, value);
             }
         }
     }
     
-    public partial class DwarfDIE_inlined_subroutine : DwarfDIE
+    public partial class DwarfDIEInlinedSubroutine : DwarfDIE
     {
         public DwarfConstant? CallColumn
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.call_column);
+                return GetAttributeConstantOpt(DwarfAttributeKind.CallColumn);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.call_column, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.CallColumn, value);
             }
         }
         
@@ -10261,11 +10261,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.call_file);
+                return GetAttributeConstantOpt(DwarfAttributeKind.CallFile);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.call_file, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.CallFile, value);
             }
         }
         
@@ -10273,11 +10273,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.call_line);
+                return GetAttributeConstantOpt(DwarfAttributeKind.CallLine);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.call_line, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.CallLine, value);
             }
         }
         
@@ -10285,11 +10285,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.const_expr);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.ConstExpr);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.const_expr, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.ConstExpr, value);
             }
         }
         
@@ -10297,11 +10297,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.entry_pc);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.EntryPC);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.entry_pc, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.EntryPC, value);
             }
         }
         
@@ -10309,11 +10309,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.high_pc);
+                return GetAttributeConstantOpt(DwarfAttributeKind.HighPC);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.high_pc, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.HighPC, value);
             }
         }
         
@@ -10321,11 +10321,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.low_pc);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.LowPC);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.low_pc, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.LowPC, value);
             }
         }
         
@@ -10333,11 +10333,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.ranges);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.Ranges);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.ranges, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.Ranges, value);
             }
         }
         
@@ -10345,11 +10345,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.return_addr);
+                return GetAttributeLocationOpt(DwarfAttributeKind.ReturnAddr);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.return_addr, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.ReturnAddr, value);
             }
         }
         
@@ -10357,11 +10357,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.segment);
+                return GetAttributeLocationOpt(DwarfAttributeKind.Segment);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.segment, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.Segment, value);
             }
         }
         
@@ -10369,11 +10369,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKind.StartScope);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.StartScope, value);
             }
         }
         
@@ -10381,26 +10381,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<object>(DwarfAttributeKind.trampoline);
+                return GetAttributeValue<object>(DwarfAttributeKind.Trampoline);
             }
             set
             {
-                SetAttributeValue<object>(DwarfAttributeKind.trampoline, value);
+                SetAttributeValue<object>(DwarfAttributeKind.Trampoline, value);
             }
         }
     }
     
-    public partial class DwarfDIE_interface_type : DwarfDIEDeclaration
+    public partial class DwarfDIEInterfaceType : DwarfDIEDeclaration
     {
         public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility, value);
             }
         }
         
@@ -10408,11 +10408,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.alignment);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Alignment);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.alignment, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Alignment, value);
             }
         }
         
@@ -10420,11 +10420,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -10432,11 +10432,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -10444,11 +10444,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.signature);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Signature);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.signature, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Signature, value);
             }
         }
         
@@ -10456,26 +10456,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKind.StartScope);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.StartScope, value);
             }
         }
     }
     
-    public partial class DwarfDIE_label : DwarfDIEDeclaration
+    public partial class DwarfDIELabel : DwarfDIEDeclaration
     {
         public ulong? LowPC
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.low_pc);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.LowPC);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.low_pc, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.LowPC, value);
             }
         }
         
@@ -10483,11 +10483,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -10495,11 +10495,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -10507,11 +10507,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.segment);
+                return GetAttributeLocationOpt(DwarfAttributeKind.Segment);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.segment, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.Segment, value);
             }
         }
         
@@ -10519,26 +10519,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKind.StartScope);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.StartScope, value);
             }
         }
     }
     
-    public partial class DwarfDIE_lexical_block : DwarfDIEDeclaration
+    public partial class DwarfDIELexicalBlock : DwarfDIEDeclaration
     {
         public ulong? EntryPC
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.entry_pc);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.EntryPC);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.entry_pc, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.EntryPC, value);
             }
         }
         
@@ -10546,11 +10546,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.high_pc);
+                return GetAttributeConstantOpt(DwarfAttributeKind.HighPC);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.high_pc, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.HighPC, value);
             }
         }
         
@@ -10558,11 +10558,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.low_pc);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.LowPC);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.low_pc, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.LowPC, value);
             }
         }
         
@@ -10570,11 +10570,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -10582,11 +10582,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -10594,11 +10594,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.ranges);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.Ranges);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.ranges, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.Ranges, value);
             }
         }
         
@@ -10606,26 +10606,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.segment);
+                return GetAttributeLocationOpt(DwarfAttributeKind.Segment);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.segment, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.Segment, value);
             }
         }
     }
     
-    public partial class DwarfDIE_member : DwarfDIEDeclaration
+    public partial class DwarfDIEMember : DwarfDIEDeclaration
     {
         public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility, value);
             }
         }
         
@@ -10633,11 +10633,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.artificial);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Artificial);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.artificial, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Artificial, value);
             }
         }
         
@@ -10645,11 +10645,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.BitSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.BitSize, value);
             }
         }
         
@@ -10657,11 +10657,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.ByteSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.ByteSize, value);
             }
         }
         
@@ -10669,11 +10669,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.data_bit_offset);
+                return GetAttributeConstantOpt(DwarfAttributeKind.DataBitOffset);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.data_bit_offset, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.DataBitOffset, value);
             }
         }
         
@@ -10681,11 +10681,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.data_member_location);
+                return GetAttributeLocationOpt(DwarfAttributeKind.DataMemberLocation);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.data_member_location, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.DataMemberLocation, value);
             }
         }
         
@@ -10693,11 +10693,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.declaration);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.declaration, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration, value);
             }
         }
         
@@ -10705,11 +10705,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.mutable);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Mutable);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.mutable, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Mutable, value);
             }
         }
         
@@ -10717,11 +10717,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -10729,11 +10729,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -10741,11 +10741,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
         
@@ -10753,26 +10753,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility, value);
             }
         }
     }
     
-    public partial class DwarfDIE_module : DwarfDIEDeclaration
+    public partial class DwarfDIEModule : DwarfDIEDeclaration
     {
         public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility, value);
             }
         }
         
@@ -10780,11 +10780,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.declaration);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.declaration, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration, value);
             }
         }
         
@@ -10792,11 +10792,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.entry_pc);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.EntryPC);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.entry_pc, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.EntryPC, value);
             }
         }
         
@@ -10804,11 +10804,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.high_pc);
+                return GetAttributeConstantOpt(DwarfAttributeKind.HighPC);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.high_pc, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.HighPC, value);
             }
         }
         
@@ -10816,11 +10816,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.low_pc);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.LowPC);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.low_pc, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.LowPC, value);
             }
         }
         
@@ -10828,11 +10828,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -10840,11 +10840,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -10852,11 +10852,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.priority);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Priority);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.priority, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Priority, value);
             }
         }
         
@@ -10864,11 +10864,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.ranges);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.Ranges);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.ranges, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.Ranges, value);
             }
         }
         
@@ -10876,11 +10876,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.segment);
+                return GetAttributeLocationOpt(DwarfAttributeKind.Segment);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.segment, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.Segment, value);
             }
         }
         
@@ -10888,11 +10888,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.specification);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Specification);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.specification, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Specification, value);
             }
         }
         
@@ -10900,26 +10900,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility, value);
             }
         }
     }
     
-    public partial class DwarfDIE_namelist : DwarfDIEDeclaration
+    public partial class DwarfDIENamelist : DwarfDIEDeclaration
     {
         public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility, value);
             }
         }
         
@@ -10927,11 +10927,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.declaration);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.declaration, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration, value);
             }
         }
         
@@ -10939,11 +10939,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -10951,11 +10951,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -10963,41 +10963,41 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility, value);
             }
         }
     }
     
-    public partial class DwarfDIE_namelist_item : DwarfDIEDeclaration
+    public partial class DwarfDIENamelistItem : DwarfDIEDeclaration
     {
         public DwarfDIE NamelistItem
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.namelist_item);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.NamelistItem);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.namelist_item, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.NamelistItem, value);
             }
         }
     }
     
-    public partial class DwarfDIE_namespace : DwarfDIEDeclaration
+    public partial class DwarfDIENamespace : DwarfDIEDeclaration
     {
         public bool? ExportSymbols
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.export_symbols);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.ExportSymbols);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.export_symbols, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.ExportSymbols, value);
             }
         }
         
@@ -11005,11 +11005,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.extension);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Extension);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.extension, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Extension, value);
             }
         }
         
@@ -11017,11 +11017,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -11029,11 +11029,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -11041,26 +11041,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKind.StartScope);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.StartScope, value);
             }
         }
     }
     
-    public partial class DwarfDIE_packed_type : DwarfDIEDeclaration
+    public partial class DwarfDIEPackedType : DwarfDIEDeclaration
     {
         public DwarfConstant? Alignment
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.alignment);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Alignment);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.alignment, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Alignment, value);
             }
         }
         
@@ -11068,11 +11068,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -11080,11 +11080,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -11092,26 +11092,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
     }
     
-    public partial class DwarfDIE_partial_unit : DwarfDIE
+    public partial class DwarfDIEPartialUnit : DwarfDIE
     {
         public ulong? AddrBase
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.addr_base);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.AddrBase);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.addr_base, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.AddrBase, value);
             }
         }
         
@@ -11119,11 +11119,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.base_types);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.BaseTypes);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.base_types, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.BaseTypes, value);
             }
         }
         
@@ -11131,11 +11131,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.comp_dir);
+                return GetAttributeValue<string>(DwarfAttributeKind.CompDir);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.comp_dir, value);
+                SetAttributeValue<string>(DwarfAttributeKind.CompDir, value);
             }
         }
         
@@ -11143,11 +11143,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.dwo_name);
+                return GetAttributeValue<string>(DwarfAttributeKind.DwoName);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.dwo_name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.DwoName, value);
             }
         }
         
@@ -11155,11 +11155,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.entry_pc);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.EntryPC);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.entry_pc, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.EntryPC, value);
             }
         }
         
@@ -11167,11 +11167,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfIdentifierCaseKind>(DwarfAttributeKind.identifier_case);
+                return GetAttributeValueOpt<DwarfIdentifierCaseKind>(DwarfAttributeKind.IdentifierCase);
             }
             set
             {
-                SetAttributeValueOpt<DwarfIdentifierCaseKind>(DwarfAttributeKind.identifier_case, value);
+                SetAttributeValueOpt<DwarfIdentifierCaseKind>(DwarfAttributeKind.IdentifierCase, value);
             }
         }
         
@@ -11179,11 +11179,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.high_pc);
+                return GetAttributeConstantOpt(DwarfAttributeKind.HighPC);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.high_pc, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.HighPC, value);
             }
         }
         
@@ -11191,11 +11191,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfLanguageKind>(DwarfAttributeKind.language);
+                return GetAttributeValueOpt<DwarfLanguageKind>(DwarfAttributeKind.Language);
             }
             set
             {
-                SetAttributeValueOpt<DwarfLanguageKind>(DwarfAttributeKind.language, value);
+                SetAttributeValueOpt<DwarfLanguageKind>(DwarfAttributeKind.Language, value);
             }
         }
         
@@ -11203,11 +11203,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.low_pc);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.LowPC);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.low_pc, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.LowPC, value);
             }
         }
         
@@ -11215,11 +11215,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.macros);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.Macros);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.macros, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.Macros, value);
             }
         }
         
@@ -11227,11 +11227,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.main_subprogram);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.MainSubprogram);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.main_subprogram, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.MainSubprogram, value);
             }
         }
         
@@ -11239,11 +11239,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -11251,11 +11251,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -11263,11 +11263,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.producer);
+                return GetAttributeValue<string>(DwarfAttributeKind.Producer);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.producer, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Producer, value);
             }
         }
         
@@ -11275,11 +11275,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.ranges);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.Ranges);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.ranges, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.Ranges, value);
             }
         }
         
@@ -11287,11 +11287,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.rnglists_base);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.RnglistsBase);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.rnglists_base, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.RnglistsBase, value);
             }
         }
         
@@ -11299,11 +11299,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.segment);
+                return GetAttributeLocationOpt(DwarfAttributeKind.Segment);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.segment, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.Segment, value);
             }
         }
         
@@ -11311,11 +11311,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDebugLine>(DwarfAttributeKind.stmt_list);
+                return GetAttributeValue<DwarfDebugLine>(DwarfAttributeKind.StmtList);
             }
             set
             {
-                SetAttributeValue<DwarfDebugLine>(DwarfAttributeKind.stmt_list, value);
+                SetAttributeValue<DwarfDebugLine>(DwarfAttributeKind.StmtList, value);
             }
         }
         
@@ -11323,11 +11323,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.str_offsets_base);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.StrOffsetsBase);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.str_offsets_base, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.StrOffsetsBase, value);
             }
         }
         
@@ -11335,26 +11335,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.use_UTF8);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.UseUTF8);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.use_UTF8, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.UseUTF8, value);
             }
         }
     }
     
-    public partial class DwarfDIE_pointer_type : DwarfDIEDeclaration
+    public partial class DwarfDIEPointerType : DwarfDIEDeclaration
     {
         public DwarfConstant? AddressClass
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.address_class);
+                return GetAttributeConstantOpt(DwarfAttributeKind.AddressClass);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.address_class, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.AddressClass, value);
             }
         }
         
@@ -11362,11 +11362,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.alignment);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Alignment);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.alignment, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Alignment, value);
             }
         }
         
@@ -11374,11 +11374,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.BitSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.BitSize, value);
             }
         }
         
@@ -11386,11 +11386,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.ByteSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.ByteSize, value);
             }
         }
         
@@ -11398,11 +11398,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -11410,11 +11410,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -11422,26 +11422,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
     }
     
-    public partial class DwarfDIE_ptr_to_member_type : DwarfDIEDeclaration
+    public partial class DwarfDIEPtrToMemberType : DwarfDIEDeclaration
     {
         public DwarfConstant? AddressClass
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.address_class);
+                return GetAttributeConstantOpt(DwarfAttributeKind.AddressClass);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.address_class, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.AddressClass, value);
             }
         }
         
@@ -11449,11 +11449,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.alignment);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Alignment);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.alignment, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Alignment, value);
             }
         }
         
@@ -11461,11 +11461,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Allocated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Allocated, value);
             }
         }
         
@@ -11473,11 +11473,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Associated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Associated, value);
             }
         }
         
@@ -11485,11 +11485,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.containing_type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.ContainingType);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.containing_type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.ContainingType, value);
             }
         }
         
@@ -11497,11 +11497,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location);
+                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation);
             }
             set
             {
-                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location, value);
+                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation, value);
             }
         }
         
@@ -11509,11 +11509,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.declaration);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.declaration, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration, value);
             }
         }
         
@@ -11521,11 +11521,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -11533,11 +11533,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -11545,11 +11545,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
         
@@ -11557,11 +11557,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.use_location);
+                return GetAttributeLocationOpt(DwarfAttributeKind.UseLocation);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.use_location, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.UseLocation, value);
             }
         }
         
@@ -11569,26 +11569,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility, value);
             }
         }
     }
     
-    public partial class DwarfDIE_reference_type : DwarfDIEDeclaration
+    public partial class DwarfDIEReferenceType : DwarfDIEDeclaration
     {
         public DwarfConstant? AddressClass
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.address_class);
+                return GetAttributeConstantOpt(DwarfAttributeKind.AddressClass);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.address_class, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.AddressClass, value);
             }
         }
         
@@ -11596,11 +11596,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.alignment);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Alignment);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.alignment, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Alignment, value);
             }
         }
         
@@ -11608,11 +11608,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.BitSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.BitSize, value);
             }
         }
         
@@ -11620,11 +11620,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.ByteSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.ByteSize, value);
             }
         }
         
@@ -11632,11 +11632,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -11644,11 +11644,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -11656,26 +11656,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
     }
     
-    public partial class DwarfDIE_restrict_type : DwarfDIEDeclaration
+    public partial class DwarfDIERestrictType : DwarfDIEDeclaration
     {
         public DwarfConstant? Alignment
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.alignment);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Alignment);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.alignment, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Alignment, value);
             }
         }
         
@@ -11683,11 +11683,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -11695,11 +11695,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -11707,26 +11707,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
     }
     
-    public partial class DwarfDIE_rvalue_reference_type : DwarfDIEDeclaration
+    public partial class DwarfDIERvalueReferenceType : DwarfDIEDeclaration
     {
         public DwarfConstant? AddressClass
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.address_class);
+                return GetAttributeConstantOpt(DwarfAttributeKind.AddressClass);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.address_class, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.AddressClass, value);
             }
         }
         
@@ -11734,11 +11734,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.alignment);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Alignment);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.alignment, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Alignment, value);
             }
         }
         
@@ -11746,11 +11746,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.BitSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.BitSize, value);
             }
         }
         
@@ -11758,11 +11758,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.ByteSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.ByteSize, value);
             }
         }
         
@@ -11770,11 +11770,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -11782,11 +11782,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -11794,26 +11794,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
     }
     
-    public partial class DwarfDIE_set_type : DwarfDIEDeclaration
+    public partial class DwarfDIESetType : DwarfDIEDeclaration
     {
         public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility, value);
             }
         }
         
@@ -11821,11 +11821,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.alignment);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Alignment);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.alignment, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Alignment, value);
             }
         }
         
@@ -11833,11 +11833,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Allocated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Allocated, value);
             }
         }
         
@@ -11845,11 +11845,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Associated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Associated, value);
             }
         }
         
@@ -11857,11 +11857,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.BitSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.BitSize, value);
             }
         }
         
@@ -11869,11 +11869,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.ByteSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.ByteSize, value);
             }
         }
         
@@ -11881,11 +11881,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location);
+                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation);
             }
             set
             {
-                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location, value);
+                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation, value);
             }
         }
         
@@ -11893,11 +11893,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.declaration);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.declaration, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration, value);
             }
         }
         
@@ -11905,11 +11905,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -11917,11 +11917,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -11929,11 +11929,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKind.StartScope);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.StartScope, value);
             }
         }
         
@@ -11941,11 +11941,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
         
@@ -11953,26 +11953,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility, value);
             }
         }
     }
     
-    public partial class DwarfDIE_shared_type : DwarfDIEDeclaration
+    public partial class DwarfDIESharedType : DwarfDIEDeclaration
     {
         public DwarfConstant? Count
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.count);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Count);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.count, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Count, value);
             }
         }
         
@@ -11980,11 +11980,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.alignment);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Alignment);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.alignment, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Alignment, value);
             }
         }
         
@@ -11992,11 +11992,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -12004,11 +12004,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -12016,26 +12016,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
     }
     
-    public partial class DwarfDIE_skeleton_unit : DwarfDIE
+    public partial class DwarfDIESkeletonUnit : DwarfDIE
     {
         public ulong? AddrBase
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.addr_base);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.AddrBase);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.addr_base, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.AddrBase, value);
             }
         }
         
@@ -12043,11 +12043,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.comp_dir);
+                return GetAttributeValue<string>(DwarfAttributeKind.CompDir);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.comp_dir, value);
+                SetAttributeValue<string>(DwarfAttributeKind.CompDir, value);
             }
         }
         
@@ -12055,11 +12055,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.dwo_name);
+                return GetAttributeValue<string>(DwarfAttributeKind.DwoName);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.dwo_name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.DwoName, value);
             }
         }
         
@@ -12067,11 +12067,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.high_pc);
+                return GetAttributeConstantOpt(DwarfAttributeKind.HighPC);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.high_pc, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.HighPC, value);
             }
         }
         
@@ -12079,11 +12079,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.low_pc);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.LowPC);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.low_pc, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.LowPC, value);
             }
         }
         
@@ -12091,11 +12091,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.ranges);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.Ranges);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.ranges, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.Ranges, value);
             }
         }
         
@@ -12103,11 +12103,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.rnglists_base);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.RnglistsBase);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.rnglists_base, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.RnglistsBase, value);
             }
         }
         
@@ -12115,11 +12115,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDebugLine>(DwarfAttributeKind.stmt_list);
+                return GetAttributeValue<DwarfDebugLine>(DwarfAttributeKind.StmtList);
             }
             set
             {
-                SetAttributeValue<DwarfDebugLine>(DwarfAttributeKind.stmt_list, value);
+                SetAttributeValue<DwarfDebugLine>(DwarfAttributeKind.StmtList, value);
             }
         }
         
@@ -12127,11 +12127,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.str_offsets_base);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.StrOffsetsBase);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.str_offsets_base, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.StrOffsetsBase, value);
             }
         }
         
@@ -12139,26 +12139,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.use_UTF8);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.UseUTF8);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.use_UTF8, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.UseUTF8, value);
             }
         }
     }
     
-    public partial class DwarfDIE_string_type : DwarfDIEDeclaration
+    public partial class DwarfDIEStringType : DwarfDIEDeclaration
     {
         public DwarfConstant? Alignment
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.alignment);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Alignment);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.alignment, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Alignment, value);
             }
         }
         
@@ -12166,11 +12166,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility, value);
             }
         }
         
@@ -12178,11 +12178,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Allocated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Allocated, value);
             }
         }
         
@@ -12190,11 +12190,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Associated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Associated, value);
             }
         }
         
@@ -12202,11 +12202,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.BitSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.BitSize, value);
             }
         }
         
@@ -12214,11 +12214,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.ByteSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.ByteSize, value);
             }
         }
         
@@ -12226,11 +12226,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location);
+                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation);
             }
             set
             {
-                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location, value);
+                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation, value);
             }
         }
         
@@ -12238,11 +12238,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.declaration);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.declaration, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration, value);
             }
         }
         
@@ -12250,11 +12250,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -12262,11 +12262,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -12274,11 +12274,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKind.StartScope);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.StartScope, value);
             }
         }
         
@@ -12286,11 +12286,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.string_length);
+                return GetAttributeLocationOpt(DwarfAttributeKind.StringLength);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.string_length, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.StringLength, value);
             }
         }
         
@@ -12298,11 +12298,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.string_length_bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.StringLengthBitSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.string_length_bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.StringLengthBitSize, value);
             }
         }
         
@@ -12310,11 +12310,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.string_length_byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.StringLengthByteSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.string_length_byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.StringLengthByteSize, value);
             }
         }
         
@@ -12322,26 +12322,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility, value);
             }
         }
     }
     
-    public partial class DwarfDIE_structure_type : DwarfDIEDeclaration
+    public partial class DwarfDIEStructureType : DwarfDIEDeclaration
     {
         public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility, value);
             }
         }
         
@@ -12349,11 +12349,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.alignment);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Alignment);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.alignment, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Alignment, value);
             }
         }
         
@@ -12361,11 +12361,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Allocated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Allocated, value);
             }
         }
         
@@ -12373,11 +12373,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Associated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Associated, value);
             }
         }
         
@@ -12385,11 +12385,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.BitSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.BitSize, value);
             }
         }
         
@@ -12397,11 +12397,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.ByteSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.ByteSize, value);
             }
         }
         
@@ -12409,11 +12409,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfCallingConvention>(DwarfAttributeKind.calling_convention);
+                return GetAttributeValueOpt<DwarfCallingConvention>(DwarfAttributeKind.CallingConvention);
             }
             set
             {
-                SetAttributeValueOpt<DwarfCallingConvention>(DwarfAttributeKind.calling_convention, value);
+                SetAttributeValueOpt<DwarfCallingConvention>(DwarfAttributeKind.CallingConvention, value);
             }
         }
         
@@ -12421,11 +12421,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location);
+                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation);
             }
             set
             {
-                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location, value);
+                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation, value);
             }
         }
         
@@ -12433,11 +12433,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.declaration);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.declaration, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration, value);
             }
         }
         
@@ -12445,11 +12445,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.export_symbols);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.ExportSymbols);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.export_symbols, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.ExportSymbols, value);
             }
         }
         
@@ -12457,11 +12457,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -12469,11 +12469,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -12481,11 +12481,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.signature);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Signature);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.signature, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Signature, value);
             }
         }
         
@@ -12493,11 +12493,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.specification);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Specification);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.specification, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Specification, value);
             }
         }
         
@@ -12505,11 +12505,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKind.StartScope);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.StartScope, value);
             }
         }
         
@@ -12517,26 +12517,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility, value);
             }
         }
     }
     
-    public partial class DwarfDIE_subprogram : DwarfDIEDeclaration
+    public partial class DwarfDIESubprogram : DwarfDIEDeclaration
     {
         public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility, value);
             }
         }
         
@@ -12544,11 +12544,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.address_class);
+                return GetAttributeConstantOpt(DwarfAttributeKind.AddressClass);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.address_class, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.AddressClass, value);
             }
         }
         
@@ -12556,11 +12556,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.alignment);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Alignment);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.alignment, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Alignment, value);
             }
         }
         
@@ -12568,11 +12568,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.artificial);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Artificial);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.artificial, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Artificial, value);
             }
         }
         
@@ -12580,11 +12580,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfCallingConvention>(DwarfAttributeKind.calling_convention);
+                return GetAttributeValueOpt<DwarfCallingConvention>(DwarfAttributeKind.CallingConvention);
             }
             set
             {
-                SetAttributeValueOpt<DwarfCallingConvention>(DwarfAttributeKind.calling_convention, value);
+                SetAttributeValueOpt<DwarfCallingConvention>(DwarfAttributeKind.CallingConvention, value);
             }
         }
         
@@ -12592,11 +12592,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.declaration);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.declaration, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration, value);
             }
         }
         
@@ -12604,11 +12604,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.defaulted);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Defaulted);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.defaulted, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Defaulted, value);
             }
         }
         
@@ -12616,11 +12616,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.deleted);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Deleted);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.deleted, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Deleted, value);
             }
         }
         
@@ -12628,11 +12628,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.elemental);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Elemental);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.elemental, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Elemental, value);
             }
         }
         
@@ -12640,11 +12640,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.entry_pc);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.EntryPC);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.entry_pc, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.EntryPC, value);
             }
         }
         
@@ -12652,11 +12652,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.@explicit);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Explicit);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.@explicit, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Explicit, value);
             }
         }
         
@@ -12664,11 +12664,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.external);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.External);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.external, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.External, value);
             }
         }
         
@@ -12676,11 +12676,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.frame_base);
+                return GetAttributeLocationOpt(DwarfAttributeKind.FrameBase);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.frame_base, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.FrameBase, value);
             }
         }
         
@@ -12688,11 +12688,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.high_pc);
+                return GetAttributeConstantOpt(DwarfAttributeKind.HighPC);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.high_pc, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.HighPC, value);
             }
         }
         
@@ -12700,11 +12700,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfInlineKind>(DwarfAttributeKind.inline);
+                return GetAttributeValueOpt<DwarfInlineKind>(DwarfAttributeKind.Inline);
             }
             set
             {
-                SetAttributeValueOpt<DwarfInlineKind>(DwarfAttributeKind.inline, value);
+                SetAttributeValueOpt<DwarfInlineKind>(DwarfAttributeKind.Inline, value);
             }
         }
         
@@ -12712,11 +12712,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.linkage_name);
+                return GetAttributeValue<string>(DwarfAttributeKind.LinkageName);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.linkage_name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.LinkageName, value);
             }
         }
         
@@ -12724,11 +12724,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.low_pc);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.LowPC);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.low_pc, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.LowPC, value);
             }
         }
         
@@ -12736,11 +12736,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.main_subprogram);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.MainSubprogram);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.main_subprogram, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.MainSubprogram, value);
             }
         }
         
@@ -12748,11 +12748,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -12760,11 +12760,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -12772,11 +12772,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.noreturn);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Noreturn);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.noreturn, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Noreturn, value);
             }
         }
         
@@ -12784,11 +12784,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.object_pointer);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.ObjectPointer);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.object_pointer, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.ObjectPointer, value);
             }
         }
         
@@ -12796,11 +12796,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.prototyped);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Prototyped);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.prototyped, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Prototyped, value);
             }
         }
         
@@ -12808,11 +12808,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.pure);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Pure);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.pure, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Pure, value);
             }
         }
         
@@ -12820,11 +12820,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.ranges);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.Ranges);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.ranges, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.Ranges, value);
             }
         }
         
@@ -12832,11 +12832,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.recursive);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Recursive);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.recursive, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Recursive, value);
             }
         }
         
@@ -12844,11 +12844,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.reference);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Reference);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.reference, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Reference, value);
             }
         }
         
@@ -12856,11 +12856,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.return_addr);
+                return GetAttributeLocationOpt(DwarfAttributeKind.ReturnAddr);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.return_addr, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.ReturnAddr, value);
             }
         }
         
@@ -12868,11 +12868,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.rvalue_reference);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.RvalueReference);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.rvalue_reference, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.RvalueReference, value);
             }
         }
         
@@ -12880,11 +12880,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.segment);
+                return GetAttributeLocationOpt(DwarfAttributeKind.Segment);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.segment, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.Segment, value);
             }
         }
         
@@ -12892,11 +12892,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.specification);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Specification);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.specification, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Specification, value);
             }
         }
         
@@ -12904,11 +12904,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKind.StartScope);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.StartScope, value);
             }
         }
         
@@ -12916,11 +12916,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.static_link);
+                return GetAttributeLocationOpt(DwarfAttributeKind.StaticLink);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.static_link, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.StaticLink, value);
             }
         }
         
@@ -12928,11 +12928,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<object>(DwarfAttributeKind.trampoline);
+                return GetAttributeValue<object>(DwarfAttributeKind.Trampoline);
             }
             set
             {
-                SetAttributeValue<object>(DwarfAttributeKind.trampoline, value);
+                SetAttributeValue<object>(DwarfAttributeKind.Trampoline, value);
             }
         }
         
@@ -12940,11 +12940,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
         
@@ -12952,11 +12952,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility, value);
             }
         }
         
@@ -12964,11 +12964,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfVirtuality>(DwarfAttributeKind.virtuality);
+                return GetAttributeValueOpt<DwarfVirtuality>(DwarfAttributeKind.Virtuality);
             }
             set
             {
-                SetAttributeValueOpt<DwarfVirtuality>(DwarfAttributeKind.virtuality, value);
+                SetAttributeValueOpt<DwarfVirtuality>(DwarfAttributeKind.Virtuality, value);
             }
         }
         
@@ -12976,26 +12976,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.vtable_elem_location);
+                return GetAttributeLocationOpt(DwarfAttributeKind.VtableElemLocation);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.vtable_elem_location, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.VtableElemLocation, value);
             }
         }
     }
     
-    public partial class DwarfDIE_subrange_type : DwarfDIEDeclaration
+    public partial class DwarfDIESubrangeType : DwarfDIEDeclaration
     {
         public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility, value);
             }
         }
         
@@ -13003,11 +13003,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.alignment);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Alignment);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.alignment, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Alignment, value);
             }
         }
         
@@ -13015,11 +13015,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Allocated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Allocated, value);
             }
         }
         
@@ -13027,11 +13027,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Associated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Associated, value);
             }
         }
         
@@ -13039,11 +13039,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.BitSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.BitSize, value);
             }
         }
         
@@ -13051,11 +13051,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.bit_stride);
+                return GetAttributeConstantOpt(DwarfAttributeKind.BitStride);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.bit_stride, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.BitStride, value);
             }
         }
         
@@ -13063,11 +13063,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.ByteSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.ByteSize, value);
             }
         }
         
@@ -13075,11 +13075,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.byte_stride);
+                return GetAttributeConstantOpt(DwarfAttributeKind.ByteStride);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.byte_stride, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.ByteStride, value);
             }
         }
         
@@ -13087,11 +13087,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.count);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Count);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.count, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Count, value);
             }
         }
         
@@ -13099,11 +13099,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location);
+                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation);
             }
             set
             {
-                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location, value);
+                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation, value);
             }
         }
         
@@ -13111,11 +13111,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.declaration);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.declaration, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration, value);
             }
         }
         
@@ -13123,11 +13123,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.lower_bound);
+                return GetAttributeConstantOpt(DwarfAttributeKind.LowerBound);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.lower_bound, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.LowerBound, value);
             }
         }
         
@@ -13135,11 +13135,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -13147,11 +13147,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -13159,11 +13159,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.threads_scaled);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.ThreadsScaled);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.threads_scaled, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.ThreadsScaled, value);
             }
         }
         
@@ -13171,11 +13171,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
         
@@ -13183,11 +13183,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.upper_bound);
+                return GetAttributeConstantOpt(DwarfAttributeKind.UpperBound);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.upper_bound, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.UpperBound, value);
             }
         }
         
@@ -13195,26 +13195,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility, value);
             }
         }
     }
     
-    public partial class DwarfDIE_subroutine_type : DwarfDIEDeclaration
+    public partial class DwarfDIESubroutineType : DwarfDIEDeclaration
     {
         public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility, value);
             }
         }
         
@@ -13222,11 +13222,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.address_class);
+                return GetAttributeConstantOpt(DwarfAttributeKind.AddressClass);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.address_class, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.AddressClass, value);
             }
         }
         
@@ -13234,11 +13234,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.alignment);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Alignment);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.alignment, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Alignment, value);
             }
         }
         
@@ -13246,11 +13246,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Allocated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Allocated, value);
             }
         }
         
@@ -13258,11 +13258,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Associated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Associated, value);
             }
         }
         
@@ -13270,11 +13270,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location);
+                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation);
             }
             set
             {
-                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location, value);
+                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation, value);
             }
         }
         
@@ -13282,11 +13282,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.declaration);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.declaration, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration, value);
             }
         }
         
@@ -13294,11 +13294,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -13306,11 +13306,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -13318,11 +13318,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.prototyped);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Prototyped);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.prototyped, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Prototyped, value);
             }
         }
         
@@ -13330,11 +13330,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.reference);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Reference);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.reference, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Reference, value);
             }
         }
         
@@ -13342,11 +13342,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.rvalue_reference);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.RvalueReference);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.rvalue_reference, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.RvalueReference, value);
             }
         }
         
@@ -13354,11 +13354,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKind.StartScope);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.StartScope, value);
             }
         }
         
@@ -13366,11 +13366,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
         
@@ -13378,26 +13378,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility, value);
             }
         }
     }
     
-    public partial class DwarfDIE_template_alias : DwarfDIEDeclaration
+    public partial class DwarfDIETemplateAlias : DwarfDIEDeclaration
     {
         public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility, value);
             }
         }
         
@@ -13405,11 +13405,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Allocated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Allocated, value);
             }
         }
         
@@ -13417,11 +13417,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Associated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Associated, value);
             }
         }
         
@@ -13429,11 +13429,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location);
+                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation);
             }
             set
             {
-                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location, value);
+                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation, value);
             }
         }
         
@@ -13441,11 +13441,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.declaration);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.declaration, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration, value);
             }
         }
         
@@ -13453,11 +13453,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -13465,11 +13465,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -13477,11 +13477,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.signature);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Signature);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.signature, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Signature, value);
             }
         }
         
@@ -13489,11 +13489,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKind.StartScope);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.StartScope, value);
             }
         }
         
@@ -13501,11 +13501,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
         
@@ -13513,26 +13513,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility, value);
             }
         }
     }
     
-    public partial class DwarfDIE_template_type_parameter : DwarfDIEDeclaration
+    public partial class DwarfDIETemplateTypeParameter : DwarfDIEDeclaration
     {
         public DwarfDIE DefaultValue
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.default_value);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.DefaultValue);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.default_value, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.DefaultValue, value);
             }
         }
         
@@ -13540,11 +13540,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -13552,11 +13552,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -13564,26 +13564,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
     }
     
-    public partial class DwarfDIE_template_value_parameter : DwarfDIEDeclaration
+    public partial class DwarfDIETemplateValueParameter : DwarfDIEDeclaration
     {
         public DwarfConstant? ConstValue
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.const_value);
+                return GetAttributeConstantOpt(DwarfAttributeKind.ConstValue);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.const_value, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.ConstValue, value);
             }
         }
         
@@ -13591,11 +13591,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.default_value);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.DefaultValue);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.default_value, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.DefaultValue, value);
             }
         }
         
@@ -13603,11 +13603,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -13615,11 +13615,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -13627,26 +13627,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
     }
     
-    public partial class DwarfDIE_thrown_type : DwarfDIEDeclaration
+    public partial class DwarfDIEThrownType : DwarfDIEDeclaration
     {
         public DwarfConstant? Alignment
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.alignment);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Alignment);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.alignment, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Alignment, value);
             }
         }
         
@@ -13654,11 +13654,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Allocated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Allocated, value);
             }
         }
         
@@ -13666,11 +13666,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Associated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Associated, value);
             }
         }
         
@@ -13678,11 +13678,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location);
+                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation);
             }
             set
             {
-                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location, value);
+                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation, value);
             }
         }
         
@@ -13690,11 +13690,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -13702,11 +13702,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -13714,26 +13714,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
     }
     
-    public partial class DwarfDIE_try_block : DwarfDIEDeclaration
+    public partial class DwarfDIETryBlock : DwarfDIEDeclaration
     {
         public ulong? EntryPC
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.entry_pc);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.EntryPC);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.entry_pc, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.EntryPC, value);
             }
         }
         
@@ -13741,11 +13741,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.high_pc);
+                return GetAttributeConstantOpt(DwarfAttributeKind.HighPC);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.high_pc, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.HighPC, value);
             }
         }
         
@@ -13753,11 +13753,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.low_pc);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.LowPC);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.low_pc, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.LowPC, value);
             }
         }
         
@@ -13765,11 +13765,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.ranges);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.Ranges);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.ranges, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.Ranges, value);
             }
         }
         
@@ -13777,26 +13777,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.segment);
+                return GetAttributeLocationOpt(DwarfAttributeKind.Segment);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.segment, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.Segment, value);
             }
         }
     }
     
-    public partial class DwarfDIE_typedef : DwarfDIEDeclaration
+    public partial class DwarfDIETypedef : DwarfDIEDeclaration
     {
         public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility, value);
             }
         }
         
@@ -13804,11 +13804,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.alignment);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Alignment);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.alignment, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Alignment, value);
             }
         }
         
@@ -13816,11 +13816,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Allocated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Allocated, value);
             }
         }
         
@@ -13828,11 +13828,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Associated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Associated, value);
             }
         }
         
@@ -13840,11 +13840,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location);
+                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation);
             }
             set
             {
-                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location, value);
+                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation, value);
             }
         }
         
@@ -13852,11 +13852,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.declaration);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.declaration, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration, value);
             }
         }
         
@@ -13864,11 +13864,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -13876,11 +13876,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -13888,11 +13888,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKind.StartScope);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.StartScope, value);
             }
         }
         
@@ -13900,11 +13900,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
         
@@ -13912,26 +13912,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility, value);
             }
         }
     }
     
-    public partial class DwarfDIE_type_unit : DwarfDIE
+    public partial class DwarfDIETypeUnit : DwarfDIE
     {
         public DwarfLanguageKind? Language
         {
             get
             {
-                return GetAttributeValueOpt<DwarfLanguageKind>(DwarfAttributeKind.language);
+                return GetAttributeValueOpt<DwarfLanguageKind>(DwarfAttributeKind.Language);
             }
             set
             {
-                SetAttributeValueOpt<DwarfLanguageKind>(DwarfAttributeKind.language, value);
+                SetAttributeValueOpt<DwarfLanguageKind>(DwarfAttributeKind.Language, value);
             }
         }
         
@@ -13939,11 +13939,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDebugLine>(DwarfAttributeKind.stmt_list);
+                return GetAttributeValue<DwarfDebugLine>(DwarfAttributeKind.StmtList);
             }
             set
             {
-                SetAttributeValue<DwarfDebugLine>(DwarfAttributeKind.stmt_list, value);
+                SetAttributeValue<DwarfDebugLine>(DwarfAttributeKind.StmtList, value);
             }
         }
         
@@ -13951,11 +13951,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.str_offsets_base);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.StrOffsetsBase);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.str_offsets_base, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.StrOffsetsBase, value);
             }
         }
         
@@ -13963,26 +13963,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.use_UTF8);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.UseUTF8);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.use_UTF8, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.UseUTF8, value);
             }
         }
     }
     
-    public partial class DwarfDIE_union_type : DwarfDIEDeclaration
+    public partial class DwarfDIEUnionType : DwarfDIEDeclaration
     {
         public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility, value);
             }
         }
         
@@ -13990,11 +13990,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.alignment);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Alignment);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.alignment, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Alignment, value);
             }
         }
         
@@ -14002,11 +14002,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.allocated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Allocated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.allocated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Allocated, value);
             }
         }
         
@@ -14014,11 +14014,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.associated);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Associated);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.associated, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Associated, value);
             }
         }
         
@@ -14026,11 +14026,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.bit_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.BitSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.bit_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.BitSize, value);
             }
         }
         
@@ -14038,11 +14038,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.byte_size);
+                return GetAttributeConstantOpt(DwarfAttributeKind.ByteSize);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.byte_size, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.ByteSize, value);
             }
         }
         
@@ -14050,11 +14050,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfCallingConvention>(DwarfAttributeKind.calling_convention);
+                return GetAttributeValueOpt<DwarfCallingConvention>(DwarfAttributeKind.CallingConvention);
             }
             set
             {
-                SetAttributeValueOpt<DwarfCallingConvention>(DwarfAttributeKind.calling_convention, value);
+                SetAttributeValueOpt<DwarfCallingConvention>(DwarfAttributeKind.CallingConvention, value);
             }
         }
         
@@ -14062,11 +14062,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location);
+                return GetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation);
             }
             set
             {
-                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.data_location, value);
+                SetAttributeValue<DwarfExpression>(DwarfAttributeKind.DataLocation, value);
             }
         }
         
@@ -14074,11 +14074,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.declaration);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.declaration, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration, value);
             }
         }
         
@@ -14086,11 +14086,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.export_symbols);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.ExportSymbols);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.export_symbols, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.ExportSymbols, value);
             }
         }
         
@@ -14098,11 +14098,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -14110,11 +14110,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -14122,11 +14122,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.signature);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Signature);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.signature, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Signature, value);
             }
         }
         
@@ -14134,11 +14134,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.specification);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Specification);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.specification, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Specification, value);
             }
         }
         
@@ -14146,11 +14146,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKind.StartScope);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.StartScope, value);
             }
         }
         
@@ -14158,41 +14158,41 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility, value);
             }
         }
     }
     
-    public partial class DwarfDIE_unspecified_parameters : DwarfDIEDeclaration
+    public partial class DwarfDIEUnspecifiedParameters : DwarfDIEDeclaration
     {
         public bool? Artificial
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.artificial);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Artificial);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.artificial, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Artificial, value);
             }
         }
     }
     
-    public partial class DwarfDIE_unspecified_type : DwarfDIEDeclaration
+    public partial class DwarfDIEUnspecifiedType : DwarfDIEDeclaration
     {
         public string Name
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -14200,26 +14200,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
     }
     
-    public partial class DwarfDIE_variable : DwarfDIEDeclaration
+    public partial class DwarfDIEVariable : DwarfDIEDeclaration
     {
         public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility, value);
             }
         }
         
@@ -14227,11 +14227,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.alignment);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Alignment);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.alignment, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Alignment, value);
             }
         }
         
@@ -14239,11 +14239,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.artificial);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Artificial);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.artificial, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Artificial, value);
             }
         }
         
@@ -14251,11 +14251,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.const_expr);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.ConstExpr);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.const_expr, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.ConstExpr, value);
             }
         }
         
@@ -14263,11 +14263,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.const_value);
+                return GetAttributeConstantOpt(DwarfAttributeKind.ConstValue);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.const_value, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.ConstValue, value);
             }
         }
         
@@ -14275,11 +14275,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.declaration);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.declaration, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration, value);
             }
         }
         
@@ -14287,11 +14287,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.endianity);
+                return GetAttributeConstantOpt(DwarfAttributeKind.Endianity);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.endianity, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.Endianity, value);
             }
         }
         
@@ -14299,11 +14299,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.external);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.External);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.external, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.External, value);
             }
         }
         
@@ -14311,11 +14311,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.linkage_name);
+                return GetAttributeValue<string>(DwarfAttributeKind.LinkageName);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.linkage_name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.LinkageName, value);
             }
         }
         
@@ -14323,11 +14323,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.location);
+                return GetAttributeLocationOpt(DwarfAttributeKind.Location);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.location, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.Location, value);
             }
         }
         
@@ -14335,11 +14335,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -14347,11 +14347,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -14359,11 +14359,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.segment);
+                return GetAttributeLocationOpt(DwarfAttributeKind.Segment);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.segment, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.Segment, value);
             }
         }
         
@@ -14371,11 +14371,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.specification);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Specification);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.specification, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Specification, value);
             }
         }
         
@@ -14383,11 +14383,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.start_scope);
+                return GetAttributeConstantOpt(DwarfAttributeKind.StartScope);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.start_scope, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.StartScope, value);
             }
         }
         
@@ -14395,11 +14395,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
         
@@ -14407,26 +14407,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility, value);
             }
         }
     }
     
-    public partial class DwarfDIE_variant : DwarfDIEDeclaration
+    public partial class DwarfDIEVariant : DwarfDIEDeclaration
     {
         public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility, value);
             }
         }
         
@@ -14434,11 +14434,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.declaration);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.declaration, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration, value);
             }
         }
         
@@ -14446,11 +14446,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfDiscriminantListKind>(DwarfAttributeKind.discr_list);
+                return GetAttributeValueOpt<DwarfDiscriminantListKind>(DwarfAttributeKind.DiscrList);
             }
             set
             {
-                SetAttributeValueOpt<DwarfDiscriminantListKind>(DwarfAttributeKind.discr_list, value);
+                SetAttributeValueOpt<DwarfDiscriminantListKind>(DwarfAttributeKind.DiscrList, value);
             }
         }
         
@@ -14458,26 +14458,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.discr_value);
+                return GetAttributeConstantOpt(DwarfAttributeKind.DiscrValue);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.discr_value, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.DiscrValue, value);
             }
         }
     }
     
-    public partial class DwarfDIE_variant_part : DwarfDIEDeclaration
+    public partial class DwarfDIEVariantPart : DwarfDIEDeclaration
     {
         public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility, value);
             }
         }
         
@@ -14485,11 +14485,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.declaration);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.declaration, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration, value);
             }
         }
         
@@ -14497,11 +14497,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.discr);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Discr);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.discr, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Discr, value);
             }
         }
         
@@ -14509,26 +14509,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
     }
     
-    public partial class DwarfDIE_volatile_type : DwarfDIEDeclaration
+    public partial class DwarfDIEVolatileType : DwarfDIEDeclaration
     {
         public string Name
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.name);
+                return GetAttributeValue<string>(DwarfAttributeKind.Name);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.name, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Name, value);
             }
         }
         
@@ -14536,11 +14536,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<string>(DwarfAttributeKind.description);
+                return GetAttributeValue<string>(DwarfAttributeKind.Description);
             }
             set
             {
-                SetAttributeValue<string>(DwarfAttributeKind.description, value);
+                SetAttributeValue<string>(DwarfAttributeKind.Description, value);
             }
         }
         
@@ -14548,26 +14548,26 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
     }
     
-    public partial class DwarfDIE_with_stmt : DwarfDIEDeclaration
+    public partial class DwarfDIEWithStmt : DwarfDIEDeclaration
     {
         public DwarfAccessibility? Accessibility
         {
             get
             {
-                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility);
+                return GetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.accessibility, value);
+                SetAttributeValueOpt<DwarfAccessibility>(DwarfAttributeKind.Accessibility, value);
             }
         }
         
@@ -14575,11 +14575,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.address_class);
+                return GetAttributeConstantOpt(DwarfAttributeKind.AddressClass);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.address_class, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.AddressClass, value);
             }
         }
         
@@ -14587,11 +14587,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<bool>(DwarfAttributeKind.declaration);
+                return GetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration);
             }
             set
             {
-                SetAttributeValueOpt<bool>(DwarfAttributeKind.declaration, value);
+                SetAttributeValueOpt<bool>(DwarfAttributeKind.Declaration, value);
             }
         }
         
@@ -14599,11 +14599,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.entry_pc);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.EntryPC);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.entry_pc, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.EntryPC, value);
             }
         }
         
@@ -14611,11 +14611,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeConstantOpt(DwarfAttributeKind.high_pc);
+                return GetAttributeConstantOpt(DwarfAttributeKind.HighPC);
             }
             set
             {
-                SetAttributeConstantOpt(DwarfAttributeKind.high_pc, value);
+                SetAttributeConstantOpt(DwarfAttributeKind.HighPC, value);
             }
         }
         
@@ -14623,11 +14623,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.location);
+                return GetAttributeLocationOpt(DwarfAttributeKind.Location);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.location, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.Location, value);
             }
         }
         
@@ -14635,11 +14635,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.low_pc);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.LowPC);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.low_pc, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.LowPC, value);
             }
         }
         
@@ -14647,11 +14647,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.ranges);
+                return GetAttributeValueOpt<ulong>(DwarfAttributeKind.Ranges);
             }
             set
             {
-                SetAttributeValueOpt<ulong>(DwarfAttributeKind.ranges, value);
+                SetAttributeValueOpt<ulong>(DwarfAttributeKind.Ranges, value);
             }
         }
         
@@ -14659,11 +14659,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeLocationOpt(DwarfAttributeKind.segment);
+                return GetAttributeLocationOpt(DwarfAttributeKind.Segment);
             }
             set
             {
-                SetAttributeLocationOpt(DwarfAttributeKind.segment, value);
+                SetAttributeLocationOpt(DwarfAttributeKind.Segment, value);
             }
         }
         
@@ -14671,11 +14671,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.type);
+                return GetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type);
             }
             set
             {
-                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.type, value);
+                SetAttributeValue<DwarfDIE>(DwarfAttributeKind.Type, value);
             }
         }
         
@@ -14683,11 +14683,11 @@ namespace LibObjectFile.Dwarf
         {
             get
             {
-                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility);
+                return GetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility);
             }
             set
             {
-                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.visibility, value);
+                SetAttributeValueOpt<DwarfVisibility>(DwarfAttributeKind.Visibility, value);
             }
         }
     }
@@ -14699,141 +14699,141 @@ namespace LibObjectFile.Dwarf
             switch (tag)
             {
                 case DwarfNative.DW_TAG_access_declaration:
-                    return new DwarfDIE_access_declaration();
+                    return new DwarfDIEAccessDeclaration();
                 case DwarfNative.DW_TAG_array_type:
-                    return new DwarfDIE_array_type();
+                    return new DwarfDIEArrayType();
                 case DwarfNative.DW_TAG_atomic_type:
-                    return new DwarfDIE_atomic_type();
+                    return new DwarfDIEAtomicType();
                 case DwarfNative.DW_TAG_base_type:
-                    return new DwarfDIE_base_type();
+                    return new DwarfDIEBaseType();
                 case DwarfNative.DW_TAG_call_site:
-                    return new DwarfDIE_call_site();
+                    return new DwarfDIECallSite();
                 case DwarfNative.DW_TAG_call_site_parameter:
-                    return new DwarfDIE_call_site_parameter();
+                    return new DwarfDIECallSiteParameter();
                 case DwarfNative.DW_TAG_catch_block:
-                    return new DwarfDIE_catch_block();
+                    return new DwarfDIECatchBlock();
                 case DwarfNative.DW_TAG_class_type:
-                    return new DwarfDIE_class_type();
+                    return new DwarfDIEClassType();
                 case DwarfNative.DW_TAG_coarray_type:
-                    return new DwarfDIE_coarray_type();
+                    return new DwarfDIECoarrayType();
                 case DwarfNative.DW_TAG_common_block:
-                    return new DwarfDIE_common_block();
+                    return new DwarfDIECommonBlock();
                 case DwarfNative.DW_TAG_common_inclusion:
-                    return new DwarfDIE_common_inclusion();
+                    return new DwarfDIECommonInclusion();
                 case DwarfNative.DW_TAG_compile_unit:
-                    return new DwarfDIE_compile_unit();
+                    return new DwarfDIECompileUnit();
                 case DwarfNative.DW_TAG_condition:
-                    return new DwarfDIE_condition();
+                    return new DwarfDIECondition();
                 case DwarfNative.DW_TAG_const_type:
-                    return new DwarfDIE_const_type();
+                    return new DwarfDIEConstType();
                 case DwarfNative.DW_TAG_constant:
-                    return new DwarfDIE_constant();
+                    return new DwarfDIEConstant();
                 case DwarfNative.DW_TAG_dwarf_procedure:
-                    return new DwarfDIE_dwarf_procedure();
+                    return new DwarfDIEDwarfProcedure();
                 case DwarfNative.DW_TAG_dynamic_type:
-                    return new DwarfDIE_dynamic_type();
+                    return new DwarfDIEDynamicType();
                 case DwarfNative.DW_TAG_entry_point:
-                    return new DwarfDIE_entry_point();
+                    return new DwarfDIEEntryPoint();
                 case DwarfNative.DW_TAG_enumeration_type:
-                    return new DwarfDIE_enumeration_type();
+                    return new DwarfDIEEnumerationType();
                 case DwarfNative.DW_TAG_enumerator:
-                    return new DwarfDIE_enumerator();
+                    return new DwarfDIEEnumerator();
                 case DwarfNative.DW_TAG_file_type:
-                    return new DwarfDIE_file_type();
+                    return new DwarfDIEFileType();
                 case DwarfNative.DW_TAG_formal_parameter:
-                    return new DwarfDIE_formal_parameter();
+                    return new DwarfDIEFormalParameter();
                 case DwarfNative.DW_TAG_friend:
-                    return new DwarfDIE_friend();
+                    return new DwarfDIEFriend();
                 case DwarfNative.DW_TAG_generic_subrange:
-                    return new DwarfDIE_generic_subrange();
+                    return new DwarfDIEGenericSubrange();
                 case DwarfNative.DW_TAG_immutable_type:
-                    return new DwarfDIE_immutable_type();
+                    return new DwarfDIEImmutableType();
                 case DwarfNative.DW_TAG_imported_declaration:
-                    return new DwarfDIE_imported_declaration();
+                    return new DwarfDIEImportedDeclaration();
                 case DwarfNative.DW_TAG_imported_module:
-                    return new DwarfDIE_imported_module();
+                    return new DwarfDIEImportedModule();
                 case DwarfNative.DW_TAG_imported_unit:
-                    return new DwarfDIE_imported_unit();
+                    return new DwarfDIEImportedUnit();
                 case DwarfNative.DW_TAG_inheritance:
-                    return new DwarfDIE_inheritance();
+                    return new DwarfDIEInheritance();
                 case DwarfNative.DW_TAG_inlined_subroutine:
-                    return new DwarfDIE_inlined_subroutine();
+                    return new DwarfDIEInlinedSubroutine();
                 case DwarfNative.DW_TAG_interface_type:
-                    return new DwarfDIE_interface_type();
+                    return new DwarfDIEInterfaceType();
                 case DwarfNative.DW_TAG_label:
-                    return new DwarfDIE_label();
+                    return new DwarfDIELabel();
                 case DwarfNative.DW_TAG_lexical_block:
-                    return new DwarfDIE_lexical_block();
+                    return new DwarfDIELexicalBlock();
                 case DwarfNative.DW_TAG_member:
-                    return new DwarfDIE_member();
+                    return new DwarfDIEMember();
                 case DwarfNative.DW_TAG_module:
-                    return new DwarfDIE_module();
+                    return new DwarfDIEModule();
                 case DwarfNative.DW_TAG_namelist:
-                    return new DwarfDIE_namelist();
+                    return new DwarfDIENamelist();
                 case DwarfNative.DW_TAG_namelist_item:
-                    return new DwarfDIE_namelist_item();
+                    return new DwarfDIENamelistItem();
                 case DwarfNative.DW_TAG_namespace:
-                    return new DwarfDIE_namespace();
+                    return new DwarfDIENamespace();
                 case DwarfNative.DW_TAG_packed_type:
-                    return new DwarfDIE_packed_type();
+                    return new DwarfDIEPackedType();
                 case DwarfNative.DW_TAG_partial_unit:
-                    return new DwarfDIE_partial_unit();
+                    return new DwarfDIEPartialUnit();
                 case DwarfNative.DW_TAG_pointer_type:
-                    return new DwarfDIE_pointer_type();
+                    return new DwarfDIEPointerType();
                 case DwarfNative.DW_TAG_ptr_to_member_type:
-                    return new DwarfDIE_ptr_to_member_type();
+                    return new DwarfDIEPtrToMemberType();
                 case DwarfNative.DW_TAG_reference_type:
-                    return new DwarfDIE_reference_type();
+                    return new DwarfDIEReferenceType();
                 case DwarfNative.DW_TAG_restrict_type:
-                    return new DwarfDIE_restrict_type();
+                    return new DwarfDIERestrictType();
                 case DwarfNative.DW_TAG_rvalue_reference_type:
-                    return new DwarfDIE_rvalue_reference_type();
+                    return new DwarfDIERvalueReferenceType();
                 case DwarfNative.DW_TAG_set_type:
-                    return new DwarfDIE_set_type();
+                    return new DwarfDIESetType();
                 case DwarfNative.DW_TAG_shared_type:
-                    return new DwarfDIE_shared_type();
+                    return new DwarfDIESharedType();
                 case DwarfNative.DW_TAG_skeleton_unit:
-                    return new DwarfDIE_skeleton_unit();
+                    return new DwarfDIESkeletonUnit();
                 case DwarfNative.DW_TAG_string_type:
-                    return new DwarfDIE_string_type();
+                    return new DwarfDIEStringType();
                 case DwarfNative.DW_TAG_structure_type:
-                    return new DwarfDIE_structure_type();
+                    return new DwarfDIEStructureType();
                 case DwarfNative.DW_TAG_subprogram:
-                    return new DwarfDIE_subprogram();
+                    return new DwarfDIESubprogram();
                 case DwarfNative.DW_TAG_subrange_type:
-                    return new DwarfDIE_subrange_type();
+                    return new DwarfDIESubrangeType();
                 case DwarfNative.DW_TAG_subroutine_type:
-                    return new DwarfDIE_subroutine_type();
+                    return new DwarfDIESubroutineType();
                 case DwarfNative.DW_TAG_template_alias:
-                    return new DwarfDIE_template_alias();
+                    return new DwarfDIETemplateAlias();
                 case DwarfNative.DW_TAG_template_type_parameter:
-                    return new DwarfDIE_template_type_parameter();
+                    return new DwarfDIETemplateTypeParameter();
                 case DwarfNative.DW_TAG_template_value_parameter:
-                    return new DwarfDIE_template_value_parameter();
+                    return new DwarfDIETemplateValueParameter();
                 case DwarfNative.DW_TAG_thrown_type:
-                    return new DwarfDIE_thrown_type();
+                    return new DwarfDIEThrownType();
                 case DwarfNative.DW_TAG_try_block:
-                    return new DwarfDIE_try_block();
+                    return new DwarfDIETryBlock();
                 case DwarfNative.DW_TAG_typedef:
-                    return new DwarfDIE_typedef();
+                    return new DwarfDIETypedef();
                 case DwarfNative.DW_TAG_type_unit:
-                    return new DwarfDIE_type_unit();
+                    return new DwarfDIETypeUnit();
                 case DwarfNative.DW_TAG_union_type:
-                    return new DwarfDIE_union_type();
+                    return new DwarfDIEUnionType();
                 case DwarfNative.DW_TAG_unspecified_parameters:
-                    return new DwarfDIE_unspecified_parameters();
+                    return new DwarfDIEUnspecifiedParameters();
                 case DwarfNative.DW_TAG_unspecified_type:
-                    return new DwarfDIE_unspecified_type();
+                    return new DwarfDIEUnspecifiedType();
                 case DwarfNative.DW_TAG_variable:
-                    return new DwarfDIE_variable();
+                    return new DwarfDIEVariable();
                 case DwarfNative.DW_TAG_variant:
-                    return new DwarfDIE_variant();
+                    return new DwarfDIEVariant();
                 case DwarfNative.DW_TAG_variant_part:
-                    return new DwarfDIE_variant_part();
+                    return new DwarfDIEVariantPart();
                 case DwarfNative.DW_TAG_volatile_type:
-                    return new DwarfDIE_volatile_type();
+                    return new DwarfDIEVolatileType();
                 case DwarfNative.DW_TAG_with_stmt:
-                    return new DwarfDIE_with_stmt();
+                    return new DwarfDIEWithStmt();
             }
             return new DwarfDIE();
         }

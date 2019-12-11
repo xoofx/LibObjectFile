@@ -8,7 +8,7 @@ namespace LibObjectFile.Dwarf
     {
         public DwarfCompilationUnit()
         {
-            Kind = DwarfUnitKind.compile;
+            Kind = DwarfUnitKind.Compile;
         }
 
         protected override bool TryReadHeader(DwarfReader reader)

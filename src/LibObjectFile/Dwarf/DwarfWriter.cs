@@ -167,7 +167,7 @@ namespace LibObjectFile.Dwarf
             switch (encoding)
             {
                 case DwarfAttributeEncoding.Address:
-                    return DwarfAttributeForm.addr;
+                    return DwarfAttributeForm.Addr;
 
                 case DwarfAttributeEncoding.Block:
                     VerifyAttributeValueNotNull(attr);
@@ -177,26 +177,26 @@ namespace LibObjectFile.Dwarf
                         Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The value of attribute {attr} from DIE {attr.Parent} must be a System.IO.Stream");
                     }
 
-                    return DwarfAttributeForm.block;
+                    return DwarfAttributeForm.Block;
 
                 case DwarfAttributeEncoding.Constant:
                     
                     if (attr.ValueAsU64 <= byte.MaxValue)
                     {
-                        return DwarfAttributeForm.data1;
+                        return DwarfAttributeForm.Data1;
                     }
                     
                     if (attr.ValueAsU64 <= ushort.MaxValue)
                     {
-                        return DwarfAttributeForm.data2;
+                        return DwarfAttributeForm.Data2;
                     }
 
                     if (attr.ValueAsU64 <= uint.MaxValue)
                     {
-                        return DwarfAttributeForm.data4;
+                        return DwarfAttributeForm.Data4;
                     }
 
-                    return DwarfAttributeForm.data8;
+                    return DwarfAttributeForm.Data8;
 
                 case DwarfAttributeEncoding.ExpressionLocation:
                     VerifyAttributeValueNotNull(attr);
@@ -206,10 +206,10 @@ namespace LibObjectFile.Dwarf
                         Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The value of attribute {attr} from DIE {attr.Parent} must be a {nameof(DwarfDIE)}");
                     }
 
-                    return DwarfAttributeForm.ref4;
+                    return DwarfAttributeForm.Ref4;
 
                 case DwarfAttributeEncoding.Flag:
-                    return attr.ValueAsBoolean ? DwarfAttributeForm.flag_present : DwarfAttributeForm.flag;
+                    return attr.ValueAsBoolean ? DwarfAttributeForm.FlagPresent : DwarfAttributeForm.Flag;
 
                 case DwarfAttributeEncoding.LinePointer:
                     VerifyAttributeValueNotNull(attr);
@@ -219,7 +219,7 @@ namespace LibObjectFile.Dwarf
                         Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The value of attribute {attr} from DIE {attr.Parent} must be a {nameof(DwarfDebugLine)}");
                     }
 
-                    return DwarfAttributeForm.sec_offset;
+                    return DwarfAttributeForm.SecOffset;
 
 
                 case DwarfAttributeEncoding.Reference:
@@ -245,7 +245,7 @@ namespace LibObjectFile.Dwarf
                         Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The value of attribute {attr} from DIE {attr.Parent} must be a string.");
                     }
 
-                    return DwarfAttributeForm.strp;
+                    return DwarfAttributeForm.Strp;
 
                 case DwarfAttributeEncoding.RangeList:
                 case DwarfAttributeEncoding.LocationList:
@@ -257,11 +257,11 @@ namespace LibObjectFile.Dwarf
                 case DwarfAttributeEncoding.LocationListPointer:
                 case DwarfAttributeEncoding.MacroPointer:
                 case DwarfAttributeEncoding.RangeListPointer:
-                    return DwarfAttributeForm.sec_offset;
+                    return DwarfAttributeForm.SecOffset;
             }
 
             Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The encoding {encoding} of attribute {attr} from DIE {attr.Parent} is not supported.");
-            return DwarfAttributeForm.data8;
+            return DwarfAttributeForm.Data8;
         }
 
         private void VerifyAttributeValueNotNull(DwarfAttribute attr)
@@ -278,80 +278,80 @@ namespace LibObjectFile.Dwarf
 
             switch (form.Value)
             {
-                case DwarfAttributeForm.addr:
+                case DwarfAttributeForm.Addr:
                     _sizeOf += DwarfHelper.SizeOfUInt(Is64BitEncoding); // WriteUInt(attr.ValueAsU64);
                     break;
-                case DwarfAttributeForm.data1:
+                case DwarfAttributeForm.Data1:
                     _sizeOf += 1; // WriteU8((byte)attr.ValueAsU64);
                     break;
-                case DwarfAttributeForm.data2:
+                case DwarfAttributeForm.Data2:
                     _sizeOf += 2; // WriteU16((ushort)attr.ValueAsU64);
                     break;
-                case DwarfAttributeForm.data4:
+                case DwarfAttributeForm.Data4:
                     _sizeOf += 4; // WriteU32((uint)attr.ValueAsU64);
                     break;
-                case DwarfAttributeForm.data8:
+                case DwarfAttributeForm.Data8:
                     _sizeOf += 8; // WriteU64(attr.ValueAsU64);
                     break;
-                case DwarfAttributeForm.@string:
+                case DwarfAttributeForm.String:
                     _sizeOf += SizeOfStringUTF8NullTerminated((string)attr.ValueAsObject);
                     break;
-                case DwarfAttributeForm.block:
+                case DwarfAttributeForm.Block:
                 {
                     var stream = (Stream)attr.ValueAsObject;
                     _sizeOf += DwarfHelper.SizeOfLEB128((ulong)stream.Length);
                     _sizeOf += (ulong) stream.Length;
                     break;
                 }
-                case DwarfAttributeForm.block1:
+                case DwarfAttributeForm.Block1:
                 {
                     var stream = (Stream)attr.ValueAsObject;
                     _sizeOf += 1;
                     _sizeOf += (ulong)stream.Length;
                     break;
                 }
-                case DwarfAttributeForm.block2:
+                case DwarfAttributeForm.Block2:
                 {
                     var stream = (Stream)attr.ValueAsObject;
                     _sizeOf += 2;
                     _sizeOf += (ulong)stream.Length;
                     break;
                 }
-                case DwarfAttributeForm.block4:
+                case DwarfAttributeForm.Block4:
                 {
                     var stream = (Stream)attr.ValueAsObject;
                     _sizeOf += 4;
                     _sizeOf += (ulong)stream.Length;
                     break;
                 }
-                case DwarfAttributeForm.flag:
+                case DwarfAttributeForm.Flag:
                     _sizeOf += 1; // WriteU8((byte)(attr.ValueAsU64 != 0 ? 1 : 0));
                     break;
-                case DwarfAttributeForm.sdata:
+                case DwarfAttributeForm.Sdata:
                     _sizeOf += DwarfHelper.SizeOfILEB128(attr.ValueAsI64); // WriteILEB128(attr.ValueAsI64);
                     break;
-                case DwarfAttributeForm.strp:
+                case DwarfAttributeForm.Strp:
                     _sizeOf += DwarfHelper.SizeOfUInt(Is64BitEncoding); // WriteUIntFromEncoding(offset);
                     break;
-                case DwarfAttributeForm.udata:
+                case DwarfAttributeForm.Udata:
                     _sizeOf += DwarfHelper.SizeOfLEB128(attr.ValueAsU64); // ReadULEB128();
                     break;
-                case DwarfAttributeForm.ref_addr:
+                case DwarfAttributeForm.RefAddr:
                     _sizeOf += DwarfHelper.SizeOfUInt(Is64BitEncoding); // WriteUIntFromEncoding(dieRef.Offset);
                     break;
-                case DwarfAttributeForm.ref1:
+                case DwarfAttributeForm.Ref1:
                     _sizeOf += 1; // WriteU8((byte)(dieRef.Offset - _currentUnit.Offset));
                     break;
-                case DwarfAttributeForm.ref2:
+                case DwarfAttributeForm.Ref2:
                     _sizeOf += 2; // WriteU16((ushort)(dieRef.Offset - _currentUnit.Offset));
                     break;
-                case DwarfAttributeForm.ref4:
+                case DwarfAttributeForm.Ref4:
                     _sizeOf += 4; // WriteU32((uint)(dieRef.Offset - _currentUnit.Offset));
                     break;
-                case DwarfAttributeForm.ref8:
+                case DwarfAttributeForm.Ref8:
                     _sizeOf += 8; // WriteU64((dieRef.Offset - _currentUnit.Offset));
                     break;
-                case DwarfAttributeForm.ref_udata:
+                case DwarfAttributeForm.RefUdata:
                 {
                     var dieRef = (DwarfDIE)attr.ValueAsObject;
                     _sizeOf += DwarfHelper.SizeOfLEB128(dieRef.Offset - _currentUnit.Offset); // WriteULEB128((dieRef.Offset - _currentUnit.Offset));
@@ -372,43 +372,43 @@ namespace LibObjectFile.Dwarf
                 // rnglist
                 // rngrlistptr
                 // stroffsetsptr
-                case DwarfAttributeForm.sec_offset:
+                case DwarfAttributeForm.SecOffset:
                     _sizeOf += DwarfHelper.SizeOfUInt(Is64BitEncoding);
                     break;
 
-                case DwarfAttributeForm.exprloc:
+                case DwarfAttributeForm.Exprloc:
                     UpdateLayoutExpression((DwarfExpression)attr.ValueAsObject);
                     break;
 
-                case DwarfAttributeForm.flag_present:
+                case DwarfAttributeForm.FlagPresent:
                     break;
 
-                case DwarfAttributeForm.ref_sig8:
+                case DwarfAttributeForm.RefSig8:
                     _sizeOf += 8; // WriteU64(attr.ValueAsU64);
                     break;
 
-                case DwarfAttributeForm.strx: throw new NotSupportedException("DW_FORM_strx - DWARF5");
-                case DwarfAttributeForm.addrx: throw new NotSupportedException("DW_FORM_addrx - DWARF5");
-                case DwarfAttributeForm.ref_sup4: throw new NotSupportedException("DW_FORM_ref_sup4 - DWARF5");
-                case DwarfAttributeForm.strp_sup: throw new NotSupportedException("DW_FORM_strp_sup - DWARF5");
-                case DwarfAttributeForm.data16: throw new NotSupportedException("DW_FORM_data16 - DWARF5");
-                case DwarfAttributeForm.line_strp: throw new NotSupportedException("DW_FORM_line_strp - DWARF5");
-                case DwarfAttributeForm.implicit_const: throw new NotSupportedException("DW_FORM_implicit_const - DWARF5");
-                case DwarfAttributeForm.loclistx: throw new NotSupportedException("DW_FORM_loclistx - DWARF5");
-                case DwarfAttributeForm.rnglistx: throw new NotSupportedException("DW_FORM_rnglistx - DWARF5");
-                case DwarfAttributeForm.ref_sup8: throw new NotSupportedException("DW_FORM_ref_sup8 - DWARF5");
-                case DwarfAttributeForm.strx1: throw new NotSupportedException("DW_FORM_strx1 - DWARF5");
-                case DwarfAttributeForm.strx2: throw new NotSupportedException("DW_FORM_strx2 - DWARF5");
-                case DwarfAttributeForm.strx3: throw new NotSupportedException("DW_FORM_strx3 - DWARF5");
-                case DwarfAttributeForm.strx4: throw new NotSupportedException("DW_FORM_strx4 - DWARF5");
-                case DwarfAttributeForm.addrx1: throw new NotSupportedException("DW_FORM_addrx1 - DWARF5");
-                case DwarfAttributeForm.addrx2: throw new NotSupportedException("DW_FORM_addrx2 - DWARF5");
-                case DwarfAttributeForm.addrx3: throw new NotSupportedException("DW_FORM_addrx3 - DWARF5");
-                case DwarfAttributeForm.addrx4: throw new NotSupportedException("DW_FORM_addrx4 - DWARF5");
-                case DwarfAttributeForm.GNU_addr_index: throw new NotSupportedException("DW_FORM_GNU_addr_index - GNU extension in debug_info.dwo.");
-                case DwarfAttributeForm.GNU_str_index: throw new NotSupportedException("DW_FORM_GNU_str_index - GNU extension, somewhat like DW_FORM_strp");
-                case DwarfAttributeForm.GNU_ref_alt: throw new NotSupportedException("DW_FORM_GNU_ref_alt - GNU extension. Offset in .debug_info.");
-                case DwarfAttributeForm.GNU_strp_alt: throw new NotSupportedException("DW_FORM_GNU_strp_alt - GNU extension. Offset in .debug_str of another object file.");
+                case DwarfAttributeForm.Strx: throw new NotSupportedException("DW_FORM_strx - DWARF5");
+                case DwarfAttributeForm.Addrx: throw new NotSupportedException("DW_FORM_addrx - DWARF5");
+                case DwarfAttributeForm.RefSup4: throw new NotSupportedException("DW_FORM_ref_sup4 - DWARF5");
+                case DwarfAttributeForm.StrpSup: throw new NotSupportedException("DW_FORM_strp_sup - DWARF5");
+                case DwarfAttributeForm.Data16: throw new NotSupportedException("DW_FORM_data16 - DWARF5");
+                case DwarfAttributeForm.LineStrp: throw new NotSupportedException("DW_FORM_line_strp - DWARF5");
+                case DwarfAttributeForm.ImplicitConst: throw new NotSupportedException("DW_FORM_implicit_const - DWARF5");
+                case DwarfAttributeForm.Loclistx: throw new NotSupportedException("DW_FORM_loclistx - DWARF5");
+                case DwarfAttributeForm.Rnglistx: throw new NotSupportedException("DW_FORM_rnglistx - DWARF5");
+                case DwarfAttributeForm.RefSup8: throw new NotSupportedException("DW_FORM_ref_sup8 - DWARF5");
+                case DwarfAttributeForm.Strx1: throw new NotSupportedException("DW_FORM_strx1 - DWARF5");
+                case DwarfAttributeForm.Strx2: throw new NotSupportedException("DW_FORM_strx2 - DWARF5");
+                case DwarfAttributeForm.Strx3: throw new NotSupportedException("DW_FORM_strx3 - DWARF5");
+                case DwarfAttributeForm.Strx4: throw new NotSupportedException("DW_FORM_strx4 - DWARF5");
+                case DwarfAttributeForm.Addrx1: throw new NotSupportedException("DW_FORM_addrx1 - DWARF5");
+                case DwarfAttributeForm.Addrx2: throw new NotSupportedException("DW_FORM_addrx2 - DWARF5");
+                case DwarfAttributeForm.Addrx3: throw new NotSupportedException("DW_FORM_addrx3 - DWARF5");
+                case DwarfAttributeForm.Addrx4: throw new NotSupportedException("DW_FORM_addrx4 - DWARF5");
+                case DwarfAttributeForm.GNUAddrIndex: throw new NotSupportedException("DW_FORM_GNU_addr_index - GNU extension in debug_info.dwo.");
+                case DwarfAttributeForm.GNUStrIndex: throw new NotSupportedException("DW_FORM_GNU_str_index - GNU extension, somewhat like DW_FORM_strp");
+                case DwarfAttributeForm.GNURefAlt: throw new NotSupportedException("DW_FORM_GNU_ref_alt - GNU extension. Offset in .debug_info.");
+                case DwarfAttributeForm.GNUStrpAlt: throw new NotSupportedException("DW_FORM_GNU_strp_alt - GNU extension. Offset in .debug_str of another object file.");
                 default:
                     throw new NotSupportedException($"Unknown {nameof(DwarfAttributeForm)}: {form}");
             }
@@ -426,116 +426,116 @@ namespace LibObjectFile.Dwarf
 
             switch (form.Value)
             {
-                case DwarfAttributeForm.addr:
+                case DwarfAttributeForm.Addr:
                 {
                     WriteUInt(attr.ValueAsU64);
                     break;
                 }
-                case DwarfAttributeForm.data1:
+                case DwarfAttributeForm.Data1:
                 {
                     WriteU8((byte)attr.ValueAsU64);
                     break;
                 }
-                case DwarfAttributeForm.data2:
+                case DwarfAttributeForm.Data2:
                 {
                     WriteU16((ushort)attr.ValueAsU64);
                     break;
                 }
-                case DwarfAttributeForm.data4:
+                case DwarfAttributeForm.Data4:
                 {
                     WriteU32((uint)attr.ValueAsU64);
                     break;
                 }
-                case DwarfAttributeForm.data8:
+                case DwarfAttributeForm.Data8:
                 {
                     WriteU64(attr.ValueAsU64);
                     break;
                 }
-                case DwarfAttributeForm.@string:
+                case DwarfAttributeForm.String:
                 {
                     WriteStringUTF8NullTerminated((string)attr.ValueAsObject);
                     break;
                 }
-                case DwarfAttributeForm.block:
+                case DwarfAttributeForm.Block:
                 {
                     var stream = (Stream) attr.ValueAsObject;
                     WriteULEB128((ulong)stream.Length);
                     Write(stream);
                     break;
                 }
-                case DwarfAttributeForm.block1:
+                case DwarfAttributeForm.Block1:
                 {
                     var stream = (Stream)attr.ValueAsObject;
                     WriteU8((byte)stream.Length);
                     Write(stream);
                     break;
                 }
-                case DwarfAttributeForm.block2:
+                case DwarfAttributeForm.Block2:
                 {
                     var stream = (Stream)attr.ValueAsObject;
                     WriteU16((ushort)stream.Length);
                     Write(stream);
                     break;
                 }
-                case DwarfAttributeForm.block4:
+                case DwarfAttributeForm.Block4:
                 {
                     var stream = (Stream)attr.ValueAsObject;
                     WriteU32((uint)stream.Length);
                     Write(stream);
                     break;
                 }
-                case DwarfAttributeForm.flag:
+                case DwarfAttributeForm.Flag:
                 {
                     WriteU8((byte) (attr.ValueAsU64 != 0 ? 1 : 0));
                     break;
                 }
-                case DwarfAttributeForm.sdata:
+                case DwarfAttributeForm.Sdata:
                 {
                     WriteILEB128(attr.ValueAsI64);
                     break;
                 }
-                case DwarfAttributeForm.strp:
+                case DwarfAttributeForm.Strp:
                 {
                     var offset = _parent.DebugStringTable.GetOrCreateString((string) attr.ValueAsObject);
                     WriteUIntFromEncoding(offset);
                     break;
                 }
-                case DwarfAttributeForm.udata:
+                case DwarfAttributeForm.Udata:
                 {
                     attr.ValueAsU64 = ReadULEB128();
                     break;
                 }
-                case DwarfAttributeForm.ref_addr:
+                case DwarfAttributeForm.RefAddr:
                 {
                     var dieRef = (DwarfDIE) attr.ValueAsObject;
                     WriteUIntFromEncoding(dieRef.Offset);
                     break;
                 }
-                case DwarfAttributeForm.ref1:
+                case DwarfAttributeForm.Ref1:
                 {
                     var dieRef = (DwarfDIE)attr.ValueAsObject;
                     WriteU8((byte)(dieRef.Offset - _currentUnit.Offset));
                     break;
                 }
-                case DwarfAttributeForm.ref2:
+                case DwarfAttributeForm.Ref2:
                 {
                     var dieRef = (DwarfDIE)attr.ValueAsObject;
                     WriteU16((ushort)(dieRef.Offset - _currentUnit.Offset));
                     break;
                 }
-                case DwarfAttributeForm.ref4:
+                case DwarfAttributeForm.Ref4:
                 {
                     var dieRef = (DwarfDIE)attr.ValueAsObject;
                     WriteU32((uint)(dieRef.Offset - _currentUnit.Offset));
                     break;
                 }
-                case DwarfAttributeForm.ref8:
+                case DwarfAttributeForm.Ref8:
                 {
                     var dieRef = (DwarfDIE)attr.ValueAsObject;
                     WriteU64((dieRef.Offset - _currentUnit.Offset));
                     break;
                 }
-                case DwarfAttributeForm.ref_udata:
+                case DwarfAttributeForm.RefUdata:
                 {
                     var dieRef = (DwarfDIE)attr.ValueAsObject;
                     WriteULEB128((dieRef.Offset - _currentUnit.Offset));
@@ -556,52 +556,52 @@ namespace LibObjectFile.Dwarf
                 // rnglist
                 // rngrlistptr
                 // stroffsetsptr
-                case DwarfAttributeForm.sec_offset:
+                case DwarfAttributeForm.SecOffset:
                 {
                     WriteUIntFromEncoding(attr.ValueAsU64);
                     break;
                 }
 
-                case DwarfAttributeForm.exprloc:
+                case DwarfAttributeForm.Exprloc:
                 {
                     WriteExpression((DwarfExpression) attr.ValueAsObject);
                     break;
                 }
 
-                case DwarfAttributeForm.flag_present:
+                case DwarfAttributeForm.FlagPresent:
                 {
                     Debug.Assert(attr.ValueAsBoolean);
                     break;
                 }
 
-                case DwarfAttributeForm.ref_sig8:
+                case DwarfAttributeForm.RefSig8:
                 {
                     WriteU64(attr.ValueAsU64);
                     break;
                 }
 
-                case DwarfAttributeForm.strx: throw new NotSupportedException("DW_FORM_strx - DWARF5");
-                case DwarfAttributeForm.addrx: throw new NotSupportedException("DW_FORM_addrx - DWARF5");
-                case DwarfAttributeForm.ref_sup4: throw new NotSupportedException("DW_FORM_ref_sup4 - DWARF5");
-                case DwarfAttributeForm.strp_sup: throw new NotSupportedException("DW_FORM_strp_sup - DWARF5");
-                case DwarfAttributeForm.data16: throw new NotSupportedException("DW_FORM_data16 - DWARF5");
-                case DwarfAttributeForm.line_strp: throw new NotSupportedException("DW_FORM_line_strp - DWARF5");
-                case DwarfAttributeForm.implicit_const: throw new NotSupportedException("DW_FORM_implicit_const - DWARF5");
-                case DwarfAttributeForm.loclistx: throw new NotSupportedException("DW_FORM_loclistx - DWARF5");
-                case DwarfAttributeForm.rnglistx: throw new NotSupportedException("DW_FORM_rnglistx - DWARF5");
-                case DwarfAttributeForm.ref_sup8: throw new NotSupportedException("DW_FORM_ref_sup8 - DWARF5");
-                case DwarfAttributeForm.strx1: throw new NotSupportedException("DW_FORM_strx1 - DWARF5");
-                case DwarfAttributeForm.strx2: throw new NotSupportedException("DW_FORM_strx2 - DWARF5");
-                case DwarfAttributeForm.strx3: throw new NotSupportedException("DW_FORM_strx3 - DWARF5");
-                case DwarfAttributeForm.strx4: throw new NotSupportedException("DW_FORM_strx4 - DWARF5");
-                case DwarfAttributeForm.addrx1: throw new NotSupportedException("DW_FORM_addrx1 - DWARF5");
-                case DwarfAttributeForm.addrx2: throw new NotSupportedException("DW_FORM_addrx2 - DWARF5");
-                case DwarfAttributeForm.addrx3: throw new NotSupportedException("DW_FORM_addrx3 - DWARF5");
-                case DwarfAttributeForm.addrx4: throw new NotSupportedException("DW_FORM_addrx4 - DWARF5");
-                case DwarfAttributeForm.GNU_addr_index: throw new NotSupportedException("DW_FORM_GNU_addr_index - GNU extension in debug_info.dwo.");
-                case DwarfAttributeForm.GNU_str_index: throw new NotSupportedException("DW_FORM_GNU_str_index - GNU extension, somewhat like DW_FORM_strp");
-                case DwarfAttributeForm.GNU_ref_alt: throw new NotSupportedException("DW_FORM_GNU_ref_alt - GNU extension. Offset in .debug_info.");
-                case DwarfAttributeForm.GNU_strp_alt: throw new NotSupportedException("DW_FORM_GNU_strp_alt - GNU extension. Offset in .debug_str of another object file.");
+                case DwarfAttributeForm.Strx: throw new NotSupportedException("DW_FORM_strx - DWARF5");
+                case DwarfAttributeForm.Addrx: throw new NotSupportedException("DW_FORM_addrx - DWARF5");
+                case DwarfAttributeForm.RefSup4: throw new NotSupportedException("DW_FORM_ref_sup4 - DWARF5");
+                case DwarfAttributeForm.StrpSup: throw new NotSupportedException("DW_FORM_strp_sup - DWARF5");
+                case DwarfAttributeForm.Data16: throw new NotSupportedException("DW_FORM_data16 - DWARF5");
+                case DwarfAttributeForm.LineStrp: throw new NotSupportedException("DW_FORM_line_strp - DWARF5");
+                case DwarfAttributeForm.ImplicitConst: throw new NotSupportedException("DW_FORM_implicit_const - DWARF5");
+                case DwarfAttributeForm.Loclistx: throw new NotSupportedException("DW_FORM_loclistx - DWARF5");
+                case DwarfAttributeForm.Rnglistx: throw new NotSupportedException("DW_FORM_rnglistx - DWARF5");
+                case DwarfAttributeForm.RefSup8: throw new NotSupportedException("DW_FORM_ref_sup8 - DWARF5");
+                case DwarfAttributeForm.Strx1: throw new NotSupportedException("DW_FORM_strx1 - DWARF5");
+                case DwarfAttributeForm.Strx2: throw new NotSupportedException("DW_FORM_strx2 - DWARF5");
+                case DwarfAttributeForm.Strx3: throw new NotSupportedException("DW_FORM_strx3 - DWARF5");
+                case DwarfAttributeForm.Strx4: throw new NotSupportedException("DW_FORM_strx4 - DWARF5");
+                case DwarfAttributeForm.Addrx1: throw new NotSupportedException("DW_FORM_addrx1 - DWARF5");
+                case DwarfAttributeForm.Addrx2: throw new NotSupportedException("DW_FORM_addrx2 - DWARF5");
+                case DwarfAttributeForm.Addrx3: throw new NotSupportedException("DW_FORM_addrx3 - DWARF5");
+                case DwarfAttributeForm.Addrx4: throw new NotSupportedException("DW_FORM_addrx4 - DWARF5");
+                case DwarfAttributeForm.GNUAddrIndex: throw new NotSupportedException("DW_FORM_GNU_addr_index - GNU extension in debug_info.dwo.");
+                case DwarfAttributeForm.GNUStrIndex: throw new NotSupportedException("DW_FORM_GNU_str_index - GNU extension, somewhat like DW_FORM_strp");
+                case DwarfAttributeForm.GNURefAlt: throw new NotSupportedException("DW_FORM_GNU_ref_alt - GNU extension. Offset in .debug_info.");
+                case DwarfAttributeForm.GNUStrpAlt: throw new NotSupportedException("DW_FORM_GNU_strp_alt - GNU extension. Offset in .debug_str of another object file.");
                 default:
                     throw new NotSupportedException($"Unknown {nameof(DwarfAttributeForm)}: {form}");
             }

@@ -176,7 +176,7 @@ namespace LibObjectFile.Dwarf
         {
             switch (attr.Kind.Value)
             {
-                case DwarfAttributeKind.decl_file:
+                case DwarfAttributeKind.DeclFile:
                 {
                     var file = _parent.DebugLineSection.FileNames[attr.ValueAsI32 - 1];
                     attr.ValueAsU64 = 0;
@@ -184,7 +184,7 @@ namespace LibObjectFile.Dwarf
                     break;
                 }
 
-                case DwarfAttributeKind.stmt_list:
+                case DwarfAttributeKind.StmtList:
                 {
                     if (attr.ValueAsU64 == 0) return;
 
@@ -239,8 +239,8 @@ namespace LibObjectFile.Dwarf
             
             switch (unitKind.Value)
             {
-                case DwarfUnitKind.compile:
-                case DwarfUnitKind.partial:
+                case DwarfUnitKind.Compile:
+                case DwarfUnitKind.Partial:
                     unit = new DwarfCompilationUnit();
                     break;
 
@@ -263,75 +263,75 @@ namespace LibObjectFile.Dwarf
             indirect:
             switch (attributeForm.Value)
             {
-                case DwarfAttributeForm.addr:
+                case DwarfAttributeForm.Addr:
                 {
                     attr.ValueAsU64 = _is64Address ? ReadU64() : ReadU32();
                     break;
                 }
 
-                case DwarfAttributeForm.data1:
+                case DwarfAttributeForm.Data1:
                 {
                     attr.ValueAsU64 = ReadU8();
                     break;
                 }
-                case DwarfAttributeForm.data2:
+                case DwarfAttributeForm.Data2:
                 {
                     attr.ValueAsU64 = ReadU16();
                     break;
                 }
-                case DwarfAttributeForm.data4:
+                case DwarfAttributeForm.Data4:
                 {
                     attr.ValueAsU64 = ReadU32();
                     break;
                 }
-                case DwarfAttributeForm.data8:
+                case DwarfAttributeForm.Data8:
                 {
                     attr.ValueAsU64 = ReadU64();
                     break;
                 }
 
-                case DwarfAttributeForm.@string:
+                case DwarfAttributeForm.String:
                 {
                     attr.ValueAsObject = ReadStringUTF8NullTerminated();
                     break;
                 }
 
-                case DwarfAttributeForm.block:
+                case DwarfAttributeForm.Block:
                 {
                     var length = ReadULEB128();
                     attr.ValueAsObject = ReadAsStream(length);
                     break;
                 }
-                case DwarfAttributeForm.block1:
+                case DwarfAttributeForm.Block1:
                 {
                     var length = ReadU8();
                     attr.ValueAsObject = ReadAsStream(length);
                     break;
                 }
-                case DwarfAttributeForm.block2:
+                case DwarfAttributeForm.Block2:
                 {
                     var length = ReadU16();
                     attr.ValueAsObject = ReadAsStream(length);
                     break;
                 }
-                case DwarfAttributeForm.block4:
+                case DwarfAttributeForm.Block4:
                 {
                     var length = ReadU32();
                     attr.ValueAsObject = ReadAsStream(length);
                     break;
                 }
 
-                case DwarfAttributeForm.flag:
+                case DwarfAttributeForm.Flag:
                 {
                     attr.ValueAsBoolean = ReadU8() != 0;
                     break;
                 }
-                case DwarfAttributeForm.sdata:
+                case DwarfAttributeForm.Sdata:
                 {
                     attr.ValueAsI64 = ReadILEB128();
                     break;
                 }
-                case DwarfAttributeForm.strp:
+                case DwarfAttributeForm.Strp:
                 {
                     var offset = ReadUIntFromEncoding();
                     if (_parent.DebugStringTable == null)
@@ -346,48 +346,48 @@ namespace LibObjectFile.Dwarf
 
                     break;
                 }
-                case DwarfAttributeForm.udata:
+                case DwarfAttributeForm.Udata:
                 {
                     attr.ValueAsU64 = ReadULEB128();
                     break;
                 }
-                case DwarfAttributeForm.ref_addr:
+                case DwarfAttributeForm.RefAddr:
                 {
                     attr.ValueAsU64 = ReadUIntFromEncoding();
                     ResolveAttributeReferenceWithinSection(AttributeToDIERef(attr), false);
                     break;
                 }
-                case DwarfAttributeForm.ref1:
+                case DwarfAttributeForm.Ref1:
                 {
                     attr.ValueAsU64 = ReadU8();
                     ResolveAttributeReferenceWithinCompilationUnit(AttributeToDIERef(attr), false);
                     break;
                 }
-                case DwarfAttributeForm.ref2:
+                case DwarfAttributeForm.Ref2:
                 {
                     attr.ValueAsU64 = ReadU16();
                     ResolveAttributeReferenceWithinCompilationUnit(AttributeToDIERef(attr), false);
                     break;
                 }
-                case DwarfAttributeForm.ref4:
+                case DwarfAttributeForm.Ref4:
                 {
                     attr.ValueAsU64 = ReadU32();
                     ResolveAttributeReferenceWithinCompilationUnit(AttributeToDIERef(attr), false);
                     break;
                 }
-                case DwarfAttributeForm.ref8:
+                case DwarfAttributeForm.Ref8:
                 {
                     attr.ValueAsU64 = ReadU64();
                     ResolveAttributeReferenceWithinCompilationUnit(AttributeToDIERef(attr), false);
                     break;
                 }
-                case DwarfAttributeForm.ref_udata:
+                case DwarfAttributeForm.RefUdata:
                 {
                     attr.ValueAsU64 = ReadULEB128();
                     ResolveAttributeReferenceWithinCompilationUnit(AttributeToDIERef(attr), false);
                     break;
                 }
-                case DwarfAttributeForm.indirect:
+                case DwarfAttributeForm.Indirect:
                 {
                     attributeForm = new DwarfAttributeFormEx(this.ReadLEB128AsU32());
                     goto indirect;
@@ -401,55 +401,55 @@ namespace LibObjectFile.Dwarf
                 // rnglist
                 // rngrlistptr
                 // stroffsetsptr
-                case DwarfAttributeForm.sec_offset:
+                case DwarfAttributeForm.SecOffset:
                 {
                     attr.ValueAsU64 = ReadUIntFromEncoding();
                     //Console.WriteLine($"attribute {attr.Key} offset: {attr.ValueAsU64}");
                     break;
                 }
 
-                case DwarfAttributeForm.exprloc:
+                case DwarfAttributeForm.Exprloc:
                 {
                     var length = ReadULEB128();
                     attr.ValueAsObject = ReadExpression(length);
                     break;
                 }
 
-                case DwarfAttributeForm.flag_present:
+                case DwarfAttributeForm.FlagPresent:
                 {
                     attr.ValueAsBoolean = true;
                     break;
                 }
 
-                case DwarfAttributeForm.ref_sig8:
+                case DwarfAttributeForm.RefSig8:
                 {
                     var offset = ReadU64();
                     attr.ValueAsU64 = offset;
                     break;
                 }
 
-                case DwarfAttributeForm.strx: throw new NotSupportedException("DW_FORM_strx - DWARF5");
-                case DwarfAttributeForm.addrx: throw new NotSupportedException("DW_FORM_addrx - DWARF5");
-                case DwarfAttributeForm.ref_sup4: throw new NotSupportedException("DW_FORM_ref_sup4 - DWARF5");
-                case DwarfAttributeForm.strp_sup: throw new NotSupportedException("DW_FORM_strp_sup - DWARF5");
-                case DwarfAttributeForm.data16: throw new NotSupportedException("DW_FORM_data16 - DWARF5");
-                case DwarfAttributeForm.line_strp: throw new NotSupportedException("DW_FORM_line_strp - DWARF5");
-                case DwarfAttributeForm.implicit_const: throw new NotSupportedException("DW_FORM_implicit_const - DWARF5");
-                case DwarfAttributeForm.loclistx: throw new NotSupportedException("DW_FORM_loclistx - DWARF5");
-                case DwarfAttributeForm.rnglistx: throw new NotSupportedException("DW_FORM_rnglistx - DWARF5");
-                case DwarfAttributeForm.ref_sup8: throw new NotSupportedException("DW_FORM_ref_sup8 - DWARF5");
-                case DwarfAttributeForm.strx1: throw new NotSupportedException("DW_FORM_strx1 - DWARF5");
-                case DwarfAttributeForm.strx2: throw new NotSupportedException("DW_FORM_strx2 - DWARF5");
-                case DwarfAttributeForm.strx3: throw new NotSupportedException("DW_FORM_strx3 - DWARF5");
-                case DwarfAttributeForm.strx4: throw new NotSupportedException("DW_FORM_strx4 - DWARF5");
-                case DwarfAttributeForm.addrx1: throw new NotSupportedException("DW_FORM_addrx1 - DWARF5");
-                case DwarfAttributeForm.addrx2: throw new NotSupportedException("DW_FORM_addrx2 - DWARF5");
-                case DwarfAttributeForm.addrx3: throw new NotSupportedException("DW_FORM_addrx3 - DWARF5");
-                case DwarfAttributeForm.addrx4: throw new NotSupportedException("DW_FORM_addrx4 - DWARF5");
-                case DwarfAttributeForm.GNU_addr_index: throw new NotSupportedException("DW_FORM_GNU_addr_index - GNU extension in debug_info.dwo.");
-                case DwarfAttributeForm.GNU_str_index: throw new NotSupportedException("DW_FORM_GNU_str_index - GNU extension, somewhat like DW_FORM_strp");
-                case DwarfAttributeForm.GNU_ref_alt: throw new NotSupportedException("DW_FORM_GNU_ref_alt - GNU extension. Offset in .debug_info.");
-                case DwarfAttributeForm.GNU_strp_alt: throw new NotSupportedException("DW_FORM_GNU_strp_alt - GNU extension. Offset in .debug_str of another object file.");
+                case DwarfAttributeForm.Strx: throw new NotSupportedException("DW_FORM_strx - DWARF5");
+                case DwarfAttributeForm.Addrx: throw new NotSupportedException("DW_FORM_addrx - DWARF5");
+                case DwarfAttributeForm.RefSup4: throw new NotSupportedException("DW_FORM_ref_sup4 - DWARF5");
+                case DwarfAttributeForm.StrpSup: throw new NotSupportedException("DW_FORM_strp_sup - DWARF5");
+                case DwarfAttributeForm.Data16: throw new NotSupportedException("DW_FORM_data16 - DWARF5");
+                case DwarfAttributeForm.LineStrp: throw new NotSupportedException("DW_FORM_line_strp - DWARF5");
+                case DwarfAttributeForm.ImplicitConst: throw new NotSupportedException("DW_FORM_implicit_const - DWARF5");
+                case DwarfAttributeForm.Loclistx: throw new NotSupportedException("DW_FORM_loclistx - DWARF5");
+                case DwarfAttributeForm.Rnglistx: throw new NotSupportedException("DW_FORM_rnglistx - DWARF5");
+                case DwarfAttributeForm.RefSup8: throw new NotSupportedException("DW_FORM_ref_sup8 - DWARF5");
+                case DwarfAttributeForm.Strx1: throw new NotSupportedException("DW_FORM_strx1 - DWARF5");
+                case DwarfAttributeForm.Strx2: throw new NotSupportedException("DW_FORM_strx2 - DWARF5");
+                case DwarfAttributeForm.Strx3: throw new NotSupportedException("DW_FORM_strx3 - DWARF5");
+                case DwarfAttributeForm.Strx4: throw new NotSupportedException("DW_FORM_strx4 - DWARF5");
+                case DwarfAttributeForm.Addrx1: throw new NotSupportedException("DW_FORM_addrx1 - DWARF5");
+                case DwarfAttributeForm.Addrx2: throw new NotSupportedException("DW_FORM_addrx2 - DWARF5");
+                case DwarfAttributeForm.Addrx3: throw new NotSupportedException("DW_FORM_addrx3 - DWARF5");
+                case DwarfAttributeForm.Addrx4: throw new NotSupportedException("DW_FORM_addrx4 - DWARF5");
+                case DwarfAttributeForm.GNUAddrIndex: throw new NotSupportedException("DW_FORM_GNU_addr_index - GNU extension in debug_info.dwo.");
+                case DwarfAttributeForm.GNUStrIndex: throw new NotSupportedException("DW_FORM_GNU_str_index - GNU extension, somewhat like DW_FORM_strp");
+                case DwarfAttributeForm.GNURefAlt: throw new NotSupportedException("DW_FORM_GNU_ref_alt - GNU extension. Offset in .debug_info.");
+                case DwarfAttributeForm.GNUStrpAlt: throw new NotSupportedException("DW_FORM_GNU_strp_alt - GNU extension. Offset in .debug_str of another object file.");
                 default:
                     throw new NotSupportedException($"Unknown {nameof(DwarfAttributeForm)}: {attributeForm.Value}");
             }
@@ -475,224 +475,224 @@ namespace LibObjectFile.Dwarf
 
                 switch (kind.Value)
                 {
-                    case DwarfOperationKind.addr:
+                    case DwarfOperationKind.Addr:
                         op.Operand1.U64 = ReadUInt();
                         break;
-                    case DwarfOperationKind.const1u:
+                    case DwarfOperationKind.Const1u:
                         op.Operand1.U64 = ReadU8();
                         break;
-                    case DwarfOperationKind.const1s:
+                    case DwarfOperationKind.Const1s:
                         op.Operand1.I64 = ReadI8();
                         break;
-                    case DwarfOperationKind.const2u:
+                    case DwarfOperationKind.Const2u:
                         op.Operand1.U64 = ReadU16();
                         break;
-                    case DwarfOperationKind.const2s:
+                    case DwarfOperationKind.Const2s:
                         op.Operand1.I64 = ReadI16();
                         break;
 
-                    case DwarfOperationKind.const4u:
+                    case DwarfOperationKind.Const4u:
                         op.Operand1.U64 = ReadU32();
                         break;
-                    case DwarfOperationKind.const4s:
+                    case DwarfOperationKind.Const4s:
                         op.Operand1.I64 = ReadU32();
                         break;
 
-                    case DwarfOperationKind.const8u:
+                    case DwarfOperationKind.Const8u:
                         op.Operand1.U64 = ReadU64();
                         break;
 
-                    case DwarfOperationKind.const8s:
+                    case DwarfOperationKind.Const8s:
                         op.Operand1.I64 = ReadI64();
                         break;
 
-                    case DwarfOperationKind.constu:
+                    case DwarfOperationKind.Constu:
                         op.Operand1.U64 = ReadULEB128();
                         break;
 
-                    case DwarfOperationKind.consts:
+                    case DwarfOperationKind.Consts:
                         op.Operand1.I64 = ReadILEB128();
                         break;
 
-                    case DwarfOperationKind.deref:
-                    case DwarfOperationKind.dup:
-                    case DwarfOperationKind.drop:
-                    case DwarfOperationKind.over:
-                    case DwarfOperationKind.swap:
-                    case DwarfOperationKind.rot:
-                    case DwarfOperationKind.xderef:
-                    case DwarfOperationKind.abs:
-                    case DwarfOperationKind.and:
-                    case DwarfOperationKind.div:
-                    case DwarfOperationKind.minus:
-                    case DwarfOperationKind.mod:
-                    case DwarfOperationKind.mul:
-                    case DwarfOperationKind.neg:
-                    case DwarfOperationKind.not:
-                    case DwarfOperationKind.or:
-                    case DwarfOperationKind.plus:
-                    case DwarfOperationKind.shl:
-                    case DwarfOperationKind.shr:
-                    case DwarfOperationKind.shra:
-                    case DwarfOperationKind.xor:
-                    case DwarfOperationKind.eq:
-                    case DwarfOperationKind.ge:
-                    case DwarfOperationKind.gt:
-                    case DwarfOperationKind.le:
-                    case DwarfOperationKind.lt:
-                    case DwarfOperationKind.ne:
-                    case DwarfOperationKind.nop:
-                    case DwarfOperationKind.push_object_address:
-                    case DwarfOperationKind.form_tls_address:
-                    case DwarfOperationKind.call_frame_cfa:
+                    case DwarfOperationKind.Deref:
+                    case DwarfOperationKind.Dup:
+                    case DwarfOperationKind.Drop:
+                    case DwarfOperationKind.Over:
+                    case DwarfOperationKind.Swap:
+                    case DwarfOperationKind.Rot:
+                    case DwarfOperationKind.Xderef:
+                    case DwarfOperationKind.Abs:
+                    case DwarfOperationKind.And:
+                    case DwarfOperationKind.Div:
+                    case DwarfOperationKind.Minus:
+                    case DwarfOperationKind.Mod:
+                    case DwarfOperationKind.Mul:
+                    case DwarfOperationKind.Neg:
+                    case DwarfOperationKind.Not:
+                    case DwarfOperationKind.Or:
+                    case DwarfOperationKind.Plus:
+                    case DwarfOperationKind.Shl:
+                    case DwarfOperationKind.Shr:
+                    case DwarfOperationKind.Shra:
+                    case DwarfOperationKind.Xor:
+                    case DwarfOperationKind.Eq:
+                    case DwarfOperationKind.Ge:
+                    case DwarfOperationKind.Gt:
+                    case DwarfOperationKind.Le:
+                    case DwarfOperationKind.Lt:
+                    case DwarfOperationKind.Ne:
+                    case DwarfOperationKind.Nop:
+                    case DwarfOperationKind.PushObjectAddress:
+                    case DwarfOperationKind.FormTlsAddress:
+                    case DwarfOperationKind.CallFrameCfa:
                         break;
 
-                    case DwarfOperationKind.pick:
+                    case DwarfOperationKind.Pick:
                         op.Operand1.U64 = ReadU8();
                         break;
 
-                    case DwarfOperationKind.plus_uconst:
+                    case DwarfOperationKind.PlusUconst:
                         op.Operand1.U64 = ReadULEB128();
                         break;
 
-                    case DwarfOperationKind.bra:
-                    case DwarfOperationKind.skip:
+                    case DwarfOperationKind.Bra:
+                    case DwarfOperationKind.Skip:
                         // TODO: resolve branches to DwarfOperation
                         op.Operand1.I64 = ReadI16();
                         break;
 
-                    case DwarfOperationKind.lit0:
-                    case DwarfOperationKind.lit1:
-                    case DwarfOperationKind.lit2:
-                    case DwarfOperationKind.lit3:
-                    case DwarfOperationKind.lit4:
-                    case DwarfOperationKind.lit5:
-                    case DwarfOperationKind.lit6:
-                    case DwarfOperationKind.lit7:
-                    case DwarfOperationKind.lit8:
-                    case DwarfOperationKind.lit9:
-                    case DwarfOperationKind.lit10:
-                    case DwarfOperationKind.lit11:
-                    case DwarfOperationKind.lit12:
-                    case DwarfOperationKind.lit13:
-                    case DwarfOperationKind.lit14:
-                    case DwarfOperationKind.lit15:
-                    case DwarfOperationKind.lit16:
-                    case DwarfOperationKind.lit17:
-                    case DwarfOperationKind.lit18:
-                    case DwarfOperationKind.lit19:
-                    case DwarfOperationKind.lit20:
-                    case DwarfOperationKind.lit21:
-                    case DwarfOperationKind.lit22:
-                    case DwarfOperationKind.lit23:
-                    case DwarfOperationKind.lit24:
-                    case DwarfOperationKind.lit25:
-                    case DwarfOperationKind.lit26:
-                    case DwarfOperationKind.lit27:
-                    case DwarfOperationKind.lit28:
-                    case DwarfOperationKind.lit29:
-                    case DwarfOperationKind.lit30:
-                    case DwarfOperationKind.lit31:
-                        op.Operand1.U64 = (ulong)((byte)kind.Value - (byte)DwarfOperationKind.lit0);
+                    case DwarfOperationKind.Lit0:
+                    case DwarfOperationKind.Lit1:
+                    case DwarfOperationKind.Lit2:
+                    case DwarfOperationKind.Lit3:
+                    case DwarfOperationKind.Lit4:
+                    case DwarfOperationKind.Lit5:
+                    case DwarfOperationKind.Lit6:
+                    case DwarfOperationKind.Lit7:
+                    case DwarfOperationKind.Lit8:
+                    case DwarfOperationKind.Lit9:
+                    case DwarfOperationKind.Lit10:
+                    case DwarfOperationKind.Lit11:
+                    case DwarfOperationKind.Lit12:
+                    case DwarfOperationKind.Lit13:
+                    case DwarfOperationKind.Lit14:
+                    case DwarfOperationKind.Lit15:
+                    case DwarfOperationKind.Lit16:
+                    case DwarfOperationKind.Lit17:
+                    case DwarfOperationKind.Lit18:
+                    case DwarfOperationKind.Lit19:
+                    case DwarfOperationKind.Lit20:
+                    case DwarfOperationKind.Lit21:
+                    case DwarfOperationKind.Lit22:
+                    case DwarfOperationKind.Lit23:
+                    case DwarfOperationKind.Lit24:
+                    case DwarfOperationKind.Lit25:
+                    case DwarfOperationKind.Lit26:
+                    case DwarfOperationKind.Lit27:
+                    case DwarfOperationKind.Lit28:
+                    case DwarfOperationKind.Lit29:
+                    case DwarfOperationKind.Lit30:
+                    case DwarfOperationKind.Lit31:
+                        op.Operand1.U64 = (ulong)((byte)kind.Value - (byte)DwarfOperationKind.Lit0);
                         break;
 
-                    case DwarfOperationKind.reg0:
-                    case DwarfOperationKind.reg1:
-                    case DwarfOperationKind.reg2:
-                    case DwarfOperationKind.reg3:
-                    case DwarfOperationKind.reg4:
-                    case DwarfOperationKind.reg5:
-                    case DwarfOperationKind.reg6:
-                    case DwarfOperationKind.reg7:
-                    case DwarfOperationKind.reg8:
-                    case DwarfOperationKind.reg9:
-                    case DwarfOperationKind.reg10:
-                    case DwarfOperationKind.reg11:
-                    case DwarfOperationKind.reg12:
-                    case DwarfOperationKind.reg13:
-                    case DwarfOperationKind.reg14:
-                    case DwarfOperationKind.reg15:
-                    case DwarfOperationKind.reg16:
-                    case DwarfOperationKind.reg17:
-                    case DwarfOperationKind.reg18:
-                    case DwarfOperationKind.reg19:
-                    case DwarfOperationKind.reg20:
-                    case DwarfOperationKind.reg21:
-                    case DwarfOperationKind.reg22:
-                    case DwarfOperationKind.reg23:
-                    case DwarfOperationKind.reg24:
-                    case DwarfOperationKind.reg25:
-                    case DwarfOperationKind.reg26:
-                    case DwarfOperationKind.reg27:
-                    case DwarfOperationKind.reg28:
-                    case DwarfOperationKind.reg29:
-                    case DwarfOperationKind.reg30:
-                    case DwarfOperationKind.reg31:
-                        op.Operand1.U64 = (ulong)kind.Value - (ulong)DwarfOperationKind.reg0;
+                    case DwarfOperationKind.Reg0:
+                    case DwarfOperationKind.Reg1:
+                    case DwarfOperationKind.Reg2:
+                    case DwarfOperationKind.Reg3:
+                    case DwarfOperationKind.Reg4:
+                    case DwarfOperationKind.Reg5:
+                    case DwarfOperationKind.Reg6:
+                    case DwarfOperationKind.Reg7:
+                    case DwarfOperationKind.Reg8:
+                    case DwarfOperationKind.Reg9:
+                    case DwarfOperationKind.Reg10:
+                    case DwarfOperationKind.Reg11:
+                    case DwarfOperationKind.Reg12:
+                    case DwarfOperationKind.Reg13:
+                    case DwarfOperationKind.Reg14:
+                    case DwarfOperationKind.Reg15:
+                    case DwarfOperationKind.Reg16:
+                    case DwarfOperationKind.Reg17:
+                    case DwarfOperationKind.Reg18:
+                    case DwarfOperationKind.Reg19:
+                    case DwarfOperationKind.Reg20:
+                    case DwarfOperationKind.Reg21:
+                    case DwarfOperationKind.Reg22:
+                    case DwarfOperationKind.Reg23:
+                    case DwarfOperationKind.Reg24:
+                    case DwarfOperationKind.Reg25:
+                    case DwarfOperationKind.Reg26:
+                    case DwarfOperationKind.Reg27:
+                    case DwarfOperationKind.Reg28:
+                    case DwarfOperationKind.Reg29:
+                    case DwarfOperationKind.Reg30:
+                    case DwarfOperationKind.Reg31:
+                        op.Operand1.U64 = (ulong)kind.Value - (ulong)DwarfOperationKind.Reg0;
                         break;
 
-                    case DwarfOperationKind.breg0:
-                    case DwarfOperationKind.breg1:
-                    case DwarfOperationKind.breg2:
-                    case DwarfOperationKind.breg3:
-                    case DwarfOperationKind.breg4:
-                    case DwarfOperationKind.breg5:
-                    case DwarfOperationKind.breg6:
-                    case DwarfOperationKind.breg7:
-                    case DwarfOperationKind.breg8:
-                    case DwarfOperationKind.breg9:
-                    case DwarfOperationKind.breg10:
-                    case DwarfOperationKind.breg11:
-                    case DwarfOperationKind.breg12:
-                    case DwarfOperationKind.breg13:
-                    case DwarfOperationKind.breg14:
-                    case DwarfOperationKind.breg15:
-                    case DwarfOperationKind.breg16:
-                    case DwarfOperationKind.breg17:
-                    case DwarfOperationKind.breg18:
-                    case DwarfOperationKind.breg19:
-                    case DwarfOperationKind.breg20:
-                    case DwarfOperationKind.breg21:
-                    case DwarfOperationKind.breg22:
-                    case DwarfOperationKind.breg23:
-                    case DwarfOperationKind.breg24:
-                    case DwarfOperationKind.breg25:
-                    case DwarfOperationKind.breg26:
-                    case DwarfOperationKind.breg27:
-                    case DwarfOperationKind.breg28:
-                    case DwarfOperationKind.breg29:
-                    case DwarfOperationKind.breg30:
-                    case DwarfOperationKind.breg31:
-                        op.Operand1.U64 = (ulong)kind.Value - (ulong)DwarfOperationKind.reg0;
+                    case DwarfOperationKind.Breg0:
+                    case DwarfOperationKind.Breg1:
+                    case DwarfOperationKind.Breg2:
+                    case DwarfOperationKind.Breg3:
+                    case DwarfOperationKind.Breg4:
+                    case DwarfOperationKind.Breg5:
+                    case DwarfOperationKind.Breg6:
+                    case DwarfOperationKind.Breg7:
+                    case DwarfOperationKind.Breg8:
+                    case DwarfOperationKind.Breg9:
+                    case DwarfOperationKind.Breg10:
+                    case DwarfOperationKind.Breg11:
+                    case DwarfOperationKind.Breg12:
+                    case DwarfOperationKind.Breg13:
+                    case DwarfOperationKind.Breg14:
+                    case DwarfOperationKind.Breg15:
+                    case DwarfOperationKind.Breg16:
+                    case DwarfOperationKind.Breg17:
+                    case DwarfOperationKind.Breg18:
+                    case DwarfOperationKind.Breg19:
+                    case DwarfOperationKind.Breg20:
+                    case DwarfOperationKind.Breg21:
+                    case DwarfOperationKind.Breg22:
+                    case DwarfOperationKind.Breg23:
+                    case DwarfOperationKind.Breg24:
+                    case DwarfOperationKind.Breg25:
+                    case DwarfOperationKind.Breg26:
+                    case DwarfOperationKind.Breg27:
+                    case DwarfOperationKind.Breg28:
+                    case DwarfOperationKind.Breg29:
+                    case DwarfOperationKind.Breg30:
+                    case DwarfOperationKind.Breg31:
+                        op.Operand1.U64 = (ulong)kind.Value - (ulong)DwarfOperationKind.Breg0;
                         op.Operand2.I64 = ReadILEB128();
                         break;
 
-                    case DwarfOperationKind.regx:
+                    case DwarfOperationKind.Regx:
                         op.Operand1.U64 = ReadULEB128();
                         break;
 
-                    case DwarfOperationKind.fbreg:
+                    case DwarfOperationKind.Fbreg:
                         op.Operand1.I64 = ReadILEB128();
                         break;
 
-                    case DwarfOperationKind.bregx:
+                    case DwarfOperationKind.Bregx:
                         op.Operand1.U64 = ReadULEB128();
                         op.Operand2.I64 = ReadILEB128();
                         break;
 
-                    case DwarfOperationKind.piece:
+                    case DwarfOperationKind.Piece:
                         op.Operand1.U64 = ReadULEB128();
                         break;
 
-                    case DwarfOperationKind.deref_size:
+                    case DwarfOperationKind.DerefSize:
                         op.Operand1.U64 = ReadU8();
                         break;
 
-                    case DwarfOperationKind.xderef_size:
+                    case DwarfOperationKind.XderefSize:
                         op.Operand1.U64 = ReadU8();
                         break;
 
-                    case DwarfOperationKind.call2:
+                    case DwarfOperationKind.Call2:
                     {
                         var offset = ReadU16();
                         var dieRef = new DwarfDIEReference(offset, op, DwarfExpressionLocationDIEReferenceResolverInstance);
@@ -700,7 +700,7 @@ namespace LibObjectFile.Dwarf
                         break;
                     }
 
-                    case DwarfOperationKind.call4:
+                    case DwarfOperationKind.Call4:
                     {
                         var offset = ReadU32();
                         var dieRef = new DwarfDIEReference(offset, op, DwarfExpressionLocationDIEReferenceResolverInstance);
@@ -708,7 +708,7 @@ namespace LibObjectFile.Dwarf
                         break;
                     }
 
-                    case DwarfOperationKind.call_ref:
+                    case DwarfOperationKind.CallRef:
                     {
                         var offset = ReadUIntFromEncoding();
                         var dieRef = new DwarfDIEReference(offset, op, DwarfExpressionLocationDIEReferenceResolverInstance);
@@ -716,23 +716,23 @@ namespace LibObjectFile.Dwarf
                         break;
                     }
 
-                    case DwarfOperationKind.bit_piece:
+                    case DwarfOperationKind.BitPiece:
                         op.Operand1.U64 = ReadULEB128();
                         op.Operand2.U64 = ReadULEB128();
                         break;
 
-                    case DwarfOperationKind.implicit_value:
+                    case DwarfOperationKind.ImplicitValue:
                         {
                             var length = ReadULEB128();
                             op.Operand0 = ReadAsStream(length);
                             break;
                         }
 
-                    case DwarfOperationKind.stack_value:
+                    case DwarfOperationKind.StackValue:
                         break;
 
-                    case DwarfOperationKind.implicit_pointer:
-                    case DwarfOperationKind.GNU_implicit_pointer:
+                    case DwarfOperationKind.ImplicitPointer:
+                    case DwarfOperationKind.GNUImplicitPointer:
                     {
                         ulong offset;
                         //  a reference to a debugging information entry that describes the dereferenced object’s value
@@ -755,23 +755,23 @@ namespace LibObjectFile.Dwarf
                         break;
                     }
 
-                    case DwarfOperationKind.addrx:
-                    case DwarfOperationKind.GNU_addr_index:
-                    case DwarfOperationKind.constx:
-                    case DwarfOperationKind.GNU_const_index:
+                    case DwarfOperationKind.Addrx:
+                    case DwarfOperationKind.GNUAddrIndex:
+                    case DwarfOperationKind.Constx:
+                    case DwarfOperationKind.GNUConstIndex:
                         op.Operand1.U64 = ReadULEB128();
                         break;
 
-                    case DwarfOperationKind.entry_value:
-                    case DwarfOperationKind.GNU_entry_value:
+                    case DwarfOperationKind.EntryValue:
+                    case DwarfOperationKind.GNUEntryValue:
                     {
                         var length = ReadULEB128();
                         var nested = ReadExpression(length);
                         break;
                     }
 
-                    case DwarfOperationKind.const_type:
-                    case DwarfOperationKind.GNU_const_type:
+                    case DwarfOperationKind.ConstType:
+                    case DwarfOperationKind.GNUConstType:
                     {
                         // The DW_OP_const_type operation takes three operands
 
@@ -788,8 +788,8 @@ namespace LibObjectFile.Dwarf
                         break;
                     }
 
-                    case DwarfOperationKind.regval_type:
-                    case DwarfOperationKind.GNU_regval_type:
+                    case DwarfOperationKind.RegvalType:
+                    case DwarfOperationKind.GNURegvalType:
                     {
                         // The DW_OP_regval_type operation provides the contents of a given register
                         // interpreted as a value of a given type
@@ -809,9 +809,9 @@ namespace LibObjectFile.Dwarf
                         break;
                     }
 
-                    case DwarfOperationKind.deref_type:
-                    case DwarfOperationKind.GNU_deref_type:
-                    case DwarfOperationKind.xderef_type:
+                    case DwarfOperationKind.DerefType:
+                    case DwarfOperationKind.GNUDerefType:
+                    case DwarfOperationKind.XderefType:
                     {
                         // The DW_OP_deref_type operation behaves like the DW_OP_deref_size operation:
                         // it pops the top stack entry and treats it as an address.
@@ -831,10 +831,10 @@ namespace LibObjectFile.Dwarf
                         break;
                     }
 
-                    case DwarfOperationKind.convert:
-                    case DwarfOperationKind.GNU_convert:
-                    case DwarfOperationKind.reinterpret:
-                    case DwarfOperationKind.GNU_reinterpret:
+                    case DwarfOperationKind.Convert:
+                    case DwarfOperationKind.GNUConvert:
+                    case DwarfOperationKind.Reinterpret:
+                    case DwarfOperationKind.GNUReinterpret:
                     {
                         ulong offset = ReadULEB128();
                         if (offset != 0)
@@ -845,15 +845,15 @@ namespace LibObjectFile.Dwarf
                         break;
                     }
 
-                    case DwarfOperationKind.GNU_push_tls_address:
-                    case DwarfOperationKind.GNU_uninit:
+                    case DwarfOperationKind.GNUPushTlsAddress:
+                    case DwarfOperationKind.GNUUninit:
                         break;
 
-                    case DwarfOperationKind.GNU_encoded_addr:
+                    case DwarfOperationKind.GNUEncodedAddr:
                         op.Operand1.U64 = ReadEncodedValue(kind);
                         break;
 
-                    case DwarfOperationKind.GNU_parameter_ref:
+                    case DwarfOperationKind.GNUParameterRef:
                         op.Operand1.U64 = ReadU32();
                         break;
 
