@@ -20,6 +20,8 @@ namespace LibObjectFile.Dwarf
 
         public IReadOnlyList<DwarfOperation> Operations => _operations;
 
+        internal List<DwarfOperation> InternalOperations => _operations;
+
         public void AddOperation(DwarfOperation operation)
         {
             if (operation == null) throw new ArgumentNullException(nameof(operation));

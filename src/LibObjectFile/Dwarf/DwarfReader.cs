@@ -769,7 +769,7 @@ namespace LibObjectFile.Dwarf
                     case DwarfOperationKind.GNUEntryValue:
                     {
                         var length = ReadULEB128();
-                        var nested = ReadExpression(length);
+                        op.Operand0 = ReadExpression(length);
                         break;
                     }
 

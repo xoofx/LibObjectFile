@@ -28,7 +28,7 @@ namespace LibObjectFile.Tests.Dwarf
 
             stream.WriteULEB128(value);
             
-            Assert.AreEqual((uint)stream.Position, DwarfHelper.SizeOfLEB128(value));
+            Assert.AreEqual((uint)stream.Position, DwarfHelper.SizeOfULEB128(value));
 
             stream.Position = 0;
             var readbackValue = stream.ReadULEB128();

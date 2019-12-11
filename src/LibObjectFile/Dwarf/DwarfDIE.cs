@@ -15,7 +15,7 @@ namespace LibObjectFile.Dwarf
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly List<DwarfDIE> _children;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private DwarfTag _tag;
+        private DwarfTagEx _tag;
 
         public DwarfDIE()
         {
@@ -23,12 +23,12 @@ namespace LibObjectFile.Dwarf
             _children = new List<DwarfDIE>();
         }
 
-        protected DwarfDIE(DwarfTag tag)
+        protected DwarfDIE(DwarfTagEx tag)
         {
             _tag = tag;
         }
 
-        public virtual DwarfTag Tag
+        public virtual DwarfTagEx Tag
         {
             get => _tag;
             set => _tag = value;

@@ -8,7 +8,7 @@ namespace LibObjectFile.Dwarf
 {
     public readonly struct DwarfAbbreviationItemKey : IEquatable<DwarfAbbreviationItemKey>
     {
-        public DwarfAbbreviationItemKey(DwarfTag tag, bool hasChildren, DwarfAttributeDescriptors descriptors)
+        public DwarfAbbreviationItemKey(DwarfTagEx tag, bool hasChildren, DwarfAttributeDescriptors descriptors)
         {
             Tag = tag;
             HasChildren = hasChildren;
@@ -16,7 +16,7 @@ namespace LibObjectFile.Dwarf
         }
 
 
-        public readonly DwarfTag Tag;
+        public readonly DwarfTagEx Tag;
 
         public readonly bool HasChildren;
 
@@ -36,7 +36,7 @@ namespace LibObjectFile.Dwarf
         {
             unchecked
             {
-                var hashCode = (int) Tag;
+                var hashCode = Tag.GetHashCode();
                 hashCode = (hashCode * 397) ^ HasChildren.GetHashCode();
                 hashCode = (hashCode * 397) ^ Descriptors.GetHashCode();
                 return hashCode;

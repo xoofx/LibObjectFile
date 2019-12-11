@@ -16,7 +16,7 @@ namespace LibObjectFile.Dwarf
             return is64Bit ? 8U : 4U;
         }
 
-        public static uint SizeOfLEB128(ulong value)
+        public static uint SizeOfULEB128(ulong value)
         {
             if (value == 0) return 1;
 
