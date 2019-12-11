@@ -10,7 +10,7 @@ namespace LibObjectFile.Elf
 {
     public class ElfGnuNoteBuildId : ElfGnuNote
     {
-        public override ElfNoteType GetNoteType() => new ElfNoteType(ElfNative.NT_GNU_BUILD_ID);
+        public override ElfNoteTypeEx GetNoteType() => new ElfNoteTypeEx(ElfNoteType.GNU_BUILD_ID);
 
         public Stream BuildId { get; set; }
 

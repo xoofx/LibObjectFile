@@ -40,7 +40,7 @@ namespace LibObjectFile.Elf
             ident[EI_CLASS] = (byte) objectFile.FileClass;
             ident[EI_DATA] = (byte) objectFile.Encoding;
             ident[EI_VERSION] = (byte)objectFile.Version;
-            ident[EI_OSABI] = objectFile.OSABI.Value;
+            ident[EI_OSABI] = (byte)objectFile.OSABI.Value;
             ident[EI_ABIVERSION] = objectFile.AbiVersion;
         }
 
@@ -70,7 +70,7 @@ namespace LibObjectFile.Elf
             objectFile.FileClass = (ElfFileClass)ident[EI_CLASS];
             objectFile.Encoding = (ElfEncoding)ident[EI_DATA];
             objectFile.Version = ident[EI_VERSION];
-            objectFile.OSABI = new ElfOSABI(ident[EI_OSABI]);
+            objectFile.OSABI = new ElfOSABIEx(ident[EI_OSABI]);
             objectFile.AbiVersion = ident[EI_ABIVERSION];
             return true;
         }

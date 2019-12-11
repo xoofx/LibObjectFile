@@ -55,17 +55,18 @@ namespace LibObjectFile.Dwarf
             set => AttachChild<DwarfContainer, DwarfDebugInfoSection>(this, value, ref _debugInfoSection);
         }
 
-        internal void Read(DwarfReaderWriter reader)
+        internal void Read(DwarfReader reader)
         {
             DebugStringTable?.Read(reader);
             DebugLineSection?.Read(reader);
             DebugAddressRangeTable?.Read(reader);
-            DebugInfoSection?.Read(reader);
+
+            DebugInfoSection?.Read(reader, reader.Context.DebugInfoStream, DwarfUnitKind.compile);
         }
 
-        public void Write(DwarfFileContext outputContext)
+        public void Write(DwarfWriterContext writerContext)
         {
-            if (outputContext == null) throw new ArgumentNullException(nameof(outputContext));
+            if (writerContext == null) throw new ArgumentNullException(nameof(writerContext));
 
             var diagnostics = new DiagnosticBag();
 
@@ -86,15 +87,15 @@ namespace LibObjectFile.Dwarf
                 throw new ObjectFileException("Unexpected errors while verifying and updating the layout", diagnostics);
             }
 
-            var writer = new DwarfReaderWriter(outputContext, diagnostics);
+            var writer = new DwarfWriter(writerContext, diagnostics);
             Write(writer);
         }
 
-        public static DwarfFile Read(DwarfFileContext inputContext)
+        public static DwarfFile Read(DwarfReaderContext readerContext)
         {
-            if (inputContext == null) throw new ArgumentNullException(nameof(inputContext));
+            if (readerContext == null) throw new ArgumentNullException(nameof(readerContext));
 
-            var reader = new DwarfReaderWriter(inputContext, new DiagnosticBag());
+            var reader = new DwarfReader(readerContext, new DiagnosticBag());
             var dwarf = new DwarfFile();
             dwarf.Read(reader);
             return dwarf;
@@ -102,7 +103,7 @@ namespace LibObjectFile.Dwarf
 
         public static DwarfFile ReadFromElf(ElfObjectFile elf)
         {
-            var readerContext = DwarfFileContext.FromElf(elf);
+            var readerContext = DwarfReaderContext.FromElf(elf);
             return Read(readerContext);
         }
 

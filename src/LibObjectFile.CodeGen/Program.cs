@@ -141,7 +141,22 @@ namespace LibObjectFile.CodeGen
             };
             ns.Members.Add(enumClass);
 
+            CSharpEnum stdEnum = null;
+
+            var enumItemType = enumRawFields[0].FieldType;
+
             bool isReloc = enumPrefix == "R_";
+
+            if (!isReloc)
+            {
+                enumClass.Name = enumClass.Name + "Ex";
+                stdEnum = new CSharpEnum(enumClassName)
+                {
+                    Visibility = CSharpVisibility.Public
+                };
+                ns.Members.Add(stdEnum);
+                stdEnum.BaseTypes.Add(enumItemType);
+            }
 
             var filteredFields = new List<CSharpField>();
 
@@ -166,6 +181,12 @@ namespace LibObjectFile.CodeGen
                     {
                         continue;
                     }
+                }
+
+                // skip lo/hi user
+                if (rawName.StartsWith("DW_") && (rawName.Contains("_lo_") || rawName.Contains("_hi_")))
+                {
+                    continue;
                 }
 
                 // NUM fields
@@ -221,6 +242,12 @@ namespace LibObjectFile.CodeGen
                 };
 
                 enumClass.Members.Add(enumField);
+
+                if (!isReloc)
+                {
+                    var stdEnumField = new CSharpEnumItem(csFieldName, $"{cppOptions.DefaultClassLib}.{rawName}");
+                    stdEnum.Members.Add(stdEnumField);
+                }
             }
 
             var toStringInternal = new CSharpMethod()
@@ -236,11 +263,11 @@ namespace LibObjectFile.CodeGen
                 var values = new HashSet<object>();
                 if (isReloc)
                 {
-                    writer.WriteLine("switch (((ulong)Value << 16) | Arch.Value)");
+                    writer.WriteLine("switch (((ulong)Value << 16) | (ulong)Arch.Value)");
                 }
                 else
                 {
-                    writer.WriteLine("switch (Value)");
+                    writer.WriteLine($"switch (({enumItemType})Value)");
                 }
                 writer.OpenBraceBlock();
                 foreach (var rawField in filteredFields)

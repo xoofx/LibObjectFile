@@ -17,7 +17,7 @@ namespace LibObjectFile.Elf
 
         public uint SubMinorVersion { get; set; }
 
-        public override ElfNoteType GetNoteType() => new ElfNoteType(ElfNative.NT_GNU_ABI_TAG);
+        public override ElfNoteTypeEx GetNoteType() => new ElfNoteTypeEx(ElfNoteType.GNU_ABI_TAG);
 
         public override uint GetDescriptorSize() => 4 * sizeof(int);
 

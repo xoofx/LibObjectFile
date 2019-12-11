@@ -53,7 +53,7 @@ namespace LibObjectFile
         /// <summary>
         /// The diagnostics while read/writing this object file.
         /// </summary>
-        public DiagnosticBag Diagnostics { get; }
+        public DiagnosticBag Diagnostics { get; protected set; }
 
         /// <summary>
         /// Gets a boolean indicating if this reader is operating in read-only mode.
@@ -163,6 +163,12 @@ namespace LibObjectFile
         public void WriteStringUTF8NullTerminated(string text)
         {
             Stream.WriteStringUTF8NullTerminated(text);
+        }
+
+        public static ulong SizeOfStringUTF8NullTerminated(string text)
+        {
+            if (text == null) return 0;
+            return (ulong)Encoding.UTF8.GetByteCount(text) + 1;
         }
 
         /// <summary>

@@ -3,13 +3,16 @@
 // See the license.txt file in the project root for more information.
 
 using System;
+using System.Diagnostics;
 
 namespace LibObjectFile.Dwarf
 {
     public sealed class DwarfAttribute : ObjectFileNode<DwarfDIE>, IComparable<DwarfAttribute>
     {
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private ulong _valueAsU64;
-        public DwarfAttributeKey Key { get; set; }
+
+        public DwarfAttributeKindEx Kind { get; set; }
 
         public bool ValueAsBoolean
         {
@@ -41,22 +44,29 @@ namespace LibObjectFile.Dwarf
             set => _valueAsU64 = value;
         }
 
+        /// <summary>
+        /// Gets or sets the encoding used for this attribute. Default is <c>null</c> meaning that the encoding
+        /// is detected automatically. Some attributes may require to explicitly set this encoding to disambiguate
+        /// between different encoding form (e.g boolean => <see cref="DwarfAttributeEncoding.Flag"/> instead of <see cref="DwarfAttributeEncoding.Constant"/>)
+        /// </summary>
+        public DwarfAttributeEncoding? Encoding { get; set; }
+
         public object ValueAsObject { get; set; }
         
         public int CompareTo(DwarfAttribute other)
         {
-            return this.Key.Value.CompareTo(other.Key.Value);
+            return ((uint)Kind).CompareTo((uint)other.Kind);
         }
 
         public override string ToString()
         {
             if (ValueAsObject != null)
             {
-                return ValueAsU64 != 0 ? $"{nameof(Key)}: {Key}, Value: {ValueAsObject} Offset: {ValueAsU64}" : $"{nameof(Key)}: {Key}, Value: {ValueAsObject}";
+                return ValueAsU64 != 0 ? $"{nameof(Kind)}: {Kind}, Value: {ValueAsObject} Offset: {ValueAsU64}" : $"{nameof(Kind)}: {Kind}, Value: {ValueAsObject}";
             }
             else
             {
-                return $"{nameof(Key)}: {Key}, Value: {ValueAsU64}";
+                return $"{nameof(Kind)}: {Kind}, Value: {ValueAsU64}";
             }
         }
 

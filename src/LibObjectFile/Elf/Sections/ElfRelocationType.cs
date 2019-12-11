@@ -11,7 +11,7 @@ namespace LibObjectFile.Elf
     /// </summary>
     public readonly partial struct ElfRelocationType : IEquatable<ElfRelocationType>
     {
-        public ElfRelocationType(ElfArch arch, uint value)
+        public ElfRelocationType(ElfArchEx arch, uint value)
         {
             Arch = arch;
             Value = value;
@@ -20,7 +20,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// The associated <see cref="ElfArch"/> the <see cref="Value"/> applies to.
         /// </summary>
-        public readonly ElfArch Arch;
+        public readonly ElfArchEx Arch;
 
         /// <summary>
         /// The value of this relocation type.

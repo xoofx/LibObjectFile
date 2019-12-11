@@ -3,34 +3,19 @@
 // See the license.txt file in the project root for more information.
 
 using System;
-using System.IO;
 using LibObjectFile.Elf;
 
 namespace LibObjectFile.Dwarf
 {
-    public class DwarfFileContext
+    public class DwarfReaderContext : DwarfReaderWriterContext
     {
-        public bool IsLittleEndian { get; set; }
-
-        public bool Is64BitAddress { get; set; }
-
         public bool IsInputReadOnly { get; set; }
 
-        public DwarfStreamAndDump DebugAbbrevStream;
-
-        public DwarfStreamAndDump DebugStringStream;
-
-        public DwarfStreamAndDump DebugAddressRangeStream;
-
-        public DwarfStreamAndDump DebugLineStream;
-
-        public DwarfStreamAndDump DebugInfoStream;
-        
-        public static DwarfFileContext FromElf(ElfObjectFile elf)
+        public static DwarfReaderContext FromElf(ElfObjectFile elf)
         {
             if (elf == null) throw new ArgumentNullException(nameof(elf));
 
-            var readerContext = new DwarfFileContext()
+            var readerContext = new DwarfReaderContext()
             {
                 IsLittleEndian = elf.Encoding == ElfEncoding.Lsb,
                 Is64BitAddress = elf.FileClass == ElfFileClass.Is64
@@ -59,34 +44,6 @@ namespace LibObjectFile.Dwarf
             }
 
             return readerContext;
-        }
-    }
-    
-    public struct DwarfStreamAndDump
-    {
-        public DwarfStreamAndDump(Stream stream) : this()
-        {
-            Stream = stream;
-        }
-
-        public DwarfStreamAndDump(Stream stream, TextWriter rawDump)
-        {
-            Stream = stream;
-            RawDump = rawDump;
-        }
-
-        public Stream Stream { get; set; }
-
-        public TextWriter RawDump { get; set; }
-
-        public static implicit operator DwarfStreamAndDump(Stream stream)
-        {
-            return new DwarfStreamAndDump(stream);
-        }
-
-        public static implicit operator Stream(DwarfStreamAndDump streamAndDump)
-        {
-            return streamAndDump.Stream;
         }
     }
 }

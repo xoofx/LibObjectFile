@@ -26,14 +26,14 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Gets or sets the type of this note.
         /// </summary>
-        public ElfNoteType Type { get; set; }
+        public ElfNoteTypeEx Type { get; set; }
 
         public override string GetName()
         {
             return Name;
         }
 
-        public override ElfNoteType GetNoteType()
+        public override ElfNoteTypeEx GetNoteType()
         {
             return Type;
         }

@@ -325,16 +325,16 @@ namespace LibObjectFile.Elf
             {
                 switch (note.GetNoteType().Value)
                 {
-                    case ElfNative.NT_GNU_ABI_TAG:
+                    case ElfNoteType.GNU_ABI_TAG:
                         builder.Append("NT_GNU_ABI_TAG (ABI version tag)");
                         break;
-                    case ElfNative.NT_GNU_HWCAP:
+                    case ElfNoteType.GNU_HWCAP:
                         builder.Append("NT_GNU_HWCAP (DSO-supplied software HWCAP info)");
                         break;
-                    case ElfNative.NT_GNU_BUILD_ID:
+                    case ElfNoteType.GNU_BUILD_ID:
                         builder.Append("NT_GNU_BUILD_ID (unique build ID bitstring)");
                         break;
-                    case ElfNative.NT_GNU_GOLD_VERSION:
+                    case ElfNoteType.GNU_GOLD_VERSION:
                         builder.Append("NT_GNU_GOLD_VERSION (gold version)");
                         break;
                 }
@@ -343,7 +343,7 @@ namespace LibObjectFile.Elf
             {
                 switch (note.GetNoteType().Value)
                 {
-                    case ElfNative.NT_VERSION:
+                    case ElfNoteType.VERSION:
                         builder.Append("NT_VERSION (version)");
                         break;
                 }
@@ -678,21 +678,21 @@ namespace LibObjectFile.Elf
         }
 
 
-        private static string GetElfOsAbi(ElfOSABI osabi)
+        private static string GetElfOsAbi(ElfOSABIEx osabi)
         {
             return osabi.Value switch
             {
-                ElfNative.ELFOSABI_NONE => "UNIX - System V",
-                ElfNative.ELFOSABI_HPUX => "UNIX - HP-UX",
-                ElfNative.ELFOSABI_NETBSD => "UNIX - NetBSD",
-                ElfNative.ELFOSABI_GNU => "UNIX - GNU",
-                ElfNative.ELFOSABI_SOLARIS => "UNIX - Solaris",
-                ElfNative.ELFOSABI_AIX => "UNIX - AIX",
-                ElfNative.ELFOSABI_IRIX => "UNIX - IRIX",
-                ElfNative.ELFOSABI_FREEBSD => "UNIX - FreeBSD",
-                ElfNative.ELFOSABI_TRU64 => "UNIX - TRU64",
-                ElfNative.ELFOSABI_MODESTO => "Novell - Modesto",
-                ElfNative.ELFOSABI_OPENBSD => "UNIX - OpenBSD",
+                ElfOSABI.NONE => "UNIX - System V",
+                ElfOSABI.HPUX => "UNIX - HP-UX",
+                ElfOSABI.NETBSD => "UNIX - NetBSD",
+                ElfOSABI.GNU => "UNIX - GNU",
+                ElfOSABI.SOLARIS => "UNIX - Solaris",
+                ElfOSABI.AIX => "UNIX - AIX",
+                ElfOSABI.IRIX => "UNIX - IRIX",
+                ElfOSABI.FREEBSD => "UNIX - FreeBSD",
+                ElfOSABI.TRU64 => "UNIX - TRU64",
+                ElfOSABI.MODESTO => "Novell - Modesto",
+                ElfOSABI.OPENBSD => "UNIX - OpenBSD",
                 _ => $"<unknown: {osabi.Value:x}"
             };
         }
@@ -715,9 +715,9 @@ namespace LibObjectFile.Elf
             }
         }
 
-        static string GetElfArch(ElfArch arch)
+        static string GetElfArch(ElfArchEx arch)
         {
-            switch (arch.Value)
+            switch ((ushort)arch.Value)
             {
                 case ElfNative.EM_NONE: return "None";
                 case ElfNative.EM_M32: return "WE32100";

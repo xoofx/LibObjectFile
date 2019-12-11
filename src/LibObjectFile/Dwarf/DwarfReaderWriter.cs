@@ -7,19 +7,16 @@ using System.IO;
 
 namespace LibObjectFile.Dwarf
 {
-    public sealed class DwarfReaderWriter : ObjectFileReaderWriter
+    public abstract class DwarfReaderWriter : ObjectFileReaderWriter
     {
-        internal DwarfReaderWriter(DwarfFileContext fileContext, DiagnosticBag diagnostics) : base(fileContext.DebugInfoStream, diagnostics)
+        internal DwarfReaderWriter(DwarfReaderWriterContext context, DiagnosticBag diagnostics) : base(context.DebugInfoStream, diagnostics)
         {
-            IsReadOnly = fileContext.IsInputReadOnly;
-            FileContext = fileContext;
-            IsLittleEndian = fileContext.IsLittleEndian;
-            Is64BitAddress = fileContext.Is64BitAddress;
+            Context = context;
+            IsLittleEndian = context.IsLittleEndian;
+            Is64BitAddress = context.Is64BitAddress;
         }
 
-        public DwarfFileContext FileContext { get; }
-        
-        public override bool IsReadOnly { get; }
+        public DwarfReaderWriterContext Context { get; }
 
         public bool Is64BitEncoding { get; set; }
 
@@ -100,7 +97,7 @@ namespace LibObjectFile.Dwarf
 
         public uint ReadLEB128AsU32()
         {
-            return Stream.ReadLEB128AsU32();
+            return Stream.ReadULEB128AsU32();
         }
 
         public int ReadLEB128AsI32()
@@ -113,11 +110,6 @@ namespace LibObjectFile.Dwarf
             return Stream.ReadSignedLEB128();
         }
 
-        public unsafe T ReadLEB128As<T>() where T : unmanaged
-        {
-            return Stream.ReadLEB128As<T>();
-        }
-        
         public void WriteULEB128(ulong value)
         {
             Stream.WriteULEB128(value);

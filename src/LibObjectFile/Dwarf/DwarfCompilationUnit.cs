@@ -6,30 +6,65 @@ namespace LibObjectFile.Dwarf
 {
     public class DwarfCompilationUnit : DwarfUnit
     {
-        private DwarfDIE _root;
-
         public DwarfCompilationUnit()
         {
+            Kind = DwarfUnitKind.compile;
         }
 
-        public bool Is64BitEncoding { get; set; }
-
-        public bool Is64BitAddress { get; set; }
-
-        public ushort Version { get; set; }
-        
-        /// <summary>
-        /// Gets or sets the root <see cref="DwarfDIE"/> of this compilation unit.
-        /// </summary>
-        public DwarfDIE Root
+        protected override bool TryReadHeader(DwarfReader reader)
         {
-            get => _root;
-            set => AttachChild<DwarfContainer, DwarfDIE>(this, value, ref _root);
+            bool result;
+            if (Version < 5)
+            {
+                // 3. debug_abbrev_offset (section offset) 
+                DebugAbbreviationOffset = reader.ReadUIntFromEncoding();
+
+                // 4. address_size (ubyte) 
+                result = TryReadAddressSize(reader);
+            }
+            else
+            {
+                // NOTE: order of address_size/debug_abbrev_offset are different from Dwarf 4
+
+                // 4. address_size (ubyte) 
+                result = TryReadAddressSize(reader);
+
+                // 5. debug_abbrev_offset (section offset) 
+                DebugAbbreviationOffset = reader.ReadUIntFromEncoding();
+            }
+
+            return result;
         }
 
-        /// <summary>
-        /// Gets or sets the abbreviation associated with the <see cref="Root"/> <see cref="DwarfDIE"/>
-        /// </summary>
-        public DwarfAbbreviation Abbreviation { get; set; }
+        protected override void WriteHeader(DwarfReaderWriter writer)
+        {
+            bool result;
+            if (Version < 5)
+            {
+                // 3. debug_abbrev_offset (section offset) 
+                writer.WriteUIntFromEncoding(Abbreviation.Offset);
+
+                // 4. address_size (ubyte) 
+                WriteAddressSize(writer);
+            }
+            else
+            {
+                // NOTE: order of address_size/debug_abbrev_offset are different from Dwarf 4
+
+                // 4. address_size (ubyte) 
+                WriteAddressSize(writer);
+
+                // 5. debug_abbrev_offset (section offset) 
+                writer.WriteUIntFromEncoding(Abbreviation.Offset);
+            }
+        }
+
+        protected override void UpdateLayout(DwarfWriter writer, ref ulong sizeOf)
+        {
+            // 3. debug_abbrev_offset (section offset) 
+            sizeOf += DwarfHelper.SizeOfUInt(writer.Is64BitEncoding); // writer.WriteUIntFromEncoding(Abbreviation.Offset);
+            // 4. address_size (ubyte) 
+            sizeOf += 1; // WriteAddressSize(writer);
+        }
     }
 }

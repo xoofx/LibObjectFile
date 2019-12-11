@@ -107,11 +107,11 @@ namespace LibObjectFile.Dwarf
             return $"{nameof(Tag)}: {Tag}, {nameof(Attributes)}: {Attributes.Count}, {nameof(Children)}: {Children.Count}";
         }
 
-        protected TValue GetAttributeValue<TValue>(DwarfAttributeKey key)
+        protected TValue GetAttributeValue<TValue>(DwarfAttributeKind kind)
         {
             foreach (var attr in _attributes)
             {
-                if (attr.Key == key)
+                if (attr.Kind == kind)
                 {
                     return (TValue)attr.ValueAsObject;
                 }
@@ -120,13 +120,13 @@ namespace LibObjectFile.Dwarf
             return default;
         }
 
-        protected unsafe TValue? GetAttributeValueOpt<TValue>(DwarfAttributeKey key) where TValue : unmanaged
+        protected unsafe TValue? GetAttributeValueOpt<TValue>(DwarfAttributeKind kind) where TValue : unmanaged
         {
             Debug.Assert(sizeof(TValue) <= sizeof(ulong));
             
             foreach (var attr in _attributes)
             {
-                if (attr.Key == key)
+                if (attr.Kind == kind)
                 {
                     ulong localU64 = attr.ValueAsU64;
                     return *(TValue*) &localU64;
@@ -136,11 +136,11 @@ namespace LibObjectFile.Dwarf
             return default;
         }
 
-        protected DwarfConstant? GetAttributeConstantOpt(DwarfAttributeKey key)
+        protected DwarfConstant? GetAttributeConstantOpt(DwarfAttributeKind kind)
         {
             foreach (var attr in _attributes)
             {
-                if (attr.Key == key)
+                if (attr.Kind == kind)
                 {
                     return new DwarfConstant
                     {
@@ -156,12 +156,12 @@ namespace LibObjectFile.Dwarf
             return null;
         }
 
-        protected void SetAttributeConstantOpt(DwarfAttributeKey key, DwarfConstant? cst)
+        protected void SetAttributeConstantOpt(DwarfAttributeKind kind, DwarfConstant? cst)
         {
             for (int i = 0; i < _attributes.Count; i++)
             {
                 var attr = _attributes[i];
-                if (attr.Key == key)
+                if (attr.Kind == kind)
                 {
                     if (!cst.HasValue)
                     {
@@ -182,18 +182,18 @@ namespace LibObjectFile.Dwarf
                 var value = cst.Value;
                 AddAttribute(new DwarfAttribute()
                 {
-                    Key = key,
+                    Kind = kind,
                     ValueAsU64 = value.AsValue.U64,
                     ValueAsObject = value.AsExpression
                 });
             }
         }
 
-        protected DwarfLocation? GetAttributeLocationOpt(DwarfAttributeKey key)
+        protected DwarfLocation? GetAttributeLocationOpt(DwarfAttributeKind kind)
         {
             foreach (var attr in _attributes)
             {
-                if (attr.Key == key)
+                if (attr.Kind == kind)
                 {
                     return new DwarfLocation
                     {
@@ -209,12 +209,12 @@ namespace LibObjectFile.Dwarf
             return null;
         }
 
-        protected void SetAttributeLocationOpt(DwarfAttributeKey key, DwarfLocation? cst)
+        protected void SetAttributeLocationOpt(DwarfAttributeKind kind, DwarfLocation? cst)
         {
             for (int i = 0; i < _attributes.Count; i++)
             {
                 var attr = _attributes[i];
-                if (attr.Key == key)
+                if (attr.Kind == kind)
                 {
                     if (!cst.HasValue)
                     {
@@ -235,18 +235,18 @@ namespace LibObjectFile.Dwarf
                 var value = cst.Value;
                 AddAttribute(new DwarfAttribute()
                 {
-                    Key = key,
+                    Kind = kind,
                     ValueAsU64 = value.AsValue.U64,
                     ValueAsObject = value.AsExpression
                 });
             }
         }
 
-        public DwarfAttribute FindAttributeByKey(DwarfAttributeKey key)
+        public DwarfAttribute FindAttributeByKey(DwarfAttributeKind kind)
         {
             foreach (var attr in _attributes)
             {
-                if (attr.Key == key)
+                if (attr.Kind == kind)
                 {
                     return attr;
                 }
@@ -255,12 +255,12 @@ namespace LibObjectFile.Dwarf
             return null;
         }
 
-        protected unsafe void SetAttributeValue<TValue>(DwarfAttributeKey key, TValue value)
+        protected unsafe void SetAttributeValue<TValue>(DwarfAttributeKind kind, TValue value)
         {
             for (int i = 0; i < _attributes.Count; i++)
             {
                 var attr = _attributes[i];
-                if (attr.Key == key)
+                if (attr.Kind == kind)
                 {
                     if (value == null)
                     {
@@ -275,15 +275,15 @@ namespace LibObjectFile.Dwarf
             }
 
             if (value == null) return;
-            AddAttribute(new DwarfAttribute() {  Key = key, ValueAsObject = value});
+            AddAttribute(new DwarfAttribute() {  Kind = kind, ValueAsObject = value});
         }
 
-        protected void SetAttributeLinkValue<TLink>(DwarfAttributeKey key, TLink link) where TLink : IObjectFileNodeLink
+        protected void SetAttributeLinkValue<TLink>(DwarfAttributeKind kind, TLink link) where TLink : IObjectFileNodeLink
         {
             for (int i = 0; i < _attributes.Count; i++)
             {
                 var attr = _attributes[i];
-                if (attr.Key == key)
+                if (attr.Kind == kind)
                 {
                     if (link == null)
                     {
@@ -300,20 +300,20 @@ namespace LibObjectFile.Dwarf
 
             AddAttribute(new DwarfAttribute()
             {
-                Key = key, 
+                Kind = kind, 
                 ValueAsU64 = link.GetRelativeOffset(),
                 ValueAsObject = link.GetObjectFileNode()
             });
         }
 
-        protected unsafe void SetAttributeValueOpt<TValue>(DwarfAttributeKey key, TValue? value) where TValue : unmanaged
+        protected unsafe void SetAttributeValueOpt<TValue>(DwarfAttributeKind kind, TValue? value) where TValue : unmanaged
         {
             Debug.Assert(sizeof(TValue) <= sizeof(ulong));
 
             for (int i = 0; i < _attributes.Count; i++)
             {
                 var attr = _attributes[i];
-                if (attr.Key == key)
+                if (attr.Kind == kind)
                 {
                     if (!value.HasValue)
                     {
@@ -332,7 +332,7 @@ namespace LibObjectFile.Dwarf
 
             if (value.HasValue)
             {
-                var attr = new DwarfAttribute() {Key = key};
+                var attr = new DwarfAttribute() {Kind = kind};
                 ulong valueU64 = 0;
                 *((TValue*)&valueU64) = value.Value;
                 attr.ValueAsU64 = valueU64;

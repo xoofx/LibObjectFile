@@ -54,7 +54,7 @@ namespace LibObjectFile.Tests.Dwarf
             {
                 // check positive
                 stream.WriteILEB128(value);
-                Assert.AreEqual((uint)stream.Position, DwarfHelper.SizeOfSignedLEB128(value));
+                Assert.AreEqual((uint)stream.Position, DwarfHelper.SizeOfILEB128(value));
 
                 stream.Position = 0;
                 var readbackValue = stream.ReadSignedLEB128();
@@ -66,7 +66,7 @@ namespace LibObjectFile.Tests.Dwarf
                 // Check negative
                 value = -value;
                 stream.WriteILEB128(value);
-                Assert.AreEqual((uint)stream.Position, DwarfHelper.SizeOfSignedLEB128(value));
+                Assert.AreEqual((uint)stream.Position, DwarfHelper.SizeOfILEB128(value));
 
                 stream.Position = 0;
                 var readbackValue = stream.ReadSignedLEB128();
@@ -90,8 +90,8 @@ namespace LibObjectFile.Tests.Dwarf
                 elf.Print(Console.Out);
             }
 
-            var inputContext = DwarfFileContext.FromElf(elf);
-            inputContext.DebugLineStream.RawDump = Console.Out;
+            var inputContext = DwarfReaderContext.FromElf(elf);
+            inputContext.DebugLineStream.Printer = Console.Out;
             var dwarf = DwarfFile.Read(inputContext);
 
             inputContext.DebugLineStream.Stream.Position = 0;
@@ -100,7 +100,7 @@ namespace LibObjectFile.Tests.Dwarf
             inputContext.DebugLineStream.Stream.CopyTo(copyInputDebugLineStream);
             inputContext.DebugLineStream.Stream.Position = 0;
 
-            var outputContext = new DwarfFileContext
+            var outputContext = new DwarfWriterContext
             {
                 IsLittleEndian = inputContext.IsLittleEndian,
                 Is64BitAddress = inputContext.Is64BitAddress,
@@ -114,12 +114,21 @@ namespace LibObjectFile.Tests.Dwarf
             Console.WriteLine("=====================================================");
             Console.WriteLine();
 
-            ((MemoryStream) outputContext.DebugLineStream).Position = 0;
-            outputContext.DebugLineStream.RawDump = Console.Out;
-            var dwarf2 = DwarfFile.Read(outputContext);
+            var reloadContext = new DwarfReaderContext()
+            {
+                IsLittleEndian = outputContext.IsLittleEndian,
+                Is64BitAddress = outputContext.Is64BitAddress,
+                DebugLineStream = outputContext.DebugLineStream
+            };
+
+            reloadContext.DebugLineStream.Stream.Position = 0;
+            reloadContext.DebugLineStream = outputContext.DebugLineStream;
+            reloadContext.DebugLineStream.Printer = Console.Out;
+
+            var dwarf2 = DwarfFile.Read(reloadContext);
 
             var inputDebugLineBuffer = copyInputDebugLineStream.ToArray();
-            var outputDebugLineBuffer = ((MemoryStream) outputContext.DebugLineStream.Stream).ToArray();
+            var outputDebugLineBuffer = ((MemoryStream)reloadContext.DebugLineStream.Stream).ToArray();
             Assert.AreEqual(inputDebugLineBuffer, outputDebugLineBuffer);
         }
 
@@ -138,8 +147,8 @@ namespace LibObjectFile.Tests.Dwarf
                 elf.Print(Console.Out);
             }
 
-            var inputContext = DwarfFileContext.FromElf(elf);
-            inputContext.DebugLineStream.RawDump = Console.Out;
+            var inputContext = DwarfReaderContext.FromElf(elf);
+            inputContext.DebugLineStream.Printer = Console.Out;
             var dwarf = DwarfFile.Read(inputContext);
 
             inputContext.DebugLineStream.Stream.Position = 0;
@@ -148,7 +157,7 @@ namespace LibObjectFile.Tests.Dwarf
             inputContext.DebugLineStream.Stream.CopyTo(copyInputDebugLineStream);
             inputContext.DebugLineStream.Stream.Position = 0;
 
-            var outputContext = new DwarfFileContext
+            var outputContext = new DwarfWriterContext
             {
                 IsLittleEndian = inputContext.IsLittleEndian,
                 Is64BitAddress = inputContext.Is64BitAddress,
@@ -162,12 +171,21 @@ namespace LibObjectFile.Tests.Dwarf
             Console.WriteLine("=====================================================");
             Console.WriteLine();
 
-            ((MemoryStream)outputContext.DebugLineStream).Position = 0;
-            outputContext.DebugLineStream.RawDump = Console.Out;
-            var dwarf2 = DwarfFile.Read(outputContext);
+            var reloadContext = new DwarfReaderContext()
+            {
+                IsLittleEndian = outputContext.IsLittleEndian,
+                Is64BitAddress = outputContext.Is64BitAddress,
+                DebugLineStream = outputContext.DebugLineStream
+            };
+
+            reloadContext.DebugLineStream.Stream.Position = 0;
+            reloadContext.DebugLineStream = outputContext.DebugLineStream;
+            reloadContext.DebugLineStream.Printer = Console.Out;
+
+            var dwarf2 = DwarfFile.Read(reloadContext);
 
             var inputDebugLineBuffer = copyInputDebugLineStream.ToArray();
-            var outputDebugLineBuffer = ((MemoryStream)outputContext.DebugLineStream.Stream).ToArray();
+            var outputDebugLineBuffer = ((MemoryStream)reloadContext.DebugLineStream.Stream).ToArray();
             Assert.AreEqual(inputDebugLineBuffer, outputDebugLineBuffer);
         }
     }

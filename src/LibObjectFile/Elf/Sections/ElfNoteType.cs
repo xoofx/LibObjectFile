@@ -7,11 +7,16 @@ using System;
 namespace LibObjectFile.Elf
 {
     /// <summary>
-    /// Gets the type of a <see cref="ElfNote"/>.
+    /// Gets the type of a <see cref="ElfNoteType"/>.
     /// </summary>
-    public readonly partial struct ElfNoteType : IEquatable<ElfNoteType>
+    public readonly partial struct ElfNoteTypeEx : IEquatable<ElfNoteTypeEx>
     {
-        public ElfNoteType(uint value)
+        public ElfNoteTypeEx(uint value)
+        {
+            Value = (ElfNoteType)value;
+        }
+
+        public ElfNoteTypeEx(ElfNoteType value)
         {
             Value = value;
         }
@@ -19,36 +24,42 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// The value of this note type.
         /// </summary>
-        public readonly uint Value;
+        public readonly ElfNoteType Value;
 
         public override string ToString()
         {
-            return ToStringInternal() ?? $"Unknown {nameof(ElfNoteType)} (0x{Value:X4})";
+            return ToStringInternal() ?? $"Unknown {nameof(ElfNoteTypeEx)} (0x{Value:X4})";
         }
 
-        public bool Equals(ElfNoteType other)
+        public bool Equals(ElfNoteTypeEx other)
         {
             return Value == other.Value;
         }
 
         public override bool Equals(object obj)
         {
-            return obj is ElfNoteType other && Equals(other);
+            return obj is ElfNoteTypeEx other && Equals(other);
         }
 
         public override int GetHashCode()
         {
-            return (int) Value;
+            return (int)Value;
         }
 
-        public static bool operator ==(ElfNoteType left, ElfNoteType right)
+        public static bool operator ==(ElfNoteTypeEx left, ElfNoteTypeEx right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(ElfNoteType left, ElfNoteType right)
+        public static bool operator !=(ElfNoteTypeEx left, ElfNoteTypeEx right)
         {
             return !left.Equals(right);
         }
+
+        public static explicit operator byte(ElfNoteTypeEx noteType) => (byte)noteType.Value;
+
+        public static implicit operator ElfNoteTypeEx(ElfNoteType noteType) => new ElfNoteTypeEx(noteType);
+
+        public static implicit operator ElfNoteType(ElfNoteTypeEx noteType) => noteType.Value;
     }
 }

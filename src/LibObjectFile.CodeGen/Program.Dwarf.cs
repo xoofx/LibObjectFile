@@ -41,6 +41,7 @@ namespace LibObjectFile.CodeGen
                     map => map.MapMacroToConst("^DW_INL_.*", "unsigned char"),
                     map => map.MapMacroToConst("^DW_ORD_.*", "unsigned char"),
                     map => map.MapMacroToConst("^DW_DSC_.*", "unsigned char"),
+                    map => map.MapMacroToConst("^DW_UT_.*", "unsigned char"),
                 }
             };
 
@@ -56,12 +57,13 @@ namespace LibObjectFile.CodeGen
             var ns = csFile.Members.OfType<CSharpNamespace>().First();
             csFile.Members.Insert(csFile.Members.IndexOf(ns), new CSharpLineElement("#pragma warning disable 1591") );
 
-            ProcessElfEnum(cppOptions, csCompilation, "DW_AT_", "DwarfAttributeKey");
+            ProcessElfEnum(cppOptions, csCompilation, "DW_AT_", "DwarfAttributeKind");
             ProcessElfEnum(cppOptions, csCompilation, "DW_FORM_", "DwarfAttributeForm");
             ProcessElfEnum(cppOptions, csCompilation, "DW_TAG_", "DwarfTag");
             ProcessElfEnum(cppOptions, csCompilation, "DW_OP_", "DwarfOperationKind");
             ProcessElfEnum(cppOptions, csCompilation, "DW_LANG_", "DwarfLanguageKind");
             ProcessElfEnum(cppOptions, csCompilation, "DW_CC_", "DwarfCallingConvention");
+            ProcessElfEnum(cppOptions, csCompilation, "DW_UT_", "DwarfUnitKind");
 
             GenerateDwarfAttributes(ns);
             GenerateDwarfDIE(ns);
@@ -75,10 +77,31 @@ namespace LibObjectFile.CodeGen
         {
             var alreadyDone = new HashSet<string>();
 
+            var csHelper = new CSharpClass("DwarfHelper")
+            {
+                Modifiers = CSharpModifiers.Static | CSharpModifiers.Partial,
+                Visibility = CSharpVisibility.Public
+            };
+            ns.Members.Add(csHelper);
+
+            var csField = new CSharpField("AttributeToEncoding")
+            {
+                Modifiers = CSharpModifiers.Static | CSharpModifiers.ReadOnly,
+                Visibility = CSharpVisibility.Private,
+                FieldType = new CSharpArrayType(new CSharpFreeType("DwarfAttributeEncoding"))
+            };
+            csHelper.Members.Add(csField);
+
+            var fieldArrayBuilder = new StringBuilder();
+            fieldArrayBuilder.AppendLine("new DwarfAttributeEncoding[] {");
+
+            int currentAttributeIndex = 0;
+
             foreach (var attrEncoding in MapAttributeToEncoding)
             {
                 var attrEncodingParts = attrEncoding.Split(' ', StringSplitOptions.RemoveEmptyEntries);
                 var attributeName = attrEncodingParts[0];
+                var attributeIndex = int.Parse(attrEncodingParts[1].Substring(2), System.Globalization.NumberStyles.HexNumber);
                 var rawName = attributeName.Substring("DW_AT_".Length);
                 //var csharpName = CSharpifyName(rawName);
 
@@ -153,20 +176,28 @@ namespace LibObjectFile.CodeGen
                             break;
 
                         case "constant":
-                            attrType = "ulong";
+                            attrType = "DwarfConstant";
                             kind = AttributeKind.ValueType;
                             break;
 
                         case "lineptr":
                             attrType = "DwarfDebugLine";
                             break;
+                        
+                        case "exprloc":
+                            attrType = "DwarfExpression";
+                            break;
 
-                        case "addptr":
                         case "loclist":
                         case "loclistptr":
+                            attrType = "DwarfLocation";
+                            break;
+
+                        case "addrptr":
                         case "macptr":
                         case "rnglist":
-                        case "rngrlistptr":
+                        case "rangelistptr":
+                        case "rnglistsptr":
                         case "stroffsetsptr":
                             attrType = "ulong";
                             kind = AttributeKind.ValueType;
@@ -186,6 +217,7 @@ namespace LibObjectFile.CodeGen
                         switch (attrEncodingParts[i])
                         {
                             case "loclist":
+                            case "loclistptr":
                                 attrType = "DwarfLocation";
                                 kind = AttributeKind.ValueType;
                                 goto next;
@@ -205,7 +237,107 @@ namespace LibObjectFile.CodeGen
                 next:
 
                 MapAttributeCompactNameToType.Add(attributeName.Replace("_", string.Empty), new AttributeMapping(rawName, attrType, kind));
+
+                const int PaddingEncodingName = 50;
+
+                for (; currentAttributeIndex < attributeIndex; currentAttributeIndex++)
+                {
+                    fieldArrayBuilder.AppendLine($"        {"DwarfAttributeEncoding.None",-PaddingEncodingName}, // 0x{currentAttributeIndex:x2} (undefined)");
+                }
+
+                for (int i = 2; i < attrEncodingParts.Length; i++)
+                {
+                    string name;
+                    switch (attrEncodingParts[i])
+                    {
+                        case "string":
+                            name = "String";
+                            break;
+
+                        case "flag":
+                            name = "Flag";
+                            break;
+
+                        case "block":
+                            name = "Block";
+                            break;
+
+                        case "reference":
+                            name = "Reference";
+                            break;
+
+                        case "address":
+                            name = "Address";
+                            break;
+
+                        case "constant":
+                            name = "Constant";
+                            break;
+
+                        case "lineptr":
+                            name = "LinePointer";
+                            break;
+
+                        case "exprloc":
+                            name = "ExpressionLocation";
+                            break;
+
+                        case "loclist":
+                            name = "LocationList";
+                            break;
+
+                        case "loclistptr":
+                            name = "LocationListPointer";
+                            break;
+
+                        case "loclistsptr":
+                            name = "LocationListsPointer";
+                            break;
+
+                        case "addrptr":
+                            name = "AddressPointer";
+                            break;
+
+                        case "macptr":
+                            name = "MacroPointer";
+                            break;
+
+                        case "rnglist":
+                            name = "RangeList";
+                            break;
+
+                        case "rangelistptr":
+                            name = "RangeListPointer";
+                            break;
+
+                        case "rnglistsptr":
+                            name = "RangeListsPointer";
+                            break;
+
+                        case "stroffsetsptr":
+                            name = "StringOffsetPointer";
+                            break;
+                        default:
+                            throw new InvalidOperationException($"Unknown encoding {attrEncodingParts[i]}");
+                    }
+
+                    bool isLast = i + 1 == attrEncodingParts.Length;
+
+                    fieldArrayBuilder.Append($"        {"DwarfAttributeEncoding." + name + (isLast ? "" : " | "),-PaddingEncodingName}");
+
+                    if (isLast)
+                    {
+                        fieldArrayBuilder.Append($", // 0x{currentAttributeIndex:x2} {attributeName} ");
+                    }
+                    fieldArrayBuilder.AppendLine();
+
+                }
+
+                currentAttributeIndex++;
             }
+
+            fieldArrayBuilder.Append("    }");
+            csField.InitValue = fieldArrayBuilder.ToString();
 
             Console.WriteLine();
             foreach (var key in alreadyDone.ToArray().OrderBy(x => x))
@@ -375,33 +507,33 @@ namespace LibObjectFile.CodeGen
             switch (map.Kind)
             {
                 case AttributeKind.Managed:
-                    csProperty.GetBody = (writer, element) => writer.WriteLine($"return GetAttributeValue<{attrType}>(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)});");
-                    csProperty.SetBody = (writer, element) => writer.WriteLine($"SetAttributeValue<{attrType}>(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)}, value);");
+                    csProperty.GetBody = (writer, element) => writer.WriteLine($"return GetAttributeValue<{attrType}>(DwarfAttributeKind.{CSharpHelper.EscapeName(rawAttrName)});");
+                    csProperty.SetBody = (writer, element) => writer.WriteLine($"SetAttributeValue<{attrType}>(DwarfAttributeKind.{CSharpHelper.EscapeName(rawAttrName)}, value);");
                     break;
                 case AttributeKind.ValueType:
                     if (map.AttributeType == "DwarfConstant")
                     {
-                        csProperty.GetBody = (writer, element) => writer.WriteLine($"return GetAttributeConstantOpt(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)});");
-                        csProperty.SetBody = (writer, element) => writer.WriteLine($"SetAttributeConstantOpt(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)}, value);");
+                        csProperty.GetBody = (writer, element) => writer.WriteLine($"return GetAttributeConstantOpt(DwarfAttributeKind.{CSharpHelper.EscapeName(rawAttrName)});");
+                        csProperty.SetBody = (writer, element) => writer.WriteLine($"SetAttributeConstantOpt(DwarfAttributeKind.{CSharpHelper.EscapeName(rawAttrName)}, value);");
                     }
                     else if (map.AttributeType == "DwarfLocation")
                     {
-                        csProperty.GetBody = (writer, element) => writer.WriteLine($"return GetAttributeLocationOpt(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)});");
-                        csProperty.SetBody = (writer, element) => writer.WriteLine($"SetAttributeLocationOpt(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)}, value);");
+                        csProperty.GetBody = (writer, element) => writer.WriteLine($"return GetAttributeLocationOpt(DwarfAttributeKind.{CSharpHelper.EscapeName(rawAttrName)});");
+                        csProperty.SetBody = (writer, element) => writer.WriteLine($"SetAttributeLocationOpt(DwarfAttributeKind.{CSharpHelper.EscapeName(rawAttrName)}, value);");
                     }
                     else
                     {
-                        csProperty.GetBody = (writer, element) => writer.WriteLine($"return GetAttributeValueOpt<{attrType}>(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)});");
-                        csProperty.SetBody = (writer, element) => writer.WriteLine($"SetAttributeValueOpt<{attrType}>(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)}, value);");
+                        csProperty.GetBody = (writer, element) => writer.WriteLine($"return GetAttributeValueOpt<{attrType}>(DwarfAttributeKind.{CSharpHelper.EscapeName(rawAttrName)});");
+                        csProperty.SetBody = (writer, element) => writer.WriteLine($"SetAttributeValueOpt<{attrType}>(DwarfAttributeKind.{CSharpHelper.EscapeName(rawAttrName)}, value);");
                     }
                     break;
                 case AttributeKind.Link:
                     csProperty.GetBody = (writer, element) =>
                     {
-                        writer.WriteLine($"var attr = FindAttributeByKey(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)});");
+                        writer.WriteLine($"var attr = FindAttributeByKey(DwarfAttributeKind.{CSharpHelper.EscapeName(rawAttrName)});");
                         writer.WriteLine($"return attr == null ? null : new {attrType}(attr.ValueAsU64, attr.ValueAsObject);");
                     };
-                    csProperty.SetBody = (writer, element) => { writer.WriteLine($"SetAttributeLinkValue(DwarfAttributeKey.{CSharpHelper.EscapeName(rawAttrName)}, value);"); };
+                    csProperty.SetBody = (writer, element) => { writer.WriteLine($"SetAttributeLinkValue(DwarfAttributeKind.{CSharpHelper.EscapeName(rawAttrName)}, value);"); };
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -412,6 +544,11 @@ namespace LibObjectFile.CodeGen
 
         private static string CSharpifyName(string rawName)
         {
+            if (rawName.EndsWith("_pc"))
+            {
+                rawName = rawName.Replace("_pc", "_PC");
+            }
+
             var newName = new StringBuilder();
             bool upperCase = true;
             for (var i = 0; i < rawName.Length; i++)

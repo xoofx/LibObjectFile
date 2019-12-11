@@ -45,6 +45,6 @@ namespace LibObjectFile.Dwarf
 
         RangeListsPointer = 1 << 16,
 
-        StringOffsetsPointer,
+        StringOffsetPointer = 1 << 17,
     }
 }

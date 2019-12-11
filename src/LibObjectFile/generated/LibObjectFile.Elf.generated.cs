@@ -11428,410 +11428,410 @@ namespace LibObjectFile.Elf
         public const uint R_TILEGX_NUM = 130;
     }
     
-    public readonly partial struct ElfArch
+    public readonly partial struct ElfArchEx
     {
         /// <summary>
         /// No machine
         /// </summary>
-        public static readonly ElfArch NONE = new ElfArch(ElfNative.EM_NONE);
+        public static readonly ElfArchEx NONE = new ElfArchEx(ElfNative.EM_NONE);
         
         /// <summary>
         /// AT
         /// &amp;T
         /// WE 32100
         /// </summary>
-        public static readonly ElfArch M32 = new ElfArch(ElfNative.EM_M32);
+        public static readonly ElfArchEx M32 = new ElfArchEx(ElfNative.EM_M32);
         
         /// <summary>
         /// SUN SPARC
         /// </summary>
-        public static readonly ElfArch SPARC = new ElfArch(ElfNative.EM_SPARC);
+        public static readonly ElfArchEx SPARC = new ElfArchEx(ElfNative.EM_SPARC);
         
         /// <summary>
         /// Intel 80386
         /// </summary>
-        public static readonly ElfArch I386 = new ElfArch(ElfNative.EM_386);
+        public static readonly ElfArchEx I386 = new ElfArchEx(ElfNative.EM_386);
         
         /// <summary>
         /// Motorola m68k family
         /// </summary>
-        public static readonly ElfArch M68K = new ElfArch(ElfNative.EM_68K);
+        public static readonly ElfArchEx M68K = new ElfArchEx(ElfNative.EM_68K);
         
         /// <summary>
         /// Motorola m88k family
         /// </summary>
-        public static readonly ElfArch M88K = new ElfArch(ElfNative.EM_88K);
+        public static readonly ElfArchEx M88K = new ElfArchEx(ElfNative.EM_88K);
         
         /// <summary>
         /// Intel 80860
         /// </summary>
-        public static readonly ElfArch I860 = new ElfArch(ElfNative.EM_860);
+        public static readonly ElfArchEx I860 = new ElfArchEx(ElfNative.EM_860);
         
         /// <summary>
         /// MIPS R3000 big-endian
         /// </summary>
-        public static readonly ElfArch MIPS = new ElfArch(ElfNative.EM_MIPS);
+        public static readonly ElfArchEx MIPS = new ElfArchEx(ElfNative.EM_MIPS);
         
         /// <summary>
         /// IBM System/370
         /// </summary>
-        public static readonly ElfArch S370 = new ElfArch(ElfNative.EM_S370);
+        public static readonly ElfArchEx S370 = new ElfArchEx(ElfNative.EM_S370);
         
         /// <summary>
         /// MIPS R3000 little-endian
         /// </summary>
-        public static readonly ElfArch MIPS_RS3_LE = new ElfArch(ElfNative.EM_MIPS_RS3_LE);
+        public static readonly ElfArchEx MIPS_RS3_LE = new ElfArchEx(ElfNative.EM_MIPS_RS3_LE);
         
         /// <summary>
         /// HPPA
         /// </summary>
-        public static readonly ElfArch PARISC = new ElfArch(ElfNative.EM_PARISC);
+        public static readonly ElfArchEx PARISC = new ElfArchEx(ElfNative.EM_PARISC);
         
         /// <summary>
         /// Fujitsu VPP500
         /// </summary>
-        public static readonly ElfArch VPP500 = new ElfArch(ElfNative.EM_VPP500);
+        public static readonly ElfArchEx VPP500 = new ElfArchEx(ElfNative.EM_VPP500);
         
         /// <summary>
         /// Sun's "v8plus"
         /// </summary>
-        public static readonly ElfArch SPARC32PLUS = new ElfArch(ElfNative.EM_SPARC32PLUS);
+        public static readonly ElfArchEx SPARC32PLUS = new ElfArchEx(ElfNative.EM_SPARC32PLUS);
         
         /// <summary>
         /// Intel 80960
         /// </summary>
-        public static readonly ElfArch I960 = new ElfArch(ElfNative.EM_960);
+        public static readonly ElfArchEx I960 = new ElfArchEx(ElfNative.EM_960);
         
         /// <summary>
         /// PowerPC
         /// </summary>
-        public static readonly ElfArch PPC = new ElfArch(ElfNative.EM_PPC);
+        public static readonly ElfArchEx PPC = new ElfArchEx(ElfNative.EM_PPC);
         
         /// <summary>
         /// PowerPC 64-bit
         /// </summary>
-        public static readonly ElfArch PPC64 = new ElfArch(ElfNative.EM_PPC64);
+        public static readonly ElfArchEx PPC64 = new ElfArchEx(ElfNative.EM_PPC64);
         
         /// <summary>
         /// IBM S390
         /// </summary>
-        public static readonly ElfArch S390 = new ElfArch(ElfNative.EM_S390);
+        public static readonly ElfArchEx S390 = new ElfArchEx(ElfNative.EM_S390);
         
         /// <summary>
         /// NEC V800 series
         /// </summary>
-        public static readonly ElfArch V800 = new ElfArch(ElfNative.EM_V800);
+        public static readonly ElfArchEx V800 = new ElfArchEx(ElfNative.EM_V800);
         
         /// <summary>
         /// Fujitsu FR20
         /// </summary>
-        public static readonly ElfArch FR20 = new ElfArch(ElfNative.EM_FR20);
+        public static readonly ElfArchEx FR20 = new ElfArchEx(ElfNative.EM_FR20);
         
         /// <summary>
         /// TRW RH-32
         /// </summary>
-        public static readonly ElfArch RH32 = new ElfArch(ElfNative.EM_RH32);
+        public static readonly ElfArchEx RH32 = new ElfArchEx(ElfNative.EM_RH32);
         
         /// <summary>
         /// Motorola RCE
         /// </summary>
-        public static readonly ElfArch RCE = new ElfArch(ElfNative.EM_RCE);
+        public static readonly ElfArchEx RCE = new ElfArchEx(ElfNative.EM_RCE);
         
         /// <summary>
         /// ARM
         /// </summary>
-        public static readonly ElfArch ARM = new ElfArch(ElfNative.EM_ARM);
+        public static readonly ElfArchEx ARM = new ElfArchEx(ElfNative.EM_ARM);
         
         /// <summary>
         /// Digital Alpha
         /// </summary>
-        public static readonly ElfArch FAKE_ALPHA = new ElfArch(ElfNative.EM_FAKE_ALPHA);
+        public static readonly ElfArchEx FAKE_ALPHA = new ElfArchEx(ElfNative.EM_FAKE_ALPHA);
         
         /// <summary>
         /// Hitachi SH
         /// </summary>
-        public static readonly ElfArch SH = new ElfArch(ElfNative.EM_SH);
+        public static readonly ElfArchEx SH = new ElfArchEx(ElfNative.EM_SH);
         
         /// <summary>
         /// SPARC v9 64-bit
         /// </summary>
-        public static readonly ElfArch SPARCV9 = new ElfArch(ElfNative.EM_SPARCV9);
+        public static readonly ElfArchEx SPARCV9 = new ElfArchEx(ElfNative.EM_SPARCV9);
         
         /// <summary>
         /// Siemens Tricore
         /// </summary>
-        public static readonly ElfArch TRICORE = new ElfArch(ElfNative.EM_TRICORE);
+        public static readonly ElfArchEx TRICORE = new ElfArchEx(ElfNative.EM_TRICORE);
         
         /// <summary>
         /// Argonaut RISC Core
         /// </summary>
-        public static readonly ElfArch ARC = new ElfArch(ElfNative.EM_ARC);
+        public static readonly ElfArchEx ARC = new ElfArchEx(ElfNative.EM_ARC);
         
         /// <summary>
         /// Hitachi H8/300
         /// </summary>
-        public static readonly ElfArch H8_300 = new ElfArch(ElfNative.EM_H8_300);
+        public static readonly ElfArchEx H8_300 = new ElfArchEx(ElfNative.EM_H8_300);
         
         /// <summary>
         /// Hitachi H8/300H
         /// </summary>
-        public static readonly ElfArch H8_300H = new ElfArch(ElfNative.EM_H8_300H);
+        public static readonly ElfArchEx H8_300H = new ElfArchEx(ElfNative.EM_H8_300H);
         
         /// <summary>
         /// Hitachi H8S
         /// </summary>
-        public static readonly ElfArch H8S = new ElfArch(ElfNative.EM_H8S);
+        public static readonly ElfArchEx H8S = new ElfArchEx(ElfNative.EM_H8S);
         
         /// <summary>
         /// Hitachi H8/500
         /// </summary>
-        public static readonly ElfArch H8_500 = new ElfArch(ElfNative.EM_H8_500);
+        public static readonly ElfArchEx H8_500 = new ElfArchEx(ElfNative.EM_H8_500);
         
         /// <summary>
         /// Intel Merced
         /// </summary>
-        public static readonly ElfArch IA_64 = new ElfArch(ElfNative.EM_IA_64);
+        public static readonly ElfArchEx IA_64 = new ElfArchEx(ElfNative.EM_IA_64);
         
         /// <summary>
         /// Stanford MIPS-X
         /// </summary>
-        public static readonly ElfArch MIPS_X = new ElfArch(ElfNative.EM_MIPS_X);
+        public static readonly ElfArchEx MIPS_X = new ElfArchEx(ElfNative.EM_MIPS_X);
         
         /// <summary>
         /// Motorola Coldfire
         /// </summary>
-        public static readonly ElfArch COLDFIRE = new ElfArch(ElfNative.EM_COLDFIRE);
+        public static readonly ElfArchEx COLDFIRE = new ElfArchEx(ElfNative.EM_COLDFIRE);
         
         /// <summary>
         /// Motorola M68HC12
         /// </summary>
-        public static readonly ElfArch M68HC12 = new ElfArch(ElfNative.EM_68HC12);
+        public static readonly ElfArchEx M68HC12 = new ElfArchEx(ElfNative.EM_68HC12);
         
         /// <summary>
         /// Fujitsu MMA Multimedia Accelerator
         /// </summary>
-        public static readonly ElfArch MMA = new ElfArch(ElfNative.EM_MMA);
+        public static readonly ElfArchEx MMA = new ElfArchEx(ElfNative.EM_MMA);
         
         /// <summary>
         /// Siemens PCP
         /// </summary>
-        public static readonly ElfArch PCP = new ElfArch(ElfNative.EM_PCP);
+        public static readonly ElfArchEx PCP = new ElfArchEx(ElfNative.EM_PCP);
         
         /// <summary>
         /// Sony nCPU embeeded RISC
         /// </summary>
-        public static readonly ElfArch NCPU = new ElfArch(ElfNative.EM_NCPU);
+        public static readonly ElfArchEx NCPU = new ElfArchEx(ElfNative.EM_NCPU);
         
         /// <summary>
         /// Denso NDR1 microprocessor
         /// </summary>
-        public static readonly ElfArch NDR1 = new ElfArch(ElfNative.EM_NDR1);
+        public static readonly ElfArchEx NDR1 = new ElfArchEx(ElfNative.EM_NDR1);
         
         /// <summary>
         /// Motorola Start*Core processor
         /// </summary>
-        public static readonly ElfArch STARCORE = new ElfArch(ElfNative.EM_STARCORE);
+        public static readonly ElfArchEx STARCORE = new ElfArchEx(ElfNative.EM_STARCORE);
         
         /// <summary>
         /// Toyota ME16 processor
         /// </summary>
-        public static readonly ElfArch ME16 = new ElfArch(ElfNative.EM_ME16);
+        public static readonly ElfArchEx ME16 = new ElfArchEx(ElfNative.EM_ME16);
         
         /// <summary>
         /// STMicroelectronic ST100 processor
         /// </summary>
-        public static readonly ElfArch ST100 = new ElfArch(ElfNative.EM_ST100);
+        public static readonly ElfArchEx ST100 = new ElfArchEx(ElfNative.EM_ST100);
         
         /// <summary>
         /// Advanced Logic Corp. Tinyj emb.fam
         /// </summary>
-        public static readonly ElfArch TINYJ = new ElfArch(ElfNative.EM_TINYJ);
+        public static readonly ElfArchEx TINYJ = new ElfArchEx(ElfNative.EM_TINYJ);
         
         /// <summary>
         /// AMD x86-64 architecture
         /// </summary>
-        public static readonly ElfArch X86_64 = new ElfArch(ElfNative.EM_X86_64);
+        public static readonly ElfArchEx X86_64 = new ElfArchEx(ElfNative.EM_X86_64);
         
         /// <summary>
         /// Sony DSP Processor
         /// </summary>
-        public static readonly ElfArch PDSP = new ElfArch(ElfNative.EM_PDSP);
+        public static readonly ElfArchEx PDSP = new ElfArchEx(ElfNative.EM_PDSP);
         
         /// <summary>
         /// Siemens FX66 microcontroller
         /// </summary>
-        public static readonly ElfArch FX66 = new ElfArch(ElfNative.EM_FX66);
+        public static readonly ElfArchEx FX66 = new ElfArchEx(ElfNative.EM_FX66);
         
         /// <summary>
         /// STMicroelectronics ST9+ 8/16 mc
         /// </summary>
-        public static readonly ElfArch ST9PLUS = new ElfArch(ElfNative.EM_ST9PLUS);
+        public static readonly ElfArchEx ST9PLUS = new ElfArchEx(ElfNative.EM_ST9PLUS);
         
         /// <summary>
         /// STmicroelectronics ST7 8 bit mc
         /// </summary>
-        public static readonly ElfArch ST7 = new ElfArch(ElfNative.EM_ST7);
+        public static readonly ElfArchEx ST7 = new ElfArchEx(ElfNative.EM_ST7);
         
         /// <summary>
         /// Motorola MC68HC16 microcontroller
         /// </summary>
-        public static readonly ElfArch M68HC16 = new ElfArch(ElfNative.EM_68HC16);
+        public static readonly ElfArchEx M68HC16 = new ElfArchEx(ElfNative.EM_68HC16);
         
         /// <summary>
         /// Motorola MC68HC11 microcontroller
         /// </summary>
-        public static readonly ElfArch M68HC11 = new ElfArch(ElfNative.EM_68HC11);
+        public static readonly ElfArchEx M68HC11 = new ElfArchEx(ElfNative.EM_68HC11);
         
         /// <summary>
         /// Motorola MC68HC08 microcontroller
         /// </summary>
-        public static readonly ElfArch M68HC08 = new ElfArch(ElfNative.EM_68HC08);
+        public static readonly ElfArchEx M68HC08 = new ElfArchEx(ElfNative.EM_68HC08);
         
         /// <summary>
         /// Motorola MC68HC05 microcontroller
         /// </summary>
-        public static readonly ElfArch M68HC05 = new ElfArch(ElfNative.EM_68HC05);
+        public static readonly ElfArchEx M68HC05 = new ElfArchEx(ElfNative.EM_68HC05);
         
         /// <summary>
         /// Silicon Graphics SVx
         /// </summary>
-        public static readonly ElfArch SVX = new ElfArch(ElfNative.EM_SVX);
+        public static readonly ElfArchEx SVX = new ElfArchEx(ElfNative.EM_SVX);
         
         /// <summary>
         /// STMicroelectronics ST19 8 bit mc
         /// </summary>
-        public static readonly ElfArch ST19 = new ElfArch(ElfNative.EM_ST19);
+        public static readonly ElfArchEx ST19 = new ElfArchEx(ElfNative.EM_ST19);
         
         /// <summary>
         /// Digital VAX
         /// </summary>
-        public static readonly ElfArch VAX = new ElfArch(ElfNative.EM_VAX);
+        public static readonly ElfArchEx VAX = new ElfArchEx(ElfNative.EM_VAX);
         
         /// <summary>
         /// Axis Communications 32-bit embedded processor
         /// </summary>
-        public static readonly ElfArch CRIS = new ElfArch(ElfNative.EM_CRIS);
+        public static readonly ElfArchEx CRIS = new ElfArchEx(ElfNative.EM_CRIS);
         
         /// <summary>
         /// Infineon Technologies 32-bit embedded processor
         /// </summary>
-        public static readonly ElfArch JAVELIN = new ElfArch(ElfNative.EM_JAVELIN);
+        public static readonly ElfArchEx JAVELIN = new ElfArchEx(ElfNative.EM_JAVELIN);
         
         /// <summary>
         /// Element 14 64-bit DSP Processor
         /// </summary>
-        public static readonly ElfArch FIREPATH = new ElfArch(ElfNative.EM_FIREPATH);
+        public static readonly ElfArchEx FIREPATH = new ElfArchEx(ElfNative.EM_FIREPATH);
         
         /// <summary>
         /// LSI Logic 16-bit DSP Processor
         /// </summary>
-        public static readonly ElfArch ZSP = new ElfArch(ElfNative.EM_ZSP);
+        public static readonly ElfArchEx ZSP = new ElfArchEx(ElfNative.EM_ZSP);
         
         /// <summary>
         /// Donald Knuth's educational 64-bit processor
         /// </summary>
-        public static readonly ElfArch MMIX = new ElfArch(ElfNative.EM_MMIX);
+        public static readonly ElfArchEx MMIX = new ElfArchEx(ElfNative.EM_MMIX);
         
         /// <summary>
         /// Harvard University machine-independent object files
         /// </summary>
-        public static readonly ElfArch HUANY = new ElfArch(ElfNative.EM_HUANY);
+        public static readonly ElfArchEx HUANY = new ElfArchEx(ElfNative.EM_HUANY);
         
         /// <summary>
         /// SiTera Prism
         /// </summary>
-        public static readonly ElfArch PRISM = new ElfArch(ElfNative.EM_PRISM);
+        public static readonly ElfArchEx PRISM = new ElfArchEx(ElfNative.EM_PRISM);
         
         /// <summary>
         /// Atmel AVR 8-bit microcontroller
         /// </summary>
-        public static readonly ElfArch AVR = new ElfArch(ElfNative.EM_AVR);
+        public static readonly ElfArchEx AVR = new ElfArchEx(ElfNative.EM_AVR);
         
         /// <summary>
         /// Fujitsu FR30
         /// </summary>
-        public static readonly ElfArch FR30 = new ElfArch(ElfNative.EM_FR30);
+        public static readonly ElfArchEx FR30 = new ElfArchEx(ElfNative.EM_FR30);
         
         /// <summary>
         /// Mitsubishi D10V
         /// </summary>
-        public static readonly ElfArch D10V = new ElfArch(ElfNative.EM_D10V);
+        public static readonly ElfArchEx D10V = new ElfArchEx(ElfNative.EM_D10V);
         
         /// <summary>
         /// Mitsubishi D30V
         /// </summary>
-        public static readonly ElfArch D30V = new ElfArch(ElfNative.EM_D30V);
+        public static readonly ElfArchEx D30V = new ElfArchEx(ElfNative.EM_D30V);
         
         /// <summary>
         /// NEC v850
         /// </summary>
-        public static readonly ElfArch V850 = new ElfArch(ElfNative.EM_V850);
+        public static readonly ElfArchEx V850 = new ElfArchEx(ElfNative.EM_V850);
         
         /// <summary>
         /// Mitsubishi M32R
         /// </summary>
-        public static readonly ElfArch M32R = new ElfArch(ElfNative.EM_M32R);
+        public static readonly ElfArchEx M32R = new ElfArchEx(ElfNative.EM_M32R);
         
         /// <summary>
         /// Matsushita MN10300
         /// </summary>
-        public static readonly ElfArch MN10300 = new ElfArch(ElfNative.EM_MN10300);
+        public static readonly ElfArchEx MN10300 = new ElfArchEx(ElfNative.EM_MN10300);
         
         /// <summary>
         /// Matsushita MN10200
         /// </summary>
-        public static readonly ElfArch MN10200 = new ElfArch(ElfNative.EM_MN10200);
+        public static readonly ElfArchEx MN10200 = new ElfArchEx(ElfNative.EM_MN10200);
         
         /// <summary>
         /// picoJava
         /// </summary>
-        public static readonly ElfArch PJ = new ElfArch(ElfNative.EM_PJ);
+        public static readonly ElfArchEx PJ = new ElfArchEx(ElfNative.EM_PJ);
         
         /// <summary>
         /// OpenRISC 32-bit embedded processor
         /// </summary>
-        public static readonly ElfArch OPENRISC = new ElfArch(ElfNative.EM_OPENRISC);
+        public static readonly ElfArchEx OPENRISC = new ElfArchEx(ElfNative.EM_OPENRISC);
         
         /// <summary>
         /// ARC Cores Tangent-A5
         /// </summary>
-        public static readonly ElfArch ARC_A5 = new ElfArch(ElfNative.EM_ARC_A5);
+        public static readonly ElfArchEx ARC_A5 = new ElfArchEx(ElfNative.EM_ARC_A5);
         
         /// <summary>
         /// Tensilica Xtensa Architecture
         /// </summary>
-        public static readonly ElfArch XTENSA = new ElfArch(ElfNative.EM_XTENSA);
+        public static readonly ElfArchEx XTENSA = new ElfArchEx(ElfNative.EM_XTENSA);
         
         /// <summary>
         /// Altera Nios II
         /// </summary>
-        public static readonly ElfArch ALTERA_NIOS2 = new ElfArch(ElfNative.EM_ALTERA_NIOS2);
+        public static readonly ElfArchEx ALTERA_NIOS2 = new ElfArchEx(ElfNative.EM_ALTERA_NIOS2);
         
         /// <summary>
         /// ARM AARCH64
         /// </summary>
-        public static readonly ElfArch AARCH64 = new ElfArch(ElfNative.EM_AARCH64);
+        public static readonly ElfArchEx AARCH64 = new ElfArchEx(ElfNative.EM_AARCH64);
         
         /// <summary>
         /// Tilera TILEPro
         /// </summary>
-        public static readonly ElfArch TILEPRO = new ElfArch(ElfNative.EM_TILEPRO);
+        public static readonly ElfArchEx TILEPRO = new ElfArchEx(ElfNative.EM_TILEPRO);
         
         /// <summary>
         /// Xilinx MicroBlaze
         /// </summary>
-        public static readonly ElfArch MICROBLAZE = new ElfArch(ElfNative.EM_MICROBLAZE);
+        public static readonly ElfArchEx MICROBLAZE = new ElfArchEx(ElfNative.EM_MICROBLAZE);
         
         /// <summary>
         /// Tilera TILE-Gx
         /// </summary>
-        public static readonly ElfArch TILEGX = new ElfArch(ElfNative.EM_TILEGX);
+        public static readonly ElfArchEx TILEGX = new ElfArchEx(ElfNative.EM_TILEGX);
         
-        public static readonly ElfArch ALPHA = new ElfArch(ElfNative.EM_ALPHA);
+        public static readonly ElfArchEx ALPHA = new ElfArchEx(ElfNative.EM_ALPHA);
         
         private string ToStringInternal()
         {
-            switch (Value)
+            switch ((ushort)Value)
             {
                 case ElfNative.EM_NONE: return "EM_NONE";
                 case ElfNative.EM_M32: return "EM_M32";
@@ -11918,91 +11918,254 @@ namespace LibObjectFile.Elf
         }
     }
     
-    public readonly partial struct ElfOSABI
+    public enum ElfArch : ushort
+    {
+        NONE = ElfNative.EM_NONE,
+        
+        M32 = ElfNative.EM_M32,
+        
+        SPARC = ElfNative.EM_SPARC,
+        
+        I386 = ElfNative.EM_386,
+        
+        M68K = ElfNative.EM_68K,
+        
+        M88K = ElfNative.EM_88K,
+        
+        I860 = ElfNative.EM_860,
+        
+        MIPS = ElfNative.EM_MIPS,
+        
+        S370 = ElfNative.EM_S370,
+        
+        MIPS_RS3_LE = ElfNative.EM_MIPS_RS3_LE,
+        
+        PARISC = ElfNative.EM_PARISC,
+        
+        VPP500 = ElfNative.EM_VPP500,
+        
+        SPARC32PLUS = ElfNative.EM_SPARC32PLUS,
+        
+        I960 = ElfNative.EM_960,
+        
+        PPC = ElfNative.EM_PPC,
+        
+        PPC64 = ElfNative.EM_PPC64,
+        
+        S390 = ElfNative.EM_S390,
+        
+        V800 = ElfNative.EM_V800,
+        
+        FR20 = ElfNative.EM_FR20,
+        
+        RH32 = ElfNative.EM_RH32,
+        
+        RCE = ElfNative.EM_RCE,
+        
+        ARM = ElfNative.EM_ARM,
+        
+        FAKE_ALPHA = ElfNative.EM_FAKE_ALPHA,
+        
+        SH = ElfNative.EM_SH,
+        
+        SPARCV9 = ElfNative.EM_SPARCV9,
+        
+        TRICORE = ElfNative.EM_TRICORE,
+        
+        ARC = ElfNative.EM_ARC,
+        
+        H8_300 = ElfNative.EM_H8_300,
+        
+        H8_300H = ElfNative.EM_H8_300H,
+        
+        H8S = ElfNative.EM_H8S,
+        
+        H8_500 = ElfNative.EM_H8_500,
+        
+        IA_64 = ElfNative.EM_IA_64,
+        
+        MIPS_X = ElfNative.EM_MIPS_X,
+        
+        COLDFIRE = ElfNative.EM_COLDFIRE,
+        
+        M68HC12 = ElfNative.EM_68HC12,
+        
+        MMA = ElfNative.EM_MMA,
+        
+        PCP = ElfNative.EM_PCP,
+        
+        NCPU = ElfNative.EM_NCPU,
+        
+        NDR1 = ElfNative.EM_NDR1,
+        
+        STARCORE = ElfNative.EM_STARCORE,
+        
+        ME16 = ElfNative.EM_ME16,
+        
+        ST100 = ElfNative.EM_ST100,
+        
+        TINYJ = ElfNative.EM_TINYJ,
+        
+        X86_64 = ElfNative.EM_X86_64,
+        
+        PDSP = ElfNative.EM_PDSP,
+        
+        FX66 = ElfNative.EM_FX66,
+        
+        ST9PLUS = ElfNative.EM_ST9PLUS,
+        
+        ST7 = ElfNative.EM_ST7,
+        
+        M68HC16 = ElfNative.EM_68HC16,
+        
+        M68HC11 = ElfNative.EM_68HC11,
+        
+        M68HC08 = ElfNative.EM_68HC08,
+        
+        M68HC05 = ElfNative.EM_68HC05,
+        
+        SVX = ElfNative.EM_SVX,
+        
+        ST19 = ElfNative.EM_ST19,
+        
+        VAX = ElfNative.EM_VAX,
+        
+        CRIS = ElfNative.EM_CRIS,
+        
+        JAVELIN = ElfNative.EM_JAVELIN,
+        
+        FIREPATH = ElfNative.EM_FIREPATH,
+        
+        ZSP = ElfNative.EM_ZSP,
+        
+        MMIX = ElfNative.EM_MMIX,
+        
+        HUANY = ElfNative.EM_HUANY,
+        
+        PRISM = ElfNative.EM_PRISM,
+        
+        AVR = ElfNative.EM_AVR,
+        
+        FR30 = ElfNative.EM_FR30,
+        
+        D10V = ElfNative.EM_D10V,
+        
+        D30V = ElfNative.EM_D30V,
+        
+        V850 = ElfNative.EM_V850,
+        
+        M32R = ElfNative.EM_M32R,
+        
+        MN10300 = ElfNative.EM_MN10300,
+        
+        MN10200 = ElfNative.EM_MN10200,
+        
+        PJ = ElfNative.EM_PJ,
+        
+        OPENRISC = ElfNative.EM_OPENRISC,
+        
+        ARC_A5 = ElfNative.EM_ARC_A5,
+        
+        XTENSA = ElfNative.EM_XTENSA,
+        
+        ALTERA_NIOS2 = ElfNative.EM_ALTERA_NIOS2,
+        
+        AARCH64 = ElfNative.EM_AARCH64,
+        
+        TILEPRO = ElfNative.EM_TILEPRO,
+        
+        MICROBLAZE = ElfNative.EM_MICROBLAZE,
+        
+        TILEGX = ElfNative.EM_TILEGX,
+        
+        ALPHA = ElfNative.EM_ALPHA,
+    }
+    
+    public readonly partial struct ElfOSABIEx
     {
         /// <summary>
         /// UNIX System V ABI
         /// </summary>
-        public static readonly ElfOSABI NONE = new ElfOSABI(ElfNative.ELFOSABI_NONE);
+        public static readonly ElfOSABIEx NONE = new ElfOSABIEx(ElfNative.ELFOSABI_NONE);
         
         /// <summary>
         /// UNIX System V ABI
         /// </summary>
-        public static readonly ElfOSABI SYSV = new ElfOSABI(ElfNative.ELFOSABI_SYSV);
+        public static readonly ElfOSABIEx SYSV = new ElfOSABIEx(ElfNative.ELFOSABI_SYSV);
         
         /// <summary>
         /// HP-UX
         /// </summary>
-        public static readonly ElfOSABI HPUX = new ElfOSABI(ElfNative.ELFOSABI_HPUX);
+        public static readonly ElfOSABIEx HPUX = new ElfOSABIEx(ElfNative.ELFOSABI_HPUX);
         
         /// <summary>
         /// NetBSD.
         /// </summary>
-        public static readonly ElfOSABI NETBSD = new ElfOSABI(ElfNative.ELFOSABI_NETBSD);
+        public static readonly ElfOSABIEx NETBSD = new ElfOSABIEx(ElfNative.ELFOSABI_NETBSD);
         
         /// <summary>
         /// Object uses GNU ELF extensions.
         /// </summary>
-        public static readonly ElfOSABI GNU = new ElfOSABI(ElfNative.ELFOSABI_GNU);
+        public static readonly ElfOSABIEx GNU = new ElfOSABIEx(ElfNative.ELFOSABI_GNU);
         
         /// <summary>
         /// Object uses GNU ELF extensions.
         /// </summary>
-        public static readonly ElfOSABI LINUX = new ElfOSABI(ElfNative.ELFOSABI_LINUX);
+        public static readonly ElfOSABIEx LINUX = new ElfOSABIEx(ElfNative.ELFOSABI_LINUX);
         
         /// <summary>
         /// Sun Solaris.
         /// </summary>
-        public static readonly ElfOSABI SOLARIS = new ElfOSABI(ElfNative.ELFOSABI_SOLARIS);
+        public static readonly ElfOSABIEx SOLARIS = new ElfOSABIEx(ElfNative.ELFOSABI_SOLARIS);
         
         /// <summary>
         /// IBM AIX.
         /// </summary>
-        public static readonly ElfOSABI AIX = new ElfOSABI(ElfNative.ELFOSABI_AIX);
+        public static readonly ElfOSABIEx AIX = new ElfOSABIEx(ElfNative.ELFOSABI_AIX);
         
         /// <summary>
         /// SGI Irix.
         /// </summary>
-        public static readonly ElfOSABI IRIX = new ElfOSABI(ElfNative.ELFOSABI_IRIX);
+        public static readonly ElfOSABIEx IRIX = new ElfOSABIEx(ElfNative.ELFOSABI_IRIX);
         
         /// <summary>
         /// FreeBSD.
         /// </summary>
-        public static readonly ElfOSABI FREEBSD = new ElfOSABI(ElfNative.ELFOSABI_FREEBSD);
+        public static readonly ElfOSABIEx FREEBSD = new ElfOSABIEx(ElfNative.ELFOSABI_FREEBSD);
         
         /// <summary>
         /// Compaq TRU64 UNIX.
         /// </summary>
-        public static readonly ElfOSABI TRU64 = new ElfOSABI(ElfNative.ELFOSABI_TRU64);
+        public static readonly ElfOSABIEx TRU64 = new ElfOSABIEx(ElfNative.ELFOSABI_TRU64);
         
         /// <summary>
         /// Novell Modesto.
         /// </summary>
-        public static readonly ElfOSABI MODESTO = new ElfOSABI(ElfNative.ELFOSABI_MODESTO);
+        public static readonly ElfOSABIEx MODESTO = new ElfOSABIEx(ElfNative.ELFOSABI_MODESTO);
         
         /// <summary>
         /// OpenBSD.
         /// </summary>
-        public static readonly ElfOSABI OPENBSD = new ElfOSABI(ElfNative.ELFOSABI_OPENBSD);
+        public static readonly ElfOSABIEx OPENBSD = new ElfOSABIEx(ElfNative.ELFOSABI_OPENBSD);
         
         /// <summary>
         /// ARM EABI
         /// </summary>
-        public static readonly ElfOSABI ARM_AEABI = new ElfOSABI(ElfNative.ELFOSABI_ARM_AEABI);
+        public static readonly ElfOSABIEx ARM_AEABI = new ElfOSABIEx(ElfNative.ELFOSABI_ARM_AEABI);
         
         /// <summary>
         /// ARM
         /// </summary>
-        public static readonly ElfOSABI ARM = new ElfOSABI(ElfNative.ELFOSABI_ARM);
+        public static readonly ElfOSABIEx ARM = new ElfOSABIEx(ElfNative.ELFOSABI_ARM);
         
         /// <summary>
         /// Standalone (embedded) application
         /// </summary>
-        public static readonly ElfOSABI STANDALONE = new ElfOSABI(ElfNative.ELFOSABI_STANDALONE);
+        public static readonly ElfOSABIEx STANDALONE = new ElfOSABIEx(ElfNative.ELFOSABI_STANDALONE);
         
         private string ToStringInternal()
         {
-            switch (Value)
+            switch ((byte)Value)
             {
                 case ElfNative.ELFOSABI_NONE: return "ELFOSABI_NONE";
                 case ElfNative.ELFOSABI_HPUX: return "ELFOSABI_HPUX";
@@ -12021,6 +12184,41 @@ namespace LibObjectFile.Elf
                 default: return null;
             }
         }
+    }
+    
+    public enum ElfOSABI : byte
+    {
+        NONE = ElfNative.ELFOSABI_NONE,
+        
+        SYSV = ElfNative.ELFOSABI_SYSV,
+        
+        HPUX = ElfNative.ELFOSABI_HPUX,
+        
+        NETBSD = ElfNative.ELFOSABI_NETBSD,
+        
+        GNU = ElfNative.ELFOSABI_GNU,
+        
+        LINUX = ElfNative.ELFOSABI_LINUX,
+        
+        SOLARIS = ElfNative.ELFOSABI_SOLARIS,
+        
+        AIX = ElfNative.ELFOSABI_AIX,
+        
+        IRIX = ElfNative.ELFOSABI_IRIX,
+        
+        FREEBSD = ElfNative.ELFOSABI_FREEBSD,
+        
+        TRU64 = ElfNative.ELFOSABI_TRU64,
+        
+        MODESTO = ElfNative.ELFOSABI_MODESTO,
+        
+        OPENBSD = ElfNative.ELFOSABI_OPENBSD,
+        
+        ARM_AEABI = ElfNative.ELFOSABI_ARM_AEABI,
+        
+        ARM = ElfNative.ELFOSABI_ARM,
+        
+        STANDALONE = ElfNative.ELFOSABI_STANDALONE,
     }
     
     public readonly partial struct ElfRelocationType
@@ -13662,7 +13860,7 @@ namespace LibObjectFile.Elf
         
         private string ToStringInternal()
         {
-            switch (((ulong)Value << 16) | Arch.Value)
+            switch (((ulong)Value << 16) | (ulong)Arch.Value)
             {
                 case ((ulong)ElfNative.R_386_NONE << 16) | ElfNative.EM_386 : return "R_386_NONE";
                 case ((ulong)ElfNative.R_386_32 << 16) | ElfNative.EM_386 : return "R_386_32";
@@ -14006,214 +14204,214 @@ namespace LibObjectFile.Elf
         }
     }
     
-    public readonly partial struct ElfNoteType
+    public readonly partial struct ElfNoteTypeEx
     {
         /// <summary>
         /// Contains copy of prstatus struct
         /// </summary>
-        public static readonly ElfNoteType PRSTATUS = new ElfNoteType(ElfNative.NT_PRSTATUS);
+        public static readonly ElfNoteTypeEx PRSTATUS = new ElfNoteTypeEx(ElfNative.NT_PRSTATUS);
         
         /// <summary>
         /// Contains copy of fpregset struct
         /// </summary>
-        public static readonly ElfNoteType FPREGSET = new ElfNoteType(ElfNative.NT_FPREGSET);
+        public static readonly ElfNoteTypeEx FPREGSET = new ElfNoteTypeEx(ElfNative.NT_FPREGSET);
         
         /// <summary>
         /// Contains copy of prpsinfo struct
         /// </summary>
-        public static readonly ElfNoteType PRPSINFO = new ElfNoteType(ElfNative.NT_PRPSINFO);
+        public static readonly ElfNoteTypeEx PRPSINFO = new ElfNoteTypeEx(ElfNative.NT_PRPSINFO);
         
         /// <summary>
         /// Contains copy of prxregset struct
         /// </summary>
-        public static readonly ElfNoteType PRXREG = new ElfNoteType(ElfNative.NT_PRXREG);
+        public static readonly ElfNoteTypeEx PRXREG = new ElfNoteTypeEx(ElfNative.NT_PRXREG);
         
         /// <summary>
         /// Contains copy of task structure
         /// </summary>
-        public static readonly ElfNoteType TASKSTRUCT = new ElfNoteType(ElfNative.NT_TASKSTRUCT);
+        public static readonly ElfNoteTypeEx TASKSTRUCT = new ElfNoteTypeEx(ElfNative.NT_TASKSTRUCT);
         
         /// <summary>
         /// String from sysinfo(SI_PLATFORM)
         /// </summary>
-        public static readonly ElfNoteType PLATFORM = new ElfNoteType(ElfNative.NT_PLATFORM);
+        public static readonly ElfNoteTypeEx PLATFORM = new ElfNoteTypeEx(ElfNative.NT_PLATFORM);
         
         /// <summary>
         /// Contains copy of auxv array
         /// </summary>
-        public static readonly ElfNoteType AUXV = new ElfNoteType(ElfNative.NT_AUXV);
+        public static readonly ElfNoteTypeEx AUXV = new ElfNoteTypeEx(ElfNative.NT_AUXV);
         
         /// <summary>
         /// Contains copy of gwindows struct
         /// </summary>
-        public static readonly ElfNoteType GWINDOWS = new ElfNoteType(ElfNative.NT_GWINDOWS);
+        public static readonly ElfNoteTypeEx GWINDOWS = new ElfNoteTypeEx(ElfNative.NT_GWINDOWS);
         
         /// <summary>
         /// Contains copy of asrset struct
         /// </summary>
-        public static readonly ElfNoteType ASRS = new ElfNoteType(ElfNative.NT_ASRS);
+        public static readonly ElfNoteTypeEx ASRS = new ElfNoteTypeEx(ElfNative.NT_ASRS);
         
         /// <summary>
         /// Contains copy of pstatus struct
         /// </summary>
-        public static readonly ElfNoteType PSTATUS = new ElfNoteType(ElfNative.NT_PSTATUS);
+        public static readonly ElfNoteTypeEx PSTATUS = new ElfNoteTypeEx(ElfNative.NT_PSTATUS);
         
         /// <summary>
         /// Contains copy of psinfo struct
         /// </summary>
-        public static readonly ElfNoteType PSINFO = new ElfNoteType(ElfNative.NT_PSINFO);
+        public static readonly ElfNoteTypeEx PSINFO = new ElfNoteTypeEx(ElfNative.NT_PSINFO);
         
         /// <summary>
         /// Contains copy of prcred struct
         /// </summary>
-        public static readonly ElfNoteType PRCRED = new ElfNoteType(ElfNative.NT_PRCRED);
+        public static readonly ElfNoteTypeEx PRCRED = new ElfNoteTypeEx(ElfNative.NT_PRCRED);
         
         /// <summary>
         /// Contains copy of utsname struct
         /// </summary>
-        public static readonly ElfNoteType UTSNAME = new ElfNoteType(ElfNative.NT_UTSNAME);
+        public static readonly ElfNoteTypeEx UTSNAME = new ElfNoteTypeEx(ElfNative.NT_UTSNAME);
         
         /// <summary>
         /// Contains copy of lwpstatus struct
         /// </summary>
-        public static readonly ElfNoteType LWPSTATUS = new ElfNoteType(ElfNative.NT_LWPSTATUS);
+        public static readonly ElfNoteTypeEx LWPSTATUS = new ElfNoteTypeEx(ElfNative.NT_LWPSTATUS);
         
         /// <summary>
         /// Contains copy of lwpinfo struct
         /// </summary>
-        public static readonly ElfNoteType LWPSINFO = new ElfNoteType(ElfNative.NT_LWPSINFO);
+        public static readonly ElfNoteTypeEx LWPSINFO = new ElfNoteTypeEx(ElfNative.NT_LWPSINFO);
         
         /// <summary>
         /// Contains copy of fprxregset struct
         /// </summary>
-        public static readonly ElfNoteType PRFPXREG = new ElfNoteType(ElfNative.NT_PRFPXREG);
+        public static readonly ElfNoteTypeEx PRFPXREG = new ElfNoteTypeEx(ElfNative.NT_PRFPXREG);
         
         /// <summary>
         /// Contains copy of siginfo_t, size might increase
         /// </summary>
-        public static readonly ElfNoteType SIGINFO = new ElfNoteType(ElfNative.NT_SIGINFO);
+        public static readonly ElfNoteTypeEx SIGINFO = new ElfNoteTypeEx(ElfNative.NT_SIGINFO);
         
         /// <summary>
         /// Contains information about mapped files
         /// </summary>
-        public static readonly ElfNoteType FILE = new ElfNoteType(ElfNative.NT_FILE);
+        public static readonly ElfNoteTypeEx FILE = new ElfNoteTypeEx(ElfNative.NT_FILE);
         
         /// <summary>
         /// Contains copy of user_fxsr_struct
         /// </summary>
-        public static readonly ElfNoteType PRXFPREG = new ElfNoteType(ElfNative.NT_PRXFPREG);
+        public static readonly ElfNoteTypeEx PRXFPREG = new ElfNoteTypeEx(ElfNative.NT_PRXFPREG);
         
         /// <summary>
         /// PowerPC Altivec/VMX registers
         /// </summary>
-        public static readonly ElfNoteType PPC_VMX = new ElfNoteType(ElfNative.NT_PPC_VMX);
+        public static readonly ElfNoteTypeEx PPC_VMX = new ElfNoteTypeEx(ElfNative.NT_PPC_VMX);
         
         /// <summary>
         /// PowerPC SPE/EVR registers
         /// </summary>
-        public static readonly ElfNoteType PPC_SPE = new ElfNoteType(ElfNative.NT_PPC_SPE);
+        public static readonly ElfNoteTypeEx PPC_SPE = new ElfNoteTypeEx(ElfNative.NT_PPC_SPE);
         
         /// <summary>
         /// PowerPC VSX registers
         /// </summary>
-        public static readonly ElfNoteType PPC_VSX = new ElfNoteType(ElfNative.NT_PPC_VSX);
+        public static readonly ElfNoteTypeEx PPC_VSX = new ElfNoteTypeEx(ElfNative.NT_PPC_VSX);
         
         /// <summary>
         /// i386 TLS slots (struct user_desc)
         /// </summary>
-        public static readonly ElfNoteType I386_TLS = new ElfNoteType(ElfNative.NT_386_TLS);
+        public static readonly ElfNoteTypeEx I386_TLS = new ElfNoteTypeEx(ElfNative.NT_386_TLS);
         
         /// <summary>
         /// x86 io permission bitmap (1=deny)
         /// </summary>
-        public static readonly ElfNoteType I386_IOPERM = new ElfNoteType(ElfNative.NT_386_IOPERM);
+        public static readonly ElfNoteTypeEx I386_IOPERM = new ElfNoteTypeEx(ElfNative.NT_386_IOPERM);
         
         /// <summary>
         /// x86 extended state using xsave
         /// </summary>
-        public static readonly ElfNoteType X86_XSTATE = new ElfNoteType(ElfNative.NT_X86_XSTATE);
+        public static readonly ElfNoteTypeEx X86_XSTATE = new ElfNoteTypeEx(ElfNative.NT_X86_XSTATE);
         
         /// <summary>
         /// s390 upper register halves
         /// </summary>
-        public static readonly ElfNoteType S390_HIGH_GPRS = new ElfNoteType(ElfNative.NT_S390_HIGH_GPRS);
+        public static readonly ElfNoteTypeEx S390_HIGH_GPRS = new ElfNoteTypeEx(ElfNative.NT_S390_HIGH_GPRS);
         
         /// <summary>
         /// s390 timer register
         /// </summary>
-        public static readonly ElfNoteType S390_TIMER = new ElfNoteType(ElfNative.NT_S390_TIMER);
+        public static readonly ElfNoteTypeEx S390_TIMER = new ElfNoteTypeEx(ElfNative.NT_S390_TIMER);
         
         /// <summary>
         /// s390 TOD clock comparator register
         /// </summary>
-        public static readonly ElfNoteType S390_TODCMP = new ElfNoteType(ElfNative.NT_S390_TODCMP);
+        public static readonly ElfNoteTypeEx S390_TODCMP = new ElfNoteTypeEx(ElfNative.NT_S390_TODCMP);
         
         /// <summary>
         /// s390 TOD programmable register
         /// </summary>
-        public static readonly ElfNoteType S390_TODPREG = new ElfNoteType(ElfNative.NT_S390_TODPREG);
+        public static readonly ElfNoteTypeEx S390_TODPREG = new ElfNoteTypeEx(ElfNative.NT_S390_TODPREG);
         
         /// <summary>
         /// s390 control registers
         /// </summary>
-        public static readonly ElfNoteType S390_CTRS = new ElfNoteType(ElfNative.NT_S390_CTRS);
+        public static readonly ElfNoteTypeEx S390_CTRS = new ElfNoteTypeEx(ElfNative.NT_S390_CTRS);
         
         /// <summary>
         /// s390 prefix register
         /// </summary>
-        public static readonly ElfNoteType S390_PREFIX = new ElfNoteType(ElfNative.NT_S390_PREFIX);
+        public static readonly ElfNoteTypeEx S390_PREFIX = new ElfNoteTypeEx(ElfNative.NT_S390_PREFIX);
         
         /// <summary>
         /// s390 breaking event address
         /// </summary>
-        public static readonly ElfNoteType S390_LAST_BREAK = new ElfNoteType(ElfNative.NT_S390_LAST_BREAK);
+        public static readonly ElfNoteTypeEx S390_LAST_BREAK = new ElfNoteTypeEx(ElfNative.NT_S390_LAST_BREAK);
         
         /// <summary>
         /// s390 system call restart data
         /// </summary>
-        public static readonly ElfNoteType S390_SYSTEM_CALL = new ElfNoteType(ElfNative.NT_S390_SYSTEM_CALL);
+        public static readonly ElfNoteTypeEx S390_SYSTEM_CALL = new ElfNoteTypeEx(ElfNative.NT_S390_SYSTEM_CALL);
         
         /// <summary>
         /// s390 transaction diagnostic block
         /// </summary>
-        public static readonly ElfNoteType S390_TDB = new ElfNoteType(ElfNative.NT_S390_TDB);
+        public static readonly ElfNoteTypeEx S390_TDB = new ElfNoteTypeEx(ElfNative.NT_S390_TDB);
         
         /// <summary>
         /// ARM VFP/NEON registers
         /// </summary>
-        public static readonly ElfNoteType ARM_VFP = new ElfNoteType(ElfNative.NT_ARM_VFP);
+        public static readonly ElfNoteTypeEx ARM_VFP = new ElfNoteTypeEx(ElfNative.NT_ARM_VFP);
         
         /// <summary>
         /// ARM TLS register
         /// </summary>
-        public static readonly ElfNoteType ARM_TLS = new ElfNoteType(ElfNative.NT_ARM_TLS);
+        public static readonly ElfNoteTypeEx ARM_TLS = new ElfNoteTypeEx(ElfNative.NT_ARM_TLS);
         
         /// <summary>
         /// ARM hardware breakpoint registers
         /// </summary>
-        public static readonly ElfNoteType ARM_HW_BREAK = new ElfNoteType(ElfNative.NT_ARM_HW_BREAK);
+        public static readonly ElfNoteTypeEx ARM_HW_BREAK = new ElfNoteTypeEx(ElfNative.NT_ARM_HW_BREAK);
         
         /// <summary>
         /// ARM hardware watchpoint registers
         /// </summary>
-        public static readonly ElfNoteType ARM_HW_WATCH = new ElfNoteType(ElfNative.NT_ARM_HW_WATCH);
+        public static readonly ElfNoteTypeEx ARM_HW_WATCH = new ElfNoteTypeEx(ElfNative.NT_ARM_HW_WATCH);
         
         /// <summary>
         /// Contains a version string.
         /// </summary>
-        public static readonly ElfNoteType VERSION = new ElfNoteType(ElfNative.NT_VERSION);
+        public static readonly ElfNoteTypeEx VERSION = new ElfNoteTypeEx(ElfNative.NT_VERSION);
         
-        public static readonly ElfNoteType GNU_ABI_TAG = new ElfNoteType(ElfNative.NT_GNU_ABI_TAG);
+        public static readonly ElfNoteTypeEx GNU_ABI_TAG = new ElfNoteTypeEx(ElfNative.NT_GNU_ABI_TAG);
         
-        public static readonly ElfNoteType GNU_HWCAP = new ElfNoteType(ElfNative.NT_GNU_HWCAP);
+        public static readonly ElfNoteTypeEx GNU_HWCAP = new ElfNoteTypeEx(ElfNative.NT_GNU_HWCAP);
         
-        public static readonly ElfNoteType GNU_BUILD_ID = new ElfNoteType(ElfNative.NT_GNU_BUILD_ID);
+        public static readonly ElfNoteTypeEx GNU_BUILD_ID = new ElfNoteTypeEx(ElfNative.NT_GNU_BUILD_ID);
         
-        public static readonly ElfNoteType GNU_GOLD_VERSION = new ElfNoteType(ElfNative.NT_GNU_GOLD_VERSION);
+        public static readonly ElfNoteTypeEx GNU_GOLD_VERSION = new ElfNoteTypeEx(ElfNative.NT_GNU_GOLD_VERSION);
         
         private string ToStringInternal()
         {
-            switch (Value)
+            switch ((uint)Value)
             {
                 case ElfNative.NT_PRSTATUS: return "NT_PRSTATUS";
                 case ElfNative.NT_FPREGSET: return "NT_FPREGSET";
@@ -14255,5 +14453,94 @@ namespace LibObjectFile.Elf
                 default: return null;
             }
         }
+    }
+    
+    public enum ElfNoteType : uint
+    {
+        PRSTATUS = ElfNative.NT_PRSTATUS,
+        
+        FPREGSET = ElfNative.NT_FPREGSET,
+        
+        PRPSINFO = ElfNative.NT_PRPSINFO,
+        
+        PRXREG = ElfNative.NT_PRXREG,
+        
+        TASKSTRUCT = ElfNative.NT_TASKSTRUCT,
+        
+        PLATFORM = ElfNative.NT_PLATFORM,
+        
+        AUXV = ElfNative.NT_AUXV,
+        
+        GWINDOWS = ElfNative.NT_GWINDOWS,
+        
+        ASRS = ElfNative.NT_ASRS,
+        
+        PSTATUS = ElfNative.NT_PSTATUS,
+        
+        PSINFO = ElfNative.NT_PSINFO,
+        
+        PRCRED = ElfNative.NT_PRCRED,
+        
+        UTSNAME = ElfNative.NT_UTSNAME,
+        
+        LWPSTATUS = ElfNative.NT_LWPSTATUS,
+        
+        LWPSINFO = ElfNative.NT_LWPSINFO,
+        
+        PRFPXREG = ElfNative.NT_PRFPXREG,
+        
+        SIGINFO = ElfNative.NT_SIGINFO,
+        
+        FILE = ElfNative.NT_FILE,
+        
+        PRXFPREG = ElfNative.NT_PRXFPREG,
+        
+        PPC_VMX = ElfNative.NT_PPC_VMX,
+        
+        PPC_SPE = ElfNative.NT_PPC_SPE,
+        
+        PPC_VSX = ElfNative.NT_PPC_VSX,
+        
+        I386_TLS = ElfNative.NT_386_TLS,
+        
+        I386_IOPERM = ElfNative.NT_386_IOPERM,
+        
+        X86_XSTATE = ElfNative.NT_X86_XSTATE,
+        
+        S390_HIGH_GPRS = ElfNative.NT_S390_HIGH_GPRS,
+        
+        S390_TIMER = ElfNative.NT_S390_TIMER,
+        
+        S390_TODCMP = ElfNative.NT_S390_TODCMP,
+        
+        S390_TODPREG = ElfNative.NT_S390_TODPREG,
+        
+        S390_CTRS = ElfNative.NT_S390_CTRS,
+        
+        S390_PREFIX = ElfNative.NT_S390_PREFIX,
+        
+        S390_LAST_BREAK = ElfNative.NT_S390_LAST_BREAK,
+        
+        S390_SYSTEM_CALL = ElfNative.NT_S390_SYSTEM_CALL,
+        
+        S390_TDB = ElfNative.NT_S390_TDB,
+        
+        ARM_VFP = ElfNative.NT_ARM_VFP,
+        
+        ARM_TLS = ElfNative.NT_ARM_TLS,
+        
+        ARM_HW_BREAK = ElfNative.NT_ARM_HW_BREAK,
+        
+        ARM_HW_WATCH = ElfNative.NT_ARM_HW_WATCH,
+        
+        VERSION = ElfNative.NT_VERSION,
+        
+        GNU_ABI_TAG = ElfNative.NT_GNU_ABI_TAG,
+        
+        GNU_HWCAP = ElfNative.NT_GNU_HWCAP,
+        
+        GNU_BUILD_ID = ElfNative.NT_GNU_BUILD_ID,
+        
+        GNU_GOLD_VERSION = ElfNative.NT_GNU_GOLD_VERSION,
     }
 }

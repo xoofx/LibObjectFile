@@ -39,9 +39,27 @@ namespace LibObjectFile.Dwarf
             return text;
         }
 
+        public ulong GetOrCreateString(string text)
+        {
+            if (text == null) return 0;
+
+            ulong offset;
+            if (_stringToOffset.TryGetValue(text, out offset))
+            {
+                return offset;
+            }
+
+            Stream.Position = Stream.Length;
+            offset = (ulong)Stream.Position;
+            Stream.WriteStringUTF8NullTerminated(text);
+            _offsetToString[offset] = text;
+            _stringToOffset[text] = offset;
+            return offset;
+        }
+
         internal void Read(DwarfReaderWriter reader)
         {
-            if (reader.FileContext.DebugStringStream.Stream == null)
+            if (reader.Context.DebugStringStream.Stream == null)
             {
                 return;
             }
@@ -49,7 +67,7 @@ namespace LibObjectFile.Dwarf
             var previousStream = reader.Stream;
             try
             {
-                reader.Stream = reader.FileContext.DebugStringStream;
+                reader.Stream = reader.Context.DebugStringStream;
                 Stream = reader.ReadAsStream((ulong) reader.Stream.Length);
             }
             finally

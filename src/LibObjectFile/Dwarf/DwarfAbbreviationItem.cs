@@ -10,10 +10,10 @@ namespace LibObjectFile.Dwarf
     {
         public ulong Code { get; internal set; }
 
-        public DwarfTag Tag { get; set; }
+        public DwarfTagEx Tag { get; set; }
 
         public bool HasChildren { get; set; }
 
-        public List<DwarfAttributeDescriptor> Descriptors { get; set; }
+        public DwarfAttributeDescriptors Descriptors { get; set; }
     }
 }

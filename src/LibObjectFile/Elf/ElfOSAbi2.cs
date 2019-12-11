@@ -11,28 +11,33 @@ namespace LibObjectFile.Elf
     /// This is the value seen in the ident part of an Elf header at index <see cref="ElfNative.EI_OSABI"/>
     /// as well as the various machine defines (e.g <see cref="ElfNative.ELFOSABI_LINUX"/>).
     /// </summary>
-    public readonly partial struct ElfOSABI : IEquatable<ElfOSABI>
+    public readonly partial struct ElfOSABIEx : IEquatable<ElfOSABIEx>
     {
-        public ElfOSABI(byte value)
+        public ElfOSABIEx(byte value)
+        {
+            Value = (ElfOSABI)value;
+        }
+
+        public ElfOSABIEx(ElfOSABI value)
         {
             Value = value;
         }
 
-        public readonly byte Value;
+        public readonly ElfOSABI Value;
 
         public override string ToString()
         {
-            return ToStringInternal() ?? $"Unknown {nameof(ElfOSABI)} (0x{Value:X4})";
+            return ToStringInternal() ?? $"Unknown {nameof(ElfOSABIEx)} (0x{Value:X4})";
         }
 
-        public bool Equals(ElfOSABI other)
+        public bool Equals(ElfOSABIEx other)
         {
             return Value == other.Value;
         }
 
         public override bool Equals(object obj)
         {
-            return obj is ElfOSABI other && Equals(other);
+            return obj is ElfOSABIEx other && Equals(other);
         }
 
         public override int GetHashCode()
@@ -40,14 +45,20 @@ namespace LibObjectFile.Elf
             return Value.GetHashCode();
         }
 
-        public static bool operator ==(ElfOSABI left, ElfOSABI right)
+        public static bool operator ==(ElfOSABIEx left, ElfOSABIEx right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(ElfOSABI left, ElfOSABI right)
+        public static bool operator !=(ElfOSABIEx left, ElfOSABIEx right)
         {
             return !left.Equals(right);
         }
+
+        public static explicit operator byte(ElfOSABIEx osABI) => (byte)osABI.Value;
+
+        public static implicit operator ElfOSABIEx(ElfOSABI osABI) => new ElfOSABIEx(osABI);
+
+        public static implicit operator ElfOSABI(ElfOSABIEx osABI) => osABI.Value;
     }
 }

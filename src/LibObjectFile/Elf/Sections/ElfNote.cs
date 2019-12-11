@@ -21,7 +21,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Gets or sets the type of this note.
         /// </summary>
-        public abstract ElfNoteType GetNoteType();
+        public abstract ElfNoteTypeEx GetNoteType();
 
         public abstract uint GetDescriptorSize();
 

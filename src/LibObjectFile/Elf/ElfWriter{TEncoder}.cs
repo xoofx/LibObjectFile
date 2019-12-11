@@ -141,7 +141,7 @@ namespace LibObjectFile.Elf
             ObjectFile.CopyIdentTo(new Span<byte>(hdr.e_ident, EI_NIDENT));
 
             _encoder.Encode(out hdr.e_type, (ushort)ObjectFile.FileType);
-            _encoder.Encode(out hdr.e_machine, ObjectFile.Arch.Value);
+            _encoder.Encode(out hdr.e_machine, (ushort)ObjectFile.Arch.Value);
             _encoder.Encode(out hdr.e_version, EV_CURRENT);
             _encoder.Encode(out hdr.e_entry, (uint)ObjectFile.EntryPointAddress);
             _encoder.Encode(out hdr.e_ehsize, Layout.SizeOfElfHeader);
@@ -167,7 +167,7 @@ namespace LibObjectFile.Elf
             ObjectFile.CopyIdentTo(new Span<byte>(hdr.e_ident, EI_NIDENT));
 
             _encoder.Encode(out hdr.e_type, (ushort)ObjectFile.FileType);
-            _encoder.Encode(out hdr.e_machine, ObjectFile.Arch.Value);
+            _encoder.Encode(out hdr.e_machine, (ushort)ObjectFile.Arch.Value);
             _encoder.Encode(out hdr.e_version, EV_CURRENT);
             _encoder.Encode(out hdr.e_entry, ObjectFile.EntryPointAddress);
             _encoder.Encode(out hdr.e_ehsize, Layout.SizeOfElfHeader);

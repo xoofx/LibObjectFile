@@ -69,7 +69,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Gets or sets the OS ABI.
         /// </summary>
-        public ElfOSABI OSABI { get; set; }
+        public ElfOSABIEx OSABI { get; set; }
 
         /// <summary>
         /// Gets or sets the OS ABI version.
@@ -91,7 +91,7 @@ namespace LibObjectFile.Elf
         /// Gets or sets the machine architecture (e.g 386, X86_64...)
         /// From Elf Header equivalent of <see cref="ElfNative.Elf32_Ehdr.e_machine"/> or <see cref="ElfNative.Elf64_Ehdr.e_machine"/>.
         /// </summary>
-        public ElfArch Arch { get; set; }
+        public ElfArchEx Arch { get; set; }
 
         /// <summary>
         /// Entry point virtual address.

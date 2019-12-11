@@ -58,7 +58,7 @@ namespace LibObjectFile.Dwarf
             }
         }
 
-        public static uint ReadLEB128AsU32(this Stream stream)
+        public static uint ReadULEB128AsU32(this Stream stream)
         {
             var offset = stream.Position;
             var value = stream.ReadULEB128();
@@ -92,23 +92,6 @@ namespace LibObjectFile.Dwarf
             }
 
             return value;
-        }
-
-        public static unsafe T ReadLEB128As<T>(this Stream stream) where T : unmanaged
-        {
-            if (sizeof(T) > sizeof(ulong)) throw new ArgumentException($"Invalid sizeof(T) = {sizeof(T)} cannot be bigger than 8 bytes");
-            bool isU32 = sizeof(T) == sizeof(uint);
-            if (!isU32 && sizeof(T) != sizeof(ulong))
-                throw new ArgumentException($"Invalid sizeof(T) = {sizeof(T)} must be either 4 bytes or 8 bytes");
-
-            var offset = stream.Position;
-            var rawLEB = ReadULEB128(stream);
-            T* value = (T*)&rawLEB;
-            if (isU32)
-            {
-                if (rawLEB >= uint.MaxValue) throw new InvalidOperationException($"The LEB128 0x{rawLEB:x16} read from stream at offset {offset} is out of range of UInt");
-            }
-            return *value;
         }
     }
 }

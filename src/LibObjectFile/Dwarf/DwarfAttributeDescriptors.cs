@@ -3,21 +3,33 @@
 // See the license.txt file in the project root for more information.
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace LibObjectFile.Dwarf
 {
     [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
-    public readonly struct DwarfAttributeDescriptors : IEquatable<DwarfAttributeDescriptors>
+    public readonly struct DwarfAttributeDescriptors : IEquatable<DwarfAttributeDescriptors>, IEnumerable<DwarfAttributeDescriptor>
     {
         private readonly List<DwarfAttributeDescriptor> _descriptors;
 
-        public DwarfAttributeDescriptors(List<DwarfAttributeDescriptor> descriptors)
+        internal DwarfAttributeDescriptors(List<DwarfAttributeDescriptor> descriptors)
         {
             _descriptors = descriptors;
         }
-        
+
+        public int Length => _descriptors?.Count ?? 0;
+
+        public DwarfAttributeDescriptor this[int index]
+        {
+            get
+            {
+                if (_descriptors == null) throw new ArgumentException("This descriptors instance is not initialized");
+                return _descriptors[index];
+            }
+        }
+
         public bool Equals(DwarfAttributeDescriptors other)
         {
             if (ReferenceEquals(_descriptors, other._descriptors)) return true;
@@ -34,6 +46,16 @@ namespace LibObjectFile.Dwarf
             return true;
         }
 
+        public List<DwarfAttributeDescriptor>.Enumerator GetEnumerator()
+        {
+            return _descriptors.GetEnumerator();
+        }
+
+        IEnumerator<DwarfAttributeDescriptor> IEnumerable<DwarfAttributeDescriptor>.GetEnumerator()
+        {
+            return _descriptors.GetEnumerator();
+        }
+
         public override bool Equals(object obj)
         {
             return obj is DwarfAttributeDescriptors other && Equals(other);
@@ -48,6 +70,11 @@ namespace LibObjectFile.Dwarf
                 hashCode = (hashCode * 397) ^ descriptor.GetHashCode();
             }
             return hashCode;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ((IEnumerable) _descriptors).GetEnumerator();
         }
 
         private string DebuggerDisplay => $"Count = {_descriptors.Count}";

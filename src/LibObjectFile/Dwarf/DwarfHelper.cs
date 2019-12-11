@@ -4,14 +4,14 @@
 
 namespace LibObjectFile.Dwarf
 {
-    public static class DwarfHelper
+    public static partial class DwarfHelper
     {
         public static uint SizeOfUnitLength(bool is64Bit)
         {
             return is64Bit ? 12U : 4U;
         }
 
-        public static uint SizeOfNativeInt(bool is64Bit)
+        public static uint SizeOfUInt(bool is64Bit)
         {
             return is64Bit ? 8U : 4U;
         }
@@ -30,7 +30,7 @@ namespace LibObjectFile.Dwarf
             return sizeOf;
         }
 
-        public static uint SizeOfSignedLEB128(long value)
+        public static uint SizeOfILEB128(long value)
         {
             if (value == 0) return 1;
             uint sizeOf = 0;
@@ -47,6 +47,12 @@ namespace LibObjectFile.Dwarf
             }
 
             return sizeOf;
+        }
+
+        public static DwarfAttributeEncoding GetAttributeEncoding(DwarfAttributeKindEx kind)
+        {
+            if ((uint)kind.Value >= AttributeToEncoding.Length) return DwarfAttributeEncoding.None;
+            return AttributeToEncoding[(int) kind.Value];
         }
 
         private static readonly DwarfAttributeEncoding[] Encodings = new DwarfAttributeEncoding[]
@@ -81,7 +87,7 @@ namespace LibObjectFile.Dwarf
             DwarfAttributeEncoding.MacroPointer |
             DwarfAttributeEncoding.RangeList |
             DwarfAttributeEncoding.RangeListsPointer |
-            DwarfAttributeEncoding.StringOffsetsPointer, // DW_FORM_sec_offset 	0x17 
+            DwarfAttributeEncoding.StringOffsetPointer, // DW_FORM_sec_offset 	0x17 
             DwarfAttributeEncoding.ExpressionLocation , // DW_FORM_exprloc  0x18 
             DwarfAttributeEncoding.Flag               , // DW_FORM_flag_present  0x19 
             DwarfAttributeEncoding.String             , // DW_FORM_strx  0x1a 
@@ -104,12 +110,5 @@ namespace LibObjectFile.Dwarf
             DwarfAttributeEncoding.Address            , // DW_FORM_addrx3 0x2b
             DwarfAttributeEncoding.Address            , // DW_FORM_addrx4 0x2c
         };
-
-
-
-
-
-
-
     }
 }

@@ -82,7 +82,7 @@ namespace LibObjectFile.Elf
                 var nameLength = reader.Decode(nativeNote.n_namesz);
                 var descriptorLength = reader.Decode(nativeNote.n_descsz);
                 
-                var noteType = new ElfNoteType(reader.Decode(nativeNote.n_type));
+                var noteType = new ElfNoteTypeEx(reader.Decode(nativeNote.n_type));
                 var noteName = reader.ReadStringUTF8NullTerminated(nameLength);
                 SkipPaddingAlignedTo4Bytes(reader, (ulong)reader.Stream.Position - startPosition);
 
@@ -119,7 +119,7 @@ namespace LibObjectFile.Elf
                 var noteName = elfNote.GetName();
                 writer.Encode(out nativeNote.n_namesz, noteName == null ? 0 : ((uint) Encoding.UTF8.GetByteCount(noteName) + 1));
                 writer.Encode(out nativeNote.n_descsz, elfNote.GetDescriptorSize());
-                writer.Encode(out nativeNote.n_type, elfNote.GetNoteType().Value);
+                writer.Encode(out nativeNote.n_type, (uint)elfNote.GetNoteType().Value);
 
                 writer.Write(nativeNote);
 
@@ -150,11 +150,11 @@ namespace LibObjectFile.Elf
         {
             if (name == "GNU")
             {
-                switch (type.Value)
+                switch (type)
                 {
-                    case ElfNative.NT_GNU_ABI_TAG:
+                    case ElfNoteType.GNU_ABI_TAG:
                         return new ElfGnuNoteABITag();
-                    case ElfNative.NT_GNU_BUILD_ID:
+                    case ElfNoteType.GNU_BUILD_ID:
                         return new ElfGnuNoteBuildId();
                 }
             }

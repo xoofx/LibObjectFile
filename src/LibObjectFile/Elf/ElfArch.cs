@@ -11,9 +11,14 @@ namespace LibObjectFile.Elf
     /// This is the value seen in <see cref="ElfNative.Elf32_Ehdr.e_machine"/> or <see cref="ElfNative.Elf64_Ehdr.e_machine"/>
     /// as well as the various machine defines (e.g <see cref="ElfNative.EM_386"/>).
     /// </summary>
-    public readonly partial struct ElfArch : IEquatable<ElfArch>
+    public readonly partial struct ElfArchEx : IEquatable<ElfArchEx>
     {
-        public ElfArch(ushort value)
+        public ElfArchEx(ushort value)
+        {
+            Value = (ElfArch)value;
+        }
+
+        public ElfArchEx(ElfArch value)
         {
             Value = value;
         }
@@ -21,21 +26,21 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Raw value.
         /// </summary>
-        public readonly ushort Value;
+        public readonly ElfArch Value;
 
         public override string ToString()
         {
-            return ToStringInternal() ?? $"Unknown {nameof(ElfArch)} (0x{Value:X4})";
+            return ToStringInternal() ?? $"Unknown {nameof(ElfArchEx)} (0x{Value:X4})";
         }
 
-        public bool Equals(ElfArch other)
+        public bool Equals(ElfArchEx other)
         {
             return Value == other.Value;
         }
 
         public override bool Equals(object obj)
         {
-            return obj is ElfArch other && Equals(other);
+            return obj is ElfArchEx other && Equals(other);
         }
 
         public override int GetHashCode()
@@ -43,14 +48,20 @@ namespace LibObjectFile.Elf
             return Value.GetHashCode();
         }
 
-        public static bool operator ==(ElfArch left, ElfArch right)
+        public static bool operator ==(ElfArchEx left, ElfArchEx right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(ElfArch left, ElfArch right)
+        public static bool operator !=(ElfArchEx left, ElfArchEx right)
         {
             return !left.Equals(right);
         }
+
+        public static explicit operator uint(ElfArchEx arch) => (uint)arch.Value;
+
+        public static implicit operator ElfArchEx(ElfArch arch) => new ElfArchEx(arch);
+
+        public static implicit operator ElfArch(ElfArchEx arch) => arch.Value;
     }
 }

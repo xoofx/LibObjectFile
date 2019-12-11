@@ -71,7 +71,7 @@ namespace LibObjectFile.Elf
             }
 
             ObjectFile.FileType = (ElfFileType)_decoder.Decode(hdr.e_type);
-            ObjectFile.Arch = new ElfArch(_decoder.Decode(hdr.e_machine));
+            ObjectFile.Arch = new ElfArchEx(_decoder.Decode(hdr.e_machine));
             ObjectFile.Version = _decoder.Decode(hdr.e_version);
 
             ObjectFile.EntryPointAddress = _decoder.Decode(hdr.e_entry);
@@ -100,7 +100,7 @@ namespace LibObjectFile.Elf
             }
 
             ObjectFile.FileType = (ElfFileType)_decoder.Decode(hdr.e_type);
-            ObjectFile.Arch = new ElfArch(_decoder.Decode(hdr.e_machine));
+            ObjectFile.Arch = new ElfArchEx(_decoder.Decode(hdr.e_machine));
             ObjectFile.Version = _decoder.Decode(hdr.e_version);
 
             ObjectFile.EntryPointAddress = _decoder.Decode(hdr.e_entry);

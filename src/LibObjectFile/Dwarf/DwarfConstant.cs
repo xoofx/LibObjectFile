@@ -2,6 +2,8 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
+using System.IO;
+
 namespace LibObjectFile.Dwarf
 {
     public struct DwarfConstant
@@ -23,6 +25,12 @@ namespace LibObjectFile.Dwarf
             AsValue = default;
             AsObject = dieRef;
         }
+
+        public DwarfConstant(Stream stream)
+        {
+            AsValue = default;
+            AsObject = stream;
+        }
         
         public DwarfInteger AsValue;
 
@@ -31,11 +39,17 @@ namespace LibObjectFile.Dwarf
         public DwarfExpression AsExpression => AsObject as DwarfExpression;
 
         public DwarfDIE AsReference => AsObject as DwarfDIE;
-        
+
+        public Stream AsStream => AsObject as Stream;
+
+        public string AsString => AsObject as string;
+
         public override string ToString()
         {
             if (AsExpression != null) return $"Constant Expression: {AsExpression}";
             if (AsReference != null) return $"Constant Reference: {AsReference}";
+            if (AsStream != null) return $"Constant Block: Length = {AsStream.Length}";
+            if (AsString != null) return $"Constant String: {AsString}";
             return $"Constant Value: {AsValue}";
         }
 

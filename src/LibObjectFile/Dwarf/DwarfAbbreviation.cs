@@ -87,7 +87,7 @@ namespace LibObjectFile.Dwarf
             var index = code - 1;
             bool canAddToList = _mapItems == null && index < int.MaxValue &&_items.Count == (int)index;
             
-            item.Tag = reader.ReadLEB128As<DwarfTag>();
+            item.Tag = new DwarfTagEx(reader.ReadULEB128AsU32());
             var hasChildrenRaw = reader.ReadU8();
             bool hasChildren = false;
             if (hasChildrenRaw == DwarfNative.DW_CHILDREN_yes)
@@ -134,8 +134,8 @@ namespace LibObjectFile.Dwarf
 
             while (true)
             {
-                var attributeName = reader.ReadLEB128As<DwarfAttributeKey>();
-                var attributeForm = reader.ReadLEB128As<DwarfAttributeForm>();
+                var attributeName = new DwarfAttributeKindEx(reader.ReadULEB128AsU32());
+                var attributeForm = new DwarfAttributeFormEx(reader.ReadULEB128AsU32());
 
                 if (attributeForm.Value == 0 && attributeForm.Value == 0)
                 {
@@ -148,7 +148,7 @@ namespace LibObjectFile.Dwarf
 
             if (descriptors != null)
             {
-                item.Descriptors = descriptors;
+                item.Descriptors = new DwarfAttributeDescriptors(descriptors);
             }
             
             return true;
