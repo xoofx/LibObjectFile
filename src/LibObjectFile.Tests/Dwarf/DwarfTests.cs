@@ -206,6 +206,15 @@ namespace LibObjectFile.Tests.Dwarf
             var inputContext = DwarfReaderContext.FromElf(elf);
             var dwarf = DwarfFile.Read(inputContext);
 
+            dwarf.DebugAbbrevTable.Print(Console.Out);
+            
+            PrintStreamLength(inputContext);
+
+            Console.WriteLine();
+            Console.WriteLine("====================================================================");
+            Console.WriteLine("Write Back");
+            Console.WriteLine("====================================================================");
+
             var outputContext = new DwarfWriterContext
             {
                 IsLittleEndian = inputContext.IsLittleEndian,
@@ -215,6 +224,34 @@ namespace LibObjectFile.Tests.Dwarf
                 DebugInfoStream = new MemoryStream(),
             };
             dwarf.Write(outputContext);
+
+            dwarf.DebugAbbrevTable.Print(Console.Out);
+
+            PrintStreamLength(outputContext);
+        }
+
+        private static void PrintStreamLength(DwarfReaderWriterContext context)
+        {
+            if (context.DebugInfoStream.Stream != null)
+            {
+                Console.WriteLine($".debug_info {context.DebugInfoStream.Stream.Length}");
+            }
+            if (context.DebugAbbrevStream.Stream != null)
+            {
+                Console.WriteLine($".debug_abbrev {context.DebugAbbrevStream.Stream.Length}");
+            }
+            if (context.DebugAddressRangeStream.Stream != null)
+            {
+                Console.WriteLine($".debug_aranges {context.DebugAddressRangeStream.Stream.Length}");
+            }
+            if (context.DebugStringStream.Stream != null)
+            {
+                Console.WriteLine($".debug_str {context.DebugStringStream.Stream.Length}");
+            }
+            if (context.DebugLineStream.Stream != null)
+            {
+                Console.WriteLine($".debug_line {context.DebugLineStream.Stream.Length}");
+            }
         }
     }
 }
