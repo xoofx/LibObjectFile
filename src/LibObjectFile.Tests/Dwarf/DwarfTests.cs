@@ -152,7 +152,6 @@ namespace LibObjectFile.Tests.Dwarf
             var dwarf = DwarfFile.Read(inputContext);
 
             inputContext.DebugLineStream.Stream.Position = 0;
-
             var copyInputDebugLineStream = new MemoryStream();
             inputContext.DebugLineStream.Stream.CopyTo(copyInputDebugLineStream);
             inputContext.DebugLineStream.Stream.Position = 0;
@@ -187,6 +186,35 @@ namespace LibObjectFile.Tests.Dwarf
             var inputDebugLineBuffer = copyInputDebugLineStream.ToArray();
             var outputDebugLineBuffer = ((MemoryStream)reloadContext.DebugLineStream.Stream).ToArray();
             Assert.AreEqual(inputDebugLineBuffer, outputDebugLineBuffer);
+        }
+
+
+        [Test]
+        public void TestDebugInfoSmall()
+        {
+            var cppName = "small";
+            var cppObj = $"{cppName}_debug.o";
+            LinuxUtil.RunLinuxExe("gcc", $"{cppName}.cpp -g -c -o {cppObj}");
+
+            ElfObjectFile elf;
+            using (var inStream = File.OpenRead(cppObj))
+            {
+                elf = ElfObjectFile.Read(inStream);
+                elf.Print(Console.Out);
+            }
+
+            var inputContext = DwarfReaderContext.FromElf(elf);
+            var dwarf = DwarfFile.Read(inputContext);
+
+            var outputContext = new DwarfWriterContext
+            {
+                IsLittleEndian = inputContext.IsLittleEndian,
+                Is64BitAddress = inputContext.Is64BitAddress,
+                DebugAbbrevStream = new MemoryStream(),
+                DebugLineStream = new MemoryStream(),
+                DebugInfoStream = new MemoryStream(),
+            };
+            dwarf.Write(outputContext);
         }
     }
 }

@@ -787,7 +787,9 @@ namespace LibObjectFile.Dwarf
                             var dieRef = new DwarfDIEReference(offset, op, DwarfExpressionLocationDIEReferenceResolverInstance);
                             ResolveAttributeReferenceWithinCompilationUnit(dieRef, false);
                         }
-                        op.Operand1.U64 = ReadEncodedValue(kind);
+                        op.Operand1.U64 = ReadEncodedValue(kind, out var sizeOfEncodedValue);
+                        // Encode size of encoded value in Operand1
+                        op.Operand2.U64 = sizeOfEncodedValue;
                         break;
                     }
 
@@ -853,8 +855,11 @@ namespace LibObjectFile.Dwarf
                         break;
 
                     case DwarfOperationKind.GNUEncodedAddr:
-                        op.Operand1.U64 = ReadEncodedValue(kind);
+                    {
+                        op.Operand1.U64 = ReadEncodedValue(kind, out var sizeOfEncodedValue);
+                        op.Operand2.U64 = sizeOfEncodedValue;
                         break;
+                    }
 
                     case DwarfOperationKind.GNUParameterRef:
                         op.Operand1.U64 = ReadU32();
@@ -871,9 +876,9 @@ namespace LibObjectFile.Dwarf
             return exprLoc;
         }
 
-        private ulong ReadEncodedValue(DwarfOperationKind kind)
+        private ulong ReadEncodedValue(DwarfOperationKind kind, out byte size)
         {
-            var size = ReadU8();
+            size = ReadU8();
             switch (size)
             {
                 case 0:

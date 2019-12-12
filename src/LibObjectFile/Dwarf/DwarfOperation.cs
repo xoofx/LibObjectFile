@@ -9,7 +9,7 @@ namespace LibObjectFile.Dwarf
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public class DwarfOperation : ObjectFileNode<DwarfExpression>
     {
-        public DwarfOperationKind Kind { get; set; }
+        public DwarfOperationKindEx Kind { get; set; }
 
         public object Operand0 { get; set; }
 

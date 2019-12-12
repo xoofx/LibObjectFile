@@ -747,8 +747,10 @@ namespace LibObjectFile.Dwarf
             }
         }
 
-        internal void Write(DwarfReaderWriter writer)
+        internal void Write(DwarfWriter writer)
         {
+            if (writer.Context.DebugLineStream.Stream == null) return;
+
             var currentStream = writer.Stream;
             try
             {
@@ -761,7 +763,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        private void Write(DwarfReaderWriter writer, TextWriter rawDump)
+        private void Write(DwarfWriter writer, TextWriter rawDump)
         {
             var startOffset = writer.Offset;
 

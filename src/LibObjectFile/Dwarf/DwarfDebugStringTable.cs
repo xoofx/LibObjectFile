@@ -39,6 +39,12 @@ namespace LibObjectFile.Dwarf
             return text;
         }
 
+        public bool ContainsString(string text)
+        {
+            if (text == null) return false;
+            return _stringToOffset.ContainsKey(text);
+        }
+
         public ulong GetOrCreateString(string text)
         {
             if (text == null) return 0;
@@ -81,7 +87,7 @@ namespace LibObjectFile.Dwarf
             return true;
         }
 
-        public void Write(DwarfReaderWriter writer)
+        public void Write(DwarfWriter writer)
         {
         }
     }

@@ -60,7 +60,6 @@ namespace LibObjectFile.Dwarf
             DebugStringTable?.Read(reader);
             DebugLineSection?.Read(reader);
             DebugAddressRangeTable?.Read(reader);
-
             DebugInfoSection?.Read(reader, reader.Context.DebugInfoStream, DwarfUnitKind.Compile);
         }
 
@@ -75,20 +74,36 @@ namespace LibObjectFile.Dwarf
             DebugAddressRangeTable?.Verify(diagnostics);
             DebugInfoSection?.Verify(diagnostics);
 
+            // Update layout
             if (!diagnostics.HasErrors)
             {
                 DebugLineSection?.TryUpdateLayout(diagnostics);
                 DebugAddressRangeTable?.TryUpdateLayout(diagnostics);
-                DebugInfoSection?.TryUpdateLayout(diagnostics);
             }
+            CheckErrors(diagnostics);
 
+            // Reset the abbreviation table
+            // TODO: Make this configurable via the DwarfWriterContext
+            DebugAbbrevTable?.Reset();
+
+            var writer = new DwarfWriter(writerContext, diagnostics);
+            writer.UpdateLayout(diagnostics, DebugInfoSection);
+            CheckErrors(diagnostics);
+
+            // Update the abbrev table right after we have computed the entire layout of this 
+            DebugAbbrevTable?.TryUpdateLayout(diagnostics);
+
+            CheckErrors(diagnostics);
+
+            Write(writer);
+        }
+
+        private static void CheckErrors(DiagnosticBag diagnostics)
+        {
             if (diagnostics.HasErrors)
             {
                 throw new ObjectFileException("Unexpected errors while verifying and updating the layout", diagnostics);
             }
-
-            var writer = new DwarfWriter(writerContext, diagnostics);
-            Write(writer);
         }
 
         public static DwarfFile Read(DwarfReaderContext readerContext)
@@ -107,12 +122,13 @@ namespace LibObjectFile.Dwarf
             return Read(readerContext);
         }
 
-        private void Write(DwarfReaderWriter writer)
+        private void Write(DwarfWriter writer)
         {
+            DebugAbbrevTable?.Write(writer);
             DebugStringTable?.Write(writer);
             DebugLineSection?.Write(writer);
             DebugAddressRangeTable?.Write(writer);
-            DebugInfoSection?.Write(writer);
+            DebugInfoSection?.Write(writer, writer.Context.DebugInfoStream.Stream);
         }
     }
 }

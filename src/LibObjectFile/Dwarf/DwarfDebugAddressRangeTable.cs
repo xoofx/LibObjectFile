@@ -141,7 +141,7 @@ namespace LibObjectFile.Dwarf
             return true;
         }
 
-        internal void Write(DwarfReaderWriter writer)
+        internal void Write(DwarfWriter writer)
         {
         }
     }

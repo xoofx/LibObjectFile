@@ -7,13 +7,13 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime;
 
 namespace LibObjectFile.Dwarf
 {
     public class DwarfWriter : DwarfReaderWriter
     {
-        private Dictionary<DwarfDIE, DwarfAbbreviationItem> _mapDIEToAbbreviationCode;
-        private Queue<DwarfDIE> _diesToWrite;
+        private readonly Dictionary<DwarfDIE, DwarfAbbreviationItem> _mapDIEToAbbreviationCode;
         private DwarfFile _parent;
         private DwarfUnit _currentUnit;
         private ulong _sizeOf;
@@ -21,6 +21,7 @@ namespace LibObjectFile.Dwarf
 
         internal DwarfWriter(DwarfWriterContext context, DiagnosticBag diagnostics) : base(context, diagnostics)
         {
+            _mapDIEToAbbreviationCode = new Dictionary<DwarfDIE, DwarfAbbreviationItem>();
         }
 
         public override bool IsReadOnly => false;
@@ -29,6 +30,7 @@ namespace LibObjectFile.Dwarf
         
         internal void UpdateLayout(DiagnosticBag diagnostics, DwarfDebugInfoSection debugInfo)
         {
+            _parent = debugInfo.Parent;
             var previousDiagnostics = Diagnostics;
             Diagnostics = diagnostics;
             try
@@ -47,7 +49,7 @@ namespace LibObjectFile.Dwarf
 
         }
 
-        internal void UpdateLayoutUnit(DwarfUnit unit)
+        private void UpdateLayoutUnit(DwarfUnit unit)
         {
             unit.Offset = _sizeOf;
 
@@ -73,7 +75,7 @@ namespace LibObjectFile.Dwarf
             // Compute the full layout of all DIE and attributes (once abbreviation are calculated)
             UpdateLayoutDIE(unit.Root);
             
-            unit.Size = _sizeOf;
+            unit.Size = _sizeOf - unit.Offset;
         }
 
         private void UpdateLayoutDIE(DwarfDIE die)
@@ -82,7 +84,6 @@ namespace LibObjectFile.Dwarf
 
             var abbreviationItem = _mapDIEToAbbreviationCode[die];
             _sizeOf += DwarfHelper.SizeOfULEB128(abbreviationItem.Code); // WriteULEB128(abbreviationItem.Code);
-
 
             var descriptors = abbreviationItem.Descriptors;
             for (var i = 0; i < die.Attributes.Count; i++)
@@ -94,14 +95,15 @@ namespace LibObjectFile.Dwarf
 
             foreach (var children in die.Children)
             {
-                UpdateLayoutDIE(die);
+                UpdateLayoutDIE(children);
             }
 
-            die.Size = _sizeOf;
+            die.Size = _sizeOf - die.Offset;
         }
         
         internal void Write(DwarfDebugInfoSection debugInfo)
         {
+            _parent = debugInfo.Parent;
             foreach (var unit in debugInfo.Units)
             {
                 _currentUnit = unit;
@@ -131,6 +133,8 @@ namespace LibObjectFile.Dwarf
 
         private void WriteDIE(DwarfDIE die)
         {
+            var startDIEOffset = Offset;
+            Debug.Assert(die.Offset == startDIEOffset);
             var abbreviationItem = _mapDIEToAbbreviationCode[die];
             WriteULEB128(abbreviationItem.Code);
 
@@ -144,18 +148,18 @@ namespace LibObjectFile.Dwarf
 
             foreach (var children in die.Children)
             {
-                WriteDIE(die);
+                WriteDIE(children);
             }
+            Debug.Assert(die.Size == Offset - startDIEOffset);
         }
         
         private void ComputeAbbreviation(DwarfUnit unit)
         {
-            if (unit.Abbreviation == null)
-            {
-                var abbreviation = new DwarfAbbreviation();
-                unit.Abbreviation = abbreviation;
-                _parent.DebugAbbrevTable.AddAbbreviation(abbreviation);
-            }
+            // Reset a new abbreviation
+            // TODO: Make this configurable
+            var abbreviation = new DwarfAbbreviation();
+            unit.Abbreviation = abbreviation;
+            _parent.DebugAbbrevTable.AddAbbreviation(abbreviation);
 
             _currentAbbreviation = unit.Abbreviation;
             ComputeAbbreviationItem(unit.Root);
@@ -185,7 +189,7 @@ namespace LibObjectFile.Dwarf
 
             foreach (var children in die.Children)
             {
-                ComputeAbbreviationItem(die);
+                ComputeAbbreviationItem(children);
             }
         }
 
@@ -196,7 +200,21 @@ namespace LibObjectFile.Dwarf
 
             if (encoding == DwarfAttributeEncoding.None)
             {
-                throw new InvalidOperationException($"Unsupported attribute {attr} with unknown encoding");
+                switch (attr.Kind.Value)
+                {
+                    case DwarfAttributeKind.GNUAllCallSites:
+                    case DwarfAttributeKind.GNUAllTailCallSites:
+                        encoding = DwarfAttributeEncoding.Flag;
+                        break;
+                    case DwarfAttributeKind.GNUCallSiteTarget:
+                    case DwarfAttributeKind.GNUCallSiteValue:
+                        encoding = DwarfAttributeEncoding.ExpressionLocation | DwarfAttributeEncoding.LocationList;
+                        break;
+
+                    default:
+                        // TODO: Add pluggable support for requesting attribute encoding here
+                        throw new InvalidOperationException($"Unsupported attribute {attr} with unknown encoding");
+                }
             }
 
             // If the attribute has a requested encoding
@@ -209,6 +227,60 @@ namespace LibObjectFile.Dwarf
                 }
                 // Replace encoding with requested encoding
                 encoding = requestedEncoding;
+            }
+
+            // Do we still have a complex encoding?
+            if ((((uint)encoding) & ((uint)encoding - 1)) != 0U)
+            {
+                // if we have, try to detect which one we should select
+                if (attr.ValueAsObject is DwarfDIE)
+                {
+                    if ((encoding & DwarfAttributeEncoding.Reference) == 0)
+                    {
+                        Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The DIE value of attribute {attr} from DIE {attr.Parent} is not valid for supported attribute encoding {encoding}. Expecting Reference.");
+                    }
+                    encoding = DwarfAttributeEncoding.Reference;
+                }
+                else if (attr.ValueAsObject is Stream)
+                {
+                    if ((encoding & DwarfAttributeEncoding.Block) == 0)
+                    {
+                        Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The Stream value of attribute {attr} from DIE {attr.Parent} is not valid for supported attribute encoding {encoding}. Expecting Block.");
+                    }
+                    encoding = DwarfAttributeEncoding.Block;
+                }
+                else if (attr.ValueAsObject is string)
+                {
+                    if ((encoding & DwarfAttributeEncoding.String) == 0)
+                    {
+                        Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The string value of attribute {attr} from DIE {attr.Parent} is not valid for supported attribute encoding {encoding}. Expecting String.");
+                    }
+                    encoding = DwarfAttributeEncoding.String;
+                }
+                else if (attr.ValueAsObject is DwarfExpression)
+                {
+                    if ((encoding & DwarfAttributeEncoding.ExpressionLocation) == 0)
+                    {
+                        Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The string value of attribute {attr} from DIE {attr.Parent} is not valid for supported attribute encoding {encoding}. Expecting ExpressionLocation.");
+                    }
+                    encoding = DwarfAttributeEncoding.ExpressionLocation;
+                }
+                else if ((encoding & DwarfAttributeEncoding.Address) != 0)
+                {
+                    if (attr.ValueAsObject != null)
+                    {
+                        Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The {attr.ValueAsObject.GetType()} value of attribute {attr} from DIE {attr.Parent} is not valid for supported attribute encoding {encoding}. Expecting Address.");
+                    }
+                    encoding = DwarfAttributeEncoding.Address;
+                }
+                else if ((encoding & DwarfAttributeEncoding.Constant) != 0)
+                {
+                    if (attr.ValueAsObject != null)
+                    {
+                        Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The {attr.ValueAsObject.GetType()} value of attribute {attr} from DIE {attr.Parent} is not valid for supported attribute encoding {encoding}. Expecting Constant.");
+                    }
+                    encoding = DwarfAttributeEncoding.Constant;
+                }
             }
 
             switch (encoding)
@@ -248,22 +320,26 @@ namespace LibObjectFile.Dwarf
                 case DwarfAttributeEncoding.ExpressionLocation:
                     VerifyAttributeValueNotNull(attr);
 
-                    if (!(attr.ValueAsObject is DwarfDIE))
+                    if (!(attr.ValueAsObject is DwarfExpression))
                     {
-                        Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The value of attribute {attr} from DIE {attr.Parent} must be a {nameof(DwarfDIE)}");
+                        Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The value of attribute {attr} from DIE {attr.Parent} must be a {nameof(DwarfExpression)}");
                     }
 
-                    return DwarfAttributeForm.Ref4;
+                    return DwarfAttributeForm.Exprloc;
 
                 case DwarfAttributeEncoding.Flag:
                     return attr.ValueAsBoolean ? DwarfAttributeForm.FlagPresent : DwarfAttributeForm.Flag;
 
                 case DwarfAttributeEncoding.LinePointer:
-                    VerifyAttributeValueNotNull(attr);
-
-                    if (!(attr.ValueAsObject is DwarfDebugLine))
+                    bool canHaveNull = attr.Kind.Value == DwarfAttributeKind.StmtList;
+                    if (!canHaveNull)
                     {
-                        Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The value of attribute {attr} from DIE {attr.Parent} must be a {nameof(DwarfDebugLine)}");
+                        VerifyAttributeValueNotNull(attr);
+
+                        if (!(attr.ValueAsObject is DwarfDebugLine))
+                        {
+                            Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The value of attribute {attr} from DIE {attr.Parent} must be a {nameof(DwarfDebugLine)}");
+                        }
                     }
 
                     return DwarfAttributeForm.SecOffset;
@@ -285,14 +361,17 @@ namespace LibObjectFile.Dwarf
                     if (attr.ValueAsObject is string str)
                     {
                         // Create string offset
-                        _parent.DebugStringTable.GetOrCreateString(str);
+                        if (_parent.DebugStringTable.ContainsString(str))
+                        {
+                            return DwarfAttributeForm.Strp;
+                        }
                     }
                     else
                     {
                         Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The value of attribute {attr} from DIE {attr.Parent} must be a string.");
                     }
 
-                    return DwarfAttributeForm.Strp;
+                    return DwarfAttributeForm.String;
 
                 case DwarfAttributeEncoding.RangeList:
                 case DwarfAttributeEncoding.LocationList:
@@ -326,7 +405,7 @@ namespace LibObjectFile.Dwarf
             switch (form.Value)
             {
                 case DwarfAttributeForm.Addr:
-                    _sizeOf += DwarfHelper.SizeOfUInt(Is64BitEncoding); // WriteUInt(attr.ValueAsU64);
+                    _sizeOf += DwarfHelper.SizeOfUInt(Is64BitAddress); // WriteUInt(attr.ValueAsU64);
                     break;
                 case DwarfAttributeForm.Data1:
                     _sizeOf += 1; // WriteU8((byte)attr.ValueAsU64);
@@ -424,7 +503,15 @@ namespace LibObjectFile.Dwarf
                     break;
 
                 case DwarfAttributeForm.Exprloc:
+                    var expr = (DwarfExpression) attr.ValueAsObject;
                     UpdateLayoutExpression((DwarfExpression)attr.ValueAsObject);
+                    var deltaLength = DwarfHelper.SizeOfULEB128(expr.Size);
+                    expr.Offset += deltaLength;
+                    foreach (var op in expr.InternalOperations)
+                    {
+                        op.Offset += deltaLength;
+                    }
+                    _sizeOf += deltaLength;
                     break;
 
                 case DwarfAttributeForm.FlagPresent:
@@ -482,7 +569,7 @@ namespace LibObjectFile.Dwarf
             // 1 byte per opcode
             _sizeOf += 1;
 
-            switch (op.Kind)
+            switch (op.Kind.Value)
             {
                 case DwarfOperationKind.Addr:
                     _sizeOf += DwarfHelper.SizeOfUInt(Is64BitAddress);
@@ -737,7 +824,7 @@ namespace LibObjectFile.Dwarf
                         // must be a DW_TAG_base_type entry that provides the type of the constant provided
 
                         _sizeOf += SizeOfDIEReference(op);
-                        _sizeOf += SizeOfEncodedValue(op.Operand1.U64);
+                        _sizeOf += SizeOfEncodedValue(op.Kind, op.Operand1.U64, (byte)op.Operand2.U64);
                         break;
                     }
 
@@ -782,7 +869,7 @@ namespace LibObjectFile.Dwarf
                     break;
 
                 case DwarfOperationKind.GNUEncodedAddr:
-                    _sizeOf += SizeOfEncodedValue(op.Operand1.U64);
+                    _sizeOf += SizeOfEncodedValue(op.Kind, op.Operand1.U64, (byte)op.Operand2.U64);
                     break;
 
                 case DwarfOperationKind.GNUParameterRef:
@@ -823,19 +910,32 @@ namespace LibObjectFile.Dwarf
 
             return 0U;
         }
-
-
-        private static ulong SizeOfEncodedValue(ulong value)
+        
+        private ulong SizeOfEncodedValue(DwarfOperationKindEx kind, ulong value, byte size)
         {
-            if (value <= byte.MaxValue) return 1 + 1;
-            if (value <= ushort.MaxValue) return 1 + 2;
-            if (value <= uint.MaxValue) return 1 + 4;
-            return 1 + 8;
+            switch (size)
+            {
+                case 0:
+                    return 1 + DwarfHelper.SizeOfUInt(Is64BitAddress);
+                case 1:
+                    return 1 + 1;
+                case 2:
+                    return 1 + 2;
+                case 4:
+                    return 1 + 4;
+                case 8:
+                    return 1 + 8;
+                default:
+                    // TODO: report via diagnostics in Verify
+                    throw new InvalidOperationException($"Invalid Encoded address size {size} for {kind}");
+            }
         }
 
         private void WriteAttribute(DwarfAttributeFormEx form, DwarfAttribute attr)
         {
-
+            var startAttributeOffset = Offset;
+            Debug.Assert(attr.Offset == startAttributeOffset);
+            
             switch (form.Value)
             {
                 case DwarfAttributeForm.Addr:
@@ -1017,15 +1117,368 @@ namespace LibObjectFile.Dwarf
                 default:
                     throw new NotSupportedException($"Unknown {nameof(DwarfAttributeForm)}: {form}");
             }
+
+            Debug.Assert(Offset - startAttributeOffset == attr.Size);
         }
 
         private void WriteExpression(DwarfExpression expression)
         {
             WriteULEB128(expression.Size);
-
-            foreach(var op in expression.Operations)
+            
+            var startExpressionOffset = Offset;
+            Debug.Assert(startExpressionOffset == expression.Offset);
+            
+            foreach (var op in expression.Operations)
             {
-                // TODO
+                WriteOperation(op);
+            }
+
+            Debug.Assert(Offset - startExpressionOffset == expression.Size);
+        }
+
+        private void WriteOperation(DwarfOperation op)
+        {
+            var startOpOffset = Offset;
+            Debug.Assert(startOpOffset == op.Offset);
+
+            WriteU8((byte)op.Kind);
+            
+            switch (op.Kind.Value)
+            {
+                case DwarfOperationKind.Addr:
+                    WriteUInt(op.Operand1.U64);
+                    break;
+                case DwarfOperationKind.Const1u:
+                case DwarfOperationKind.Const1s:
+                case DwarfOperationKind.Pick:
+                case DwarfOperationKind.DerefSize:
+                case DwarfOperationKind.XderefSize:
+                    WriteU8((byte)op.Operand1.U64);
+                    break;
+
+                case DwarfOperationKind.Const2u:
+                case DwarfOperationKind.Const2s:
+                    WriteU16((ushort)op.Operand1.U64);
+                    break;
+
+                case DwarfOperationKind.Const4u:
+                case DwarfOperationKind.Const4s:
+                    WriteU32((uint)op.Operand1.U64);
+                    break;
+
+                case DwarfOperationKind.Const8u:
+                case DwarfOperationKind.Const8s:
+                    WriteU64(op.Operand1.U64);
+                    break;
+
+                case DwarfOperationKind.Constu:
+                case DwarfOperationKind.PlusUconst:
+                case DwarfOperationKind.Regx:
+                case DwarfOperationKind.Piece:
+                case DwarfOperationKind.Addrx:
+                case DwarfOperationKind.GNUAddrIndex:
+                case DwarfOperationKind.Constx:
+                case DwarfOperationKind.GNUConstIndex:
+                    WriteULEB128(op.Operand1.U64);
+                    break;
+
+                case DwarfOperationKind.Consts:
+                case DwarfOperationKind.Fbreg:
+                    WriteILEB128(op.Operand1.I64);
+                    break;
+
+                case DwarfOperationKind.Deref:
+                case DwarfOperationKind.Dup:
+                case DwarfOperationKind.Drop:
+                case DwarfOperationKind.Over:
+                case DwarfOperationKind.Swap:
+                case DwarfOperationKind.Rot:
+                case DwarfOperationKind.Xderef:
+                case DwarfOperationKind.Abs:
+                case DwarfOperationKind.And:
+                case DwarfOperationKind.Div:
+                case DwarfOperationKind.Minus:
+                case DwarfOperationKind.Mod:
+                case DwarfOperationKind.Mul:
+                case DwarfOperationKind.Neg:
+                case DwarfOperationKind.Not:
+                case DwarfOperationKind.Or:
+                case DwarfOperationKind.Plus:
+                case DwarfOperationKind.Shl:
+                case DwarfOperationKind.Shr:
+                case DwarfOperationKind.Shra:
+                case DwarfOperationKind.Xor:
+                case DwarfOperationKind.Eq:
+                case DwarfOperationKind.Ge:
+                case DwarfOperationKind.Gt:
+                case DwarfOperationKind.Le:
+                case DwarfOperationKind.Lt:
+                case DwarfOperationKind.Ne:
+                case DwarfOperationKind.Nop:
+                case DwarfOperationKind.PushObjectAddress:
+                case DwarfOperationKind.FormTlsAddress:
+                case DwarfOperationKind.CallFrameCfa:
+                    break;
+
+                case DwarfOperationKind.Bra:
+                case DwarfOperationKind.Skip:
+                    WriteU16((ushort)((long)Offset + 2 - (long)((DwarfOperation) op.Operand0).Offset));
+                    break;
+
+                case DwarfOperationKind.Lit0:
+                case DwarfOperationKind.Lit1:
+                case DwarfOperationKind.Lit2:
+                case DwarfOperationKind.Lit3:
+                case DwarfOperationKind.Lit4:
+                case DwarfOperationKind.Lit5:
+                case DwarfOperationKind.Lit6:
+                case DwarfOperationKind.Lit7:
+                case DwarfOperationKind.Lit8:
+                case DwarfOperationKind.Lit9:
+                case DwarfOperationKind.Lit10:
+                case DwarfOperationKind.Lit11:
+                case DwarfOperationKind.Lit12:
+                case DwarfOperationKind.Lit13:
+                case DwarfOperationKind.Lit14:
+                case DwarfOperationKind.Lit15:
+                case DwarfOperationKind.Lit16:
+                case DwarfOperationKind.Lit17:
+                case DwarfOperationKind.Lit18:
+                case DwarfOperationKind.Lit19:
+                case DwarfOperationKind.Lit20:
+                case DwarfOperationKind.Lit21:
+                case DwarfOperationKind.Lit22:
+                case DwarfOperationKind.Lit23:
+                case DwarfOperationKind.Lit24:
+                case DwarfOperationKind.Lit25:
+                case DwarfOperationKind.Lit26:
+                case DwarfOperationKind.Lit27:
+                case DwarfOperationKind.Lit28:
+                case DwarfOperationKind.Lit29:
+                case DwarfOperationKind.Lit30:
+                case DwarfOperationKind.Lit31:
+                case DwarfOperationKind.Reg0:
+                case DwarfOperationKind.Reg1:
+                case DwarfOperationKind.Reg2:
+                case DwarfOperationKind.Reg3:
+                case DwarfOperationKind.Reg4:
+                case DwarfOperationKind.Reg5:
+                case DwarfOperationKind.Reg6:
+                case DwarfOperationKind.Reg7:
+                case DwarfOperationKind.Reg8:
+                case DwarfOperationKind.Reg9:
+                case DwarfOperationKind.Reg10:
+                case DwarfOperationKind.Reg11:
+                case DwarfOperationKind.Reg12:
+                case DwarfOperationKind.Reg13:
+                case DwarfOperationKind.Reg14:
+                case DwarfOperationKind.Reg15:
+                case DwarfOperationKind.Reg16:
+                case DwarfOperationKind.Reg17:
+                case DwarfOperationKind.Reg18:
+                case DwarfOperationKind.Reg19:
+                case DwarfOperationKind.Reg20:
+                case DwarfOperationKind.Reg21:
+                case DwarfOperationKind.Reg22:
+                case DwarfOperationKind.Reg23:
+                case DwarfOperationKind.Reg24:
+                case DwarfOperationKind.Reg25:
+                case DwarfOperationKind.Reg26:
+                case DwarfOperationKind.Reg27:
+                case DwarfOperationKind.Reg28:
+                case DwarfOperationKind.Reg29:
+                case DwarfOperationKind.Reg30:
+                case DwarfOperationKind.Reg31:
+                case DwarfOperationKind.StackValue:
+                    break;
+
+                case DwarfOperationKind.Breg0:
+                case DwarfOperationKind.Breg1:
+                case DwarfOperationKind.Breg2:
+                case DwarfOperationKind.Breg3:
+                case DwarfOperationKind.Breg4:
+                case DwarfOperationKind.Breg5:
+                case DwarfOperationKind.Breg6:
+                case DwarfOperationKind.Breg7:
+                case DwarfOperationKind.Breg8:
+                case DwarfOperationKind.Breg9:
+                case DwarfOperationKind.Breg10:
+                case DwarfOperationKind.Breg11:
+                case DwarfOperationKind.Breg12:
+                case DwarfOperationKind.Breg13:
+                case DwarfOperationKind.Breg14:
+                case DwarfOperationKind.Breg15:
+                case DwarfOperationKind.Breg16:
+                case DwarfOperationKind.Breg17:
+                case DwarfOperationKind.Breg18:
+                case DwarfOperationKind.Breg19:
+                case DwarfOperationKind.Breg20:
+                case DwarfOperationKind.Breg21:
+                case DwarfOperationKind.Breg22:
+                case DwarfOperationKind.Breg23:
+                case DwarfOperationKind.Breg24:
+                case DwarfOperationKind.Breg25:
+                case DwarfOperationKind.Breg26:
+                case DwarfOperationKind.Breg27:
+                case DwarfOperationKind.Breg28:
+                case DwarfOperationKind.Breg29:
+                case DwarfOperationKind.Breg30:
+                case DwarfOperationKind.Breg31:
+                    WriteILEB128(op.Operand2.I64);
+                    break;
+
+                case DwarfOperationKind.Bregx:
+                    WriteULEB128(op.Operand1.U64);
+                    WriteILEB128(op.Operand2.I64);
+                    break;
+
+                case DwarfOperationKind.Call2:
+                    WriteU16((ushort)((DwarfDIE)op.Operand0).Offset);
+                    break;
+
+                case DwarfOperationKind.Call4:
+                    WriteU32((uint)((DwarfDIE)op.Operand0).Offset);
+                    break;
+
+                case DwarfOperationKind.CallRef:
+                    WriteUInt(((DwarfDIE)op.Operand0).Offset);
+                    break;
+
+                case DwarfOperationKind.BitPiece:
+                    WriteULEB128(op.Operand1.U64);
+                    WriteULEB128(op.Operand2.U64);
+                    break;
+
+                case DwarfOperationKind.ImplicitValue:
+                {
+                    var stream = (Stream) op.Operand0;
+                    WriteULEB128((ulong)stream.Position);
+                    Write(stream);
+                    break;
+                }
+
+                case DwarfOperationKind.ImplicitPointer:
+                case DwarfOperationKind.GNUImplicitPointer:
+                {
+                    ulong offset = ((DwarfDIE) op.Operand0).Offset;
+                    //  a reference to a debugging information entry that describes the dereferenced object’s value
+                    if (_currentUnit.Version == 2)
+                    {
+                        WriteUInt(offset);
+                    }
+                    else
+                    {
+                        WriteUIntFromEncoding(offset);
+                    }
+                    //  a signed number that is treated as a byte offset from the start of that value
+                    WriteILEB128(op.Operand1.I64);
+                    break;
+                }
+
+                case DwarfOperationKind.EntryValue:
+                case DwarfOperationKind.GNUEntryValue:
+                {
+                    var expression = (DwarfExpression) op.Operand0;
+                    WriteULEB128(expression.Size);
+                    WriteExpression(expression);
+                    break;
+                }
+
+                case DwarfOperationKind.ConstType:
+                case DwarfOperationKind.GNUConstType:
+                {
+                    // The DW_OP_const_type operation takes three operands
+
+                    // The first operand is an unsigned LEB128 integer that represents the offset
+                    // of a debugging information entry in the current compilation unit, which
+                    // must be a DW_TAG_base_type entry that provides the type of the constant provided
+                    WriteULEB128(((DwarfDIE)op.Operand0).Offset);
+                    WriteEncodedValue(op.Kind, op.Operand1.U64, (byte)op.Operand2.U64);
+                    break;
+                }
+
+                case DwarfOperationKind.RegvalType:
+                case DwarfOperationKind.GNURegvalType:
+                {
+                    // The DW_OP_regval_type operation provides the contents of a given register
+                    // interpreted as a value of a given type
+
+                    // The first operand is an unsigned LEB128 number, which identifies a register
+                    // whose contents is to be pushed onto the stack
+                    WriteULEB128(op.Operand1.U64);
+
+                    // The second operand is an unsigned LEB128 number that represents the offset
+                    // of a debugging information entry in the current compilation unit
+                    WriteULEB128(((DwarfDIE)op.Operand0).Offset);
+                    break;
+                }
+
+                case DwarfOperationKind.DerefType:
+                case DwarfOperationKind.GNUDerefType:
+                case DwarfOperationKind.XderefType:
+                {
+                    // The DW_OP_deref_type operation behaves like the DW_OP_deref_size operation:
+                    // it pops the top stack entry and treats it as an address.
+
+                    // This operand is a 1-byte unsigned integral constant whose value which is the
+                    // same as the size of the base type referenced by the second operand
+                    WriteU8((byte)op.Operand1.U64);
+
+                    // The second operand is an unsigned LEB128 number that represents the offset
+                    // of a debugging information entry in the current compilation unit
+                    WriteULEB128(((DwarfDIE)op.Operand0).Offset);
+                    break;
+                }
+
+                case DwarfOperationKind.Convert:
+                case DwarfOperationKind.GNUConvert:
+                case DwarfOperationKind.Reinterpret:
+                case DwarfOperationKind.GNUReinterpret:
+                    WriteULEB128(((DwarfDIE)op.Operand0).Offset);
+                    break;
+
+                case DwarfOperationKind.GNUPushTlsAddress:
+                case DwarfOperationKind.GNUUninit:
+                    break;
+
+                case DwarfOperationKind.GNUEncodedAddr:
+                    WriteEncodedValue(op.Kind, op.Operand1.U64, (byte)op.Operand2.U64);
+                    break;
+
+                case DwarfOperationKind.GNUParameterRef:
+                    WriteU32((uint)op.Operand1.U64);
+                    break;
+
+                default:
+                    throw new NotSupportedException($"The {nameof(DwarfOperationKind)} {op.Kind} is not supported");
+            }
+
+            Debug.Assert(Offset - startOpOffset == op.Size);
+        }
+
+        private void WriteEncodedValue(DwarfOperationKindEx kind, ulong value, byte size)
+        {
+            WriteU8(size);
+            switch (size)
+            {
+                case 0:
+                    WriteUInt(value);
+                    break;
+                case 1:
+                    WriteU8((byte)value);
+                    break;
+                case 2:
+                    WriteU16((ushort)value);
+                    break;
+                case 4:
+                    WriteU32((uint) value);
+                    break;
+                case 8:
+                    WriteU64(value);
+                    break;
+                default:
+                    // TODO: report via diagnostics in Verify
+                    throw new InvalidOperationException($"Invalid Encoded address size {size} for {kind}");
             }
         }
     }

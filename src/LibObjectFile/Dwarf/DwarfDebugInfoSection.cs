@@ -54,9 +54,20 @@ namespace LibObjectFile.Dwarf
             return true;
         }
 
-        internal void Write(DwarfReaderWriter writer)
+        internal void Write(DwarfWriter writer, Stream stream)
         {
-            // TODO
+            if (stream == null) return;
+
+            var previousStream = stream;
+            writer.Stream = stream;
+            try
+            {
+                writer.Write(this);
+            } 
+            finally
+            {
+                writer.Stream = previousStream;
+            }
         }
     }
 }

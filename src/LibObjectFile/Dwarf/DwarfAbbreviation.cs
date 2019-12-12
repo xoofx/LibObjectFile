@@ -27,6 +27,20 @@ namespace LibObjectFile.Dwarf
 
         public void Reset()
         {
+            // Reset parent dependency
+            foreach (var dwarfAbbreviationItem in _items)
+            {
+                dwarfAbbreviationItem.Parent = null;
+            }
+
+            if (_mapItems.Count > 0)
+            {
+                foreach (var keyPair in _mapItems)
+                {
+                    keyPair.Value.Parent = null;
+                }
+            }
+
             _items.Clear();
             _mapItems.Clear();
             _mapKeyToItem.Clear();
@@ -126,6 +140,7 @@ namespace LibObjectFile.Dwarf
 
         private bool TryReadNext(Stream reader, DiagnosticBag diagnostics)
         {
+            var startOffset = (ulong)reader.Position;
             var code = reader.ReadULEB128();
             if (code == 0)
             {
@@ -201,13 +216,133 @@ namespace LibObjectFile.Dwarf
 
             var key = new DwarfAbbreviationItemKey(item.Tag, item.HasChildren, item.Descriptors);
             _mapKeyToItem.Add(key, item);
+
+            item.Offset = startOffset;
+            item.Size = (ulong) reader.Position - startOffset;
             
             return true;
         }
 
         public override bool TryUpdateLayout(DiagnosticBag diagnostics)
         {
+            if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
+
+            var offset = Offset;
+
+            if (_mapItems.Count > 0)
+            {
+                foreach(var itemPair in _mapItems)
+                {
+                    var item = itemPair.Value;
+                    item.Offset = offset;
+                    TryUpdateLayout(item);
+                    offset += item.Size;
+                }
+
+            }
+            else
+            {
+                if (_items.Count > 0)
+                {
+                    foreach(var item in _items)
+                    {
+                        item.Offset = offset;
+                        TryUpdateLayout(item);
+                        offset += item.Size;
+                    }
+                }
+            }
+
+            offset += DwarfHelper.SizeOfULEB128(0);
+            
+            Size = offset;
+
             return true;
+        }
+
+        private void TryUpdateLayout(DwarfAbbreviationItem item)
+        {
+            ulong offset = 0;
+
+            // Code
+            offset += DwarfHelper.SizeOfULEB128(item.Code);
+
+            // Tag
+            offset += DwarfHelper.SizeOfULEB128((uint) item.Tag.Value);
+
+            // HasChildren
+            offset += 1;
+
+            var descriptors = item.Descriptors;
+            for (int i = 0; i < descriptors.Length; i++)
+            {
+                var descriptor = descriptors[i];
+                offset += DwarfHelper.SizeOfULEB128((uint) descriptor.Kind.Value);
+                offset += DwarfHelper.SizeOfULEB128((uint) descriptor.Form.Value);
+            }
+
+            // Null Kind and Form
+            offset += DwarfHelper.SizeOfULEB128(0) * 2;
+
+            item.Size = offset;
+        }
+        
+
+        internal void Write(DwarfWriter writer)
+        {
+            var startOffset = writer.Offset;
+            Debug.Assert(startOffset == Offset);
+            if (_mapItems.Count > 0)
+            {
+                foreach (var itemPair in _mapItems)
+                {
+                    var item = itemPair.Value;
+                    Write(writer, item);
+                }
+
+            }
+            else
+            {
+                if (_items.Count > 0)
+                {
+                    foreach (var item in _items)
+                    {
+                        Write(writer, item);
+                    }
+                }
+            }
+
+            // End of abbreviation item
+            writer.WriteULEB128(0);
+
+            Debug.Assert(writer.Offset - startOffset == Size);
+        }
+
+        private void Write(DwarfWriter writer, DwarfAbbreviationItem item)
+        {
+            var startOffset = writer.Offset;
+            Debug.Assert(startOffset == item.Offset);
+
+            // Code
+            writer.WriteULEB128(item.Code);
+            
+            // Tag
+            writer.WriteULEB128((uint)item.Tag.Value);
+
+            // HasChildren
+            writer.WriteU8(item.HasChildren ? DwarfNative.DW_CHILDREN_yes : DwarfNative.DW_CHILDREN_no);
+
+            var descriptors = item.Descriptors;
+            for (int i = 0; i < descriptors.Length; i++)
+            {
+                var descriptor = descriptors[i];
+                writer.WriteULEB128((uint)descriptor.Kind.Value);
+                writer.WriteULEB128((uint)descriptor.Form.Value);
+            }
+            writer.WriteULEB128(0);
+            writer.WriteULEB128(0);
+            
+            Debug.Assert(writer.Offset - startOffset == item.Size);
         }
     }
 }
