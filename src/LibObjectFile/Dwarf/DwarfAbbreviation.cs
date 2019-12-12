@@ -67,12 +67,13 @@ namespace LibObjectFile.Dwarf
                 {
 
                     _mapItems[_nextCode] = item;
-                    _mapKeyToItem[itemKey] = item;
                 }
                 else
                 {
                     _items.Add(item);
                 }
+
+                _mapKeyToItem[itemKey] = item;
 
                 _nextCode++;
             }
