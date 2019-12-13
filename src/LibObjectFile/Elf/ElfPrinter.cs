@@ -202,13 +202,27 @@ namespace LibObjectFile.Elf
                         ulong symbolValue = 0;
                         if (entry.SymbolIndex <= symbolTable.Entries.Count)
                         {
-                            symbolName = symbolTable.Entries[(int)entry.SymbolIndex].Name;
-                            symbolValue = symbolTable.Entries[(int)entry.SymbolIndex].Value;
+                            var symbolEntry = symbolTable.Entries[(int) entry.SymbolIndex];
+                            symbolName = symbolEntry.Name;
+                            symbolValue = symbolEntry.Value;
+
+                            if (symbolName == string.Empty )
+                            {
+                                switch (symbolEntry.Type)
+                                {
+                                    case ElfSymbolType.Section:
+                                        if (symbolEntry.Section.Section is ElfBinarySection targetSection)
+                                        {
+                                            symbolName = targetSection.Name;
+                                        }
+                                        break;
+                                }
+                            }
                         }
 
                         if (elf.FileClass == ElfFileClass.Is32)
                         {
-                            writer.WriteLine($"{entry.Offset:x8}  {entry.Info32:x8} {entry.Type.Name,-22} {symbolValue:x8} {symbolName} + {entry.Addend}");
+                            writer.WriteLine($"{entry.Offset:x8}  {entry.Info32:x8} {entry.Type.Name,-22} {symbolValue:x8} {symbolName} + {entry.Addend:x}");
                         }
                         else
                         {
@@ -218,7 +232,7 @@ namespace LibObjectFile.Elf
                             }
                             else
                             {
-                                writer.WriteLine($"{entry.Offset:x16}  {entry.Info64:x16} {entry.Type.Name,-22} {symbolValue:x16} {symbolName} + {entry.Addend}");
+                                writer.WriteLine($"{entry.Offset:x16}  {entry.Info64:x16} {entry.Type.Name,-22} {symbolValue:x16} {symbolName} + {entry.Addend:x}");
                             }
                         }
                     }
