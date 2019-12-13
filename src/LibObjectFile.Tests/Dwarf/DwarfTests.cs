@@ -226,6 +226,7 @@ namespace LibObjectFile.Tests.Dwarf
             dwarf.Write(outputContext);
 
             dwarf.DebugAbbrevTable.Print(Console.Out);
+            dwarf.DebugInfoSection.Print(Console.Out);
 
             PrintStreamLength(outputContext);
         }

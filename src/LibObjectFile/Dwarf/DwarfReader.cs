@@ -128,6 +128,7 @@ namespace LibObjectFile.Dwarf
             
             var die = DIEHelper.ConvertTagToDwarfDIE((ushort) abbreviationItem.Tag);
             
+            die.Abbrev = abbreviationItem;
             die.Offset = startDIEOffset ;
             die.Tag = abbreviationItem.Tag;
 

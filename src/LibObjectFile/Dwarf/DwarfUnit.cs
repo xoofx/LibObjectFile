@@ -19,6 +19,8 @@ namespace LibObjectFile.Dwarf
         public DwarfUnitKindEx Kind { get; set; }
 
         internal ulong DebugAbbreviationOffset { get; set; }
+
+        public ulong UnitLength { get; internal set; }
         
         /// <summary>
         /// Gets or sets the root <see cref="DwarfDIE"/> of this compilation unit.

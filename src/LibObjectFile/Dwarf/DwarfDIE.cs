@@ -38,6 +38,8 @@ namespace LibObjectFile.Dwarf
 
         public IReadOnlyList<DwarfDIE> Children => _children;
 
+        public DwarfAbbreviationItem Abbrev { get; internal set; }
+
         /// <summary>
         /// Adds a child to <see cref="Children"/>.
         /// </summary>

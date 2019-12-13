@@ -3,17 +3,13 @@
 // See the license.txt file in the project root for more information.
 
 using System;
-using System.Buffers;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime;
 
 namespace LibObjectFile.Dwarf
 {
     public class DwarfWriter : DwarfReaderWriter
     {
-        private readonly Dictionary<DwarfDIE, DwarfAbbreviationItem> _mapDIEToAbbreviationCode;
         private DwarfFile _parent;
         private DwarfUnit _currentUnit;
         private ulong _sizeOf;
@@ -21,7 +17,6 @@ namespace LibObjectFile.Dwarf
 
         internal DwarfWriter(DwarfWriterContext context, DiagnosticBag diagnostics) : base(context, diagnostics)
         {
-            _mapDIEToAbbreviationCode = new Dictionary<DwarfDIE, DwarfAbbreviationItem>();
         }
 
         public override bool IsReadOnly => false;
@@ -76,16 +71,17 @@ namespace LibObjectFile.Dwarf
             UpdateLayoutDIE(unit.Root);
             
             unit.Size = _sizeOf - unit.Offset;
+            unit.UnitLength = unit.Size - DwarfHelper.SizeOfUnitLength(Is64BitEncoding);
         }
 
         private void UpdateLayoutDIE(DwarfDIE die)
         {
             die.Offset = _sizeOf;
 
-            var abbreviationItem = _mapDIEToAbbreviationCode[die];
-            _sizeOf += DwarfHelper.SizeOfULEB128(abbreviationItem.Code); // WriteULEB128(abbreviationItem.Code);
+            var abbrev = die.Abbrev;
+            _sizeOf += DwarfHelper.SizeOfULEB128(abbrev.Code); // WriteULEB128(abbreviationItem.Code);
 
-            var descriptors = abbreviationItem.Descriptors;
+            var descriptors = abbrev.Descriptors;
             for (var i = 0; i < die.Attributes.Count; i++)
             {
                 var attr = die.Attributes[i];
@@ -93,11 +89,17 @@ namespace LibObjectFile.Dwarf
                 UpdateLayoutAttribute(descriptor.Form, attr);
             }
 
-            foreach (var children in die.Children)
+            if (abbrev.HasChildren)
             {
-                UpdateLayoutDIE(children);
-            }
+                foreach (var children in die.Children)
+                {
+                    UpdateLayoutDIE(children);
+                }
 
+                // Encode abbreviation 0 code
+                _sizeOf += DwarfHelper.SizeOfULEB128(0);
+            }
+            
             die.Size = _sizeOf - die.Offset;
         }
         
@@ -135,10 +137,10 @@ namespace LibObjectFile.Dwarf
         {
             var startDIEOffset = Offset;
             Debug.Assert(die.Offset == startDIEOffset);
-            var abbreviationItem = _mapDIEToAbbreviationCode[die];
-            WriteULEB128(abbreviationItem.Code);
+            var abbrev = die.Abbrev;
+            WriteULEB128(abbrev.Code);
 
-            var descriptors = abbreviationItem.Descriptors;
+            var descriptors = abbrev.Descriptors;
             for (var i = 0; i < die.Attributes.Count; i++)
             {
                 var attr = die.Attributes[i];
@@ -146,9 +148,13 @@ namespace LibObjectFile.Dwarf
                 WriteAttribute(descriptor.Form, attr);
             }
 
-            foreach (var children in die.Children)
+            if (abbrev.HasChildren)
             {
-                WriteDIE(children);
+                foreach (var children in die.Children)
+                {
+                    WriteDIE(children);
+                }
+                WriteULEB128(0);
             }
             Debug.Assert(die.Size == Offset - startDIEOffset);
         }
@@ -185,7 +191,7 @@ namespace LibObjectFile.Dwarf
             var key = new DwarfAbbreviationItemKey(die.Tag, die.Children.Count > 0, new DwarfAttributeDescriptors(descriptorArray));
             var item = _currentAbbreviation.GetOrCreate(key);
 
-            _mapDIEToAbbreviationCode[die] = item;
+            die.Abbrev = item;
 
             foreach (var children in die.Children)
             {
