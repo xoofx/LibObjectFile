@@ -10,7 +10,7 @@ namespace LibObjectFile.Dwarf
 {
     public static class DwarfPrinter
     {
-        public static void Print(this DwarfDebugAbbrevTable abbrevTable, TextWriter writer)
+        public static void Print(this DwarfAbbreviationTable abbrevTable, TextWriter writer)
         {
             if (writer == null) throw new ArgumentNullException(nameof(writer));
 
@@ -43,7 +43,7 @@ namespace LibObjectFile.Dwarf
             }
         }
 
-        public static void Print(this DwarfDebugInfoSection debugInfo, TextWriter writer)
+        public static void Print(this DwarfInfoSection debugInfo, TextWriter writer)
         {
             if (writer == null) throw new ArgumentNullException(nameof(writer));
 

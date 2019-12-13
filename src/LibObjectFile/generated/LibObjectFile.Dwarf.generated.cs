@@ -8811,15 +8811,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDebugLine StmtList
+        public DwarfLine StmtList
         {
             get
             {
-                return GetAttributeValue<DwarfDebugLine>(DwarfAttributeKind.StmtList);
+                return GetAttributeValue<DwarfLine>(DwarfAttributeKind.StmtList);
             }
             set
             {
-                SetAttributeValue<DwarfDebugLine>(DwarfAttributeKind.StmtList, value);
+                SetAttributeValue<DwarfLine>(DwarfAttributeKind.StmtList, value);
             }
         }
         
@@ -11307,15 +11307,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDebugLine StmtList
+        public DwarfLine StmtList
         {
             get
             {
-                return GetAttributeValue<DwarfDebugLine>(DwarfAttributeKind.StmtList);
+                return GetAttributeValue<DwarfLine>(DwarfAttributeKind.StmtList);
             }
             set
             {
-                SetAttributeValue<DwarfDebugLine>(DwarfAttributeKind.StmtList, value);
+                SetAttributeValue<DwarfLine>(DwarfAttributeKind.StmtList, value);
             }
         }
         
@@ -12111,15 +12111,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDebugLine StmtList
+        public DwarfLine StmtList
         {
             get
             {
-                return GetAttributeValue<DwarfDebugLine>(DwarfAttributeKind.StmtList);
+                return GetAttributeValue<DwarfLine>(DwarfAttributeKind.StmtList);
             }
             set
             {
-                SetAttributeValue<DwarfDebugLine>(DwarfAttributeKind.StmtList, value);
+                SetAttributeValue<DwarfLine>(DwarfAttributeKind.StmtList, value);
             }
         }
         
@@ -13935,15 +13935,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDebugLine StmtList
+        public DwarfLine StmtList
         {
             get
             {
-                return GetAttributeValue<DwarfDebugLine>(DwarfAttributeKind.StmtList);
+                return GetAttributeValue<DwarfLine>(DwarfAttributeKind.StmtList);
             }
             set
             {
-                SetAttributeValue<DwarfDebugLine>(DwarfAttributeKind.StmtList, value);
+                SetAttributeValue<DwarfLine>(DwarfAttributeKind.StmtList, value);
             }
         }
         

@@ -10,11 +10,11 @@ using LibObjectFile.Utils;
 namespace LibObjectFile.Dwarf
 {
     [DebuggerDisplay("Count = {Ranges.Count,nq}")]
-    public class DwarfDebugAddressRangeTable : DwarfSection
+    public class DwarfAddressRangeTable : DwarfSection
     {
-        public DwarfDebugAddressRangeTable()
+        public DwarfAddressRangeTable()
         {
-            Ranges = new List<DwarfDebugAddressRange>();
+            Ranges = new List<DwarfAddressRange>();
         }
 
         public ushort Version { get; set; }
@@ -27,11 +27,11 @@ namespace LibObjectFile.Dwarf
 
         internal ulong DebugInfoOffset { get; set; }
 
-        public List<DwarfDebugAddressRange> Ranges { get; }
+        public List<DwarfAddressRange> Ranges { get; }
 
-        public static DwarfDebugAddressRangeTable Read(Stream stream, bool isLittleEndian, TextWriter rawDump = null)
+        public static DwarfAddressRangeTable Read(Stream stream, bool isLittleEndian, TextWriter rawDump = null)
         {
-            var dwarfDebugAddressRangeTable = new DwarfDebugAddressRangeTable();
+            var dwarfDebugAddressRangeTable = new DwarfAddressRangeTable();
             var reader = new DwarfReader(new DwarfReaderContext()
             {
                 IsLittleEndian = isLittleEndian, 
@@ -132,7 +132,7 @@ namespace LibObjectFile.Dwarf
                     break;
                 }
 
-                Ranges.Add(new DwarfDebugAddressRange(segment, address, length));
+                Ranges.Add(new DwarfAddressRange(segment, address, length));
             }
         }
 

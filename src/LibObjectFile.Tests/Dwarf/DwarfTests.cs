@@ -206,7 +206,7 @@ namespace LibObjectFile.Tests.Dwarf
             var inputContext = DwarfReaderContext.FromElf(elf);
             var dwarf = DwarfFile.Read(inputContext);
 
-            dwarf.DebugAbbrevTable.Print(Console.Out);
+            dwarf.AbbreviationTable.Print(Console.Out);
             
             PrintStreamLength(inputContext);
 
@@ -225,8 +225,8 @@ namespace LibObjectFile.Tests.Dwarf
             };
             dwarf.Write(outputContext);
 
-            dwarf.DebugAbbrevTable.Print(Console.Out);
-            dwarf.DebugInfoSection.Print(Console.Out);
+            dwarf.AbbreviationTable.Print(Console.Out);
+            dwarf.InfoSection.Print(Console.Out);
 
             PrintStreamLength(outputContext);
         }

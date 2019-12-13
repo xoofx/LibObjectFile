@@ -10,7 +10,7 @@ using System.IO;
 namespace LibObjectFile.Dwarf
 {
     [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
-    public sealed class DwarfAbbreviation : ObjectFileNode<DwarfDebugAbbrevTable>
+    public sealed class DwarfAbbreviation : ObjectFileNode<DwarfAbbreviationTable>
     {
         private readonly List<DwarfAbbreviationItem> _items;
         private readonly Dictionary<ulong, DwarfAbbreviationItem> _mapItems; // Only used if code are non contiguous

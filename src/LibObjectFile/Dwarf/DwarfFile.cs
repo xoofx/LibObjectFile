@@ -10,57 +10,57 @@ namespace LibObjectFile.Dwarf
 {
     public class DwarfFile : DwarfContainer
     {
-        private DwarfDebugAbbrevTable _debugAbbrevTable;
-        private DwarfDebugStringTable _debugStringTable;
-        private DwarfDebugLineSection _debugLineSection;
-        private DwarfDebugInfoSection _debugInfoSection;
-        private DwarfDebugAddressRangeTable _debugAddressRangeTable;
+        private DwarfAbbreviationTable _abbreviationTable;
+        private DwarfStringTable _stringTable;
+        private DwarfLineSection _lineSection;
+        private DwarfInfoSection _infoSection;
+        private DwarfAddressRangeTable _addressRangeTable;
 
         public DwarfFile()
         {
-            DebugAbbrevTable = new DwarfDebugAbbrevTable();
-            DebugStringTable = new DwarfDebugStringTable();
-            DebugLineSection = new DwarfDebugLineSection();
-            DebugInfoSection = new DwarfDebugInfoSection();
-            DebugAddressRangeTable = new DwarfDebugAddressRangeTable();
+            AbbreviationTable = new DwarfAbbreviationTable();
+            StringTable = new DwarfStringTable();
+            LineSection = new DwarfLineSection();
+            InfoSection = new DwarfInfoSection();
+            AddressRangeTable = new DwarfAddressRangeTable();
         }
 
-        public DwarfDebugAbbrevTable DebugAbbrevTable
+        public DwarfAbbreviationTable AbbreviationTable
         {
-            get => _debugAbbrevTable;
-            set => AttachChild<DwarfContainer, DwarfDebugAbbrevTable>(this, value, ref _debugAbbrevTable);
+            get => _abbreviationTable;
+            set => AttachChild<DwarfContainer, DwarfAbbreviationTable>(this, value, ref _abbreviationTable);
         }
         
-        public DwarfDebugStringTable DebugStringTable
+        public DwarfStringTable StringTable
         {
-            get => _debugStringTable;
-            set => AttachChild<DwarfContainer, DwarfDebugStringTable>(this, value, ref _debugStringTable);
+            get => _stringTable;
+            set => AttachChild<DwarfContainer, DwarfStringTable>(this, value, ref _stringTable);
         }
 
-        public DwarfDebugLineSection DebugLineSection
+        public DwarfLineSection LineSection
         {
-            get => _debugLineSection;
-            set => AttachChild<DwarfContainer, DwarfDebugLineSection>(this, value, ref _debugLineSection);
+            get => _lineSection;
+            set => AttachChild<DwarfContainer, DwarfLineSection>(this, value, ref _lineSection);
         }
 
-        public DwarfDebugAddressRangeTable DebugAddressRangeTable
+        public DwarfAddressRangeTable AddressRangeTable
         {
-            get => _debugAddressRangeTable;
-            set => AttachChild<DwarfContainer, DwarfDebugAddressRangeTable>(this, value, ref _debugAddressRangeTable);
+            get => _addressRangeTable;
+            set => AttachChild<DwarfContainer, DwarfAddressRangeTable>(this, value, ref _addressRangeTable);
         }
 
-        public DwarfDebugInfoSection DebugInfoSection
+        public DwarfInfoSection InfoSection
         {
-            get => _debugInfoSection;
-            set => AttachChild<DwarfContainer, DwarfDebugInfoSection>(this, value, ref _debugInfoSection);
+            get => _infoSection;
+            set => AttachChild<DwarfContainer, DwarfInfoSection>(this, value, ref _infoSection);
         }
 
         internal void Read(DwarfReader reader)
         {
-            DebugStringTable?.Read(reader);
-            DebugLineSection?.Read(reader);
-            DebugAddressRangeTable?.Read(reader);
-            DebugInfoSection?.Read(reader, reader.Context.DebugInfoStream, DwarfUnitKind.Compile);
+            StringTable?.Read(reader);
+            LineSection?.Read(reader);
+            AddressRangeTable?.Read(reader);
+            InfoSection?.Read(reader, reader.Context.DebugInfoStream, DwarfUnitKind.Compile);
         }
 
         public void Write(DwarfWriterContext writerContext)
@@ -70,28 +70,28 @@ namespace LibObjectFile.Dwarf
             var diagnostics = new DiagnosticBag();
 
             // Verify
-            DebugLineSection?.Verify(diagnostics);
-            DebugAddressRangeTable?.Verify(diagnostics);
-            DebugInfoSection?.Verify(diagnostics);
+            LineSection?.Verify(diagnostics);
+            AddressRangeTable?.Verify(diagnostics);
+            InfoSection?.Verify(diagnostics);
 
             // Update layout
             if (!diagnostics.HasErrors)
             {
-                DebugLineSection?.TryUpdateLayout(diagnostics);
-                DebugAddressRangeTable?.TryUpdateLayout(diagnostics);
+                LineSection?.TryUpdateLayout(diagnostics);
+                AddressRangeTable?.TryUpdateLayout(diagnostics);
             }
             CheckErrors(diagnostics);
 
             // Reset the abbreviation table
             // TODO: Make this configurable via the DwarfWriterContext
-            DebugAbbrevTable?.Reset();
+            AbbreviationTable?.Reset();
 
             var writer = new DwarfWriter(writerContext, diagnostics);
-            writer.UpdateLayout(diagnostics, DebugInfoSection);
+            writer.UpdateLayout(diagnostics, InfoSection);
             CheckErrors(diagnostics);
 
             // Update the abbrev table right after we have computed the entire layout of this 
-            DebugAbbrevTable?.TryUpdateLayout(diagnostics);
+            AbbreviationTable?.TryUpdateLayout(diagnostics);
 
             CheckErrors(diagnostics);
 
@@ -124,11 +124,11 @@ namespace LibObjectFile.Dwarf
 
         private void Write(DwarfWriter writer)
         {
-            DebugAbbrevTable?.Write(writer);
-            DebugStringTable?.Write(writer);
-            DebugLineSection?.Write(writer);
-            DebugAddressRangeTable?.Write(writer);
-            DebugInfoSection?.Write(writer, writer.Context.DebugInfoStream.Stream);
+            AbbreviationTable?.Write(writer);
+            StringTable?.Write(writer);
+            LineSection?.Write(writer);
+            AddressRangeTable?.Write(writer);
+            InfoSection?.Write(writer, writer.Context.DebugInfoStream.Stream);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace LibObjectFile.Dwarf
         private readonly Dictionary<ulong, DwarfDIE> _registeredDIEPerSection;
         private readonly List<DwarfDIEReference> _unresolvedDIECompilationUnitReference;
         private readonly List<DwarfDIEReference> _attributesWithUnresolvedDIESectionReference;
-        private readonly Dictionary<ulong, DwarfDebugLine> _offsetToDebugLine;
+        private readonly Dictionary<ulong, DwarfLine> _offsetToDebugLine;
         private DiagnosticBag _diagnostics;
         private bool _is64Address;
         private ushort _version;
@@ -30,22 +30,22 @@ namespace LibObjectFile.Dwarf
             _registeredDIEPerSection = new Dictionary<ulong, DwarfDIE>();
             _unresolvedDIECompilationUnitReference = new List<DwarfDIEReference>();
             _attributesWithUnresolvedDIESectionReference = new List<DwarfDIEReference>();
-            _offsetToDebugLine = new Dictionary<ulong, DwarfDebugLine>();
+            _offsetToDebugLine = new Dictionary<ulong, DwarfLine>();
         }
 
         public override bool IsReadOnly { get; }
 
         public new DwarfReaderContext Context => (DwarfReaderContext)base.Context;
         
-        internal void Read(DwarfDebugInfoSection debugInfo, DwarfUnitKind defaultUnitKind)
+        internal void Read(DwarfInfoSection debugInfo, DwarfUnitKind defaultUnitKind)
         {
             _diagnostics = Diagnostics;
             _parent = debugInfo.Parent;
 
             // Prebuild map offset to debug line
-            if (_parent.DebugLineSection != null)
+            if (_parent.LineSection != null)
             {
-                foreach(var debugLine in _parent.DebugLineSection.Lines)
+                foreach(var debugLine in _parent.LineSection.Lines)
                 {
                     _offsetToDebugLine.Add(debugLine.Offset, debugLine);
                 }
@@ -105,7 +105,7 @@ namespace LibObjectFile.Dwarf
             }
 
             abbreviation = DwarfAbbreviation.Read(stream, abbreviationOffset);
-            _parent.DebugAbbrevTable.AddAbbreviation(abbreviation);
+            _parent.AbbreviationTable.AddAbbreviation(abbreviation);
 
             _abbreviations[abbreviationOffset] = abbreviation;
             return abbreviation;
@@ -182,7 +182,7 @@ namespace LibObjectFile.Dwarf
             {
                 case DwarfAttributeKind.DeclFile:
                 {
-                    var file = _parent.DebugLineSection.FileNames[attr.ValueAsI32 - 1];
+                    var file = _parent.LineSection.FileNames[attr.ValueAsI32 - 1];
                     attr.ValueAsU64 = 0;
                     attr.ValueAsObject = file;
                     break;
@@ -192,7 +192,7 @@ namespace LibObjectFile.Dwarf
                 {
                     if (attr.ValueAsU64 == 0) return;
 
-                    if (_parent.DebugLineSection != null)
+                    if (_parent.LineSection != null)
                     {
                         if (_offsetToDebugLine.TryGetValue(attr.ValueAsU64, out var debugLine))
                         {
@@ -338,14 +338,14 @@ namespace LibObjectFile.Dwarf
                 case DwarfAttributeForm.Strp:
                 {
                     var offset = ReadUIntFromEncoding();
-                    if (_parent.DebugStringTable == null)
+                    if (_parent.StringTable == null)
                     {
                         attr.ValueAsU64 = offset;
-                        Diagnostics.Error(DiagnosticId.DWARF_ERR_MissingStringTable, $"The .debug_str {nameof(DwarfFile.DebugStringTable)} is null while a DW_FORM_strp for attribute {attr.Kind} is requesting an access to it");
+                        Diagnostics.Error(DiagnosticId.DWARF_ERR_MissingStringTable, $"The .debug_str {nameof(DwarfFile.StringTable)} is null while a DW_FORM_strp for attribute {attr.Kind} is requesting an access to it");
                     }
                     else
                     {
-                        attr.ValueAsObject = _parent.DebugStringTable.GetStringFromOffset(offset);
+                        attr.ValueAsObject = _parent.StringTable.GetStringFromOffset(offset);
                     }
 
                     break;

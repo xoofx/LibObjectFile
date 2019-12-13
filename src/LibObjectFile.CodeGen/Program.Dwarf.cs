@@ -181,7 +181,7 @@ namespace LibObjectFile.CodeGen
                             break;
 
                         case "lineptr":
-                            attrType = "DwarfDebugLine";
+                            attrType = "DwarfLine";
                             break;
                         
                         case "exprloc":

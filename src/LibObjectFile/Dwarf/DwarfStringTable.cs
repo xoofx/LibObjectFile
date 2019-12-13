@@ -7,18 +7,18 @@ using System.IO;
 
 namespace LibObjectFile.Dwarf
 {
-    public class DwarfDebugStringTable : DwarfSection
+    public class DwarfStringTable : DwarfSection
     {
         private readonly Dictionary<string, ulong> _stringToOffset;
         private readonly Dictionary<ulong, string> _offsetToString;
 
-        public DwarfDebugStringTable()
+        public DwarfStringTable()
         {
             _stringToOffset = new Dictionary<string, ulong>();
             _offsetToString = new Dictionary<ulong, string>();
         }
 
-        public DwarfDebugStringTable(Stream stream) : this()
+        public DwarfStringTable(Stream stream) : this()
         {
             Stream = stream;
         }

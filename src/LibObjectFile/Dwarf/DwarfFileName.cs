@@ -6,7 +6,7 @@ using System.IO;
 
 namespace LibObjectFile.Dwarf
 {
-    public sealed class DwarfDebugFileName
+    public sealed class DwarfFileName
     {
         public string Name { get; set; }
 

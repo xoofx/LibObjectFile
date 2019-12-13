@@ -7,11 +7,11 @@ using System.IO;
 
 namespace LibObjectFile.Dwarf
 {
-    public sealed class DwarfDebugInfoSection : DwarfSection
+    public sealed class DwarfInfoSection : DwarfSection
     {
         private readonly List<DwarfUnit> _units;
 
-        public DwarfDebugInfoSection()
+        public DwarfInfoSection()
         {
             _units = new List<DwarfUnit>();
         }

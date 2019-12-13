@@ -12,31 +12,31 @@ using System.Text;
 namespace LibObjectFile.Dwarf
 {
     [DebuggerDisplay("Count = {Lines.Count,nq}")]
-    public sealed class DwarfDebugLineSection : DwarfSection
+    public sealed class DwarfLineSection : DwarfSection
     {
         private readonly Dictionary<string, uint> _directoryNameToIndex;
-        private readonly Dictionary<DwarfDebugFileName, uint> _fileNameToIndex;
+        private readonly Dictionary<DwarfFileName, uint> _fileNameToIndex;
         private readonly List<string> _directoryNames;
-        private readonly List<DwarfDebugLine> _lines;
-        private readonly DwarfDebugLine _stateDebugLine;
+        private readonly List<DwarfLine> _lines;
+        private readonly DwarfLine _stateLine;
         private byte _minimumInstructionLength;
         private byte _maximumOperationsPerInstruction;
         private readonly List<uint> _standardOpCodeLengths;
 
-        public DwarfDebugLineSection()
+        public DwarfLineSection()
         {
-            FileNames = new List<DwarfDebugFileName>();
-            _lines = new List<DwarfDebugLine>();
+            FileNames = new List<DwarfFileName>();
+            _lines = new List<DwarfLine>();
             _directoryNameToIndex = new Dictionary<string, uint>();
-            _fileNameToIndex = new Dictionary<DwarfDebugFileName, uint>();
+            _fileNameToIndex = new Dictionary<DwarfFileName, uint>();
             _directoryNames = new List<string>();
-            _stateDebugLine = new DwarfDebugLine();
+            _stateLine = new DwarfLine();
             LineBase = -5;
             LineRange = 14;
             _minimumInstructionLength = 1;
             _maximumOperationsPerInstruction = 1;
             _standardOpCodeLengths = new List<uint>();
-            _lines = new List<DwarfDebugLine>();
+            _lines = new List<DwarfLine>();
             foreach (var stdOpCode in DefaultStandardOpCodeLengths)
             {
                 _standardOpCodeLengths.Add(stdOpCode);
@@ -82,21 +82,21 @@ namespace LibObjectFile.Dwarf
             }
         } 
 
-        public List<DwarfDebugFileName> FileNames { get; }
+        public List<DwarfFileName> FileNames { get; }
 
-        public IReadOnlyList<DwarfDebugLine> Lines => _lines;
+        public IReadOnlyList<DwarfLine> Lines => _lines;
 
-        public void AddDebugLine(DwarfDebugLine line)
+        public void AddDebugLine(DwarfLine line)
         {
             _lines.Add(this, line);
         }
 
-        public void RemoveDebugLine(DwarfDebugLine line)
+        public void RemoveDebugLine(DwarfLine line)
         {
             _lines.Remove(this, line);
         }
 
-        public DwarfDebugLine RemoveDebugLineAt(int index)
+        public DwarfLine RemoveDebugLineAt(int index)
         {
             return _lines.RemoveAt(this, index);
         }
@@ -236,7 +236,7 @@ namespace LibObjectFile.Dwarf
                     break;
                 }
 
-                var fileName = new DwarfDebugFileName {Name = name};
+                var fileName = new DwarfFileName {Name = name};
 
                 var directoryIndex = reader.ReadULEB128();
                 if (!name.Contains('/') && !name.Contains('\\') && directoryIndex > 0 && (directoryIndex - 1) < (ulong) directories.Count)
@@ -272,7 +272,7 @@ namespace LibObjectFile.Dwarf
                 rawDump.WriteLine(" The File Name Table is empty.");
             }
 
-            var state = _stateDebugLine;
+            var state = _stateLine;
             state.Offset = reader.Offset;
             var firstFileName = FileNames.Count > 0 ? FileNames[0] : null;
             state.Reset(firstFileName, default_is_stmt != 0);
@@ -483,7 +483,7 @@ namespace LibObjectFile.Dwarf
                                     var fileTime = reader.ReadULEB128();
                                     var fileSize = reader.ReadULEB128();
 
-                                    var debugFileName = new DwarfDebugFileName() {Name = fileName};
+                                    var debugFileName = new DwarfFileName() {Name = fileName};
                                     debugFileName.Directory = fileDirectoryIndex == 0 || fileDirectoryIndex >= directories.Count ? null : directories[fileDirectoryIndex - 1];
                                     debugFileName.Time = fileTime;
                                     debugFileName.Size = fileSize;
@@ -836,7 +836,7 @@ namespace LibObjectFile.Dwarf
 
         private void WriteDebugLineOpCodes(DwarfReaderWriter writer, uint opCodeBase)
         {
-            var previousLineState = new DwarfDebugLineState();
+            var previousLineState = new DwarfLineState();
             var firstFile = FileNames.Count > 0 ? FileNames[0] : null;
             previousLineState.Reset(firstFile, true);
             var initialState = previousLineState;
@@ -1095,7 +1095,7 @@ namespace LibObjectFile.Dwarf
 
         private void LayoutDebugLineOpCodes(ref ulong sizeOf, uint opCodeBase)
         {
-            var previousLineState = new DwarfDebugLineState();
+            var previousLineState = new DwarfLineState();
             var firstFile = FileNames.Count > 0 ? FileNames[0] : null;
             previousLineState.Reset(firstFile, true);
             var initialState = previousLineState;

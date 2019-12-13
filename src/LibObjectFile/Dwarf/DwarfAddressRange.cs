@@ -4,9 +4,9 @@
 
 namespace LibObjectFile.Dwarf
 {
-    public struct DwarfDebugAddressRange
+    public struct DwarfAddressRange
     {
-        public DwarfDebugAddressRange(ulong segment, ulong address, ulong length)
+        public DwarfAddressRange(ulong segment, ulong address, ulong length)
         {
             Segment = segment;
             Address = address;

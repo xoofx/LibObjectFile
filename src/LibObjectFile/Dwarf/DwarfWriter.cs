@@ -23,7 +23,7 @@ namespace LibObjectFile.Dwarf
         
         public new DwarfWriterContext Context => (DwarfWriterContext)base.Context;
         
-        internal void UpdateLayout(DiagnosticBag diagnostics, DwarfDebugInfoSection debugInfo)
+        internal void UpdateLayout(DiagnosticBag diagnostics, DwarfInfoSection debugInfo)
         {
             _parent = debugInfo.Parent;
             var previousDiagnostics = Diagnostics;
@@ -103,7 +103,7 @@ namespace LibObjectFile.Dwarf
             die.Size = _sizeOf - die.Offset;
         }
         
-        internal void Write(DwarfDebugInfoSection debugInfo)
+        internal void Write(DwarfInfoSection debugInfo)
         {
             _parent = debugInfo.Parent;
             foreach (var unit in debugInfo.Units)
@@ -165,7 +165,7 @@ namespace LibObjectFile.Dwarf
             // TODO: Make this configurable
             var abbreviation = new DwarfAbbreviation();
             unit.Abbreviation = abbreviation;
-            _parent.DebugAbbrevTable.AddAbbreviation(abbreviation);
+            _parent.AbbreviationTable.AddAbbreviation(abbreviation);
 
             _currentAbbreviation = unit.Abbreviation;
             ComputeAbbreviationItem(unit.Root);
@@ -342,9 +342,9 @@ namespace LibObjectFile.Dwarf
                     {
                         VerifyAttributeValueNotNull(attr);
 
-                        if (!(attr.ValueAsObject is DwarfDebugLine))
+                        if (!(attr.ValueAsObject is DwarfLine))
                         {
-                            Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The value of attribute {attr} from DIE {attr.Parent} must be a {nameof(DwarfDebugLine)}");
+                            Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The value of attribute {attr} from DIE {attr.Parent} must be a {nameof(DwarfLine)}");
                         }
                     }
 
@@ -367,7 +367,7 @@ namespace LibObjectFile.Dwarf
                     if (attr.ValueAsObject is string str)
                     {
                         // Create string offset
-                        if (_parent.DebugStringTable.ContainsString(str))
+                        if (_parent.StringTable.ContainsString(str))
                         {
                             return DwarfAttributeForm.Strp;
                         }
@@ -1014,7 +1014,7 @@ namespace LibObjectFile.Dwarf
                 }
                 case DwarfAttributeForm.Strp:
                 {
-                    var offset = _parent.DebugStringTable.GetOrCreateString((string) attr.ValueAsObject);
+                    var offset = _parent.StringTable.GetOrCreateString((string) attr.ValueAsObject);
                     WriteUIntFromEncoding(offset);
                     break;
                 }

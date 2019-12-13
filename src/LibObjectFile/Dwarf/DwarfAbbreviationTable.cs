@@ -7,11 +7,11 @@ using System.Diagnostics;
 
 namespace LibObjectFile.Dwarf
 {
-    public class DwarfDebugAbbrevTable : DwarfSection
+    public class DwarfAbbreviationTable : DwarfSection
     {
         private readonly List<DwarfAbbreviation> _abbreviations;
 
-        public DwarfDebugAbbrevTable()
+        public DwarfAbbreviationTable()
         {
             _abbreviations = new List<DwarfAbbreviation>();
         }
