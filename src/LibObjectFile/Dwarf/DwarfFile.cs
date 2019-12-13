@@ -73,6 +73,7 @@ namespace LibObjectFile.Dwarf
             LineSection?.Verify(diagnostics);
             AddressRangeTable?.Verify(diagnostics);
             InfoSection?.Verify(diagnostics);
+            StringTable?.Verify(diagnostics);
 
             // Update layout
             if (!diagnostics.HasErrors)
@@ -90,7 +91,10 @@ namespace LibObjectFile.Dwarf
             writer.UpdateLayout(diagnostics, InfoSection);
             CheckErrors(diagnostics);
 
-            // Update the abbrev table right after we have computed the entire layout of this 
+            // Update string table right after updating the layout of Info
+            StringTable?.TryUpdateLayout(diagnostics);
+
+            // Update the abbrev table right after we have computed the entire layout of Info
             AbbreviationTable?.TryUpdateLayout(diagnostics);
 
             CheckErrors(diagnostics);

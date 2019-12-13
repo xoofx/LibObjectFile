@@ -222,6 +222,7 @@ namespace LibObjectFile.Tests.Dwarf
                 DebugAbbrevStream = new MemoryStream(),
                 DebugLineStream = new MemoryStream(),
                 DebugInfoStream = new MemoryStream(),
+                DebugStringStream =  new MemoryStream(),
             };
             dwarf.Write(outputContext);
 

@@ -84,11 +84,25 @@ namespace LibObjectFile.Dwarf
 
         public override bool TryUpdateLayout(DiagnosticBag diagnostics)
         {
+            Size = (ulong?)(Stream?.Length) ?? 0UL;
             return true;
         }
 
-        public void Write(DwarfWriter writer)
+        internal void Write(DwarfWriter writer)
         {
+            if (Stream == null) return;
+            if (writer.Context.DebugStringStream.Stream == null) return;
+
+            var previousStream = writer.Stream;
+            try
+            {
+                writer.Stream = writer.Context.DebugStringStream.Stream;
+                writer.Write(Stream);
+            }
+            finally
+            {
+                writer.Stream = previousStream;
+            }
         }
     }
 }
