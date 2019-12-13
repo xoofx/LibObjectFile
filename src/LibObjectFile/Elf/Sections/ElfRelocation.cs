@@ -10,6 +10,14 @@ namespace LibObjectFile.Elf
     /// </summary>
     public struct ElfRelocation
     {
+        public ElfRelocation(ulong offset, ElfRelocationType type, uint symbolIndex, long addend)
+        {
+            Offset = offset;
+            Type = type;
+            SymbolIndex = symbolIndex;
+            Addend = addend;
+        }
+
         /// <summary>
         /// Gets or sets the offset.
         /// </summary>

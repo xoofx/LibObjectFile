@@ -184,6 +184,11 @@ namespace LibObjectFile
             stream.Write(span);
         }
 
+        public static void WriteI32(this Stream stream, bool isLittleEndian, int value)
+        {
+            WriteU32(stream, isLittleEndian, (uint)value);
+        }
+
         public static unsafe void WriteU32(this Stream stream, bool isLittleEndian, uint value)
         {
             if (isLittleEndian != BitConverter.IsLittleEndian)

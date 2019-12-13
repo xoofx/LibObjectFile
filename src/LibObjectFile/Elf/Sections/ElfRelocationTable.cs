@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace LibObjectFile.Elf
 {
@@ -12,19 +13,36 @@ namespace LibObjectFile.Elf
     /// </summary>
     public sealed class ElfRelocationTable : ElfSection
     {
+        private readonly List<ElfRelocation> _entries;
         public const string DefaultName = ".rel";
         public const string DefaultNameWithAddends = ".rela";
 
         public ElfRelocationTable() : base(ElfSectionType.RelocationAddends)
         {
             Name = DefaultNameWithAddends;
-            Entries = new List<ElfRelocation>();
+            _entries = new List<ElfRelocation>();
         }
 
         /// <summary>
         /// Gets a list of <see cref="ElfRelocation"/> entries.
         /// </summary>
-        public List<ElfRelocation> Entries { get; }
+        public List<ElfRelocation> Entries => _entries;
+
+        public Dictionary<ulong, ElfRelocation> CreateMap()
+        {
+            var mapRelocs = new Dictionary<ulong, ElfRelocation>();
+            for (var i = 0; i < _entries.Count; i++)
+            {
+                var entry = _entries[i];
+                if (mapRelocs.ContainsKey(entry.Offset))
+                {
+                    throw new InvalidOperationException($"Invalid offset {entry.Offset} for entry {i} which is already taken by another entry.");
+                }
+                mapRelocs.Add(entry.Offset, entry);
+            }
+
+            return mapRelocs;
+        }
 
         private static string GetDefaultName(ElfSectionType type)
         {
@@ -88,15 +106,14 @@ namespace LibObjectFile.Elf
                         reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteRelocationAddendsEntry32Size, $"Unable to read entirely the relocation entry [{i}] from {Type} section [{Index}]. Not enough data (size: {OriginalTableEntrySize}) read at offset {streamOffset} from the stream");
                     }
 
-                    var entry = new ElfRelocation();
-                    entry.Offset = reader.Decode(rel.r_offset);
-
+                    var offset = reader.Decode(rel.r_offset);
                     var r_info = reader.Decode(rel.r_info);
-                    entry.Type = new ElfRelocationType(Parent.Arch, r_info & 0xFF);
-                    entry.SymbolIndex = r_info >> 8;
-                    entry.Addend = reader.Decode(rel.r_addend);
+                    var type = new ElfRelocationType(Parent.Arch, r_info & 0xFF);
+                    var symbolIndex = r_info >> 8;
+                    var addend = reader.Decode(rel.r_addend);
 
-                    Entries.Add(entry);
+                    var entry = new ElfRelocation(offset, type, symbolIndex, addend);
+                    _entries.Add(entry);
                 }
             }
             else
@@ -110,14 +127,14 @@ namespace LibObjectFile.Elf
                         reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteRelocationEntry32Size, $"Unable to read entirely the relocation entry [{i}] from {Type} section [{Index}]. Not enough data (size: {OriginalTableEntrySize}) read at offset {streamOffset} from the stream");
                     }
 
-                    var entry = new ElfRelocation();
-                    entry.Offset = reader.Decode(rel.r_offset);
+                    var offset = reader.Decode(rel.r_offset);
 
                     var r_info = reader.Decode(rel.r_info);
-                    entry.Type = new ElfRelocationType(Parent.Arch, r_info & 0xFF);
-                    entry.SymbolIndex = r_info >> 8;
+                    var type = new ElfRelocationType(Parent.Arch, r_info & 0xFF);
+                    var symbolIndex = r_info >> 8;
 
-                    Entries.Add(entry);
+                    var entry = new ElfRelocation(offset, type, symbolIndex, 0);
+                    _entries.Add(entry);
                 }
             }
         }
@@ -136,15 +153,15 @@ namespace LibObjectFile.Elf
                         reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteRelocationAddendsEntry64Size, $"Unable to read entirely the relocation entry [{i}] from {Type} section [{Index}]. Not enough data (size: {OriginalTableEntrySize}) read at offset {streamOffset} from the stream");
                     }
 
-                    var entry = new ElfRelocation();
-                    entry.Offset = reader.Decode(rel.r_offset);
+                    var offset = reader.Decode(rel.r_offset);
 
                     var r_info = reader.Decode(rel.r_info);
-                    entry.Type = new ElfRelocationType(Parent.Arch, (uint)(r_info & 0xFFFFFFFF));
-                    entry.SymbolIndex = (uint)(r_info >> 32);
-                    entry.Addend = reader.Decode(rel.r_addend);
+                    var type = new ElfRelocationType(Parent.Arch, (uint)(r_info & 0xFFFFFFFF));
+                    var symbolIndex = (uint)(r_info >> 32);
+                    var addend = reader.Decode(rel.r_addend);
 
-                    Entries.Add(entry);
+                    var entry = new ElfRelocation(offset, type, symbolIndex, addend);
+                    _entries.Add(entry);
                 }
             }
             else
@@ -158,14 +175,14 @@ namespace LibObjectFile.Elf
                         reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteRelocationEntry64Size, $"Unable to read entirely the relocation entry [{i}] from {Type} section [{Index}]. Not enough data (size: {OriginalTableEntrySize}) read at offset {streamOffset} from the stream");
                     }
 
-                    var entry = new ElfRelocation();
-                    entry.Offset = reader.Decode(rel.r_offset);
+                    var offset = reader.Decode(rel.r_offset);
 
                     var r_info = reader.Decode(rel.r_info);
-                    entry.Type = new ElfRelocationType(Parent.Arch, (uint)(r_info & 0xFFFFFFFF));
-                    entry.SymbolIndex = (uint)(r_info >> 32);
+                    var type = new ElfRelocationType(Parent.Arch, (uint)(r_info & 0xFFFFFFFF));
+                    var symbolIndex = (uint)(r_info >> 32);
 
-                    Entries.Add(entry);
+                    var entry = new ElfRelocation(offset, type, symbolIndex, 0);
+                    _entries.Add(entry);
                 }
             }
         }

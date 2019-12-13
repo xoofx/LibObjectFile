@@ -3,6 +3,8 @@
 // See the license.txt file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
+using System.IO;
 using LibObjectFile.Elf;
 
 namespace LibObjectFile.Dwarf
@@ -20,6 +22,10 @@ namespace LibObjectFile.Dwarf
                 IsLittleEndian = elf.Encoding == ElfEncoding.Lsb,
                 Is64BitAddress = elf.FileClass == ElfFileClass.Is64
             };
+
+            ElfRelocationTable debugInfoReloc = null;
+
+            List<StreamRelocation> relocations = null;
 
             foreach (var section in elf.Sections)
             {
@@ -40,10 +46,43 @@ namespace LibObjectFile.Dwarf
                     case ".debug_line":
                         readerContext.DebugLineStream = ((ElfBinarySection)section).Stream;
                         break;
+
+                    case ".rela.debug_aranges":
+                    case ".rel.debug_aranges":
+                    case ".rela.debug_line":
+                    case ".rel.debug_line":
+                    case ".rela.debug_info":
+                    case ".rel.debug_info":
+                        if (relocations == null)
+                            relocations = new List<StreamRelocation>();
+                        relocations.Add(new StreamRelocation(((ElfBinarySection)section.Info.Section).Stream, (ElfRelocationTable)section));
+                        break;
+                }
+            }
+
+            // Apply relocation
+            if (relocations != null)
+            {
+                foreach (var relocationStream in relocations)
+                {
+                    relocationStream.RelocationTable.Apply(relocationStream.Stream, new ElfRelocationContext());
                 }
             }
 
             return readerContext;
+        }
+
+        private struct StreamRelocation
+        {
+            public StreamRelocation(Stream stream, ElfRelocationTable relocationTable)
+            {
+                Stream = stream;
+                RelocationTable = relocationTable;
+            }
+
+            public readonly Stream Stream;
+
+            public readonly ElfRelocationTable RelocationTable;
         }
     }
 }
