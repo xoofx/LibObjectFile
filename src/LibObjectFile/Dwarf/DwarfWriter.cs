@@ -367,7 +367,7 @@ namespace LibObjectFile.Dwarf
                     if (attr.ValueAsObject is string str)
                     {
                         // Create string offset
-                        if (_parent.StringTable.ContainsString(str))
+                        if (_parent.StringTable.Contains(str))
                         {
                             return DwarfAttributeForm.Strp;
                         }

@@ -2,6 +2,7 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -11,19 +12,24 @@ namespace LibObjectFile.Dwarf
     {
         private readonly Dictionary<string, ulong> _stringToOffset;
         private readonly Dictionary<ulong, string> _offsetToString;
+        private Stream _stream;
 
-        public DwarfStringTable()
+        public DwarfStringTable() : this(new MemoryStream())
         {
+        }
+
+        public DwarfStringTable(Stream stream)
+        {
+            Stream = stream ?? throw new ArgumentNullException(nameof(stream));
             _stringToOffset = new Dictionary<string, ulong>();
             _offsetToString = new Dictionary<ulong, string>();
         }
 
-        public DwarfStringTable(Stream stream) : this()
+        public Stream Stream
         {
-            Stream = stream;
+            get => _stream;
+            set => _stream = value ?? throw new ArgumentNullException(nameof(value));
         }
-
-        public Stream Stream { get; set; }
 
         public string GetStringFromOffset(ulong offset)
         {
@@ -39,7 +45,7 @@ namespace LibObjectFile.Dwarf
             return text;
         }
 
-        public bool ContainsString(string text)
+        public bool Contains(string text)
         {
             if (text == null) return false;
             return _stringToOffset.ContainsKey(text);
@@ -63,7 +69,7 @@ namespace LibObjectFile.Dwarf
             return offset;
         }
 
-        internal void Read(DwarfReaderWriter reader)
+        internal void Read(DwarfReader reader)
         {
             if (reader.Context.DebugStringStream.Stream == null)
             {
