@@ -79,7 +79,6 @@ namespace LibObjectFile.Dwarf
             if (!diagnostics.HasErrors)
             {
                 LineSection?.TryUpdateLayout(diagnostics);
-                AddressRangeTable?.TryUpdateLayout(diagnostics);
             }
             CheckErrors(diagnostics);
 
@@ -90,6 +89,9 @@ namespace LibObjectFile.Dwarf
             var writer = new DwarfWriter(writerContext, diagnostics);
             writer.UpdateLayout(diagnostics, InfoSection);
             CheckErrors(diagnostics);
+
+            // Update AddressRangeTable layout after Info
+            AddressRangeTable?.TryUpdateLayout(diagnostics);
 
             // Update string table right after updating the layout of Info
             StringTable?.TryUpdateLayout(diagnostics);

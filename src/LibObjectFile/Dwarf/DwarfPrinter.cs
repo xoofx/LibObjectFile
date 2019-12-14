@@ -122,6 +122,36 @@ namespace LibObjectFile.Dwarf
             }
         }
 
+        public static void Print(this DwarfAddressRangeTable addressRangeTable, TextWriter writer)
+        {
+            if (writer == null) throw new ArgumentNullException(nameof(writer));
+
+            writer.WriteLine("Contents of the .debug_aranges section:");
+            writer.WriteLine();
+            writer.WriteLine($"  Length:                   {addressRangeTable.HeaderLength}");
+            writer.WriteLine($"  Version:                  {addressRangeTable.Version}");
+            writer.WriteLine($"  Offset into .debug_info:  0x{addressRangeTable.DebugInfoOffset:x}");
+            writer.WriteLine($"  Pointer Size:             {(addressRangeTable.Is64BitAddress ? 8 : 4)}");
+            writer.WriteLine($"  Segment Size:             {addressRangeTable.SegmentSelectorSize}");
+            writer.WriteLine();
+            var addressSize = addressRangeTable.Is64BitAddress ? 8 : 4;
+            if (addressSize > 4)
+            {
+                writer.WriteLine("    Address            Length");
+            }
+            else
+            {
+                writer.WriteLine("    Address    Length");
+            }
+
+            var formatStyle = "x" + (addressSize * 2);
+            foreach (var range in addressRangeTable.Ranges)
+            {
+                writer.WriteLine($"    {range.Segment.ToString(formatStyle)} {range.Address.ToString(formatStyle)}");
+            }
+            writer.WriteLine($"    {((ulong)0).ToString(formatStyle)} {((ulong)0).ToString(formatStyle)}");
+        }
+
         private static string GetLanguageKind(DwarfLanguageKind kind)
         {
             var rawKind = (uint) kind;

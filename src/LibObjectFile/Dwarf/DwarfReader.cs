@@ -50,7 +50,9 @@ namespace LibObjectFile.Dwarf
                     _offsetToDebugLine.Add(debugLine.Offset, debugLine);
                 }
             }
-            
+
+            var addressRangeTable = debugInfo.Parent.AddressRangeTable;
+
             while (true)
             {
                 if (Offset >= Length)
@@ -66,6 +68,12 @@ namespace LibObjectFile.Dwarf
                 {
                     Offset = offsetEndOfUnit;
                     continue;
+                }
+
+                // Link AddressRangeTable to Unit
+                if (addressRangeTable != null && addressRangeTable.DebugInfoOffset == cu.Offset)
+                {
+                    addressRangeTable.Unit = cu;
                 }
 
                 _version = cu.Version;

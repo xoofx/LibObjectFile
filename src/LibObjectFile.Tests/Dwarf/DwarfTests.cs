@@ -223,11 +223,13 @@ namespace LibObjectFile.Tests.Dwarf
                 DebugLineStream = new MemoryStream(),
                 DebugInfoStream = new MemoryStream(),
                 DebugStringStream =  new MemoryStream(),
+                DebugAddressRangeStream = new MemoryStream()
             };
             dwarf.Write(outputContext);
 
             dwarf.AbbreviationTable.Print(Console.Out);
             dwarf.InfoSection.Print(Console.Out);
+            dwarf.AddressRangeTable.Print(Console.Out);
 
             PrintStreamLength(outputContext);
         }

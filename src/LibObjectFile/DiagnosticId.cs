@@ -106,6 +106,8 @@ namespace LibObjectFile
         DWARF_ERR_InvalidOperationIndex = 2013,
         DWARF_ERR_InvalidAddressSize = 2014,
         DWARF_ERR_UnsupportedUnitType = 2015,
+        DWARF_ERR_InvalidNullUnitForAddressRangeTable = 2016,
+        DWARF_ERR_InvalidParentUnitForAddressRangeTable = 2017,
 
 
     }

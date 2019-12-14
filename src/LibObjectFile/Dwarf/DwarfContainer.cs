@@ -18,5 +18,16 @@ namespace LibObjectFile.Dwarf
             if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
             return true;
         }
+
+        public DwarfFile GetParentFile()
+        {
+            var check = this;
+            while (check != null)
+            {
+                if (check is DwarfFile dwarfFile) return dwarfFile;
+                check = check.Parent;
+            }
+            return null;
+        }
     }
 }
