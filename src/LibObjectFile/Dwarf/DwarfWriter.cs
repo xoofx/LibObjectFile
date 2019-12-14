@@ -67,6 +67,8 @@ namespace LibObjectFile.Dwarf
             // Before updating the layout, we need to compute the abbreviation
             ComputeAbbreviation(unit);
 
+            unit.DebugAbbreviationOffset = unit.Abbreviation.Offset;
+
             // Compute the full layout of all DIE and attributes (once abbreviation are calculated)
             UpdateLayoutDIE(unit.Root);
             

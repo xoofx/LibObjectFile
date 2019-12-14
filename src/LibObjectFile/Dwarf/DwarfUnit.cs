@@ -18,7 +18,7 @@ namespace LibObjectFile.Dwarf
 
         public DwarfUnitKindEx Kind { get; set; }
 
-        internal ulong DebugAbbreviationOffset { get; set; }
+        public ulong DebugAbbreviationOffset { get; internal set; }
 
         public ulong UnitLength { get; internal set; }
         
@@ -34,7 +34,7 @@ namespace LibObjectFile.Dwarf
         /// <summary>
         /// Gets or sets the abbreviation associated with the <see cref="Root"/> <see cref="DwarfDIE"/>
         /// </summary>
-        public DwarfAbbreviation Abbreviation { get; set; }
+        public DwarfAbbreviation Abbreviation { get; internal set; }
         
         public ulong GetRelocatableValue(ulong relativeOffset, RelocationSize size)
         {
