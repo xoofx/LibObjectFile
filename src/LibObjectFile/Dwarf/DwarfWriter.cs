@@ -354,7 +354,16 @@ namespace LibObjectFile.Dwarf
                 case DwarfAttributeEncoding.Reference:
                     VerifyAttributeValueNotNull(attr);
 
-                    if (!(attr.ValueAsObject is DwarfDIE))
+                    if (attr.ValueAsObject is DwarfDIE die)
+                    {
+                        var dieParentUnit = die.GetParentUnit();
+                        // If we are not from the same unit 
+                        if (dieParentUnit != _currentUnit)
+                        {
+                            return DwarfAttributeForm.RefAddr;
+                        }
+                    }
+                    else
                     {
                         Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The value of attribute {attr} from DIE {attr.Parent} must be a {nameof(DwarfDIE)}");
                     }

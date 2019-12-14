@@ -29,5 +29,16 @@ namespace LibObjectFile.Dwarf
             }
             return null;
         }
+
+        public DwarfUnit GetParentUnit()
+        {
+            var check = this;
+            while (check != null)
+            {
+                if (check is DwarfUnit dwarfUnit) return dwarfUnit;
+                check = check.Parent;
+            }
+            return null;
+        }
     }
 }
