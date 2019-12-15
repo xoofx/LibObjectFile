@@ -70,7 +70,7 @@ namespace LibObjectFile.Elf
         public bool IsEmpty => this == Empty;
 
         /// <summary>
-        /// Returns the absolute offset of this range taking into account the <see cref="BeginSection"/>.<see cref="ElfObjectFileNode.Offset"/>.
+        /// Returns the absolute offset of this range taking into account the <see cref="BeginSection"/>.<see cref="ElfObject.Offset"/>.
         /// </summary>
         public ulong Offset
         {

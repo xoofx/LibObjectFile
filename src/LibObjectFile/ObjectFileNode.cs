@@ -20,7 +20,6 @@ namespace LibObjectFile
         /// <summary>
         /// Gets the containing parent.
         /// </summary>
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ObjectFileNode Parent
         {
             get => _parent;
@@ -95,29 +94,11 @@ namespace LibObjectFile
             if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
         }
 
-        /// <summary>
-        /// Update and calculate the layout of this file.
-        /// </summary>
-        public void UpdateLayout()
-        {
-            var diagnostics = new DiagnosticBag();
-            TryUpdateLayout(diagnostics);
-            if (diagnostics.HasErrors)
-            {
-                throw new ObjectFileException("Unexpected error while updating the layout of this instance", diagnostics);
-            }
-        }
-
-        /// <summary>
-        /// Tries to update and calculate the layout of the sections, segments and <see cref="Layout"/>.
-        /// </summary>
-        /// <param name="diagnostics">A DiagnosticBag instance to receive the diagnostics.</param>
-        /// <returns><c>true</c> if the calculation of the layout is successful. otherwise <c>false</c></returns>
-        public abstract bool TryUpdateLayout(DiagnosticBag diagnostics);
-
-        public static void AttachChild<TParent, T>(TParent parent, T child, ref T field) where T : ObjectFileNode<TParent> where TParent : ObjectFileNode
+        protected static void AttachChild<TParent, T>(TParent parent, T child, ref T field, bool allowNull) where T : ObjectFileNode where TParent : ObjectFileNode
         {
             if (parent == null) throw new ArgumentNullException(nameof(parent));
+            if (!allowNull && child == null) throw new ArgumentNullException(nameof(child));
+
             if (field != null)
             {
                 field.Parent = null;
@@ -133,28 +114,39 @@ namespace LibObjectFile
         }
     }
 
-    /// <summary>
-    /// Base class for a part of a file.
-    /// </summary>
-    public abstract class ObjectFileNode<TParentFile> : ObjectFileNode where TParentFile : ObjectFileNode
-    {
-        protected override void ValidateParent(ObjectFileNode parent)
-        {
-            if (!(parent is TParentFile))
-            {
-                throw new ArgumentException($"Parent must inherit from type {nameof(TParentFile)}");
-            }
-        }
+    ///// <summary>
+    ///// Base class for a part of a file.
+    ///// </summary>
+    //public abstract class ObjectFileNode<TParentFile, TLayoutContext> : ObjectFileNode where TParentFile : ObjectFileNode
+    //{
+    //    protected override void ValidateParent(ObjectFileNode parent)
+    //    {
+    //        if (!(parent is TParentFile))
+    //        {
+    //            throw new ArgumentException($"Parent must inherit from type {nameof(TParentFile)}");
+    //        }
+    //    }
+        
+    //    internal void UpdateLayoutInternal(TLayoutContext layout)
+    //    {
+    //        UpdateLayoutImpl(layout);
+    //    }
 
-        /// <summary>
-        /// Gets the containing <see cref="TParentFile"/>. Might be null if this section or segment
-        /// does not belong to an existing <see cref="TParentFile"/>.
-        /// </summary>
-        [DebuggerBrowsable(DebuggerBrowsableState.Collapsed)]
-        public new TParentFile Parent
-        {
-            get => (TParentFile) base.Parent;
-            internal set => base.Parent = value;
-        }
-    }
+    //    /// <summary>
+    //    /// Updates the layout of this object.
+    //    /// </summary>
+    //    /// <param name="layout">The layout context of this object.</param>
+    //    protected abstract void UpdateLayoutImpl(TLayoutContext layout);
+        
+    //    /// <summary>
+    //    /// Gets the containing <see cref="TParentFile"/>. Might be null if this section or segment
+    //    /// does not belong to an existing <see cref="TParentFile"/>.
+    //    /// </summary>
+    //    [DebuggerBrowsable(DebuggerBrowsableState.Collapsed)]
+    //    public new TParentFile Parent
+    //    {
+    //        get => (TParentFile) base.Parent;
+    //        internal set => base.Parent = value;
+    //    }
+    //}
 }

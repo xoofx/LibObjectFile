@@ -357,7 +357,8 @@ namespace LibObjectFile.Tests.Elf
             var diagnostics = elf.Verify();
             Assert.False(diagnostics.HasErrors);
 
-            Assert.True(elf.TryUpdateLayout(diagnostics));
+            elf.UpdateLayout(diagnostics);
+            Assert.False(diagnostics.HasErrors);
 
             elf.Print(Console.Out);
 

@@ -59,14 +59,14 @@ namespace LibObjectFile.Elf
             writer.Write(Stream);
         }
 
-        public override bool TryUpdateLayout(DiagnosticBag diagnostics)
+        public override void UpdateLayout(DiagnosticBag diagnostics)
         {
             if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
 
-            if (Type == ElfSectionType.NoBits) return true;
-
-            Size = Stream != null ? (ulong)Stream.Length : 0;
-            return true;
+            if (Type != ElfSectionType.NoBits)
+            {
+                Size = Stream != null ? (ulong)Stream.Length : 0;
+            }
         }
 
         public override void Verify(DiagnosticBag diagnostics)

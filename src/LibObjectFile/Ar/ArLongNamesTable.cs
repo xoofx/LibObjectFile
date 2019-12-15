@@ -109,12 +109,12 @@ namespace LibObjectFile.Ar
             ArrayPool<byte>.Shared.Return(buffer);
         }
 
-        public override bool TryUpdateLayout(DiagnosticBag diagnostics)
+        public override void UpdateLayout(DiagnosticBag diagnostics)
         {
             if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
             Size = 0;
 
-            if (Parent == null) return false;
+            if (Parent == null) return;
 
             ulong size = 0;
             for (var i = (int)Index; i < Parent.Files.Count; i++)
@@ -143,7 +143,6 @@ namespace LibObjectFile.Ar
 
             // Once it is calculated freeze it
             Size = size;
-            return true;
         }
     }
 }

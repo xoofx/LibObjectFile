@@ -439,7 +439,7 @@ namespace LibObjectFile.Elf
 
                 // Add the shadow section ElfProgramHeaderTable
                 ObjectFile.InsertSectionAt(1, programHeaderTable);
-                programHeaderTable.TryUpdateLayout(Diagnostics);
+                programHeaderTable.UpdateLayout(Diagnostics);
 
                 if (programHeaderTable.Size > 0)
                 {

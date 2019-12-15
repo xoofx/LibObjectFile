@@ -4,28 +4,32 @@
 
 using System;
 using System.Diagnostics;
+using LibObjectFile.Elf;
 
-namespace LibObjectFile.Dwarf
+namespace LibObjectFile.Ar
 {
-    public abstract class DwarfSection : DwarfContainer
+    public abstract class ArObject : ObjectFileNode
     {
         protected override void ValidateParent(ObjectFileNode parent)
         {
-            if (!(parent is DwarfFile))
+            if (!(parent is ArArchiveFile))
             {
-                throw new ArgumentException($"Parent must inherit from type {nameof(DwarfFile)}");
+                throw new ArgumentException($"Parent must inherit from type {nameof(ArArchiveFile)}");
             }
         }
+
 
         /// <summary>
         /// Gets the containing <see cref="ElfObjectFile"/>. Might be null if this section or segment
         /// does not belong to an existing <see cref="ElfObjectFile"/>.
         /// </summary>
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public new DwarfFile Parent
+        public new ArArchiveFile Parent
         {
-            get => (DwarfFile)base.Parent;
+            get => (ArArchiveFile)base.Parent;
             internal set => base.Parent = value;
         }
+
+        public abstract void UpdateLayout(DiagnosticBag diagnostics);
     }
 }

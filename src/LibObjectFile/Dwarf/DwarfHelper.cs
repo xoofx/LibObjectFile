@@ -2,10 +2,18 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
+using System.Text;
+
 namespace LibObjectFile.Dwarf
 {
     public static partial class DwarfHelper
     {
+        public static ulong SizeOfStringUTF8NullTerminated(string text)
+        {
+            if (text == null) return 0;
+            return (ulong)Encoding.UTF8.GetByteCount(text) + 1;
+        }
+        
         public static uint SizeOfUnitLength(bool is64Bit)
         {
             return is64Bit ? 12U : 4U;

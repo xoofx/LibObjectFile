@@ -31,6 +31,7 @@ namespace LibObjectFile.Dwarf
             _fileNameToIndex = new Dictionary<DwarfFileName, uint>();
             _directoryNames = new List<string>();
             _stateLine = new DwarfLine();
+            Version = 2;
             LineBase = -5;
             LineRange = 14;
             _minimumInstructionLength = 1;
@@ -101,27 +102,9 @@ namespace LibObjectFile.Dwarf
             return _lines.RemoveAt(this, index);
         }
 
-        internal void Read(DwarfReaderWriter reader)
+        protected override void Read(DwarfReader reader)
         {
-            if (reader.Context.DebugLineStream.Stream == null)
-            {
-                return;
-            }
-
-            var currentStream = reader.Stream;
-            try
-            {
-                reader.Stream = reader.Context.DebugLineStream;
-                ReadInternal(reader, reader.Context.DebugLineStream.Printer);
-            }
-            finally
-            {
-                reader.Stream = currentStream;
-            }
-        }
-
-        private void ReadInternal(DwarfReaderWriter reader, TextWriter rawDump)
-        {
+            var log = reader.Log;
             var startOfSection = reader.Offset;
             var unitLength = reader.ReadUnitLength();
             Is64BitEncoding = reader.Is64BitEncoding;
@@ -155,28 +138,28 @@ namespace LibObjectFile.Dwarf
             LineRange = line_range;
             var opcode_base = reader.ReadU8();
             
-            if (rawDump != null)
+            if (log != null)
             {
-                rawDump.WriteLine();
-                rawDump.WriteLine($"  Offset:                      0x{startOfSection:x}");
-                rawDump.WriteLine($"  Length:                      {unitLength}");
-                rawDump.WriteLine($"  DWARF Version:               {Version}");
-                rawDump.WriteLine($"  Prologue Length:             {header_length}");
-                rawDump.WriteLine($"  Minimum Instruction Length:  {minimum_instruction_length}");
+                log.WriteLine();
+                log.WriteLine($"  Offset:                      0x{startOfSection:x}");
+                log.WriteLine($"  Length:                      {unitLength}");
+                log.WriteLine($"  DWARF Version:               {Version}");
+                log.WriteLine($"  Prologue Length:             {header_length}");
+                log.WriteLine($"  Minimum Instruction Length:  {minimum_instruction_length}");
                 if (Version >= 4)
                 {
-                    rawDump.WriteLine($"  Maximum Operations Per Instruction:  {maximum_operations_per_instruction}");
+                    log.WriteLine($"  Maximum Operations Per Instruction:  {maximum_operations_per_instruction}");
                 }
-                rawDump.WriteLine($"  Initial value of 'is_stmt':  {default_is_stmt}");
-                rawDump.WriteLine($"  Line Base:                   {line_base}");
-                rawDump.WriteLine($"  Line Range:                  {line_range}");
-                rawDump.WriteLine($"  Opcode Base:                 {opcode_base}");
+                log.WriteLine($"  Initial value of 'is_stmt':  {default_is_stmt}");
+                log.WriteLine($"  Line Base:                   {line_base}");
+                log.WriteLine($"  Line Range:                  {line_range}");
+                log.WriteLine($"  Opcode Base:                 {opcode_base}");
             }
             
             _standardOpCodeLengths.Clear();
             for (int i = 1; i < opcode_base; i++)
             {
-                var opcode_length = reader.ReadLEB128AsU32();
+                var opcode_length = reader.ReadULEB128AsU32();
                 _standardOpCodeLengths.Add((uint)opcode_length);
                 if (i - 1 <= DefaultStandardOpCodeLengths.Length && opcode_length != DefaultStandardOpCodeLengths[i - 1])
                 {
@@ -184,14 +167,14 @@ namespace LibObjectFile.Dwarf
                 }
             }
 
-            if (rawDump != null && opcode_base > 0)
+            if (log != null && opcode_base > 0)
             {
-                rawDump.WriteLine();
-                rawDump.WriteLine(" Opcodes:");
+                log.WriteLine();
+                log.WriteLine(" Opcodes:");
                 for (int i = 0; i < _standardOpCodeLengths.Count; i++)
                 {
                     var argCount = _standardOpCodeLengths[i];
-                    rawDump.WriteLine($"  Opcode {i + 1} has {argCount} {((argCount == 0 || argCount > 1) ? "args" : "arg")}");
+                    log.WriteLine($"  Opcode {i + 1} has {argCount} {((argCount == 0 || argCount > 1) ? "args" : "arg")}");
                 }
             }
 
@@ -208,20 +191,20 @@ namespace LibObjectFile.Dwarf
                 directories.Add(dir);
             }
 
-            if (rawDump != null)
+            if (log != null)
             {
-                rawDump.WriteLine();
+                log.WriteLine();
                 if (directories.Count > 0)
                 {
-                    rawDump.WriteLine($" The Directory Table (offset 0x{directoriesOffset:x}):");
+                    log.WriteLine($" The Directory Table (offset 0x{directoriesOffset:x}):");
                     for (int i = 0; i < directories.Count; i++)
                     {
-                        rawDump.WriteLine($"  {i + 1}\t{directories[i]}");
+                        log.WriteLine($"  {i + 1}\t{directories[i]}");
                     }
                 }
                 else
                 {
-                    rawDump.WriteLine(" The Directory Table is empty.");
+                    log.WriteLine(" The Directory Table is empty.");
                 }
             }
 
@@ -251,25 +234,25 @@ namespace LibObjectFile.Dwarf
                 fileName.Time = reader.ReadULEB128();
                 fileName.Size = reader.ReadULEB128();
 
-                if (rawDump != null)
+                if (log != null)
                 {
                     if (printDumpHeader)
                     {
-                        rawDump.WriteLine();
-                        rawDump.WriteLine($" The File Name Table (offset 0x{fileNamesOffset:x}):");
-                        rawDump.WriteLine($"  Entry\tDir\tTime\tSize\tName");
+                        log.WriteLine();
+                        log.WriteLine($" The File Name Table (offset 0x{fileNamesOffset:x}):");
+                        log.WriteLine($"  Entry\tDir\tTime\tSize\tName");
                         printDumpHeader = false;
                     }
-                    rawDump.WriteLine($"  {FileNames.Count + 1}\t{directoryIndex}\t{fileName.Time}\t{fileName.Size}\t{name}");
+                    log.WriteLine($"  {FileNames.Count + 1}\t{directoryIndex}\t{fileName.Time}\t{fileName.Size}\t{name}");
                 }
 
                 FileNames.Add(fileName);
             }
 
-            if (rawDump != null && printDumpHeader)
+            if (log != null && printDumpHeader)
             {
-                rawDump.WriteLine();
-                rawDump.WriteLine(" The File Name Table is empty.");
+                log.WriteLine();
+                log.WriteLine(" The File Name Table is empty.");
             }
 
             var state = _stateLine;
@@ -288,16 +271,16 @@ namespace LibObjectFile.Dwarf
                     break;
                 }
 
-                if (rawDump != null)
+                if (log != null)
                 {
                     if (printDumpHeader)
                     {
-                        rawDump.WriteLine();
-                        rawDump.WriteLine(" Line Number Statements:");
+                        log.WriteLine();
+                        log.WriteLine(" Line Number Statements:");
                         printDumpHeader = false;
                     }
 
-                    rawDump.Write($"  [0x{reader.Offset:x8}]");
+                    log.Write($"  [0x{reader.Offset:x8}]");
                 }
 
                 var opcode = reader.ReadU8();
@@ -307,9 +290,9 @@ namespace LibObjectFile.Dwarf
                         AddDebugLine(state.Clone());
                         state.Offset = reader.Offset;
                         state.SpecialReset();
-                        if (rawDump != null)
+                        if (log != null)
                         {
-                            rawDump.WriteLine("  Copy");
+                            log.WriteLine("  Copy");
                         }
                         break;
                     case DwarfNative.DW_LNS_advance_pc:
@@ -324,15 +307,15 @@ namespace LibObjectFile.Dwarf
                         }
                         state.Address += deltaAddress;
 
-                        if (rawDump != null)
+                        if (log != null)
                         {
                             if (minimum_instruction_length == 1)
                             {
-                                rawDump.WriteLine($"  Advance PC by {deltaAddress} to 0x{state.Address:x}");
+                                log.WriteLine($"  Advance PC by {deltaAddress} to 0x{state.Address:x}");
                             }
                             else
                             {
-                                rawDump.WriteLine($"  Advance PC by {deltaAddress} to 0x{state.Address:x}[{state.OperationIndex}]");
+                                log.WriteLine($"  Advance PC by {deltaAddress} to 0x{state.Address:x}[{state.OperationIndex}]");
                             }
                         }
                         break;
@@ -340,9 +323,9 @@ namespace LibObjectFile.Dwarf
                     case DwarfNative.DW_LNS_advance_line:
                         var deltaLine = reader.ReadILEB128();
                         state.Line = (uint) (state.Line + deltaLine);
-                        if (rawDump != null)
+                        if (log != null)
                         {
-                            rawDump.WriteLine($"  Advance Line by {deltaLine} to {state.Line}");
+                            log.WriteLine($"  Advance Line by {deltaLine} to {state.Line}");
                         }
                         break;
                     case DwarfNative.DW_LNS_set_file:
@@ -355,30 +338,30 @@ namespace LibObjectFile.Dwarf
                         {
                             state.File = FileNames[fileIndex - 1];
                         }
-                        if (rawDump != null)
+                        if (log != null)
                         {
-                            rawDump.WriteLine($"  Set File Name to entry {fileIndex} in the File Name Table");
+                            log.WriteLine($"  Set File Name to entry {fileIndex} in the File Name Table");
                         }
                         break;
                     case DwarfNative.DW_LNS_set_column:
-                        state.Column = reader.ReadLEB128AsU32();
-                        if (rawDump != null)
+                        state.Column = reader.ReadULEB128AsU32();
+                        if (log != null)
                         {
-                            rawDump.WriteLine($"  Set column to {state.Column}");
+                            log.WriteLine($"  Set column to {state.Column}");
                         }
                         break;
                     case DwarfNative.DW_LNS_negate_stmt:
                         state.IsStatement = !state.IsStatement;
-                        if (rawDump != null)
+                        if (log != null)
                         {
-                            rawDump.WriteLine($"  Set is_stmt to {(state.IsStatement ? 1 : 0)}");
+                            log.WriteLine($"  Set is_stmt to {(state.IsStatement ? 1 : 0)}");
                         }
                         break;
                     case DwarfNative.DW_LNS_set_basic_block:
                         state.IsBasicBlock = true;
-                        if (rawDump != null)
+                        if (log != null)
                         {
-                            rawDump.WriteLine($"  Set basic block");
+                            log.WriteLine($"  Set basic block");
                         }
                         break;
                     case DwarfNative.DW_LNS_const_add_pc:
@@ -399,15 +382,15 @@ namespace LibObjectFile.Dwarf
                         }
                         state.Address += deltaAddress;
 
-                        if (rawDump != null)
+                        if (log != null)
                         {
                             if (minimum_instruction_length == 1)
                             {
-                                rawDump.WriteLine($"  Advance PC by constant {deltaAddress} to 0x{state.Address:x}");
+                                log.WriteLine($"  Advance PC by constant {deltaAddress} to 0x{state.Address:x}");
                             }
                             else
                             {
-                                rawDump.WriteLine($"  Advance PC by constant {deltaAddress} to 0x{state.Address:x}[{state.OperationIndex}]");
+                                log.WriteLine($"  Advance PC by constant {deltaAddress} to 0x{state.Address:x}[{state.OperationIndex}]");
                             }
                         }
                         break;
@@ -416,30 +399,30 @@ namespace LibObjectFile.Dwarf
                         var fixedDelta = reader.ReadU16();
                         state.Address += fixedDelta;
                         state.OperationIndex = 0;
-                        if (rawDump != null)
+                        if (log != null)
                         {
-                            rawDump.WriteLine($"  Advance PC by fixed size amount {fixedDelta} to 0x{state.Address:x}");
+                            log.WriteLine($"  Advance PC by fixed size amount {fixedDelta} to 0x{state.Address:x}");
                         }
                         break;
                     case DwarfNative.DW_LNS_set_prologue_end:  // DWARF 3
                         state.IsPrologueEnd = true;
-                        if (rawDump != null)
+                        if (log != null)
                         {
-                            rawDump.WriteLine($"  Set prologue_end to true");
+                            log.WriteLine($"  Set prologue_end to true");
                         }
                         break;
                     case DwarfNative.DW_LNS_set_epilogue_begin:  // DWARF 3
                         state.IsEpilogueBegin = true;
-                        if (rawDump != null)
+                        if (log != null)
                         {
-                            rawDump.WriteLine($"  Set epilogue_begin to true");
+                            log.WriteLine($"  Set epilogue_begin to true");
                         }
                         break;
                     case DwarfNative.DW_LNS_set_isa: // DWARF 3
                         state.Isa = reader.ReadULEB128();
-                        if (rawDump != null)
+                        if (log != null)
                         {
-                            rawDump.WriteLine($"  Set ISA to {state.Isa}");
+                            log.WriteLine($"  Set ISA to {state.Isa}");
                         }
                         break;
                     case 0:
@@ -451,9 +434,9 @@ namespace LibObjectFile.Dwarf
                             var sub_opcode = reader.ReadU8();
 
                             // extended opcode
-                            if (rawDump != null)
+                            if (log != null)
                             {
-                                rawDump.Write($"  Extended opcode {sub_opcode}: ");
+                                log.Write($"  Extended opcode {sub_opcode}: ");
                             }
                             
                             switch (sub_opcode)
@@ -463,18 +446,18 @@ namespace LibObjectFile.Dwarf
                                     AddDebugLine(state.Clone());
                                     state.Offset = reader.Offset;
                                     state.Reset(firstFileName, default_is_stmt != 0);
-                                    if (rawDump != null)
+                                    if (log != null)
                                     {
-                                        rawDump.WriteLine("End of Sequence");
-                                        rawDump.WriteLine();
+                                        log.WriteLine("End of Sequence");
+                                        log.WriteLine();
                                     }
                                     break;
                                 case DwarfNative.DW_LNE_set_address:
                                     state.Address = reader.ReadUInt();
                                     state.OperationIndex = 0;
-                                    if (rawDump != null)
+                                    if (log != null)
                                     {
-                                        rawDump.WriteLine($"set Address to 0x{state.Address:x}");
+                                        log.WriteLine($"set Address to 0x{state.Address:x}");
                                     }
                                     break;
                                 case DwarfNative.DW_LNE_define_file:
@@ -490,27 +473,27 @@ namespace LibObjectFile.Dwarf
 
                                     state.File = debugFileName;
 
-                                    if (rawDump != null)
+                                    if (log != null)
                                     {
-                                        rawDump.WriteLine("define new File Table entry");
-                                        rawDump.WriteLine($"  Entry\tDir\tTime\tSize\tName");
+                                        log.WriteLine("define new File Table entry");
+                                        log.WriteLine($"  Entry\tDir\tTime\tSize\tName");
                                         intFileNameCount++;
-                                        rawDump.WriteLine($"  {intFileNameCount + 1}\t{fileDirectoryIndex}\t{debugFileName.Time}\t{debugFileName.Size,-7}\t{fileName}");
-                                        rawDump.WriteLine();
+                                        log.WriteLine($"  {intFileNameCount + 1}\t{fileDirectoryIndex}\t{debugFileName.Time}\t{debugFileName.Size,-7}\t{fileName}");
+                                        log.WriteLine();
                                     }
 
                                     break;
                                 case DwarfNative.DW_LNE_set_discriminator: // DWARF 4
                                     state.Discriminator = reader.ReadULEB128();
-                                    if (rawDump != null)
+                                    if (log != null)
                                     {
-                                        rawDump.WriteLine($"set Discriminator to {state.Discriminator}");
+                                        log.WriteLine($"set Discriminator to {state.Discriminator}");
                                     }
                                     break;
                                 default:
-                                    if (rawDump != null)
+                                    if (log != null)
                                     {
-                                        rawDump.WriteLine($"Unknown opcode");
+                                        log.WriteLine($"Unknown opcode");
                                     }
                                     isValidSubOpCode = false;
                                     // TODO: Add support for pluggable handling of extensions
@@ -538,9 +521,9 @@ namespace LibObjectFile.Dwarf
                                 reader.ReadULEB128();
                             }
 
-                            if (rawDump != null)
+                            if (log != null)
                             {
-                                rawDump.WriteLine("Unsupported standard opcode with {numberOfLEB128Args} LEB128 args skipped");
+                                log.WriteLine("Unsupported standard opcode with {numberOfLEB128Args} LEB128 args skipped");
                             }
                         }
                         else
@@ -565,19 +548,19 @@ namespace LibObjectFile.Dwarf
                                 state.Address = state.Address + operation_advance;
                             }
 
-                            if (rawDump != null)
+                            if (log != null)
                             {
                                 if (minimum_instruction_length == 1)
                                 {
-                                    rawDump.Write($"  Special opcode {adjusted_opcode}: advance Address by {deltaAddress} to 0x{state.Address:x}");
+                                    log.Write($"  Special opcode {adjusted_opcode}: advance Address by {deltaAddress} to 0x{state.Address:x}");
                                 }
                                 else
                                 {
-                                    rawDump.Write($"  Special opcode {adjusted_opcode}: advance Address by {deltaAddress} to 0x{state.Address:x}[{state.OperationIndex}]");
+                                    log.Write($"  Special opcode {adjusted_opcode}: advance Address by {deltaAddress} to 0x{state.Address:x}[{state.OperationIndex}]");
                                 }
 
                                 // TODO: Make verbose version
-                                rawDump.WriteLine($" and Line by {line_inc} to {state.Line}");
+                                log.WriteLine($" and Line by {line_inc} to {state.Line}");
                             }
 
                             AddDebugLine(state.Clone());
@@ -587,6 +570,11 @@ namespace LibObjectFile.Dwarf
 
                         break;
                 }
+            }
+
+            foreach (var debugLine in Lines)
+            {
+                reader._offsetToDebugLine.Add(debugLine.Offset, debugLine);
             }
         }
 
@@ -674,13 +662,8 @@ namespace LibObjectFile.Dwarf
             }
         }
 
-        public override bool TryUpdateLayout(DiagnosticBag diagnostics)
+        protected override void UpdateLayout(DwarfLayoutContext layoutContext)
         {
-            if (!base.TryUpdateLayout(diagnostics))
-            {
-                return false;
-            }
-            
             ulong sizeOf = DwarfHelper.SizeOfUnitLength(Is64BitEncoding);
             // unit_length
             sizeOf += DwarfHelper.SizeOfUInt(Is64BitEncoding);
@@ -732,8 +715,6 @@ namespace LibObjectFile.Dwarf
             LayoutDebugLineOpCodes(ref sizeOf, OpCodeBase);
 
             Size = sizeOf;
-            
-            return true;
         }
 
         private void RecordDirectory(string directoryName, ref ulong sizeOf, out uint dirIndex)
@@ -747,23 +728,7 @@ namespace LibObjectFile.Dwarf
             }
         }
 
-        internal void Write(DwarfWriter writer)
-        {
-            if (writer.Context.DebugLineStream.Stream == null) return;
-
-            var currentStream = writer.Stream;
-            try
-            {
-                writer.Stream = writer.Context.DebugLineStream;
-                Write(writer, writer.Context.DebugLineStream.Printer);
-            }
-            finally
-            {
-                writer.Stream = currentStream;
-            }
-        }
-        
-        private void Write(DwarfWriter writer, TextWriter rawDump)
+        protected override void Write(DwarfWriter writer)
         {
             var startOffset = writer.Offset;
 

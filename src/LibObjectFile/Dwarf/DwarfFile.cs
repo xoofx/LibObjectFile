@@ -3,7 +3,6 @@
 // See the license.txt file in the project root for more information.
 
 using System;
-using System.Diagnostics;
 using LibObjectFile.Elf;
 
 namespace LibObjectFile.Dwarf
@@ -25,42 +24,100 @@ namespace LibObjectFile.Dwarf
             AddressRangeTable = new DwarfAddressRangeTable();
         }
 
+        public bool IsLittleEndian { get; set; }
+
+        public bool Is64BitAddress { get; set; }
+
         public DwarfAbbreviationTable AbbreviationTable
         {
             get => _abbreviationTable;
-            set => AttachChild<DwarfContainer, DwarfAbbreviationTable>(this, value, ref _abbreviationTable);
+            set => AttachChild(this, value, ref _abbreviationTable, false);
         }
         
         public DwarfStringTable StringTable
         {
             get => _stringTable;
-            set => AttachChild<DwarfContainer, DwarfStringTable>(this, value, ref _stringTable);
+            set => AttachChild(this, value, ref _stringTable, false);
         }
 
         public DwarfLineSection LineSection
         {
             get => _lineSection;
-            set => AttachChild<DwarfContainer, DwarfLineSection>(this, value, ref _lineSection);
+            set => AttachChild(this, value, ref _lineSection, false);
         }
 
         public DwarfAddressRangeTable AddressRangeTable
         {
             get => _addressRangeTable;
-            set => AttachChild<DwarfContainer, DwarfAddressRangeTable>(this, value, ref _addressRangeTable);
+            set => AttachChild(this, value, ref _addressRangeTable, false);
         }
 
         public DwarfInfoSection InfoSection
         {
             get => _infoSection;
-            set => AttachChild<DwarfContainer, DwarfInfoSection>(this, value, ref _infoSection);
+            set => AttachChild(this, value, ref _infoSection, false);
+        }
+        
+        protected override void Read(DwarfReader reader)
+        {
+            throw new NotImplementedException();
         }
 
-        internal void Read(DwarfReader reader)
+        public override void Verify(DiagnosticBag diagnostics)
         {
-            StringTable?.Read(reader);
-            LineSection?.Read(reader);
-            AddressRangeTable?.Read(reader);
-            InfoSection?.Read(reader, reader.Context.DebugInfoStream, DwarfUnitKind.Compile);
+            base.Verify(diagnostics);
+
+            LineSection.Verify(diagnostics);
+            AddressRangeTable.Verify(diagnostics);
+            InfoSection.Verify(diagnostics);
+            StringTable.Verify(diagnostics);
+        }
+        
+        public void UpdateLayout(DwarfLayoutConfig config, DiagnosticBag diagnostics)
+        {
+            if (config == null) throw new ArgumentNullException(nameof(config));
+            if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
+
+            var layoutContext = new DwarfLayoutContext(this, config, diagnostics);
+
+            LineSection.Offset = 0;
+            LineSection.UpdateLayoutInternal(layoutContext);
+            if (layoutContext.HasErrors)
+            {
+                return;
+            }
+
+            // Reset the abbreviation table
+            // TODO: Make this configurable via the DwarfWriterContext
+            AbbreviationTable.Offset = 0;
+            AbbreviationTable.Reset();
+
+            InfoSection.Offset = 0;
+            InfoSection.UpdateLayoutInternal(layoutContext);
+            if (layoutContext.HasErrors)
+            {
+                return;
+            }
+
+            // Update AddressRangeTable layout after Info
+            AddressRangeTable.Offset = 0;
+            AddressRangeTable.UpdateLayoutInternal(layoutContext);
+            if (layoutContext.HasErrors)
+            {
+                return;
+            }
+
+            // Update string table right after updating the layout of Info
+            StringTable.Offset = 0;
+            StringTable.UpdateLayoutInternal(layoutContext);
+            if (layoutContext.HasErrors)
+            {
+                return;
+            }
+
+            // Update the abbrev table right after we have computed the entire layout of Info
+            AbbreviationTable.Offset = 0;
+            AbbreviationTable.UpdateLayoutInternal(layoutContext);
         }
 
         public void Write(DwarfWriterContext writerContext)
@@ -69,39 +126,107 @@ namespace LibObjectFile.Dwarf
 
             var diagnostics = new DiagnosticBag();
 
-            // Verify
-            LineSection?.Verify(diagnostics);
-            AddressRangeTable?.Verify(diagnostics);
-            InfoSection?.Verify(diagnostics);
-            StringTable?.Verify(diagnostics);
+            // Verify correctness
+            Verify(diagnostics);
+            CheckErrors(diagnostics);
 
-            // Update layout
-            if (!diagnostics.HasErrors)
+            // Update the layout of all section and tables
+            UpdateLayout(writerContext.LayoutConfig, diagnostics);
+            CheckErrors(diagnostics);
+
+            // Write all section and stables
+            var writer = new DwarfWriter(this, writerContext, diagnostics);
+            writer.Is64BitAddress = writerContext.Is64BitAddress;
+
+            writer.Stream = writerContext.DebugAbbrevStream.Stream;
+            if (writer.Stream != null)
             {
-                LineSection?.TryUpdateLayout(diagnostics);
+                AbbreviationTable.WriteInternal(writer);
             }
+
+            writer.Stream = writerContext.DebugStringStream.Stream;
+            if (writer.Stream != null)
+            {
+                StringTable.WriteInternal(writer);
+            }
+
+            writer.Stream = writerContext.DebugLineStream.Stream;
+            if (writer.Stream != null)
+            {
+                LineSection.WriteInternal(writer);
+            }
+
+            writer.Stream = writerContext.DebugAddressRangeStream.Stream;
+            if (writer.Stream != null)
+            {
+                AddressRangeTable.WriteInternal(writer);
+            }
+
+            writer.Stream = writerContext.DebugInfoStream.Stream;
+            if (writer.Stream != null)
+            {
+                InfoSection.WriteInternal(writer);
+            }
+
             CheckErrors(diagnostics);
+        }
 
-            // Reset the abbreviation table
-            // TODO: Make this configurable via the DwarfWriterContext
-            AbbreviationTable?.Reset();
+        public static DwarfFile Read(DwarfReaderContext readerContext)
+        {
+            if (readerContext == null) throw new ArgumentNullException(nameof(readerContext));
 
-            var writer = new DwarfWriter(writerContext, diagnostics);
-            writer.UpdateLayout(diagnostics, InfoSection);
-            CheckErrors(diagnostics);
+            var dwarf = new DwarfFile()
+            {
+                IsLittleEndian = readerContext.IsLittleEndian
+            };
+            var reader = new DwarfReader(readerContext, dwarf, new DiagnosticBag());
 
-            // Update AddressRangeTable layout after Info
-            AddressRangeTable?.TryUpdateLayout(diagnostics);
+            reader.Log = readerContext.DebugAbbrevStream.Printer;
+            reader.Stream = readerContext.DebugAbbrevStream.Stream;
+            if (reader.Stream != null)
+            {
+                reader.Log = readerContext.DebugAbbrevStream.Printer;
+                dwarf.AbbreviationTable.ReadInternal(reader);
+            }
 
-            // Update string table right after updating the layout of Info
-            StringTable?.TryUpdateLayout(diagnostics);
+            reader.Log = readerContext.DebugStringStream.Printer;
+            reader.Stream = readerContext.DebugStringStream.Stream;
+            if (reader.Stream != null)
+            {
+                reader.Log = readerContext.DebugStringStream.Printer;
+                dwarf.StringTable.ReadInternal(reader);
+            }
 
-            // Update the abbrev table right after we have computed the entire layout of Info
-            AbbreviationTable?.TryUpdateLayout(diagnostics);
+            reader.Log = readerContext.DebugLineStream.Printer;
+            reader.Stream = readerContext.DebugLineStream.Stream;
+            if (reader.Stream != null)
+            {
+                reader.Log = readerContext.DebugLineStream.Printer;
+                dwarf.LineSection.ReadInternal(reader);
+            }
 
-            CheckErrors(diagnostics);
+            reader.Log = readerContext.DebugAddressRangeStream.Printer;
+            reader.Stream = readerContext.DebugAddressRangeStream.Stream;
+            if (reader.Stream != null)
+            {
+                dwarf.AddressRangeTable.ReadInternal(reader);
+            }
 
-            Write(writer);
+            reader.Log = readerContext.DebugInfoStream.Printer;
+            reader.Stream = readerContext.DebugInfoStream.Stream;
+            if (reader.Stream != null)
+            {
+                reader.DefaultUnitKind = DwarfUnitKind.Compile;
+                dwarf.InfoSection.ReadInternal(reader);
+            }
+
+            return dwarf;
+        }
+
+        public static DwarfFile ReadFromElf(ElfObjectFile elf)
+        {
+            var readerContext = DwarfReaderContext.FromElf(elf);
+            return Read(readerContext);
         }
 
         private static void CheckErrors(DiagnosticBag diagnostics)
@@ -112,29 +237,12 @@ namespace LibObjectFile.Dwarf
             }
         }
 
-        public static DwarfFile Read(DwarfReaderContext readerContext)
+        protected override void UpdateLayout(DwarfLayoutContext layoutContext)
         {
-            if (readerContext == null) throw new ArgumentNullException(nameof(readerContext));
-
-            var reader = new DwarfReader(readerContext, new DiagnosticBag());
-            var dwarf = new DwarfFile();
-            dwarf.Read(reader);
-            return dwarf;
         }
 
-        public static DwarfFile ReadFromElf(ElfObjectFile elf)
+        protected override void Write(DwarfWriter writer)
         {
-            var readerContext = DwarfReaderContext.FromElf(elf);
-            return Read(readerContext);
-        }
-
-        private void Write(DwarfWriter writer)
-        {
-            AbbreviationTable?.Write(writer);
-            StringTable?.Write(writer);
-            LineSection?.Write(writer);
-            AddressRangeTable?.Write(writer);
-            InfoSection?.Write(writer, writer.Context.DebugInfoStream.Stream);
         }
     }
 }

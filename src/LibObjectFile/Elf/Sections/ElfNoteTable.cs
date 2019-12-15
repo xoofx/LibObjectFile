@@ -38,7 +38,7 @@ namespace LibObjectFile.Elf
             }
         }
 
-        public override unsafe bool TryUpdateLayout(DiagnosticBag diagnostics)
+        public override unsafe void UpdateLayout(DiagnosticBag diagnostics)
         {
             if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
             ulong size = 0;
@@ -59,7 +59,6 @@ namespace LibObjectFile.Elf
                 size += entrySize;
             }
             Size = size;
-            return true;
         }
         
         protected override unsafe void Read(ElfReader reader)

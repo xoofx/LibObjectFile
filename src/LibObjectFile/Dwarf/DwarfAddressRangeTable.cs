@@ -35,26 +35,7 @@ namespace LibObjectFile.Dwarf
 
         public ulong HeaderLength => Size - DwarfHelper.SizeOfUnitLength(Is64BitEncoding);
 
-        internal void Read(DwarfReader reader)
-        {
-            if (reader.Context.DebugAddressRangeStream.Stream == null)
-            {
-                return;
-            }
-
-            var currentStream = reader.Stream;
-            try
-            {
-                reader.Stream = reader.Context.DebugAddressRangeStream;
-                ReadInternal(reader, reader.Context.DebugAddressRangeStream.Printer);
-            }
-            finally
-            {
-                reader.Stream = currentStream;
-            }
-        }
-
-        private void ReadInternal(DwarfReaderWriter reader, TextWriter dumpLog)
+        protected override void Read(DwarfReader reader)
         {
             Offset = reader.Offset;
             var unitLength = reader.ReadUnitLength();
@@ -159,7 +140,7 @@ namespace LibObjectFile.Dwarf
             }
         }
 
-        public override bool TryUpdateLayout(DiagnosticBag diagnostics)
+        protected override void UpdateLayout(DwarfLayoutContext layoutContext)
         {
             ulong sizeOf = 0;
             // unit_length
@@ -191,31 +172,9 @@ namespace LibObjectFile.Dwarf
             {
                 DebugInfoOffset = Unit.Offset;
             }
-
-            return true;
         }
 
-        internal void Write(DwarfWriter writer)
-        {
-            if (writer.Context.DebugAddressRangeStream.Stream == null)
-            {
-                return;
-            }
-
-            var previousStream = writer.Stream;
-            writer.Stream = writer.Context.DebugAddressRangeStream.Stream;
-
-            try
-            {
-                WriteInternal(writer);
-            }
-            finally
-            {
-                writer.Stream = previousStream;
-            }
-        }
-
-        private void WriteInternal(DwarfWriter writer)
+        protected override void Write(DwarfWriter writer)
         {
             var startOffset = writer.Offset;
 

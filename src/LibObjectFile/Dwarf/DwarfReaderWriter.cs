@@ -9,19 +9,20 @@ namespace LibObjectFile.Dwarf
 {
     public abstract class DwarfReaderWriter : ObjectFileReaderWriter
     {
-        internal DwarfReaderWriter(DwarfReaderWriterContext context, DiagnosticBag diagnostics) : base(context.DebugInfoStream, diagnostics)
+        internal DwarfReaderWriter(DwarfFile file, DiagnosticBag diagnostics) : base(null, diagnostics)
         {
-            Context = context;
-            IsLittleEndian = context.IsLittleEndian;
-            Is64BitAddress = context.Is64BitAddress;
+            File = file;
+            IsLittleEndian = file.IsLittleEndian;
         }
 
-        public DwarfReaderWriterContext Context { get; }
+        public DwarfFile File { get; }
 
         public bool Is64BitEncoding { get; set; }
 
-        public bool Is64BitAddress { get; }
-       
+        public bool Is64BitAddress { get; internal set; }
+
+        public DwarfUnit CurrentUnit { get; internal set; }
+
         public ulong ReadUnitLength()
         {
             Is64BitEncoding = false;
@@ -95,7 +96,7 @@ namespace LibObjectFile.Dwarf
             return Stream.ReadULEB128();
         }
 
-        public uint ReadLEB128AsU32()
+        public uint ReadULEB128AsU32()
         {
             return Stream.ReadULEB128AsU32();
         }

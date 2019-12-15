@@ -341,5 +341,153 @@ namespace LibObjectFile.Dwarf
                 AddAttribute(attr);
             }
         }
+
+        protected override void UpdateLayout(DwarfLayoutContext layoutContext)
+        {
+            var abbrev = Abbrev;
+
+            var endOffset = Offset;
+            endOffset += DwarfHelper.SizeOfULEB128(abbrev.Code); // WriteULEB128(abbreviationItem.Code);
+
+            foreach (var attr in _attributes)
+            {
+                attr.Offset = endOffset;
+                attr.UpdateLayoutInternal(layoutContext);
+                endOffset += attr.Size;
+            }
+
+            if (abbrev.HasChildren)
+            {
+                foreach (var child in _children)
+                {
+                    child.Offset = endOffset;
+                    child.UpdateLayout(layoutContext);
+                    endOffset += child.Size;
+                }
+
+                // Encode abbreviation 0 code
+                endOffset += DwarfHelper.SizeOfULEB128(0);
+            }
+
+            Size = endOffset - Offset;
+        }
+
+        protected override void Read(DwarfReader reader)
+        {
+            // Store map offset to DIE to resolve references
+            reader.RegisterDIE(this);
+
+            // Console.WriteLine($" <{level}><{die.Offset:x}> Abbrev Number: {abbreviationCode} ({die.Tag})");
+
+            var descriptors = Abbrev.Descriptors;
+            if (descriptors.Length > 0)
+            {
+                for (int i = 0; i < descriptors.Length; i++)
+                {
+                    reader.CurrentAttributeDescriptor = descriptors[i];
+                    
+                    var attribute = new DwarfAttribute()
+                    {
+                        Offset = reader.Offset,
+                    };
+
+                    attribute.ReadInternal(reader);
+
+                    AddAttribute(attribute);
+                }
+            }
+
+            if (Abbrev.HasChildren)
+            {
+                while (true)
+                {
+                    reader.DIELevel++;
+                    var child = ReadInstance(reader);
+                    reader.DIELevel--;
+                    if (child == null) break;
+
+                    AddChild(child);
+                }
+            }
+
+            Size = reader.Offset - Offset;
+        }
+
+        internal static DwarfDIE ReadInstance(DwarfReader reader)
+        {
+            var startDIEOffset = reader.Offset;
+            var abbreviationCode = reader.ReadULEB128();
+            DwarfDIE die = null;
+
+            if (abbreviationCode != 0)
+            {
+
+                if (!reader.CurrentUnit.Abbreviation.TryFindByCode(abbreviationCode, out var abbreviationItem))
+                {
+                    throw new InvalidOperationException($"Invalid abbreviation code {abbreviationCode}");
+                }
+
+                die = DIEHelper.ConvertTagToDwarfDIE((ushort) abbreviationItem.Tag);
+                die.Offset = startDIEOffset;
+                die.Abbrev = abbreviationItem;
+                die.Tag = abbreviationItem.Tag;
+                die.ReadInternal(reader);
+            }
+
+            return die;
+        }
+
+        internal void UpdateAbbreviationItem(DwarfLayoutContext context)
+        {
+            // Initialize the offset of DIE to ulong.MaxValue to make sure that when we have a reference
+            // to it, we can detect if it is a forward or backward reference.
+            // If it is a backward reference, we will be able to encode the offset
+            // otherwise we will have to pad the encoding with NOP (for DwarfOperation in expressions)
+            Offset = ulong.MaxValue;
+
+            // TODO: pool if not used by GetOrCreate below
+            var descriptorArray = new DwarfAttributeDescriptor[Attributes.Count];
+
+            for (var i = 0; i < Attributes.Count; i++)
+            {
+                var attr = Attributes[i];
+                attr.UpdateAttributeForm(context);
+                descriptorArray[i] = new DwarfAttributeDescriptor(attr.Kind, attr.Form);
+            }
+
+            var key = new DwarfAbbreviationItemKey(Tag, Children.Count > 0, new DwarfAttributeDescriptors(descriptorArray));
+            var item = context.CurrentUnit.Abbreviation.GetOrCreate(key);
+
+            Abbrev = item;
+
+            foreach (var children in Children)
+            {
+                children.UpdateAbbreviationItem(context);
+            }
+        }
+
+        protected override void Write(DwarfWriter writer)
+        {
+            var startDIEOffset = Offset;
+            Debug.Assert(Offset == startDIEOffset);
+            var abbrev = Abbrev;
+            writer.WriteULEB128(abbrev.Code);
+
+            foreach (var attr in _attributes)
+            {
+                attr.WriteInternal(writer);
+            }
+
+            if (abbrev.HasChildren)
+            {
+                foreach (var child in _children)
+                {
+                    child.Write(writer);
+                }
+                writer.WriteULEB128(0);
+            }
+
+            Debug.Assert(Size == writer.Offset - startDIEOffset);
+        }
     }
 }

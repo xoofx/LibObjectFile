@@ -6,7 +6,7 @@ using System.Globalization;
 
 namespace LibObjectFile.Dwarf
 {
-    public class DwarfLine : ObjectFileNode<DwarfLineSection>
+    public class DwarfLine : DwarfObject<DwarfLineSection>
     {
         // -----------------------
         // DWARF 2
@@ -174,9 +174,17 @@ namespace LibObjectFile.Dwarf
 
         private static string Bool2Str(bool value) => value.ToString(CultureInfo.InvariantCulture).ToLowerInvariant();
 
-        public override bool TryUpdateLayout(DiagnosticBag diagnostics)
+        protected override void UpdateLayout(DwarfLayoutContext layoutContext)
         {
-            return true;
+        }
+
+        protected override void Read(DwarfReader reader)
+        {
+            throw new System.NotImplementedException();
+        }
+        
+        protected override void Write(DwarfWriter writer)
+        {
         }
     }
 }

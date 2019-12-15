@@ -28,7 +28,7 @@ namespace LibObjectFile.Elf
         /// </summary>
         public uint UpperAlignment { get; set; }
         
-        public override bool TryUpdateLayout(DiagnosticBag diagnostics)
+        public override void UpdateLayout(DiagnosticBag diagnostics)
         {
             if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
 
@@ -38,8 +38,6 @@ namespace LibObjectFile.Elf
             {
                 diagnostics.Error(DiagnosticId.ELF_ERR_InvalidAlignmentOutOfRange, $"Invalid alignment 0x{UpperAlignment:x} resulting in an offset beyond int.MaxValue");
             }
-            
-            return true;
         }
 
         protected override void Read(ElfReader reader)

@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 
 namespace LibObjectFile.Dwarf
@@ -69,46 +70,20 @@ namespace LibObjectFile.Dwarf
             return offset;
         }
 
-        internal void Read(DwarfReader reader)
+        protected override void Read(DwarfReader reader)
         {
-            if (reader.Context.DebugStringStream.Stream == null)
-            {
-                return;
-            }
-
-            var previousStream = reader.Stream;
-            try
-            {
-                reader.Stream = reader.Context.DebugStringStream;
-                Stream = reader.ReadAsStream((ulong) reader.Stream.Length);
-            }
-            finally
-            {
-                reader.Stream = previousStream;
-            }
+            Stream = reader.ReadAsStream((ulong) reader.Stream.Length);
+            Size = reader.Offset - Offset;
         }
 
-        public override bool TryUpdateLayout(DiagnosticBag diagnostics)
+        protected override void Write(DwarfWriter writer)
+        {
+            writer.Write(Stream);
+        }
+
+        protected override void UpdateLayout(DwarfLayoutContext layoutContext)
         {
             Size = (ulong?)(Stream?.Length) ?? 0UL;
-            return true;
-        }
-
-        internal void Write(DwarfWriter writer)
-        {
-            if (Stream == null) return;
-            if (writer.Context.DebugStringStream.Stream == null) return;
-
-            var previousStream = writer.Stream;
-            try
-            {
-                writer.Stream = writer.Context.DebugStringStream.Stream;
-                writer.Write(Stream);
-            }
-            finally
-            {
-                writer.Stream = previousStream;
-            }
         }
     }
 }

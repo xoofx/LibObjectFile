@@ -11,7 +11,7 @@ namespace LibObjectFile.Elf
     /// Defines the base class for a section in an <see cref="ElfObjectFile"/>.
     /// </summary>
     [DebuggerDisplay("{ToString(),nq}")]
-    public abstract class ElfSection : ElfObjectFileNode
+    public abstract class ElfSection : ElfObject
     {
         private ElfSectionType _type;
 
@@ -31,6 +31,26 @@ namespace LibObjectFile.Elf
             {
                 _type = value;
             }
+        }
+
+        protected override void ValidateParent(ObjectFileNode parent)
+        {
+            if (!(parent is ElfObjectFile))
+            {
+                throw new ArgumentException($"Parent must inherit from type {nameof(ElfObjectFile)}");
+            }
+        }
+
+
+        /// <summary>
+        /// Gets the containing <see cref="ElfObjectFile"/>. Might be null if this section or segment
+        /// does not belong to an existing <see cref="ElfObjectFile"/>.
+        /// </summary>
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public new ElfObjectFile Parent
+        {
+            get => (ElfObjectFile)base.Parent;
+            internal set => base.Parent = value;
         }
 
         /// <summary>

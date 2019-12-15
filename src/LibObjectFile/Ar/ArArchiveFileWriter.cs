@@ -30,7 +30,8 @@ namespace LibObjectFile.Ar
         internal void Write()
         {
             var localDiagnostics = new DiagnosticBag();
-            if (!ArArchiveFile.TryUpdateLayout(localDiagnostics))
+            ArArchiveFile.UpdateLayout(localDiagnostics);
+            if (localDiagnostics.HasErrors)
             {
                 throw new ObjectFileException("Invalid ar file", localDiagnostics);
             }

@@ -8,29 +8,12 @@ namespace LibObjectFile.Dwarf
 {
     public class DwarfWriterContext : DwarfReaderWriterContext
     {
-        private DwarfAttributeForm _defaultAttributeFormForReference;
-
         public DwarfWriterContext()
         {
-            DefaultAttributeFormForReference = DwarfAttributeForm.Ref4;
+            LayoutConfig = new DwarfLayoutConfig();
         }
 
-        public DwarfAttributeFormEx DefaultAttributeFormForReference
-        {
-            get => _defaultAttributeFormForReference;
-            set
-            {
-                switch (value.Value)
-                {
-                    case DwarfAttributeForm.Ref1:
-                    case DwarfAttributeForm.Ref2:
-                    case DwarfAttributeForm.Ref4:
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(value));
-                }
-                _defaultAttributeFormForReference = value;
-            }
-        }
+
+        public DwarfLayoutConfig LayoutConfig { get; }
     }
 }

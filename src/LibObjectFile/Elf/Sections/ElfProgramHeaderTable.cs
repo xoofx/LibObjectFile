@@ -30,16 +30,15 @@ namespace LibObjectFile.Elf
             }
         }
 
-        public override bool TryUpdateLayout(DiagnosticBag diagnostics)
+        public override void UpdateLayout(DiagnosticBag diagnostics)
         {
             if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
 
             Size = 0;
 
-            if (Parent == null) return false;
+            if (Parent == null) return;
 
             Size = (ulong) Parent.Segments.Count * Parent.Layout.SizeOfProgramHeaderEntry;
-            return true;
         }
 
 

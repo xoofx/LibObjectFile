@@ -5,6 +5,7 @@
 using System;
 using System.Buffers;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using LibObjectFile.Utils;
 
@@ -179,7 +180,7 @@ namespace LibObjectFile.Elf
         /// </summary>
         /// <param name="diagnostics">A DiagnosticBag instance to receive the diagnostics.</param>
         /// <returns><c>true</c> if the calculation of the layout is successful. otherwise <c>false</c></returns>
-        public override unsafe bool TryUpdateLayout(DiagnosticBag diagnostics)
+        public unsafe void UpdateLayout(DiagnosticBag diagnostics)
         {
             if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
 
@@ -237,10 +238,7 @@ namespace LibObjectFile.Elf
                         }
                     }
 
-                    if (!section.TryUpdateLayout(diagnostics))
-                    {
-                        return false;
-                    }
+                    section.UpdateLayout(diagnostics);
 
                     // Console.WriteLine($"{section.ToString(),-50} Offset: {section.Offset:x4} Size: {section.Size:x4}");
 
@@ -271,16 +269,11 @@ namespace LibObjectFile.Elf
                 for (int i = 0; i < Segments.Count; i++)
                 {
                     var programHeader = Segments[i];
-                    if (!programHeader.TryUpdateLayout(diagnostics))
-                    {
-                        return false;
-                    }
+                    programHeader.UpdateLayout(diagnostics);
                 }
             }
 
             Size = offset + (ulong)VisibleSectionCount * Layout.SizeOfSectionHeaderEntry;
-
-            return true;
         }
 
         /// <summary>
@@ -566,8 +559,9 @@ namespace LibObjectFile.Elf
             {
                 return false;
             }
-            
-            if (!TryUpdateLayout(diagnostics))
+
+            UpdateLayout(diagnostics);
+            if (diagnostics.HasErrors)
             {
                 return false;
             }
@@ -682,7 +676,7 @@ namespace LibObjectFile.Elf
 
         /// <summary>
         /// Contains the layout of an object available after reading an <see cref="ElfObjectFile"/>
-        /// or after calling <see cref="ElfObjectFile.UpdateLayout"/> or <see cref="ElfObjectFile.TryUpdateLayout"/>
+        /// or after calling <see cref="ElfObjectFile.UpdateLayout"/> or <see cref="ElfObjectFile.UpdateLayout"/>
         /// </summary>
         public sealed class ElfObjectLayout
         {

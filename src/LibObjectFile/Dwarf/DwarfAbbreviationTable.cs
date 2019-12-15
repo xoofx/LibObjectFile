@@ -41,48 +41,46 @@ namespace LibObjectFile.Dwarf
             }
             _abbreviations.Clear();
         }
-
-        public override bool TryUpdateLayout(DiagnosticBag diagnostics)
+        
+        protected override void UpdateLayout(DwarfLayoutContext layoutContext)
         {
-            ulong offset = 0;
+            ulong endOffset = Offset;
             foreach (var abbreviation in _abbreviations)
             {
-                abbreviation.Offset = offset;
-                if (!abbreviation.TryUpdateLayout(diagnostics))
-                {
-                    return false;
-                }
-                offset += abbreviation.Size;
+                abbreviation.Offset = endOffset;
+                abbreviation.UpdateLayoutInternal(layoutContext);
+                endOffset += abbreviation.Size;
             }
 
-            Size = offset;
-
-            return true;
+            Size = endOffset - Offset;
         }
 
-        internal void Write(DwarfWriter writer)
+        protected override void Read(DwarfReader reader)
         {
-            if (writer.Context.DebugAbbrevStream.Stream == null)
+            var endOffset = reader.Offset;
+            while (reader.Offset < reader.Length)
             {
-                return;
-            }
-
-            var previousStream = writer.Stream;
-            writer.Stream = writer.Context.DebugAbbrevStream;
-            try
-            {
-                var startOffset = writer.Offset;
-                foreach (var abbreviation in _abbreviations)
+                var abbreviation = new DwarfAbbreviation
                 {
-                    abbreviation.Write(writer);
-                }
+                    Offset = endOffset
+                };
+                abbreviation.ReadInternal(reader);
+                endOffset += abbreviation.Size;
+                AddAbbreviation(abbreviation);
+            }
 
-                Debug.Assert(writer.Offset - startOffset == Size);
-            }
-            finally
+            Size = endOffset - Offset;
+        }
+
+        protected override void Write(DwarfWriter writer)
+        {
+            var startOffset = writer.Offset;
+            foreach (var abbreviation in _abbreviations)
             {
-                writer.Stream = previousStream;
+                abbreviation.WriteInternal(writer);
             }
+
+            Debug.Assert(writer.Offset - startOffset == Size);
         }
     }
 }

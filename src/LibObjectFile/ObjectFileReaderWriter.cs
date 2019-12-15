@@ -62,6 +62,8 @@ namespace LibObjectFile
 
         public bool IsLittleEndian { get; protected set; }
 
+        public TextWriter Log { get; set; }
+
         /// <summary>
         /// Reads from the <see cref="Stream"/> and current position to the specified buffer.
         /// </summary>
@@ -163,12 +165,6 @@ namespace LibObjectFile
         public void WriteStringUTF8NullTerminated(string text)
         {
             Stream.WriteStringUTF8NullTerminated(text);
-        }
-
-        public static ulong SizeOfStringUTF8NullTerminated(string text)
-        {
-            if (text == null) return 0;
-            return (ulong)Encoding.UTF8.GetByteCount(text) + 1;
         }
 
         /// <summary>

@@ -9,6 +9,8 @@ namespace LibObjectFile.Dwarf
         public DwarfCompilationUnit()
         {
             Kind = DwarfUnitKind.Compile;
+            // Default to version 4
+            Version = 4;
         }
 
         protected override bool TryReadHeader(DwarfReader reader)
@@ -38,7 +40,6 @@ namespace LibObjectFile.Dwarf
 
         protected override void WriteHeader(DwarfReaderWriter writer)
         {
-            bool result;
             if (Version < 5)
             {
                 // 3. debug_abbrev_offset (section offset) 
@@ -59,12 +60,11 @@ namespace LibObjectFile.Dwarf
             }
         }
 
-        protected override void UpdateLayout(DwarfWriter writer, ref ulong sizeOf)
+        protected override ulong GetLayoutHeaderSize()
         {
             // 3. debug_abbrev_offset (section offset) 
-            sizeOf += DwarfHelper.SizeOfUInt(writer.Is64BitEncoding); // writer.WriteUIntFromEncoding(Abbreviation.Offset);
             // 4. address_size (ubyte) 
-            sizeOf += 1; // WriteAddressSize(writer);
+            return DwarfHelper.SizeOfUInt(Is64BitEncoding) + 1;
         }
     }
 }

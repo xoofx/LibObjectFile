@@ -6,22 +6,16 @@ using System;
 
 namespace LibObjectFile.Dwarf
 {
-    public abstract class DwarfContainer : ObjectFileNode<DwarfContainer>
+    public abstract class DwarfContainer : DwarfObject<DwarfContainer>
     {
         public override void Verify(DiagnosticBag diagnostics)
         {
             if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
         }
 
-        public override bool TryUpdateLayout(DiagnosticBag diagnostics)
-        {
-            if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
-            return true;
-        }
-
         public DwarfFile GetParentFile()
         {
-            var check = this;
+            var check = (ObjectFileNode)this;
             while (check != null)
             {
                 if (check is DwarfFile dwarfFile) return dwarfFile;
@@ -32,7 +26,7 @@ namespace LibObjectFile.Dwarf
 
         public DwarfUnit GetParentUnit()
         {
-            var check = this;
+            var check = (ObjectFileNode)this;
             while (check != null)
             {
                 if (check is DwarfUnit dwarfUnit) return dwarfUnit;

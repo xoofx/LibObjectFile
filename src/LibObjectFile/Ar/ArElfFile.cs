@@ -44,23 +44,19 @@ namespace LibObjectFile.Ar
             }
         }
 
-        public override bool TryUpdateLayout(DiagnosticBag diagnostics)
+        public override void UpdateLayout(DiagnosticBag diagnostics)
         {
             if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
             Size = 0;
             
             if (ElfObjectFile != null)
             {
-                if (ElfObjectFile.TryUpdateLayout(new DiagnosticBag()))
+                ElfObjectFile.UpdateLayout(diagnostics);
+                if (!diagnostics.HasErrors)
                 {
                     Size = ElfObjectFile.Layout.TotalSize;
                 }
-                else
-                {
-                    return false;
-                }
             }
-            return true;
         }
     }
 }

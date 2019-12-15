@@ -9,7 +9,7 @@ namespace LibObjectFile.Ar
     /// <summary>
     /// Base class for a file entry in <see cref="ArArchiveFile.Files"/>
     /// </summary>
-    public abstract partial class ArFile : ObjectFileNode<ArArchiveFile>
+    public abstract partial class ArFile : ArObject
     {
         private string _name;
         private DateTimeOffset _timestamp;

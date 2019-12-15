@@ -10,7 +10,7 @@ namespace LibObjectFile.Elf
     /// <summary>
     /// Defines a segment or program header.
     /// </summary>
-    public sealed class ElfSegment : ElfObjectFileNode
+    public sealed class ElfSegment : ElfObject
     {
         public ValueKind OffsetKind { get; set; }
         
@@ -50,7 +50,7 @@ namespace LibObjectFile.Elf
         /// </summary>
         public ulong Alignment { get; set; }
 
-        public override bool TryUpdateLayout(DiagnosticBag diagnostics)
+        public override void UpdateLayout(DiagnosticBag diagnostics)
         {
             if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
 
@@ -140,8 +140,6 @@ namespace LibObjectFile.Elf
                     }
                 }
             }
-
-            return isRangeValid;
         }
 
 

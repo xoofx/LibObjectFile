@@ -246,12 +246,11 @@ namespace LibObjectFile.Elf
             }
         }
 
-        public override unsafe bool TryUpdateLayout(DiagnosticBag diagnostics)
+        public override unsafe void UpdateLayout(DiagnosticBag diagnostics)
         {
             if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
             Size = Parent == null || Parent.FileClass == ElfFileClass.None ? 0 :
                 Parent.FileClass == ElfFileClass.Is32 ? (ulong)(Entries.Count * sizeof(ElfNative.Elf32_Sym)) : (ulong)(Entries.Count * sizeof(ElfNative.Elf64_Sym));
-            return true;
         }
     }
 }

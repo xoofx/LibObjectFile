@@ -316,7 +316,7 @@ namespace LibObjectFile.Elf
             }
         }
 
-        public override unsafe bool TryUpdateLayout(DiagnosticBag diagnostics)
+        public override unsafe void UpdateLayout(DiagnosticBag diagnostics)
         {
             if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
 
@@ -325,7 +325,6 @@ namespace LibObjectFile.Elf
                     ? (ulong)Entries.Count * (IsRelocationWithAddends ? (ulong)sizeof(ElfNative.Elf32_Rela) : (ulong)sizeof(ElfNative.Elf32_Rel))
                     : (ulong)Entries.Count * (IsRelocationWithAddends ? (ulong)sizeof(ElfNative.Elf64_Rela) : (ulong)sizeof(ElfNative.Elf64_Rel));
 
-            return true;
         }
     }
 }

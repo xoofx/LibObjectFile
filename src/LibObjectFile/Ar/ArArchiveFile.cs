@@ -309,23 +309,11 @@ namespace LibObjectFile.Ar
             writer.Write();
         }
         
-        /// <inheritdoc />
-        public override bool TryUpdateLayout(DiagnosticBag diagnostics)
+        public void UpdateLayout(DiagnosticBag diagnostics)
         {
             if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
 
             Size = 0;
-
-            // Check first that we have a valid object file
-            var localDiagnostics = new DiagnosticBag();
-            Verify(localDiagnostics);
-
-            // If we have any any errors
-            if (localDiagnostics.HasErrors)
-            {
-                localDiagnostics.CopyTo(diagnostics);
-                return false;
-            }
 
             if (Kind == ArArchiveKind.GNU)
             {
@@ -364,18 +352,14 @@ namespace LibObjectFile.Ar
             {
                 var entry = Files[i];
 
-                if (!entry.TryUpdateLayout(diagnostics))
-                {
-                    return false;
-                }
+                entry.UpdateLayout(diagnostics);
+                if (diagnostics.HasErrors) return;
 
                 // If we have a GNU headers and they are required, add them to the offset and size
                 if (LongNamesTable != null && LongNamesTable.Index == i)
                 {
-                    if (!LongNamesTable.TryUpdateLayout(diagnostics))
-                    {
-                        return false;
-                    }
+                    LongNamesTable.UpdateLayout(diagnostics);
+                    if (diagnostics.HasErrors) return;
 
                     var headerSize = LongNamesTable.Size;
                     if (headerSize > 0)
@@ -392,8 +376,6 @@ namespace LibObjectFile.Ar
             }
 
             Size = size;
-
-            return true;
         }
     }
 }

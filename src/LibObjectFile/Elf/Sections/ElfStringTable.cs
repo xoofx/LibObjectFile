@@ -52,11 +52,10 @@ namespace LibObjectFile.Elf
             }
         }
 
-        public override bool TryUpdateLayout(DiagnosticBag diagnostics)
+        public override void UpdateLayout(DiagnosticBag diagnostics)
         {
             if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
             Size = (ulong)_table.Length;
-            return true;
         }
 
         protected override void Read(ElfReader reader)

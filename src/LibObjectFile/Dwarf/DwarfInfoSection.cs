@@ -2,6 +2,7 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -20,54 +21,73 @@ namespace LibObjectFile.Dwarf
 
         public void AddUnit(DwarfUnit unit)
         {
-            _units.Add<DwarfContainer, DwarfUnit>(this, unit);
+            _units.Add(this, unit);
         }
 
         public void RemoveUnit(DwarfUnit unit)
         {
-            _units.Remove<DwarfContainer, DwarfUnit>(this, unit);
+            _units.Remove(this, unit);
         }
 
         public DwarfUnit RemoveUnitAt(int index)
         {
-            return _units.RemoveAt<DwarfContainer, DwarfUnit>(this, index);
+            return _units.RemoveAt(this, index);
         }
 
-        internal void Read(DwarfReader reader, Stream stream, DwarfUnitKind defaultUnitKind)
+        protected override void Read(DwarfReader reader)
         {
-            if (stream == null) return;
+            var addressRangeTable = reader.File.AddressRangeTable;
+            
+            while (reader.Offset < reader.Length)
+            {
+                // 7.5 Format of Debugging Information
+                // - Each such contribution consists of a compilation unit header
 
-            var previousStream = reader.Stream;
-            reader.Stream = stream;
-            try
-            {
-                reader.Read(this, defaultUnitKind);
+                var startOffset = Offset;
+
+                reader.ClearResolveAttributeReferenceWithinCompilationUnit();
+
+                var cu = DwarfUnit.ReadInstance(reader, out var offsetEndOfUnit);
+                if (cu == null)
+                {
+                    reader.Offset = offsetEndOfUnit;
+                    continue;
+                }
+
+                reader.CurrentUnit = cu;
+
+                // Link AddressRangeTable to Unit
+                if (addressRangeTable.DebugInfoOffset == cu.Offset)
+                {
+                    addressRangeTable.Unit = cu;
+                }
+                
+                AddUnit(cu);
             }
-            finally
+
+            reader.ResolveAttributeReferenceWithinSection();
+        }
+
+        protected override void UpdateLayout(DwarfLayoutContext layoutContext)
+        {
+            var offset = Offset;
+            foreach (var unit in Units)
             {
-                reader.Stream = previousStream;
+                layoutContext.CurrentUnit = unit;
+                unit.Offset = offset;
+                unit.UpdateLayoutInternal(layoutContext);
+                offset += unit.Size;
             }
         }
 
-        public override bool TryUpdateLayout(DiagnosticBag diagnostics)
+        protected override void Write(DwarfWriter writer)
         {
-            return true;
-        }
-
-        internal void Write(DwarfWriter writer, Stream stream)
-        {
-            if (stream == null) return;
-
-            var previousStream = stream;
-            writer.Stream = stream;
-            try
+            foreach (var unit in _units)
             {
-                writer.Write(this);
-            } 
-            finally
-            {
-                writer.Stream = previousStream;
+                writer.CurrentUnit = unit;
+                unit.WriteInternal(writer);
             }
+            writer.CurrentUnit = null;
         }
     }
 }

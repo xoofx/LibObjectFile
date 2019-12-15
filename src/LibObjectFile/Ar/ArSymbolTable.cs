@@ -206,9 +206,10 @@ namespace LibObjectFile.Ar
             return $"{base.ToString()}, {nameof(Symbols)} Count: {Symbols.Count}";
         }
 
-        public override bool TryUpdateLayout(DiagnosticBag diagnostics)
+        public override void UpdateLayout(DiagnosticBag diagnostics)
         {
             if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
+            if (Parent == null) return;
 
             // number of entries (both for BSD and GNU)
             ulong sizeOfTable = sizeof(uint);
@@ -236,7 +237,6 @@ namespace LibObjectFile.Ar
             }
 
             Size = sizeOfTable;
-            return true;
         }
     }
 }
