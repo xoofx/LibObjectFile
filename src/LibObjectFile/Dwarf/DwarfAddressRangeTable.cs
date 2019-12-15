@@ -23,9 +23,9 @@ namespace LibObjectFile.Dwarf
 
         public bool Is64BitEncoding { get; set; }
 
-        public bool Is64BitAddress { get; set; }
+        public DwarfAddressSize AddressSize { get; set; }
 
-        public byte SegmentSelectorSize { get; set; }
+        public DwarfAddressSize SegmentSelectorSize { get; set; }
 
         public ulong DebugInfoOffset { get; private set; }
 
@@ -50,19 +50,12 @@ namespace LibObjectFile.Dwarf
 
             DebugInfoOffset = reader.ReadUIntFromEncoding();
 
-            var address_size = reader.ReadU8();
-            if (address_size != 4 && address_size != 8)
-            {
-                reader.Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidAddressSize, $"Unsupported address size {address_size}. Must be 4 (32 bits) or 8 (64 bits).");
-                return;
-            }
-            // TODO: Support AddressKind instead of Is64BitAddress
-            Is64BitAddress = address_size == 8;
+            AddressSize = reader.ReadAddressSize();
 
-            var segment_selector_size = reader.ReadU8();
+            var segment_selector_size = (DwarfAddressSize)reader.ReadU8();
             SegmentSelectorSize = segment_selector_size;
 
-            var align = (ulong)segment_selector_size + (ulong)address_size * 2;
+            var align = (ulong)segment_selector_size + (ulong)AddressSize * 2;
 
             // SPECS 7.21: The first tuple following the header in each set begins at an offset that is a multiple of the size of a single tuple
             reader.Offset = AlignHelper.AlignToUpper(reader.Offset, align);
@@ -72,35 +65,43 @@ namespace LibObjectFile.Dwarf
                 ulong segment = 0;
                 switch (segment_selector_size)
                 {
-                    case 2:
+                    case DwarfAddressSize.Bit8:
+                        segment = reader.ReadU8();
+                        break;
+
+                    case DwarfAddressSize.Bit16:
                         segment = reader.ReadU16();
                         break;
 
-                    case 4:
+                    case DwarfAddressSize.Bit32:
                         segment = reader.ReadU32();
                         break;
 
-                    case 8:
+                    case DwarfAddressSize.Bit64:
                         segment = reader.ReadU64();
                         break;
 
-                    case 0:
+                    case DwarfAddressSize.None:
                         break;
                 }
 
                 ulong address = 0;
                 ulong length = 0;
-                switch (address_size)
+                switch (AddressSize)
                 {
-                    case 2:
+                    case DwarfAddressSize.Bit8:
+                        address = reader.ReadU8();
+                        length = reader.ReadU8();
+                        break;
+                    case DwarfAddressSize.Bit16:
                         address = reader.ReadU16();
                         length = reader.ReadU16();
                         break;
-                    case 4:
+                    case DwarfAddressSize.Bit32:
                         address = reader.ReadU32();
                         length = reader.ReadU32();
                         break;
-                    case 8:
+                    case DwarfAddressSize.Bit64:
                         address = reader.ReadU64();
                         length = reader.ReadU64();
                         break;
@@ -158,7 +159,7 @@ namespace LibObjectFile.Dwarf
             // segment selector size
             sizeOf += 1;
 
-            var align = (ulong)SegmentSelectorSize + (ulong)(Is64BitAddress ? 8 : 4 ) * 2;
+            var align = (ulong)SegmentSelectorSize + (ulong)AddressSize * 2;
 
             // SPECS 7.21: The first tuple following the header in each set begins at an offset that is a multiple of the size of a single tuple
             sizeOf = AlignHelper.AlignToUpper(sizeOf, align);
@@ -188,10 +189,10 @@ namespace LibObjectFile.Dwarf
             writer.WriteUInt(DebugInfoOffset);
 
             // address_size
-            var address_size = (byte) (Is64BitAddress ? 8 : 4);
-            writer.WriteU8(address_size);
+            var address_size = AddressSize;
+            writer.WriteU8((byte)address_size);
 
-            writer.WriteU8(SegmentSelectorSize);
+            writer.WriteU8((byte)SegmentSelectorSize);
 
             var align = (ulong)SegmentSelectorSize + (ulong)address_size * 2;
 
@@ -209,13 +210,16 @@ namespace LibObjectFile.Dwarf
                 {
                     switch (SegmentSelectorSize)
                     {
-                        case 2:
+                        case DwarfAddressSize.Bit8:
+                            writer.WriteU8((byte)range.Segment);
+                            break;
+                        case DwarfAddressSize.Bit16:
                             writer.WriteU16((ushort)range.Segment);
                             break;
-                        case 4:
+                        case DwarfAddressSize.Bit32:
                             writer.WriteU32((uint)range.Segment);
                             break;
-                        case 8:
+                        case DwarfAddressSize.Bit64:
                             writer.WriteU64((ulong)range.Segment);
                             break;
                     }
@@ -223,15 +227,19 @@ namespace LibObjectFile.Dwarf
 
                 switch (address_size)
                 {
-                    case 2:
+                    case DwarfAddressSize.Bit8:
+                        writer.WriteU8((byte)range.Address);
+                        writer.WriteU8((byte)range.Length);
+                        break;
+                    case DwarfAddressSize.Bit16:
                         writer.WriteU16((ushort)range.Address);
                         writer.WriteU16((ushort)range.Length);
                         break;
-                    case 4:
+                    case DwarfAddressSize.Bit32:
                         writer.WriteU32((uint)range.Address);
                         writer.WriteU32((uint)range.Length);
                         break;
-                    case 8:
+                    case DwarfAddressSize.Bit64:
                         writer.WriteU64(range.Address);
                         writer.WriteU64(range.Length);
                         break;
@@ -242,13 +250,16 @@ namespace LibObjectFile.Dwarf
             {
                 switch (SegmentSelectorSize)
                 {
-                    case 2:
+                    case DwarfAddressSize.Bit8:
+                        writer.WriteU8(0);
+                        break;
+                    case DwarfAddressSize.Bit16:
                         writer.WriteU16(0);
                         break;
-                    case 4:
+                    case DwarfAddressSize.Bit32:
                         writer.WriteU32(0);
                         break;
-                    case 8:
+                    case DwarfAddressSize.Bit64:
                         writer.WriteU64(0);
                         break;
                 }
@@ -256,13 +267,16 @@ namespace LibObjectFile.Dwarf
 
             switch (address_size)
             {
-                case 2:
+                case DwarfAddressSize.Bit8:
+                    writer.WriteU16(0);
+                    break;
+                case DwarfAddressSize.Bit16:
                     writer.WriteU32(0);
                     break;
-                case 4:
+                case DwarfAddressSize.Bit32:
                     writer.WriteU64(0);
                     break;
-                case 8:
+                case DwarfAddressSize.Bit64:
                     writer.WriteU64(0);
                     writer.WriteU64(0);
                     break;

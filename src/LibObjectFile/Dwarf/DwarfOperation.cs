@@ -35,7 +35,7 @@ namespace LibObjectFile.Dwarf
             switch (Kind.Value)
             {
                 case DwarfOperationKind.Addr:
-                    endOffset += DwarfHelper.SizeOfUInt(layoutContext.CurrentUnit.Is64BitAddress);
+                    endOffset += DwarfHelper.SizeOfUInt(layoutContext.CurrentUnit.AddressSize);
                     break;
                 case DwarfOperationKind.Const1u:
                 case DwarfOperationKind.Const1s:
@@ -218,7 +218,7 @@ namespace LibObjectFile.Dwarf
                     break;
 
                 case DwarfOperationKind.CallRef:
-                    endOffset += DwarfHelper.SizeOfUInt(layoutContext.CurrentUnit.Is64BitAddress);
+                    endOffset += DwarfHelper.SizeOfUInt(layoutContext.CurrentUnit.AddressSize);
                     break;
 
                 case DwarfOperationKind.BitPiece:
@@ -249,7 +249,7 @@ namespace LibObjectFile.Dwarf
                     //  a reference to a debugging information entry that describes the dereferenced object’s value
                     if (layoutContext.CurrentUnit.Version == 2)
                     {
-                        endOffset += DwarfHelper.SizeOfUInt(layoutContext.CurrentUnit.Is64BitAddress);
+                        endOffset += DwarfHelper.SizeOfUInt(layoutContext.CurrentUnit.AddressSize);
                     }
                     else
                     {
@@ -289,7 +289,7 @@ namespace LibObjectFile.Dwarf
                         // must be a DW_TAG_base_type entry that provides the type of the constant provided
 
                         endOffset += SizeOfDIEReference(layoutContext);
-                        endOffset += SizeOfEncodedValue(Kind, Operand1.U64, (byte)Operand2.U64, layoutContext.CurrentUnit.Is64BitAddress);
+                        endOffset += SizeOfEncodedValue(Kind, Operand1.U64, (byte)Operand2.U64, layoutContext.CurrentUnit.AddressSize);
                         break;
                     }
 
@@ -334,7 +334,7 @@ namespace LibObjectFile.Dwarf
                     break;
 
                 case DwarfOperationKind.GNUEncodedAddr:
-                    endOffset += SizeOfEncodedValue(Kind, Operand1.U64, (byte)Operand2.U64, layoutContext.CurrentUnit.Is64BitAddress);
+                    endOffset += SizeOfEncodedValue(Kind, Operand1.U64, (byte)Operand2.U64, layoutContext.CurrentUnit.AddressSize);
                     break;
 
                 case DwarfOperationKind.GNUParameterRef:
@@ -376,12 +376,12 @@ namespace LibObjectFile.Dwarf
             return 0U;
         }
 
-        private ulong SizeOfEncodedValue(DwarfOperationKindEx kind, ulong value, byte size, bool is64BitAddress)
+        private ulong SizeOfEncodedValue(DwarfOperationKindEx kind, ulong value, byte size, DwarfAddressSize addressSize)
         {
             switch (size)
             {
                 case 0:
-                    return 1 + DwarfHelper.SizeOfUInt(is64BitAddress);
+                    return 1 + DwarfHelper.SizeOfUInt(addressSize);
                 case 1:
                     return 1 + 1;
                 case 2:

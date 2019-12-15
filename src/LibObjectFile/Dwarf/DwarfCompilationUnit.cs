@@ -13,29 +13,28 @@ namespace LibObjectFile.Dwarf
             Version = 4;
         }
 
-        protected override bool TryReadHeader(DwarfReader reader)
+        protected override void ReadHeader(DwarfReader reader)
         {
-            bool result;
             if (Version < 5)
             {
                 // 3. debug_abbrev_offset (section offset) 
                 DebugAbbreviationOffset = reader.ReadUIntFromEncoding();
 
                 // 4. address_size (ubyte) 
-                result = TryReadAddressSize(reader);
+                AddressSize = reader.ReadAddressSize();
+                reader.AddressSize = AddressSize;
             }
             else
             {
                 // NOTE: order of address_size/debug_abbrev_offset are different from Dwarf 4
 
                 // 4. address_size (ubyte) 
-                result = TryReadAddressSize(reader);
+                AddressSize = reader.ReadAddressSize();
+                reader.AddressSize = AddressSize;
 
                 // 5. debug_abbrev_offset (section offset) 
                 DebugAbbreviationOffset = reader.ReadUIntFromEncoding();
             }
-
-            return result;
         }
 
         protected override void WriteHeader(DwarfReaderWriter writer)
@@ -46,14 +45,14 @@ namespace LibObjectFile.Dwarf
                 writer.WriteUIntFromEncoding(Abbreviation.Offset);
 
                 // 4. address_size (ubyte) 
-                WriteAddressSize(writer);
+                writer.WriteAddressSize(AddressSize);
             }
             else
             {
                 // NOTE: order of address_size/debug_abbrev_offset are different from Dwarf 4
 
                 // 4. address_size (ubyte) 
-                WriteAddressSize(writer);
+                writer.WriteAddressSize(AddressSize);
 
                 // 5. debug_abbrev_offset (section offset) 
                 writer.WriteUIntFromEncoding(Abbreviation.Offset);

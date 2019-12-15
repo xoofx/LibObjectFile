@@ -8,7 +8,7 @@ namespace LibObjectFile.Dwarf
     {
         public bool IsLittleEndian { get; set; }
 
-        public bool Is64BitAddress { get; set; }
+        public DwarfAddressSize AddressSize { get; set; }
         
         public DwarfStreamAndPrint DebugAbbrevStream;
 

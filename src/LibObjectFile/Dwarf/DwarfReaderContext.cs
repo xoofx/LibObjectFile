@@ -20,7 +20,7 @@ namespace LibObjectFile.Dwarf
             var readerContext = new DwarfReaderContext()
             {
                 IsLittleEndian = elf.Encoding == ElfEncoding.Lsb,
-                Is64BitAddress = elf.FileClass == ElfFileClass.Is64
+                AddressSize = elf.FileClass == ElfFileClass.Is64 ? DwarfAddressSize.Bit64 : DwarfAddressSize.Bit32
             };
 
             ElfRelocationTable debugInfoReloc = null;

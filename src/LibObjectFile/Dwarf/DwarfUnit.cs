@@ -12,7 +12,7 @@ namespace LibObjectFile.Dwarf
 
         public bool Is64BitEncoding { get; set; }
 
-        public bool Is64BitAddress { get; set; }
+        public DwarfAddressSize AddressSize { get; set; }
 
         public ushort Version { get; set; }
 
@@ -54,9 +54,9 @@ namespace LibObjectFile.Dwarf
             throw new NotImplementedException();
         }
 
-        internal bool TryReadHeaderInternal(DwarfReader reader)
+        internal void ReadHeaderInternal(DwarfReader reader)
         {
-            return TryReadHeader(reader);
+            ReadHeader(reader);
         }
 
         internal void WriteHeaderInternal(DwarfReaderWriter writer)
@@ -106,37 +106,9 @@ namespace LibObjectFile.Dwarf
 
         protected abstract ulong GetLayoutHeaderSize();
 
-        protected abstract bool TryReadHeader(DwarfReader reader);
+        protected abstract void ReadHeader(DwarfReader reader);
 
         protected abstract void WriteHeader(DwarfReaderWriter writer);
-
-
-        protected bool TryReadAddressSize(DwarfReaderWriter reader)
-        {
-            var address_size = reader.ReadU8();
-
-            // TODO: We don't support anything else than 32 or 64bit for now
-            if (address_size != 4 && address_size != 8)
-            {
-                reader.Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidAddressSize, $"Unsupported address size {address_size} for unit at offset {Offset}. Must be 4 (32 bits) or 8 (64 bits).");
-                return false;
-            }
-
-            Is64BitAddress = address_size == 8;
-            return true;
-        }
-
-        protected void WriteAddressSize(DwarfReaderWriter writer)
-        {
-            if (Is64BitAddress)
-            {
-                writer.WriteU8(8);
-            }
-            else
-            {
-                writer.WriteU8(4);
-            }
-        }
 
         protected override void Read(DwarfReader reader)
         {
@@ -204,7 +176,7 @@ namespace LibObjectFile.Dwarf
             unit.Offset = startOffset;
             unit.Version = version;
 
-            unit.TryReadHeaderInternal(reader);
+            unit.ReadHeaderInternal(reader);
 
             unit.ReadInternal(reader);
 

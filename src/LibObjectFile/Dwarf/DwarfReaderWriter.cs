@@ -19,9 +19,32 @@ namespace LibObjectFile.Dwarf
 
         public bool Is64BitEncoding { get; set; }
 
-        public bool Is64BitAddress { get; internal set; }
+        public DwarfAddressSize AddressSize { get; internal set; }
 
         public DwarfUnit CurrentUnit { get; internal set; }
+
+        public DwarfAddressSize ReadAddressSize()
+        {
+            var address_size = (DwarfAddressSize)ReadU8();
+            switch (address_size)
+            {
+                case DwarfAddressSize.Bit8:
+                case DwarfAddressSize.Bit16:
+                case DwarfAddressSize.Bit32:
+                case DwarfAddressSize.Bit64:
+                    break;
+                default:
+                    Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidAddressSize, $"Unsupported address size {(uint)address_size}.");
+                    break;
+            }
+
+            return address_size;
+        }
+
+        public void WriteAddressSize(DwarfAddressSize addressSize)
+        {
+            WriteU8((byte)addressSize);
+        }
 
         public ulong ReadUnitLength()
         {
@@ -76,18 +99,39 @@ namespace LibObjectFile.Dwarf
 
         public ulong ReadUInt()
         {
-            return Is64BitAddress ? ReadU64() : ReadU32();
+            switch (AddressSize)
+            {
+                case DwarfAddressSize.Bit8:
+                    return ReadU8();
+                case DwarfAddressSize.Bit16:
+                    return ReadU16();
+                case DwarfAddressSize.Bit32:
+                    return ReadU32();
+                case DwarfAddressSize.Bit64:
+                    return ReadU64();
+                default:
+                    throw new ArgumentOutOfRangeException($"Invalid AddressSize {AddressSize}");
+            }
         }
 
         public void WriteUInt(ulong target)
         {
-            if (Is64BitAddress)
+            switch (AddressSize)
             {
-                WriteU64(target);
-            }
-            else
-            {
-                WriteU32((uint)target);
+                case DwarfAddressSize.Bit8:
+                    WriteU8((byte)target);
+                    break;
+                case DwarfAddressSize.Bit16:
+                    WriteU16((ushort)target);
+                    break;
+                case DwarfAddressSize.Bit32:
+                    WriteU32((uint)target);
+                    break;
+                case DwarfAddressSize.Bit64:
+                    WriteU64(target);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException($"Invalid AddressSize {AddressSize}");
             }
         }
 

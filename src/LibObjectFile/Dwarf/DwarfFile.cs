@@ -26,7 +26,7 @@ namespace LibObjectFile.Dwarf
 
         public bool IsLittleEndian { get; set; }
 
-        public bool Is64BitAddress { get; set; }
+        public DwarfAddressSize AddressSize { get; set; }
 
         public DwarfAbbreviationTable AbbreviationTable
         {
@@ -136,7 +136,7 @@ namespace LibObjectFile.Dwarf
 
             // Write all section and stables
             var writer = new DwarfWriter(this, writerContext, diagnostics);
-            writer.Is64BitAddress = writerContext.Is64BitAddress;
+            writer.AddressSize = writerContext.AddressSize;
 
             writer.Stream = writerContext.DebugAbbrevStream.Stream;
             if (writer.Stream != null)

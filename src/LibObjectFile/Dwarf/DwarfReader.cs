@@ -2,9 +2,7 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
-using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace LibObjectFile.Dwarf
 {
@@ -15,16 +13,10 @@ namespace LibObjectFile.Dwarf
         private readonly List<DwarfDIEReference> _unresolvedDIECompilationUnitReference;
         private readonly List<DwarfDIEReference> _attributesWithUnresolvedDIESectionReference;
         
-        private DiagnosticBag _diagnostics;
-        private bool _is64Address;
-        private ushort _version;
-        private ulong _offsetOfCompilationUnitInSection;
-        private DwarfFile _parent;
-
         internal DwarfReader(DwarfReaderContext context, DwarfFile file, DiagnosticBag diagnostics) : base(file, diagnostics)
         {
             IsReadOnly = context.IsInputReadOnly;
-            Is64BitAddress = context.Is64BitAddress;
+            AddressSize = context.AddressSize;
             _registeredDIEPerCompilationUnit = new Dictionary<ulong, DwarfDIE>();
             _registeredDIEPerSection = new Dictionary<ulong, DwarfDIE>();
             _unresolvedDIECompilationUnitReference = new List<DwarfDIEReference>();
@@ -85,7 +77,7 @@ namespace LibObjectFile.Dwarf
                 {
                     if (dieRef.Offset != 0)
                     {
-                        _diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidReference, $"Unable to resolve DIE reference (0x{dieRef.Offset:x}, section 0x{(dieRef.Offset + _offsetOfCompilationUnitInSection):x}) for {dieRef.DwarfObject} at offset 0x{dieRef.Offset:x}");
+                        Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidReference, $"Unable to resolve DIE reference (0x{dieRef.Offset:x}, section 0x{(dieRef.Offset):x}) for {dieRef.DwarfObject} at offset 0x{dieRef.Offset:x}");
                     }
                 }
                 else
@@ -108,7 +100,7 @@ namespace LibObjectFile.Dwarf
                 {
                     if (dieRef.Offset != 0)
                     {
-                        _diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidReference, $"Unable to resolve DIE reference (0x{dieRef.Offset:x}) for {dieRef.DwarfObject} at offset 0x{dieRef.Offset:x}");
+                        Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidReference, $"Unable to resolve DIE reference (0x{dieRef.Offset:x}) for {dieRef.DwarfObject} at offset 0x{dieRef.Offset:x}");
                     }
                 }
                 else

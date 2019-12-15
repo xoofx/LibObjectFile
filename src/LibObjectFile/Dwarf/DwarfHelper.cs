@@ -24,6 +24,11 @@ namespace LibObjectFile.Dwarf
             return is64Bit ? 8U : 4U;
         }
 
+        public static uint SizeOfUInt(DwarfAddressSize addressSize)
+        {
+            return (uint)(addressSize);
+        }
+
         public static uint SizeOfULEB128(ulong value)
         {
             if (value == 0) return 1;

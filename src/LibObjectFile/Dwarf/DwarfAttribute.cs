@@ -75,14 +75,14 @@ namespace LibObjectFile.Dwarf
 
         protected override void UpdateLayout(DwarfLayoutContext layoutContext)
         {
-            var is64BitAddress = layoutContext.CurrentUnit.Is64BitAddress;
+            var addressSize = layoutContext.CurrentUnit.AddressSize;
             var is64BitEncoding = layoutContext.CurrentUnit.Is64BitEncoding;
 
             var endOffset = Offset;
             switch (Form.Value)
             {
                 case DwarfAttributeForm.Addr:
-                    endOffset += DwarfHelper.SizeOfUInt(is64BitAddress); // WriteUInt(ValueAsU64);
+                    endOffset += DwarfHelper.SizeOfUInt(addressSize); // WriteUInt(ValueAsU64);
                     break;
                 case DwarfAttributeForm.Data1:
                     endOffset += 1; // WriteU8((byte)ValueAsU64);
@@ -294,8 +294,8 @@ namespace LibObjectFile.Dwarf
             switch (attributeForm.Value)
             {
                 case DwarfAttributeForm.Addr:
-                    {
-                        ValueAsU64 = reader.CurrentUnit.Is64BitAddress ? reader.ReadU64() : reader.ReadU32();
+                {
+                    ValueAsU64 = reader.ReadUInt();
                         break;
                     }
 

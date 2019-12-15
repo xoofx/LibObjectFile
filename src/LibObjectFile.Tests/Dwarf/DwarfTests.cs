@@ -103,7 +103,7 @@ namespace LibObjectFile.Tests.Dwarf
             var outputContext = new DwarfWriterContext
             {
                 IsLittleEndian = inputContext.IsLittleEndian,
-                Is64BitAddress = inputContext.Is64BitAddress,
+                AddressSize = inputContext.AddressSize,
                 DebugLineStream = new MemoryStream()
             };
             dwarf.Write(outputContext);
@@ -117,7 +117,7 @@ namespace LibObjectFile.Tests.Dwarf
             var reloadContext = new DwarfReaderContext()
             {
                 IsLittleEndian = outputContext.IsLittleEndian,
-                Is64BitAddress = outputContext.Is64BitAddress,
+                AddressSize = outputContext.AddressSize,
                 DebugLineStream = outputContext.DebugLineStream
             };
 
@@ -159,7 +159,7 @@ namespace LibObjectFile.Tests.Dwarf
             var outputContext = new DwarfWriterContext
             {
                 IsLittleEndian = inputContext.IsLittleEndian,
-                Is64BitAddress = inputContext.Is64BitAddress,
+                AddressSize = inputContext.AddressSize,
                 DebugLineStream = new MemoryStream()
             };
             dwarf.Write(outputContext);
@@ -173,7 +173,7 @@ namespace LibObjectFile.Tests.Dwarf
             var reloadContext = new DwarfReaderContext()
             {
                 IsLittleEndian = outputContext.IsLittleEndian,
-                Is64BitAddress = outputContext.Is64BitAddress,
+                AddressSize = outputContext.AddressSize,
                 DebugLineStream = outputContext.DebugLineStream
             };
 
@@ -207,7 +207,9 @@ namespace LibObjectFile.Tests.Dwarf
             var dwarf = DwarfFile.Read(inputContext);
 
             dwarf.AbbreviationTable.Print(Console.Out);
-            
+            dwarf.InfoSection.Print(Console.Out);
+            dwarf.AddressRangeTable.Print(Console.Out);
+
             PrintStreamLength(inputContext);
 
             Console.WriteLine();
@@ -218,7 +220,7 @@ namespace LibObjectFile.Tests.Dwarf
             var outputContext = new DwarfWriterContext
             {
                 IsLittleEndian = inputContext.IsLittleEndian,
-                Is64BitAddress = inputContext.Is64BitAddress,
+                AddressSize = inputContext.AddressSize,
                 DebugAbbrevStream = new MemoryStream(),
                 DebugLineStream = new MemoryStream(),
                 DebugInfoStream = new MemoryStream(),

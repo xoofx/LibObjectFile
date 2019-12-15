@@ -62,7 +62,7 @@ namespace LibObjectFile.Dwarf
             writer.WriteLine($"   Length:        0x{unit.UnitLength:x}");
             writer.WriteLine($"   Version:       {unit.Version}");
             writer.WriteLine($"   Abbrev Offset: 0x{unit.Abbreviation?.Offset ?? 0:x}");
-            writer.WriteLine($"   Pointer Size:  {(unit.Is64BitAddress ? 8 : 4)}");
+            writer.WriteLine($"   Pointer Size:  {(uint)unit.AddressSize}");
             if (unit.Root != null)
             {
                 Print(unit.Root, writer);
@@ -131,10 +131,10 @@ namespace LibObjectFile.Dwarf
             writer.WriteLine($"  Length:                   {addressRangeTable.HeaderLength}");
             writer.WriteLine($"  Version:                  {addressRangeTable.Version}");
             writer.WriteLine($"  Offset into .debug_info:  0x{addressRangeTable.DebugInfoOffset:x}");
-            writer.WriteLine($"  Pointer Size:             {(addressRangeTable.Is64BitAddress ? 8 : 4)}");
+            writer.WriteLine($"  Pointer Size:             {(byte)addressRangeTable.AddressSize}");
             writer.WriteLine($"  Segment Size:             {addressRangeTable.SegmentSelectorSize}");
             writer.WriteLine();
-            var addressSize = addressRangeTable.Is64BitAddress ? 8 : 4;
+            var addressSize = (uint)addressRangeTable.AddressSize;
             if (addressSize > 4)
             {
                 writer.WriteLine("    Address            Length");
@@ -147,7 +147,7 @@ namespace LibObjectFile.Dwarf
             var formatStyle = "x" + (addressSize * 2);
             foreach (var range in addressRangeTable.Ranges)
             {
-                writer.WriteLine($"    {range.Segment.ToString(formatStyle)} {range.Address.ToString(formatStyle)}");
+                writer.WriteLine($"    {range.Address.ToString(formatStyle)} {range.Length.ToString(formatStyle)}");
             }
             writer.WriteLine($"    {((ulong)0).ToString(formatStyle)} {((ulong)0).ToString(formatStyle)}");
         }

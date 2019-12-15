@@ -46,7 +46,7 @@ namespace LibObjectFile.Dwarf
 
         public bool Is64BitEncoding { get; set; }
 
-        public bool Is64BitAddress { get; set; }
+        public DwarfAddressSize AddressSize { get; set; }
 
         public ushort Version { get; set; }
 
@@ -108,7 +108,7 @@ namespace LibObjectFile.Dwarf
             var startOfSection = reader.Offset;
             var unitLength = reader.ReadUnitLength();
             Is64BitEncoding = reader.Is64BitEncoding;
-            Is64BitAddress = reader.Is64BitAddress;
+            AddressSize = reader.AddressSize;
             var startPosition = reader.Offset;
             var version = reader.ReadU16();
 
@@ -953,7 +953,7 @@ namespace LibObjectFile.Dwarf
                 if (!hasSetAddress)
                 {
                     writer.WriteU8(0);
-                    writer.WriteULEB128(1 + DwarfHelper.SizeOfUInt(writer.Is64BitAddress));
+                    writer.WriteULEB128(1 + DwarfHelper.SizeOfUInt(writer.AddressSize));
                     writer.WriteU8(DwarfNative.DW_LNE_set_address);
                     writer.WriteUInt(debugLine.Address);
                     operationAdvancedEncoded = true;
@@ -1205,7 +1205,7 @@ namespace LibObjectFile.Dwarf
                 if (!hasSetAddress)
                 {
                     sizeOf += 1; // writer.WriteU8(0);
-                    var sizeOfAddress = DwarfHelper.SizeOfUInt(Is64BitAddress);
+                    var sizeOfAddress = DwarfHelper.SizeOfUInt(AddressSize);
                     sizeOf += DwarfHelper.SizeOfULEB128(1 + sizeOfAddress); // writer.WriteLEB128(DwarfHelper.SizeOfNativeInt(writer.IsTargetAddress64Bit));
                     sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNE_set_address);
                     sizeOf += sizeOfAddress; // writer.WriteLEB128(debugLine.Address);
