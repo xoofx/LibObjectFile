@@ -68,9 +68,10 @@ namespace LibObjectFile.Dwarf
             base.Verify(diagnostics);
 
             LineSection.Verify(diagnostics);
+            AbbreviationTable.Verify(diagnostics);
             AddressRangeTable.Verify(diagnostics);
-            InfoSection.Verify(diagnostics);
             StringTable.Verify(diagnostics);
+            InfoSection.Verify(diagnostics);
         }
         
         public void UpdateLayout(DwarfLayoutConfig config, DiagnosticBag diagnostics)
@@ -135,33 +136,38 @@ namespace LibObjectFile.Dwarf
             CheckErrors(diagnostics);
 
             // Write all section and stables
-            var writer = new DwarfWriter(this, writerContext, diagnostics);
+            var writer = new DwarfWriter(this, diagnostics);
             writer.AddressSize = writerContext.AddressSize;
-
+            
+            writer.Log = writerContext.DebugLineStream.Printer;
+            writer.Stream = writerContext.DebugLineStream.Stream;
+            if (writer.Stream != null)
+            {
+                LineSection.WriteInternal(writer);
+            }
+            
+            writer.Log = writerContext.DebugAbbrevStream.Printer;
             writer.Stream = writerContext.DebugAbbrevStream.Stream;
             if (writer.Stream != null)
             {
                 AbbreviationTable.WriteInternal(writer);
             }
 
+            writer.Log = writerContext.DebugAddressRangeStream.Printer;
+            writer.Stream = writerContext.DebugAddressRangeStream.Stream;
+            if (writer.Stream != null)
+            {
+                AddressRangeTable.WriteInternal(writer);
+            }
+            
+            writer.Log = writerContext.DebugStringStream.Printer;
             writer.Stream = writerContext.DebugStringStream.Stream;
             if (writer.Stream != null)
             {
                 StringTable.WriteInternal(writer);
             }
 
-            writer.Stream = writerContext.DebugLineStream.Stream;
-            if (writer.Stream != null)
-            {
-                LineSection.WriteInternal(writer);
-            }
-
-            writer.Stream = writerContext.DebugAddressRangeStream.Stream;
-            if (writer.Stream != null)
-            {
-                AddressRangeTable.WriteInternal(writer);
-            }
-
+            writer.Log = writerContext.DebugInfoStream.Printer;
             writer.Stream = writerContext.DebugInfoStream.Stream;
             if (writer.Stream != null)
             {
@@ -185,7 +191,6 @@ namespace LibObjectFile.Dwarf
             reader.Stream = readerContext.DebugAbbrevStream.Stream;
             if (reader.Stream != null)
             {
-                reader.Log = readerContext.DebugAbbrevStream.Printer;
                 dwarf.AbbreviationTable.ReadInternal(reader);
             }
 
@@ -193,7 +198,6 @@ namespace LibObjectFile.Dwarf
             reader.Stream = readerContext.DebugStringStream.Stream;
             if (reader.Stream != null)
             {
-                reader.Log = readerContext.DebugStringStream.Printer;
                 dwarf.StringTable.ReadInternal(reader);
             }
 
@@ -201,7 +205,6 @@ namespace LibObjectFile.Dwarf
             reader.Stream = readerContext.DebugLineStream.Stream;
             if (reader.Stream != null)
             {
-                reader.Log = readerContext.DebugLineStream.Printer;
                 dwarf.LineSection.ReadInternal(reader);
             }
 

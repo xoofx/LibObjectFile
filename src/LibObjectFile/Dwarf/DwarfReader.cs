@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace LibObjectFile.Dwarf
 {
-    public class DwarfReader : DwarfReaderWriter
+    public sealed class DwarfReader : DwarfReaderWriter
     {
         private readonly Dictionary<ulong, DwarfDIE> _registeredDIEPerCompilationUnit;
         private readonly Dictionary<ulong, DwarfDIE> _registeredDIEPerSection;

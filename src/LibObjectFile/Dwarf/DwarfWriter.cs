@@ -4,9 +4,9 @@
 
 namespace LibObjectFile.Dwarf
 {
-    public class DwarfWriter : DwarfReaderWriter
+    public sealed class DwarfWriter : DwarfReaderWriter
     {
-        internal DwarfWriter(DwarfFile file, DwarfWriterContext context, DiagnosticBag diagnostics) : base(file, diagnostics)
+        internal DwarfWriter(DwarfFile file, DiagnosticBag diagnostics) : base(file, diagnostics)
         {
         }
 
