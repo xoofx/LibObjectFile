@@ -263,7 +263,7 @@ namespace LibObjectFile.Dwarf
 
                     if (reader.File.LineSection != null)
                     {
-                        if (reader._offsetToDebugLine.TryGetValue(ValueAsU64, out var debugLine))
+                        if (reader.OffsetToDebugLine.TryGetValue(ValueAsU64, out var debugLine))
                         {
                             ValueAsU64 = 0;
                             ValueAsObject = debugLine;

@@ -574,7 +574,7 @@ namespace LibObjectFile.Dwarf
 
             foreach (var debugLine in Lines)
             {
-                reader._offsetToDebugLine.Add(debugLine.Offset, debugLine);
+                reader.OffsetToDebugLine.Add(debugLine.Offset, debugLine);
             }
         }
 
