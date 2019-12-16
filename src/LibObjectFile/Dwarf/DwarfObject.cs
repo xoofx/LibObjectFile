@@ -7,7 +7,44 @@ using System.Diagnostics;
 
 namespace LibObjectFile.Dwarf
 {
-    public abstract class DwarfObject<TContainer> : ObjectFileNode where TContainer : ObjectFileNode
+
+    public abstract class DwarfObject : ObjectFileNode
+    {
+        public DwarfFile GetParentFile()
+        {
+            var check = (ObjectFileNode)this;
+            while (check != null)
+            {
+                if (check is DwarfFile dwarfFile) return dwarfFile;
+                check = check.Parent;
+            }
+            return null;
+        }
+
+        public DwarfUnit GetParentUnit()
+        {
+            var check = (ObjectFileNode)this;
+            while (check != null)
+            {
+                if (check is DwarfUnit dwarfUnit) return dwarfUnit;
+                check = check.Parent;
+            }
+            return null;
+        }
+
+        public DwarfSection GetParentSection()
+        {
+            var check = (ObjectFileNode)this;
+            while (check != null)
+            {
+                if (check is DwarfSection dwarfSection) return dwarfSection;
+                check = check.Parent;
+            }
+            return null;
+        }
+    }
+
+    public abstract class DwarfObject<TContainer> : DwarfObject where TContainer : ObjectFileNode
     {
         protected override void ValidateParent(ObjectFileNode parent)
         {

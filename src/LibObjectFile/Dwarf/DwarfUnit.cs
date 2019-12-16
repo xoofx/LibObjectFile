@@ -6,30 +6,43 @@ using System;
 
 namespace LibObjectFile.Dwarf
 {
-    public abstract class DwarfUnit : DwarfContainer, IRelocatable
+    /// <summary>
+    /// Base class for a Dwarf Unit.
+    /// </summary>
+    public abstract class DwarfUnit : DwarfContainer
     {
         private DwarfDIE _root;
 
+        /// <summary>
+        /// Gets or sets the encoding of this unit.
+        /// </summary>
         public bool Is64BitEncoding { get; set; }
 
+        /// <summary>
+        /// Gets or sets the address size used by this unit.
+        /// </summary>
         public DwarfAddressSize AddressSize { get; set; }
 
+        /// <summary>
+        /// Gets or sets the version of this unit.
+        /// </summary>
         public ushort Version { get; set; }
 
+        /// <summary>
+        /// Gets or sets the kind of this unit.
+        /// </summary>
         public DwarfUnitKindEx Kind { get; set; }
 
+        /// <summary>
+        /// Gets the abbreviation offset, only valid once the layout has been calculated through <see cref="DwarfFile.UpdateLayout"/>.
+        /// </summary>
         public ulong DebugAbbreviationOffset { get; internal set; }
 
+        /// <summary>
+        /// Gets the unit length, only valid once the layout has been calculated through <see cref="DwarfFile.UpdateLayout"/>.
+        /// </summary>
         public ulong UnitLength { get; internal set; }
 
-        protected override void ValidateParent(ObjectFileNode parent)
-        {
-            if (!(parent is DwarfSection))
-            {
-                throw new ArgumentException($"Parent must inherit from type {nameof(DwarfSection)}");
-            }
-        }
-        
         /// <summary>
         /// Gets or sets the root <see cref="DwarfDIE"/> of this compilation unit.
         /// </summary>
@@ -40,18 +53,23 @@ namespace LibObjectFile.Dwarf
         }
 
         /// <summary>
-        /// Gets or sets the abbreviation associated with the <see cref="Root"/> <see cref="DwarfDIE"/>
+        /// Gets the abbreviation associated with the <see cref="Root"/> <see cref="DwarfDIE"/>.
         /// </summary>
+        /// <remarks>
+        /// This abbreviation is automatically setup after reading or after updating the layout through <see cref="DwarfFile.UpdateLayout"/>.
+        /// </remarks>
         public DwarfAbbreviation Abbreviation { get; internal set; }
-        
-        public ulong GetRelocatableValue(ulong relativeOffset, RelocationSize size)
-        {
-            throw new NotImplementedException();
-        }
 
-        public void SetRelocatableValue(ulong relativeOffset, RelocationSize size)
+        public override void Verify(DiagnosticBag diagnostics)
         {
-            throw new NotImplementedException();
+            base.Verify(diagnostics);
+
+            if (Version < 2 || Version > 5)
+            {
+                diagnostics.Error(DiagnosticId.DWARF_ERR_VersionNotSupported, $"Version .debug_info {Version} not supported");
+            }
+
+            Root?.Verify(diagnostics);
         }
 
         internal void ReadHeaderInternal(DwarfReader reader)
@@ -63,7 +81,15 @@ namespace LibObjectFile.Dwarf
         {
             WriteHeader(writer);
         }
-        
+
+        protected override void ValidateParent(ObjectFileNode parent)
+        {
+            if (!(parent is DwarfSection))
+            {
+                throw new ArgumentException($"Parent must inherit from type {nameof(DwarfSection)}");
+            }
+        }
+
         protected override void UpdateLayout(DwarfLayoutContext layoutContext)
         {
             var offset = this.Offset;

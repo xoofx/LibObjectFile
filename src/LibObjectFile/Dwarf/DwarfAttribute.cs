@@ -13,6 +13,9 @@ namespace LibObjectFile.Dwarf
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private ulong _valueAsU64;
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private object _valueAsObject;
+
         public DwarfAttributeKindEx Kind { get; set; }
 
         public bool ValueAsBoolean
@@ -54,7 +57,45 @@ namespace LibObjectFile.Dwarf
 
         public DwarfAttributeFormEx Form { get; internal set; }
 
-        public object ValueAsObject { get; set; }
+        public object ValueAsObject
+        {
+            get => _valueAsObject;
+            set
+            {
+                if (_valueAsObject is DwarfExpression oldExpression)
+                {
+                    oldExpression.Parent = null;
+                }
+                _valueAsObject = value;
+
+                if (value is DwarfExpression newExpression)
+                {
+                    if (newExpression.Parent != null) throw new InvalidOperationException($"Cannot set the {newExpression.GetType()} as it already belongs to another {newExpression.Parent.GetType()} instance");
+                    newExpression.Parent = this;
+                }
+            }
+        }
+        
+        public override void Verify(DiagnosticBag diagnostics)
+        {
+            base.Verify(diagnostics);
+
+            // Check DwarfDIE reference
+            if (ValueAsObject is DwarfDIE attrDIE)
+            {
+                var thisSection = this.GetParentSection();
+                var attrSection = attrDIE.GetParentSection();
+
+                if (thisSection != attrSection)
+                {
+                    diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidParentForDIE, $"Invalid parent for the DIE {attrDIE} referenced by the attribute {this}. It must be within the same parent {attrSection.GetType()}.");
+                }
+            }
+            else if (ValueAsObject is DwarfExpression expr)
+            {
+                expr.Verify(diagnostics);
+            }
+        }
         
         public int CompareTo(DwarfAttribute other)
         {
@@ -183,16 +224,7 @@ namespace LibObjectFile.Dwarf
                     var expr = (DwarfExpression)ValueAsObject;
                     expr.Offset = endOffset;
                     expr.UpdateLayoutInternal(layoutContext);
-
-                    // We need to shift the expression which is prefixed by its size encoded in LEB128
-                    var deltaLength = DwarfHelper.SizeOfULEB128(expr.Size);
-                    expr.Offset += deltaLength;
-                    foreach (var op in expr.InternalOperations)
-                    {
-                        op.Offset += deltaLength;
-                    }
-
-                    endOffset += expr.Size + deltaLength;
+                    endOffset += expr.Size;
                     break;
 
                 case DwarfAttributeForm.FlagPresent:
@@ -554,7 +586,7 @@ namespace LibObjectFile.Dwarf
                 {
                     if ((encoding & DwarfAttributeEncoding.ExpressionLocation) == 0)
                     {
-                        context.Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The string value of attribute {this} from DIE {this.Parent} is not valid for supported attribute encoding {encoding}. Expecting ExpressionLocation.");
+                        context.Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The expression value of attribute {this} from DIE {this.Parent} is not valid for supported attribute encoding {encoding}. Expecting ExpressionLocation.");
                     }
 
                     encoding = DwarfAttributeEncoding.ExpressionLocation;
@@ -563,8 +595,7 @@ namespace LibObjectFile.Dwarf
                 {
                     if (this.ValueAsObject != null)
                     {
-                        context.Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData,
-                            $"The {this.ValueAsObject.GetType()} value of attribute {this} from DIE {this.Parent} is not valid for supported attribute encoding {encoding}. Expecting Address.");
+                        context.Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The {this.ValueAsObject.GetType()} value of attribute {this} from DIE {this.Parent} is not valid for supported attribute encoding {encoding}. Expecting Address.");
                     }
 
                     encoding = DwarfAttributeEncoding.Address;
@@ -573,8 +604,7 @@ namespace LibObjectFile.Dwarf
                 {
                     if (this.ValueAsObject != null)
                     {
-                        context.Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData,
-                            $"The {this.ValueAsObject.GetType()} value of attribute {this} from DIE {this.Parent} is not valid for supported attribute encoding {encoding}. Expecting Constant.");
+                        context.Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The {this.ValueAsObject.GetType()} value of attribute {this} from DIE {this.Parent} is not valid for supported attribute encoding {encoding}. Expecting Constant.");
                     }
 
                     encoding = DwarfAttributeEncoding.Constant;

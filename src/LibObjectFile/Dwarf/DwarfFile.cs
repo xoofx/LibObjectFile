@@ -223,6 +223,8 @@ namespace LibObjectFile.Dwarf
                 dwarf.InfoSection.ReadInternal(reader);
             }
 
+            CheckErrors(reader.Diagnostics);
+
             return dwarf;
         }
 

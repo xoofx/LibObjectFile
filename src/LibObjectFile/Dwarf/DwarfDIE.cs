@@ -104,6 +104,22 @@ namespace LibObjectFile.Dwarf
             return _attributes.RemoveAt<DwarfDIE, DwarfAttribute>(this, index);
         }
 
+
+        public override void Verify(DiagnosticBag diagnostics)
+        {
+            base.Verify(diagnostics);
+
+            foreach (var attr in _attributes)
+            {
+                attr.Verify(diagnostics);
+            }
+
+            foreach (var child in _children)
+            {
+                child.Verify(diagnostics);
+            }
+        }
+
         public override string ToString()
         {
             return $"{nameof(Tag)}: {Tag}, {nameof(Attributes)}: {Attributes.Count}, {nameof(Children)}: {Children.Count}";

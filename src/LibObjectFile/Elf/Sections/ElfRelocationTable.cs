@@ -28,22 +28,6 @@ namespace LibObjectFile.Elf
         /// </summary>
         public List<ElfRelocation> Entries => _entries;
 
-        public Dictionary<ulong, ElfRelocation> CreateMap()
-        {
-            var mapRelocs = new Dictionary<ulong, ElfRelocation>();
-            for (var i = 0; i < _entries.Count; i++)
-            {
-                var entry = _entries[i];
-                if (mapRelocs.ContainsKey(entry.Offset))
-                {
-                    throw new InvalidOperationException($"Invalid offset {entry.Offset} for entry {i} which is already taken by another entry.");
-                }
-                mapRelocs.Add(entry.Offset, entry);
-            }
-
-            return mapRelocs;
-        }
-
         private static string GetDefaultName(ElfSectionType type)
         {
             return type == ElfSectionType.Relocation? DefaultName : DefaultNameWithAddends;

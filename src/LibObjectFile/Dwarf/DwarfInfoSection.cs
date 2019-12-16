@@ -2,9 +2,7 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
-using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace LibObjectFile.Dwarf
 {
@@ -66,6 +64,16 @@ namespace LibObjectFile.Dwarf
             }
 
             reader.ResolveAttributeReferenceWithinSection();
+        }
+
+        public override void Verify(DiagnosticBag diagnostics)
+        {
+            base.Verify(diagnostics);
+
+            foreach (var unit in _units)
+            {
+                unit.Verify(diagnostics);
+            }
         }
 
         protected override void UpdateLayout(DwarfLayoutContext layoutContext)

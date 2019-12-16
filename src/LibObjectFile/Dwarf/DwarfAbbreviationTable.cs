@@ -18,22 +18,22 @@ namespace LibObjectFile.Dwarf
 
         public IReadOnlyList<DwarfAbbreviation> Abbreviations => _abbreviations;
 
-        public void AddAbbreviation(DwarfAbbreviation abbreviation)
+        internal void AddAbbreviation(DwarfAbbreviation abbreviation)
         {
             _abbreviations.Add(this, abbreviation);
         }
 
-        public void RemoveAbbreviation(DwarfAbbreviation abbreviation)
+        internal void RemoveAbbreviation(DwarfAbbreviation abbreviation)
         {
             _abbreviations.Remove(this, abbreviation);
         }
 
-        public DwarfAbbreviation RemoveAbbreviationAt(int index)
+        internal DwarfAbbreviation RemoveAbbreviationAt(int index)
         {
             return _abbreviations.RemoveAt(this, index);
         }
 
-        public void Reset()
+        internal void Reset()
         {
             foreach(var abbreviation in _abbreviations)
             {
