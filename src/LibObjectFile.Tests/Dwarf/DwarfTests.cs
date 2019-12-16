@@ -103,6 +103,7 @@ namespace LibObjectFile.Tests.Dwarf
             var outputContext = new DwarfWriterContext
             {
                 IsLittleEndian = inputContext.IsLittleEndian,
+                EnableRelocation = false,
                 AddressSize = inputContext.AddressSize,
                 DebugLineStream = new MemoryStream()
             };
