@@ -138,25 +138,24 @@ namespace LibObjectFile.Dwarf
             writer.AddressSize = writerContext.AddressSize;
             writer.EnableRelocation = writerContext.EnableRelocation;
             
-            writer.Log = writerContext.DebugLineStream.Printer;
-            writer.Stream = writerContext.DebugLineStream.Stream;
+            writer.Log = writerContext.DebugLinePrinter;
+            writer.Stream = writerContext.DebugLineStream;
             if (writer.Stream != null)
             {
                 writer.CurrentSection = LineSection;
                 LineSection.Relocations.Clear();
                 LineSection.WriteInternal(writer);
             }
-            
-            writer.Log = writerContext.DebugAbbrevStream.Printer;
-            writer.Stream = writerContext.DebugAbbrevStream.Stream;
+
+            writer.Log = null;
+            writer.Stream = writerContext.DebugAbbrevStream;
             if (writer.Stream != null)
             {
                 writer.CurrentSection = AbbreviationTable;
                 AbbreviationTable.WriteInternal(writer);
             }
 
-            writer.Log = writerContext.DebugAddressRangeStream.Printer;
-            writer.Stream = writerContext.DebugAddressRangeStream.Stream;
+            writer.Stream = writerContext.DebugAddressRangeStream;
             if (writer.Stream != null)
             {
                 writer.CurrentSection = AddressRangeTable;
@@ -164,16 +163,14 @@ namespace LibObjectFile.Dwarf
                 AddressRangeTable.WriteInternal(writer);
             }
             
-            writer.Log = writerContext.DebugStringStream.Printer;
-            writer.Stream = writerContext.DebugStringStream.Stream;
+            writer.Stream = writerContext.DebugStringStream;
             if (writer.Stream != null)
             {
                 writer.CurrentSection = StringTable;
                 StringTable.WriteInternal(writer);
             }
 
-            writer.Log = writerContext.DebugInfoStream.Printer;
-            writer.Stream = writerContext.DebugInfoStream.Stream;
+            writer.Stream = writerContext.DebugInfoStream;
             if (writer.Stream != null)
             {
                 writer.CurrentSection = InfoSection;
@@ -194,40 +191,39 @@ namespace LibObjectFile.Dwarf
             };
             var reader = new DwarfReader(readerContext, dwarf, new DiagnosticBag());
 
-            reader.Log = readerContext.DebugAbbrevStream.Printer;
-            reader.Stream = readerContext.DebugAbbrevStream.Stream;
+            reader.Log = null;
+            reader.Stream = readerContext.DebugAbbrevStream;
             if (reader.Stream != null)
             {
                 reader.CurrentSection = dwarf.AbbreviationTable;
                 dwarf.AbbreviationTable.ReadInternal(reader);
             }
 
-            reader.Log = readerContext.DebugStringStream.Printer;
-            reader.Stream = readerContext.DebugStringStream.Stream;
+            reader.Stream = readerContext.DebugStringStream;
             if (reader.Stream != null)
             {
                 reader.CurrentSection = dwarf.StringTable;
                 dwarf.StringTable.ReadInternal(reader);
             }
 
-            reader.Log = readerContext.DebugLineStream.Printer;
-            reader.Stream = readerContext.DebugLineStream.Stream;
+            reader.Log = readerContext.DebugLinePrinter;
+            reader.Stream = readerContext.DebugLineStream;
             if (reader.Stream != null)
             {
                 reader.CurrentSection = dwarf.LineSection;
                 dwarf.LineSection.ReadInternal(reader);
             }
 
-            reader.Log = readerContext.DebugAddressRangeStream.Printer;
-            reader.Stream = readerContext.DebugAddressRangeStream.Stream;
+            reader.Log = null;
+            reader.Stream = readerContext.DebugAddressRangeStream;
             if (reader.Stream != null)
             {
                 reader.CurrentSection = dwarf.AddressRangeTable;
                 dwarf.AddressRangeTable.ReadInternal(reader);
             }
 
-            reader.Log = readerContext.DebugInfoStream.Printer;
-            reader.Stream = readerContext.DebugInfoStream.Stream;
+            reader.Log = null;
+            reader.Stream = readerContext.DebugInfoStream;
             if (reader.Stream != null)
             {
                 reader.DefaultUnitKind = DwarfUnitKind.Compile;

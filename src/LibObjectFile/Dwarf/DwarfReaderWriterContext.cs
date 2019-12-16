@@ -2,6 +2,8 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
+using System.IO;
+
 namespace LibObjectFile.Dwarf
 {
     public abstract class DwarfReaderWriterContext
@@ -10,14 +12,16 @@ namespace LibObjectFile.Dwarf
 
         public DwarfAddressSize AddressSize { get; set; }
         
-        public DwarfStreamAndPrint DebugAbbrevStream;
+        public Stream DebugAbbrevStream { get; set; }
 
-        public DwarfStreamAndPrint DebugStringStream;
+        public Stream DebugStringStream { get; set; }
 
-        public DwarfStreamAndPrint DebugAddressRangeStream;
+        public Stream DebugAddressRangeStream { get; set; }
 
-        public DwarfStreamAndPrint DebugLineStream;
+        public Stream DebugLineStream { get; set; }
 
-        public DwarfStreamAndPrint DebugInfoStream;
+        public TextWriter DebugLinePrinter { get; set; }
+
+        public Stream DebugInfoStream { get; set; }
     }
 }

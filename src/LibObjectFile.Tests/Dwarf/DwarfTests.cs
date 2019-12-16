@@ -91,14 +91,14 @@ namespace LibObjectFile.Tests.Dwarf
             }
 
             var inputContext = DwarfReaderContext.FromElf(elf);
-            inputContext.DebugLineStream.Printer = Console.Out;
+            inputContext.DebugLinePrinter = Console.Out;
             var dwarf = DwarfFile.Read(inputContext);
 
-            inputContext.DebugLineStream.Stream.Position = 0;
+            inputContext.DebugLineStream.Position = 0;
 
             var copyInputDebugLineStream = new MemoryStream();
-            inputContext.DebugLineStream.Stream.CopyTo(copyInputDebugLineStream);
-            inputContext.DebugLineStream.Stream.Position = 0;
+            inputContext.DebugLineStream.CopyTo(copyInputDebugLineStream);
+            inputContext.DebugLineStream.Position = 0;
 
             var outputContext = new DwarfWriterContext
             {
@@ -122,14 +122,14 @@ namespace LibObjectFile.Tests.Dwarf
                 DebugLineStream = outputContext.DebugLineStream
             };
 
-            reloadContext.DebugLineStream.Stream.Position = 0;
+            reloadContext.DebugLineStream.Position = 0;
             reloadContext.DebugLineStream = outputContext.DebugLineStream;
-            reloadContext.DebugLineStream.Printer = Console.Out;
+            reloadContext.DebugLinePrinter = Console.Out;
 
             var dwarf2 = DwarfFile.Read(reloadContext);
 
             var inputDebugLineBuffer = copyInputDebugLineStream.ToArray();
-            var outputDebugLineBuffer = ((MemoryStream)reloadContext.DebugLineStream.Stream).ToArray();
+            var outputDebugLineBuffer = ((MemoryStream)reloadContext.DebugLineStream).ToArray();
             Assert.AreEqual(inputDebugLineBuffer, outputDebugLineBuffer);
         }
 
@@ -149,13 +149,13 @@ namespace LibObjectFile.Tests.Dwarf
             }
 
             var inputContext = DwarfReaderContext.FromElf(elf);
-            inputContext.DebugLineStream.Printer = Console.Out;
+            inputContext.DebugLinePrinter = Console.Out;
             var dwarf = DwarfFile.Read(inputContext);
 
-            inputContext.DebugLineStream.Stream.Position = 0;
+            inputContext.DebugLineStream.Position = 0;
             var copyInputDebugLineStream = new MemoryStream();
-            inputContext.DebugLineStream.Stream.CopyTo(copyInputDebugLineStream);
-            inputContext.DebugLineStream.Stream.Position = 0;
+            inputContext.DebugLineStream.CopyTo(copyInputDebugLineStream);
+            inputContext.DebugLineStream.Position = 0;
 
             var outputContext = new DwarfWriterContext
             {
@@ -178,14 +178,14 @@ namespace LibObjectFile.Tests.Dwarf
                 DebugLineStream = outputContext.DebugLineStream
             };
 
-            reloadContext.DebugLineStream.Stream.Position = 0;
+            reloadContext.DebugLineStream.Position = 0;
             reloadContext.DebugLineStream = outputContext.DebugLineStream;
-            reloadContext.DebugLineStream.Printer = Console.Out;
+            reloadContext.DebugLinePrinter = Console.Out;
 
             var dwarf2 = DwarfFile.Read(reloadContext);
 
             var inputDebugLineBuffer = copyInputDebugLineStream.ToArray();
-            var outputDebugLineBuffer = ((MemoryStream)reloadContext.DebugLineStream.Stream).ToArray();
+            var outputDebugLineBuffer = ((MemoryStream)reloadContext.DebugLineStream).ToArray();
             Assert.AreEqual(inputDebugLineBuffer, outputDebugLineBuffer);
         }
 
@@ -241,25 +241,25 @@ namespace LibObjectFile.Tests.Dwarf
 
         private static void PrintStreamLength(DwarfReaderWriterContext context)
         {
-            if (context.DebugInfoStream.Stream != null)
+            if (context.DebugInfoStream != null)
             {
-                Console.WriteLine($".debug_info {context.DebugInfoStream.Stream.Length}");
+                Console.WriteLine($".debug_info {context.DebugInfoStream.Length}");
             }
-            if (context.DebugAbbrevStream.Stream != null)
+            if (context.DebugAbbrevStream != null)
             {
-                Console.WriteLine($".debug_abbrev {context.DebugAbbrevStream.Stream.Length}");
+                Console.WriteLine($".debug_abbrev {context.DebugAbbrevStream.Length}");
             }
-            if (context.DebugAddressRangeStream.Stream != null)
+            if (context.DebugAddressRangeStream != null)
             {
-                Console.WriteLine($".debug_aranges {context.DebugAddressRangeStream.Stream.Length}");
+                Console.WriteLine($".debug_aranges {context.DebugAddressRangeStream.Length}");
             }
-            if (context.DebugStringStream.Stream != null)
+            if (context.DebugStringStream != null)
             {
-                Console.WriteLine($".debug_str {context.DebugStringStream.Stream.Length}");
+                Console.WriteLine($".debug_str {context.DebugStringStream.Length}");
             }
-            if (context.DebugLineStream.Stream != null)
+            if (context.DebugLineStream != null)
             {
-                Console.WriteLine($".debug_line {context.DebugLineStream.Stream.Length}");
+                Console.WriteLine($".debug_line {context.DebugLineStream.Length}");
             }
         }
     }
