@@ -21,7 +21,14 @@ namespace LibObjectFile.Dwarf
 
         public DwarfAddressSize AddressSize { get; internal set; }
 
+        public DwarfSection CurrentSection { get; internal set; }
+
         public DwarfUnit CurrentUnit { get; internal set; }
+
+        public DwarfAddressSize SizeOfUIntEncoding()
+        {
+            return Is64BitEncoding ? DwarfAddressSize.Bit64 : DwarfAddressSize.Bit32;
+        }
 
         public DwarfAddressSize ReadAddressSize()
         {

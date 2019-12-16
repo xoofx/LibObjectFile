@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace LibObjectFile.Dwarf
 {
-    public sealed class DwarfInfoSection : DwarfSection
+    public sealed class DwarfInfoSection : DwarfRelocatableSection
     {
         private readonly List<DwarfUnit> _units;
 

@@ -43,6 +43,26 @@ namespace LibObjectFile.Dwarf
             }
         }
 
+        public static void PrintRelocations(this DwarfRelocatableSection relocSection, TextWriter writer)
+        {
+            if (writer == null) throw new ArgumentNullException(nameof(writer));
+
+            writer.WriteLine();
+            if (relocSection.Relocations.Count == 0)
+            {
+                writer.WriteLine("  There are no relocations in this section.");
+                return;
+            }
+
+            writer.WriteLine($"  Relocations of this section contains {(relocSection.Relocations.Count > 1 ? $"{relocSection.Relocations.Count} entries" : "1 entry")}:");
+            writer.WriteLine();
+            writer.WriteLine("    Offset             Target               Size   Addend");
+            foreach (var reloc in relocSection.Relocations)
+            {
+                writer.WriteLine($"{reloc.Offset:x16}   {reloc.Target,-24} {(uint)reloc.Size,-6} {reloc.Addend:x}");
+            }
+        }
+
         public static void Print(this DwarfInfoSection debugInfo, TextWriter writer)
         {
             if (writer == null) throw new ArgumentNullException(nameof(writer));

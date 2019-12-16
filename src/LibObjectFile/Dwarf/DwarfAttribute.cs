@@ -328,123 +328,123 @@ namespace LibObjectFile.Dwarf
                 case DwarfAttributeForm.Addr:
                 {
                     ValueAsU64 = reader.ReadUInt();
-                        break;
-                    }
+                    break;
+                }
 
                 case DwarfAttributeForm.Data1:
-                    {
-                        ValueAsU64 = reader.ReadU8();
-                        break;
-                    }
+                {
+                    ValueAsU64 = reader.ReadU8();
+                    break;
+                }
                 case DwarfAttributeForm.Data2:
-                    {
-                        ValueAsU64 = reader.ReadU16();
-                        break;
-                    }
+                {
+                    ValueAsU64 = reader.ReadU16();
+                    break;
+                }
                 case DwarfAttributeForm.Data4:
-                    {
-                        ValueAsU64 = reader.ReadU32();
-                        break;
-                    }
+                {
+                    ValueAsU64 = reader.ReadU32();
+                    break;
+                }
                 case DwarfAttributeForm.Data8:
-                    {
-                        ValueAsU64 = reader.ReadU64();
-                        break;
-                    }
+                {
+                    ValueAsU64 = reader.ReadU64();
+                    break;
+                }
 
                 case DwarfAttributeForm.String:
-                    {
-                        ValueAsObject = reader.ReadStringUTF8NullTerminated();
-                        break;
-                    }
+                {
+                    ValueAsObject = reader.ReadStringUTF8NullTerminated();
+                    break;
+                }
 
                 case DwarfAttributeForm.Block:
-                    {
-                        var length = reader.ReadULEB128();
-                        ValueAsObject = reader.ReadAsStream(length);
-                        break;
-                    }
+                {
+                    var length = reader.ReadULEB128();
+                    ValueAsObject = reader.ReadAsStream(length);
+                    break;
+                }
                 case DwarfAttributeForm.Block1:
-                    {
-                        var length = reader.ReadU8();
-                        ValueAsObject = reader.ReadAsStream(length);
-                        break;
-                    }
+                {
+                    var length = reader.ReadU8();
+                    ValueAsObject = reader.ReadAsStream(length);
+                    break;
+                }
                 case DwarfAttributeForm.Block2:
-                    {
-                        var length = reader.ReadU16();
-                        ValueAsObject = reader.ReadAsStream(length);
-                        break;
-                    }
+                {
+                    var length = reader.ReadU16();
+                    ValueAsObject = reader.ReadAsStream(length);
+                    break;
+                }
                 case DwarfAttributeForm.Block4:
-                    {
-                        var length = reader.ReadU32();
-                        ValueAsObject = reader.ReadAsStream(length);
-                        break;
-                    }
+                {
+                    var length = reader.ReadU32();
+                    ValueAsObject = reader.ReadAsStream(length);
+                    break;
+                }
 
                 case DwarfAttributeForm.Flag:
-                    {
-                        ValueAsBoolean = reader.ReadU8() != 0;
-                        break;
-                    }
+                {
+                    ValueAsBoolean = reader.ReadU8() != 0;
+                    break;
+                }
                 case DwarfAttributeForm.Sdata:
-                    {
-                        ValueAsI64 = reader.ReadILEB128();
-                        break;
-                    }
+                {
+                    ValueAsI64 = reader.ReadILEB128();
+                    break;
+                }
                 case DwarfAttributeForm.Strp:
-                    {
-                        var offset = reader.ReadUIntFromEncoding();
-                        ValueAsObject = reader.File.StringTable.GetStringFromOffset(offset);
-                        break;
-                    }
+                {
+                    var offset = reader.ReadUIntFromEncoding();
+                    ValueAsObject = reader.File.StringTable.GetStringFromOffset(offset);
+                    break;
+                }
                 case DwarfAttributeForm.Udata:
-                    {
-                        ValueAsU64 = reader.ReadULEB128();
-                        break;
-                    }
+                {
+                    ValueAsU64 = reader.ReadULEB128();
+                    break;
+                }
                 case DwarfAttributeForm.RefAddr:
-                    {
-                        ValueAsU64 = reader.ReadUIntFromEncoding();
-                        reader.ResolveAttributeReferenceWithinSection(AttributeToDIERef(this), false);
-                        break;
-                    }
+                {
+                    ValueAsU64 = reader.ReadUIntFromEncoding();
+                    reader.ResolveAttributeReferenceWithinSection(AttributeToDIERef(this), false);
+                    break;
+                }
                 case DwarfAttributeForm.Ref1:
-                    {
-                        ValueAsU64 = reader.ReadU8();
-                        reader.ResolveAttributeReferenceWithinCompilationUnit(AttributeToDIERef(this), false);
-                        break;
-                    }
+                {
+                    ValueAsU64 = reader.ReadU8();
+                    reader.ResolveAttributeReferenceWithinCompilationUnit(AttributeToDIERef(this), false);
+                    break;
+                }
                 case DwarfAttributeForm.Ref2:
-                    {
-                        ValueAsU64 = reader.ReadU16();
-                        reader.ResolveAttributeReferenceWithinCompilationUnit(AttributeToDIERef(this), false);
-                        break;
-                    }
+                {
+                    ValueAsU64 = reader.ReadU16();
+                    reader.ResolveAttributeReferenceWithinCompilationUnit(AttributeToDIERef(this), false);
+                    break;
+                }
                 case DwarfAttributeForm.Ref4:
-                    {
-                        ValueAsU64 = reader.ReadU32();
-                        reader.ResolveAttributeReferenceWithinCompilationUnit(AttributeToDIERef(this), false);
-                        break;
-                    }
+                {
+                    ValueAsU64 = reader.ReadU32();
+                    reader.ResolveAttributeReferenceWithinCompilationUnit(AttributeToDIERef(this), false);
+                    break;
+                }
                 case DwarfAttributeForm.Ref8:
-                    {
-                        ValueAsU64 = reader.ReadU64();
-                        reader.ResolveAttributeReferenceWithinCompilationUnit(AttributeToDIERef(this), false);
-                        break;
-                    }
+                {
+                    ValueAsU64 = reader.ReadU64();
+                    reader.ResolveAttributeReferenceWithinCompilationUnit(AttributeToDIERef(this), false);
+                    break;
+                }
                 case DwarfAttributeForm.RefUdata:
-                    {
-                        ValueAsU64 = reader.ReadULEB128();
-                        reader.ResolveAttributeReferenceWithinCompilationUnit(AttributeToDIERef(this), false);
-                        break;
-                    }
+                {
+                    ValueAsU64 = reader.ReadULEB128();
+                    reader.ResolveAttributeReferenceWithinCompilationUnit(AttributeToDIERef(this), false);
+                    break;
+                }
                 case DwarfAttributeForm.Indirect:
-                    {
-                        attributeForm = new DwarfAttributeFormEx(reader.ReadULEB128AsU32());
-                        goto indirect;
-                    }
+                {
+                    attributeForm = new DwarfAttributeFormEx(reader.ReadULEB128AsU32());
+                    goto indirect;
+                }
 
                 // addptr
                 // lineptr
@@ -455,32 +455,32 @@ namespace LibObjectFile.Dwarf
                 // rngrlistptr
                 // stroffsetsptr
                 case DwarfAttributeForm.SecOffset:
-                    {
-                        ValueAsU64 = reader.ReadUIntFromEncoding();
-                        //Console.WriteLine($"attribute {Key} offset: {ValueAsU64}");
-                        break;
-                    }
+                {
+                    ValueAsU64 = reader.ReadUIntFromEncoding();
+                    //Console.WriteLine($"attribute {Key} offset: {ValueAsU64}");
+                    break;
+                }
 
                 case DwarfAttributeForm.Exprloc:
-                    {
-                        var expression = new DwarfExpression();
-                        expression.ReadInternal(reader);
-                        ValueAsObject = expression;
-                        break;
-                    }
+                {
+                    var expression = new DwarfExpression();
+                    expression.ReadInternal(reader);
+                    ValueAsObject = expression;
+                    break;
+                }
 
                 case DwarfAttributeForm.FlagPresent:
-                    {
-                        ValueAsBoolean = true;
-                        break;
-                    }
+                {
+                    ValueAsBoolean = true;
+                    break;
+                }
 
                 case DwarfAttributeForm.RefSig8:
-                    {
-                        var offset = reader.ReadU64();
-                        ValueAsU64 = offset;
-                        break;
-                    }
+                {
+                    var offset = reader.ReadU64();
+                    ValueAsU64 = offset;
+                    break;
+                }
 
                 case DwarfAttributeForm.Strx: throw new NotSupportedException("DW_FORM_strx - DWARF5");
                 case DwarfAttributeForm.Addrx: throw new NotSupportedException("DW_FORM_addrx - DWARF5");
@@ -598,7 +598,15 @@ namespace LibObjectFile.Dwarf
                         context.Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The {this.ValueAsObject.GetType()} value of attribute {this} from DIE {this.Parent} is not valid for supported attribute encoding {encoding}. Expecting Address.");
                     }
 
-                    encoding = DwarfAttributeEncoding.Address;
+                    // If not specified explicitly, We consider HighPC as a constant (delta from LowPC)
+                    if (this.Kind  == DwarfAttributeKindEx.HighPC)
+                    {
+                        encoding = DwarfAttributeEncoding.Constant;
+                    }
+                    else
+                    {
+                        encoding = DwarfAttributeEncoding.Address;
+                    }
                 }
                 else if ((encoding & DwarfAttributeEncoding.Constant) != 0)
                 {
@@ -743,120 +751,125 @@ namespace LibObjectFile.Dwarf
             switch (Form.Value)
             {
                 case DwarfAttributeForm.Addr:
-                    {
-                        writer.WriteUInt(ValueAsU64);
-                        break;
-                    }
+                {
+                    writer.WriteAddress(DwarfRelocationTarget.Code, ValueAsU64);
+                    break;
+                }
                 case DwarfAttributeForm.Data1:
-                    {
-                        writer.WriteU8((byte)ValueAsU64);
-                        break;
-                    }
+                {
+                    writer.WriteU8((byte) ValueAsU64);
+                    break;
+                }
                 case DwarfAttributeForm.Data2:
-                    {
-                        writer.WriteU16((ushort)ValueAsU64);
-                        break;
-                    }
+                {
+                    writer.WriteU16((ushort) ValueAsU64);
+                    break;
+                }
                 case DwarfAttributeForm.Data4:
-                    {
-                        writer.WriteU32((uint)ValueAsU64);
-                        break;
-                    }
+                {
+                    writer.WriteU32((uint) ValueAsU64);
+                    break;
+                }
                 case DwarfAttributeForm.Data8:
-                    {
-                        writer.WriteU64(ValueAsU64);
-                        break;
-                    }
+                {
+                    writer.WriteU64(ValueAsU64);
+                    break;
+                }
                 case DwarfAttributeForm.String:
-                    {
-                        writer.WriteStringUTF8NullTerminated((string)ValueAsObject);
-                        break;
-                    }
+                {
+                    writer.WriteStringUTF8NullTerminated((string) ValueAsObject);
+                    break;
+                }
                 case DwarfAttributeForm.Block:
-                    {
-                        var stream = (Stream)ValueAsObject;
-                        writer.WriteULEB128((ulong)stream.Length);
-                        writer.Write(stream);
-                        break;
-                    }
+                {
+                    var stream = (Stream) ValueAsObject;
+                    writer.WriteULEB128((ulong) stream.Length);
+                    writer.Write(stream);
+                    break;
+                }
                 case DwarfAttributeForm.Block1:
-                    {
-                        var stream = (Stream)ValueAsObject;
-                        writer.WriteU8((byte)stream.Length);
-                        writer.Write(stream);
-                        break;
-                    }
+                {
+                    var stream = (Stream) ValueAsObject;
+                    writer.WriteU8((byte) stream.Length);
+                    writer.Write(stream);
+                    break;
+                }
                 case DwarfAttributeForm.Block2:
-                    {
-                        var stream = (Stream)ValueAsObject;
-                        writer.WriteU16((ushort)stream.Length);
-                        writer.Write(stream);
-                        break;
-                    }
+                {
+                    var stream = (Stream) ValueAsObject;
+                    writer.WriteU16((ushort) stream.Length);
+                    writer.Write(stream);
+                    break;
+                }
                 case DwarfAttributeForm.Block4:
-                    {
-                        var stream = (Stream)ValueAsObject;
-                        writer.WriteU32((uint)stream.Length);
-                        writer.Write(stream);
-                        break;
-                    }
+                {
+                    var stream = (Stream) ValueAsObject;
+                    writer.WriteU32((uint) stream.Length);
+                    writer.Write(stream);
+                    break;
+                }
                 case DwarfAttributeForm.Flag:
-                    {
-                        writer.WriteU8((byte)(ValueAsU64 != 0 ? 1 : 0));
-                        break;
-                    }
+                {
+                    writer.WriteU8((byte) (ValueAsU64 != 0 ? 1 : 0));
+                    break;
+                }
                 case DwarfAttributeForm.Sdata:
-                    {
-                        writer.WriteILEB128(ValueAsI64);
-                        break;
-                    }
+                {
+                    writer.WriteILEB128(ValueAsI64);
+                    break;
+                }
                 case DwarfAttributeForm.Strp:
+                {
+                    var offset = writer.File.StringTable.GetOrCreateString((string) ValueAsObject);
+                    if (writer.EnableRelocation)
                     {
-                        var offset = writer.File.StringTable.GetOrCreateString((string)ValueAsObject);
-                        writer.WriteUIntFromEncoding(offset);
-                        break;
+                        writer.RecordRelocation(DwarfRelocationTarget.StringTable, writer.SizeOfUIntEncoding(), offset);
+                        offset = 0;
                     }
+                    writer.WriteUIntFromEncoding(offset);
+                    break;
+                }
                 case DwarfAttributeForm.Udata:
-                    {
-                        writer.WriteULEB128(ValueAsU64);
-                        break;
-                    }
+                {
+                    writer.WriteULEB128(ValueAsU64);
+                    break;
+                }
                 case DwarfAttributeForm.RefAddr:
-                    {
-                        var dieRef = (DwarfDIE)ValueAsObject;
-                        writer.WriteUIntFromEncoding(dieRef.Offset);
-                        break;
-                    }
+                {
+                    var dieRef = (DwarfDIE) ValueAsObject;
+                    writer.WriteUIntFromEncoding(dieRef.Offset);
+                    break;
+                }
                 case DwarfAttributeForm.Ref1:
-                    {
-                        var dieRef = (DwarfDIE)ValueAsObject;
-                        writer.WriteU8((byte)(dieRef.Offset - writer.CurrentUnit.Offset));
-                        break;
-                    }
+                {
+                    var dieRef = (DwarfDIE) ValueAsObject;
+                    writer.WriteU8((byte) (dieRef.Offset - writer.CurrentUnit.Offset));
+                    break;
+                }
                 case DwarfAttributeForm.Ref2:
-                    {
-                        var dieRef = (DwarfDIE)ValueAsObject;
-                        writer.WriteU16((ushort)(dieRef.Offset - writer.CurrentUnit.Offset));
-                        break;
-                    }
+                {
+                    var dieRef = (DwarfDIE) ValueAsObject;
+                    writer.WriteU16((ushort) (dieRef.Offset - writer.CurrentUnit.Offset));
+                    break;
+                }
                 case DwarfAttributeForm.Ref4:
-                    {
-                        var dieRef = (DwarfDIE)ValueAsObject;
-                        writer.WriteU32((uint)(dieRef.Offset - writer.CurrentUnit.Offset));
-                        break;
-                    }
+                {
+                    var dieRef = (DwarfDIE) ValueAsObject;
+                    writer.WriteU32((uint) (dieRef.Offset - writer.CurrentUnit.Offset));
+                    break;
+                }
                 case DwarfAttributeForm.Ref8:
-                    {
-                        var dieRef = (DwarfDIE)ValueAsObject;
-                        writer.WriteU64((dieRef.Offset - writer.CurrentUnit.Offset));
-                        break;
-                    }
+                {
+                    var dieRef = (DwarfDIE) ValueAsObject;
+                    writer.WriteU64((dieRef.Offset - writer.CurrentUnit.Offset));
+                    break;
+                }
                 case DwarfAttributeForm.RefUdata:
-                    {
-                        var dieRef = (DwarfDIE)ValueAsObject;
-                        writer.WriteULEB128((dieRef.Offset - writer.CurrentUnit.Offset));
-                        break;
-                    }
+                {
+                    var dieRef = (DwarfDIE) ValueAsObject;
+                    writer.WriteULEB128((dieRef.Offset - writer.CurrentUnit.Offset));
+                    break;
+                }
 
                 //case DwarfAttributeForm.indirect:
                 //{
@@ -873,10 +886,10 @@ namespace LibObjectFile.Dwarf
                 // rngrlistptr
                 // stroffsetsptr
                 case DwarfAttributeForm.SecOffset:
-                    {
-                        writer.WriteUIntFromEncoding(ValueAsU64);
-                        break;
-                    }
+                {
+                    writer.WriteUIntFromEncoding(ValueAsU64);
+                    break;
+                }
 
                 case DwarfAttributeForm.Exprloc:
                     ((DwarfExpression) ValueAsObject).WriteInternal(writer);

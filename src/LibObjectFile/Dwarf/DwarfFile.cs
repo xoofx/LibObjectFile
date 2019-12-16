@@ -26,8 +26,6 @@ namespace LibObjectFile.Dwarf
 
         public bool IsLittleEndian { get; set; }
 
-        public DwarfAddressSize AddressSize { get; set; }
-
         public DwarfAbbreviationTable AbbreviationTable
         {
             get => _abbreviationTable;
@@ -138,11 +136,14 @@ namespace LibObjectFile.Dwarf
             // Write all section and stables
             var writer = new DwarfWriter(this, diagnostics);
             writer.AddressSize = writerContext.AddressSize;
+            writer.EnableRelocation = writerContext.EnableRelocation;
             
             writer.Log = writerContext.DebugLineStream.Printer;
             writer.Stream = writerContext.DebugLineStream.Stream;
             if (writer.Stream != null)
             {
+                writer.CurrentSection = LineSection;
+                LineSection.Relocations.Clear();
                 LineSection.WriteInternal(writer);
             }
             
@@ -150,6 +151,7 @@ namespace LibObjectFile.Dwarf
             writer.Stream = writerContext.DebugAbbrevStream.Stream;
             if (writer.Stream != null)
             {
+                writer.CurrentSection = AbbreviationTable;
                 AbbreviationTable.WriteInternal(writer);
             }
 
@@ -157,6 +159,8 @@ namespace LibObjectFile.Dwarf
             writer.Stream = writerContext.DebugAddressRangeStream.Stream;
             if (writer.Stream != null)
             {
+                writer.CurrentSection = AddressRangeTable;
+                AddressRangeTable.Relocations.Clear();
                 AddressRangeTable.WriteInternal(writer);
             }
             
@@ -164,6 +168,7 @@ namespace LibObjectFile.Dwarf
             writer.Stream = writerContext.DebugStringStream.Stream;
             if (writer.Stream != null)
             {
+                writer.CurrentSection = StringTable;
                 StringTable.WriteInternal(writer);
             }
 
@@ -171,6 +176,8 @@ namespace LibObjectFile.Dwarf
             writer.Stream = writerContext.DebugInfoStream.Stream;
             if (writer.Stream != null)
             {
+                writer.CurrentSection = InfoSection;
+                InfoSection.Relocations.Clear();
                 InfoSection.WriteInternal(writer);
             }
 
@@ -191,6 +198,7 @@ namespace LibObjectFile.Dwarf
             reader.Stream = readerContext.DebugAbbrevStream.Stream;
             if (reader.Stream != null)
             {
+                reader.CurrentSection = dwarf.AbbreviationTable;
                 dwarf.AbbreviationTable.ReadInternal(reader);
             }
 
@@ -198,6 +206,7 @@ namespace LibObjectFile.Dwarf
             reader.Stream = readerContext.DebugStringStream.Stream;
             if (reader.Stream != null)
             {
+                reader.CurrentSection = dwarf.StringTable;
                 dwarf.StringTable.ReadInternal(reader);
             }
 
@@ -205,6 +214,7 @@ namespace LibObjectFile.Dwarf
             reader.Stream = readerContext.DebugLineStream.Stream;
             if (reader.Stream != null)
             {
+                reader.CurrentSection = dwarf.LineSection;
                 dwarf.LineSection.ReadInternal(reader);
             }
 
@@ -212,6 +222,7 @@ namespace LibObjectFile.Dwarf
             reader.Stream = readerContext.DebugAddressRangeStream.Stream;
             if (reader.Stream != null)
             {
+                reader.CurrentSection = dwarf.AddressRangeTable;
                 dwarf.AddressRangeTable.ReadInternal(reader);
             }
 
@@ -220,6 +231,7 @@ namespace LibObjectFile.Dwarf
             if (reader.Stream != null)
             {
                 reader.DefaultUnitKind = DwarfUnitKind.Compile;
+                reader.CurrentSection = dwarf.InfoSection;
                 dwarf.InfoSection.ReadInternal(reader);
             }
 

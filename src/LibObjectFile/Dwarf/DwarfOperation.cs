@@ -805,7 +805,7 @@ namespace LibObjectFile.Dwarf
             switch (Kind.Value)
             {
                 case DwarfOperationKind.Addr:
-                    writer.WriteUInt(Operand1.U64);
+                    writer.WriteAddress(DwarfRelocationTarget.Code, Operand1.U64);
                     break;
                 case DwarfOperationKind.Const1u:
                 case DwarfOperationKind.Const1s:

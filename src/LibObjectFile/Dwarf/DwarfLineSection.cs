@@ -12,7 +12,7 @@ using System.Text;
 namespace LibObjectFile.Dwarf
 {
     [DebuggerDisplay("Count = {Lines.Count,nq}")]
-    public sealed class DwarfLineSection : DwarfSection
+    public sealed class DwarfLineSection : DwarfRelocatableSection
     {
         private readonly Dictionary<string, uint> _directoryNameToIndex;
         private readonly Dictionary<DwarfFileName, uint> _fileNameToIndex;
@@ -799,7 +799,7 @@ namespace LibObjectFile.Dwarf
             Debug.Assert(Size == writer.Offset - startOffset, $"Expected Size: {Size} != Written Size: {writer.Offset - startOffset}");
         }
 
-        private void WriteDebugLineOpCodes(DwarfReaderWriter writer, uint opCodeBase)
+        private void WriteDebugLineOpCodes(DwarfWriter writer, uint opCodeBase)
         {
             var previousLineState = new DwarfLineState();
             var firstFile = FileNames.Count > 0 ? FileNames[0] : null;
@@ -955,7 +955,7 @@ namespace LibObjectFile.Dwarf
                     writer.WriteU8(0);
                     writer.WriteULEB128(1 + DwarfHelper.SizeOfUInt(writer.AddressSize));
                     writer.WriteU8(DwarfNative.DW_LNE_set_address);
-                    writer.WriteUInt(debugLine.Address);
+                    writer.WriteAddress(DwarfRelocationTarget.Code, debugLine.Address);
                     operationAdvancedEncoded = true;
                     deltaAddress = 0;
                     hasSetAddress = true;

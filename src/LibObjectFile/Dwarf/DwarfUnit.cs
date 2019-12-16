@@ -72,16 +72,6 @@ namespace LibObjectFile.Dwarf
             Root?.Verify(diagnostics);
         }
 
-        internal void ReadHeaderInternal(DwarfReader reader)
-        {
-            ReadHeader(reader);
-        }
-
-        internal void WriteHeaderInternal(DwarfReaderWriter writer)
-        {
-            WriteHeader(writer);
-        }
-
         protected override void ValidateParent(ObjectFileNode parent)
         {
             if (!(parent is DwarfSection))
@@ -134,7 +124,7 @@ namespace LibObjectFile.Dwarf
 
         protected abstract void ReadHeader(DwarfReader reader);
 
-        protected abstract void WriteHeader(DwarfReaderWriter writer);
+        protected abstract void WriteHeader(DwarfWriter writer);
 
         protected override void Read(DwarfReader reader)
         {
@@ -202,7 +192,7 @@ namespace LibObjectFile.Dwarf
             unit.Offset = startOffset;
             unit.Version = version;
 
-            unit.ReadHeaderInternal(reader);
+            unit.ReadHeader(reader);
 
             unit.ReadInternal(reader);
 
@@ -223,7 +213,7 @@ namespace LibObjectFile.Dwarf
                 writer.WriteU8((byte)Kind.Value);
             }
 
-            WriteHeaderInternal(writer);
+            WriteHeader(writer);
 
             Root?.WriteInternal(writer);
             // TODO: check size of unit length

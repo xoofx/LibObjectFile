@@ -11,7 +11,7 @@ using LibObjectFile.Utils;
 namespace LibObjectFile.Dwarf
 {
     [DebuggerDisplay("Count = {Ranges.Count,nq}")]
-    public class DwarfAddressRangeTable : DwarfSection
+    public class DwarfAddressRangeTable : DwarfRelocatableSection
     {
         public DwarfAddressRangeTable()
         {
@@ -186,15 +186,21 @@ namespace LibObjectFile.Dwarf
             writer.WriteU16(Version);
 
             // debug_info_offset
-            writer.WriteUInt(DebugInfoOffset);
+            var debugInfoOffset = DebugInfoOffset;
+            if (writer.EnableRelocation)
+            {
+                writer.RecordRelocation(DwarfRelocationTarget.DebugInfo, writer.SizeOfUIntEncoding(), debugInfoOffset);
+                debugInfoOffset = 0;
+            }
+            writer.WriteUIntFromEncoding(debugInfoOffset);
 
             // address_size
-            var address_size = AddressSize;
-            writer.WriteU8((byte)address_size);
+            writer.AddressSize = AddressSize;
+            writer.WriteU8((byte)AddressSize);
 
             writer.WriteU8((byte)SegmentSelectorSize);
 
-            var align = (ulong)SegmentSelectorSize + (ulong)address_size * 2;
+            var align = (ulong)SegmentSelectorSize + (ulong)AddressSize * 2;
 
             // SPECS 7.21: The first tuple following the header in each set begins at an offset that is a multiple of the size of a single tuple
             var nextOffset = AlignHelper.AlignToUpper(writer.Offset, align);
@@ -225,25 +231,8 @@ namespace LibObjectFile.Dwarf
                     }
                 }
 
-                switch (address_size)
-                {
-                    case DwarfAddressSize.Bit8:
-                        writer.WriteU8((byte)range.Address);
-                        writer.WriteU8((byte)range.Length);
-                        break;
-                    case DwarfAddressSize.Bit16:
-                        writer.WriteU16((ushort)range.Address);
-                        writer.WriteU16((ushort)range.Length);
-                        break;
-                    case DwarfAddressSize.Bit32:
-                        writer.WriteU32((uint)range.Address);
-                        writer.WriteU32((uint)range.Length);
-                        break;
-                    case DwarfAddressSize.Bit64:
-                        writer.WriteU64(range.Address);
-                        writer.WriteU64(range.Length);
-                        break;
-                }
+                writer.WriteAddress(DwarfRelocationTarget.Code, range.Address);
+                writer.WriteUInt(range.Length);
             }
 
             if (SegmentSelectorSize != 0)
@@ -265,7 +254,7 @@ namespace LibObjectFile.Dwarf
                 }
             }
 
-            switch (address_size)
+            switch (AddressSize)
             {
                 case DwarfAddressSize.Bit8:
                     writer.WriteU16(0);

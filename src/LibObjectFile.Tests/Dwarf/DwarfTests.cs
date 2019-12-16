@@ -231,7 +231,9 @@ namespace LibObjectFile.Tests.Dwarf
 
             dwarf.AbbreviationTable.Print(Console.Out);
             dwarf.InfoSection.Print(Console.Out);
+            dwarf.InfoSection.PrintRelocations(Console.Out);
             dwarf.AddressRangeTable.Print(Console.Out);
+            dwarf.AddressRangeTable.PrintRelocations(Console.Out);
 
             PrintStreamLength(outputContext);
         }

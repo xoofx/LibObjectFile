@@ -11,9 +11,11 @@ namespace LibObjectFile.Dwarf
         public DwarfWriterContext()
         {
             LayoutConfig = new DwarfLayoutConfig();
+            EnableRelocation = true;
         }
-
-
+        
         public DwarfLayoutConfig LayoutConfig { get; }
+
+        public bool EnableRelocation { get; set; }
     }
 }
