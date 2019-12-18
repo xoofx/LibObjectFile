@@ -93,7 +93,7 @@ namespace LibObjectFile.Dwarf
         {
             if (writer == null) throw new ArgumentNullException(nameof(writer));
 
-            writer.WriteLine($" <{level}><{die.Offset:x}>: Abbrev Number: {die.Abbrev.Offset} ({die.Tag})");
+            writer.WriteLine($" <{level}><{die.Offset:x}>: Abbrev Number: {die.Abbrev.Code} ({die.Tag})");
 
             foreach (var attr in die.Attributes)
             {

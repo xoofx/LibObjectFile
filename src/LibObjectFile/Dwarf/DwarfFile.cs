@@ -141,6 +141,7 @@ namespace LibObjectFile.Dwarf
             if (writer.Stream != null)
             {
                 writer.Stream.Position = 0;
+                writer.Stream.SetLength(0);
                 writer.CurrentSection = LineTable;
                 LineTable.Relocations.Clear();
                 LineTable.WriteInternal(writer);
@@ -151,6 +152,7 @@ namespace LibObjectFile.Dwarf
             if (writer.Stream != null)
             {
                 writer.Stream.Position = 0;
+                writer.Stream.SetLength(0);
                 writer.CurrentSection = AbbreviationTable;
                 AbbreviationTable.WriteInternal(writer);
             }
@@ -159,6 +161,7 @@ namespace LibObjectFile.Dwarf
             if (writer.Stream != null)
             {
                 writer.Stream.Position = 0;
+                writer.Stream.SetLength(0);
                 writer.CurrentSection = AddressRangeTable;
                 AddressRangeTable.Relocations.Clear();
                 AddressRangeTable.WriteInternal(writer);
@@ -168,6 +171,7 @@ namespace LibObjectFile.Dwarf
             if (writer.Stream != null)
             {
                 writer.Stream.Position = 0;
+                writer.Stream.SetLength(0);
                 writer.CurrentSection = StringTable;
                 StringTable.WriteInternal(writer);
             }
@@ -176,6 +180,7 @@ namespace LibObjectFile.Dwarf
             if (writer.Stream != null)
             {
                 writer.Stream.Position = 0;
+                writer.Stream.SetLength(0);
                 writer.CurrentSection = InfoSection;
                 InfoSection.Relocations.Clear();
                 InfoSection.WriteInternal(writer);
@@ -202,12 +207,15 @@ namespace LibObjectFile.Dwarf
 
             // Setup the output based on actual content of Dwarf infos
             var writer = new DwarfWriter(this, elfContext.IsLittleEndian, diagnostics);
+            writer.AddressSize = elfContext.AddressSize;
+            writer.EnableRelocation = layoutConfig.GenerateRelocation;
 
             // String table
             if (StringTable.Size > 0)
             {
                 writer.Stream = elfContext.GetOrCreateStringTable().Stream;
                 writer.Stream.Position = 0;
+                writer.Stream.SetLength(0);
                 writer.CurrentSection = StringTable;
                 StringTable.WriteInternal(writer);
             }
@@ -221,6 +229,7 @@ namespace LibObjectFile.Dwarf
             {
                 writer.Stream = elfContext.GetOrCreateAbbreviationTable().Stream; 
                 writer.Stream.Position = 0;
+                writer.Stream.SetLength(0);
                 writer.CurrentSection = AbbreviationTable;
                 AbbreviationTable.WriteInternal(writer);
             }
@@ -234,10 +243,11 @@ namespace LibObjectFile.Dwarf
             {
                 writer.Stream = elfContext.GetOrCreateLineSection().Stream;
                 writer.Stream.Position = 0;
+                writer.Stream.SetLength(0);
                 writer.CurrentSection = LineTable;
                 LineTable.Relocations.Clear();
                 LineTable.WriteInternal(writer);
-                if (layoutConfig.GenerateRelocation)
+                if (layoutConfig.GenerateRelocation && LineTable.Relocations.Count > 0)
                 {
                     LineTable.CopyRelocationsTo(elfContext, elfContext.GetOrCreateRelocLineSection());
                 }
@@ -256,11 +266,12 @@ namespace LibObjectFile.Dwarf
             {
                 writer.Stream = elfContext.GetOrCreateAddressRangeTable().Stream;
                 writer.Stream.Position = 0;
+                writer.Stream.SetLength(0);
                 writer.CurrentSection = AddressRangeTable;
                 AddressRangeTable.Relocations.Clear();
                 AddressRangeTable.WriteInternal(writer);
 
-                if (layoutConfig.GenerateRelocation)
+                if (layoutConfig.GenerateRelocation && AddressRangeTable.Relocations.Count > 0)
                 {
                     AddressRangeTable.CopyRelocationsTo(elfContext, elfContext.GetOrCreateRelocAddressRangeTable());
                 }
@@ -279,11 +290,12 @@ namespace LibObjectFile.Dwarf
             {
                 writer.Stream = elfContext.GetOrCreateInfoSection().Stream;
                 writer.Stream.Position = 0;
-                writer.CurrentSection = AddressRangeTable;
+                writer.Stream.SetLength(0);
+                writer.CurrentSection = InfoSection;
                 InfoSection.Relocations.Clear();
                 InfoSection.WriteInternal(writer);
 
-                if (layoutConfig.GenerateRelocation)
+                if (layoutConfig.GenerateRelocation && InfoSection.Relocations.Count > 0)
                 {
                     InfoSection.CopyRelocationsTo(elfContext, elfContext.GetOrCreateRelocInfoSection());
                 }

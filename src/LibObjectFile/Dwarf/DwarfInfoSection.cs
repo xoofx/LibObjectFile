@@ -3,6 +3,7 @@
 // See the license.txt file in the project root for more information.
 
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace LibObjectFile.Dwarf
 {
@@ -86,16 +87,19 @@ namespace LibObjectFile.Dwarf
                 unit.UpdateLayoutInternal(layoutContext);
                 offset += unit.Size;
             }
+            Size = offset - Offset;
         }
 
         protected override void Write(DwarfWriter writer)
         {
+            Debug.Assert(Offset == writer.Offset);
             foreach (var unit in _units)
             {
                 writer.CurrentUnit = unit;
                 unit.WriteInternal(writer);
             }
             writer.CurrentUnit = null;
+            Debug.Assert(Size == writer.Offset - Offset);
         }
     }
 }

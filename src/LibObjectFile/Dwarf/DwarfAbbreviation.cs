@@ -162,9 +162,6 @@ namespace LibObjectFile.Dwarf
             var key = new DwarfAbbreviationItemKey(item.Tag, item.HasChildren, item.Descriptors);
             _mapKeyToItem.Add(key, item);
 
-            item.Offset = startOffset;
-            item.Size = reader.Offset - startOffset;
-            
             return true;
         }
 

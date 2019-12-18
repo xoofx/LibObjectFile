@@ -239,6 +239,14 @@ namespace LibObjectFile.Tests.Dwarf
             dwarf.AddressRangeTable.Print(Console.Out);
             dwarf.AddressRangeTable.PrintRelocations(Console.Out);
 
+            dwarf.WriteToElf(elfContext);
+
+            var cppObj2 = $"{cppName}_debug2.o";
+            using (var outStream = new FileStream(cppObj2, FileMode.Create))
+            {
+                elf.Write(outStream);
+            }
+
             PrintStreamLength(outputContext);
         }
 

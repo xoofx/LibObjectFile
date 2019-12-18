@@ -3,6 +3,7 @@
 // See the license.txt file in the project root for more information.
 
 using System;
+using System.Diagnostics;
 
 namespace LibObjectFile.Dwarf
 {
@@ -86,6 +87,9 @@ namespace LibObjectFile.Dwarf
 
             // 1. unit_length 
             offset += DwarfHelper.SizeOfUnitLength(Is64BitEncoding);
+
+            var offsetAfterUnitLength = offset;
+
             // 2. version (uhalf) 
             offset += sizeof(ushort); // WriteU16(unit.Version);
 
@@ -117,7 +121,7 @@ namespace LibObjectFile.Dwarf
             }
 
             Size = offset - Offset;
-            UnitLength = Size - DwarfHelper.SizeOfUnitLength(Is64BitEncoding);
+            UnitLength = offset - offsetAfterUnitLength;
         }
 
         protected abstract ulong GetLayoutHeaderSize();
@@ -139,12 +143,11 @@ namespace LibObjectFile.Dwarf
                 }
             }
 
-            var startDIEOffset = Offset;
             Root = DwarfDIE.ReadInstance(reader);
 
             reader.ResolveAttributeReferenceWithinCompilationUnit();
 
-            Size = reader.Offset - startDIEOffset;
+            Size = reader.Offset - Offset;
         }
 
         internal static DwarfUnit ReadInstance(DwarfReader reader, out ulong offsetEndOfUnit)
@@ -187,6 +190,7 @@ namespace LibObjectFile.Dwarf
                     return null;
             }
 
+            unit.UnitLength = unit_length;
             unit.Kind = unitKind;
             unit.Is64BitEncoding = reader.Is64BitEncoding;
             unit.Offset = startOffset;
@@ -201,9 +205,15 @@ namespace LibObjectFile.Dwarf
 
         protected override void Write(DwarfWriter writer)
         {
+            var startOffset = writer.Offset;
+            Debug.Assert(Offset == writer.Offset);
+
             // 1. unit_length 
             Is64BitEncoding = Is64BitEncoding;
-            writer.WriteUnitLength(Size);
+            writer.WriteUnitLength(UnitLength);
+
+            var offsetAfterUnitLength = writer.Offset;
+
             // 2. version (uhalf) 
             writer.WriteU16(Version);
 
@@ -214,9 +224,13 @@ namespace LibObjectFile.Dwarf
             }
 
             WriteHeader(writer);
+            writer.AddressSize = AddressSize;
 
             Root?.WriteInternal(writer);
             // TODO: check size of unit length
+
+            Debug.Assert(Size == writer.Offset - startOffset);
+            Debug.Assert(UnitLength == writer.Offset - offsetAfterUnitLength);
         }
     }
 }

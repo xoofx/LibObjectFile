@@ -22,6 +22,8 @@ namespace LibObjectFile.Dwarf
 
         internal List<DwarfOperation> InternalOperations => _operations;
 
+        public ulong OperationLengthInBytes { get; internal set; }
+
         public void AddOperation(DwarfOperation operation)
         {
             if (operation == null) throw new ArgumentNullException(nameof(operation));
@@ -59,7 +61,7 @@ namespace LibObjectFile.Dwarf
                 endOffset += op.Size;
             }
 
-            Size = endOffset - Offset;
+            OperationLengthInBytes = endOffset - Offset;
 
             // We need to shift the expression which is prefixed by its size encoded in LEB128
             var deltaLength = DwarfHelper.SizeOfULEB128(Size);
@@ -68,13 +70,14 @@ namespace LibObjectFile.Dwarf
                 op.Offset += deltaLength;
             }
 
-            Size += deltaLength;
+            Size = OperationLengthInBytes + deltaLength;
         }
 
         protected override void Read(DwarfReader reader)
         {
             Offset = reader.Offset;
             var size = reader.ReadULEB128();
+            OperationLengthInBytes = size;
             var endPosition = reader.Offset + size;
 
             while (reader.Offset < endPosition)
@@ -92,7 +95,7 @@ namespace LibObjectFile.Dwarf
             Debug.Assert(Offset == writer.Offset);
 
             var startExpressionOffset = writer.Offset;
-            writer.WriteULEB128(Size);
+            writer.WriteULEB128(OperationLengthInBytes);
 
             foreach (var op in Operations)
             {

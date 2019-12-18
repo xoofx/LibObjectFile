@@ -64,7 +64,7 @@ namespace LibObjectFile.Dwarf
                         break;
                     case ".debug_str":
                         StringTable = ((ElfBinarySection)section);
-                        mapSectionToSymbolIndex.TryGetValue(AddressRangeTable, out _stringTableSymbolIndex);
+                        mapSectionToSymbolIndex.TryGetValue(StringTable, out _stringTableSymbolIndex);
                         break;
                     case ".debug_line":
                         LineTable = ((ElfBinarySection)section);
@@ -275,7 +275,9 @@ namespace LibObjectFile.Dwarf
                 Name = $".rela{section.Name}", 
                 Alignment = (ulong)AddressSize, 
                 Flags = ElfSectionFlags.InfoLink, 
-                Type = ElfSectionType.RelocationAddends
+                Type = ElfSectionType.RelocationAddends,
+                Info = section,
+                Link = _symbolTable,
             };
             Elf.AddSection(newSection);
             return newSection;
