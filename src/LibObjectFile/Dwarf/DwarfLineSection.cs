@@ -587,6 +587,11 @@ namespace LibObjectFile.Dwarf
                 diagnostics.Error(DiagnosticId.DWARF_ERR_VersionNotSupported, $"Version .debug_line {Version} not supported");
             }
 
+            if (AddressSize == DwarfAddressSize.None)
+            {
+                diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidAddressSize, $"Address size for .debug_line cannot be None/0");
+            }
+
             if (StandardOpCodeLengths.Count < DefaultStandardOpCodeLengths.Length)
             {
                 diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidNumberOfStandardOpCodeLengths, $"Invalid length {StandardOpCodeLengths.Count} of {nameof(StandardOpCodeLengths)}. Expecting standard opcode length >= {DefaultStandardOpCodeLengths.Length} for {this}.");

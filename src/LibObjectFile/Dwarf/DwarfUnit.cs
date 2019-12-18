@@ -70,6 +70,11 @@ namespace LibObjectFile.Dwarf
                 diagnostics.Error(DiagnosticId.DWARF_ERR_VersionNotSupported, $"Version .debug_info {Version} not supported");
             }
 
+            if (AddressSize == DwarfAddressSize.None)
+            {
+                diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidAddressSize, $"Address size for .debug_info cannot be None/0");
+            }
+
             Root?.Verify(diagnostics);
         }
 
