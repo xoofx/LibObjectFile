@@ -265,6 +265,10 @@ namespace LibObjectFile.Tests.Dwarf
             elf.AddSection(new ElfSymbolTable() { Link = stringSection });
             elf.AddSection(new ElfSectionHeaderStringTable());
 
+            var elfDiagnostics = new DiagnosticBag();
+            elf.UpdateLayout(elfDiagnostics);
+            Assert.False(elfDiagnostics.HasErrors);
+
             // Create DWARF Object
             var dwarfFile = new DwarfFile();
             
@@ -329,6 +333,12 @@ namespace LibObjectFile.Tests.Dwarf
             }
 
             elf.Print(Console.Out);
+            Console.WriteLine();
+            dwarfFile.AbbreviationTable.Print(Console.Out);
+            Console.WriteLine();
+            dwarfFile.AddressRangeTable.Print(Console.Out);
+            Console.WriteLine();
+            dwarfFile.InfoSection.Print(Console.Out);
         }
 
         private static void PrintStreamLength(DwarfReaderWriterContext context)
