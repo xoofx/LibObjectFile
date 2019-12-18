@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.0 (18 Dec 2019)
+- Add support for DWARF Version 4 (missing only .debug_frame)
+- Add support for layouting sections independently of the order defined sections header
+
 ## 0.2.1 (17 Nov 2019)
 - Add verify for PT_LOAD segment align requirements
 

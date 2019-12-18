@@ -2,11 +2,12 @@
 
 <img align="right" width="200px" height="200px" src="img/libobjectfile.png">
 
-LibObjectFile is a .NET library to read, manipulate and write linker and executable object files (e.g ELF, ar, COFF...)
+LibObjectFile is a .NET library to read, manipulate and write linker and executable object files (e.g ELF, ar, DWARF, COFF...)
 
 > NOTE: Currently LibObjectFile supports only the following file format:
 >
 > - **ELF** object-file format
+> - **DWARF** debugging format (version 4)
 > - **Archive `ar`** file format (Common, GNU and BSD variants)
 >
 > There is a longer term plan to support other file formats (e.g COFF, MACH-O, .lib) but as I don't 
@@ -42,6 +43,13 @@ elf.Write(outStream);
     - Other sections fallback to `ElfCustomSection`
   - Program headers with or without sections
   - Print with `readelf` similar output
+- Support for DWARF debugging format:
+  - Version 4 (currently still the default for GCC)
+  - Sections `.debug_info`, `.debug_line`, `.debug_aranges`, `.debug_abbrev` and `.debug_str` (currently only missing  `.debug_frame`)
+  - Support for Dwarf expressions
+  - High level interface, automatic layout/offsets between sections.
+  - Integration with ELF to support easy reading/writing back
+  - Support for relocatable sections
 - Use of a Diagnostics API to validate file format (on read/before write)
 - Library requiring .NET `netstandard2.1`+ and compatible with `netcoreapp3.0`+
 
@@ -53,6 +61,8 @@ The [doc/readme.md](doc/readme.md) explains how the library is designed and can 
 
 PR Welcome if you are willing to contribute to one of these issues:
 
+- [ ] Add more unit tests
+
 ### ELF
 There are still a few missing implementation of `ElfSection` for completeness:
 
@@ -61,6 +71,11 @@ There are still a few missing implementation of `ElfSection` for completeness:
 - [ ] Version Needs Table (`SHT_VERNEED`)
 
 These sections are currently loaded as `ElfCustomSection` but should have their own ElfXXXTable (e.g `ElfDynamicLinkingTable`, `ElfVersionSymbolTable`...)
+
+### DWARF
+
+- [ ] Support for `.debug_frame` section
+- [ ] Version 5
 
 ### Other file formats
 In a future version I would like to implement the following file format:
