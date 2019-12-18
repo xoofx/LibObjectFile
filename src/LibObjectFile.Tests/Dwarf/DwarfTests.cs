@@ -250,6 +250,87 @@ namespace LibObjectFile.Tests.Dwarf
             PrintStreamLength(outputContext);
         }
 
+
+        [Test]
+        public void CreateDwarf()
+        {
+            // Create ELF object
+            var elf = new ElfObjectFile {FileType = ElfFileType.Relocatable};
+            elf.FileClass = ElfFileClass.Is64;
+
+            var codeSection = new ElfBinarySection(new MemoryStream(new byte[0x64])).ConfigureAs(ElfSectionSpecialType.Text);
+            elf.AddSection(codeSection);
+            var stringSection = new ElfStringTable();
+            elf.AddSection(stringSection);
+            elf.AddSection(new ElfSymbolTable() { Link = stringSection });
+            elf.AddSection(new ElfSectionHeaderStringTable());
+
+            // Create DWARF Object
+            var dwarfFile = new DwarfFile();
+            
+            // Create .debug_line information
+            var fileName = new DwarfFileName()
+            {
+                Name = "check.cpp",
+                Directory = Environment.CurrentDirectory,
+            };
+            dwarfFile.LineTable.AddressSize = DwarfAddressSize.Bit64;
+            dwarfFile.LineTable.FileNames.Add(fileName);
+            dwarfFile.LineTable.AddDebugLine(new DwarfLine()
+            {
+                File = fileName,
+                Address = 0,
+                Column = 1,
+                Line = 1,
+            });
+            dwarfFile.LineTable.AddDebugLine(new DwarfLine()
+            {
+                File = fileName,
+                Address = 0,
+                Column = 1,
+                Line = 1,
+                IsEndSequence = true
+            });
+
+            // Create .debug_info
+            var rootDIE = new DwarfDIECompileUnit()
+            {
+                Name = fileName.Name,
+                LowPC = 0, // 0 relative to base virtual address
+                HighPC = (int)codeSection.Size, // default is offset/length after LowPC
+                CompDir = fileName.Directory,
+                StmtList = dwarfFile.LineTable.Lines[0],
+            };
+            var subProgram = new DwarfDIESubprogram()
+            {
+                Name = "MyFunction"
+            };
+            rootDIE.AddChild(subProgram);
+
+            var cu = new DwarfCompilationUnit()
+            {
+                AddressSize = DwarfAddressSize.Bit64,
+                Root = rootDIE
+            };
+            dwarfFile.InfoSection.AddUnit(cu);
+            
+            // AddressRange table
+            dwarfFile.AddressRangeTable.AddressSize = DwarfAddressSize.Bit64;
+            dwarfFile.AddressRangeTable.Unit = cu;
+            dwarfFile.AddressRangeTable.Ranges.Add(new DwarfAddressRange(0, 0, codeSection.Size));
+            
+            // Transfer DWARF To ELF
+            var dwarfElfContext = new DwarfElfContext(elf);
+            dwarfFile.WriteToElf(dwarfElfContext);
+
+            using (var output = new FileStream("check.o", FileMode.Create))
+            {
+                elf.Write(output);
+            }
+
+            elf.Print(Console.Out);
+        }
+
         private static void PrintStreamLength(DwarfReaderWriterContext context)
         {
             if (context.DebugInfoStream != null)
