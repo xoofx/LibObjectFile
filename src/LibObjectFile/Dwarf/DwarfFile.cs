@@ -212,6 +212,13 @@ namespace LibObjectFile.Dwarf
                 EnableRelocation = elfContext.Elf.FileType == ElfFileType.Relocatable
             };
 
+            // Pre-create table/sections to create symbols as well
+            if (StringTable.Size > 0) elfContext.GetOrCreateStringTable();
+            if (AbbreviationTable.Size > 0) elfContext.GetOrCreateAbbreviationTable();
+            if (LineTable.Size > 0) elfContext.GetOrCreateLineSection();
+            if (AddressRangeTable.Size > 0) elfContext.GetOrCreateAddressRangeTable();
+            if (InfoSection.Size > 0) elfContext.GetOrCreateInfoSection();
+
             // String table
             if (StringTable.Size > 0)
             {
