@@ -200,20 +200,20 @@ namespace LibObjectFile.Elf
                         if (symbolTable == null) continue;
                         string symbolName = string.Empty;
                         ulong symbolValue = 0;
-                        if (entry.SymbolIndex <= symbolTable.Entries.Count)
+                        if (entry.SymbolIndex < symbolTable.Entries.Count)
                         {
                             var symbolEntry = symbolTable.Entries[(int) entry.SymbolIndex];
                             symbolName = symbolEntry.Name;
                             symbolValue = symbolEntry.Value;
 
-                            if (symbolName == string.Empty )
+                            if (string.IsNullOrEmpty(symbolName))
                             {
                                 switch (symbolEntry.Type)
                                 {
                                     case ElfSymbolType.Section:
-                                        if (symbolEntry.Section.Section is ElfBinarySection targetSection)
+                                        if (symbolEntry.Section.Section != null)
                                         {
-                                            symbolName = targetSection.Name;
+                                            symbolName = symbolEntry.Section.Section.Name;
                                         }
                                         break;
                                 }
