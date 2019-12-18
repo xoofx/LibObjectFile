@@ -8,6 +8,11 @@ namespace LibObjectFile.Dwarf
 {
     public class DwarfLine : DwarfObject<DwarfLineSection>
     {
+        public DwarfLine()
+        {
+            IsStatement = true;
+        }
+
         // -----------------------
         // DWARF 2
         // -----------------------
