@@ -43,7 +43,15 @@ namespace LibObjectFile.Dwarf
 
                 if (codeSection != null)
                 {
-                    mapSectionToSymbolIndex.TryGetValue(codeSection, out _codeSectionSymbolIndex);
+                    if (!mapSectionToSymbolIndex.TryGetValue(codeSection, out _codeSectionSymbolIndex))
+                    {
+                        _codeSectionSymbolIndex = _symbolTable.Entries.Count;
+                        _symbolTable.Entries.Add(new ElfSymbol()
+                        {
+                            Type = ElfSymbolType.Section,
+                            Section = codeSection,
+                        });
+                    }
                 }
             }
 
