@@ -205,6 +205,8 @@ namespace LibObjectFile.Elf
             var sections = ObjectFile.Sections;
             if (sections.Count == 0) return;
 
+            sections = ObjectFile.GetSectionsOrderedByStreamIndex();
+
             // We write the content all sections including shadows
             for (var i = 0; i < sections.Count; i++)
             {

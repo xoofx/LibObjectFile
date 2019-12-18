@@ -3,6 +3,7 @@
 // See the license.txt file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace LibObjectFile.Elf
@@ -405,12 +406,19 @@ namespace LibObjectFile.Elf
             var fileParts = new ElfFilePartList(ObjectFile.Sections.Count + ObjectFile.Segments.Count);
 
             // Make sure to pre-sort all sections by offset
-            ObjectFile.SortSectionsByOffset();
+            var orderedSections = new List<ElfSection>(ObjectFile.Sections.Count);
+            orderedSections.AddRange(ObjectFile.Sections);
+            orderedSections.Sort(CompareSectionOffsetsDelegate);
+            // Store the stream index to recover the same order when saving back.
+            for(int i = 0; i < orderedSections.Count; i++)
+            {
+                orderedSections[i].StreamIndex = (uint)i;
+            }
 
             // Lastly verify integrity of all sections
-            for (var i = 0; i < ObjectFile.Sections.Count; i++)
+            for (var i = 0; i < orderedSections.Count; i++)
             {
-                var section = ObjectFile.Sections[i];
+                var section = orderedSections[i];
                 section.Verify(this.Diagnostics);
 
                 if (section.Size > 0)
@@ -420,9 +428,9 @@ namespace LibObjectFile.Elf
                 }
 
                 // Verify overlapping sections and generate and error
-                for (int j = i + 1; j < ObjectFile.Sections.Count; j++)
+                for (int j = i + 1; j < orderedSections.Count; j++)
                 {
-                    var otherSection = ObjectFile.Sections[j];
+                    var otherSection = orderedSections[j];
                     if (section.Contains(otherSection) || otherSection.Contains(section))
                     {
                         Diagnostics.Warning(DiagnosticId.ELF_ERR_InvalidOverlappingSections, $"The section {section} [{section.Offset} : {section.Offset + section.Size - 1}] is overlapping with the section {otherSection} [{otherSection.Offset} : {otherSection.Offset + otherSection.Size - 1}]");
@@ -438,7 +446,13 @@ namespace LibObjectFile.Elf
                 };
 
                 // Add the shadow section ElfProgramHeaderTable
+                for (int i = 1; i < orderedSections.Count; i++)
+                {
+                    orderedSections[i].StreamIndex++;
+                }
+                programHeaderTable.StreamIndex = 1;
                 ObjectFile.InsertSectionAt(1, programHeaderTable);
+                orderedSections.Insert(1, programHeaderTable);
                 programHeaderTable.UpdateLayout(Diagnostics);
 
                 if (programHeaderTable.Size > 0)
@@ -455,7 +469,7 @@ namespace LibObjectFile.Elf
                 if (segment.Size == 0) continue;
 
                 var segmentEndOffset = segment.Offset + segment.Size - 1;
-                foreach (var section in ObjectFile.Sections)
+                foreach (var section in orderedSections)
                 {
                     if (section.Size == 0) continue;
 
@@ -514,12 +528,22 @@ namespace LibObjectFile.Elf
                         Stream.Position = (long)shadowSection.Offset;
                         shadowSection.ReadInternal(this);
 
-                        ObjectFile.InsertSectionAt((int)previousSectionIndex, shadowSection);
+                        // Insert the shadow section with this order
+                        shadowSection.StreamIndex = previousSectionIndex;
+                        for (int j = (int)previousSectionIndex; j < orderedSections.Count; j++)
+                        {
+                            var otherSection = orderedSections[j];
+                            otherSection.StreamIndex++;
+                        }
+                        // Update ordered sections
+                        orderedSections.Insert((int)previousSectionIndex, shadowSection);
+                        ObjectFile.AddSection(shadowSection);
+
                         fileParts[i] = new ElfFilePart(shadowSection);
                     }
                     else
                     {
-                        previousSectionIndex = part.Section.Index + 1;
+                        previousSectionIndex = part.Section.StreamIndex + 1;
                     }
                 }
 
@@ -530,9 +554,9 @@ namespace LibObjectFile.Elf
                     if (!segment.Range.IsEmpty) continue;
 
                     var segmentEndOffset = segment.Offset + segment.Size - 1;
-                    for (var i = 0; i < ObjectFile.Sections.Count; i++)
+                    for (var i = 0; i < orderedSections.Count; i++)
                     {
-                        var section = ObjectFile.Sections[i];
+                        var section = orderedSections[i];
                         if (section.Size == 0) continue;
 
                         var sectionEndOffset = section.Offset + section.Size - 1;
@@ -540,9 +564,9 @@ namespace LibObjectFile.Elf
                         {
                             ElfSection beginSection = section;
                             ElfSection endSection = null;
-                            for (int j = i; j < ObjectFile.Sections.Count; j++)
+                            for (int j = i; j < orderedSections.Count; j++)
                             {
-                                var nextSection = ObjectFile.Sections[j];
+                                var nextSection = orderedSections[j];
                                 if (nextSection.Size == 0) continue;
 
                                 sectionEndOffset = nextSection.Offset + nextSection.Size - 1;
@@ -715,6 +739,13 @@ namespace LibObjectFile.Elf
         public override ushort Decode(ElfNative.Elf64_Versym src)
         {
             return _decoder.Decode(src);
+        }
+
+        private static readonly Comparison<ElfSection> CompareSectionOffsetsDelegate = new Comparison<ElfSection>(CompareSectionOffsets);
+
+        private static int CompareSectionOffsets(ElfSection left, ElfSection right)
+        {
+            return left.Offset.CompareTo(right.Offset);
         }
     }
 }

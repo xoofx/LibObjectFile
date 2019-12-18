@@ -94,6 +94,11 @@ namespace LibObjectFile.Elf
         public uint SectionIndex { get; internal set; }
 
         /// <summary>
+        /// Gets or sets the ordering index used when writing back this section.
+        /// </summary>
+        public uint StreamIndex { get; set; }
+
+        /// <summary>
         /// Gets the size of the original table entry size of this section.
         /// </summary>
         public ulong OriginalTableEntrySize { get; internal set; }

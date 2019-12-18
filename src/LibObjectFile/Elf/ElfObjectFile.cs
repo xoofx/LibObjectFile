@@ -18,8 +18,6 @@ namespace LibObjectFile.Elf
     /// </summary>
     public sealed class ElfObjectFile : ObjectFileNode
     {
-        private static readonly Comparison<ElfSection> CompareSectionOffsetsDelegate = new Comparison<ElfSection>(CompareSectionOffsets);
-
         private readonly List<ElfSection> _sections;
         private ElfSectionHeaderStringTable _sectionHeaderStringTable;
         private readonly List<ElfSegment> _segments;
@@ -175,6 +173,14 @@ namespace LibObjectFile.Elf
             }
         }
 
+        public List<ElfSection> GetSectionsOrderedByStreamIndex()
+        {
+            var orderedSections = new List<ElfSection>(Sections.Count);
+            orderedSections.AddRange(Sections);
+            orderedSections.Sort(CompareStreamIndexAndIndexDelegate);
+            return orderedSections;
+        }
+
         /// <summary>
         /// Tries to update and calculate the layout of the sections, segments and <see cref="Layout"/>.
         /// </summary>
@@ -197,7 +203,7 @@ namespace LibObjectFile.Elf
             bool programHeaderTableFoundAndUpdated = false;
 
             // If we have any sections, prepare their offsets
-            var sections = Sections;
+            var sections = GetSectionsOrderedByStreamIndex();
             if (sections.Count > 0)
             {
                 // Calculate offsets of all sections in the stream
@@ -660,20 +666,6 @@ namespace LibObjectFile.Elf
             return !reader.Diagnostics.HasErrors;
         }
 
-        internal void SortSectionsByOffset()
-        {
-            _sections.Sort(CompareSectionOffsetsDelegate);
-            for (int i = 0; i < _sections.Count; i++)
-            {
-                _sections[i].Index = (uint)i;
-            }
-        }
-
-        private static int CompareSectionOffsets(ElfSection left, ElfSection right)
-        {
-            return left.Offset.CompareTo(right.Offset);
-        }
-
         /// <summary>
         /// Contains the layout of an object available after reading an <see cref="ElfObjectFile"/>
         /// or after calling <see cref="ElfObjectFile.UpdateLayout"/> or <see cref="ElfObjectFile.UpdateLayout"/>
@@ -714,6 +706,15 @@ namespace LibObjectFile.Elf
             /// </summary>
             public ulong TotalSize { get; internal set; }
 
+        }
+
+        private static readonly Comparison<ElfSection> CompareStreamIndexAndIndexDelegate = new Comparison<ElfSection>(CompareStreamIndexAndIndex);
+
+        private static int CompareStreamIndexAndIndex(ElfSection left, ElfSection right)
+        {
+            var delta = left.StreamIndex.CompareTo(right.StreamIndex);
+            if (delta != 0) return delta;
+            return left.Index.CompareTo(right.Index);
         }
     }
 }
