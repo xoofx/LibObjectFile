@@ -3,7 +3,6 @@
 // See the license.txt file in the project root for more information.
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -420,6 +419,12 @@ namespace LibObjectFile.CodeGen
                     currentDIE = new CSharpClass($"DwarfDIE{csDIEName}");
                     currentDIE.BaseTypes.Add(new CSharpFreeType("DwarfDIE"));
                     ns.Members.Add(currentDIE);
+
+                    var csConstructor = new CSharpMethod();
+                    csConstructor.IsConstructor = true;
+                    csConstructor.Body = (writer, element) => writer.WriteLine($"this.Tag = (DwarfTag)DwarfNative.{fullTagName};");
+                    currentDIE.Members.Add(csConstructor);
+
                     dieClasses.Add(currentDIE);
                 }
                 else

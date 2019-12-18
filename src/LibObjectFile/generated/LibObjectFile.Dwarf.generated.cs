@@ -7434,6 +7434,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEAccessDeclaration : DwarfDIEDeclaration
     {
+        public DwarfDIEAccessDeclaration()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_access_declaration;
+        }
+        
         public DwarfAccessibility? Accessibility
         {
             get
@@ -7473,6 +7478,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEArrayType : DwarfDIEDeclaration
     {
+        public DwarfDIEArrayType()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_array_type;
+        }
+        
         public DwarfAccessibility? Accessibility
         {
             get
@@ -7680,6 +7690,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEAtomicType : DwarfDIEDeclaration
     {
+        public DwarfDIEAtomicType()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_atomic_type;
+        }
+        
         public DwarfConstant? Alignment
         {
             get
@@ -7731,6 +7746,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEBaseType : DwarfDIEDeclaration
     {
+        public DwarfDIEBaseType()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_base_type;
+        }
+        
         public DwarfConstant? Alignment
         {
             get
@@ -7938,6 +7958,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIECallSite : DwarfDIE
     {
+        public DwarfDIECallSite()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_call_site;
+        }
+        
         public DwarfConstant? CallColumn
         {
             get
@@ -8061,6 +8086,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIECallSiteParameter : DwarfDIE
     {
+        public DwarfDIECallSiteParameter()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_call_site_parameter;
+        }
+        
         public DwarfExpression CallDataLocation
         {
             get
@@ -8160,6 +8190,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIECatchBlock : DwarfDIEDeclaration
     {
+        public DwarfDIECatchBlock()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_catch_block;
+        }
+        
         public ulong? EntryPC
         {
             get
@@ -8223,6 +8258,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEClassType : DwarfDIEDeclaration
     {
+        public DwarfDIEClassType()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_class_type;
+        }
+        
         public DwarfAccessibility? Accessibility
         {
             get
@@ -8418,6 +8458,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIECoarrayType : DwarfDIEDeclaration
     {
+        public DwarfDIECoarrayType()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_coarray_type;
+        }
+        
         public DwarfConstant? Alignment
         {
             get
@@ -8493,6 +8538,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIECommonBlock : DwarfDIEDeclaration
     {
+        public DwarfDIECommonBlock()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_common_block;
+        }
+        
         public bool? Declaration
         {
             get
@@ -8580,6 +8630,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIECommonInclusion : DwarfDIEDeclaration
     {
+        public DwarfDIECommonInclusion()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_common_inclusion;
+        }
+        
         public DwarfDIE CommonReference
         {
             get
@@ -8619,6 +8674,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIECompileUnit : DwarfDIE
     {
+        public DwarfDIECompileUnit()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_compile_unit;
+        }
+        
         public ulong? AddrBase
         {
             get
@@ -8850,6 +8910,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIECondition : DwarfDIEDeclaration
     {
+        public DwarfDIECondition()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_condition;
+        }
+        
         public string Name
         {
             get
@@ -8877,6 +8942,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEConstType : DwarfDIEDeclaration
     {
+        public DwarfDIEConstType()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_const_type;
+        }
+        
         public DwarfConstant? Alignment
         {
             get
@@ -8928,6 +8998,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEConstant : DwarfDIEDeclaration
     {
+        public DwarfDIEConstant()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_constant;
+        }
+        
         public DwarfAccessibility? Accessibility
         {
             get
@@ -9063,6 +9138,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEDwarfProcedure : DwarfDIE
     {
+        public DwarfDIEDwarfProcedure()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_dwarf_procedure;
+        }
+        
         public DwarfLocation? Location
         {
             get
@@ -9078,6 +9158,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEDynamicType : DwarfDIEDeclaration
     {
+        public DwarfDIEDynamicType()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_dynamic_type;
+        }
+        
         public DwarfConstant? Alignment
         {
             get
@@ -9165,6 +9250,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEEntryPoint : DwarfDIEDeclaration
     {
+        public DwarfDIEEntryPoint()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_entry_point;
+        }
+        
         public DwarfConstant? AddressClass
         {
             get
@@ -9288,6 +9378,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEEnumerationType : DwarfDIEDeclaration
     {
+        public DwarfDIEEnumerationType()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_enumeration_type;
+        }
+        
         public DwarfAccessibility? Accessibility
         {
             get
@@ -9507,6 +9602,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEEnumerator : DwarfDIEDeclaration
     {
+        public DwarfDIEEnumerator()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_enumerator;
+        }
+        
         public DwarfConstant? ConstValue
         {
             get
@@ -9546,6 +9646,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEFileType : DwarfDIEDeclaration
     {
+        public DwarfDIEFileType()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_file_type;
+        }
+        
         public DwarfConstant? Alignment
         {
             get
@@ -9681,6 +9786,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEFormalParameter : DwarfDIEDeclaration
     {
+        public DwarfDIEFormalParameter()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_formal_parameter;
+        }
+        
         public bool? Artificial
         {
             get
@@ -9816,6 +9926,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEFriend : DwarfDIEDeclaration
     {
+        public DwarfDIEFriend()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_friend;
+        }
+        
         public DwarfDIE Friend
         {
             get
@@ -9831,6 +9946,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEGenericSubrange : DwarfDIEDeclaration
     {
+        public DwarfDIEGenericSubrange()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_generic_subrange;
+        }
+        
         public DwarfAccessibility? Accessibility
         {
             get
@@ -10050,6 +10170,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEImmutableType : DwarfDIEDeclaration
     {
+        public DwarfDIEImmutableType()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_immutable_type;
+        }
+        
         public string Name
         {
             get
@@ -10089,6 +10214,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEImportedDeclaration : DwarfDIEDeclaration
     {
+        public DwarfDIEImportedDeclaration()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_imported_declaration;
+        }
+        
         public DwarfAccessibility? Accessibility
         {
             get
@@ -10152,6 +10282,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEImportedModule : DwarfDIEDeclaration
     {
+        public DwarfDIEImportedModule()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_imported_module;
+        }
+        
         public DwarfDIE Import
         {
             get
@@ -10179,6 +10314,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEImportedUnit : DwarfDIE
     {
+        public DwarfDIEImportedUnit()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_imported_unit;
+        }
+        
         public DwarfDIE Import
         {
             get
@@ -10194,6 +10334,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEInheritance : DwarfDIEDeclaration
     {
+        public DwarfDIEInheritance()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_inheritance;
+        }
+        
         public DwarfAccessibility? Accessibility
         {
             get
@@ -10245,6 +10390,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEInlinedSubroutine : DwarfDIE
     {
+        public DwarfDIEInlinedSubroutine()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_inlined_subroutine;
+        }
+        
         public DwarfConstant? CallColumn
         {
             get
@@ -10392,6 +10542,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEInterfaceType : DwarfDIEDeclaration
     {
+        public DwarfDIEInterfaceType()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_interface_type;
+        }
+        
         public DwarfAccessibility? Accessibility
         {
             get
@@ -10467,6 +10622,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIELabel : DwarfDIEDeclaration
     {
+        public DwarfDIELabel()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_label;
+        }
+        
         public ulong? LowPC
         {
             get
@@ -10530,6 +10690,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIELexicalBlock : DwarfDIEDeclaration
     {
+        public DwarfDIELexicalBlock()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_lexical_block;
+        }
+        
         public ulong? EntryPC
         {
             get
@@ -10617,6 +10782,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEMember : DwarfDIEDeclaration
     {
+        public DwarfDIEMember()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_member;
+        }
+        
         public DwarfAccessibility? Accessibility
         {
             get
@@ -10764,6 +10934,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEModule : DwarfDIEDeclaration
     {
+        public DwarfDIEModule()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_module;
+        }
+        
         public DwarfAccessibility? Accessibility
         {
             get
@@ -10911,6 +11086,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIENamelist : DwarfDIEDeclaration
     {
+        public DwarfDIENamelist()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_namelist;
+        }
+        
         public DwarfAccessibility? Accessibility
         {
             get
@@ -10974,6 +11154,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIENamelistItem : DwarfDIEDeclaration
     {
+        public DwarfDIENamelistItem()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_namelist_item;
+        }
+        
         public DwarfDIE NamelistItem
         {
             get
@@ -10989,6 +11174,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIENamespace : DwarfDIEDeclaration
     {
+        public DwarfDIENamespace()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_namespace;
+        }
+        
         public bool? ExportSymbols
         {
             get
@@ -11052,6 +11242,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEPackedType : DwarfDIEDeclaration
     {
+        public DwarfDIEPackedType()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_packed_type;
+        }
+        
         public DwarfConstant? Alignment
         {
             get
@@ -11103,6 +11298,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEPartialUnit : DwarfDIE
     {
+        public DwarfDIEPartialUnit()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_partial_unit;
+        }
+        
         public ulong? AddrBase
         {
             get
@@ -11346,6 +11546,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEPointerType : DwarfDIEDeclaration
     {
+        public DwarfDIEPointerType()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_pointer_type;
+        }
+        
         public DwarfConstant? AddressClass
         {
             get
@@ -11433,6 +11638,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEPtrToMemberType : DwarfDIEDeclaration
     {
+        public DwarfDIEPtrToMemberType()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_ptr_to_member_type;
+        }
+        
         public DwarfConstant? AddressClass
         {
             get
@@ -11580,6 +11790,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEReferenceType : DwarfDIEDeclaration
     {
+        public DwarfDIEReferenceType()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_reference_type;
+        }
+        
         public DwarfConstant? AddressClass
         {
             get
@@ -11667,6 +11882,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIERestrictType : DwarfDIEDeclaration
     {
+        public DwarfDIERestrictType()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_restrict_type;
+        }
+        
         public DwarfConstant? Alignment
         {
             get
@@ -11718,6 +11938,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIERvalueReferenceType : DwarfDIEDeclaration
     {
+        public DwarfDIERvalueReferenceType()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_rvalue_reference_type;
+        }
+        
         public DwarfConstant? AddressClass
         {
             get
@@ -11805,6 +12030,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIESetType : DwarfDIEDeclaration
     {
+        public DwarfDIESetType()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_set_type;
+        }
+        
         public DwarfAccessibility? Accessibility
         {
             get
@@ -11964,6 +12194,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIESharedType : DwarfDIEDeclaration
     {
+        public DwarfDIESharedType()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_shared_type;
+        }
+        
         public DwarfConstant? Count
         {
             get
@@ -12027,6 +12262,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIESkeletonUnit : DwarfDIE
     {
+        public DwarfDIESkeletonUnit()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_skeleton_unit;
+        }
+        
         public ulong? AddrBase
         {
             get
@@ -12150,6 +12390,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEStringType : DwarfDIEDeclaration
     {
+        public DwarfDIEStringType()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_string_type;
+        }
+        
         public DwarfConstant? Alignment
         {
             get
@@ -12333,6 +12578,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEStructureType : DwarfDIEDeclaration
     {
+        public DwarfDIEStructureType()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_structure_type;
+        }
+        
         public DwarfAccessibility? Accessibility
         {
             get
@@ -12528,6 +12778,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIESubprogram : DwarfDIEDeclaration
     {
+        public DwarfDIESubprogram()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_subprogram;
+        }
+        
         public DwarfAccessibility? Accessibility
         {
             get
@@ -12987,6 +13242,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIESubrangeType : DwarfDIEDeclaration
     {
+        public DwarfDIESubrangeType()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_subrange_type;
+        }
+        
         public DwarfAccessibility? Accessibility
         {
             get
@@ -13206,6 +13466,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIESubroutineType : DwarfDIEDeclaration
     {
+        public DwarfDIESubroutineType()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_subroutine_type;
+        }
+        
         public DwarfAccessibility? Accessibility
         {
             get
@@ -13389,6 +13654,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIETemplateAlias : DwarfDIEDeclaration
     {
+        public DwarfDIETemplateAlias()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_template_alias;
+        }
+        
         public DwarfAccessibility? Accessibility
         {
             get
@@ -13524,6 +13794,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIETemplateTypeParameter : DwarfDIEDeclaration
     {
+        public DwarfDIETemplateTypeParameter()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_template_type_parameter;
+        }
+        
         public DwarfDIE DefaultValue
         {
             get
@@ -13575,6 +13850,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIETemplateValueParameter : DwarfDIEDeclaration
     {
+        public DwarfDIETemplateValueParameter()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_template_value_parameter;
+        }
+        
         public DwarfConstant? ConstValue
         {
             get
@@ -13638,6 +13918,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEThrownType : DwarfDIEDeclaration
     {
+        public DwarfDIEThrownType()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_thrown_type;
+        }
+        
         public DwarfConstant? Alignment
         {
             get
@@ -13725,6 +14010,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIETryBlock : DwarfDIEDeclaration
     {
+        public DwarfDIETryBlock()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_try_block;
+        }
+        
         public ulong? EntryPC
         {
             get
@@ -13788,6 +14078,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIETypedef : DwarfDIEDeclaration
     {
+        public DwarfDIETypedef()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_typedef;
+        }
+        
         public DwarfAccessibility? Accessibility
         {
             get
@@ -13923,6 +14218,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIETypeUnit : DwarfDIE
     {
+        public DwarfDIETypeUnit()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_type_unit;
+        }
+        
         public DwarfLanguageKind? Language
         {
             get
@@ -13974,6 +14274,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEUnionType : DwarfDIEDeclaration
     {
+        public DwarfDIEUnionType()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_union_type;
+        }
+        
         public DwarfAccessibility? Accessibility
         {
             get
@@ -14169,6 +14474,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEUnspecifiedParameters : DwarfDIEDeclaration
     {
+        public DwarfDIEUnspecifiedParameters()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_unspecified_parameters;
+        }
+        
         public bool? Artificial
         {
             get
@@ -14184,6 +14494,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEUnspecifiedType : DwarfDIEDeclaration
     {
+        public DwarfDIEUnspecifiedType()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_unspecified_type;
+        }
+        
         public string Name
         {
             get
@@ -14211,6 +14526,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEVariable : DwarfDIEDeclaration
     {
+        public DwarfDIEVariable()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_variable;
+        }
+        
         public DwarfAccessibility? Accessibility
         {
             get
@@ -14418,6 +14738,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEVariant : DwarfDIEDeclaration
     {
+        public DwarfDIEVariant()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_variant;
+        }
+        
         public DwarfAccessibility? Accessibility
         {
             get
@@ -14469,6 +14794,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEVariantPart : DwarfDIEDeclaration
     {
+        public DwarfDIEVariantPart()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_variant_part;
+        }
+        
         public DwarfAccessibility? Accessibility
         {
             get
@@ -14520,6 +14850,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEVolatileType : DwarfDIEDeclaration
     {
+        public DwarfDIEVolatileType()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_volatile_type;
+        }
+        
         public string Name
         {
             get
@@ -14559,6 +14894,11 @@ namespace LibObjectFile.Dwarf
     
     public partial class DwarfDIEWithStmt : DwarfDIEDeclaration
     {
+        public DwarfDIEWithStmt()
+        {
+            this.Tag = (DwarfTag)DwarfNative.DW_TAG_with_stmt;
+        }
+        
         public DwarfAccessibility? Accessibility
         {
             get
