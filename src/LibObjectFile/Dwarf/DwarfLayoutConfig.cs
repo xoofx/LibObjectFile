@@ -13,7 +13,6 @@ namespace LibObjectFile.Dwarf
         public DwarfLayoutConfig()
         {
             DefaultAttributeFormForReference = DwarfAttributeForm.Ref4;
-            GenerateRelocation = true;
         }
 
         public DwarfAttributeFormEx DefaultAttributeFormForReference
@@ -34,7 +33,5 @@ namespace LibObjectFile.Dwarf
                 _defaultAttributeFormForReference = value;
             }
         }
-
-        public bool GenerateRelocation { get; set; }
     }
 }

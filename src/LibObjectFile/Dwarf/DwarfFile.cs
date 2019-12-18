@@ -134,7 +134,7 @@ namespace LibObjectFile.Dwarf
             // Write all section and stables
             var writer = new DwarfWriter(this, writerContext.IsLittleEndian, diagnostics);
             writer.AddressSize = writerContext.AddressSize;
-            writer.EnableRelocation = writerContext.LayoutConfig.GenerateRelocation;
+            writer.EnableRelocation = writerContext.EnableRelocation;
             
             writer.Log = writerContext.DebugLinePrinter;
             writer.Stream = writerContext.DebugLineStream;
@@ -206,9 +206,11 @@ namespace LibObjectFile.Dwarf
             CheckErrors(diagnostics);
 
             // Setup the output based on actual content of Dwarf infos
-            var writer = new DwarfWriter(this, elfContext.IsLittleEndian, diagnostics);
-            writer.AddressSize = elfContext.AddressSize;
-            writer.EnableRelocation = layoutConfig.GenerateRelocation;
+            var writer = new DwarfWriter(this, elfContext.IsLittleEndian, diagnostics)
+            {
+                AddressSize = elfContext.AddressSize, 
+                EnableRelocation = elfContext.Elf.FileType == ElfFileType.Relocatable
+            };
 
             // String table
             if (StringTable.Size > 0)
@@ -247,7 +249,7 @@ namespace LibObjectFile.Dwarf
                 writer.CurrentSection = LineTable;
                 LineTable.Relocations.Clear();
                 LineTable.WriteInternal(writer);
-                if (layoutConfig.GenerateRelocation && LineTable.Relocations.Count > 0)
+                if (writer.EnableRelocation && LineTable.Relocations.Count > 0)
                 {
                     LineTable.CopyRelocationsTo(elfContext, elfContext.GetOrCreateRelocLineSection());
                 }
@@ -271,7 +273,7 @@ namespace LibObjectFile.Dwarf
                 AddressRangeTable.Relocations.Clear();
                 AddressRangeTable.WriteInternal(writer);
 
-                if (layoutConfig.GenerateRelocation && AddressRangeTable.Relocations.Count > 0)
+                if (writer.EnableRelocation && AddressRangeTable.Relocations.Count > 0)
                 {
                     AddressRangeTable.CopyRelocationsTo(elfContext, elfContext.GetOrCreateRelocAddressRangeTable());
                 }
@@ -295,7 +297,7 @@ namespace LibObjectFile.Dwarf
                 InfoSection.Relocations.Clear();
                 InfoSection.WriteInternal(writer);
 
-                if (layoutConfig.GenerateRelocation && InfoSection.Relocations.Count > 0)
+                if (writer.EnableRelocation && InfoSection.Relocations.Count > 0)
                 {
                     InfoSection.CopyRelocationsTo(elfContext, elfContext.GetOrCreateRelocInfoSection());
                 }
