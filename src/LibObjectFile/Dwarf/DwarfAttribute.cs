@@ -283,7 +283,7 @@ namespace LibObjectFile.Dwarf
             {
                 case DwarfAttributeKind.DeclFile:
                 {
-                    var file = reader.File.LineSection.FileNames[ValueAsI32 - 1];
+                    var file = reader.File.LineTable.FileNames[ValueAsI32 - 1];
                     ValueAsU64 = 0;
                     ValueAsObject = file;
                     break;
@@ -293,7 +293,7 @@ namespace LibObjectFile.Dwarf
                 {
                     if (ValueAsU64 == 0) return;
 
-                    if (reader.File.LineSection != null)
+                    if (reader.File.LineTable != null)
                     {
                         if (reader.OffsetToDebugLine.TryGetValue(ValueAsU64, out var debugLine))
                         {
@@ -823,7 +823,7 @@ namespace LibObjectFile.Dwarf
                     var offset = writer.File.StringTable.GetOrCreateString((string) ValueAsObject);
                     if (writer.EnableRelocation)
                     {
-                        writer.RecordRelocation(DwarfRelocationTarget.StringTable, writer.SizeOfUIntEncoding(), offset);
+                        writer.RecordRelocation(DwarfRelocationTarget.DebugString, writer.SizeOfUIntEncoding(), offset);
                         offset = 0;
                     }
                     writer.WriteUIntFromEncoding(offset);

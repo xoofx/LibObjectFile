@@ -63,6 +63,26 @@ namespace LibObjectFile.Elf
             return !left.Equals(right);
         }
 
+        public static bool operator ==(string left, ElfString right)
+        {
+            return string.Equals(left, right.Value);
+        }
+
+        public static bool operator !=(ElfString left, string right)
+        {
+            return !string.Equals(left.Value, right);
+        }
+
+        public static bool operator ==(ElfString right, string left)
+        {
+            return string.Equals(left, right.Value);
+        }
+
+        public static bool operator !=(string right, ElfString left)
+        {
+            return !string.Equals(left.Value, right);
+        }
+
         public static implicit operator string(ElfString elfString)
         {
             return elfString.Value;

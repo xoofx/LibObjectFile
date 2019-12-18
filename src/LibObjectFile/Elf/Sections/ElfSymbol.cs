@@ -74,7 +74,7 @@ namespace LibObjectFile.Elf
                 hashCode = (hashCode * 397) ^ (int) Bind;
                 hashCode = (hashCode * 397) ^ (int) Visibility;
                 hashCode = (hashCode * 397) ^ Section.GetHashCode();
-                hashCode = (hashCode * 397) ^ (Name != null ? Name.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ Name.GetHashCode();
                 return hashCode;
             }
         }

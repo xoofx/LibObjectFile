@@ -5,7 +5,7 @@
 namespace LibObjectFile.Elf
 {
     /// <summary>
-    /// Context used when applying relocation via <see cref="ElfRelocationTableExtensions.Apply"/>.
+    /// Context used when applying relocation via <see cref="ElfRelocationTableExtensions.Relocate"/>.
     /// </summary>
     public struct ElfRelocationContext
     {

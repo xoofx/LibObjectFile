@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using LibObjectFile.Dwarf;
 
 namespace LibObjectFile.Elf
 {
@@ -16,8 +17,22 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Applies the relocation defined by this table to the specified stream. The stream must be seekable and writeable.
         /// </summary>
+        public static void Relocate(this ElfRelocationTable relocTable, in ElfRelocationContext context)
+        {
+            var relocTarget = relocTable.Info.Section;
+            if (!(relocTarget is ElfBinarySection relocTargetBinarySection))
+            {
+                throw new InvalidOperationException($"Invalid ElfRelocationTable.Info section. Can only relocate a section that inherits from {nameof(ElfBinarySection)}.");
+            }
+
+            Relocate(relocTable, relocTargetBinarySection.Stream, context);
+        }
+
+        /// <summary>
+        /// Applies the relocation defined by this table to the specified stream. The stream must be seekable and writeable.
+        /// </summary>
         /// <param name="stream"></param>
-        public static void Apply(this ElfRelocationTable relocTable, Stream stream, in ElfRelocationContext context)
+        public static void Relocate(this ElfRelocationTable relocTable, Stream stream, in ElfRelocationContext context)
         {
             if (stream == null) throw new ArgumentNullException(nameof(stream));
 

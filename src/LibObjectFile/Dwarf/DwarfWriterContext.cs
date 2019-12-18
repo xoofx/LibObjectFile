@@ -3,19 +3,21 @@
 // See the license.txt file in the project root for more information.
 
 using System;
+using LibObjectFile.Elf;
 
 namespace LibObjectFile.Dwarf
 {
     public class DwarfWriterContext : DwarfReaderWriterContext
     {
-        public DwarfWriterContext()
+        public DwarfWriterContext() : this(new DwarfLayoutConfig())
         {
-            LayoutConfig = new DwarfLayoutConfig();
-            EnableRelocation = true;
         }
-        
-        public DwarfLayoutConfig LayoutConfig { get; }
 
-        public bool EnableRelocation { get; set; }
+        public DwarfWriterContext(DwarfLayoutConfig layoutConfig)
+        {
+            LayoutConfig = layoutConfig ?? throw new ArgumentNullException(nameof(layoutConfig));
+        }
+
+        public DwarfLayoutConfig LayoutConfig { get; }
     }
 }

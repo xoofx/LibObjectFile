@@ -12,7 +12,6 @@ namespace LibObjectFile.Dwarf
         internal DwarfReaderWriter(DwarfFile file, DiagnosticBag diagnostics) : base(null, diagnostics)
         {
             File = file;
-            IsLittleEndian = file.IsLittleEndian;
         }
 
         public DwarfFile File { get; }

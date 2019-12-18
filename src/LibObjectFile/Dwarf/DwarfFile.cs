@@ -11,7 +11,7 @@ namespace LibObjectFile.Dwarf
     {
         private DwarfAbbreviationTable _abbreviationTable;
         private DwarfStringTable _stringTable;
-        private DwarfLineSection _lineSection;
+        private DwarfLineSection _lineTable;
         private DwarfInfoSection _infoSection;
         private DwarfAddressRangeTable _addressRangeTable;
 
@@ -19,12 +19,10 @@ namespace LibObjectFile.Dwarf
         {
             AbbreviationTable = new DwarfAbbreviationTable();
             StringTable = new DwarfStringTable();
-            LineSection = new DwarfLineSection();
+            LineTable = new DwarfLineSection();
             InfoSection = new DwarfInfoSection();
             AddressRangeTable = new DwarfAddressRangeTable();
         }
-
-        public bool IsLittleEndian { get; set; }
 
         public DwarfAbbreviationTable AbbreviationTable
         {
@@ -38,10 +36,10 @@ namespace LibObjectFile.Dwarf
             set => AttachChild(this, value, ref _stringTable, false);
         }
 
-        public DwarfLineSection LineSection
+        public DwarfLineSection LineTable
         {
-            get => _lineSection;
-            set => AttachChild(this, value, ref _lineSection, false);
+            get => _lineTable;
+            set => AttachChild(this, value, ref _lineTable, false);
         }
 
         public DwarfAddressRangeTable AddressRangeTable
@@ -65,7 +63,7 @@ namespace LibObjectFile.Dwarf
         {
             base.Verify(diagnostics);
 
-            LineSection.Verify(diagnostics);
+            LineTable.Verify(diagnostics);
             AbbreviationTable.Verify(diagnostics);
             AddressRangeTable.Verify(diagnostics);
             StringTable.Verify(diagnostics);
@@ -79,8 +77,8 @@ namespace LibObjectFile.Dwarf
 
             var layoutContext = new DwarfLayoutContext(this, config, diagnostics);
 
-            LineSection.Offset = 0;
-            LineSection.UpdateLayoutInternal(layoutContext);
+            LineTable.Offset = 0;
+            LineTable.UpdateLayoutInternal(layoutContext);
             if (layoutContext.HasErrors)
             {
                 return;
@@ -134,23 +132,25 @@ namespace LibObjectFile.Dwarf
             CheckErrors(diagnostics);
 
             // Write all section and stables
-            var writer = new DwarfWriter(this, diagnostics);
+            var writer = new DwarfWriter(this, writerContext.IsLittleEndian, diagnostics);
             writer.AddressSize = writerContext.AddressSize;
-            writer.EnableRelocation = writerContext.EnableRelocation;
+            writer.EnableRelocation = writerContext.LayoutConfig.GenerateRelocation;
             
             writer.Log = writerContext.DebugLinePrinter;
             writer.Stream = writerContext.DebugLineStream;
             if (writer.Stream != null)
             {
-                writer.CurrentSection = LineSection;
-                LineSection.Relocations.Clear();
-                LineSection.WriteInternal(writer);
+                writer.Stream.Position = 0;
+                writer.CurrentSection = LineTable;
+                LineTable.Relocations.Clear();
+                LineTable.WriteInternal(writer);
             }
 
             writer.Log = null;
             writer.Stream = writerContext.DebugAbbrevStream;
             if (writer.Stream != null)
             {
+                writer.Stream.Position = 0;
                 writer.CurrentSection = AbbreviationTable;
                 AbbreviationTable.WriteInternal(writer);
             }
@@ -158,6 +158,7 @@ namespace LibObjectFile.Dwarf
             writer.Stream = writerContext.DebugAddressRangeStream;
             if (writer.Stream != null)
             {
+                writer.Stream.Position = 0;
                 writer.CurrentSection = AddressRangeTable;
                 AddressRangeTable.Relocations.Clear();
                 AddressRangeTable.WriteInternal(writer);
@@ -166,6 +167,7 @@ namespace LibObjectFile.Dwarf
             writer.Stream = writerContext.DebugStringStream;
             if (writer.Stream != null)
             {
+                writer.Stream.Position = 0;
                 writer.CurrentSection = StringTable;
                 StringTable.WriteInternal(writer);
             }
@@ -173,9 +175,126 @@ namespace LibObjectFile.Dwarf
             writer.Stream = writerContext.DebugInfoStream;
             if (writer.Stream != null)
             {
+                writer.Stream.Position = 0;
                 writer.CurrentSection = InfoSection;
                 InfoSection.Relocations.Clear();
                 InfoSection.WriteInternal(writer);
+            }
+
+            CheckErrors(diagnostics);
+        }
+        
+        public void WriteToElf(DwarfElfContext elfContext, DwarfLayoutConfig layoutConfig = null)
+        {
+            if (elfContext == null) throw new ArgumentNullException(nameof(elfContext));
+
+            var diagnostics = new DiagnosticBag();
+
+            layoutConfig ??= new DwarfLayoutConfig();
+            
+            // Verify correctness
+            Verify(diagnostics);
+            CheckErrors(diagnostics);
+
+            // Update the layout of all section and tables
+            UpdateLayout(layoutConfig, diagnostics);
+            CheckErrors(diagnostics);
+
+            // Setup the output based on actual content of Dwarf infos
+            var writer = new DwarfWriter(this, elfContext.IsLittleEndian, diagnostics);
+
+            // String table
+            if (StringTable.Size > 0)
+            {
+                writer.Stream = elfContext.GetOrCreateStringTable().Stream;
+                writer.Stream.Position = 0;
+                writer.CurrentSection = StringTable;
+                StringTable.WriteInternal(writer);
+            }
+            else
+            {
+                elfContext.RemoveStringTable();
+            }
+
+            // Abbreviation table
+            if (AbbreviationTable.Size > 0)
+            {
+                writer.Stream = elfContext.GetOrCreateAbbreviationTable().Stream; 
+                writer.Stream.Position = 0;
+                writer.CurrentSection = AbbreviationTable;
+                AbbreviationTable.WriteInternal(writer);
+            }
+            else
+            {
+                elfContext.RemoveAbbreviationTable();
+            }
+
+            // Line table
+            if (LineTable.Size > 0)
+            {
+                writer.Stream = elfContext.GetOrCreateLineSection().Stream;
+                writer.Stream.Position = 0;
+                writer.CurrentSection = LineTable;
+                LineTable.Relocations.Clear();
+                LineTable.WriteInternal(writer);
+                if (layoutConfig.GenerateRelocation)
+                {
+                    LineTable.CopyRelocationsTo(elfContext, elfContext.GetOrCreateRelocLineSection());
+                }
+                else
+                {
+                    elfContext.RemoveRelocLineTable();
+                }
+            }
+            else
+            {
+                elfContext.RemoveLineTable();
+            }
+
+            // AddressRange table
+            if (AddressRangeTable.Size > 0)
+            {
+                writer.Stream = elfContext.GetOrCreateAddressRangeTable().Stream;
+                writer.Stream.Position = 0;
+                writer.CurrentSection = AddressRangeTable;
+                AddressRangeTable.Relocations.Clear();
+                AddressRangeTable.WriteInternal(writer);
+
+                if (layoutConfig.GenerateRelocation)
+                {
+                    AddressRangeTable.CopyRelocationsTo(elfContext, elfContext.GetOrCreateRelocAddressRangeTable());
+                }
+                else
+                {
+                    elfContext.RemoveAddressRangeTable();
+                }
+            }
+            else
+            {
+                elfContext.RemoveAddressRangeTable();
+            }
+
+            // InfoSection
+            if (InfoSection.Size > 0)
+            {
+                writer.Stream = elfContext.GetOrCreateInfoSection().Stream;
+                writer.Stream.Position = 0;
+                writer.CurrentSection = AddressRangeTable;
+                InfoSection.Relocations.Clear();
+                InfoSection.WriteInternal(writer);
+
+                if (layoutConfig.GenerateRelocation)
+                {
+                    InfoSection.CopyRelocationsTo(elfContext, elfContext.GetOrCreateRelocInfoSection());
+                }
+                else
+                {
+                    elfContext.RemoveRelocInfoSection();
+                }
+            }
+            else
+            {
+                elfContext.RemoveInfoSection();
             }
 
             CheckErrors(diagnostics);
@@ -185,10 +304,7 @@ namespace LibObjectFile.Dwarf
         {
             if (readerContext == null) throw new ArgumentNullException(nameof(readerContext));
 
-            var dwarf = new DwarfFile()
-            {
-                IsLittleEndian = readerContext.IsLittleEndian
-            };
+            var dwarf = new DwarfFile();
             var reader = new DwarfReader(readerContext, dwarf, new DiagnosticBag());
 
             reader.Log = null;
@@ -210,8 +326,8 @@ namespace LibObjectFile.Dwarf
             reader.Stream = readerContext.DebugLineStream;
             if (reader.Stream != null)
             {
-                reader.CurrentSection = dwarf.LineSection;
-                dwarf.LineSection.ReadInternal(reader);
+                reader.CurrentSection = dwarf.LineTable;
+                dwarf.LineTable.ReadInternal(reader);
             }
 
             reader.Log = null;
@@ -236,10 +352,15 @@ namespace LibObjectFile.Dwarf
             return dwarf;
         }
 
+        public static DwarfFile ReadFromElf(DwarfElfContext elfContext)
+        {
+            if (elfContext == null) throw new ArgumentNullException(nameof(elfContext));
+            return Read(new DwarfReaderContext(elfContext));
+        }
+
         public static DwarfFile ReadFromElf(ElfObjectFile elf)
         {
-            var readerContext = DwarfReaderContext.FromElf(elf);
-            return Read(readerContext);
+            return ReadFromElf(new DwarfElfContext(elf));
         }
 
         private static void CheckErrors(DiagnosticBag diagnostics)

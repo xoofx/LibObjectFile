@@ -8,8 +8,9 @@ namespace LibObjectFile.Dwarf
 {
     public sealed class DwarfWriter : DwarfReaderWriter
     {
-        internal DwarfWriter(DwarfFile file, DiagnosticBag diagnostics) : base(file, diagnostics)
+        internal DwarfWriter(DwarfFile file, bool isLittleEndian, DiagnosticBag diagnostics) : base(file, diagnostics)
         {
+            IsLittleEndian = isLittleEndian;
         }
 
         public override bool IsReadOnly => false;

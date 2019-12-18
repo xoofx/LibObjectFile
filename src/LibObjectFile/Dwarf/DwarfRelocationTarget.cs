@@ -8,9 +8,9 @@ namespace LibObjectFile.Dwarf
     {
         Code,
 
-        StringTable,
+        DebugString,
 
-        AbbreviationTable,
+        DebugAbbrev,
 
         DebugInfo,
     }

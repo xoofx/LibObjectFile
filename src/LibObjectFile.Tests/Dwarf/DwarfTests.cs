@@ -90,7 +90,8 @@ namespace LibObjectFile.Tests.Dwarf
                 elf.Print(Console.Out);
             }
 
-            var inputContext = DwarfReaderContext.FromElf(elf);
+            var elfContext = new DwarfElfContext(elf);
+            var inputContext = new DwarfReaderContext(elfContext);
             inputContext.DebugLinePrinter = Console.Out;
             var dwarf = DwarfFile.Read(inputContext);
 
@@ -103,7 +104,7 @@ namespace LibObjectFile.Tests.Dwarf
             var outputContext = new DwarfWriterContext
             {
                 IsLittleEndian = inputContext.IsLittleEndian,
-                EnableRelocation = false,
+                LayoutConfig = { GenerateRelocation = false },
                 AddressSize = inputContext.AddressSize,
                 DebugLineStream = new MemoryStream()
             };
@@ -148,7 +149,8 @@ namespace LibObjectFile.Tests.Dwarf
                 elf.Print(Console.Out);
             }
 
-            var inputContext = DwarfReaderContext.FromElf(elf);
+            var elfContext = new DwarfElfContext(elf);
+            var inputContext = new DwarfReaderContext(elfContext);
             inputContext.DebugLinePrinter = Console.Out;
             var dwarf = DwarfFile.Read(inputContext);
 
@@ -204,7 +206,8 @@ namespace LibObjectFile.Tests.Dwarf
                 elf.Print(Console.Out);
             }
 
-            var inputContext = DwarfReaderContext.FromElf(elf);
+            var elfContext = new DwarfElfContext(elf);
+            var inputContext = new DwarfReaderContext(elfContext);
             var dwarf = DwarfFile.Read(inputContext);
 
             dwarf.AbbreviationTable.Print(Console.Out);

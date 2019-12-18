@@ -17,6 +17,7 @@ namespace LibObjectFile.Dwarf
         {
             IsReadOnly = context.IsInputReadOnly;
             AddressSize = context.AddressSize;
+            IsLittleEndian = context.IsLittleEndian;
             _registeredDIEPerCompilationUnit = new Dictionary<ulong, DwarfDIE>();
             _registeredDIEPerSection = new Dictionary<ulong, DwarfDIE>();
             _unresolvedDIECompilationUnitReference = new List<DwarfDIEReference>();
