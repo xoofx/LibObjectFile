@@ -152,7 +152,7 @@ namespace LibObjectFile.Dwarf
             writer.WriteLine($"  Version:                  {addressRangeTable.Version}");
             writer.WriteLine($"  Offset into .debug_info:  0x{addressRangeTable.DebugInfoOffset:x}");
             writer.WriteLine($"  Pointer Size:             {(byte)addressRangeTable.AddressSize}");
-            writer.WriteLine($"  Segment Size:             {addressRangeTable.SegmentSelectorSize}");
+            writer.WriteLine($"  Segment Size:             {(byte)addressRangeTable.SegmentSelectorSize}");
             writer.WriteLine();
             var addressSize = (uint)addressRangeTable.AddressSize;
             if (addressSize > 4)
