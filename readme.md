@@ -44,8 +44,8 @@ elf.Write(outStream);
   - Program headers with or without sections
   - Print with `readelf` similar output
 - Support for DWARF debugging format:
-  - Version 4 (currently still the default for GCC)
-  - Sections `.debug_info`, `.debug_line`, `.debug_aranges`, `.debug_abbrev` and `.debug_str` (currently only missing  `.debug_frame`)
+  - Partial support of Version 4 (currently still the default for GCC)
+  - Support for the sections: `.debug_info`, `.debug_line`, `.debug_aranges`, `.debug_abbrev` and `.debug_str` 
   - Support for Dwarf expressions
   - High level interface, automatic layout/offsets between sections.
   - Integration with ELF to support easy reading/writing back
@@ -74,7 +74,7 @@ These sections are currently loaded as `ElfCustomSection` but should have their 
 
 ### DWARF
 
-- [ ] Support for `.debug_frame` section
+- [ ] Version 4: support for `.debug_types`, `.debug_frame`, `.debug_loc`, `.debug_ranges`, `.debug_pubnames`, `.debug_pubtypes`, `.debug_macinfo` section
 - [ ] Version 5
 
 ### Other file formats
