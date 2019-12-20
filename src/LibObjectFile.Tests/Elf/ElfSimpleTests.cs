@@ -13,6 +13,18 @@ namespace LibObjectFile.Tests.Elf
     public class ElfSimpleTests : ElfTestBase
     {
         [Test]
+        public void TryReadFailed()
+        {
+            using var stream = File.OpenRead(typeof(ElfSimpleTests).Assembly.Location);
+
+            Assert.False(ElfObjectFile.TryRead(stream, out var elfObjectFile, out var diagnostics));
+            Assert.True(diagnostics.HasErrors);    
+            Assert.AreEqual(1, diagnostics.Messages.Count);
+            Assert.AreEqual(DiagnosticId.ELF_ERR_InvalidHeaderMagic, diagnostics.Messages[0].Id);
+        }
+
+
+        [Test]
         public void SimpleEmptyWithDefaultSections()
         {
             var elf = new ElfObjectFile();
