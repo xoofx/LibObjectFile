@@ -35,7 +35,7 @@ namespace LibObjectFile.Elf
         {
             _segments = new List<ElfSegment>();
             _sections = new List<ElfSection>();
-            FileClass = ElfFileClass.Is64;
+            FileClass = ElfFileClass.None;
             OSABI = ElfOSABI.NONE;
             Encoding = ElfEncoding.Lsb;
             FileType = ElfFileType.Relocatable;
@@ -584,7 +584,7 @@ namespace LibObjectFile.Elf
         /// <returns><c>true</c> if the stream contains an ELF file. otherwise returns <c>false</c></returns>
         public static bool IsElf(Stream stream)
         {
-            return IsElf(stream, out _);
+            return IsElf(stream, out _, out _);
         }
 
         /// <summary>
@@ -592,12 +592,14 @@ namespace LibObjectFile.Elf
         /// </summary>
         /// <param name="stream">The stream containing potentially an ELF file</param>
         /// <param name="encoding">Output the encoding if ELF is <c>true</c>.</param>
+        /// <param name="class">Output the file class if ELF is <c>true</c>.</param>
         /// <returns><c>true</c> if the stream contains an ELF file. otherwise returns <c>false</c></returns>
-        public static bool IsElf(Stream stream, out ElfEncoding encoding)
+        public static bool IsElf(Stream stream, out ElfEncoding encoding, out ElfFileClass @class)
         {
             if (stream == null) throw new ArgumentNullException(nameof(stream));
 
             var ident = ArrayPool<byte>.Shared.Rent(EI_NIDENT);
+            @class = ElfFileClass.None;
             encoding = ElfEncoding.None;
             try
             {
@@ -607,6 +609,7 @@ namespace LibObjectFile.Elf
 
                 if (length == EI_NIDENT && (ident[EI_MAG0] == ELFMAG0 && ident[EI_MAG1] == ELFMAG1 && ident[EI_MAG2] == ELFMAG2 && ident[EI_MAG3] == ELFMAG3))
                 {
+                    @class = (ElfFileClass)ident[EI_CLASS];
                     encoding = (ElfEncoding)ident[EI_DATA];
                     return true;
                 }
@@ -648,14 +651,14 @@ namespace LibObjectFile.Elf
 
             objectFile = null;
 
-            if (!IsElf(stream, out var encoding))
+            if (!IsElf(stream, out var encoding, out var @class))
             {
                 diagnostics = new DiagnosticBag();
                 diagnostics.Error(DiagnosticId.ELF_ERR_InvalidHeaderMagic, "ELF magic header not found");
                 return false;
             }
 
-            objectFile = new ElfObjectFile(false) { Encoding = encoding };
+            objectFile = new ElfObjectFile(false) { Encoding = encoding, FileClass = @class };
             options ??= new ElfReaderOptions();
 
             var reader = ElfReader.Create(objectFile, stream, options);
