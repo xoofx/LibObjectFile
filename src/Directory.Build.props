@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <Deterministic>True</Deterministic>
+  </PropertyGroup>
+</Project>
