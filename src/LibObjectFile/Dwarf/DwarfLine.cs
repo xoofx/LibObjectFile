@@ -6,7 +6,7 @@ using System.Globalization;
 
 namespace LibObjectFile.Dwarf
 {
-    public class DwarfLine : DwarfObject<DwarfLineSection>
+    public class DwarfLine : DwarfObject<DwarfLineSequence>
     {
         public DwarfLine()
         {
@@ -57,12 +57,6 @@ namespace LibObjectFile.Dwarf
         /// </summary>
         public bool IsBasicBlock { get; set; }
 
-        /// <summary>
-        /// A boolean indicating that the current address is that of the first byte after the end of a sequence of target machine instructions.
-        /// IsEndSequence terminates a sequence of lines; therefore other information in the same row is not meaningful.
-        /// </summary>
-        public bool IsEndSequence { get; set; }
-
         // -----------------------
         // DWARF 3
         // -----------------------
@@ -106,7 +100,6 @@ namespace LibObjectFile.Dwarf
             out int deltaColumn,
             out bool isStatementChanged,
             out bool isBasicBlockChanged,
-            out bool isEndSequenceChanged,
             out bool isPrologueEndChanged,
             out bool isEpilogueBeginChanged,
             out bool isaChanged,
@@ -119,7 +112,6 @@ namespace LibObjectFile.Dwarf
             deltaColumn = (int) ((long) against.Column - (long) this.Column);
             isStatementChanged = against.IsStatement != this.IsStatement;
             isBasicBlockChanged = against.IsBasicBlock != this.IsBasicBlock;
-            isEndSequenceChanged = against.IsEndSequence != this.IsEndSequence;
             isPrologueEndChanged = against.IsPrologueEnd != this.IsPrologueEnd;
             isEpilogueBeginChanged = against.IsEpilogueBegin != this.IsEpilogueBegin;
             isaChanged = against.Isa != this.Isa;
@@ -134,7 +126,6 @@ namespace LibObjectFile.Dwarf
             Column = 0;
             this.IsStatement = isStatement;
             IsBasicBlock = false;
-            IsEndSequence = false;
 
             // DWARF 3
             IsPrologueEnd = false;
@@ -163,7 +154,6 @@ namespace LibObjectFile.Dwarf
                 File = File,
                 Isa = Isa,
                 IsBasicBlock = IsBasicBlock,
-                IsEndSequence = IsEndSequence,
                 IsEpilogueBegin = IsEpilogueBegin,
                 IsPrologueEnd = IsPrologueEnd,
                 IsStatement = IsStatement,
@@ -174,7 +164,7 @@ namespace LibObjectFile.Dwarf
         
         public override string ToString()
         {
-            return $"{nameof(Offset)}: 0x{Offset:x8}, {nameof(Address)}: 0x{Address:x16}, {nameof(File)}: {File}, {nameof(Line)}: {Line,4}, {nameof(Column)}: {Column,2}, {nameof(IsStatement)}: {Bool2Str(IsStatement),5}, {nameof(IsBasicBlock)}: {Bool2Str(IsBasicBlock),5}, {nameof(IsEndSequence)}: {Bool2Str(IsEndSequence),5}, {nameof(IsPrologueEnd)}: {Bool2Str(IsPrologueEnd),5}, {nameof(IsEpilogueBegin)}: {Bool2Str(IsEpilogueBegin),5}, {nameof(Isa)}: {Isa,3}, {nameof(Discriminator)}: {Discriminator,3}";
+            return $"{nameof(Offset)}: 0x{Offset:x8}, {nameof(Address)}: 0x{Address:x16}, {nameof(File)}: {File}, {nameof(Line)}: {Line,4}, {nameof(Column)}: {Column,2}, {nameof(IsStatement)}: {Bool2Str(IsStatement),5}, {nameof(IsBasicBlock)}: {Bool2Str(IsBasicBlock),5}, {nameof(IsPrologueEnd)}: {Bool2Str(IsPrologueEnd),5}, {nameof(IsEpilogueBegin)}: {Bool2Str(IsEpilogueBegin),5}, {nameof(Isa)}: {Isa,3}, {nameof(Discriminator)}: {Discriminator,3}";
         }
 
         private static string Bool2Str(bool value) => value.ToString(CultureInfo.InvariantCulture).ToLowerInvariant();
@@ -185,7 +175,6 @@ namespace LibObjectFile.Dwarf
 
         protected override void Read(DwarfReader reader)
         {
-            throw new System.NotImplementedException();
         }
         
         protected override void Write(DwarfWriter writer)

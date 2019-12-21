@@ -280,21 +280,25 @@ namespace LibObjectFile.Tests.Dwarf
             };
             dwarfFile.LineTable.AddressSize = DwarfAddressSize.Bit64;
             dwarfFile.LineTable.FileNames.Add(fileName);
-            dwarfFile.LineTable.AddDebugLine(new DwarfLine()
-            {
-                File = fileName,
-                Address = 0,
-                Column = 1,
-                Line = 1,
-            });
-            dwarfFile.LineTable.AddDebugLine(new DwarfLine()
-            {
-                File = fileName,
-                Address = 0,
-                Column = 1,
-                Line = 1,
-                IsEndSequence = true
-            });
+            dwarfFile.LineTable.AddLineSequence(new DwarfLineSequence()
+                {
+
+                    new DwarfLine()
+                    {
+                        File = fileName,
+                        Address = 0,
+                        Column = 1,
+                        Line = 1,
+                    },
+                    new DwarfLine()
+                    {
+                        File = fileName,
+                        Address = 0,
+                        Column = 1,
+                        Line = 1,
+                    }
+                }
+            );
 
             // Create .debug_info
             var rootDIE = new DwarfDIECompileUnit()
@@ -303,7 +307,7 @@ namespace LibObjectFile.Tests.Dwarf
                 LowPC = 0, // 0 relative to base virtual address
                 HighPC = (int)codeSection.Size, // default is offset/length after LowPC
                 CompDir = fileName.Directory,
-                StmtList = dwarfFile.LineTable.Lines[0],
+                StmtList = dwarfFile.LineTable.LineSequences[0],
             };
             var subProgram = new DwarfDIESubprogram()
             {

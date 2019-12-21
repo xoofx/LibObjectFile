@@ -11,13 +11,13 @@ using System.Text;
 
 namespace LibObjectFile.Dwarf
 {
-    [DebuggerDisplay("Count = {Lines.Count,nq}")]
+    [DebuggerDisplay("Count = {LineSequences.Count,nq}")]
     public sealed class DwarfLineSection : DwarfRelocatableSection
     {
         private readonly Dictionary<string, uint> _directoryNameToIndex;
         private readonly Dictionary<DwarfFileName, uint> _fileNameToIndex;
         private readonly List<string> _directoryNames;
-        private readonly List<DwarfLine> _lines;
+        private readonly List<DwarfLineSequence> _lineSequences;
         private readonly DwarfLine _stateLine;
         private byte _minimumInstructionLength;
         private byte _maximumOperationsPerInstruction;
@@ -26,7 +26,7 @@ namespace LibObjectFile.Dwarf
         public DwarfLineSection()
         {
             FileNames = new List<DwarfFileName>();
-            _lines = new List<DwarfLine>();
+            _lineSequences = new List<DwarfLineSequence>();
             _directoryNameToIndex = new Dictionary<string, uint>();
             _fileNameToIndex = new Dictionary<DwarfFileName, uint>();
             _directoryNames = new List<string>();
@@ -37,7 +37,6 @@ namespace LibObjectFile.Dwarf
             _minimumInstructionLength = 1;
             _maximumOperationsPerInstruction = 1;
             _standardOpCodeLengths = new List<uint>();
-            _lines = new List<DwarfLine>();
             foreach (var stdOpCode in DefaultStandardOpCodeLengths)
             {
                 _standardOpCodeLengths.Add(stdOpCode);
@@ -85,21 +84,21 @@ namespace LibObjectFile.Dwarf
 
         public List<DwarfFileName> FileNames { get; }
 
-        public IReadOnlyList<DwarfLine> Lines => _lines;
+        public IReadOnlyList<DwarfLineSequence> LineSequences => _lineSequences;
 
-        public void AddDebugLine(DwarfLine line)
+        public void AddLineSequence(DwarfLineSequence line)
         {
-            _lines.Add(this, line);
+            _lineSequences.Add(this, line);
         }
 
-        public void RemoveDebugLine(DwarfLine line)
+        public void RemoveLineSequence(DwarfLineSequence line)
         {
-            _lines.Remove(this, line);
+            _lineSequences.Remove(this, line);
         }
 
-        public DwarfLine RemoveDebugLineAt(int index)
+        public DwarfLineSequence RemoveLineSequenceAt(int index)
         {
-            return _lines.RemoveAt(this, index);
+            return _lineSequences.RemoveAt(this, index);
         }
 
         protected override void Read(DwarfReader reader)
@@ -263,6 +262,8 @@ namespace LibObjectFile.Dwarf
             var intFileNameCount = FileNames.Count;
 
             printDumpHeader = true;
+            var currentSequence = new DwarfLineSequence {Offset = state.Offset};
+            AddLineSequence(currentSequence);
             while (true)
             {
                 var currentLength = reader.Offset - startPosition;
@@ -287,7 +288,7 @@ namespace LibObjectFile.Dwarf
                 switch (opcode)
                 {
                     case DwarfNative.DW_LNS_copy:
-                        AddDebugLine(state.Clone());
+                        currentSequence.Add(state.Clone());
                         state.Offset = reader.Offset;
                         state.SpecialReset();
                         if (log != null)
@@ -442,8 +443,10 @@ namespace LibObjectFile.Dwarf
                             switch (sub_opcode)
                             {
                                 case DwarfNative.DW_LNE_end_sequence:
-                                    state.IsEndSequence = true;
-                                    AddDebugLine(state.Clone());
+                                    currentSequence.Add(state.Clone());
+                                    currentSequence.Size = reader.Offset - currentSequence.Offset;
+                                    currentSequence = new DwarfLineSequence() {Offset = reader.Offset};
+                                    AddLineSequence(currentSequence);
                                     state.Offset = reader.Offset;
                                     state.Reset(firstFileName, default_is_stmt != 0);
                                     if (log != null)
@@ -563,7 +566,7 @@ namespace LibObjectFile.Dwarf
                                 log.WriteLine($" and Line by {line_inc} to {state.Line}");
                             }
 
-                            AddDebugLine(state.Clone());
+                            currentSequence.Add(state.Clone());
                             state.Offset = reader.Offset;
                             state.SpecialReset();
                         }
@@ -572,9 +575,9 @@ namespace LibObjectFile.Dwarf
                 }
             }
 
-            foreach (var debugLine in Lines)
+            foreach (var debugLine in _lineSequences)
             {
-                reader.OffsetToDebugLine.Add(debugLine.Offset, debugLine);
+                reader.OffsetToDebugLineSequence.Add(debugLine.Offset, debugLine);
             }
         }
 
@@ -649,20 +652,24 @@ namespace LibObjectFile.Dwarf
             }
 
             // Check that address increment is positive
-            ulong previousAddress = 0;
-            for (var i = 0; i < Lines.Count; i++)
+            foreach (var lineSequence in _lineSequences)
             {
-                var line = Lines[i];
-                var deltaAddress = (long)line.Address - (long)previousAddress;
-                if (deltaAddress < 0)
+                var lines = lineSequence.Lines;
+                ulong previousAddress = 0;
+                for (var i = 0; i < lines.Count; i++)
                 {
-                    diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidNegativeAddressDelta, $"Invalid address 0x{line.Address:x} after previous 0x{previousAddress:x} for debug line entry at [{i}]. The increment must be positive. for {this}");
-                }
-                previousAddress = line.IsEndSequence ? (ulong) 0 : line.Address;
+                    var line = lines[i];
+                    var deltaAddress = (long)line.Address - (long)previousAddress;
+                    if (deltaAddress < 0)
+                    {
+                        diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidNegativeAddressDelta, $"Invalid address 0x{line.Address:x} after previous 0x{previousAddress:x} for debug line entry at [{i}]. The increment must be positive. for {this}");
+                    }
+                    previousAddress = line.Address;
 
-                if (line.OperationIndex >= MaximumOperationsPerInstruction)
-                {
-                    diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidOperationIndex, $"Invalid operation index {line.OperationIndex} must be < {MaximumOperationsPerInstruction} for debug line entry at [{i}] for {this}");
+                    if (line.OperationIndex >= MaximumOperationsPerInstruction)
+                    {
+                        diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidOperationIndex, $"Invalid operation index {line.OperationIndex} must be < {MaximumOperationsPerInstruction} for debug line entry at [{i}] for {this}");
+                    }
                 }
             }
         }
@@ -825,241 +832,248 @@ namespace LibObjectFile.Dwarf
 
             bool hasSetAddress = false;
 
-            foreach (var debugLine in Lines)
+            foreach (var lineSequence in _lineSequences)
             {
-                ulong deltaAddress;
-                int deltaOperationIndex;
-                bool fileNameChanged;
-                int deltaLine;
-                int deltaColumn;
-                bool isStatementChanged;
-                bool isBasicBlockChanged;
-                bool isEndSequenceChanged;
-                bool isPrologueEndChanged;
-                bool isEpilogueBeginChanged;
-                bool isaChanged;
-                bool isDiscriminatorChanged;
+                var lines = lineSequence.Lines;
 
-                bool hasGeneratedRow = false;
-
-                var debugLineState = debugLine.ToState();
-                
-                previousLineState.Delta(debugLineState, out deltaAddress,
-                    out deltaOperationIndex,
-                    out fileNameChanged,
-                    out deltaLine,
-                    out deltaColumn,
-                    out isStatementChanged,
-                    out isBasicBlockChanged,
-                    out isEndSequenceChanged,
-                    out isPrologueEndChanged,
-                    out isEpilogueBeginChanged,
-                    out isaChanged,
-                    out isDiscriminatorChanged);
-
-                Debug.Assert(debugLine.Offset == writer.Offset, $"Expected Debug Line Offset: {debugLine.Offset} != Written Offset: {writer.Offset}");
-                
-                // DW_LNS_set_column
-                if (deltaColumn != 0)
+                for (var lineIndex = 0; lineIndex < lines.Count; lineIndex++)
                 {
-                    writer.WriteU8(DwarfNative.DW_LNS_set_column);
-                    writer.WriteULEB128(debugLine.Column);
-                }
+                    var debugLine = lines[lineIndex];
+                    ulong deltaAddress;
+                    int deltaOperationIndex;
+                    bool fileNameChanged;
+                    int deltaLine;
+                    int deltaColumn;
+                    bool isStatementChanged;
+                    bool isBasicBlockChanged;
+                    bool isEndSequenceChanged;
+                    bool isPrologueEndChanged;
+                    bool isEpilogueBeginChanged;
+                    bool isaChanged;
+                    bool isDiscriminatorChanged;
 
-                // DW_LNS_set_file or DW_LNE_define_file
-                if (fileNameChanged)
-                {
-                    var fileName = debugLine.File;
+                    bool hasGeneratedRow = false;
 
-                    // DW_LNS_set_file
-                    if (_fileNameToIndex.TryGetValue(fileName, out var fileIndex))
+                    var debugLineState = debugLine.ToState();
+
+                    previousLineState.Delta(debugLineState, out deltaAddress,
+                        out deltaOperationIndex,
+                        out fileNameChanged,
+                        out deltaLine,
+                        out deltaColumn,
+                        out isStatementChanged,
+                        out isBasicBlockChanged,
+                        out isEndSequenceChanged,
+                        out isPrologueEndChanged,
+                        out isEpilogueBeginChanged,
+                        out isaChanged,
+                        out isDiscriminatorChanged);
+
+                    Debug.Assert(debugLine.Offset == writer.Offset, $"Expected Debug Line Offset: {debugLine.Offset} != Written Offset: {writer.Offset}");
+
+                    // DW_LNS_set_column
+                    if (deltaColumn != 0)
                     {
-                        writer.WriteU8(DwarfNative.DW_LNS_set_file);
-                        writer.WriteULEB128(fileIndex);
+                        writer.WriteU8(DwarfNative.DW_LNS_set_column);
+                        writer.WriteULEB128(debugLine.Column);
                     }
-                    else
+
+                    // DW_LNS_set_file or DW_LNE_define_file
+                    if (fileNameChanged)
                     {
-                        // DW_LNE_define_file
+                        var fileName = debugLine.File;
+
+                        // DW_LNS_set_file
+                        if (_fileNameToIndex.TryGetValue(fileName, out var fileIndex))
+                        {
+                            writer.WriteU8(DwarfNative.DW_LNS_set_file);
+                            writer.WriteULEB128(fileIndex);
+                        }
+                        else
+                        {
+                            // DW_LNE_define_file
+                            writer.WriteU8(0);
+                            uint dirIndex = _directoryNameToIndex[fileName.Directory];
+
+                            ulong sizeOfInlineFileName = 1;
+                            sizeOfInlineFileName += (ulong) Encoding.UTF8.GetByteCount(fileName.Name) + 1;
+                            sizeOfInlineFileName += DwarfHelper.SizeOfULEB128(dirIndex);
+                            sizeOfInlineFileName += DwarfHelper.SizeOfULEB128(fileName.Time);
+                            sizeOfInlineFileName += DwarfHelper.SizeOfULEB128(fileName.Size);
+
+                            writer.WriteULEB128(sizeOfInlineFileName);
+
+                            writer.WriteU8(DwarfNative.DW_LNE_define_file);
+                            writer.WriteStringUTF8NullTerminated(fileName.Name);
+                            writer.WriteULEB128(dirIndex);
+                            writer.WriteULEB128(fileName.Time);
+                            writer.WriteULEB128(fileName.Size);
+                        }
+                    }
+
+                    // DW_LNS_copy
+                    if (isBasicBlockChanged && !debugLine.IsBasicBlock ||
+                        isPrologueEndChanged && !debugLine.IsPrologueEnd ||
+                        isEpilogueBeginChanged && !debugLine.IsEpilogueBegin)
+                    {
+                        writer.WriteU8(DwarfNative.DW_LNS_copy);
+                        isDiscriminatorChanged = debugLine.Discriminator != 0;
+                        hasGeneratedRow = true;
+                    }
+
+                    // DW_LNS_set_basic_block
+                    if (isBasicBlockChanged && debugLine.IsBasicBlock)
+                    {
+                        writer.WriteU8(DwarfNative.DW_LNS_set_basic_block);
+                    }
+
+                    // DW_LNS_set_prologue_end
+                    if (isPrologueEndChanged && debugLine.IsPrologueEnd)
+                    {
+                        writer.WriteU8(DwarfNative.DW_LNS_set_prologue_end);
+                    }
+
+                    // DW_LNS_set_epilogue_begin
+                    if (isEpilogueBeginChanged && debugLine.IsEpilogueBegin)
+                    {
+                        writer.WriteU8(DwarfNative.DW_LNS_set_epilogue_begin);
+                    }
+
+                    // DW_LNS_set_isa
+                    if (isaChanged)
+                    {
+                        writer.WriteU8(DwarfNative.DW_LNS_set_isa);
+                        writer.WriteULEB128(debugLine.Isa);
+                    }
+
+                    // DW_LNE_set_discriminator
+                    if (isDiscriminatorChanged)
+                    {
                         writer.WriteU8(0);
-                        uint dirIndex = _directoryNameToIndex[fileName.Directory];
-
-                        ulong sizeOfInlineFileName = 1;
-                        sizeOfInlineFileName += (ulong)Encoding.UTF8.GetByteCount(fileName.Name) + 1;
-                        sizeOfInlineFileName += DwarfHelper.SizeOfULEB128(dirIndex);
-                        sizeOfInlineFileName += DwarfHelper.SizeOfULEB128(fileName.Time);
-                        sizeOfInlineFileName += DwarfHelper.SizeOfULEB128(fileName.Size);
-
-                        writer.WriteULEB128(sizeOfInlineFileName);
-
-                        writer.WriteU8(DwarfNative.DW_LNE_define_file);
-                        writer.WriteStringUTF8NullTerminated(fileName.Name);
-                        writer.WriteULEB128(dirIndex);
-                        writer.WriteULEB128(fileName.Time);
-                        writer.WriteULEB128(fileName.Size);
+                        writer.WriteULEB128(1 + DwarfHelper.SizeOfULEB128(debugLine.Discriminator));
+                        writer.WriteU8(DwarfNative.DW_LNE_set_discriminator);
+                        writer.WriteULEB128(debugLine.Discriminator);
                     }
-                }
 
-                // DW_LNS_copy
-                if (isBasicBlockChanged && !debugLine.IsBasicBlock ||
-                    isPrologueEndChanged && !debugLine.IsPrologueEnd ||
-                    isEpilogueBeginChanged && !debugLine.IsEpilogueBegin)
-                {
-                    writer.WriteU8(DwarfNative.DW_LNS_copy);
-                    isDiscriminatorChanged = debugLine.Discriminator != 0;
-                    hasGeneratedRow = true;
-                }
-
-                // DW_LNS_set_basic_block
-                if (isBasicBlockChanged && debugLine.IsBasicBlock)
-                {
-                    writer.WriteU8(DwarfNative.DW_LNS_set_basic_block);
-                }
-                
-                // DW_LNS_set_prologue_end
-                if (isPrologueEndChanged && debugLine.IsPrologueEnd)
-                {
-                    writer.WriteU8(DwarfNative.DW_LNS_set_prologue_end);
-                }
-
-                // DW_LNS_set_epilogue_begin
-                if (isEpilogueBeginChanged && debugLine.IsEpilogueBegin)
-                {
-                    writer.WriteU8(DwarfNative.DW_LNS_set_epilogue_begin);
-                }
-                
-                // DW_LNS_set_isa
-                if (isaChanged)
-                {
-                    writer.WriteU8(DwarfNative.DW_LNS_set_isa);
-                    writer.WriteULEB128(debugLine.Isa);
-                }
-
-                // DW_LNE_set_discriminator
-                if (isDiscriminatorChanged)
-                {
-                    writer.WriteU8(0);
-                    writer.WriteULEB128(1 + DwarfHelper.SizeOfULEB128(debugLine.Discriminator));
-                    writer.WriteU8(DwarfNative.DW_LNE_set_discriminator);
-                    writer.WriteULEB128(debugLine.Discriminator);
-                }
-
-                // DW_LNS_negate_stmt
-                if (isStatementChanged)
-                {
-                    writer.WriteU8(DwarfNative.DW_LNS_negate_stmt);
-                }
-
-                bool canEncodeSpecial = !debugLine.IsEndSequence;
-                bool canEncodeLineInSpecialCode = canEncodeSpecial && deltaLine >= LineBase && deltaLine < LineBase + LineRange;
-
-                bool operationAdvancedEncoded = false;
-
-                // Pre-encode address if necessary
-                if (!hasSetAddress)
-                {
-                    writer.WriteU8(0);
-                    writer.WriteULEB128(1 + DwarfHelper.SizeOfUInt(writer.AddressSize));
-                    writer.WriteU8(DwarfNative.DW_LNE_set_address);
-                    writer.WriteAddress(DwarfRelocationTarget.Code, debugLine.Address);
-                    operationAdvancedEncoded = true;
-                    deltaAddress = 0;
-                    hasSetAddress = true;
-                }
-
-                // DW_LNS_advance_line
-                // In case we can't encode the line advance via special code
-                if (!canEncodeLineInSpecialCode)
-                {
-                    if (deltaLine != 0)
+                    // DW_LNS_negate_stmt
+                    if (isStatementChanged)
                     {
-                        writer.WriteU8(DwarfNative.DW_LNS_advance_line);
-                        writer.WriteILEB128(deltaLine);
-                        deltaLine = 0;
+                        writer.WriteU8(DwarfNative.DW_LNS_negate_stmt);
                     }
-                }
 
+                    bool isEndOfSequence = lineIndex + 1 == lines.Count;
+                    bool canEncodeSpecial = !isEndOfSequence;
+                    bool canEncodeLineInSpecialCode = canEncodeSpecial && deltaLine >= LineBase && deltaLine < LineBase + LineRange;
 
-                if (deltaAddress > maxDeltaAddressPerSpecialCode && deltaAddress <= (2U * maxDeltaAddressPerSpecialCode))
-                {
-                    ulong deltaAddressSpecialOpCode255;
+                    bool operationAdvancedEncoded = false;
 
-                    if (Version >= 4)
+                    // Pre-encode address if necessary
+                    if (!hasSetAddress)
                     {
-                        deltaAddressSpecialOpCode255 = (((ulong)previousLineState.OperationIndex + maxOperationAdvance) / MaximumOperationsPerInstruction);
-                        deltaOperationIndex = debugLine.OperationIndex - (byte)((previousLineState.OperationIndex + maxOperationAdvance) % MaximumOperationsPerInstruction);
+                        writer.WriteU8(0);
+                        writer.WriteULEB128(1 + DwarfHelper.SizeOfUInt(writer.AddressSize));
+                        writer.WriteU8(DwarfNative.DW_LNE_set_address);
+                        writer.WriteAddress(DwarfRelocationTarget.Code, debugLine.Address);
+                        operationAdvancedEncoded = true;
+                        deltaAddress = 0;
+                        hasSetAddress = true;
                     }
-                    else
-                    {
-                        deltaAddressSpecialOpCode255 = maxOperationAdvance;
-                        deltaOperationIndex = 0;
-                    }
 
-                    Debug.Assert(deltaAddressSpecialOpCode255 * MinimumInstructionLength < deltaAddress);
-                    deltaAddress -= deltaAddressSpecialOpCode255 * MinimumInstructionLength;
-
-                    writer.WriteU8(DwarfNative.DW_LNS_const_add_pc);
-                }
-
-                var operation_advance = deltaAddress * MaximumOperationsPerInstruction / MinimumInstructionLength + debugLine.OperationIndex;
-
-                bool canEncodeAddressInSpecialCode = false;
-                ulong opcode = 256;
-                if (canEncodeSpecial && (operation_advance > 0 || deltaOperationIndex != 0 || deltaLine != 0))
-                {
-                    opcode = operation_advance * LineRange + opCodeBase + (ulong)(deltaLine - LineBase);
-                    if (opcode > 255)
+                    // DW_LNS_advance_line
+                    // In case we can't encode the line advance via special code
+                    if (!canEncodeLineInSpecialCode)
                     {
                         if (deltaLine != 0)
                         {
-                            opcode = opCodeBase + (ulong)(deltaLine - LineBase);
+                            writer.WriteU8(DwarfNative.DW_LNS_advance_line);
+                            writer.WriteILEB128(deltaLine);
+                            deltaLine = 0;
                         }
+                    }
+
+
+                    if (deltaAddress > maxDeltaAddressPerSpecialCode && deltaAddress <= (2U * maxDeltaAddressPerSpecialCode))
+                    {
+                        ulong deltaAddressSpecialOpCode255;
+
+                        if (Version >= 4)
+                        {
+                            deltaAddressSpecialOpCode255 = (((ulong) previousLineState.OperationIndex + maxOperationAdvance) / MaximumOperationsPerInstruction);
+                            deltaOperationIndex = debugLine.OperationIndex - (byte) ((previousLineState.OperationIndex + maxOperationAdvance) % MaximumOperationsPerInstruction);
+                        }
+                        else
+                        {
+                            deltaAddressSpecialOpCode255 = maxOperationAdvance;
+                            deltaOperationIndex = 0;
+                        }
+
+                        Debug.Assert(deltaAddressSpecialOpCode255 * MinimumInstructionLength < deltaAddress);
+                        deltaAddress -= deltaAddressSpecialOpCode255 * MinimumInstructionLength;
+
+                        writer.WriteU8(DwarfNative.DW_LNS_const_add_pc);
+                    }
+
+                    var operation_advance = deltaAddress * MaximumOperationsPerInstruction / MinimumInstructionLength + debugLine.OperationIndex;
+
+                    bool canEncodeAddressInSpecialCode = false;
+                    ulong opcode = 256;
+                    if (canEncodeSpecial && (operation_advance > 0 || deltaOperationIndex != 0 || deltaLine != 0))
+                    {
+                        opcode = operation_advance * LineRange + opCodeBase + (ulong) (deltaLine - LineBase);
+                        if (opcode > 255)
+                        {
+                            if (deltaLine != 0)
+                            {
+                                opcode = opCodeBase + (ulong) (deltaLine - LineBase);
+                            }
+                        }
+                        else
+                        {
+                            canEncodeAddressInSpecialCode = true;
+                        }
+                    }
+
+                    if (!operationAdvancedEncoded && !canEncodeAddressInSpecialCode)
+                    {
+                        if (deltaAddress > 0 || deltaOperationIndex != 0)
+                        {
+                            writer.WriteU8(DwarfNative.DW_LNS_advance_pc);
+                            writer.WriteULEB128(operation_advance);
+                        }
+                    }
+
+                    // Special opcode
+                    if (opcode <= 255)
+                    {
+                        writer.WriteU8((byte) opcode);
+                        debugLineState.SpecialReset();
+                        hasGeneratedRow = true;
+                    }
+
+                    if (isEndOfSequence)
+                    {
+                        writer.WriteU8(0);
+                        writer.WriteULEB128(1);
+                        writer.WriteU8(DwarfNative.DW_LNE_end_sequence);
+
+                        hasGeneratedRow = true;
+
+                        hasSetAddress = false;
+                        previousLineState = initialState;
+                        previousLineState.Reset(firstFile, true);
                     }
                     else
                     {
-                        canEncodeAddressInSpecialCode = true;
+                        previousLineState = debugLineState;
                     }
-                }
 
-                if (!operationAdvancedEncoded && !canEncodeAddressInSpecialCode)
-                {
-                    if (deltaAddress > 0 || deltaOperationIndex != 0)
+                    if (!hasGeneratedRow)
                     {
-                        writer.WriteU8(DwarfNative.DW_LNS_advance_pc);
-                        writer.WriteULEB128(operation_advance);
+                        writer.WriteU8(DwarfNative.DW_LNS_copy);
                     }
-                }
 
-                // Special opcode
-                if (opcode <= 255)
-                {
-                    writer.WriteU8((byte)opcode);
-                    debugLineState.SpecialReset();
-                    hasGeneratedRow = true;
+                    Debug.Assert(debugLine.Size == writer.Offset - debugLine.Offset, $"Expected Debug Line Size: {debugLine.Size} != Written Size: {writer.Offset - debugLine.Offset}");
                 }
-
-                if (debugLine.IsEndSequence)
-                {
-                    writer.WriteU8(0);
-                    writer.WriteULEB128(1);
-                    writer.WriteU8(DwarfNative.DW_LNE_end_sequence);
-
-                    hasGeneratedRow = true;
-
-                    hasSetAddress = false;
-                    previousLineState = initialState;
-                    previousLineState.Reset(firstFile, true);
-                }
-                else
-                {
-                    previousLineState = debugLineState;
-                }
-
-                if (!hasGeneratedRow)
-                {
-                    writer.WriteU8(DwarfNative.DW_LNS_copy);
-                }
-                
-                Debug.Assert(debugLine.Size == writer.Offset - debugLine.Offset, $"Expected Debug Line Size: {debugLine.Size} != Written Size: {writer.Offset - debugLine.Offset}");
             }
         }
 
@@ -1083,230 +1097,241 @@ namespace LibObjectFile.Dwarf
             maxDeltaAddressPerSpecialCode *= MinimumInstructionLength;
 
             bool hasSetAddress = false;
-            foreach (var debugLine in Lines)
+
+            foreach (var lineSequence in _lineSequences)
             {
-                ulong deltaAddress;
-                int deltaOperationIndex;
-                bool fileNameChanged;
-                int deltaLine;
-                int deltaColumn;
-                bool isStatementChanged;
-                bool isBasicBlockChanged;
-                bool isEndSequenceChanged;
-                bool isPrologueEndChanged;
-                bool isEpilogueBeginChanged;
-                bool isaChanged;
-                bool isDiscriminatorChanged;
+                var lines = lineSequence.Lines;
 
-                bool hasGeneratedRow = false;
+                lineSequence.Offset = sizeOf;
 
-                var debugLineState = debugLine.ToState();
-
-                previousLineState.Delta(debugLineState, out deltaAddress,
-                    out deltaOperationIndex,
-                    out fileNameChanged,
-                    out deltaLine,
-                    out deltaColumn,
-                    out isStatementChanged,
-                    out isBasicBlockChanged,
-                    out isEndSequenceChanged,
-                    out isPrologueEndChanged,
-                    out isEpilogueBeginChanged,
-                    out isaChanged,
-                    out isDiscriminatorChanged);
-
-                debugLine.Offset = sizeOf;
-
-                // DW_LNS_set_column
-                if (deltaColumn != 0)
+                for (var lineIndex = 0; lineIndex < lines.Count; lineIndex++)
                 {
-                    sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNS_set_column);
-                    sizeOf += DwarfHelper.SizeOfULEB128(debugLine.Column); //writer.WriteLEB128(debugLine.Column));
-                }
+                    var debugLine = lines[lineIndex];
+                    ulong deltaAddress;
+                    int deltaOperationIndex;
+                    bool fileNameChanged;
+                    int deltaLine;
+                    int deltaColumn;
+                    bool isStatementChanged;
+                    bool isBasicBlockChanged;
+                    bool isEndSequenceChanged;
+                    bool isPrologueEndChanged;
+                    bool isEpilogueBeginChanged;
+                    bool isaChanged;
+                    bool isDiscriminatorChanged;
 
-                // DW_LNS_set_file or DW_LNE_define_file
-                if (fileNameChanged)
-                {
-                    var fileName = debugLine.File;
+                    bool hasGeneratedRow = false;
 
-                    // DW_LNS_set_file
-                    if (_fileNameToIndex.TryGetValue(fileName, out var fileIndex))
+                    var debugLineState = debugLine.ToState();
+
+                    previousLineState.Delta(debugLineState, out deltaAddress,
+                        out deltaOperationIndex,
+                        out fileNameChanged,
+                        out deltaLine,
+                        out deltaColumn,
+                        out isStatementChanged,
+                        out isBasicBlockChanged,
+                        out isEndSequenceChanged,
+                        out isPrologueEndChanged,
+                        out isEpilogueBeginChanged,
+                        out isaChanged,
+                        out isDiscriminatorChanged);
+
+                    debugLine.Offset = sizeOf;
+
+                    // DW_LNS_set_column
+                    if (deltaColumn != 0)
                     {
-                        sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNS_set_file);
-                        sizeOf += DwarfHelper.SizeOfULEB128(fileIndex); // writer.WriteLEB128(fileIndex);
+                        sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNS_set_column);
+                        sizeOf += DwarfHelper.SizeOfULEB128(debugLine.Column); //writer.WriteLEB128(debugLine.Column));
                     }
-                    else
+
+                    // DW_LNS_set_file or DW_LNE_define_file
+                    if (fileNameChanged)
                     {
-                        // DW_LNE_define_file
+                        var fileName = debugLine.File;
+
+                        // DW_LNS_set_file
+                        if (_fileNameToIndex.TryGetValue(fileName, out var fileIndex))
+                        {
+                            sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNS_set_file);
+                            sizeOf += DwarfHelper.SizeOfULEB128(fileIndex); // writer.WriteLEB128(fileIndex);
+                        }
+                        else
+                        {
+                            // DW_LNE_define_file
+                            sizeOf += 1; // writer.WriteU8(0);
+                            uint dirIndex = _directoryNameToIndex[fileName.Directory];
+
+                            ulong sizeOfInlineFileName = 1;
+                            sizeOfInlineFileName += (ulong) Encoding.UTF8.GetByteCount(fileName.Name) + 1;
+                            sizeOfInlineFileName += DwarfHelper.SizeOfULEB128(dirIndex);
+                            sizeOfInlineFileName += DwarfHelper.SizeOfULEB128(fileName.Time);
+                            sizeOfInlineFileName += DwarfHelper.SizeOfULEB128(fileName.Size);
+
+                            sizeOf += DwarfHelper.SizeOfULEB128(sizeOfInlineFileName);
+                            sizeOf += sizeOfInlineFileName;
+                        }
+                    }
+
+                    // DW_LNS_copy
+                    if (isBasicBlockChanged && !debugLine.IsBasicBlock ||
+                        isPrologueEndChanged && !debugLine.IsPrologueEnd ||
+                        isEpilogueBeginChanged && !debugLine.IsEpilogueBegin)
+                    {
+                        sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNS_copy);
+                        isDiscriminatorChanged = debugLine.Discriminator != 0;
+                        hasGeneratedRow = true;
+                    }
+
+                    // DW_LNS_set_basic_block
+                    if (isBasicBlockChanged && debugLine.IsBasicBlock)
+                    {
+                        sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNS_set_basic_block);
+                    }
+
+                    // DW_LNS_set_prologue_end
+                    if (isPrologueEndChanged && debugLine.IsPrologueEnd)
+                    {
+                        sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNS_set_prologue_end);
+                    }
+
+                    // DW_LNS_set_epilogue_begin
+                    if (isEpilogueBeginChanged && debugLine.IsEpilogueBegin)
+                    {
+                        sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNS_set_epilogue_begin);
+                    }
+
+                    // DW_LNS_set_isa
+                    if (isaChanged)
+                    {
+                        sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNS_set_isa);
+                        sizeOf += DwarfHelper.SizeOfULEB128(debugLine.Isa); // writer.WriteLEB128(debugLine.Isa);
+                    }
+
+                    // DW_LNE_set_discriminator
+                    if (isDiscriminatorChanged)
+                    {
                         sizeOf += 1; // writer.WriteU8(0);
-                        uint dirIndex = _directoryNameToIndex[fileName.Directory];
-
-                        ulong sizeOfInlineFileName = 1;
-                        sizeOfInlineFileName += (ulong)Encoding.UTF8.GetByteCount(fileName.Name) + 1;
-                        sizeOfInlineFileName += DwarfHelper.SizeOfULEB128(dirIndex);
-                        sizeOfInlineFileName += DwarfHelper.SizeOfULEB128(fileName.Time);
-                        sizeOfInlineFileName += DwarfHelper.SizeOfULEB128(fileName.Size);
-
-                        sizeOf += DwarfHelper.SizeOfULEB128(sizeOfInlineFileName);
-                        sizeOf += sizeOfInlineFileName;
+                        var sizeOfDiscriminator = DwarfHelper.SizeOfULEB128(debugLine.Discriminator);
+                        sizeOf += DwarfHelper.SizeOfULEB128(1 + sizeOfDiscriminator); // writer.WriteLEB128(1 + DwarfHelper.SizeOfLEB128(debugLine.Discriminator));
+                        sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNE_set_discriminator);
+                        sizeOf += sizeOfDiscriminator; // writer.WriteLEB128(debugLine.Discriminator);
                     }
-                }
 
-                // DW_LNS_copy
-                if (isBasicBlockChanged && !debugLine.IsBasicBlock ||
-                    isPrologueEndChanged && !debugLine.IsPrologueEnd ||
-                    isEpilogueBeginChanged && !debugLine.IsEpilogueBegin)
-                {
-                    sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNS_copy);
-                    isDiscriminatorChanged = debugLine.Discriminator != 0;
-                    hasGeneratedRow = true;
-                }
-
-                // DW_LNS_set_basic_block
-                if (isBasicBlockChanged && debugLine.IsBasicBlock)
-                {
-                    sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNS_set_basic_block);
-                }
-
-                // DW_LNS_set_prologue_end
-                if (isPrologueEndChanged && debugLine.IsPrologueEnd)
-                {
-                    sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNS_set_prologue_end);
-                }
-
-                // DW_LNS_set_epilogue_begin
-                if (isEpilogueBeginChanged && debugLine.IsEpilogueBegin)
-                {
-                    sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNS_set_epilogue_begin);
-                }
-
-                // DW_LNS_set_isa
-                if (isaChanged)
-                {
-                    sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNS_set_isa);
-                    sizeOf += DwarfHelper.SizeOfULEB128(debugLine.Isa); // writer.WriteLEB128(debugLine.Isa);
-                }
-
-                // DW_LNE_set_discriminator
-                if (isDiscriminatorChanged)
-                {
-                    sizeOf += 1; // writer.WriteU8(0);
-                    var sizeOfDiscriminator = DwarfHelper.SizeOfULEB128(debugLine.Discriminator);
-                    sizeOf += DwarfHelper.SizeOfULEB128(1 + sizeOfDiscriminator); // writer.WriteLEB128(1 + DwarfHelper.SizeOfLEB128(debugLine.Discriminator));
-                    sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNE_set_discriminator);
-                    sizeOf += sizeOfDiscriminator; // writer.WriteLEB128(debugLine.Discriminator);
-                }
-
-                // DW_LNS_negate_stmt
-                if (isStatementChanged)
-                {
-                    sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNS_negate_stmt);
-                }
-
-                bool canEncodeSpecial = !debugLine.IsEndSequence;
-                bool canEncodeLineInSpecialCode = canEncodeSpecial && deltaLine >= LineBase && deltaLine < LineBase + LineRange;
-                bool operationAdvancedEncoded = false;
-
-                if (!hasSetAddress)
-                {
-                    sizeOf += 1; // writer.WriteU8(0);
-                    var sizeOfAddress = DwarfHelper.SizeOfUInt(AddressSize);
-                    sizeOf += DwarfHelper.SizeOfULEB128(1 + sizeOfAddress); // writer.WriteLEB128(DwarfHelper.SizeOfNativeInt(writer.IsTargetAddress64Bit));
-                    sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNE_set_address);
-                    sizeOf += sizeOfAddress; // writer.WriteLEB128(debugLine.Address);
-                    operationAdvancedEncoded = true;
-                    deltaAddress = 0;
-                    hasSetAddress = true;
-                }
-                else if (deltaAddress > maxDeltaAddressPerSpecialCode && deltaAddress <= (2U * maxDeltaAddressPerSpecialCode))
-                {
-                    ulong deltaAddressSpecialOpCode255;
-
-                    if (Version >= 4)
+                    // DW_LNS_negate_stmt
+                    if (isStatementChanged)
                     {
-                        deltaAddressSpecialOpCode255 = (((ulong)previousLineState.OperationIndex + maxOperationAdvance) / MaximumOperationsPerInstruction);
-                        deltaOperationIndex = debugLine.OperationIndex - (byte)((previousLineState.OperationIndex + maxOperationAdvance) % MaximumOperationsPerInstruction);
+                        sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNS_negate_stmt);
                     }
-                    else
+
+                    bool isEndOfSequence = lineIndex + 1 == lines.Count;
+                    bool canEncodeSpecial = !isEndOfSequence;
+                    bool canEncodeLineInSpecialCode = canEncodeSpecial && deltaLine >= LineBase && deltaLine < LineBase + LineRange;
+                    bool operationAdvancedEncoded = false;
+
+                    if (!hasSetAddress)
                     {
-                        deltaAddressSpecialOpCode255 = maxOperationAdvance;
-                        deltaOperationIndex = 0;
+                        sizeOf += 1; // writer.WriteU8(0);
+                        var sizeOfAddress = DwarfHelper.SizeOfUInt(AddressSize);
+                        sizeOf += DwarfHelper.SizeOfULEB128(1 + sizeOfAddress); // writer.WriteLEB128(DwarfHelper.SizeOfNativeInt(writer.IsTargetAddress64Bit));
+                        sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNE_set_address);
+                        sizeOf += sizeOfAddress; // writer.WriteLEB128(debugLine.Address);
+                        operationAdvancedEncoded = true;
+                        deltaAddress = 0;
+                        hasSetAddress = true;
                     }
-
-                    Debug.Assert(deltaAddressSpecialOpCode255 * MinimumInstructionLength < deltaAddress);
-                    deltaAddress -= deltaAddressSpecialOpCode255 * MinimumInstructionLength;
-
-                    sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNS_const_add_pc);
-                }
-
-                // DW_LNS_advance_line
-                if (!canEncodeLineInSpecialCode)
-                {
-                    if (deltaLine != 0)
+                    else if (deltaAddress > maxDeltaAddressPerSpecialCode && deltaAddress <= (2U * maxDeltaAddressPerSpecialCode))
                     {
-                        sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNS_advance_line);
-                        sizeOf += DwarfHelper.SizeOfILEB128(deltaLine); // writer.WriteSignedLEB128(deltaLine);
-                        deltaLine = 0;
+                        ulong deltaAddressSpecialOpCode255;
+
+                        if (Version >= 4)
+                        {
+                            deltaAddressSpecialOpCode255 = (((ulong) previousLineState.OperationIndex + maxOperationAdvance) / MaximumOperationsPerInstruction);
+                            deltaOperationIndex = debugLine.OperationIndex - (byte) ((previousLineState.OperationIndex + maxOperationAdvance) % MaximumOperationsPerInstruction);
+                        }
+                        else
+                        {
+                            deltaAddressSpecialOpCode255 = maxOperationAdvance;
+                            deltaOperationIndex = 0;
+                        }
+
+                        Debug.Assert(deltaAddressSpecialOpCode255 * MinimumInstructionLength < deltaAddress);
+                        deltaAddress -= deltaAddressSpecialOpCode255 * MinimumInstructionLength;
+
+                        sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNS_const_add_pc);
                     }
-                }
 
-                var operation_advance = deltaAddress * MaximumOperationsPerInstruction / MinimumInstructionLength + debugLine.OperationIndex;
-
-                bool canEncodeAddress = false;
-                ulong opcode = 256;
-                if (canEncodeSpecial && (operation_advance > 0 || deltaOperationIndex > 0 || deltaLine != 0))
-                {
-                    opcode = operation_advance * LineRange + opCodeBase + (ulong)(deltaLine - LineBase);
-                    if (opcode > 255)
+                    // DW_LNS_advance_line
+                    if (!canEncodeLineInSpecialCode)
                     {
                         if (deltaLine != 0)
                         {
-                            opcode = opCodeBase + (ulong)(deltaLine - LineBase);
+                            sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNS_advance_line);
+                            sizeOf += DwarfHelper.SizeOfILEB128(deltaLine); // writer.WriteSignedLEB128(deltaLine);
+                            deltaLine = 0;
                         }
+                    }
+
+                    var operation_advance = deltaAddress * MaximumOperationsPerInstruction / MinimumInstructionLength + debugLine.OperationIndex;
+
+                    bool canEncodeAddress = false;
+                    ulong opcode = 256;
+                    if (canEncodeSpecial && (operation_advance > 0 || deltaOperationIndex > 0 || deltaLine != 0))
+                    {
+                        opcode = operation_advance * LineRange + opCodeBase + (ulong) (deltaLine - LineBase);
+                        if (opcode > 255)
+                        {
+                            if (deltaLine != 0)
+                            {
+                                opcode = opCodeBase + (ulong) (deltaLine - LineBase);
+                            }
+                        }
+                        else
+                        {
+                            canEncodeAddress = true;
+                        }
+                    }
+
+                    if (!operationAdvancedEncoded && !canEncodeAddress)
+                    {
+                        if (deltaAddress > 0 || deltaOperationIndex > 0)
+                        {
+                            sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNS_advance_pc);
+                            sizeOf += DwarfHelper.SizeOfULEB128(operation_advance); // writer.WriteLEB128(operation_advance);
+                        }
+                    }
+
+                    // Special opcode
+                    if (opcode <= 255)
+                    {
+                        sizeOf += 1; // writer.WriteU8((byte)opcode);
+                        debugLineState.SpecialReset();
+                        hasGeneratedRow = true;
+                    }
+
+                    if (isEndOfSequence)
+                    {
+                        sizeOf += 3; // writer.WriteU8(0);
+                        // writer.WriteLEB128(1);
+                        // writer.WriteU8(DwarfNative.DW_LNE_end_sequence);
+                        previousLineState = initialState;
+                        previousLineState.Reset(firstFile, true);
+                        hasGeneratedRow = true;
                     }
                     else
                     {
-                        canEncodeAddress = true;
+                        previousLineState = debugLineState;
                     }
-                }
 
-                if (!operationAdvancedEncoded && !canEncodeAddress)
-                {
-                    if (deltaAddress > 0 || deltaOperationIndex > 0)
+                    if (!hasGeneratedRow)
                     {
-                        sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNS_advance_pc);
-                        sizeOf += DwarfHelper.SizeOfULEB128(operation_advance); // writer.WriteLEB128(operation_advance);
+                        sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNS_copy);
                     }
-                }
 
-                // Special opcode
-                if (opcode <= 255)
-                {
-                    sizeOf += 1; // writer.WriteU8((byte)opcode);
-                    debugLineState.SpecialReset();
-                    hasGeneratedRow = true;
+                    debugLine.Size = sizeOf - debugLine.Offset;
                 }
-                
-                if (debugLine.IsEndSequence)
-                {
-                    sizeOf += 3; // writer.WriteU8(0);
-                                 // writer.WriteLEB128(1);
-                                 // writer.WriteU8(DwarfNative.DW_LNE_end_sequence);
-                    previousLineState = initialState;
-                    previousLineState.Reset(firstFile, true);
-                    hasGeneratedRow = true;
-                }
-                else
-                {
-                    previousLineState = debugLineState;
-                }
-
-                if (!hasGeneratedRow)
-                {
-                    sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNS_copy);
-                }
-
-                debugLine.Size = sizeOf - debugLine.Offset;
+                lineSequence.Size = sizeOf - lineSequence.Offset;
             }
         }
         
@@ -1328,7 +1353,7 @@ namespace LibObjectFile.Dwarf
 
         public override string ToString()
         {
-            return $"Section .debug_line, {nameof(Version)}: {Version}, {nameof(Is64BitEncoding)}: {Is64BitEncoding}, {nameof(FileNames)}: {FileNames.Count}, {nameof(Lines)}: {Lines.Count}";
+            return $"Section .debug_line, {nameof(Version)}: {Version}, {nameof(Is64BitEncoding)}: {Is64BitEncoding}, {nameof(FileNames)}: {FileNames.Count}, {nameof(LineSequences)}: {LineSequences.Count}";
         }
     }
 }

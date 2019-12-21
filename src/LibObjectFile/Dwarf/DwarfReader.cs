@@ -22,7 +22,7 @@ namespace LibObjectFile.Dwarf
             _registeredDIEPerSection = new Dictionary<ulong, DwarfDIE>();
             _unresolvedDIECompilationUnitReference = new List<DwarfDIEReference>();
             _attributesWithUnresolvedDIESectionReference = new List<DwarfDIEReference>();
-            OffsetToDebugLine = new Dictionary<ulong, DwarfLine>();
+            OffsetToDebugLineSequence = new Dictionary<ulong, DwarfLineSequence>();
         }
 
         public override bool IsReadOnly { get; }
@@ -33,7 +33,7 @@ namespace LibObjectFile.Dwarf
 
         internal DwarfAttributeDescriptor CurrentAttributeDescriptor { get; set; }
 
-        internal Dictionary<ulong, DwarfLine> OffsetToDebugLine { get; }
+        internal Dictionary<ulong, DwarfLineSequence> OffsetToDebugLineSequence { get; }
         
         internal void RegisterDIE(DwarfDIE die)
         {
