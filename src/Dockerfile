@@ -4,8 +4,6 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.0
 RUN apt-get update && \
     apt-get -y install build-essential gcc
 
-WORKDIR /app
-
-COPY ./ ./
+WORKDIR /src
 
 CMD dotnet test
