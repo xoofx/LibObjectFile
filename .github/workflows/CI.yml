@@ -30,6 +30,12 @@ jobs:
     - name: Pack
       run: dotnet pack src --configuration Release
 
+    - runs:
+        using: 'docker'
+        image: 'Dockerfile'
+        args:
+          - ${{ inputs.who-to-greet }}
+
     - name: Publish
       if: github.event_name == 'push'
       run: |      
@@ -38,4 +44,7 @@ jobs:
           else
               echo publish is only enabled by tagging with a release tag
           fi
-      
+
+runs:
+  using: 'docker'
+  image: 'src/Dockerfile'
