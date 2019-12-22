@@ -99,3 +99,9 @@ This software is released under the [BSD-Clause 2 license](https://github.com/lu
 ## Author
 
 Alexandre MUTEL aka [xoofx](http://xoofx.com)
+
+## Supporters
+
+Supports this project with a monthly donation and help me continue improving it. \[[Become a supporter](https://github.com/sponsors/xoofx)\]
+
+[<img src="https://github.com/bruno-garcia.png?size=200" width="64px;" style="border-radius: 50%" alt="bruno-garcia"/>](https://github.com/bruno-garcia)
