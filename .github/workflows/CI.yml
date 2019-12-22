@@ -30,12 +30,6 @@ jobs:
     - name: Pack
       run: dotnet pack src --configuration Release
 
-    - runs:
-        using: 'docker'
-        image: 'Dockerfile'
-        args:
-          - ${{ inputs.who-to-greet }}
-
     - name: Publish
       if: github.event_name == 'push'
       run: |      
