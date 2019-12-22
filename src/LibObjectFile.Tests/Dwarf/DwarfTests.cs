@@ -255,8 +255,7 @@ namespace LibObjectFile.Tests.Dwarf
         public void CreateDwarf()
         {
             // Create ELF object
-            var elf = new ElfObjectFile {FileType = ElfFileType.Relocatable};
-            elf.FileClass = ElfFileClass.Is64;
+            var elf = new ElfObjectFile(ElfArch.X86_64);
 
             var codeSection = new ElfBinarySection(new MemoryStream(new byte[0x64])).ConfigureAs(ElfSectionSpecialType.Text);
             elf.AddSection(codeSection);

@@ -67,12 +67,17 @@ namespace LibObjectFile.Elf
                 return false;
             }
 
+            CopyIndentFrom(objectFile, ident);
+            return true;
+        }
+
+        internal static void CopyIndentFrom(this ElfObjectFile objectFile, ReadOnlySpan<byte> ident)
+        {
             objectFile.FileClass = (ElfFileClass)ident[EI_CLASS];
             objectFile.Encoding = (ElfEncoding)ident[EI_DATA];
             objectFile.Version = ident[EI_VERSION];
             objectFile.OSABI = new ElfOSABIEx(ident[EI_OSABI]);
             objectFile.AbiVersion = ident[EI_ABIVERSION];
-            return true;
         }
     }
 }

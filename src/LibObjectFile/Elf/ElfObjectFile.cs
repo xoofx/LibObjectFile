@@ -27,20 +27,38 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Creates a new instance with the default sections (null and a shadow program header table).
         /// </summary>
-        public ElfObjectFile() : this(true)
+        public ElfObjectFile(ElfArch arch) : this(true)
         {
+            Arch = arch;
+            switch (arch)
+            {
+                case ElfArch.I386:
+                    FileClass = ElfFileClass.Is32;
+                    Encoding = ElfEncoding.Lsb;
+                    break;
+                case ElfArch.X86_64:
+                    FileClass = ElfFileClass.Is64;
+                    Encoding = ElfEncoding.Lsb;
+                    break;
+                case ElfArch.ARM:
+                    FileClass = ElfFileClass.Is32;
+                    Encoding = ElfEncoding.Lsb; // not 100% valid, but ok for a default
+                    break;
+                case ElfArch.AARCH64:
+                    FileClass = ElfFileClass.Is64;
+                    Encoding = ElfEncoding.Lsb; // not 100% valid, but ok for a default
+                    break;
+
+                // TODO: Add support for more arch
+            }
+            Version = ElfNative.EV_CURRENT;
+            FileType = ElfFileType.Relocatable;
         }
 
         internal ElfObjectFile(bool addDefaultSections)
         {
             _segments = new List<ElfSegment>();
             _sections = new List<ElfSection>();
-            FileClass = ElfFileClass.Is64;
-            OSABI = ElfOSABI.NONE;
-            Encoding = ElfEncoding.Lsb;
-            FileType = ElfFileType.Relocatable;
-            Arch = ElfArch.X86_64;
-            Version = ElfNative.EV_CURRENT;
             Layout = new ElfObjectLayout();
 
             if (addDefaultSections)
@@ -619,6 +637,33 @@ namespace LibObjectFile.Elf
             return false;
         }
 
+        private static bool TryReadElfObjectFileHeader(Stream stream, out ElfObjectFile file)
+        {
+            if (stream == null) throw new ArgumentNullException(nameof(stream));
+
+            var ident = ArrayPool<byte>.Shared.Rent(EI_NIDENT);
+            file = null;
+            try
+            {
+                var startPosition = stream.Position;
+                var length = stream.Read(ident, 0, EI_NIDENT);
+                stream.Position = startPosition;
+
+                if (length == EI_NIDENT && (ident[EI_MAG0] == ELFMAG0 && ident[EI_MAG1] == ELFMAG1 && ident[EI_MAG2] == ELFMAG2 && ident[EI_MAG3] == ELFMAG3))
+                {
+                    file =new ElfObjectFile(false);
+                    file.CopyIndentFrom(ident);
+                    return true;
+                }
+            }
+            finally
+            {
+                ArrayPool<byte>.Shared.Return(ident);
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Reads an <see cref="ElfObjectFile"/> from the specified stream.
         /// </summary>
@@ -646,18 +691,14 @@ namespace LibObjectFile.Elf
         {
             if (stream == null) throw new ArgumentNullException(nameof(stream));
 
-            objectFile = null;
-
-            if (!IsElf(stream, out var encoding))
+            if (!TryReadElfObjectFileHeader(stream, out objectFile))
             {
                 diagnostics = new DiagnosticBag();
                 diagnostics.Error(DiagnosticId.ELF_ERR_InvalidHeaderMagic, "ELF magic header not found");
                 return false;
             }
 
-            objectFile = new ElfObjectFile(false) { Encoding = encoding };
             options ??= new ElfReaderOptions();
-
             var reader = ElfReader.Create(objectFile, stream, options);
             diagnostics = reader.Diagnostics;
 
