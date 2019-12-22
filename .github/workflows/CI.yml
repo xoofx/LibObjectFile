@@ -10,6 +10,7 @@ on:
 
 jobs:
   docker-tests:
+    runs-on: ubuntu-18.04
     using: 'docker'
     image: 'src/Dockerfile'
   build:
