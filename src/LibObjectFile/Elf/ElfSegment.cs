@@ -59,8 +59,6 @@ namespace LibObjectFile.Elf
                 Offset = Range.Offset;
             }
             
-            bool isRangeValid = true;
-
             if (Range.IsEmpty)
             {
                 //diagnostics.Error($"Invalid empty {nameof(Range)} in {this}. An {nameof(ElfSegment)} requires to be attached to a section or a range of section or a {nameof(ElfShadowSection)}");
@@ -74,25 +72,21 @@ namespace LibObjectFile.Elf
                 if (!AlignHelper.IsPowerOfTwo(alignment))
                 {
                     diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentAlignmentForLoad, $"Invalid segment alignment requirements: Alignment = {alignment} must be a power of 2");
-                    isRangeValid = false;
                 }
 
                 if (Range.BeginSection.Parent == null)
                 {
                     diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeBeginSectionParent, $"Invalid null parent {nameof(Range)}.{nameof(Range.BeginSection)} in {this}. The section must be attached to the same {nameof(ElfObjectFile)} than this instance");
-                    isRangeValid = false;
                 }
 
                 if (Range.EndSection.Parent == null)
                 {
                     diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeEndSectionParent, $"Invalid null parent {nameof(Range)}.{nameof(Range.EndSection)} in {this}. The section must be attached to the same {nameof(ElfObjectFile)} than this instance");
-                    isRangeValid = false;
                 }
 
                 if (Range.BeginOffset >= Range.BeginSection.Size)
                 {
                     diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeBeginOffset, $"Invalid {nameof(Range)}.{nameof(Range.BeginOffset)}: {Range.BeginOffset} cannot be >= {nameof(Range.BeginSection)}.{nameof(ElfSection.Size)}: {Range.BeginSection.Size} in {this}. The offset must be within the section");
-                    isRangeValid = false;
                 }
                 else
                 {
@@ -104,14 +98,12 @@ namespace LibObjectFile.Elf
                         if ((alignment % 4096) != 0)
                         {
                             diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentAlignmentForLoad, $"Invalid {nameof(ElfNative.PT_LOAD)} segment alignment requirements: {alignment} must be multiple of the Page Size {4096}");
-                            isRangeValid = false;
                         }
 
                         var mod = (VirtualAddress - Range.Offset) & (alignment - 1);
                         if (mod != 0)
                         {
                             diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentVirtualAddressOrOffset, $"Invalid {nameof(ElfNative.PT_LOAD)} segment alignment requirements: (VirtualAddress - Range.Offset) & (Alignment - 1) == {mod}  while it must be == 0");
-                            isRangeValid = false;
                         }
                     }
                 }
@@ -119,7 +111,6 @@ namespace LibObjectFile.Elf
                 if ((Range.EndOffset >= 0 && (ulong)Range.EndOffset >= Range.EndSection.Size))
                 {
                     diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeEndOffset, $"Invalid {nameof(Range)}.{nameof(Range.EndOffset)}: {Range.EndOffset} cannot be >= {nameof(Range)}.{nameof(ElfSegmentRange.EndSection)}.{nameof(ElfSection.Size)}: {Range.EndSection.Size} in {this}. The offset must be within the section");
-                    isRangeValid = false;
                 }
                 else if (Range.EndOffset < 0)
                 {
@@ -127,7 +118,6 @@ namespace LibObjectFile.Elf
                     if (endOffset < 0)
                     {
                         diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeEndOffset, $"Invalid relative {nameof(Range)}.{nameof(Range.EndOffset)}: {Range.EndOffset}. The resulting end offset {endOffset} with {nameof(Range)}.{nameof(ElfSegmentRange.EndSection)}.{nameof(ElfSection.Size)}: {Range.EndSection.Size} cannot be < 0 in {this}. The offset must be within the section");
-                        isRangeValid = false;
                     }
                 }
 
@@ -136,7 +126,6 @@ namespace LibObjectFile.Elf
                     if (Range.BeginSection.Index > Range.EndSection.Index)
                     {
                         diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeIndices, $"Invalid index order between {nameof(Range)}.{nameof(ElfSegmentRange.BeginSection)}.{nameof(ElfSegment.Index)}: {Range.BeginSection.Index} and {nameof(Range)}.{nameof(ElfSegmentRange.EndSection)}.{nameof(ElfSegment.Index)}: {Range.EndSection.Index} in {this}. The from index must be <= to the end index.");
-                        isRangeValid = false;
                     }
                 }
             }

@@ -197,8 +197,6 @@ namespace LibObjectFile.Tests.Elf
         [Test]
         public void SimpleProgramHeaderAndCodeSectionAndSymbolSectionAndRelocation()
         {
-            var arch = ElfArch.X86_64;
-
             var elf = new ElfObjectFile();
 
             var codeStream = new MemoryStream();
