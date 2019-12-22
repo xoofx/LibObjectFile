@@ -27,14 +27,14 @@ namespace LibObjectFile.Tests.Elf
         [Test]
         public void SimpleEmptyWithDefaultSections()
         {
-            var elf = new ElfObjectFile();
+            var elf = new ElfObjectFile(ElfArch.X86_64);
             AssertReadElf(elf, "empty_default.elf");
         }
 
         [Test]
         public void SimpleEmpty()
         {
-            var elf = new ElfObjectFile();
+            var elf = new ElfObjectFile(ElfArch.X86_64);
             for (int i = elf.Sections.Count - 1; i >= 0; i--)
             {
                 elf.RemoveSectionAt(i);
@@ -45,7 +45,7 @@ namespace LibObjectFile.Tests.Elf
         [Test]
         public void SimpleCodeSection()
         {
-            var elf = new ElfObjectFile();
+            var elf = new ElfObjectFile(ElfArch.X86_64);
 
             var codeStream = new MemoryStream();
             codeStream.Write(Encoding.UTF8.GetBytes("This is a text"));
@@ -61,7 +61,7 @@ namespace LibObjectFile.Tests.Elf
         [Test]
         public void SimpleCodeSectionAndSymbolSection()
         {
-            var elf = new ElfObjectFile();
+            var elf = new ElfObjectFile(ElfArch.X86_64);
 
             var codeStream = new MemoryStream();
             codeStream.Write(Encoding.UTF8.GetBytes("This is a text"));
@@ -109,7 +109,7 @@ namespace LibObjectFile.Tests.Elf
         [Test]
         public void SimpleProgramHeaderAndCodeSectionAndSymbolSection()
         {
-            var elf = new ElfObjectFile();
+            var elf = new ElfObjectFile(ElfArch.X86_64);
 
             var codeStream = new MemoryStream();
             codeStream.Write(new byte[4096]);
@@ -197,7 +197,7 @@ namespace LibObjectFile.Tests.Elf
         [Test]
         public void SimpleProgramHeaderAndCodeSectionAndSymbolSectionAndRelocation()
         {
-            var elf = new ElfObjectFile();
+            var elf = new ElfObjectFile(ElfArch.X86_64);
 
             var codeStream = new MemoryStream();
             codeStream.Write(new byte[4096]);
@@ -349,7 +349,7 @@ namespace LibObjectFile.Tests.Elf
         [Test]
         public void TestAlignedSection()
         {
-            var elf = new ElfObjectFile();
+            var elf = new ElfObjectFile(ElfArch.X86_64);
 
             // By default 0x1000
             var alignedSection = new ElfAlignedShadowSection();
