@@ -9,6 +9,9 @@ on:
   pull_request:
 
 jobs:
+  docker-tests:
+    using: 'docker'
+    image: 'src/Dockerfile'
   build:
     runs-on: ubuntu-18.04
 
@@ -38,7 +41,3 @@ jobs:
           else
               echo publish is only enabled by tagging with a release tag
           fi
-
-runs:
-  using: 'docker'
-  image: 'src/Dockerfile'
