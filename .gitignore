@@ -218,3 +218,9 @@ FakesAssemblies/
 **/*.Server/GeneratedArtifacts
 **/*.Server/ModelManifest.xml
 _Pvt_Extensions
+
+# macOS
+.DS_Store
+
+# JetBrains Rider
+.idea/
