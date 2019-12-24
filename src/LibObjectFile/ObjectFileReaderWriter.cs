@@ -174,7 +174,7 @@ namespace LibObjectFile
         /// <param name="sizeToRead">Size of the element to read (might be smaller or bigger).</param>
         /// <param name="data">The data read.</param>
         /// <returns><c>true</c> if reading was successful. <c>false</c> otherwise.</returns>
-        public unsafe bool TryReadInteger<T>(int sizeToRead, out T data) where T : unmanaged
+        public unsafe bool TryReadData<T>(int sizeToRead, out T data) where T : unmanaged
         {
             if (sizeToRead <= 0) throw new ArgumentOutOfRangeException(nameof(sizeToRead));
 

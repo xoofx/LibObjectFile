@@ -74,7 +74,7 @@ namespace LibObjectFile.Elf
             {
                 ElfNative.Elf32_Sym sym;
                 ulong streamOffset = (ulong)reader.Stream.Position;
-                if (!reader.TryReadInteger((int)OriginalTableEntrySize, out sym))
+                if (!reader.TryReadData((int)OriginalTableEntrySize, out sym))
                 {
                     reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteSymbolEntry32Size, $"Unable to read entirely the symbol entry [{i}] from {Type} section [{Index}]. Not enough data (size: {OriginalTableEntrySize}) read at offset {streamOffset} from the stream");
                 }
@@ -107,7 +107,7 @@ namespace LibObjectFile.Elf
             {
                 ElfNative.Elf64_Sym sym;
                 ulong streamOffset = (ulong)reader.Stream.Position;
-                if (!reader.TryReadInteger((int)OriginalTableEntrySize, out sym))
+                if (!reader.TryReadData((int)OriginalTableEntrySize, out sym))
                 {
                     reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteSymbolEntry64Size, $"Unable to read entirely the symbol entry [{i}] from {Type} section [{Index}]. Not enough data (size: {OriginalTableEntrySize}) read at offset {streamOffset} from the stream");
                 }

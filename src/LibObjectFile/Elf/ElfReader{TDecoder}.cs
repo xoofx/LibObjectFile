@@ -66,7 +66,7 @@ namespace LibObjectFile.Elf
         {
             ElfNative.Elf32_Ehdr hdr;
             ulong streamOffset = (ulong)Stream.Position;
-            if (!TryReadInteger(sizeof(ElfNative.Elf32_Ehdr), out hdr))
+            if (!TryReadData(sizeof(ElfNative.Elf32_Ehdr), out hdr))
             {
                 Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteHeader32Size, $"Unable to read entirely Elf header. Not enough data (size: {sizeof(ElfNative.Elf32_Ehdr)}) read at offset {streamOffset} from the stream");
             }
@@ -95,7 +95,7 @@ namespace LibObjectFile.Elf
         {
             ElfNative.Elf64_Ehdr hdr;
             ulong streamOffset = (ulong)Stream.Position;
-            if (!TryReadInteger(sizeof(ElfNative.Elf64_Ehdr), out hdr))
+            if (!TryReadData(sizeof(ElfNative.Elf64_Ehdr), out hdr))
             {
                 Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteHeader64Size, $"Unable to read entirely Elf header. Not enough data (size: {sizeof(ElfNative.Elf64_Ehdr)}) read at offset {streamOffset} from the stream");
             }
@@ -152,7 +152,7 @@ namespace LibObjectFile.Elf
         private ElfSegment ReadProgramHeader32(int phdrIndex)
         {
             var streamOffset = Stream.Position;
-            if (!TryReadInteger(Layout.SizeOfSectionHeaderEntry, out ElfNative.Elf32_Phdr hdr))
+            if (!TryReadData(Layout.SizeOfSectionHeaderEntry, out ElfNative.Elf32_Phdr hdr))
             {
                 Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteProgramHeader32Size, $"Unable to read entirely program header [{phdrIndex}]. Not enough data (size: {Layout.SizeOfProgramHeaderEntry}) read at offset {streamOffset} from the stream");
             }
@@ -173,7 +173,7 @@ namespace LibObjectFile.Elf
         private ElfSegment ReadProgramHeader64(int phdrIndex)
         {
             var streamOffset = Stream.Position;
-            if (!TryReadInteger(Layout.SizeOfSectionHeaderEntry, out ElfNative.Elf64_Phdr hdr))
+            if (!TryReadData(Layout.SizeOfSectionHeaderEntry, out ElfNative.Elf64_Phdr hdr))
             {
                 Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteProgramHeader64Size, $"Unable to read entirely program header [{phdrIndex}]. Not enough data (size: {Layout.SizeOfProgramHeaderEntry}) read at offset {streamOffset} from the stream");
             }
@@ -236,7 +236,7 @@ namespace LibObjectFile.Elf
         private ElfSection ReadSectionTableEntry32(int sectionIndex)
         {
             var streamOffset = Stream.Position;
-            if (!TryReadInteger(Layout.SizeOfSectionHeaderEntry, out ElfNative.Elf32_Shdr rawSection))
+            if (!TryReadData(Layout.SizeOfSectionHeaderEntry, out ElfNative.Elf32_Shdr rawSection))
             {
                 Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteSectionHeader32Size, $"Unable to read entirely section header [{sectionIndex}]. Not enough data (size: {Layout.SizeOfSectionHeaderEntry}) read at offset {streamOffset} from the stream");
             }
@@ -270,7 +270,7 @@ namespace LibObjectFile.Elf
         private ElfSection ReadSectionTableEntry64(int sectionIndex)
         {
             var streamOffset = Stream.Position;
-            if (!TryReadInteger(Layout.SizeOfSectionHeaderEntry, out ElfNative.Elf64_Shdr rawSection))
+            if (!TryReadData(Layout.SizeOfSectionHeaderEntry, out ElfNative.Elf64_Shdr rawSection))
             {
                 Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteSectionHeader64Size, $"Unable to read entirely section header [{sectionIndex}]. Not enough data (size: {Layout.SizeOfSectionHeaderEntry}) read at offset {streamOffset} from the stream");
             }
