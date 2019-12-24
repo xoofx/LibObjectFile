@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.3 (24 Dec 2019)
+- Fix an invalid error when a program header size is bigger than expected
+
 ## 0.3.2 (22 Dec 2019)
 - Fix a bug when reading ElfObjectFile from an existing ELF where ObjectFile.FileClass/Encoding/Version/OSABI/AbiVersion was not actually deserialized.
 
