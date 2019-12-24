@@ -186,7 +186,7 @@ namespace LibObjectFile
             if (sizeToRead > dataByteCount)
             {
                 var buffer = ArrayPool<byte>.Shared.Rent(sizeToRead);
-                var span = new Span<byte>(buffer);
+                var span = new Span<byte>(buffer, 0, sizeToRead);
                 byteRead = Stream.Read(span);
                 data = MemoryMarshal.Cast<byte, T>(span)[0];
                 ArrayPool<byte>.Shared.Return(buffer);
