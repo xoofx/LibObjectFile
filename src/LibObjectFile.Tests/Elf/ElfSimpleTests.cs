@@ -13,6 +13,13 @@ namespace LibObjectFile.Tests.Elf
     public class ElfSimpleTests : ElfTestBase
     {
         [Test]
+        public void TryReadThrows()
+        {
+            using var stream = File.OpenRead("TestFiles/cmnlib.b00");
+            Assert.Throws<ArgumentOutOfRangeException>(() => ElfObjectFile.TryRead(stream, out _, out _));
+        }
+
+        [Test]
         public void TryReadFailed()
         {
             using var stream = File.OpenRead(typeof(ElfSimpleTests).Assembly.Location);
