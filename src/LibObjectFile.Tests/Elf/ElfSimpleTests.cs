@@ -4,6 +4,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using LibObjectFile.Elf;
 using NUnit.Framework;
@@ -16,7 +17,14 @@ namespace LibObjectFile.Tests.Elf
         public void TryReadThrows()
         {
             using var stream = File.OpenRead("TestFiles/cmnlib.b00");
-            Assert.Throws<ArgumentOutOfRangeException>(() => ElfObjectFile.TryRead(stream, out _, out _));
+            Assert.False(ElfObjectFile.TryRead(stream, out var elf, out var diagnostics));
+            Assert.NotNull(elf);
+            Assert.AreEqual(
+                "Unable to read entirely program header [3]. Not enough data (size: 32) read at offset 148 from the stream",
+                diagnostics.Messages.Single().Message);
+
+            // Repro:
+            // Assert.Throws<ArgumentOutOfRangeException>(() => ElfObjectFile.TryRead(stream, out _, out _));
         }
 
         [Test]

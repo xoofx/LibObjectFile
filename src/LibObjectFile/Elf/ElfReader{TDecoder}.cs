@@ -508,7 +508,7 @@ namespace LibObjectFile.Elf
             if (hasShadowSections)
             {
                 int shadowCount = 0;
-                uint previousSectionIndex = 1;
+                uint previousSectionIndex = 0;
 
                 // Create ElfCustomShadowSection for any parts in the file
                 // that are referenced by a segment but doesn't have a section
