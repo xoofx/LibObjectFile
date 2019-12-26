@@ -38,4 +38,4 @@ jobs:
           else
               echo publish is only enabled by tagging with a release tag
           fi
-      
+
