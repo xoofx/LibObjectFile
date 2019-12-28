@@ -15,11 +15,21 @@ namespace LibObjectFile.Tests.Elf
         [Test]
         public void TryReadThrows()
         {
-            using var stream = File.OpenRead("TestFiles/cmnlib.b00");
-            Assert.False(ElfObjectFile.TryRead(stream, out var elf, out var diagnostics));
-            Assert.NotNull(elf);
-            Assert.AreEqual(1, diagnostics.Messages.Count);
-            Assert.AreEqual(116, diagnostics.Messages[0].Id);
+            static void CheckInvalidLib(bool isReadOnly)
+            { 
+                using var stream = File.OpenRead("TestFiles/cmnlib.b00");
+                Assert.False(ElfObjectFile.TryRead(stream, out var elf, out var diagnostics, new ElfReaderOptions() { ReadOnly = isReadOnly }));
+                Assert.NotNull(elf);
+                Assert.AreEqual(4, diagnostics.Messages.Count, "Invalid number of error messages found");
+                Assert.AreEqual(DiagnosticId.ELF_ERR_IncompleteProgramHeader32Size, diagnostics.Messages[0].Id);
+                for (int i = 1; i < diagnostics.Messages.Count; i++)
+                {
+                    Assert.AreEqual(DiagnosticId.CMN_ERR_UnexpectedEndOfFile, diagnostics.Messages[i].Id);
+                }
+            }
+
+            CheckInvalidLib(false);
+            CheckInvalidLib(true);
         }
 
         [Test]

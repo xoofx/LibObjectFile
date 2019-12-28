@@ -405,6 +405,23 @@ namespace LibObjectFile.Elf
 
             var fileParts = new ElfFilePartList(ObjectFile.Sections.Count + ObjectFile.Segments.Count);
 
+            if (_isFirstSectionValidNull)
+            {
+                var programHeaderTable = new ElfProgramHeaderTable()
+                {
+                    Offset = Layout.OffsetOfProgramHeaderTable,
+                };
+
+                // Add the shadow section ElfProgramHeaderTable
+                ObjectFile.InsertSectionAt(1, programHeaderTable);
+                programHeaderTable.UpdateLayout(Diagnostics);
+
+                if (programHeaderTable.Size > 0)
+                {
+                    fileParts.Insert(new ElfFilePart(programHeaderTable));
+                }
+            }
+
             // Make sure to pre-sort all sections by offset
             var orderedSections = new List<ElfSection>(ObjectFile.Sections.Count);
             orderedSections.AddRange(ObjectFile.Sections);
@@ -435,29 +452,6 @@ namespace LibObjectFile.Elf
                     {
                         Diagnostics.Warning(DiagnosticId.ELF_ERR_InvalidOverlappingSections, $"The section {section} [{section.Offset} : {section.Offset + section.Size - 1}] is overlapping with the section {otherSection} [{otherSection.Offset} : {otherSection.Offset + otherSection.Size - 1}]");
                     }
-                }
-            }
-            
-            if (_isFirstSectionValidNull)
-            {
-                var programHeaderTable = new ElfProgramHeaderTable()
-                {
-                    Offset = Layout.OffsetOfProgramHeaderTable,
-                };
-
-                // Add the shadow section ElfProgramHeaderTable
-                for (int i = 1; i < orderedSections.Count; i++)
-                {
-                    orderedSections[i].StreamIndex++;
-                }
-                programHeaderTable.StreamIndex = 1;
-                ObjectFile.InsertSectionAt(1, programHeaderTable);
-                orderedSections.Insert(1, programHeaderTable);
-                programHeaderTable.UpdateLayout(Diagnostics);
-
-                if (programHeaderTable.Size > 0)
-                {
-                    fileParts.Insert(new ElfFilePart(programHeaderTable));
                 }
             }
             
@@ -508,7 +502,10 @@ namespace LibObjectFile.Elf
             if (hasShadowSections)
             {
                 int shadowCount = 0;
-                uint previousSectionIndex = 0;
+                // If we have sections and the first section is NULL valid, we can start inserting
+                // shadow sections at index 1 (after null section), otherwise we can insert shadow
+                // sections before.
+                uint previousSectionIndex = _isFirstSectionValidNull ? 1U : 0U;
 
                 // Create ElfCustomShadowSection for any parts in the file
                 // that are referenced by a segment but doesn't have a section
