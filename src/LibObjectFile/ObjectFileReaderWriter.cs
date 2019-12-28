@@ -221,7 +221,7 @@ namespace LibObjectFile
             if (IsReadOnly)
             {
                 var stream = ReadAsSliceStream(size);
-                Stream.Position += (long)size;
+                Stream.Position += stream.Length;
                 return stream;
             }
 
@@ -288,7 +288,23 @@ namespace LibObjectFile
         
         private SliceStream ReadAsSliceStream(ulong size)
         {
-            return new SliceStream(Stream, Stream.Position, (long)size);
+            var position = Stream.Position;
+            if (position + (long)size > Stream.Length)
+            {
+                if (position < Stream.Length)
+                {
+                    size = Stream.Position < Stream.Length ? (ulong)(Stream.Length - Stream.Position) : 0;
+                    Diagnostics.Error(DiagnosticId.CMN_ERR_UnexpectedEndOfFile, $"Unexpected end of file. Expecting to slice {size} bytes at offset {position} while remaining length is {size}");
+                }
+                else
+                {
+                    position = Stream.Length;
+                    size = 0;
+                    Diagnostics.Error(DiagnosticId.CMN_ERR_UnexpectedEndOfFile, $"Unexpected end of file. Position of slice {position} is outside of the stream length {Stream.Length} in bytes");
+                }
+            }
+
+            return new SliceStream(Stream, position, (long)size);
         }
 
         private MemoryStream ReadAsMemoryStream(ulong size)
@@ -313,6 +329,12 @@ namespace LibObjectFile
                     break;
                 }
             }
+
+            if (size != 0)
+            {
+                Diagnostics.Error(DiagnosticId.CMN_ERR_UnexpectedEndOfFile, $"Unexpected end of file. Expecting to read {size} bytes at offset {Stream.Position}");
+            }
+            
             return memoryStream;
         }
     }
