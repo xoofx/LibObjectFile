@@ -140,7 +140,7 @@ namespace LibObjectFile.Tests.Ar
                 stream.Position = 0;
 
                 Assert.False(ArArchiveFile.TryRead(stream, ArArchiveKind.GNU, out _, out var diagnostics));
-                ExpectDiagnostics(diagnostics, DiagnosticId.CMN_ERR_UnexpectedEndOfFile);
+                ExpectDiagnostics(diagnostics, DiagnosticId.CMN_ERR_UnexpectedEndOfFile, DiagnosticId.CMN_ERR_UnexpectedEndOfFile);
 
                 stream.Position = continuePosition;
 
