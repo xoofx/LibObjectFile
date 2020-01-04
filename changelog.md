@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.4 (4 Jan 2020)
+- Fix a bug if a program header has an invalid shadow section that does not correspond to a region in the file
+
 ## 0.3.3 (24 Dec 2019)
 - Fix an invalid error when a program header size is bigger than expected
 
