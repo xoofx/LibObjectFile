@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.5 (11 Feb 2020)
+- Fix a bug with bss sections not being correctly handled when trying to write them to a stream
+- Add shadow sections between sections even when no-program headers are in the file.
+
 ## 0.3.4 (4 Jan 2020)
 - Fix a bug if a program header has an invalid shadow section that does not correspond to a region in the file
 

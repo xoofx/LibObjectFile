@@ -10,7 +10,7 @@
     <Description>LibObjectFile is a .NET library to read, manipulate and write linker and executable object files (e.g ELF, ar, DWARF, COFF...)</Description>
     <Copyright>Alexandre Mutel</Copyright>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <VersionPrefix>0.3.4</VersionPrefix>
+    <VersionPrefix>0.3.5</VersionPrefix>
     <Authors>Alexandre Mutel</Authors>
     <PackageTags>ELF DWARF ar archive objectfile</PackageTags>
     <PackageReleaseNotes>https://github.com/xoofx/LibObjectFile/blob/master/changelog.md</PackageReleaseNotes>
