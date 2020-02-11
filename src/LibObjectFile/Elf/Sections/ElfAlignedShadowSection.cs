@@ -16,11 +16,15 @@ namespace LibObjectFile.Elf
     /// </summary>
     public sealed class ElfAlignedShadowSection : ElfShadowSection
     {
-        public ElfAlignedShadowSection()
+        public ElfAlignedShadowSection() : this(0x1000)
         {
-            UpperAlignment = 0x1000;
         }
-        
+
+        public ElfAlignedShadowSection(uint upperAlignment)
+        {
+            UpperAlignment = upperAlignment;
+        }
+
         /// <summary>
         /// Gets or sets teh alignment requirement that this section will ensure for the
         /// following sections placed after this section, so that the offset of the following

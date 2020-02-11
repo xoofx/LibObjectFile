@@ -433,16 +433,32 @@ namespace LibObjectFile.Elf
             }
 
             // Lastly verify integrity of all sections
+            bool hasShadowSections = false;
+
+            var lastOffset = fileParts.Count > 0 ? fileParts[fileParts.Count - 1].EndOffset : 0;
             for (var i = 0; i < orderedSections.Count; i++)
             {
                 var section = orderedSections[i];
                 section.Verify(this.Diagnostics);
 
-                if (section.Size > 0)
+                if (lastOffset > 0 && section.Offset > lastOffset)
                 {
-                    // Collect sections parts
-                    fileParts.Insert(new ElfFilePart(section));
+                    if (section.Offset > lastOffset)
+                    {
+                        // Create parts for the segment
+                        fileParts.CreateParts(lastOffset + 1, section.Offset - 1);
+                        hasShadowSections = true;
+                    }
                 }
+
+                if (section.Size == 0 || !section.HasContent)
+                {
+                    continue;
+                }
+
+                // Collect sections parts
+                fileParts.Insert(new ElfFilePart(section));
+                lastOffset = section.Offset + section.Size - 1;
 
                 // Verify overlapping sections and generate and error
                 for (int j = i + 1; j < orderedSections.Count; j++)
@@ -457,7 +473,7 @@ namespace LibObjectFile.Elf
             
             // Link segments to sections if we have an exact match.
             // otherwise record any segments that are not bound to a section.
-            bool hasShadowSections = false;
+
             foreach (var segment in ObjectFile.Segments)
             {
                 if (segment.Size == 0) continue;
@@ -465,7 +481,7 @@ namespace LibObjectFile.Elf
                 var segmentEndOffset = segment.Offset + segment.Size - 1;
                 foreach (var section in orderedSections)
                 {
-                    if (section.Size == 0) continue;
+                    if (section.Size == 0 || !section.HasContent) continue;
 
                     var sectionEndOffset = section.Offset + section.Size - 1;
                     if (segment.Offset == section.Offset && segmentEndOffset == sectionEndOffset)
@@ -554,7 +570,7 @@ namespace LibObjectFile.Elf
                     for (var i = 0; i < orderedSections.Count; i++)
                     {
                         var section = orderedSections[i];
-                        if (section.Size == 0) continue;
+                        if (section.Size == 0 || !section.HasContent) continue;
 
                         var sectionEndOffset = section.Offset + section.Size - 1;
                         if (segment.Offset >= section.Offset && segment.Offset <= sectionEndOffset)
@@ -564,7 +580,7 @@ namespace LibObjectFile.Elf
                             for (int j = i; j < orderedSections.Count; j++)
                             {
                                 var nextSection = orderedSections[j];
-                                if (nextSection.Size == 0) continue;
+                                if (nextSection.Size == 0 || !nextSection.HasContent) continue;
 
                                 sectionEndOffset = nextSection.Offset + nextSection.Size - 1;
 

@@ -77,7 +77,34 @@ namespace LibObjectFile.Tests.Elf
 
             AssertReadElf(elf, "test.elf");
         }
-        
+
+        [Test]
+        public void TestBss()
+        {
+            var elf = new ElfObjectFile(ElfArch.X86_64);
+
+            var stream = new MemoryStream();
+            stream.Write(new byte[] { 1, 2, 3, 4 });
+            stream.Position = 0;
+            var codeSection = new ElfBinarySection(stream).ConfigureAs(ElfSectionSpecialType.Text);
+            elf.AddSection(codeSection);
+
+            elf.AddSection(new ElfAlignedShadowSection(1024));
+
+            var bssSection = new ElfBinarySection().ConfigureAs(ElfSectionSpecialType.Bss);
+            elf.AddSection(bssSection);
+
+            elf.AddSection(new ElfSectionHeaderStringTable());
+
+            var diagnostics = new DiagnosticBag();
+            elf.UpdateLayout(diagnostics);
+            Assert.False(diagnostics.HasErrors);
+            
+            Assert.AreEqual(1024, bssSection.Offset);
+
+            AssertReadElf(elf, "test_bss.elf");
+        }
+
         [Test]
         public void SimpleCodeSectionAndSymbolSection()
         {

@@ -84,40 +84,40 @@ namespace LibObjectFile.Elf
                     diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeEndSectionParent, $"Invalid null parent {nameof(Range)}.{nameof(Range.EndSection)} in {this}. The section must be attached to the same {nameof(ElfObjectFile)} than this instance");
                 }
 
-                if (Range.BeginOffset >= Range.BeginSection.Size)
+                if (Type == ElfSegmentTypeCore.Load)
                 {
-                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeBeginOffset, $"Invalid {nameof(Range)}.{nameof(Range.BeginOffset)}: {Range.BeginOffset} cannot be >= {nameof(Range.BeginSection)}.{nameof(ElfSection.Size)}: {Range.BeginSection.Size} in {this}. The offset must be within the section");
-                }
-                else
-                {
-                    if (Type == ElfSegmentTypeCore.Load)
+                    // Specs:
+                    // As ‘‘Program Loading’’ later in this part describes, loadable process segments must have congruent values for p_vaddr and p_offset, modulo the page size.
+                    // TODO: how to make this configurable?
+                    if ((alignment % 4096) != 0)
                     {
-                        // Specs:
-                        // As ‘‘Program Loading’’ later in this part describes, loadable process segments must have congruent values for p_vaddr and p_offset, modulo the page size.
-                        // TODO: how to make this configurable?
-                        if ((alignment % 4096) != 0)
-                        {
-                            diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentAlignmentForLoad, $"Invalid {nameof(ElfNative.PT_LOAD)} segment alignment requirements: {alignment} must be multiple of the Page Size {4096}");
-                        }
+                        diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentAlignmentForLoad, $"Invalid {nameof(ElfNative.PT_LOAD)} segment alignment requirements: {alignment} must be multiple of the Page Size {4096}");
+                    }
 
-                        var mod = (VirtualAddress - Range.Offset) & (alignment - 1);
-                        if (mod != 0)
-                        {
-                            diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentVirtualAddressOrOffset, $"Invalid {nameof(ElfNative.PT_LOAD)} segment alignment requirements: (VirtualAddress - Range.Offset) & (Alignment - 1) == {mod}  while it must be == 0");
-                        }
+                    var mod = (VirtualAddress - Range.Offset) & (alignment - 1);
+                    if (mod != 0)
+                    {
+                        diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentVirtualAddressOrOffset, $"Invalid {nameof(ElfNative.PT_LOAD)} segment alignment requirements: (VirtualAddress - Range.Offset) & (Alignment - 1) == {mod}  while it must be == 0");
                     }
                 }
 
-                if ((Range.EndOffset >= 0 && (ulong)Range.EndOffset >= Range.EndSection.Size))
+                if (Size > 0)
                 {
-                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeEndOffset, $"Invalid {nameof(Range)}.{nameof(Range.EndOffset)}: {Range.EndOffset} cannot be >= {nameof(Range)}.{nameof(ElfSegmentRange.EndSection)}.{nameof(ElfSection.Size)}: {Range.EndSection.Size} in {this}. The offset must be within the section");
-                }
-                else if (Range.EndOffset < 0)
-                {
-                    var endOffset = (long)Range.EndSection.Size + Range.EndOffset;
-                    if (endOffset < 0)
+                    if (Range.BeginOffset >= Range.BeginSection.Size)
                     {
-                        diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeEndOffset, $"Invalid relative {nameof(Range)}.{nameof(Range.EndOffset)}: {Range.EndOffset}. The resulting end offset {endOffset} with {nameof(Range)}.{nameof(ElfSegmentRange.EndSection)}.{nameof(ElfSection.Size)}: {Range.EndSection.Size} cannot be < 0 in {this}. The offset must be within the section");
+                        diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeBeginOffset, $"Invalid {nameof(Range)}.{nameof(Range.BeginOffset)}: {Range.BeginOffset} cannot be >= {nameof(Range.BeginSection)}.{nameof(ElfSection.Size)}: {Range.BeginSection.Size} in {this}. The offset must be within the section");
+                    }
+                    if ((Range.EndOffset >= 0 && (ulong)Range.EndOffset >= Range.EndSection.Size))
+                    {
+                        diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeEndOffset, $"Invalid {nameof(Range)}.{nameof(Range.EndOffset)}: {Range.EndOffset} cannot be >= {nameof(Range)}.{nameof(ElfSegmentRange.EndSection)}.{nameof(ElfSection.Size)}: {Range.EndSection.Size} in {this}. The offset must be within the section");
+                    }
+                    else if (Range.EndOffset < 0)
+                    {
+                        var endOffset = (long)Range.EndSection.Size + Range.EndOffset;
+                        if (endOffset < 0)
+                        {
+                            diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeEndOffset, $"Invalid relative {nameof(Range)}.{nameof(Range.EndOffset)}: {Range.EndOffset}. The resulting end offset {endOffset} with {nameof(Range)}.{nameof(ElfSegmentRange.EndSection)}.{nameof(ElfSection.Size)}: {Range.EndSection.Size} cannot be < 0 in {this}. The offset must be within the section");
+                        }
                     }
                 }
 
