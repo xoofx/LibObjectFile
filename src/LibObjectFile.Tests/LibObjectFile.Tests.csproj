@@ -9,10 +9,18 @@
 
   <ItemGroup>
     <None Remove="helloworld.cpp" />
+    <None Remove="lib_a.cpp" />
+    <None Remove="lib_b.cpp" />
     <None Remove="small.cpp" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="lib_b.cpp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib_a.cpp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="small.cpp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

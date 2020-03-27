@@ -8871,15 +8871,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfLineSequence StmtList
+        public DwarfLineProgramTable StmtList
         {
             get
             {
-                return GetAttributeValue<DwarfLineSequence>(DwarfAttributeKind.StmtList);
+                return GetAttributeValue<DwarfLineProgramTable>(DwarfAttributeKind.StmtList);
             }
             set
             {
-                SetAttributeValue<DwarfLineSequence>(DwarfAttributeKind.StmtList, value);
+                SetAttributeValue<DwarfLineProgramTable>(DwarfAttributeKind.StmtList, value);
             }
         }
         
@@ -11507,15 +11507,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfLineSequence StmtList
+        public DwarfLineProgramTable StmtList
         {
             get
             {
-                return GetAttributeValue<DwarfLineSequence>(DwarfAttributeKind.StmtList);
+                return GetAttributeValue<DwarfLineProgramTable>(DwarfAttributeKind.StmtList);
             }
             set
             {
-                SetAttributeValue<DwarfLineSequence>(DwarfAttributeKind.StmtList, value);
+                SetAttributeValue<DwarfLineProgramTable>(DwarfAttributeKind.StmtList, value);
             }
         }
         
@@ -12351,15 +12351,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfLineSequence StmtList
+        public DwarfLineProgramTable StmtList
         {
             get
             {
-                return GetAttributeValue<DwarfLineSequence>(DwarfAttributeKind.StmtList);
+                return GetAttributeValue<DwarfLineProgramTable>(DwarfAttributeKind.StmtList);
             }
             set
             {
-                SetAttributeValue<DwarfLineSequence>(DwarfAttributeKind.StmtList, value);
+                SetAttributeValue<DwarfLineProgramTable>(DwarfAttributeKind.StmtList, value);
             }
         }
         
@@ -14235,15 +14235,15 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfLineSequence StmtList
+        public DwarfLineProgramTable StmtList
         {
             get
             {
-                return GetAttributeValue<DwarfLineSequence>(DwarfAttributeKind.StmtList);
+                return GetAttributeValue<DwarfLineProgramTable>(DwarfAttributeKind.StmtList);
             }
             set
             {
-                SetAttributeValue<DwarfLineSequence>(DwarfAttributeKind.StmtList, value);
+                SetAttributeValue<DwarfLineProgramTable>(DwarfAttributeKind.StmtList, value);
             }
         }
         

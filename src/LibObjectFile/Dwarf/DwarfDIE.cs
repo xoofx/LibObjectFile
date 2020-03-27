@@ -17,6 +17,11 @@ namespace LibObjectFile.Dwarf
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private DwarfTagEx _tag;
 
+        /// <summary>
+        /// The current line program table when reading.
+        /// </summary>
+        internal DwarfLineProgramTable CurrentLineProgramTable;
+
         public DwarfDIE()
         {
             _attributes = new List<DwarfAttribute>();
@@ -391,7 +396,7 @@ namespace LibObjectFile.Dwarf
         protected override void Read(DwarfReader reader)
         {
             // Store map offset to DIE to resolve references
-            reader.RegisterDIE(this);
+            reader.PushDIE(this);
 
             // Console.WriteLine($" <{level}><{die.Offset:x}> Abbrev Number: {abbreviationCode} ({die.Tag})");
 
@@ -425,6 +430,8 @@ namespace LibObjectFile.Dwarf
                     AddChild(child);
                 }
             }
+
+            reader.PopDIE();
 
             Size = reader.Offset - Offset;
         }

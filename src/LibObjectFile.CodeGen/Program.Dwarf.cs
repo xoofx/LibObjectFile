@@ -180,7 +180,7 @@ namespace LibObjectFile.CodeGen
                             break;
 
                         case "lineptr":
-                            attrType = "DwarfLineSequence";
+                            attrType = "DwarfLineProgramTable";
                             break;
                         
                         case "exprloc":

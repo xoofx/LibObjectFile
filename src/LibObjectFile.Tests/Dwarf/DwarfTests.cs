@@ -135,6 +135,65 @@ namespace LibObjectFile.Tests.Dwarf
         }
 
         [Test]
+        public void TestDebugLineLibMultipleObjs()
+        {
+            var cppName = "lib";
+            var libShared = $"{cppName}_debug.so";
+            LinuxUtil.RunLinuxExe("gcc", $"{cppName}_*.cpp -g -shared -o {libShared}");
+
+            ElfObjectFile elf;
+            using (var inStream = File.OpenRead(libShared))
+            {
+                Console.WriteLine($"ReadBack from {libShared}");
+                elf = ElfObjectFile.Read(inStream);
+                elf.Print(Console.Out);
+            }
+
+            var elfContext = new DwarfElfContext(elf);
+            var inputContext = new DwarfReaderContext(elfContext);
+            inputContext.DebugLinePrinter = Console.Out;
+            var dwarf = DwarfFile.Read(inputContext);
+
+            inputContext.DebugLineStream.Position = 0;
+
+            var copyInputDebugLineStream = new MemoryStream();
+            inputContext.DebugLineStream.CopyTo(copyInputDebugLineStream);
+            inputContext.DebugLineStream.Position = 0;
+
+            var outputContext = new DwarfWriterContext
+            {
+                IsLittleEndian = inputContext.IsLittleEndian,
+                EnableRelocation = false,
+                AddressSize = inputContext.AddressSize,
+                DebugLineStream = new MemoryStream()
+            };
+            dwarf.Write(outputContext);
+
+            Console.WriteLine();
+            Console.WriteLine("=====================================================");
+            Console.WriteLine("Readback");
+            Console.WriteLine("=====================================================");
+            Console.WriteLine();
+
+            var reloadContext = new DwarfReaderContext()
+            {
+                IsLittleEndian = outputContext.IsLittleEndian,
+                AddressSize = outputContext.AddressSize,
+                DebugLineStream = outputContext.DebugLineStream
+            };
+
+            reloadContext.DebugLineStream.Position = 0;
+            reloadContext.DebugLineStream = outputContext.DebugLineStream;
+            reloadContext.DebugLinePrinter = Console.Out;
+
+            var dwarf2 = DwarfFile.Read(reloadContext);
+
+            var inputDebugLineBuffer = copyInputDebugLineStream.ToArray();
+            var outputDebugLineBuffer = ((MemoryStream)reloadContext.DebugLineStream).ToArray();
+            Assert.AreEqual(inputDebugLineBuffer, outputDebugLineBuffer);
+        }
+
+        [Test]
         public void TestDebugLineSmall()
         {
             var cppName = "small";
@@ -274,30 +333,56 @@ namespace LibObjectFile.Tests.Dwarf
             // Create .debug_line information
             var fileName = new DwarfFileName()
             {
-                Name = "check.cpp",
+                Name = "check1.cpp",
                 Directory = Environment.CurrentDirectory,
             };
-            dwarfFile.LineTable.AddressSize = DwarfAddressSize.Bit64;
-            dwarfFile.LineTable.FileNames.Add(fileName);
-            dwarfFile.LineTable.AddLineSequence(new DwarfLineSequence()
-                {
+            var fileName2 = new DwarfFileName()
+            {
+                Name = "check2.cpp",
+                Directory = Environment.CurrentDirectory,
+            };
 
-                    new DwarfLine()
+            // First line table
+            for (int i = 0; i < 2; i++)
+            {
+                var lineTable = new DwarfLineProgramTable();
+                dwarfFile.LineSection.AddLineProgramTable(lineTable);
+
+                lineTable.AddressSize = DwarfAddressSize.Bit64;
+                lineTable.FileNames.Add(fileName);
+                lineTable.FileNames.Add(fileName2);
+                lineTable.AddLineSequence(new DwarfLineSequence()
                     {
-                        File = fileName,
-                        Address = 0,
-                        Column = 1,
-                        Line = 1,
-                    },
-                    new DwarfLine()
-                    {
-                        File = fileName,
-                        Address = 0,
-                        Column = 1,
-                        Line = 1,
+
+                        new DwarfLine()
+                        {
+                            File = fileName,
+                            Address = 0,
+                            Column = 1,
+                            Line = 1,
+                        },
+                        new DwarfLine()
+                        {
+                            File = fileName,
+                            Address = 1,
+                            Column = 1,
+                            Line = 2,
+                        }
                     }
-                }
-            );
+                );
+                lineTable.AddLineSequence(new DwarfLineSequence()
+                    {
+
+                        new DwarfLine()
+                        {
+                            File = fileName2,
+                            Address = 0,
+                            Column = 1,
+                            Line = 1,
+                        },
+                    }
+                );
+            }
 
             // Create .debug_info
             var rootDIE = new DwarfDIECompileUnit()
@@ -306,11 +391,11 @@ namespace LibObjectFile.Tests.Dwarf
                 LowPC = 0, // 0 relative to base virtual address
                 HighPC = (int)codeSection.Size, // default is offset/length after LowPC
                 CompDir = fileName.Directory,
-                StmtList = dwarfFile.LineTable.LineSequences[0],
+                StmtList = dwarfFile.LineSection.LineTables[0],
             };
             var subProgram = new DwarfDIESubprogram()
             {
-                Name = "MyFunction"
+                Name = "MyFunction",
             };
             rootDIE.AddChild(subProgram);
 
@@ -330,7 +415,8 @@ namespace LibObjectFile.Tests.Dwarf
             var dwarfElfContext = new DwarfElfContext(elf);
             dwarfFile.WriteToElf(dwarfElfContext);
 
-            using (var output = new FileStream("check.o", FileMode.Create))
+            var outputFileName = "create_dwarf.o";
+            using (var output = new FileStream(outputFileName, FileMode.Create))
             {
                 elf.Write(output);
             }
@@ -342,6 +428,10 @@ namespace LibObjectFile.Tests.Dwarf
             dwarfFile.AddressRangeTable.Print(Console.Out);
             Console.WriteLine();
             dwarfFile.InfoSection.Print(Console.Out);
+
+            Console.WriteLine("ReadBack --debug-dump=rawline");
+            var readelf = LinuxUtil.ReadElf(outputFileName, "--debug-dump=rawline").TrimEnd();
+            Console.WriteLine(readelf);
         }
 
         private static void PrintStreamLength(DwarfReaderWriterContext context)

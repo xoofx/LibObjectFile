@@ -283,9 +283,17 @@ namespace LibObjectFile.Dwarf
             {
                 case DwarfAttributeKind.DeclFile:
                 {
-                    var file = reader.File.LineTable.FileNames[ValueAsI32 - 1];
-                    ValueAsU64 = 0;
-                    ValueAsObject = file;
+                    var currentLineProgramTable = reader.CurrentLineProgramTable;
+                    if (currentLineProgramTable == null)
+                    {
+                        // Log and error
+                    }
+                    else
+                    {
+                        var file = currentLineProgramTable.FileNames[ValueAsI32 - 1];
+                        ValueAsU64 = 0;
+                        ValueAsObject = file;
+                    }
                     break;
                 }
 
@@ -293,12 +301,13 @@ namespace LibObjectFile.Dwarf
                 {
                     if (ValueAsU64 == 0) return;
 
-                    if (reader.File.LineTable != null)
+                    if (reader.File.LineSection != null)
                     {
-                        if (reader.OffsetToDebugLineSequence.TryGetValue(ValueAsU64, out var debugLine))
+                        if (reader.OffsetToLineProgramTable.TryGetValue(ValueAsU64, out var lineProgramTable))
                         {
                             ValueAsU64 = 0;
-                            ValueAsObject = debugLine;
+                            ValueAsObject = lineProgramTable;
+                            reader.PushLineProgramTable(lineProgramTable);
                         }
                         else
                         {

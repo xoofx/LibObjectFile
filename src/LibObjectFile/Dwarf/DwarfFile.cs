@@ -11,7 +11,7 @@ namespace LibObjectFile.Dwarf
     {
         private DwarfAbbreviationTable _abbreviationTable;
         private DwarfStringTable _stringTable;
-        private DwarfLineSection _lineTable;
+        private DwarfLineSection _lineSection;
         private DwarfInfoSection _infoSection;
         private DwarfAddressRangeTable _addressRangeTable;
 
@@ -19,7 +19,7 @@ namespace LibObjectFile.Dwarf
         {
             AbbreviationTable = new DwarfAbbreviationTable();
             StringTable = new DwarfStringTable();
-            LineTable = new DwarfLineSection();
+            LineSection = new DwarfLineSection();
             InfoSection = new DwarfInfoSection();
             AddressRangeTable = new DwarfAddressRangeTable();
         }
@@ -36,10 +36,10 @@ namespace LibObjectFile.Dwarf
             set => AttachChild(this, value, ref _stringTable, false);
         }
 
-        public DwarfLineSection LineTable
+        public DwarfLineSection LineSection
         {
-            get => _lineTable;
-            set => AttachChild(this, value, ref _lineTable, false);
+            get => _lineSection;
+            set => AttachChild(this, value, ref _lineSection, false);
         }
 
         public DwarfAddressRangeTable AddressRangeTable
@@ -63,7 +63,7 @@ namespace LibObjectFile.Dwarf
         {
             base.Verify(diagnostics);
 
-            LineTable.Verify(diagnostics);
+            LineSection.Verify(diagnostics);
             AbbreviationTable.Verify(diagnostics);
             AddressRangeTable.Verify(diagnostics);
             StringTable.Verify(diagnostics);
@@ -77,8 +77,8 @@ namespace LibObjectFile.Dwarf
 
             var layoutContext = new DwarfLayoutContext(this, config, diagnostics);
 
-            LineTable.Offset = 0;
-            LineTable.UpdateLayoutInternal(layoutContext);
+            LineSection.Offset = 0;
+            LineSection.UpdateLayoutInternal(layoutContext);
             if (layoutContext.HasErrors)
             {
                 return;
@@ -142,9 +142,9 @@ namespace LibObjectFile.Dwarf
             {
                 writer.Stream.Position = 0;
                 writer.Stream.SetLength(0);
-                writer.CurrentSection = LineTable;
-                LineTable.Relocations.Clear();
-                LineTable.WriteInternal(writer);
+                writer.CurrentSection = LineSection;
+                LineSection.Relocations.Clear();
+                LineSection.WriteInternal(writer);
             }
 
             writer.Log = null;
@@ -215,7 +215,7 @@ namespace LibObjectFile.Dwarf
             // Pre-create table/sections to create symbols as well
             if (StringTable.Size > 0) elfContext.GetOrCreateStringTable();
             if (AbbreviationTable.Size > 0) elfContext.GetOrCreateAbbreviationTable();
-            if (LineTable.Size > 0) elfContext.GetOrCreateLineSection();
+            if (LineSection.Size > 0) elfContext.GetOrCreateLineSection();
             if (AddressRangeTable.Size > 0) elfContext.GetOrCreateAddressRangeTable();
             if (InfoSection.Size > 0) elfContext.GetOrCreateInfoSection();
 
@@ -248,17 +248,17 @@ namespace LibObjectFile.Dwarf
             }
 
             // Line table
-            if (LineTable.Size > 0)
+            if (LineSection.Size > 0)
             {
                 writer.Stream = elfContext.GetOrCreateLineSection().Stream;
                 writer.Stream.Position = 0;
                 writer.Stream.SetLength(0);
-                writer.CurrentSection = LineTable;
-                LineTable.Relocations.Clear();
-                LineTable.WriteInternal(writer);
-                if (writer.EnableRelocation && LineTable.Relocations.Count > 0)
+                writer.CurrentSection = LineSection;
+                LineSection.Relocations.Clear();
+                LineSection.WriteInternal(writer);
+                if (writer.EnableRelocation && LineSection.Relocations.Count > 0)
                 {
-                    LineTable.CopyRelocationsTo(elfContext, elfContext.GetOrCreateRelocLineSection());
+                    LineSection.CopyRelocationsTo(elfContext, elfContext.GetOrCreateRelocLineSection());
                 }
                 else
                 {
@@ -347,8 +347,8 @@ namespace LibObjectFile.Dwarf
             reader.Stream = readerContext.DebugLineStream;
             if (reader.Stream != null)
             {
-                reader.CurrentSection = dwarf.LineTable;
-                dwarf.LineTable.ReadInternal(reader);
+                reader.CurrentSection = dwarf.LineSection;
+                dwarf.LineSection.ReadInternal(reader);
             }
 
             reader.Log = null;

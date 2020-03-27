@@ -14,7 +14,7 @@ namespace LibObjectFile.Tests
     {
         public static string ReadElf(string file, string arguments = "-W -a")
         {
-            return RunLinuxExe("readelf", $"{file} -W -a");
+            return RunLinuxExe("readelf", $"{file} {arguments}");
         }
 
         public static string RunLinuxExe(string exe, string arguments, string distribution = "Ubuntu-18.04")

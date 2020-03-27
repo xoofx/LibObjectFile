@@ -12,7 +12,7 @@ namespace LibObjectFile.Dwarf
     /// A sequence of <see cref="DwarfLine"/>
     /// </summary>
     [DebuggerDisplay("Count = {Lines.Count,nq}")]
-    public class DwarfLineSequence : DwarfObject<DwarfLineSection>, IEnumerable<DwarfLine>
+    public class DwarfLineSequence : DwarfObject<DwarfLineProgramTable>, IEnumerable<DwarfLine>
     {
         private readonly List<DwarfLine> _lines;
 
