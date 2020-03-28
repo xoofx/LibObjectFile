@@ -139,7 +139,7 @@ namespace LibObjectFile.Tests.Dwarf
         {
             var cppName = "lib";
             var libShared = $"{cppName}_debug.so";
-            LinuxUtil.RunLinuxExe("gcc", $"{cppName}_*.cpp -g -shared -o {libShared}");
+            LinuxUtil.RunLinuxExe("gcc", $"{cppName}_a.cpp {cppName}_b.cpp  -g -shared -o {libShared}");
 
             ElfObjectFile elf;
             using (var inStream = File.OpenRead(libShared))
