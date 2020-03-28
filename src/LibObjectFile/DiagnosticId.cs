@@ -109,6 +109,7 @@ namespace LibObjectFile
         DWARF_ERR_InvalidNullUnitForAddressRangeTable = 2016,
         DWARF_ERR_InvalidParentUnitForAddressRangeTable = 2017,
         DWARF_ERR_InvalidParentForDIE = 2018,
+        DWARF_WRN_InvalidExtendedOpCodeLength = 2019,
 
     }
 }

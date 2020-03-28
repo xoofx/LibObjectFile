@@ -431,10 +431,11 @@ namespace LibObjectFile.Dwarf
                         break;
                     case 0:
                         var sizeOfExtended = reader.ReadULEB128();
+                        var lengthOffset = reader.Offset;
                         var endOffset = reader.Offset + sizeOfExtended;
-                        while (reader.Offset < endOffset)
+                        bool hasValidOpCode = true;
+                        if (reader.Offset < endOffset)
                         {
-                            bool isValidSubOpCode = true;
                             var sub_opcode = reader.ReadU8();
 
                             // extended opcode
@@ -489,7 +490,6 @@ namespace LibObjectFile.Dwarf
                                         log.WriteLine($"  {intFileNameCount + 1}\t{fileDirectoryIndex}\t{debugFileName.Time}\t{debugFileName.Size,-7}\t{fileName}");
                                         log.WriteLine();
                                     }
-
                                     break;
                                 case DwarfNative.DW_LNE_set_discriminator: // DWARF 4
                                     state.Discriminator = reader.ReadULEB128();
@@ -503,16 +503,19 @@ namespace LibObjectFile.Dwarf
                                     {
                                         log.WriteLine($"Unknown opcode");
                                     }
-                                    isValidSubOpCode = false;
+
+                                    hasValidOpCode = false;
                                     // TODO: Add support for pluggable handling of extensions
                                     reader.Diagnostics.Warning(DiagnosticId.DWARF_WRN_UnsupportedLineExtendedCode, $"Unsupported line extended opcode 0x{sub_opcode:x}");
                                     break;
                             }
 
-                            if (!isValidSubOpCode)
-                            {
-                                break;
-                            }
+                        }
+
+                        // Log a warning if the end offset doesn't match what we are expecting
+                        if (hasValidOpCode && reader.Offset != endOffset)
+                        {
+                            reader.Diagnostics.Warning(DiagnosticId.DWARF_WRN_InvalidExtendedOpCodeLength, $"Invalid length {sizeOfExtended} at offset 0x{lengthOffset:x}");
                         }
 
                         reader.Offset = endOffset;
