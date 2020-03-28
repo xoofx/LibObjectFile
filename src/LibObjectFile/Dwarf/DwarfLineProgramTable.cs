@@ -897,7 +897,7 @@ namespace LibObjectFile.Dwarf
                         {
                             // DW_LNE_define_file
                             writer.WriteU8(0);
-                            uint dirIndex = _directoryNameToIndex[fileName.Directory];
+                            uint dirIndex = fileName.Directory != null && _directoryNameToIndex.ContainsKey(fileName.Directory) ? _directoryNameToIndex[fileName.Directory] : 0;
 
                             ulong sizeOfInlineFileName = 1;
                             sizeOfInlineFileName += (ulong) Encoding.UTF8.GetByteCount(fileName.Name) + 1;
@@ -1166,7 +1166,7 @@ namespace LibObjectFile.Dwarf
                         {
                             // DW_LNE_define_file
                             sizeOf += 1; // writer.WriteU8(0);
-                            uint dirIndex = _directoryNameToIndex[fileName.Directory];
+                            uint dirIndex = fileName.Directory != null && _directoryNameToIndex.ContainsKey(fileName.Directory) ? _directoryNameToIndex[fileName.Directory] : 0;
 
                             ulong sizeOfInlineFileName = 1;
                             sizeOfInlineFileName += (ulong) Encoding.UTF8.GetByteCount(fileName.Name) + 1;
