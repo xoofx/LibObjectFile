@@ -365,7 +365,7 @@ namespace LibObjectFile.Elf
 
             if (builder.Length == 0)
             {
-                builder.Append($"Unknown note type: (0x{note.GetNoteType().Value:x8})");
+                builder.Append($"Unknown note type: (0x{(uint)note.GetNoteType().Value:x8})");
             }
 
             builder.Append("\t\t");
