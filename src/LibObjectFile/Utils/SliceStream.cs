@@ -91,7 +91,7 @@ namespace LibObjectFile.Utils
             }
 
             if (newPosition < 0) throw new ArgumentOutOfRangeException(nameof(offset), $"New resulting position {newPosition} is < 0");
-            if (newPosition > _length) throw new ArgumentOutOfRangeException(nameof(offset), $"New resulting position {newPosition} is >= Length {_length}");
+            if (newPosition > _length) throw new ArgumentOutOfRangeException(nameof(offset), $"New resulting position {newPosition} is > Length {_length}");
 
             // Check that we can seek on the origin stream
             _baseStream.Position = _basePosition + newPosition;
