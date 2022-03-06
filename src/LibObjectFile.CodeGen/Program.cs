@@ -259,7 +259,7 @@ namespace LibObjectFile.CodeGen
             {
                 Name = "ToStringInternal",
                 Visibility = CSharpVisibility.Private,
-                ReturnType = CSharpPrimitiveType.String
+                ReturnType = CSharpPrimitiveType.String()
             };
             enumClass.Members.Add(toStringInternal);
 

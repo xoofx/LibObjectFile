@@ -10,12 +10,11 @@
     <Description>LibObjectFile is a .NET library to read, manipulate and write linker and executable object files (e.g ELF, ar, DWARF, COFF...)</Description>
     <Copyright>Alexandre Mutel</Copyright>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <VersionPrefix>0.3.5</VersionPrefix>
     <Authors>Alexandre Mutel</Authors>
     <PackageTags>ELF DWARF ar archive objectfile</PackageTags>
-    <PackageReleaseNotes>https://github.com/xoofx/LibObjectFile/blob/master/changelog.md</PackageReleaseNotes>
     <PackageLicenseExpression>BSD-2-Clause</PackageLicenseExpression>
-    <PackageIconUrl>https://raw.githubusercontent.com/xoofx/LibObjectFile/master/img/libobjectfile.png</PackageIconUrl>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+    <PackageIcon>logo.png</PackageIcon>
     <PackageProjectUrl>https://github.com/xoofx/LibObjectFile</PackageProjectUrl>
     <!--Add support for sourcelink-->
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -27,7 +26,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="../../img/libobjectfile.png" Pack="true" PackagePath="/logo.png" />
+    <None Include="../../readme.md" Pack="true" PackagePath="/"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MinVer" Version="2.5.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <!--Add support for sourcelink-->
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-*" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.*" PrivateAssets="All" />
   </ItemGroup>
 </Project>

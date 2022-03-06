@@ -137,18 +137,19 @@ namespace LibObjectFile.Disasm
                 formatter.Options.DigitSeparator = "";
                 formatter.Options.FirstOperandCharIndex = 10;
             }
-            var output = new StringBuilderFormatterOutput();
+
+            var output = new StringOutput();
             // Use InstructionList's ref iterator (C# 7.3) to prevent copying 32 bytes every iteration
             foreach (ref var instr in instructions)
             {
                 // Don't use instr.ToString(), it allocates more, uses masm syntax and default options
                 formatter.Format(instr, output);
                 writer.Write($"{instr.IP:X16} ");
-                for (int i = 0; i < instr.ByteLength; i++)
+                for (int i = 0; i < instr.Length; i++)
                 {
                     writer.Write(buffer[(int)instr.IP + i].ToString("X2"));
                 }
-                writer.Write(new string(' ', 16 * 2 - instr.ByteLength * 2));
+                writer.Write(new string(' ', 16 * 2 - instr.Length * 2));
                 writer.WriteLine($"{output.ToStringAndReset()}");
             }
         }

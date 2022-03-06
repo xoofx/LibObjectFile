@@ -469,7 +469,7 @@ namespace LibObjectFile.CodeGen
             };
             dieHelperClass.Members.Add(dieHelperMethod);
 
-            dieHelperMethod.Parameters.Add(new CSharpParameter("tag") { ParameterType = CSharpPrimitiveType.UShort });
+            dieHelperMethod.Parameters.Add(new CSharpParameter("tag") { ParameterType = CSharpPrimitiveType.UShort() });
             dieHelperMethod.ReturnType = new CSharpFreeType("DwarfDIE");
 
             dieHelperMethod.Body = (writer, element) => { 

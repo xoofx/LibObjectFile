@@ -224,3 +224,6 @@ _Pvt_Extensions
 
 # JetBrains Rider
 .idea/
+
+# Remove artifacts produced by dotnet-releaser
+artifacts-dotnet-releaser/

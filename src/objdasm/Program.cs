@@ -41,10 +41,6 @@ namespace LibObjectFile.Disasm
                 {"v|verbose", "Show more verbose progress logs", v => objDisasmApp.Verbose = true },
             };
 
-            options.OptionWidth = 40;
-            options.LineWidth = 100;
-            options.ShiftNewLine = 0;
-
             try
             {
                 var files = options.Parse(args);

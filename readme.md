@@ -1,6 +1,6 @@
 # LibObjectFile [![Build Status](https://github.com/xoofx/LibObjectFile/workflows/ci/badge.svg?branch=master)](https://github.com/xoofx/LibObjectFile/actions) [![NuGet](https://img.shields.io/nuget/v/LibObjectFile.svg)](https://www.nuget.org/packages/LibObjectFile/)
 
-<img align="right" width="200px" height="200px" src="img/libobjectfile.png">
+<img align="right" width="200px" height="200px" src="https://raw.githubusercontent.com/xoofx/LibObjectFile/master/img/libobjectfile.png">
 
 LibObjectFile is a .NET library to read, manipulate and write linker and executable object files (e.g ELF, ar, DWARF, COFF...)
 
@@ -97,7 +97,7 @@ If you're using macOS or another Linux, there's a Dockerfile and a helper script
 
 ## License
 
-This software is released under the [BSD-Clause 2 license](https://github.com/lunet-io/markdig/blob/master/license.txt).
+This software is released under the [BSD-Clause 2 license](https://github.com/xoofx/LibObjectFile/blob/master/license.txt).
 
 ## Author
 

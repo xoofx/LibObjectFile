@@ -14,28 +14,18 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
+      with:
+        submodules: true
+        fetch-depth: 0
 
-    - name: Install .NET Core
+    - name: Install .NET 6.0
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.0.100
+        dotnet-version: '6.0.x'
 
-    - name: Build & test (Debug)
-      run: dotnet test src --configuration Debug
-
-    - name: Build & test (Release)
-      run: dotnet test src --configuration Release
-
-    - name: Pack
-      run: dotnet pack src --configuration Release
-
-    - name: Publish
-      if: github.event_name == 'push'
-      run: |      
-          if [[ ${{ github.ref }} =~ ^refs/tags/[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-              dotnet nuget push src/LibObjectFile/bin/Release/*.nupkg -s nuget.org -k ${{secrets.NUGET_TOKEN}}
-          else
-              echo publish is only enabled by tagging with a release tag
-          fi
-
+    - name: Build, Test, Pack, Publish
+      shell: bash
+      run: |
+        dotnet tool install -g dotnet-releaser
+        dotnet-releaser run --nuget-token "${{secrets.NUGET_TOKEN}}" --github-token "${{secrets.GITHUB_TOKEN}}" src/dotnet-releaser.toml
