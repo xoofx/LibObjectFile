@@ -323,6 +323,23 @@ namespace LibObjectFile.Dwarf
                     break;
 
                 }
+
+                case DwarfAttributeKind.Location:
+                {
+                    if (Form == DwarfAttributeFormEx.SecOffset)
+                    {
+                        if (reader.OffsetToLocationList.TryGetValue(ValueAsU64, out var locationList))
+                        {
+                            ValueAsU64 = 0;
+                            ValueAsObject = locationList;
+                        }
+                        else
+                        {
+                            // Log and error
+                        }
+                    }
+                    break;
+                }
             }
         }
 
@@ -599,6 +616,15 @@ namespace LibObjectFile.Dwarf
                     }
 
                     encoding = DwarfAttributeEncoding.ExpressionLocation;
+                }
+                else if (this.ValueAsObject is DwarfLocationList)
+                {
+                    if ((encoding & DwarfAttributeEncoding.LocationList) == 0)
+                    {
+                        context.Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The expression value of attribute {this} from DIE {this.Parent} is not valid for supported attribute encoding {encoding}. Expecting LocationList.");
+                    }
+
+                    encoding = DwarfAttributeEncoding.LocationList;
                 }
                 else if ((encoding & DwarfAttributeEncoding.Address) != 0)
                 {
@@ -896,7 +922,14 @@ namespace LibObjectFile.Dwarf
                 // stroffsetsptr
                 case DwarfAttributeForm.SecOffset:
                 {
-                    writer.WriteUIntFromEncoding(ValueAsU64);
+                    if (ValueAsObject != null)
+                    {
+                        writer.WriteUIntFromEncoding(((DwarfObject) ValueAsObject).Offset);
+                    }
+                    else
+                    {
+                        writer.WriteUIntFromEncoding(ValueAsU64);
+                    }
                     break;
                 }
 

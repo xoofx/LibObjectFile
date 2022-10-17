@@ -17,6 +17,7 @@ namespace LibObjectFile.Dwarf
         private int _abbreviationTableSymbolIndex;
         private int _lineTableSymbolIndex;
         private int _stringTableSymbolIndex;
+        private int _locationSectionSymbolIndex;
         private readonly ElfSymbolTable _symbolTable;
 
         public DwarfElfContext(ElfObjectFile elf)
@@ -78,6 +79,10 @@ namespace LibObjectFile.Dwarf
                         LineTable = ((ElfBinarySection)section);
                         mapSectionToSymbolIndex.TryGetValue(LineTable, out _lineTableSymbolIndex);
                         break;
+                    case ".debug_loc":
+                        LocationSection = ((ElfBinarySection)section);
+                        mapSectionToSymbolIndex.TryGetValue(LocationSection, out _locationSectionSymbolIndex);
+                        break;
 
                     case ".rela.debug_aranges":
                     case ".rel.debug_aranges":
@@ -95,6 +100,12 @@ namespace LibObjectFile.Dwarf
                     case ".rel.debug_info":
                         RelocInfoSection = (ElfRelocationTable)section;
                         RelocInfoSection.Relocate(relocContext);
+                        break;
+
+                    case ".rela.debug_loc":
+                    case ".rel.debug_loc":
+                        RelocLocationSection = (ElfRelocationTable)section;
+                        RelocLocationSection.Relocate(relocContext);
                         break;
                 }
             }
@@ -119,8 +130,12 @@ namespace LibObjectFile.Dwarf
         public ElfBinarySection StringTable { get; set; }
 
         public ElfBinarySection LineTable { get; set; }
-        
+
         public ElfRelocationTable RelocLineTable { get; set; }
+
+        public ElfBinarySection LocationSection { get; private set; }
+
+        public ElfRelocationTable RelocLocationSection { get; set; }
 
         public int CodeSectionSymbolIndex => _codeSectionSymbolIndex;
 
@@ -131,6 +146,8 @@ namespace LibObjectFile.Dwarf
         public int AbbreviationTableSymbolIndex => _abbreviationTableSymbolIndex;
 
         public int LineTableSymbolIndex => _lineTableSymbolIndex;
+
+        public int LocationSectionSymbolIndex => _locationSectionSymbolIndex;
 
         public ElfBinarySection GetOrCreateInfoSection()
         {
@@ -170,6 +187,16 @@ namespace LibObjectFile.Dwarf
         public ElfBinarySection GetOrCreateStringTable()
         {
             return StringTable ??= GetOrCreateDebugSection(".debug_str", true, out _stringTableSymbolIndex);
+        }
+
+        public ElfBinarySection GetOrCreateLocationSection()
+        {
+            return LocationSection ??= GetOrCreateDebugSection(".debug_loc", true, out _locationSectionSymbolIndex);
+        }
+
+        public ElfRelocationTable GetOrCreateRelocLocationSection()
+        {
+            return RelocLocationSection ??= GetOrCreateRelocationTable(LocationSection);
         }
 
         public void RemoveStringTable()
@@ -247,6 +274,26 @@ namespace LibObjectFile.Dwarf
             {
                 Elf.RemoveSection(RelocInfoSection);
                 RelocInfoSection = null;
+            }
+        }
+
+        public void RemoveLocationSection()
+        {
+            if (LocationSection != null)
+            {
+                Elf.RemoveSection(LocationSection);
+                LocationSection = null;
+            }
+
+            RemoveRelocLocationSection();
+        }
+
+        public void RemoveRelocLocationSection()
+        {
+            if (RelocLocationSection != null)
+            {
+                Elf.RemoveSection(RelocLocationSection);
+                RelocLocationSection = null;
             }
         }
 

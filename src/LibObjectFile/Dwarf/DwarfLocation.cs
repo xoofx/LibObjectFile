@@ -18,6 +18,12 @@ namespace LibObjectFile.Dwarf
             AsObject = expression;
         }
 
+        public DwarfLocation(DwarfLocationList locationList)
+        {
+            AsValue = default;
+            AsObject = locationList;
+        }
+
         public DwarfInteger AsValue;
 
         public object AsObject;
@@ -37,6 +43,11 @@ namespace LibObjectFile.Dwarf
         }
 
         public static implicit operator DwarfLocation(DwarfExpression value)
+        {
+            return new DwarfLocation(value);
+        }
+
+        public static implicit operator DwarfLocation(DwarfLocationList value)
         {
             return new DwarfLocation(value);
         }

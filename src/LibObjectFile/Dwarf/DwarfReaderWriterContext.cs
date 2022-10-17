@@ -23,5 +23,7 @@ namespace LibObjectFile.Dwarf
         public TextWriter DebugLinePrinter { get; set; }
 
         public Stream DebugInfoStream { get; set; }
+
+        public Stream DebugLocationStream { get; set; }
     }
 }

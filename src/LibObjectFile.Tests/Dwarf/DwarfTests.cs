@@ -459,6 +459,31 @@ namespace LibObjectFile.Tests.Dwarf
             };
             rootDIE.AddChild(subProgram);
 
+            var locationList = new DwarfLocationList();
+            var regExpression = new DwarfExpression();
+            regExpression.AddOperation(new DwarfOperation { Kind = DwarfOperationKindEx.Reg0 });            
+            var regExpression2 = new DwarfExpression();
+            regExpression2.AddOperation(new DwarfOperation { Kind = DwarfOperationKindEx.Reg2 });            
+            locationList.AddLocationListEntry(new DwarfLocationListEntry
+            {
+                Start = 0,
+                End = 0x10,
+                Expression = regExpression,
+            });
+            locationList.AddLocationListEntry(new DwarfLocationListEntry
+            {
+                Start = 0x10,
+                End = 0x20,
+                Expression = regExpression2,
+            });
+            var variable = new DwarfDIEVariable()
+            {
+                Name = "a",
+                Location = locationList,
+            };
+            dwarfFile.LocationSection.AddLocationList(locationList);
+            subProgram.AddChild(variable);
+
             var cu = new DwarfCompilationUnit()
             {
                 AddressSize = DwarfAddressSize.Bit64,

@@ -247,7 +247,7 @@ namespace LibObjectFile.Dwarf
                     {
                         var value = cst.Value;
                         attr.ValueAsU64 = value.AsValue.U64;
-                        attr.ValueAsObject = value.AsExpression;
+                        attr.ValueAsObject = value.AsObject;
                     }
                     return;
                 }
@@ -260,7 +260,7 @@ namespace LibObjectFile.Dwarf
                 {
                     Kind = kind,
                     ValueAsU64 = value.AsValue.U64,
-                    ValueAsObject = value.AsExpression
+                    ValueAsObject = value.AsObject
                 });
             }
         }
