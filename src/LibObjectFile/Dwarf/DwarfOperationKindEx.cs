@@ -22,7 +22,7 @@ namespace LibObjectFile.Dwarf
 
         public override string ToString()
         {
-            return ToStringInternal() ?? $"Unknown {nameof(DwarfOperationKindEx)} (0x{Value:x2})";
+            return ToStringInternal() ?? $"Unknown {nameof(DwarfOperationKindEx)} ({(uint)Value:x2})";
         }
 
         public bool Equals(DwarfOperationKindEx other)

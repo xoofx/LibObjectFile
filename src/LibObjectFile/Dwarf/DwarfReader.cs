@@ -26,6 +26,7 @@ namespace LibObjectFile.Dwarf
             _unresolvedDIECompilationUnitReference = new List<DwarfDIEReference>();
             _attributesWithUnresolvedDIESectionReference = new List<DwarfDIEReference>();
             OffsetToLineProgramTable = new Dictionary<ulong, DwarfLineProgramTable>();
+            OffsetToLocationList = new Dictionary<ulong, DwarfLocationList>();
             _stack = new Stack<DwarfDIE>();
             _stackWithLineProgramTable = new Stack<DwarfDIE>();
         }
@@ -43,7 +44,9 @@ namespace LibObjectFile.Dwarf
         internal DwarfAttributeDescriptor CurrentAttributeDescriptor { get; set; }
 
         internal Dictionary<ulong, DwarfLineProgramTable> OffsetToLineProgramTable { get; }
-        
+
+        internal Dictionary<ulong, DwarfLocationList> OffsetToLocationList { get; }
+
         internal void PushDIE(DwarfDIE die)
         {
             _registeredDIEPerCompilationUnit.Add(die.Offset - CurrentUnit.Offset, die);

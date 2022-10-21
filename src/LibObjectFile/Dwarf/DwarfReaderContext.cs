@@ -22,6 +22,7 @@ namespace LibObjectFile.Dwarf
             DebugAbbrevStream = elfContext.AbbreviationTable?.Stream;
             DebugInfoStream = elfContext.InfoSection?.Stream;
             DebugAddressRangeStream = elfContext.AddressRangeTable?.Stream;
+            DebugLocationStream = elfContext.LocationSection?.Stream;
         }
 
         public bool IsInputReadOnly { get; set; }

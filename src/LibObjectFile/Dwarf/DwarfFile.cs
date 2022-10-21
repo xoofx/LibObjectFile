@@ -14,6 +14,7 @@ namespace LibObjectFile.Dwarf
         private DwarfLineSection _lineSection;
         private DwarfInfoSection _infoSection;
         private DwarfAddressRangeTable _addressRangeTable;
+        private DwarfLocationSection _locationSection;
 
         public DwarfFile()
         {
@@ -21,6 +22,7 @@ namespace LibObjectFile.Dwarf
             StringTable = new DwarfStringTable();
             LineSection = new DwarfLineSection();
             InfoSection = new DwarfInfoSection();
+            LocationSection = new DwarfLocationSection();
             AddressRangeTable = new DwarfAddressRangeTable();
         }
 
@@ -53,7 +55,13 @@ namespace LibObjectFile.Dwarf
             get => _infoSection;
             set => AttachChild(this, value, ref _infoSection, false);
         }
-        
+
+        public DwarfLocationSection LocationSection
+        {
+            get => _locationSection;
+            set => AttachChild(this, value, ref _locationSection, false);
+        }
+
         protected override void Read(DwarfReader reader)
         {
             throw new NotImplementedException();
@@ -115,6 +123,9 @@ namespace LibObjectFile.Dwarf
             // Update the abbrev table right after we have computed the entire layout of Info
             AbbreviationTable.Offset = 0;
             AbbreviationTable.UpdateLayoutInternal(layoutContext);
+
+            LocationSection.Offset = 0;
+            LocationSection.UpdateLayoutInternal(layoutContext);
         }
 
         public void Write(DwarfWriterContext writerContext)
@@ -184,6 +195,16 @@ namespace LibObjectFile.Dwarf
                 writer.CurrentSection = InfoSection;
                 InfoSection.Relocations.Clear();
                 InfoSection.WriteInternal(writer);
+            }
+
+            writer.Stream = writerContext.DebugLocationStream;
+            if (writer.Stream != null)
+            {
+                writer.Stream.Position = 0;
+                writer.Stream.SetLength(0);
+                writer.CurrentSection = LocationSection;
+                LocationSection.Relocations.Clear();
+                LocationSection.WriteInternal(writer);
             }
 
             CheckErrors(diagnostics);
@@ -318,6 +339,30 @@ namespace LibObjectFile.Dwarf
                 elfContext.RemoveInfoSection();
             }
 
+            // LocationSection
+            if (LocationSection.Size > 0)
+            {
+                writer.Stream = elfContext.GetOrCreateLocationSection().Stream;
+                writer.Stream.Position = 0;
+                writer.Stream.SetLength(0);
+                writer.CurrentSection = LocationSection;
+                LocationSection.Relocations.Clear();
+                LocationSection.WriteInternal(writer);
+
+                if (writer.EnableRelocation && LocationSection.Relocations.Count > 0)
+                {
+                    LocationSection.CopyRelocationsTo(elfContext, elfContext.GetOrCreateRelocLocationSection());
+                }
+                else
+                {
+                    elfContext.RemoveRelocLocationSection();
+                }
+            }
+            else
+            {
+                elfContext.RemoveLocationSection();
+            }
+
             CheckErrors(diagnostics);
         }
 
@@ -357,6 +402,14 @@ namespace LibObjectFile.Dwarf
             {
                 reader.CurrentSection = dwarf.AddressRangeTable;
                 dwarf.AddressRangeTable.ReadInternal(reader);
+            }
+
+            reader.Log = null;
+            reader.Stream = readerContext.DebugLocationStream;
+            if (reader.Stream != null)
+            {
+                reader.CurrentSection = dwarf.LocationSection;
+                dwarf.LocationSection.ReadInternal(reader);
             }
 
             reader.Log = null;
