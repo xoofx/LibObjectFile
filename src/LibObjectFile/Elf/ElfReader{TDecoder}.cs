@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using static System.Collections.Specialized.BitVector32;
 
 namespace LibObjectFile.Elf
 {
@@ -17,8 +18,8 @@ namespace LibObjectFile.Elf
         private TDecoder _decoder;
         private ulong _startOfFile;
         private ushort _programHeaderCount;
-        private ushort _sectionHeaderCount;
-        private ushort _sectionStringTableIndex;
+        private uint _sectionHeaderCount;
+        private uint _sectionStringTableIndex;
         private bool _isFirstSectionValidNull;
         private bool _hasValidSectionStringTable;
 
@@ -193,7 +194,7 @@ namespace LibObjectFile.Elf
         
         private void ReadSections()
         {
-            if (_sectionHeaderCount == 0) return;
+            if (Layout.OffsetOfSectionHeaderTable == 0) return;
 
             // Write section header table
             ReadSectionHeaderTable();
@@ -210,9 +211,25 @@ namespace LibObjectFile.Elf
                 return;
             }
 
-            for (int i = 0; i < _sectionHeaderCount; i++)
+            uint i = 0;
+
+            if (_sectionHeaderCount == 0)
             {
-                var offset = Layout.OffsetOfSectionHeaderTable + (ulong)i * Layout.SizeOfSectionHeaderEntry;
+                // We are dealing with an object file that has more than SHN_LORESERVE
+                // (0xff00) sections. It has to begin with a NULL section header where
+                // its Size contains the real number of sections, and Link optionally
+                // points to string table section if it's section index is too high.
+                if (ReadExtendedNullSectionTableEntry())
+                {
+                    i = 1;
+                    ObjectFile.AddSection(new ElfNullSection());
+                    _isFirstSectionValidNull = true;
+                }
+            }
+
+            for (; i < _sectionHeaderCount; i++)
+            {
+                var offset = Layout.OffsetOfSectionHeaderTable + i * Layout.SizeOfSectionHeaderEntry;
 
                 if (offset >= (ulong)Stream.Length)
                 {
@@ -228,12 +245,12 @@ namespace LibObjectFile.Elf
             }
         }
 
-        private ElfSection ReadSectionTableEntry(int sectionIndex)
+        private ElfSection ReadSectionTableEntry(uint sectionIndex)
         {
             return ObjectFile.FileClass == ElfFileClass.Is32 ? ReadSectionTableEntry32(sectionIndex) : ReadSectionTableEntry64(sectionIndex);
         }
 
-        private ElfSection ReadSectionTableEntry32(int sectionIndex)
+        private ElfSection ReadSectionTableEntry32(uint sectionIndex)
         {
             var streamOffset = Stream.Position;
             if (!TryReadData(Layout.SizeOfSectionHeaderEntry, out ElfNative.Elf32_Shdr rawSection))
@@ -267,7 +284,7 @@ namespace LibObjectFile.Elf
             return section;
         }
 
-        private ElfSection ReadSectionTableEntry64(int sectionIndex)
+        private ElfSection ReadSectionTableEntry64(uint sectionIndex)
         {
             var streamOffset = Stream.Position;
             if (!TryReadData(Layout.SizeOfSectionHeaderEntry, out ElfNative.Elf64_Shdr rawSection))
@@ -299,6 +316,68 @@ namespace LibObjectFile.Elf
             }
 
             return section;
+        }
+
+        private bool ReadExtendedNullSectionTableEntry()
+        {
+            uint sh_type;
+            ulong sh_size;
+            uint sh_link;
+            bool isNull;
+
+            Stream.Position = (long)Layout.OffsetOfSectionHeaderTable;
+
+            if (ObjectFile.FileClass == ElfFileClass.Is32)
+            {
+                
+                if (!TryReadData(Layout.SizeOfSectionHeaderEntry, out ElfNative.Elf32_Shdr rawSection32))
+                {
+                    Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteSectionHeader32Size, $"Unable to read entirely NULL section header. Not enough data (size: {Layout.SizeOfSectionHeaderEntry}) read at offset {Layout.OffsetOfSectionHeaderTable} from the stream");
+                    return false;
+                }
+
+                sh_type = _decoder.Decode(rawSection32.sh_type);
+                sh_size = _decoder.Decode(rawSection32.sh_size);
+                sh_link = _decoder.Decode(rawSection32.sh_link);
+                rawSection32.sh_size = 0;
+                rawSection32.sh_link = 0;
+                isNull = rawSection32.IsNull;
+            }
+            else
+            {
+                if (!TryReadData(Layout.SizeOfSectionHeaderEntry, out ElfNative.Elf64_Shdr rawSection64))
+                {
+                    Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteSectionHeader64Size, $"Unable to read entirely NULL section header. Not enough data (size: {Layout.SizeOfSectionHeaderEntry}) read at offset {Layout.OffsetOfSectionHeaderTable} from the stream");
+                    return false;
+                }
+
+                sh_type = _decoder.Decode(rawSection64.sh_type);
+                sh_size = _decoder.Decode(rawSection64.sh_size);
+                sh_link = _decoder.Decode(rawSection64.sh_link);
+                rawSection64.sh_size = 0;
+                rawSection64.sh_link = 0;
+                isNull = rawSection64.IsNull;
+            }
+
+            if (!isNull)
+            {
+                Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidFirstSectionExpectingUndefined, $"Invalid Section [0] {(ElfSectionType)sh_type}. Expecting {ElfNative.SHN_UNDEF}");
+                return false;
+            }
+
+            if (sh_size >= uint.MaxValue)
+            {
+                Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSectionHeaderCount, $"Extended section count [{sh_size}] exceeds {uint.MaxValue}");
+                return false;
+            }
+
+            _sectionHeaderCount = (uint)sh_size;
+            if (_sectionStringTableIndex == ElfNative.SHN_XINDEX)
+            {
+                _sectionStringTableIndex = sh_link;
+            }
+
+            return true;
         }
         
         public override ElfSectionLink ResolveLink(ElfSectionLink link, string errorMessageFormat)
@@ -609,7 +688,7 @@ namespace LibObjectFile.Elf
             }
         }
         
-        private ElfSection CreateElfSection(int sectionIndex, ElfSectionType sectionType, bool isNullSection)
+        private ElfSection CreateElfSection(uint sectionIndex, ElfSectionType sectionType, bool isNullSection)
         {
             ElfSection section = null;
 

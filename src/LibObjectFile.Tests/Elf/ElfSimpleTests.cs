@@ -421,5 +421,35 @@ namespace LibObjectFile.Tests.Elf
 
             Assert.AreEqual(alignedSection.UpperAlignment, codeSection.Offset, "Invalid alignment");
         }
+
+        [Test]
+        public void TestManySections()
+        {
+            var elf = new ElfObjectFile(ElfArch.X86_64);
+
+            for (int i = 0; i < ushort.MaxValue; i++)
+            {
+                elf.AddSection(new ElfBinarySection { Name = $".section{i}" });
+            }
+            elf.AddSection(new ElfSectionHeaderStringTable());
+
+            var diagnostics = elf.Verify();
+            Assert.False(diagnostics.HasErrors);
+
+            uint visibleSectionCount = elf.VisibleSectionCount;
+
+            using (var outStream = File.OpenWrite("manysections"))
+            {
+                elf.Write(outStream);
+                outStream.Flush();
+            }
+
+            using (var inStream = File.OpenRead("manysections"))
+            {
+                elf = ElfObjectFile.Read(inStream);
+            }
+
+            Assert.AreEqual(visibleSectionCount, elf.VisibleSectionCount);
+        }
     }
 }
