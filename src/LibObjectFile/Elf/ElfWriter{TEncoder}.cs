@@ -227,9 +227,15 @@ namespace LibObjectFile.Elf
         private void WriteSectionHeaderTable()
         {
             var offset = (ulong)Stream.Position - _startOfFile;
-            if (offset != Layout.OffsetOfSectionHeaderTable)
+            var diff = Layout.OffsetOfSectionHeaderTable - offset;
+            if (diff < 0 || diff > 8)
             {
                 throw new InvalidOperationException("Internal error. Unexpected offset for SectionHeaderTable");
+            }
+            else if (diff != 0)
+            {
+                // Alignment
+                Stream.Write(stackalloc byte[(int)diff]);
             }
             
             // Then write all regular sections
