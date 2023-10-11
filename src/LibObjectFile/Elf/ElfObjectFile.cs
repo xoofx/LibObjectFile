@@ -179,6 +179,12 @@ namespace LibObjectFile.Elf
                 diagnostics.Error(DiagnosticId.ELF_ERR_InvalidHeaderFileClassNone, $"Cannot compute the layout with an {nameof(ElfObjectFile)} having a {nameof(FileClass)} == {ElfFileClass.None}");
             }
 
+            if (VisibleSectionCount >= ElfNative.SHN_LORESERVE &&
+                Sections[0] is not ElfNullSection)
+            {
+                diagnostics.Error(DiagnosticId.ELF_ERR_MissingNullSection, $"Section count is higher than SHN_LORESERVE ({ElfNative.SHN_LORESERVE}) but the first section is not a NULL section");                
+            }
+
             foreach (var segment in Segments)
             {
                 segment.Verify(diagnostics);

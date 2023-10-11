@@ -385,7 +385,7 @@ namespace LibObjectFile.Elf
             if (errorMessageFormat == null) throw new ArgumentNullException(nameof(errorMessageFormat));
 
             // Connect section Link instance
-            if (!link.IsSpecial)
+            if (!link.IsEmpty)
             {
                 if (link.SpecialIndex == _sectionStringTableIndex)
                 {
@@ -396,13 +396,21 @@ namespace LibObjectFile.Elf
                     var sectionIndex = link.SpecialIndex;
 
                     bool sectionFound = false;
-                    foreach (var section in ObjectFile.Sections)
+                    if (sectionIndex < ObjectFile.Sections.Count && ObjectFile.Sections[(int)sectionIndex].SectionIndex == sectionIndex)
                     {
-                        if (section.SectionIndex == sectionIndex)
+                        link = new ElfSectionLink(ObjectFile.Sections[(int)sectionIndex]);
+                        sectionFound = true;
+                    }
+                    else
+                    {
+                        foreach (var section in ObjectFile.Sections)
                         {
-                            link = new ElfSectionLink(section);
-                            sectionFound = true;
-                            break;
+                            if (section.SectionIndex == sectionIndex)
+                            {
+                                link = new ElfSectionLink(section);
+                                sectionFound = true;
+                                break;
+                            }
                         }
                     }
 
@@ -722,6 +730,9 @@ namespace LibObjectFile.Elf
                     break;
                 case ElfSectionType.Note:
                     section = new ElfNoteTable();
+                    break;
+                case ElfSectionType.SymbolTableSectionHeaderIndices:
+                    section = new ElfSymbolTableSectionHeaderIndices();
                     break;
             }
 

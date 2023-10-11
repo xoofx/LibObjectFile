@@ -426,15 +426,32 @@ namespace LibObjectFile.Tests.Elf
         public void TestManySections()
         {
             var elf = new ElfObjectFile(ElfArch.X86_64);
+            var stringTable = new ElfStringTable();
+            var symbolTable = new ElfSymbolTable { Link = stringTable };
 
             for (int i = 0; i < ushort.MaxValue; i++)
             {
-                elf.AddSection(new ElfBinarySection { Name = $".section{i}" });
+                var section = new ElfBinarySection { Name = $".section{i}" };
+                elf.AddSection(section);
+                symbolTable.Entries.Add(new ElfSymbol { Type = ElfSymbolType.Section, Section = section });
             }
+
+            elf.AddSection(stringTable);
+            elf.AddSection(symbolTable);
             elf.AddSection(new ElfSectionHeaderStringTable());
 
             var diagnostics = elf.Verify();
+            Assert.True(diagnostics.HasErrors);
+            Assert.AreEqual(DiagnosticId.ELF_ERR_MissingSectionHeaderIndices, diagnostics.Messages[0].Id);
+
+            elf.AddSection(new ElfSymbolTableSectionHeaderIndices { Link = symbolTable });
+            diagnostics = elf.Verify();
             Assert.False(diagnostics.HasErrors);
+
+            for (int i = 0; i < ushort.MaxValue; i++)
+            {
+
+            }
 
             uint visibleSectionCount = elf.VisibleSectionCount;
 
