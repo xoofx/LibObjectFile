@@ -448,11 +448,6 @@ namespace LibObjectFile.Tests.Elf
             diagnostics = elf.Verify();
             Assert.False(diagnostics.HasErrors);
 
-            for (int i = 0; i < ushort.MaxValue; i++)
-            {
-
-            }
-
             uint visibleSectionCount = elf.VisibleSectionCount;
 
             using (var outStream = File.OpenWrite("manysections"))
