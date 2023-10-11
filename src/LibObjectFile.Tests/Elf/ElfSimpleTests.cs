@@ -450,6 +450,14 @@ namespace LibObjectFile.Tests.Elf
             }
 
             Assert.AreEqual(visibleSectionCount, elf.VisibleSectionCount);
+            Assert.True(elf.Sections[0] is ElfNullSection);
+            Assert.True(elf.Sections[1] is ElfProgramHeaderTable);
+
+            for (int i = 0; i < ushort.MaxValue; i++)
+            {
+                Assert.True(elf.Sections[i + 2] is ElfBinarySection);
+                Assert.AreEqual($".section{i}", elf.Sections[i + 2].Name.Value);
+            }
         }
     }
 }
