@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection.PortableExecutable;
 
 namespace LibObjectFile.Elf
 {
@@ -14,12 +15,12 @@ namespace LibObjectFile.Elf
     {
         public const string DefaultName = ".symtab_shndx";
 
-        private readonly List<ElfSectionLink> _entries;
+        private readonly List<uint> _entries;
 
         public ElfSymbolTableSectionHeaderIndices() : base(ElfSectionType.SymbolTableSectionHeaderIndices)
         {
             Name = DefaultName;
-            _entries = new List<ElfSectionLink>();
+            _entries = new List<uint>();
         }
 
         public override ElfSectionType Type
@@ -35,11 +36,6 @@ namespace LibObjectFile.Elf
             }
         }
 
-        /// <summary>
-        /// Gets a list of <see cref="ElfSectionLink"/> entries.
-        /// </summary>
-        public IReadOnlyList<ElfSectionLink> Entries => _entries;
-
         public override unsafe ulong TableEntrySize => sizeof(uint);
 
         protected override void Read(ElfReader reader)
@@ -49,16 +45,16 @@ namespace LibObjectFile.Elf
             _entries.Capacity = (int)numberOfEntries;
             for (ulong i = 0; i < numberOfEntries; i++)
             {
-                _entries.Add(new ElfSectionLink(reader.ReadU32()));
+                _entries.Add(reader.ReadU32());
             }
         }
 
         protected override void Write(ElfWriter writer)
         {
             // Write all entries
-            for (int i = 0; i < Entries.Count; i++)
+            for (int i = 0; i < _entries.Count; i++)
             {
-                writer.WriteU32(Entries[i].GetIndex());
+                writer.WriteU32(_entries[i]);
             }
         }
 
@@ -70,14 +66,13 @@ namespace LibObjectFile.Elf
             for (int i = 0; i < _entries.Count; i++)
             {
                 var entry = _entries[i];
-                if (entry.SpecialIndex != 0)
+                if (entry != 0)
                 {
-                    entry = reader.ResolveLink(entry.Section, $"Invalid link section index {entry.SpecialIndex} for symbol table entry [{i}] from symbol table section [{this}]");
-                    _entries[i] = entry;
+                    var resolvedLink = reader.ResolveLink(new ElfSectionLink(entry), $"Invalid link section index {entry} for symbol table entry [{i}] from symbol table section [{this}]");
 
                     // Update the link in symbol table
                     var symbolTableEntry = symbolTable.Entries[i];
-                    symbolTableEntry.Section = entry.Section;
+                    symbolTableEntry.Section = resolvedLink;
                     symbolTable.Entries[i] = symbolTableEntry;
                 }
             }
@@ -92,21 +87,41 @@ namespace LibObjectFile.Elf
             {
                 return;
             }
-
-            for (int i = 0; i < _entries.Count; i++)
-            {
-                var entry = _entries[i];
-                if (entry.SpecialIndex != 0 && entry.Section != null && entry.Section.Parent != Parent)
-                {
-                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSymbolEntrySectionParent, $"Invalid section for the symbol entry #{i} in the {nameof(ElfSymbolTable)} section [{Index}]");
-                }
-            }
         }
 
         public override unsafe void UpdateLayout(DiagnosticBag diagnostics)
         {
             if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
-            Size = Parent == null || Parent.FileClass == ElfFileClass.None ? 0 : (ulong)Entries.Count * sizeof(uint);
+
+            // Verify that the link is safe and configured as expected
+            Link.TryGetSectionSafe<ElfSymbolTable>(nameof(ElfSymbolTableSectionHeaderIndices), nameof(Link), this, diagnostics, out var symbolTable, ElfSectionType.SymbolTable, ElfSectionType.DynamicLinkerSymbolTable);
+
+            int numberOfEntries = 0;
+            for (int i = 0; i < symbolTable.Entries.Count; i++)
+            {
+                if (symbolTable.Entries[i].Section.Section is { SectionIndex: >= ElfNative.SHN_LORESERVE })
+                {
+                    numberOfEntries = i + 1;
+                }
+            }
+
+            _entries.Capacity = numberOfEntries;
+            _entries.Clear();
+
+            for (int i = 0; i < numberOfEntries; i++)
+            {
+                var section = symbolTable.Entries[i].Section.Section;
+                if (section is { SectionIndex: >= ElfNative.SHN_LORESERVE })
+                {
+                    _entries.Add(section.SectionIndex);
+                }
+                else
+                {
+                    _entries.Add(0);
+                }
+            }
+
+            Size = Parent == null || Parent.FileClass == ElfFileClass.None ? 0 : (ulong)numberOfEntries * sizeof(uint);
         }
     }
 }

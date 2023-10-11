@@ -470,6 +470,13 @@ namespace LibObjectFile.Tests.Elf
                 Assert.True(elf.Sections[i + 2] is ElfBinarySection);
                 Assert.AreEqual($".section{i}", elf.Sections[i + 2].Name.Value);
             }
+
+            Assert.True(elf.Sections[ushort.MaxValue + 3] is ElfSymbolTable);
+            symbolTable = (ElfSymbolTable)elf.Sections[ushort.MaxValue + 3];
+            for (int i = 0; i < ushort.MaxValue; i++)
+            {
+                Assert.AreEqual($".section{i}", symbolTable.Entries[i + 1].Section.Section.Name.Value);
+            }
         }
     }
 }
