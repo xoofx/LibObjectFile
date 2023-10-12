@@ -512,7 +512,7 @@ namespace LibObjectFile.Elf
             // Make sure to pre-sort all sections by offset
             var orderedSections = new List<ElfSection>(ObjectFile.Sections.Count);
             orderedSections.AddRange(ObjectFile.Sections);
-            orderedSections.Sort(CompareSectionOffsetsDelegate);
+            orderedSections.Sort(CompareSectionOffsetsAndSizesDelegate);
             // Store the stream index to recover the same order when saving back.
             for(int i = 0; i < orderedSections.Count; i++)
             {
@@ -548,10 +548,10 @@ namespace LibObjectFile.Elf
                 lastOffset = section.Offset + section.Size - 1;
 
                 // Verify overlapping sections and generate and error
-                for (int j = i + 1; j < orderedSections.Count; j++)
+                if (i + 1 < orderedSections.Count)
                 {
-                    var otherSection = orderedSections[j];
-                    if (section.Contains(otherSection) || otherSection.Contains(section))
+                    var otherSection = orderedSections[i + 1];
+                    if (otherSection.Offset < section.Offset + section.Size)
                     {
                         Diagnostics.Warning(DiagnosticId.ELF_ERR_InvalidOverlappingSections, $"The section {section} [{section.Offset} : {section.Offset + section.Size - 1}] is overlapping with the section {otherSection} [{otherSection.Offset} : {otherSection.Offset + otherSection.Size - 1}]");
                     }
@@ -844,11 +844,16 @@ namespace LibObjectFile.Elf
             return _decoder.Decode(src);
         }
 
-        private static readonly Comparison<ElfSection> CompareSectionOffsetsDelegate = new Comparison<ElfSection>(CompareSectionOffsets);
+        private static readonly Comparison<ElfSection> CompareSectionOffsetsAndSizesDelegate = new Comparison<ElfSection>(CompareSectionOffsetsAndSizes);
 
-        private static int CompareSectionOffsets(ElfSection left, ElfSection right)
+        private static int CompareSectionOffsetsAndSizes(ElfSection left, ElfSection right)
         {
-            return left.Offset.CompareTo(right.Offset);
+            int result = left.Offset.CompareTo(right.Offset);
+            if (result == 0)
+            {
+                result = left.Size.CompareTo(right.Size);
+            }
+            return result;
         }
     }
 }
