@@ -155,8 +155,9 @@ namespace LibObjectFile.Elf
             // entries for sections
             _encoder.Encode(out hdr.e_shoff, (uint)Layout.OffsetOfSectionHeaderTable);
             _encoder.Encode(out hdr.e_shentsize, Layout.SizeOfSectionHeaderEntry);
-            _encoder.Encode(out hdr.e_shnum, (ushort)ObjectFile.VisibleSectionCount);
-            _encoder.Encode(out hdr.e_shstrndx, (ushort)(ObjectFile.SectionHeaderStringTable?.SectionIndex ?? (ushort)0));
+            _encoder.Encode(out hdr.e_shnum, ObjectFile.VisibleSectionCount >= ElfNative.SHN_LORESERVE ? (ushort)0 : (ushort)ObjectFile.VisibleSectionCount);
+            uint shstrSectionIndex = ObjectFile.SectionHeaderStringTable?.SectionIndex ?? 0u;
+            _encoder.Encode(out hdr.e_shstrndx, shstrSectionIndex >= ElfNative.SHN_LORESERVE ? (ushort)ElfNative.SHN_XINDEX : (ushort)shstrSectionIndex);
 
             Write(hdr);
         }
@@ -181,11 +182,13 @@ namespace LibObjectFile.Elf
             // entries for sections
             _encoder.Encode(out hdr.e_shoff, Layout.OffsetOfSectionHeaderTable);
             _encoder.Encode(out hdr.e_shentsize, (ushort)sizeof(Elf64_Shdr));
-            _encoder.Encode(out hdr.e_shnum, (ushort)ObjectFile.VisibleSectionCount);
-            _encoder.Encode(out hdr.e_shstrndx, (ushort)(ObjectFile.SectionHeaderStringTable?.SectionIndex ?? (ushort)0));
+            _encoder.Encode(out hdr.e_shnum, ObjectFile.VisibleSectionCount >= ElfNative.SHN_LORESERVE ? (ushort)0 : (ushort)ObjectFile.VisibleSectionCount);
+            uint shstrSectionIndex = ObjectFile.SectionHeaderStringTable?.SectionIndex ?? 0u;
+            _encoder.Encode(out hdr.e_shstrndx, shstrSectionIndex >= ElfNative.SHN_LORESERVE ? (ushort)ElfNative.SHN_XINDEX : (ushort)shstrSectionIndex);
 
             Write(hdr);
         }
+
         private void CheckProgramHeaders()
         {
             if (ObjectFile.Segments.Count == 0)
@@ -268,8 +271,17 @@ namespace LibObjectFile.Elf
             _encoder.Encode(out shdr.sh_flags, (uint)section.Flags);
             _encoder.Encode(out shdr.sh_addr, (uint)section.VirtualAddress);
             _encoder.Encode(out shdr.sh_offset, (uint)section.Offset);
-            _encoder.Encode(out shdr.sh_size, (uint)section.Size);
-            _encoder.Encode(out shdr.sh_link, section.Link.GetIndex());
+            if (section.Index == 0 && ObjectFile.VisibleSectionCount >= ElfNative.SHN_LORESERVE)
+            {
+                _encoder.Encode(out shdr.sh_size, ObjectFile.VisibleSectionCount);
+                uint shstrSectionIndex = ObjectFile.SectionHeaderStringTable?.SectionIndex ?? 0u;
+                _encoder.Encode(out shdr.sh_link, shstrSectionIndex >= ElfNative.SHN_LORESERVE ? shstrSectionIndex : 0);
+            }
+            else
+            {
+                _encoder.Encode(out shdr.sh_size, (uint)section.Size);
+                _encoder.Encode(out shdr.sh_link, section.Link.GetIndex());
+            }
             _encoder.Encode(out shdr.sh_info, section.Info.GetIndex());
             _encoder.Encode(out shdr.sh_addralign, (uint)section.Alignment);
             _encoder.Encode(out shdr.sh_entsize, (uint)section.TableEntrySize);
@@ -284,8 +296,17 @@ namespace LibObjectFile.Elf
             _encoder.Encode(out shdr.sh_flags, (uint)section.Flags);
             _encoder.Encode(out shdr.sh_addr, section.VirtualAddress);
             _encoder.Encode(out shdr.sh_offset, section.Offset);
-            _encoder.Encode(out shdr.sh_size, section.Size);
-            _encoder.Encode(out shdr.sh_link, section.Link.GetIndex());
+            if (section.Index == 0 && ObjectFile.VisibleSectionCount >= ElfNative.SHN_LORESERVE)
+            {
+                _encoder.Encode(out shdr.sh_size, ObjectFile.VisibleSectionCount);
+                uint shstrSectionIndex = ObjectFile.SectionHeaderStringTable?.SectionIndex ?? 0u;
+                _encoder.Encode(out shdr.sh_link, shstrSectionIndex >= ElfNative.SHN_LORESERVE ? shstrSectionIndex : 0);
+            }
+            else
+            {
+                _encoder.Encode(out shdr.sh_size, section.Size);
+                _encoder.Encode(out shdr.sh_link, section.Link.GetIndex());
+            }
             _encoder.Encode(out shdr.sh_info, section.Info.GetIndex());
             _encoder.Encode(out shdr.sh_addralign, section.Alignment);
             _encoder.Encode(out shdr.sh_entsize, section.TableEntrySize);
