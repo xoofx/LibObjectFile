@@ -91,9 +91,9 @@ LibObjectFile is available as a NuGet package: [![NuGet](https://img.shields.io/
 
 ## Build
 
-In order to build LibObjectFile, you need to have installed the [.NET Core 3.0 SDK](https://www.microsoft.com/net/core).
+In order to build LibObjectFile, you need to have installed the [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download).
 
-Running the tests require Ubuntu 18.04. `dotnet test` will work on Windows (via WSL) and on that version of Ubuntu.
+Running the tests require Ubuntu 22.04. `dotnet test` will work on Windows (via WSL) and on that version of Ubuntu.
 If you're using macOS or another Linux, there's a Dockerfile and a helper script under `src` to run tests in the right OS version.
 
 ## License
