@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Linq;
 
 namespace LibObjectFile.Elf
 {
@@ -17,7 +18,7 @@ namespace LibObjectFile.Elf
     public class ElfStringTable : ElfSection
     {
         private readonly MemoryStream _table;
-        private readonly List<string> _reservedStrings;
+        private readonly HashSet<string> _reservedStrings;
         private readonly Dictionary<string, uint> _mapStringToIndex;
         private readonly Dictionary<uint, string> _mapIndexToString;
 
@@ -36,7 +37,7 @@ namespace LibObjectFile.Elf
             _table = new MemoryStream(capacityInBytes);
             _mapStringToIndex = new Dictionary<string, uint>();
             _mapIndexToString = new Dictionary<uint, string>();
-            _reservedStrings = new List<string>();
+            _reservedStrings = new HashSet<string>();
             // Always create an empty string
             CreateIndex(string.Empty);
         }
@@ -78,7 +79,7 @@ namespace LibObjectFile.Elf
 
         internal void ReserveString(string text)
         {
-            if (text is object && !_mapStringToIndex.ContainsKey(text))
+            if (text is object && !_mapStringToIndex.ContainsKey(text) && !_reservedStrings.Contains(text))
             {
                 _reservedStrings.Add(text);
             }
