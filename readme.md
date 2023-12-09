@@ -51,7 +51,7 @@ elf.Write(outStream);
   - Integration with ELF to support easy reading/writing back
   - Support for relocatable sections
 - Use of a Diagnostics API to validate file format (on read/before write)
-- Library requiring `net7.0`
+- Library requiring `net8.0`
     - If you are looking for `netstandard2.1` support you will need to use `0.4.0` version
 
 ## Documentation
