@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <None Remove="helloworld.cpp" />
+    <None Remove="libstdc++.so" />
     <None Remove="lib_a.cpp" />
     <None Remove="lib_b.cpp" />
     <None Remove="multiple_functions.cpp" />
@@ -15,6 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="libstdc++.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="multiple_functions.cpp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

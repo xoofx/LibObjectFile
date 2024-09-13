@@ -463,7 +463,7 @@ namespace LibObjectFile.Elf
                 section.Link = ResolveLink(section.Link, $"Invalid section Link [{{0}}] for section [{i}]");
 
                 // Connect section Info instance
-                if (section.Type != ElfSectionType.DynamicLinkerSymbolTable && section.Type != ElfSectionType.SymbolTable)
+                if (section.Type != ElfSectionType.DynamicLinkerSymbolTable && section.Type != ElfSectionType.SymbolTable && (section.Flags & ElfSectionFlags.InfoLink) != 0)
                 {
                     section.Info = ResolveLink(section.Info, $"Invalid section Info [{{0}}] for section [{i}]");
                 }

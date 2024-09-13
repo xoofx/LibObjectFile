@@ -19,7 +19,7 @@ namespace LibObjectFile.Tests.Elf
             AssertLsbMsb(elf, fileName);
         }
         
-        private static void AssertReadElfInternal(ElfObjectFile elf, string fileName, bool writeFile = true, string context = null)
+        protected static void AssertReadElfInternal(ElfObjectFile elf, string fileName, bool writeFile = true, string context = null, string readElfParams = null)
         {
             if (writeFile)
             {
@@ -36,7 +36,8 @@ namespace LibObjectFile.Tests.Elf
 
             var result = stringWriter.ToString().Replace("\r\n", "\n").TrimEnd();
             Console.WriteLine(result);
-            var readelf = LinuxUtil.ReadElf(fileName).TrimEnd();
+            readElfParams ??= "-W -a";
+            var readelf = LinuxUtil.ReadElf(fileName, readElfParams).TrimEnd();
             if (readelf != result)
             {
                 Console.WriteLine("=== Expected:");
@@ -54,7 +55,7 @@ namespace LibObjectFile.Tests.Elf
             }
         }
         
-        private static void AssertReadBack(ElfObjectFile elf, string fileName, bool readAsReadOnly)
+        protected static void AssertReadBack(ElfObjectFile elf, string fileName, bool readAsReadOnly)
         {
             ElfObjectFile newObjectFile;
 
