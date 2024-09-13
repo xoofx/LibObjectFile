@@ -5,88 +5,86 @@
 using System;
 using System.Diagnostics;
 
-namespace LibObjectFile.Dwarf
+namespace LibObjectFile.Dwarf;
+
+public abstract class DwarfObject : ObjectFileNodeBase
 {
-
-    public abstract class DwarfObject : ObjectFileNode
+    public DwarfFile GetParentFile()
     {
-        public DwarfFile GetParentFile()
+        var check = (ObjectFileNodeBase)this;
+        while (check != null)
         {
-            var check = (ObjectFileNode)this;
-            while (check != null)
-            {
-                if (check is DwarfFile dwarfFile) return dwarfFile;
-                check = check.Parent;
-            }
-            return null;
+            if (check is DwarfFile dwarfFile) return dwarfFile;
+            check = check.Parent;
         }
+        return null;
+    }
 
-        public DwarfUnit GetParentUnit()
+    public DwarfUnit GetParentUnit()
+    {
+        var check = (ObjectFileNodeBase)this;
+        while (check != null)
         {
-            var check = (ObjectFileNode)this;
-            while (check != null)
-            {
-                if (check is DwarfUnit dwarfUnit) return dwarfUnit;
-                check = check.Parent;
-            }
-            return null;
+            if (check is DwarfUnit dwarfUnit) return dwarfUnit;
+            check = check.Parent;
         }
+        return null;
+    }
 
-        public DwarfSection GetParentSection()
+    public DwarfSection GetParentSection()
+    {
+        var check = (ObjectFileNodeBase)this;
+        while (check != null)
         {
-            var check = (ObjectFileNode)this;
-            while (check != null)
-            {
-                if (check is DwarfSection dwarfSection) return dwarfSection;
-                check = check.Parent;
-            }
-            return null;
+            if (check is DwarfSection dwarfSection) return dwarfSection;
+            check = check.Parent;
+        }
+        return null;
+    }
+}
+
+public abstract class DwarfObject<TContainer> : DwarfObject where TContainer : ObjectFileNodeBase
+{
+    protected override void ValidateParent(ObjectFileNodeBase parent)
+    {
+        if (!(parent is TContainer))
+        {
+            throw new ArgumentException($"Parent must inherit from type {nameof(TContainer)}");
         }
     }
 
-    public abstract class DwarfObject<TContainer> : DwarfObject where TContainer : ObjectFileNode
+
+    /// <summary>
+    /// Gets the containing <see cref="ElfObjectFile"/>. Might be null if this section or segment
+    /// does not belong to an existing <see cref="ElfObjectFile"/>.
+    /// </summary>
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    public new TContainer Parent
     {
-        protected override void ValidateParent(ObjectFileNode parent)
-        {
-            if (!(parent is TContainer))
-            {
-                throw new ArgumentException($"Parent must inherit from type {nameof(TContainer)}");
-            }
-        }
+        get => (TContainer)base.Parent;
+        internal set => base.Parent = value;
+    }
+
+    internal void UpdateLayoutInternal(DwarfLayoutContext layoutContext)
+    {
+        UpdateLayout(layoutContext);
+    }
+
+    protected abstract void UpdateLayout(DwarfLayoutContext layoutContext);
 
 
-        /// <summary>
-        /// Gets the containing <see cref="ElfObjectFile"/>. Might be null if this section or segment
-        /// does not belong to an existing <see cref="ElfObjectFile"/>.
-        /// </summary>
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public new TContainer Parent
-        {
-            get => (TContainer)base.Parent;
-            internal set => base.Parent = value;
-        }
+    internal void ReadInternal(DwarfReader reader)
+    {
+        Read(reader);
+    }
 
-        internal void UpdateLayoutInternal(DwarfLayoutContext layoutContext)
-        {
-            UpdateLayout(layoutContext);
-        }
-
-        protected abstract void UpdateLayout(DwarfLayoutContext layoutContext);
-
-
-        internal void ReadInternal(DwarfReader reader)
-        {
-            Read(reader);
-        }
-
-        protected abstract void Read(DwarfReader reader);
+    protected abstract void Read(DwarfReader reader);
         
 
-        internal void WriteInternal(DwarfWriter writer)
-        {
-            Write(writer);
-        }
-
-        protected abstract void Write(DwarfWriter writer);
+    internal void WriteInternal(DwarfWriter writer)
+    {
+        Write(writer);
     }
+
+    protected abstract void Write(DwarfWriter writer);
 }

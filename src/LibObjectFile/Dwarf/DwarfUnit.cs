@@ -78,7 +78,7 @@ namespace LibObjectFile.Dwarf
             Root?.Verify(diagnostics);
         }
 
-        protected override void ValidateParent(ObjectFileNode parent)
+        protected override void ValidateParent(ObjectFileNodeBase parent)
         {
             if (!(parent is DwarfSection))
             {

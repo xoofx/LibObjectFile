@@ -33,7 +33,7 @@ namespace LibObjectFile.Elf
             }
         }
 
-        protected override void ValidateParent(ObjectFileNode parent)
+        protected override void ValidateParent(ObjectFileNodeBase parent)
         {
             if (!(parent is ElfObjectFile))
             {

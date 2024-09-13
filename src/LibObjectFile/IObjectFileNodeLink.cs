@@ -8,6 +8,6 @@ namespace LibObjectFile
     {
         ulong GetRelativeOffset();
 
-        ObjectFileNode GetObjectFileNode();
+        ObjectFileNodeBase GetObjectFileNode();
     }
 }

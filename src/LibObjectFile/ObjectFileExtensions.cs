@@ -13,7 +13,7 @@ namespace LibObjectFile
         /// Adds an attribute to <see cref="Attributes"/>.
         /// </summary>
         /// <param name="element">A attribute</param>
-        public static void Add<TParent, TChild>(this List<TChild> list, TParent parent, TChild element) where TChild : ObjectFileNode where TParent: ObjectFileNode
+        public static void Add<TParent, TChild>(this List<TChild> list, TParent parent, TChild element) where TChild : ObjectFileNodeBase where TParent: ObjectFileNodeBase
         {
             if (element == null) throw new ArgumentNullException(nameof(element));
             if (element.Parent != null)
@@ -31,7 +31,7 @@ namespace LibObjectFile
         /// Adds an element to the sorted list
         /// </summary>
         /// <param name="element">An element to add</param>
-        public static void AddSorted<TParent, TChild>(this List<TChild> list, TParent parent, TChild element, bool requiresUnique = false) where TChild : ObjectFileNode, IComparable<TChild> where TParent : ObjectFileNode 
+        public static void AddSorted<TParent, TChild>(this List<TChild> list, TParent parent, TChild element, bool requiresUnique = false) where TChild : ObjectFileNodeBase, IComparable<TChild> where TParent : ObjectFileNodeBase 
         {
             if (element == null) throw new ArgumentNullException(nameof(element));
             if (element.Parent != null)
@@ -78,7 +78,7 @@ namespace LibObjectFile
         /// </summary>
         /// <param name="index">Index into <see cref="Attributes"/> to insert the specified attribute</param>
         /// <param name="element">The attribute to insert</param>
-        public static void InsertAt<TParent, TChild>(this List<TChild> list, TParent parent, int index, TChild element) where TChild : ObjectFileNode where TParent : ObjectFileNode
+        public static void InsertAt<TParent, TChild>(this List<TChild> list, TParent parent, int index, TChild element) where TChild : ObjectFileNodeBase where TParent : ObjectFileNodeBase
         {
             if (index < 0 || index > list.Count) throw new ArgumentOutOfRangeException(nameof(index), $"Invalid index {index}, Must be >= 0 && <= {list.Count}");
             if (element == null) throw new ArgumentNullException(nameof(element));
@@ -104,7 +104,7 @@ namespace LibObjectFile
         /// Removes an attribute from <see cref="Attributes"/>
         /// </summary>
         /// <param name="child">The attribute to remove</param>
-        public static void Remove<TParent, TChild>(this List<TChild> list, TParent parent, TChild child) where TChild : ObjectFileNode where TParent : ObjectFileNode
+        public static void Remove<TParent, TChild>(this List<TChild> list, TParent parent, TChild child) where TChild : ObjectFileNodeBase where TParent : ObjectFileNodeBase
         {
             if (child == null) throw new ArgumentNullException(nameof(child));
             if (!ReferenceEquals(child.Parent, parent))
@@ -130,7 +130,7 @@ namespace LibObjectFile
         /// Removes an attribute from <see cref="Attributes"/> at the specified index.
         /// </summary>
         /// <param name="index">Index into <see cref="Attributes"/> to remove the specified attribute</param>
-        public static TChild RemoveAt<TParent, TChild>(this List<TChild> list, TParent parent, int index) where TChild : ObjectFileNode where TParent : ObjectFileNode
+        public static TChild RemoveAt<TParent, TChild>(this List<TChild> list, TParent parent, int index) where TChild : ObjectFileNodeBase where TParent : ObjectFileNodeBase
         {
             if (index < 0 || index > list.Count) throw new ArgumentOutOfRangeException(nameof(index), $"Invalid index {index}, Must be >= 0 && <= {list.Count}");
             var child = list[index];

@@ -14,7 +14,7 @@ namespace LibObjectFile.CodeGen
 {
     partial class Program
     {
-        private const string SrcFolderRelative = @"..\..\..\..";
+        private const string SrcFolderRelative = @"..\..\..\..\..";
 
         static void Main(string[] args)
         {
@@ -255,9 +255,8 @@ namespace LibObjectFile.CodeGen
                 }
             }
 
-            var toStringInternal = new CSharpMethod()
+            var toStringInternal = new CSharpMethod("ToStringInternal")
             {
-                Name = "ToStringInternal",
                 Visibility = CSharpVisibility.Private,
                 ReturnType = CSharpPrimitiveType.String()
             };

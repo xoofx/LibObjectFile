@@ -6,13 +6,14 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+
 using System;
 
 #pragma warning disable 1591
 
 namespace LibObjectFile.Dwarf
 {
-    public static partial class DwarfNative
+    public static unsafe partial class DwarfNative
     {
         public const ushort DW_TAG_array_type = 1;
         

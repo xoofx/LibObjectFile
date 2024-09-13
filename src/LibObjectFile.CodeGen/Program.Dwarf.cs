@@ -420,9 +420,11 @@ namespace LibObjectFile.CodeGen
                     currentDIE.BaseTypes.Add(new CSharpFreeType("DwarfDIE"));
                     ns.Members.Add(currentDIE);
 
-                    var csConstructor = new CSharpMethod();
-                    csConstructor.IsConstructor = true;
-                    csConstructor.Body = (writer, element) => writer.WriteLine($"this.Tag = (DwarfTag)DwarfNative.{fullTagName};");
+                    var csConstructor = new CSharpMethod(string.Empty)
+                    {
+                        Kind = CSharpMethodKind.Constructor,
+                        Body = (writer, element) => writer.WriteLine($"this.Tag = (DwarfTag)DwarfNative.{fullTagName};")
+                    };
                     currentDIE.Members.Add(csConstructor);
 
                     dieClasses.Add(currentDIE);
@@ -461,9 +463,8 @@ namespace LibObjectFile.CodeGen
                 Visibility = CSharpVisibility.Internal
             };
             ns.Members.Add(dieHelperClass);
-            var dieHelperMethod = new CSharpMethod()
+            var dieHelperMethod = new CSharpMethod("ConvertTagToDwarfDIE")
             {
-                Name = "ConvertTagToDwarfDIE",
                 Modifiers =  CSharpModifiers.Static,
                 Visibility =  CSharpVisibility.Public
             };

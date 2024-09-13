@@ -6,6 +6,7 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+
 using System;
 
 #pragma warning disable 1591
@@ -14,9 +15,9 @@ namespace LibObjectFile.Elf
 {
     using System.Runtime.InteropServices;
     
-    public static partial class ElfNative
+    public static unsafe partial class ElfNative
     {
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public unsafe partial struct Elf32_Ehdr
         {
             /// <summary>
@@ -93,24 +94,24 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Type for a 16-bit quantity.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        public readonly partial struct Elf32_Half : IEquatable<Elf32_Half>
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        public readonly partial struct Elf32_Half : IEquatable<ElfNative.Elf32_Half>
         {
             public Elf32_Half(ushort value) => this.Value = value;
             
-            public readonly ushort Value;
-            
-            public bool Equals(Elf32_Half other) =>  Value.Equals(other.Value);
+            public ushort Value { get; }
             
             public override bool Equals(object obj) => obj is Elf32_Half other && Equals(other);
+            
+            public bool Equals(Elf32_Half other) => Value.Equals(other.Value);
             
             public override int GetHashCode() => Value.GetHashCode();
             
             public override string ToString() => Value.ToString();
             
-            public static implicit operator ushort(Elf32_Half from) => from.Value;
+            public static implicit operator ushort (ElfNative.Elf32_Half from) => from.Value;
             
-            public static implicit operator Elf32_Half(ushort from) => new Elf32_Half(from);
+            public static implicit operator ElfNative.Elf32_Half (ushort from) => new ElfNative.Elf32_Half(from);
             
             public static bool operator ==(Elf32_Half left, Elf32_Half right) => left.Equals(right);
             
@@ -120,24 +121,24 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Types for signed and unsigned 32-bit quantities.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        public readonly partial struct Elf32_Word : IEquatable<Elf32_Word>
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        public readonly partial struct Elf32_Word : IEquatable<ElfNative.Elf32_Word>
         {
             public Elf32_Word(uint value) => this.Value = value;
             
-            public readonly uint Value;
-            
-            public bool Equals(Elf32_Word other) =>  Value.Equals(other.Value);
+            public uint Value { get; }
             
             public override bool Equals(object obj) => obj is Elf32_Word other && Equals(other);
+            
+            public bool Equals(Elf32_Word other) => Value.Equals(other.Value);
             
             public override int GetHashCode() => Value.GetHashCode();
             
             public override string ToString() => Value.ToString();
             
-            public static implicit operator uint(Elf32_Word from) => from.Value;
+            public static implicit operator uint (ElfNative.Elf32_Word from) => from.Value;
             
-            public static implicit operator Elf32_Word(uint from) => new Elf32_Word(from);
+            public static implicit operator ElfNative.Elf32_Word (uint from) => new ElfNative.Elf32_Word(from);
             
             public static bool operator ==(Elf32_Word left, Elf32_Word right) => left.Equals(right);
             
@@ -147,24 +148,24 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Type of addresses.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        public readonly partial struct Elf32_Addr : IEquatable<Elf32_Addr>
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        public readonly partial struct Elf32_Addr : IEquatable<ElfNative.Elf32_Addr>
         {
             public Elf32_Addr(uint value) => this.Value = value;
             
-            public readonly uint Value;
-            
-            public bool Equals(Elf32_Addr other) =>  Value.Equals(other.Value);
+            public uint Value { get; }
             
             public override bool Equals(object obj) => obj is Elf32_Addr other && Equals(other);
+            
+            public bool Equals(Elf32_Addr other) => Value.Equals(other.Value);
             
             public override int GetHashCode() => Value.GetHashCode();
             
             public override string ToString() => Value.ToString();
             
-            public static implicit operator uint(Elf32_Addr from) => from.Value;
+            public static implicit operator uint (ElfNative.Elf32_Addr from) => from.Value;
             
-            public static implicit operator Elf32_Addr(uint from) => new Elf32_Addr(from);
+            public static implicit operator ElfNative.Elf32_Addr (uint from) => new ElfNative.Elf32_Addr(from);
             
             public static bool operator ==(Elf32_Addr left, Elf32_Addr right) => left.Equals(right);
             
@@ -174,31 +175,31 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Type of file offsets.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        public readonly partial struct Elf32_Off : IEquatable<Elf32_Off>
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        public readonly partial struct Elf32_Off : IEquatable<ElfNative.Elf32_Off>
         {
             public Elf32_Off(uint value) => this.Value = value;
             
-            public readonly uint Value;
-            
-            public bool Equals(Elf32_Off other) =>  Value.Equals(other.Value);
+            public uint Value { get; }
             
             public override bool Equals(object obj) => obj is Elf32_Off other && Equals(other);
+            
+            public bool Equals(Elf32_Off other) => Value.Equals(other.Value);
             
             public override int GetHashCode() => Value.GetHashCode();
             
             public override string ToString() => Value.ToString();
             
-            public static implicit operator uint(Elf32_Off from) => from.Value;
+            public static implicit operator uint (ElfNative.Elf32_Off from) => from.Value;
             
-            public static implicit operator Elf32_Off(uint from) => new Elf32_Off(from);
+            public static implicit operator ElfNative.Elf32_Off (uint from) => new ElfNative.Elf32_Off(from);
             
             public static bool operator ==(Elf32_Off left, Elf32_Off right) => left.Equals(right);
             
             public static bool operator !=(Elf32_Off left, Elf32_Off right) => !left.Equals(right);
         }
         
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public unsafe partial struct Elf64_Ehdr
         {
             /// <summary>
@@ -272,96 +273,96 @@ namespace LibObjectFile.Elf
             public ElfNative.Elf64_Half e_shstrndx;
         }
         
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        public readonly partial struct Elf64_Half : IEquatable<Elf64_Half>
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        public readonly partial struct Elf64_Half : IEquatable<ElfNative.Elf64_Half>
         {
             public Elf64_Half(ushort value) => this.Value = value;
             
-            public readonly ushort Value;
-            
-            public bool Equals(Elf64_Half other) =>  Value.Equals(other.Value);
+            public ushort Value { get; }
             
             public override bool Equals(object obj) => obj is Elf64_Half other && Equals(other);
+            
+            public bool Equals(Elf64_Half other) => Value.Equals(other.Value);
             
             public override int GetHashCode() => Value.GetHashCode();
             
             public override string ToString() => Value.ToString();
             
-            public static implicit operator ushort(Elf64_Half from) => from.Value;
+            public static implicit operator ushort (ElfNative.Elf64_Half from) => from.Value;
             
-            public static implicit operator Elf64_Half(ushort from) => new Elf64_Half(from);
+            public static implicit operator ElfNative.Elf64_Half (ushort from) => new ElfNative.Elf64_Half(from);
             
             public static bool operator ==(Elf64_Half left, Elf64_Half right) => left.Equals(right);
             
             public static bool operator !=(Elf64_Half left, Elf64_Half right) => !left.Equals(right);
         }
         
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        public readonly partial struct Elf64_Word : IEquatable<Elf64_Word>
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        public readonly partial struct Elf64_Word : IEquatable<ElfNative.Elf64_Word>
         {
             public Elf64_Word(uint value) => this.Value = value;
             
-            public readonly uint Value;
-            
-            public bool Equals(Elf64_Word other) =>  Value.Equals(other.Value);
+            public uint Value { get; }
             
             public override bool Equals(object obj) => obj is Elf64_Word other && Equals(other);
+            
+            public bool Equals(Elf64_Word other) => Value.Equals(other.Value);
             
             public override int GetHashCode() => Value.GetHashCode();
             
             public override string ToString() => Value.ToString();
             
-            public static implicit operator uint(Elf64_Word from) => from.Value;
+            public static implicit operator uint (ElfNative.Elf64_Word from) => from.Value;
             
-            public static implicit operator Elf64_Word(uint from) => new Elf64_Word(from);
+            public static implicit operator ElfNative.Elf64_Word (uint from) => new ElfNative.Elf64_Word(from);
             
             public static bool operator ==(Elf64_Word left, Elf64_Word right) => left.Equals(right);
             
             public static bool operator !=(Elf64_Word left, Elf64_Word right) => !left.Equals(right);
         }
         
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        public readonly partial struct Elf64_Addr : IEquatable<Elf64_Addr>
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        public readonly partial struct Elf64_Addr : IEquatable<ElfNative.Elf64_Addr>
         {
             public Elf64_Addr(ulong value) => this.Value = value;
             
-            public readonly ulong Value;
-            
-            public bool Equals(Elf64_Addr other) =>  Value.Equals(other.Value);
+            public ulong Value { get; }
             
             public override bool Equals(object obj) => obj is Elf64_Addr other && Equals(other);
+            
+            public bool Equals(Elf64_Addr other) => Value.Equals(other.Value);
             
             public override int GetHashCode() => Value.GetHashCode();
             
             public override string ToString() => Value.ToString();
             
-            public static implicit operator ulong(Elf64_Addr from) => from.Value;
+            public static implicit operator ulong (ElfNative.Elf64_Addr from) => from.Value;
             
-            public static implicit operator Elf64_Addr(ulong from) => new Elf64_Addr(from);
+            public static implicit operator ElfNative.Elf64_Addr (ulong from) => new ElfNative.Elf64_Addr(from);
             
             public static bool operator ==(Elf64_Addr left, Elf64_Addr right) => left.Equals(right);
             
             public static bool operator !=(Elf64_Addr left, Elf64_Addr right) => !left.Equals(right);
         }
         
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        public readonly partial struct Elf64_Off : IEquatable<Elf64_Off>
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        public readonly partial struct Elf64_Off : IEquatable<ElfNative.Elf64_Off>
         {
             public Elf64_Off(ulong value) => this.Value = value;
             
-            public readonly ulong Value;
-            
-            public bool Equals(Elf64_Off other) =>  Value.Equals(other.Value);
+            public ulong Value { get; }
             
             public override bool Equals(object obj) => obj is Elf64_Off other && Equals(other);
+            
+            public bool Equals(Elf64_Off other) => Value.Equals(other.Value);
             
             public override int GetHashCode() => Value.GetHashCode();
             
             public override string ToString() => Value.ToString();
             
-            public static implicit operator ulong(Elf64_Off from) => from.Value;
+            public static implicit operator ulong (ElfNative.Elf64_Off from) => from.Value;
             
-            public static implicit operator Elf64_Off(ulong from) => new Elf64_Off(from);
+            public static implicit operator ElfNative.Elf64_Off (ulong from) => new ElfNative.Elf64_Off(from);
             
             public static bool operator ==(Elf64_Off left, Elf64_Off right) => left.Equals(right);
             
@@ -371,7 +372,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Section header.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf32_Shdr
         {
             /// <summary>
@@ -425,7 +426,7 @@ namespace LibObjectFile.Elf
             public ElfNative.Elf32_Word sh_entsize;
         }
         
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf64_Shdr
         {
             /// <summary>
@@ -479,24 +480,24 @@ namespace LibObjectFile.Elf
             public ElfNative.Elf64_Xword sh_entsize;
         }
         
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        public readonly partial struct Elf64_Xword : IEquatable<Elf64_Xword>
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        public readonly partial struct Elf64_Xword : IEquatable<ElfNative.Elf64_Xword>
         {
             public Elf64_Xword(ulong value) => this.Value = value;
             
-            public readonly ulong Value;
-            
-            public bool Equals(Elf64_Xword other) =>  Value.Equals(other.Value);
+            public ulong Value { get; }
             
             public override bool Equals(object obj) => obj is Elf64_Xword other && Equals(other);
+            
+            public bool Equals(Elf64_Xword other) => Value.Equals(other.Value);
             
             public override int GetHashCode() => Value.GetHashCode();
             
             public override string ToString() => Value.ToString();
             
-            public static implicit operator ulong(Elf64_Xword from) => from.Value;
+            public static implicit operator ulong (ElfNative.Elf64_Xword from) => from.Value;
             
-            public static implicit operator Elf64_Xword(ulong from) => new Elf64_Xword(from);
+            public static implicit operator ElfNative.Elf64_Xword (ulong from) => new ElfNative.Elf64_Xword(from);
             
             public static bool operator ==(Elf64_Xword left, Elf64_Xword right) => left.Equals(right);
             
@@ -506,7 +507,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Section compression header.  Used when SHF_COMPRESSED is set.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf32_Chdr
         {
             /// <summary>
@@ -525,7 +526,7 @@ namespace LibObjectFile.Elf
             public ElfNative.Elf32_Word ch_addralign;
         }
         
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf64_Chdr
         {
             /// <summary>
@@ -549,7 +550,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Symbol table entry.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf32_Sym
         {
             /// <summary>
@@ -586,31 +587,31 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Type for section indices, which are 16-bit quantities.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        public readonly partial struct Elf32_Section : IEquatable<Elf32_Section>
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        public readonly partial struct Elf32_Section : IEquatable<ElfNative.Elf32_Section>
         {
             public Elf32_Section(ushort value) => this.Value = value;
             
-            public readonly ushort Value;
-            
-            public bool Equals(Elf32_Section other) =>  Value.Equals(other.Value);
+            public ushort Value { get; }
             
             public override bool Equals(object obj) => obj is Elf32_Section other && Equals(other);
+            
+            public bool Equals(Elf32_Section other) => Value.Equals(other.Value);
             
             public override int GetHashCode() => Value.GetHashCode();
             
             public override string ToString() => Value.ToString();
             
-            public static implicit operator ushort(Elf32_Section from) => from.Value;
+            public static implicit operator ushort (ElfNative.Elf32_Section from) => from.Value;
             
-            public static implicit operator Elf32_Section(ushort from) => new Elf32_Section(from);
+            public static implicit operator ElfNative.Elf32_Section (ushort from) => new ElfNative.Elf32_Section(from);
             
             public static bool operator ==(Elf32_Section left, Elf32_Section right) => left.Equals(right);
             
             public static bool operator !=(Elf32_Section left, Elf32_Section right) => !left.Equals(right);
         }
         
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf64_Sym
         {
             /// <summary>
@@ -644,24 +645,24 @@ namespace LibObjectFile.Elf
             public ElfNative.Elf64_Xword st_size;
         }
         
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        public readonly partial struct Elf64_Section : IEquatable<Elf64_Section>
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        public readonly partial struct Elf64_Section : IEquatable<ElfNative.Elf64_Section>
         {
             public Elf64_Section(ushort value) => this.Value = value;
             
-            public readonly ushort Value;
-            
-            public bool Equals(Elf64_Section other) =>  Value.Equals(other.Value);
+            public ushort Value { get; }
             
             public override bool Equals(object obj) => obj is Elf64_Section other && Equals(other);
+            
+            public bool Equals(Elf64_Section other) => Value.Equals(other.Value);
             
             public override int GetHashCode() => Value.GetHashCode();
             
             public override string ToString() => Value.ToString();
             
-            public static implicit operator ushort(Elf64_Section from) => from.Value;
+            public static implicit operator ushort (ElfNative.Elf64_Section from) => from.Value;
             
-            public static implicit operator Elf64_Section(ushort from) => new Elf64_Section(from);
+            public static implicit operator ElfNative.Elf64_Section (ushort from) => new ElfNative.Elf64_Section(from);
             
             public static bool operator ==(Elf64_Section left, Elf64_Section right) => left.Equals(right);
             
@@ -672,7 +673,7 @@ namespace LibObjectFile.Elf
         /// The syminfo section if available contains additional information about
         /// every dynamic symbol.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf32_Syminfo
         {
             /// <summary>
@@ -686,7 +687,7 @@ namespace LibObjectFile.Elf
             public ElfNative.Elf32_Half si_flags;
         }
         
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf64_Syminfo
         {
             /// <summary>
@@ -703,7 +704,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Relocation table entry without addend (in section of type SHT_REL).
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf32_Rel
         {
             /// <summary>
@@ -725,7 +726,7 @@ namespace LibObjectFile.Elf
         /// <remarks>
         /// The following, at least, is used on Sparc v9, MIPS, and Alpha.
         /// </remarks>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf64_Rel
         {
             /// <summary>
@@ -742,7 +743,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Relocation table entry with addend (in section of type SHT_RELA).
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf32_Rela
         {
             /// <summary>
@@ -761,31 +762,31 @@ namespace LibObjectFile.Elf
             public ElfNative.Elf32_Sword r_addend;
         }
         
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        public readonly partial struct Elf32_Sword : IEquatable<Elf32_Sword>
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        public readonly partial struct Elf32_Sword : IEquatable<ElfNative.Elf32_Sword>
         {
             public Elf32_Sword(int value) => this.Value = value;
             
-            public readonly int Value;
-            
-            public bool Equals(Elf32_Sword other) =>  Value.Equals(other.Value);
+            public int Value { get; }
             
             public override bool Equals(object obj) => obj is Elf32_Sword other && Equals(other);
+            
+            public bool Equals(Elf32_Sword other) => Value.Equals(other.Value);
             
             public override int GetHashCode() => Value.GetHashCode();
             
             public override string ToString() => Value.ToString();
             
-            public static implicit operator int(Elf32_Sword from) => from.Value;
+            public static implicit operator int (ElfNative.Elf32_Sword from) => from.Value;
             
-            public static implicit operator Elf32_Sword(int from) => new Elf32_Sword(from);
+            public static implicit operator ElfNative.Elf32_Sword (int from) => new ElfNative.Elf32_Sword(from);
             
             public static bool operator ==(Elf32_Sword left, Elf32_Sword right) => left.Equals(right);
             
             public static bool operator !=(Elf32_Sword left, Elf32_Sword right) => !left.Equals(right);
         }
         
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf64_Rela
         {
             /// <summary>
@@ -804,24 +805,24 @@ namespace LibObjectFile.Elf
             public ElfNative.Elf64_Sxword r_addend;
         }
         
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        public readonly partial struct Elf64_Sxword : IEquatable<Elf64_Sxword>
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        public readonly partial struct Elf64_Sxword : IEquatable<ElfNative.Elf64_Sxword>
         {
             public Elf64_Sxword(long value) => this.Value = value;
             
-            public readonly long Value;
-            
-            public bool Equals(Elf64_Sxword other) =>  Value.Equals(other.Value);
+            public long Value { get; }
             
             public override bool Equals(object obj) => obj is Elf64_Sxword other && Equals(other);
+            
+            public bool Equals(Elf64_Sxword other) => Value.Equals(other.Value);
             
             public override int GetHashCode() => Value.GetHashCode();
             
             public override string ToString() => Value.ToString();
             
-            public static implicit operator long(Elf64_Sxword from) => from.Value;
+            public static implicit operator long (ElfNative.Elf64_Sxword from) => from.Value;
             
-            public static implicit operator Elf64_Sxword(long from) => new Elf64_Sxword(from);
+            public static implicit operator ElfNative.Elf64_Sxword (long from) => new ElfNative.Elf64_Sxword(from);
             
             public static bool operator ==(Elf64_Sxword left, Elf64_Sxword right) => left.Equals(right);
             
@@ -831,7 +832,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Program segment header.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf32_Phdr
         {
             /// <summary>
@@ -875,7 +876,7 @@ namespace LibObjectFile.Elf
             public ElfNative.Elf32_Word p_align;
         }
         
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf64_Phdr
         {
             /// <summary>
@@ -922,11 +923,11 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Dynamic section entry.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf32_Dyn
         {
-            [StructLayout(LayoutKind.Explicit, CharSet = CharSet.Ansi)]
-            public partial struct Elf32_Dyn_union_d_un
+            [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Explicit, CharSet = CharSet.Ansi)]
+            public partial struct Elf32_Dyn__union_0
             {
                 /// <summary>
                 /// Integer value
@@ -946,14 +947,14 @@ namespace LibObjectFile.Elf
             /// </summary>
             public ElfNative.Elf32_Sword d_tag;
             
-            public ElfNative.Elf32_Dyn.Elf32_Dyn_union_d_un d_un;
+            public ElfNative.Elf32_Dyn.Elf32_Dyn__union_0 d_un;
         }
         
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf64_Dyn
         {
-            [StructLayout(LayoutKind.Explicit, CharSet = CharSet.Ansi)]
-            public partial struct Elf64_Dyn_union_d_un
+            [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Explicit, CharSet = CharSet.Ansi)]
+            public partial struct Elf64_Dyn__union_0
             {
                 /// <summary>
                 /// Integer value
@@ -973,13 +974,13 @@ namespace LibObjectFile.Elf
             /// </summary>
             public ElfNative.Elf64_Sxword d_tag;
             
-            public ElfNative.Elf64_Dyn.Elf64_Dyn_union_d_un d_un;
+            public ElfNative.Elf64_Dyn.Elf64_Dyn__union_0 d_un;
         }
         
         /// <summary>
         /// Version definition sections.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf32_Verdef
         {
             /// <summary>
@@ -1019,7 +1020,7 @@ namespace LibObjectFile.Elf
             public ElfNative.Elf32_Word vd_next;
         }
         
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf64_Verdef
         {
             /// <summary>
@@ -1062,7 +1063,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Auxialiary version information.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf32_Verdaux
         {
             /// <summary>
@@ -1077,7 +1078,7 @@ namespace LibObjectFile.Elf
             public ElfNative.Elf32_Word vda_next;
         }
         
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf64_Verdaux
         {
             /// <summary>
@@ -1095,7 +1096,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Version dependency section.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf32_Verneed
         {
             /// <summary>
@@ -1126,7 +1127,7 @@ namespace LibObjectFile.Elf
             public ElfNative.Elf32_Word vn_next;
         }
         
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf64_Verneed
         {
             /// <summary>
@@ -1160,7 +1161,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Auxiliary needed version information.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf32_Vernaux
         {
             /// <summary>
@@ -1190,7 +1191,7 @@ namespace LibObjectFile.Elf
             public ElfNative.Elf32_Word vna_next;
         }
         
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf64_Vernaux
         {
             /// <summary>
@@ -1230,11 +1231,11 @@ namespace LibObjectFile.Elf
         /// types are an arrangement between the exec server and the program
         /// interpreter, so we don't fully specify them here.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf32_auxv_t
         {
-            [StructLayout(LayoutKind.Explicit, CharSet = CharSet.Ansi)]
-            public partial struct Elf32_auxv_t_union_a_un
+            [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Explicit, CharSet = CharSet.Ansi)]
+            public partial struct Elf32_auxv_t__union_0
             {
                 /// <summary>
                 /// Integer value
@@ -1248,14 +1249,14 @@ namespace LibObjectFile.Elf
             /// </summary>
             public uint a_type;
             
-            public ElfNative.Elf32_auxv_t.Elf32_auxv_t_union_a_un a_un;
+            public ElfNative.Elf32_auxv_t.Elf32_auxv_t__union_0 a_un;
         }
         
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf64_auxv_t
         {
-            [StructLayout(LayoutKind.Explicit, CharSet = CharSet.Ansi)]
-            public partial struct Elf64_auxv_t_union_a_un
+            [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Explicit, CharSet = CharSet.Ansi)]
+            public partial struct Elf64_auxv_t__union_0
             {
                 /// <summary>
                 /// Integer value
@@ -1269,14 +1270,14 @@ namespace LibObjectFile.Elf
             /// </summary>
             public ulong a_type;
             
-            public ElfNative.Elf64_auxv_t.Elf64_auxv_t_union_a_un a_un;
+            public ElfNative.Elf64_auxv_t.Elf64_auxv_t__union_0 a_un;
         }
         
         /// <summary>
         /// Note section contents.  Each entry in the note section begins with
         /// a header of a fixed form.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf32_Nhdr
         {
             /// <summary>
@@ -1295,7 +1296,7 @@ namespace LibObjectFile.Elf
             public ElfNative.Elf32_Word n_type;
         }
         
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf64_Nhdr
         {
             /// <summary>
@@ -1317,7 +1318,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Move records.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf32_Move
         {
             /// <summary>
@@ -1349,31 +1350,31 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Types for signed and unsigned 64-bit quantities.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        public readonly partial struct Elf32_Xword : IEquatable<Elf32_Xword>
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        public readonly partial struct Elf32_Xword : IEquatable<ElfNative.Elf32_Xword>
         {
             public Elf32_Xword(ulong value) => this.Value = value;
             
-            public readonly ulong Value;
-            
-            public bool Equals(Elf32_Xword other) =>  Value.Equals(other.Value);
+            public ulong Value { get; }
             
             public override bool Equals(object obj) => obj is Elf32_Xword other && Equals(other);
+            
+            public bool Equals(Elf32_Xword other) => Value.Equals(other.Value);
             
             public override int GetHashCode() => Value.GetHashCode();
             
             public override string ToString() => Value.ToString();
             
-            public static implicit operator ulong(Elf32_Xword from) => from.Value;
+            public static implicit operator ulong (ElfNative.Elf32_Xword from) => from.Value;
             
-            public static implicit operator Elf32_Xword(ulong from) => new Elf32_Xword(from);
+            public static implicit operator ElfNative.Elf32_Xword (ulong from) => new ElfNative.Elf32_Xword(from);
             
             public static bool operator ==(Elf32_Xword left, Elf32_Xword right) => left.Equals(right);
             
             public static bool operator !=(Elf32_Xword left, Elf32_Xword right) => !left.Equals(right);
         }
         
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf64_Move
         {
             /// <summary>
@@ -1405,11 +1406,11 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Entries found in sections of type SHT_MIPS_GPTAB.
         /// </summary>
-        [StructLayout(LayoutKind.Explicit, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Explicit, CharSet = CharSet.Ansi)]
         public partial struct Elf32_gptab
         {
-            [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-            public partial struct Elf32_gptab_gt_header
+            [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+            public partial struct Elf32_gptab__struct_0
             {
                 /// <summary>
                 /// -G value used for compilation.
@@ -1422,8 +1423,8 @@ namespace LibObjectFile.Elf
                 public ElfNative.Elf32_Word gt_unused;
             }
             
-            [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-            public partial struct Elf32_gptab_gt_entry
+            [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+            public partial struct Elf32_gptab__struct_1
             {
                 /// <summary>
                 /// If this value were used for -G.
@@ -1440,19 +1441,19 @@ namespace LibObjectFile.Elf
             /// First entry in section.
             /// </summary>
             [FieldOffset(0)]
-            public ElfNative.Elf32_gptab.Elf32_gptab_gt_header gt_header;
+            public ElfNative.Elf32_gptab.Elf32_gptab__struct_0 gt_header;
             
             /// <summary>
             /// Subsequent entries in section.
             /// </summary>
             [FieldOffset(0)]
-            public ElfNative.Elf32_gptab.Elf32_gptab_gt_entry gt_entry;
+            public ElfNative.Elf32_gptab.Elf32_gptab__struct_1 gt_entry;
         }
         
         /// <summary>
         /// Entry found in sections of type SHT_MIPS_REGINFO.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public unsafe partial struct Elf32_RegInfo
         {
             /// <summary>
@@ -1474,7 +1475,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Entries found in sections of type SHT_MIPS_OPTIONS.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf_Options
         {
             /// <summary>
@@ -1503,7 +1504,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Entry found in `.options' section.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf_Options_Hw
         {
             /// <summary>
@@ -1520,7 +1521,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Entries found in sections of type SHT_MIPS_LIBLIST.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf32_Lib
         {
             /// <summary>
@@ -1549,7 +1550,7 @@ namespace LibObjectFile.Elf
             public ElfNative.Elf32_Word l_flags;
         }
         
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf64_Lib
         {
             /// <summary>
@@ -1578,7 +1579,7 @@ namespace LibObjectFile.Elf
             public ElfNative.Elf64_Word l_flags;
         }
         
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf_MIPS_ABIFlags_v0
         {
             /// <summary>
@@ -1634,48 +1635,48 @@ namespace LibObjectFile.Elf
             public ElfNative.Elf32_Word flags2;
         }
         
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        public readonly partial struct Elf64_Sword : IEquatable<Elf64_Sword>
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        public readonly partial struct Elf64_Sword : IEquatable<ElfNative.Elf64_Sword>
         {
             public Elf64_Sword(int value) => this.Value = value;
             
-            public readonly int Value;
-            
-            public bool Equals(Elf64_Sword other) =>  Value.Equals(other.Value);
+            public int Value { get; }
             
             public override bool Equals(object obj) => obj is Elf64_Sword other && Equals(other);
+            
+            public bool Equals(Elf64_Sword other) => Value.Equals(other.Value);
             
             public override int GetHashCode() => Value.GetHashCode();
             
             public override string ToString() => Value.ToString();
             
-            public static implicit operator int(Elf64_Sword from) => from.Value;
+            public static implicit operator int (ElfNative.Elf64_Sword from) => from.Value;
             
-            public static implicit operator Elf64_Sword(int from) => new Elf64_Sword(from);
+            public static implicit operator ElfNative.Elf64_Sword (int from) => new ElfNative.Elf64_Sword(from);
             
             public static bool operator ==(Elf64_Sword left, Elf64_Sword right) => left.Equals(right);
             
             public static bool operator !=(Elf64_Sword left, Elf64_Sword right) => !left.Equals(right);
         }
         
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        public readonly partial struct Elf32_Sxword : IEquatable<Elf32_Sxword>
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        public readonly partial struct Elf32_Sxword : IEquatable<ElfNative.Elf32_Sxword>
         {
             public Elf32_Sxword(long value) => this.Value = value;
             
-            public readonly long Value;
-            
-            public bool Equals(Elf32_Sxword other) =>  Value.Equals(other.Value);
+            public long Value { get; }
             
             public override bool Equals(object obj) => obj is Elf32_Sxword other && Equals(other);
+            
+            public bool Equals(Elf32_Sxword other) => Value.Equals(other.Value);
             
             public override int GetHashCode() => Value.GetHashCode();
             
             public override string ToString() => Value.ToString();
             
-            public static implicit operator long(Elf32_Sxword from) => from.Value;
+            public static implicit operator long (ElfNative.Elf32_Sxword from) => from.Value;
             
-            public static implicit operator Elf32_Sxword(long from) => new Elf32_Sxword(from);
+            public static implicit operator ElfNative.Elf32_Sxword (long from) => new ElfNative.Elf32_Sxword(from);
             
             public static bool operator ==(Elf32_Sxword left, Elf32_Sxword right) => left.Equals(right);
             
@@ -1685,48 +1686,48 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Type for version symbol information.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        public readonly partial struct Elf32_Versym : IEquatable<Elf32_Versym>
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        public readonly partial struct Elf32_Versym : IEquatable<ElfNative.Elf32_Versym>
         {
             public Elf32_Versym(ElfNative.Elf32_Half value) => this.Value = value;
             
-            public readonly ElfNative.Elf32_Half Value;
-            
-            public bool Equals(Elf32_Versym other) =>  Value.Equals(other.Value);
+            public ElfNative.Elf32_Half Value { get; }
             
             public override bool Equals(object obj) => obj is Elf32_Versym other && Equals(other);
+            
+            public bool Equals(Elf32_Versym other) => Value.Equals(other.Value);
             
             public override int GetHashCode() => Value.GetHashCode();
             
             public override string ToString() => Value.ToString();
             
-            public static implicit operator ElfNative.Elf32_Half(Elf32_Versym from) => from.Value;
+            public static implicit operator ElfNative.Elf32_Half (ElfNative.Elf32_Versym from) => from.Value;
             
-            public static implicit operator Elf32_Versym(ElfNative.Elf32_Half from) => new Elf32_Versym(from);
+            public static implicit operator ElfNative.Elf32_Versym (ElfNative.Elf32_Half from) => new ElfNative.Elf32_Versym(from);
             
             public static bool operator ==(Elf32_Versym left, Elf32_Versym right) => left.Equals(right);
             
             public static bool operator !=(Elf32_Versym left, Elf32_Versym right) => !left.Equals(right);
         }
         
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        public readonly partial struct Elf64_Versym : IEquatable<Elf64_Versym>
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        public readonly partial struct Elf64_Versym : IEquatable<ElfNative.Elf64_Versym>
         {
             public Elf64_Versym(ElfNative.Elf64_Half value) => this.Value = value;
             
-            public readonly ElfNative.Elf64_Half Value;
-            
-            public bool Equals(Elf64_Versym other) =>  Value.Equals(other.Value);
+            public ElfNative.Elf64_Half Value { get; }
             
             public override bool Equals(object obj) => obj is Elf64_Versym other && Equals(other);
+            
+            public bool Equals(Elf64_Versym other) => Value.Equals(other.Value);
             
             public override int GetHashCode() => Value.GetHashCode();
             
             public override string ToString() => Value.ToString();
             
-            public static implicit operator ElfNative.Elf64_Half(Elf64_Versym from) => from.Value;
+            public static implicit operator ElfNative.Elf64_Half (ElfNative.Elf64_Versym from) => from.Value;
             
-            public static implicit operator Elf64_Versym(ElfNative.Elf64_Half from) => new Elf64_Versym(from);
+            public static implicit operator ElfNative.Elf64_Versym (ElfNative.Elf64_Half from) => new ElfNative.Elf64_Versym(from);
             
             public static bool operator ==(Elf64_Versym left, Elf64_Versym right) => left.Equals(right);
             
@@ -1736,24 +1737,24 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Entries found in sections of type SHT_MIPS_CONFLICT.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        public readonly partial struct Elf32_Conflict : IEquatable<Elf32_Conflict>
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        public readonly partial struct Elf32_Conflict : IEquatable<ElfNative.Elf32_Conflict>
         {
             public Elf32_Conflict(ElfNative.Elf32_Addr value) => this.Value = value;
             
-            public readonly ElfNative.Elf32_Addr Value;
-            
-            public bool Equals(Elf32_Conflict other) =>  Value.Equals(other.Value);
+            public ElfNative.Elf32_Addr Value { get; }
             
             public override bool Equals(object obj) => obj is Elf32_Conflict other && Equals(other);
+            
+            public bool Equals(Elf32_Conflict other) => Value.Equals(other.Value);
             
             public override int GetHashCode() => Value.GetHashCode();
             
             public override string ToString() => Value.ToString();
             
-            public static implicit operator ElfNative.Elf32_Addr(Elf32_Conflict from) => from.Value;
+            public static implicit operator ElfNative.Elf32_Addr (ElfNative.Elf32_Conflict from) => from.Value;
             
-            public static implicit operator Elf32_Conflict(ElfNative.Elf32_Addr from) => new Elf32_Conflict(from);
+            public static implicit operator ElfNative.Elf32_Conflict (ElfNative.Elf32_Addr from) => new ElfNative.Elf32_Conflict(from);
             
             public static bool operator ==(Elf32_Conflict left, Elf32_Conflict right) => left.Equals(right);
             
@@ -2629,12 +2630,12 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Start of application-specific
         /// </summary>
-        public const uint SHT_LOUSER = 0x80000000;
+        public const uint SHT_LOUSER = 2147483648;
         
         /// <summary>
         /// End of application-specific
         /// </summary>
-        public const uint SHT_HIUSER = 0x8fffffff;
+        public const uint SHT_HIUSER = 2415919103;
         
         /// <summary>
         /// Writable
@@ -2699,7 +2700,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Processor-specific
         /// </summary>
-        public const uint SHF_MASKPROC = 0xf0000000;
+        public const uint SHF_MASKPROC = 4026531840;
         
         /// <summary>
         /// Special ordering requirement (Solaris).
@@ -2709,7 +2710,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Section is excluded unless referenced or allocated (Solaris).
         /// </summary>
-        public const uint SHF_EXCLUDE = (1U << 31);
+        public const uint SHF_EXCLUDE = 2147483648;
         
         /// <summary>
         /// ZLIB/DEFLATE algorithm.
@@ -2719,22 +2720,22 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Start of OS-specific.
         /// </summary>
-        public const int ELFCOMPRESS_LOOS = 0x60000000;
+        public const int ELFCOMPRESS_LOOS = 1610612736;
         
         /// <summary>
         /// End of OS-specific.
         /// </summary>
-        public const int ELFCOMPRESS_HIOS = 0x6fffffff;
+        public const int ELFCOMPRESS_HIOS = 1879048191;
         
         /// <summary>
         /// Start of processor-specific.
         /// </summary>
-        public const int ELFCOMPRESS_LOPROC = 0x70000000;
+        public const int ELFCOMPRESS_LOPROC = 1879048192;
         
         /// <summary>
         /// End of processor-specific.
         /// </summary>
-        public const int ELFCOMPRESS_HIPROC = 0x7fffffff;
+        public const int ELFCOMPRESS_HIPROC = 2147483647;
         
         /// <summary>
         /// Symbol bound to self
@@ -3029,7 +3030,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Processor-specific
         /// </summary>
-        public const uint PF_MASKPROC = 0xf0000000;
+        public const uint PF_MASKPROC = 4026531840;
         
         /// <summary>
         /// Contains copy of prstatus struct
@@ -3404,174 +3405,174 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Start of OS-specific
         /// </summary>
-        public const int DT_LOOS = 0x6000000d;
+        public const int DT_LOOS = 1610612749;
         
         /// <summary>
         /// End of OS-specific
         /// </summary>
-        public const int DT_HIOS = 0x6ffff000;
+        public const int DT_HIOS = 1879044096;
         
         /// <summary>
         /// Start of processor-specific
         /// </summary>
-        public const int DT_LOPROC = 0x70000000;
+        public const int DT_LOPROC = 1879048192;
         
         /// <summary>
         /// End of processor-specific
         /// </summary>
-        public const int DT_HIPROC = 0x7fffffff;
+        public const int DT_HIPROC = 2147483647;
         
         /// <summary>
         /// Most used by any processor
         /// </summary>
-        public const int DT_PROCNUM = 0x36;
+        public const int DT_PROCNUM = 54;
         
-        public const int DT_VALRNGLO = 0x6ffffd00;
+        public const int DT_VALRNGLO = 1879047424;
         
         /// <summary>
         /// Prelinking timestamp
         /// </summary>
-        public const int DT_GNU_PRELINKED = 0x6ffffdf5;
+        public const int DT_GNU_PRELINKED = 1879047669;
         
         /// <summary>
         /// Size of conflict section
         /// </summary>
-        public const int DT_GNU_CONFLICTSZ = 0x6ffffdf6;
+        public const int DT_GNU_CONFLICTSZ = 1879047670;
         
         /// <summary>
         /// Size of library list
         /// </summary>
-        public const int DT_GNU_LIBLISTSZ = 0x6ffffdf7;
+        public const int DT_GNU_LIBLISTSZ = 1879047671;
         
-        public const int DT_CHECKSUM = 0x6ffffdf8;
+        public const int DT_CHECKSUM = 1879047672;
         
-        public const int DT_PLTPADSZ = 0x6ffffdf9;
+        public const int DT_PLTPADSZ = 1879047673;
         
-        public const int DT_MOVEENT = 0x6ffffdfa;
+        public const int DT_MOVEENT = 1879047674;
         
-        public const int DT_MOVESZ = 0x6ffffdfb;
+        public const int DT_MOVESZ = 1879047675;
         
         /// <summary>
         /// Feature selection (DTF_*).
         /// </summary>
-        public const int DT_FEATURE_1 = 0x6ffffdfc;
+        public const int DT_FEATURE_1 = 1879047676;
         
         /// <summary>
         /// Flags for DT_* entries, effecting the following DT_* entry.
         /// </summary>
-        public const int DT_POSFLAG_1 = 0x6ffffdfd;
+        public const int DT_POSFLAG_1 = 1879047677;
         
         /// <summary>
         /// Size of syminfo table (in bytes)
         /// </summary>
-        public const int DT_SYMINSZ = 0x6ffffdfe;
+        public const int DT_SYMINSZ = 1879047678;
         
         /// <summary>
         /// Entry size of syminfo
         /// </summary>
-        public const int DT_SYMINENT = 0x6ffffdff;
+        public const int DT_SYMINENT = 1879047679;
         
-        public const int DT_VALRNGHI = 0x6ffffdff;
+        public const int DT_VALRNGHI = 1879047679;
         
         public const int DT_VALNUM = 12;
         
-        public const int DT_ADDRRNGLO = 0x6ffffe00;
+        public const int DT_ADDRRNGLO = 1879047680;
         
         /// <summary>
         /// GNU-style hash table.
         /// </summary>
-        public const int DT_GNU_HASH = 0x6ffffef5;
+        public const int DT_GNU_HASH = 1879047925;
         
-        public const int DT_TLSDESC_PLT = 0x6ffffef6;
+        public const int DT_TLSDESC_PLT = 1879047926;
         
-        public const int DT_TLSDESC_GOT = 0x6ffffef7;
+        public const int DT_TLSDESC_GOT = 1879047927;
         
         /// <summary>
         /// Start of conflict section
         /// </summary>
-        public const int DT_GNU_CONFLICT = 0x6ffffef8;
+        public const int DT_GNU_CONFLICT = 1879047928;
         
         /// <summary>
         /// Library list
         /// </summary>
-        public const int DT_GNU_LIBLIST = 0x6ffffef9;
+        public const int DT_GNU_LIBLIST = 1879047929;
         
         /// <summary>
         /// Configuration information.
         /// </summary>
-        public const int DT_CONFIG = 0x6ffffefa;
+        public const int DT_CONFIG = 1879047930;
         
         /// <summary>
         /// Dependency auditing.
         /// </summary>
-        public const int DT_DEPAUDIT = 0x6ffffefb;
+        public const int DT_DEPAUDIT = 1879047931;
         
         /// <summary>
         /// Object auditing.
         /// </summary>
-        public const int DT_AUDIT = 0x6ffffefc;
+        public const int DT_AUDIT = 1879047932;
         
         /// <summary>
         /// PLT padding.
         /// </summary>
-        public const int DT_PLTPAD = 0x6ffffefd;
+        public const int DT_PLTPAD = 1879047933;
         
         /// <summary>
         /// Move table.
         /// </summary>
-        public const int DT_MOVETAB = 0x6ffffefe;
+        public const int DT_MOVETAB = 1879047934;
         
         /// <summary>
         /// Syminfo table.
         /// </summary>
-        public const int DT_SYMINFO = 0x6ffffeff;
+        public const int DT_SYMINFO = 1879047935;
         
-        public const int DT_ADDRRNGHI = 0x6ffffeff;
+        public const int DT_ADDRRNGHI = 1879047935;
         
         public const int DT_ADDRNUM = 11;
         
-        public const int DT_VERSYM = 0x6ffffff0;
+        public const int DT_VERSYM = 1879048176;
         
-        public const int DT_RELACOUNT = 0x6ffffff9;
+        public const int DT_RELACOUNT = 1879048185;
         
-        public const int DT_RELCOUNT = 0x6ffffffa;
+        public const int DT_RELCOUNT = 1879048186;
         
         /// <summary>
         /// State flags, see DF_1_* below.
         /// </summary>
-        public const int DT_FLAGS_1 = 0x6ffffffb;
+        public const int DT_FLAGS_1 = 1879048187;
         
         /// <summary>
         /// Address of version definition table
         /// </summary>
-        public const int DT_VERDEF = 0x6ffffffc;
+        public const int DT_VERDEF = 1879048188;
         
         /// <summary>
         /// Number of version definitions
         /// </summary>
-        public const int DT_VERDEFNUM = 0x6ffffffd;
+        public const int DT_VERDEFNUM = 1879048189;
         
         /// <summary>
         /// Address of table with needed versions
         /// </summary>
-        public const int DT_VERNEED = 0x6ffffffe;
+        public const int DT_VERNEED = 1879048190;
         
         /// <summary>
         /// Number of needed versions
         /// </summary>
-        public const int DT_VERNEEDNUM = 0x6fffffff;
+        public const int DT_VERNEEDNUM = 1879048191;
         
         public const int DT_VERSIONTAGNUM = 16;
         
         /// <summary>
         /// Shared object to load before self
         /// </summary>
-        public const int DT_AUXILIARY = 0x7ffffffd;
+        public const int DT_AUXILIARY = 2147483645;
         
         /// <summary>
         /// Shared object to get values from
         /// </summary>
-        public const int DT_FILTER = 0x7fffffff;
+        public const int DT_FILTER = 2147483647;
         
         public const int DT_EXTRANUM = 3;
         
@@ -4615,7 +4616,7 @@ namespace LibObjectFile.Elf
         
         public const uint R_SPARC_NUM = 253;
         
-        public const int DT_SPARC_REGISTER = 0x70000001;
+        public const int DT_SPARC_REGISTER = 1879048193;
         
         public const int DT_SPARC_NUM = 2;
         
@@ -4655,7 +4656,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// MIPS architecture level.
         /// </summary>
-        public const uint EF_MIPS_ARCH = 0xf0000000;
+        public const uint EF_MIPS_ARCH = 4026531840;
         
         /// <summary>
         /// -mips1 code.
@@ -4700,7 +4701,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// MIPS64r2 code.
         /// </summary>
-        public const uint EF_MIPS_ARCH_64R2 = 0x80000000;
+        public const uint EF_MIPS_ARCH_64R2 = 2147483648;
         
         /// <summary>
         /// Allocated common symbols.
@@ -4841,7 +4842,7 @@ namespace LibObjectFile.Elf
         
         public const uint SHF_MIPS_ADDR = 1073741824;
         
-        public const uint SHF_MIPS_STRINGS = 0x80000000;
+        public const uint SHF_MIPS_STRINGS = 2147483648;
         
         public const uint SHF_MIPS_NOSTRIP = 134217728;
         
@@ -5057,210 +5058,210 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Runtime linker interface version
         /// </summary>
-        public const int DT_MIPS_RLD_VERSION = 0x70000001;
+        public const int DT_MIPS_RLD_VERSION = 1879048193;
         
         /// <summary>
         /// Timestamp
         /// </summary>
-        public const int DT_MIPS_TIME_STAMP = 0x70000002;
+        public const int DT_MIPS_TIME_STAMP = 1879048194;
         
         /// <summary>
         /// Checksum
         /// </summary>
-        public const int DT_MIPS_ICHECKSUM = 0x70000003;
+        public const int DT_MIPS_ICHECKSUM = 1879048195;
         
         /// <summary>
         /// Version string (string tbl index)
         /// </summary>
-        public const int DT_MIPS_IVERSION = 0x70000004;
+        public const int DT_MIPS_IVERSION = 1879048196;
         
         /// <summary>
         /// Flags
         /// </summary>
-        public const int DT_MIPS_FLAGS = 0x70000005;
+        public const int DT_MIPS_FLAGS = 1879048197;
         
         /// <summary>
         /// Base address
         /// </summary>
-        public const int DT_MIPS_BASE_ADDRESS = 0x70000006;
+        public const int DT_MIPS_BASE_ADDRESS = 1879048198;
         
-        public const int DT_MIPS_MSYM = 0x70000007;
+        public const int DT_MIPS_MSYM = 1879048199;
         
         /// <summary>
         /// Address of CONFLICT section
         /// </summary>
-        public const int DT_MIPS_CONFLICT = 0x70000008;
+        public const int DT_MIPS_CONFLICT = 1879048200;
         
         /// <summary>
         /// Address of LIBLIST section
         /// </summary>
-        public const int DT_MIPS_LIBLIST = 0x70000009;
+        public const int DT_MIPS_LIBLIST = 1879048201;
         
         /// <summary>
         /// Number of local GOT entries
         /// </summary>
-        public const int DT_MIPS_LOCAL_GOTNO = 0x7000000a;
+        public const int DT_MIPS_LOCAL_GOTNO = 1879048202;
         
         /// <summary>
         /// Number of CONFLICT entries
         /// </summary>
-        public const int DT_MIPS_CONFLICTNO = 0x7000000b;
+        public const int DT_MIPS_CONFLICTNO = 1879048203;
         
         /// <summary>
         /// Number of LIBLIST entries
         /// </summary>
-        public const int DT_MIPS_LIBLISTNO = 0x70000010;
+        public const int DT_MIPS_LIBLISTNO = 1879048208;
         
         /// <summary>
         /// Number of DYNSYM entries
         /// </summary>
-        public const int DT_MIPS_SYMTABNO = 0x70000011;
+        public const int DT_MIPS_SYMTABNO = 1879048209;
         
         /// <summary>
         /// First external DYNSYM
         /// </summary>
-        public const int DT_MIPS_UNREFEXTNO = 0x70000012;
+        public const int DT_MIPS_UNREFEXTNO = 1879048210;
         
         /// <summary>
         /// First GOT entry in DYNSYM
         /// </summary>
-        public const int DT_MIPS_GOTSYM = 0x70000013;
+        public const int DT_MIPS_GOTSYM = 1879048211;
         
         /// <summary>
         /// Number of GOT page table entries
         /// </summary>
-        public const int DT_MIPS_HIPAGENO = 0x70000014;
+        public const int DT_MIPS_HIPAGENO = 1879048212;
         
         /// <summary>
         /// Address of run time loader map.
         /// </summary>
-        public const int DT_MIPS_RLD_MAP = 0x70000016;
+        public const int DT_MIPS_RLD_MAP = 1879048214;
         
         /// <summary>
         /// Delta C++ class definition.
         /// </summary>
-        public const int DT_MIPS_DELTA_CLASS = 0x70000017;
+        public const int DT_MIPS_DELTA_CLASS = 1879048215;
         
         /// <summary>
         /// Number of entries in
         /// DT_MIPS_DELTA_CLASS.
         /// </summary>
-        public const int DT_MIPS_DELTA_CLASS_NO = 0x70000018;
+        public const int DT_MIPS_DELTA_CLASS_NO = 1879048216;
         
         /// <summary>
         /// Delta C++ class instances.
         /// </summary>
-        public const int DT_MIPS_DELTA_INSTANCE = 0x70000019;
+        public const int DT_MIPS_DELTA_INSTANCE = 1879048217;
         
         /// <summary>
         /// Number of entries in
         /// DT_MIPS_DELTA_INSTANCE.
         /// </summary>
-        public const int DT_MIPS_DELTA_INSTANCE_NO = 0x7000001a;
+        public const int DT_MIPS_DELTA_INSTANCE_NO = 1879048218;
         
         /// <summary>
         /// Delta relocations.
         /// </summary>
-        public const int DT_MIPS_DELTA_RELOC = 0x7000001b;
+        public const int DT_MIPS_DELTA_RELOC = 1879048219;
         
         /// <summary>
         /// Number of entries in
         /// DT_MIPS_DELTA_RELOC.
         /// </summary>
-        public const int DT_MIPS_DELTA_RELOC_NO = 0x7000001c;
+        public const int DT_MIPS_DELTA_RELOC_NO = 1879048220;
         
         /// <summary>
         /// Delta symbols that Delta
         /// relocations refer to.
         /// </summary>
-        public const int DT_MIPS_DELTA_SYM = 0x7000001d;
+        public const int DT_MIPS_DELTA_SYM = 1879048221;
         
         /// <summary>
         /// Number of entries in
         /// DT_MIPS_DELTA_SYM.
         /// </summary>
-        public const int DT_MIPS_DELTA_SYM_NO = 0x7000001e;
+        public const int DT_MIPS_DELTA_SYM_NO = 1879048222;
         
         /// <summary>
         /// Delta symbols that hold the
         /// class declaration.
         /// </summary>
-        public const int DT_MIPS_DELTA_CLASSSYM = 0x70000020;
+        public const int DT_MIPS_DELTA_CLASSSYM = 1879048224;
         
         /// <summary>
         /// Number of entries in
         /// DT_MIPS_DELTA_CLASSSYM.
         /// </summary>
-        public const int DT_MIPS_DELTA_CLASSSYM_NO = 0x70000021;
+        public const int DT_MIPS_DELTA_CLASSSYM_NO = 1879048225;
         
         /// <summary>
         /// Flags indicating for C++ flavor.
         /// </summary>
-        public const int DT_MIPS_CXX_FLAGS = 0x70000022;
+        public const int DT_MIPS_CXX_FLAGS = 1879048226;
         
-        public const int DT_MIPS_PIXIE_INIT = 0x70000023;
+        public const int DT_MIPS_PIXIE_INIT = 1879048227;
         
-        public const int DT_MIPS_SYMBOL_LIB = 0x70000024;
+        public const int DT_MIPS_SYMBOL_LIB = 1879048228;
         
-        public const int DT_MIPS_LOCALPAGE_GOTIDX = 0x70000025;
+        public const int DT_MIPS_LOCALPAGE_GOTIDX = 1879048229;
         
-        public const int DT_MIPS_LOCAL_GOTIDX = 0x70000026;
+        public const int DT_MIPS_LOCAL_GOTIDX = 1879048230;
         
-        public const int DT_MIPS_HIDDEN_GOTIDX = 0x70000027;
+        public const int DT_MIPS_HIDDEN_GOTIDX = 1879048231;
         
-        public const int DT_MIPS_PROTECTED_GOTIDX = 0x70000028;
+        public const int DT_MIPS_PROTECTED_GOTIDX = 1879048232;
         
         /// <summary>
         /// Address of .options.
         /// </summary>
-        public const int DT_MIPS_OPTIONS = 0x70000029;
+        public const int DT_MIPS_OPTIONS = 1879048233;
         
         /// <summary>
         /// Address of .interface.
         /// </summary>
-        public const int DT_MIPS_INTERFACE = 0x7000002a;
+        public const int DT_MIPS_INTERFACE = 1879048234;
         
-        public const int DT_MIPS_DYNSTR_ALIGN = 0x7000002b;
+        public const int DT_MIPS_DYNSTR_ALIGN = 1879048235;
         
         /// <summary>
         /// Size of the .interface section.
         /// </summary>
-        public const int DT_MIPS_INTERFACE_SIZE = 0x7000002c;
+        public const int DT_MIPS_INTERFACE_SIZE = 1879048236;
         
         /// <summary>
         /// Address of rld_text_rsolve
         /// function stored in GOT.
         /// </summary>
-        public const int DT_MIPS_RLD_TEXT_RESOLVE_ADDR = 0x7000002d;
+        public const int DT_MIPS_RLD_TEXT_RESOLVE_ADDR = 1879048237;
         
         /// <summary>
         /// Default suffix of dso to be added
         /// by rld on dlopen() calls.
         /// </summary>
-        public const int DT_MIPS_PERF_SUFFIX = 0x7000002e;
+        public const int DT_MIPS_PERF_SUFFIX = 1879048238;
         
         /// <summary>
         /// (O32)Size of compact rel section.
         /// </summary>
-        public const int DT_MIPS_COMPACT_SIZE = 0x7000002f;
+        public const int DT_MIPS_COMPACT_SIZE = 1879048239;
         
         /// <summary>
         /// GP value for aux GOTs.
         /// </summary>
-        public const int DT_MIPS_GP_VALUE = 0x70000030;
+        public const int DT_MIPS_GP_VALUE = 1879048240;
         
         /// <summary>
         /// Address of aux .dynamic.
         /// </summary>
-        public const int DT_MIPS_AUX_DYNAMIC = 0x70000031;
+        public const int DT_MIPS_AUX_DYNAMIC = 1879048241;
         
-        public const int DT_MIPS_PLTGOT = 0x70000032;
+        public const int DT_MIPS_PLTGOT = 1879048242;
         
-        public const int DT_MIPS_RWPLT = 0x70000034;
+        public const int DT_MIPS_RWPLT = 1879048244;
         
-        public const int DT_MIPS_RLD_MAP_REL = 0x70000035;
+        public const int DT_MIPS_RLD_MAP_REL = 1879048245;
         
-        public const int DT_MIPS_NUM = 0x36;
+        public const int DT_MIPS_NUM = 54;
         
         /// <summary>
         /// Trap nil pointer dereference.
@@ -5337,7 +5338,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Static branch prediction code.
         /// </summary>
-        public const uint SHF_PARISC_SBP = 0x80000000;
+        public const uint SHF_PARISC_SBP = 2147483648;
         
         /// <summary>
         /// Millicode function entry point.
@@ -6061,14 +6062,14 @@ namespace LibObjectFile.Elf
         
         public const uint R_ALPHA_NUM = 46;
         
-        public const int DT_ALPHA_PLTRO = (  0);
+        public const int DT_ALPHA_PLTRO = 1879048192;
         
         public const int DT_ALPHA_NUM = 1;
         
         /// <summary>
         /// PowerPC embedded flag
         /// </summary>
-        public const uint EF_PPC_EMB = 0x80000000;
+        public const uint EF_PPC_EMB = 2147483648;
         
         /// <summary>
         /// PowerPC -mrelocatable flag
@@ -6504,9 +6505,9 @@ namespace LibObjectFile.Elf
         
         public const uint R_PPC_TOC16 = 255;
         
-        public const int DT_PPC_GOT = (  0);
+        public const int DT_PPC_GOT = 1879048192;
         
-        public const int DT_PPC_OPT = (  1);
+        public const int DT_PPC_OPT = 1879048193;
         
         public const int DT_PPC_NUM = 2;
         
@@ -7088,13 +7089,13 @@ namespace LibObjectFile.Elf
         
         public const uint EF_PPC64_ABI = 3;
         
-        public const int DT_PPC64_GLINK = (  0);
+        public const int DT_PPC64_GLINK = 1879048192;
         
-        public const int DT_PPC64_OPD = (  1);
+        public const int DT_PPC64_OPD = 1879048193;
         
-        public const int DT_PPC64_OPDSZ = (  2);
+        public const int DT_PPC64_OPDSZ = 1879048194;
         
-        public const int DT_PPC64_OPT = (  3);
+        public const int DT_PPC64_OPT = 1879048195;
         
         public const int DT_PPC64_NUM = 4;
         
@@ -7141,7 +7142,7 @@ namespace LibObjectFile.Elf
         
         public const uint EF_ARM_MAPSYMSFIRST = 16;
         
-        public const uint EF_ARM_EABIMASK = 0XFF000000;
+        public const uint EF_ARM_EABIMASK = 4278190080;
         
         public const uint EF_ARM_BE8 = 8388608;
         
@@ -7178,7 +7179,7 @@ namespace LibObjectFile.Elf
         /// Section may be multiply defined
         /// in the input to a link step.
         /// </summary>
-        public const uint SHF_ARM_COMDEF = 0x80000000;
+        public const uint SHF_ARM_COMDEF = 2147483648;
         
         /// <summary>
         /// Segment contains the location
@@ -8470,7 +8471,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// arch. version mask
         /// </summary>
-        public const uint EF_IA_64_ARCH = 0xff000000;
+        public const uint EF_IA_64_ARCH = 4278190080;
         
         /// <summary>
         /// arch extension bits
@@ -8491,7 +8492,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// spec insns w/o recovery
         /// </summary>
-        public const uint PF_IA_64_NORECOV = 0x80000000;
+        public const uint PF_IA_64_NORECOV = 2147483648;
         
         /// <summary>
         /// extension bits
@@ -8513,7 +8514,7 @@ namespace LibObjectFile.Elf
         /// </summary>
         public const uint SHF_IA_64_NORECOV = 536870912;
         
-        public const int DT_IA_64_PLT_RESERVE = (  0);
+        public const int DT_IA_64_PLT_RESERVE = 1879048192;
         
         public const int DT_IA_64_NUM = 1;
         
@@ -10136,7 +10137,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Address of _gp.
         /// </summary>
-        public const int DT_NIOS2_GP = 0x70000002;
+        public const int DT_NIOS2_GP = 1879048194;
         
         /// <summary>
         /// No reloc.
