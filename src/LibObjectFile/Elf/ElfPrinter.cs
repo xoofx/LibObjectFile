@@ -119,7 +119,7 @@ namespace LibObjectFile.Elf
 
         private static string GetElfSectionName(ElfSection section)
         {
-            return section.Parent.SectionHeaderStringTable == null ? "<no-strings>" : section.Name.Value;
+            return section.Parent?.SectionHeaderStringTable == null ? "<no-strings>" : section.Name.Value!;
         }
 
         public static void PrintProgramHeaders(ElfObjectFile elf, TextWriter writer)
@@ -203,7 +203,7 @@ namespace LibObjectFile.Elf
                         if (entry.SymbolIndex < symbolTable.Entries.Count)
                         {
                             var symbolEntry = symbolTable.Entries[(int) entry.SymbolIndex];
-                            symbolName = symbolEntry.Name;
+                            symbolName = symbolEntry.Name!;
                             symbolValue = symbolEntry.Value;
 
                             if (string.IsNullOrEmpty(symbolName))
@@ -213,7 +213,7 @@ namespace LibObjectFile.Elf
                                     case ElfSymbolType.Section:
                                         if (symbolEntry.Section.Section != null)
                                         {
-                                            symbolName = symbolEntry.Section.Section.Name;
+                                            symbolName = symbolEntry.Section.Section.Name!;
                                         }
                                         break;
                                 }

@@ -433,7 +433,7 @@ namespace LibObjectFile.Elf
 
             if (_hasValidSectionStringTable)
             {
-                Stream.Position = (long)ObjectFile.SectionHeaderStringTable.Offset;
+                Stream.Position = (long)ObjectFile.SectionHeaderStringTable!.Offset;
                 ObjectFile.SectionHeaderStringTable.ReadInternal(this);
             }
 
@@ -663,7 +663,7 @@ namespace LibObjectFile.Elf
                         if (segment.Offset >= section.Offset && segment.Offset <= sectionEndOffset)
                         {
                             ElfSection beginSection = section;
-                            ElfSection endSection = null;
+                            ElfSection? endSection = null;
                             for (int j = i; j < orderedSections.Count; j++)
                             {
                                 var nextSection = orderedSections[j];
@@ -698,7 +698,7 @@ namespace LibObjectFile.Elf
         
         private ElfSection CreateElfSection(uint sectionIndex, ElfSectionType sectionType, bool isNullSection)
         {
-            ElfSection section = null;
+            ElfSection? section = null;
 
             switch (sectionType)
             {

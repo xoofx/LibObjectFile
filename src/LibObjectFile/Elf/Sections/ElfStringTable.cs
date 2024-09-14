@@ -77,9 +77,9 @@ namespace LibObjectFile.Elf
             writer.Stream.Write(_table.GetBuffer(), 0, (int)_table.Length);
         }
 
-        internal void ReserveString(string text)
+        internal void ReserveString(string? text)
         {
-            if (text is object && !_mapStringToIndex.ContainsKey(text) && !_reservedStrings.Contains(text))
+            if (text is not null && !_mapStringToIndex.ContainsKey(text) && !_reservedStrings.Contains(text))
             {
                 _reservedStrings.Add(text);
             }
@@ -94,7 +94,7 @@ namespace LibObjectFile.Elf
             MultiKeySort(reservedStrings, 0);
 
             // Add the strings to string table
-            string lastText = null;
+            string? lastText = null;
             for (int i = 0; i < reservedStrings.Length; i++)
             {
                 var text = reservedStrings[i];
@@ -229,7 +229,7 @@ namespace LibObjectFile.Elf
             return index;
         }
 
-        public uint GetOrCreateIndex(string text)
+        public uint GetOrCreateIndex(string? text)
         {
             // Same as empty string
             if (text == null) return 0;
@@ -275,7 +275,7 @@ namespace LibObjectFile.Elf
 
             if (_reservedStrings.Count > 0) FlushReservedStrings();
 
-            if (_mapIndexToString.TryGetValue(index, out text))
+            if (_mapIndexToString.TryGetValue(index, out text!))
             {
                 return true;
             }

@@ -21,7 +21,8 @@ namespace LibObjectFile.Dwarf
 
         public DwarfStringTable(Stream stream)
         {
-            Stream = stream ?? throw new ArgumentNullException(nameof(stream));
+            ArgumentNullException.ThrowIfNull(stream);
+            _stream = stream;
             _stringToOffset = new Dictionary<string, ulong>();
             _offsetToString = new Dictionary<ulong, string>();
         }
@@ -46,13 +47,13 @@ namespace LibObjectFile.Dwarf
             return text;
         }
 
-        public bool Contains(string text)
+        public bool Contains(string? text)
         {
             if (text == null) return false;
             return _stringToOffset.ContainsKey(text);
         }
 
-        public ulong GetOrCreateString(string text)
+        public ulong GetOrCreateString(string? text)
         {
             if (text == null) return 0;
 

@@ -101,7 +101,9 @@ namespace LibObjectFile.CodeGen
             // Add pragma
             var csFile = csCompilation.Members.OfType<CSharpGeneratedFile>().First();
             var ns = csFile.Members.OfType<CSharpNamespace>().First();
-            csFile.Members.Insert(csFile.Members.IndexOf(ns), new CSharpLineElement("#pragma warning disable 1591") ); 
+            csFile.Members.Insert(csFile.Members.IndexOf(ns), new CSharpLineElement("#pragma warning disable 1591") );
+            csFile.Members.Insert(csFile.Members.IndexOf(ns), new CSharpLineElement("#pragma warning disable CS8765"));
+            csFile.Members.Insert(csFile.Members.IndexOf(ns), new CSharpLineElement("#nullable enable"));
 
             ProcessEnum(cppOptions, csCompilation, "EM_", "ElfArch");
             ProcessEnum(cppOptions, csCompilation, "ELFOSABI_", "ElfOSABI");
@@ -258,7 +260,7 @@ namespace LibObjectFile.CodeGen
             var toStringInternal = new CSharpMethod("ToStringInternal")
             {
                 Visibility = CSharpVisibility.Private,
-                ReturnType = CSharpPrimitiveType.String()
+                ReturnType = new CSharpNullableType(CSharpPrimitiveType.String())
             };
             enumClass.Members.Add(toStringInternal);
 

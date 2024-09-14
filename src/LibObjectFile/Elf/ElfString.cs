@@ -11,13 +11,13 @@ namespace LibObjectFile.Elf
     /// </summary>
     public readonly struct ElfString : IEquatable<ElfString>
     {
-        private ElfString(string value, uint index)
+        private ElfString(string? value, uint index)
         {
             Value = value;
             Index = index;
         }
 
-        public ElfString(string value)
+        public ElfString(string? value)
         {
             Value = value;
             Index = 0;
@@ -29,7 +29,7 @@ namespace LibObjectFile.Elf
             Index = index;
         }
 
-        public readonly string Value;
+        public readonly string? Value;
 
         public readonly uint Index;
 
@@ -40,7 +40,7 @@ namespace LibObjectFile.Elf
             return (Value ?? string.Empty) == (other.Value ?? string.Empty) && Index == other.Index;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is ElfString other && Equals(other);
         }
@@ -83,7 +83,7 @@ namespace LibObjectFile.Elf
             return !string.Equals(left.Value, right);
         }
 
-        public static implicit operator string(ElfString elfString)
+        public static implicit operator string?(ElfString elfString)
         {
             return elfString.Value;
         }

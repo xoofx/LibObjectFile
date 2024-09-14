@@ -18,7 +18,7 @@ namespace LibObjectFile.Dwarf
         private int _lineTableSymbolIndex;
         private int _stringTableSymbolIndex;
         private int _locationSectionSymbolIndex;
-        private readonly ElfSymbolTable _symbolTable;
+        private readonly ElfSymbolTable? _symbolTable;
 
         public DwarfElfContext(ElfObjectFile elf)
         {
@@ -117,25 +117,25 @@ namespace LibObjectFile.Dwarf
 
         public DwarfAddressSize AddressSize => Elf.FileClass == ElfFileClass.Is64 ? DwarfAddressSize.Bit64 : DwarfAddressSize.Bit32;
 
-        public ElfBinarySection InfoSection { get; private set; }
+        public ElfBinarySection? InfoSection { get; private set; }
 
-        public ElfRelocationTable RelocInfoSection { get; set; }
+        public ElfRelocationTable? RelocInfoSection { get; set; }
 
-        public ElfBinarySection AbbreviationTable { get; set; }
+        public ElfBinarySection? AbbreviationTable { get; set; }
 
-        public ElfBinarySection AddressRangeTable { get; private set; }
+        public ElfBinarySection? AddressRangeTable { get; private set; }
 
-        public ElfRelocationTable RelocAddressRangeTable { get; set; }
+        public ElfRelocationTable? RelocAddressRangeTable { get; set; }
 
-        public ElfBinarySection StringTable { get; set; }
+        public ElfBinarySection? StringTable { get; set; }
 
-        public ElfBinarySection LineTable { get; set; }
+        public ElfBinarySection? LineTable { get; set; }
 
-        public ElfRelocationTable RelocLineTable { get; set; }
+        public ElfRelocationTable? RelocLineTable { get; set; }
 
-        public ElfBinarySection LocationSection { get; private set; }
+        public ElfBinarySection? LocationSection { get; private set; }
 
-        public ElfRelocationTable RelocLocationSection { get; set; }
+        public ElfRelocationTable? RelocLocationSection { get; set; }
 
         public int CodeSectionSymbolIndex => _codeSectionSymbolIndex;
 
@@ -156,7 +156,7 @@ namespace LibObjectFile.Dwarf
 
         public ElfRelocationTable GetOrCreateRelocInfoSection()
         {
-            return RelocInfoSection ??= GetOrCreateRelocationTable(InfoSection);
+            return RelocInfoSection ??= GetOrCreateRelocationTable(InfoSection!);
         }
 
         public ElfBinarySection GetOrCreateAbbreviationTable()
@@ -171,7 +171,7 @@ namespace LibObjectFile.Dwarf
 
         public ElfRelocationTable GetOrCreateRelocAddressRangeTable()
         {
-            return RelocAddressRangeTable ??= GetOrCreateRelocationTable(AddressRangeTable);
+            return RelocAddressRangeTable ??= GetOrCreateRelocationTable(AddressRangeTable!);
         }
 
         public ElfBinarySection GetOrCreateLineSection()
@@ -181,7 +181,7 @@ namespace LibObjectFile.Dwarf
 
         public ElfRelocationTable GetOrCreateRelocLineSection()
         {
-            return RelocLineTable ??= GetOrCreateRelocationTable(LineTable);
+            return RelocLineTable ??= GetOrCreateRelocationTable(LineTable!);
         }
 
         public ElfBinarySection GetOrCreateStringTable()
@@ -196,7 +196,7 @@ namespace LibObjectFile.Dwarf
 
         public ElfRelocationTable GetOrCreateRelocLocationSection()
         {
-            return RelocLocationSection ??= GetOrCreateRelocationTable(LocationSection);
+            return RelocLocationSection ??= GetOrCreateRelocationTable(LocationSection!);
         }
 
         public void RemoveStringTable()

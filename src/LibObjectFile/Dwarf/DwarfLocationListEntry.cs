@@ -10,7 +10,7 @@ namespace LibObjectFile.Dwarf
 
         public ulong End;
 
-        public DwarfExpression Expression;
+        public DwarfExpression? Expression;
 
         public DwarfLocationListEntry()
         {
@@ -44,7 +44,7 @@ namespace LibObjectFile.Dwarf
         {
             var endOffset = Offset;
 
-            endOffset += 2 * DwarfHelper.SizeOfUInt(layoutContext.CurrentUnit.AddressSize);
+            endOffset += 2 * DwarfHelper.SizeOfUInt(layoutContext.CurrentUnit!.AddressSize);
             if (Expression != null)
             {
                 Expression.Offset = endOffset;

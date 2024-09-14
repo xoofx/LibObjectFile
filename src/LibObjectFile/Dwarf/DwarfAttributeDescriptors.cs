@@ -46,7 +46,7 @@ namespace LibObjectFile.Dwarf
         }
 
        
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is DwarfAttributeDescriptors other && Equals(other);
         }
@@ -55,7 +55,7 @@ namespace LibObjectFile.Dwarf
         {
             int hashCode = _descriptors == null ? 0 : _descriptors.Length;
             if (hashCode == 0) return hashCode;
-            foreach (var descriptor in _descriptors)
+            foreach (var descriptor in _descriptors!)
             {
                 hashCode = (hashCode * 397) ^ descriptor.GetHashCode();
             }

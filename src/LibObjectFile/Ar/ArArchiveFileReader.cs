@@ -5,6 +5,7 @@
 using System;
 using System.Buffers;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 using LibObjectFile.Elf;
@@ -16,7 +17,7 @@ namespace LibObjectFile.Ar
     /// </summary>
     public class ArArchiveFileReader : ObjectFileReaderWriter
     {
-        private ArLongNamesTable _futureHeaders;
+        private ArLongNamesTable? _futureHeaders;
 
         internal ArArchiveFileReader(ArArchiveFile arArchiveFile, Stream stream, ArArchiveFileReaderOptions options) : base(stream)
         {
@@ -31,7 +32,7 @@ namespace LibObjectFile.Ar
 
         internal ArArchiveFile ArArchiveFile { get; }
 
-        internal static bool IsAr(Stream stream, DiagnosticBag diagnostics)
+        internal static bool IsAr(Stream stream, DiagnosticBag? diagnostics)
         {
             Span<byte> magic = stackalloc byte[ArArchiveFile.Magic.Length];
             int magicLength = stream.Read(magic);
@@ -94,7 +95,7 @@ namespace LibObjectFile.Ar
             }
         }
 
-        private bool TryReadFileEntry(Span<byte> buffer, out ArFile entry)
+        private bool TryReadFileEntry(Span<byte> buffer, [NotNullWhen(true)] out ArFile? entry)
         {
             entry = null;
 
@@ -124,7 +125,7 @@ namespace LibObjectFile.Ar
                 idLength--;
             }
 
-            string name = null;
+            string? name = null;
             ulong? bsdNameLength = null;
 
             if (idLength > 3 && ArArchiveFile.Kind == ArArchiveKind.BSD)
@@ -236,7 +237,7 @@ namespace LibObjectFile.Ar
 
             if (!entry.IsSystem)
             {
-                if (name.Contains('/'))
+                if (name!.Contains('/'))
                 {
                     Diagnostics.Error(DiagnosticId.AR_ERR_InvalidCharacterInFileEntryName, $"The character `/` was found in the entry `{name}` while it is invalid.");
                     return false;
@@ -318,7 +319,7 @@ namespace LibObjectFile.Ar
             return true;
         }
 
-        private ArFile CreateFileEntryFromName(string name)
+        private ArFile CreateFileEntryFromName(string? name)
         {
             if (ArArchiveFile.Kind == ArArchiveKind.GNU)
             {

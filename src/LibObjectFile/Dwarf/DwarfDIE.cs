@@ -20,17 +20,12 @@ namespace LibObjectFile.Dwarf
         /// <summary>
         /// The current line program table when reading.
         /// </summary>
-        internal DwarfLineProgramTable CurrentLineProgramTable;
+        internal DwarfLineProgramTable? CurrentLineProgramTable;
 
         public DwarfDIE()
         {
             _attributes = new List<DwarfAttribute>();
             _children = new List<DwarfDIE>();
-        }
-
-        protected DwarfDIE(DwarfTagEx tag)
-        {
-            _tag = tag;
         }
 
         public virtual DwarfTagEx Tag
@@ -43,7 +38,7 @@ namespace LibObjectFile.Dwarf
 
         public IReadOnlyList<DwarfDIE> Children => _children;
 
-        public DwarfAbbreviationItem Abbrev { get; internal set; }
+        public DwarfAbbreviationItem? Abbrev { get; internal set; }
 
         /// <summary>
         /// Adds a child to <see cref="Children"/>.
@@ -130,13 +125,13 @@ namespace LibObjectFile.Dwarf
             return $"{nameof(Tag)}: {Tag}, {nameof(Attributes)}: {Attributes.Count}, {nameof(Children)}: {Children.Count}";
         }
 
-        protected TValue GetAttributeValue<TValue>(DwarfAttributeKind kind)
+        protected TValue? GetAttributeValue<TValue>(DwarfAttributeKind kind)
         {
             foreach (var attr in _attributes)
             {
                 if (attr.Kind == kind)
                 {
-                    return (TValue)attr.ValueAsObject;
+                    return (TValue?)attr.ValueAsObject;
                 }
             }
 
@@ -265,7 +260,7 @@ namespace LibObjectFile.Dwarf
             }
         }
 
-        public DwarfAttribute FindAttributeByKey(DwarfAttributeKind kind)
+        public DwarfAttribute? FindAttributeByKey(DwarfAttributeKind kind)
         {
             foreach (var attr in _attributes)
             {
@@ -278,7 +273,7 @@ namespace LibObjectFile.Dwarf
             return null;
         }
 
-        protected unsafe void SetAttributeValue<TValue>(DwarfAttributeKind kind, TValue value)
+        protected unsafe void SetAttributeValue<TValue>(DwarfAttributeKind kind, TValue? value)
         {
             for (int i = 0; i < _attributes.Count; i++)
             {
@@ -368,6 +363,10 @@ namespace LibObjectFile.Dwarf
             var abbrev = Abbrev;
 
             var endOffset = Offset;
+            if (abbrev is null)
+            {
+                throw new InvalidOperationException("Abbreviation is not set");
+            }
             endOffset += DwarfHelper.SizeOfULEB128(abbrev.Code); // WriteULEB128(abbreviationItem.Code);
 
             foreach (var attr in _attributes)
@@ -399,6 +398,11 @@ namespace LibObjectFile.Dwarf
             reader.PushDIE(this);
 
             // Console.WriteLine($" <{level}><{die.Offset:x}> Abbrev Number: {abbreviationCode} ({die.Tag})");
+
+            if (Abbrev is null)
+            {
+                throw new InvalidOperationException("Abbreviation is not set");
+            }
 
             var descriptors = Abbrev.Descriptors;
             if (descriptors.Length > 0)
@@ -436,16 +440,16 @@ namespace LibObjectFile.Dwarf
             Size = reader.Offset - Offset;
         }
 
-        internal static DwarfDIE ReadInstance(DwarfReader reader)
+        internal static DwarfDIE? ReadInstance(DwarfReader reader)
         {
             var startDIEOffset = reader.Offset;
             var abbreviationCode = reader.ReadULEB128();
-            DwarfDIE die = null;
+            DwarfDIE? die = null;
 
             if (abbreviationCode != 0)
             {
 
-                if (!reader.CurrentUnit.Abbreviation.TryFindByCode(abbreviationCode, out var abbreviationItem))
+                if (!reader.CurrentUnit!.Abbreviation!.TryFindByCode(abbreviationCode, out var abbreviationItem))
                 {
                     throw new InvalidOperationException($"Invalid abbreviation code {abbreviationCode}");
                 }
@@ -479,7 +483,7 @@ namespace LibObjectFile.Dwarf
             }
 
             var key = new DwarfAbbreviationItemKey(Tag, Children.Count > 0, new DwarfAttributeDescriptors(descriptorArray));
-            var item = context.CurrentUnit.Abbreviation.GetOrCreate(key);
+            var item = context.CurrentUnit!.Abbreviation!.GetOrCreate(key);
 
             Abbrev = item;
 
@@ -494,6 +498,11 @@ namespace LibObjectFile.Dwarf
             var startDIEOffset = Offset;
             Debug.Assert(Offset == startDIEOffset);
             var abbrev = Abbrev;
+            if (abbrev is null)
+            {
+                throw new InvalidOperationException("Abbreviation is not set");
+            }
+
             writer.WriteULEB128(abbrev.Code);
 
             foreach (var attr in _attributes)

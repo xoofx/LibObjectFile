@@ -62,6 +62,11 @@ namespace LibObjectFile.Elf
             // Verify that the link is safe and configured as expected
             Link.TryGetSectionSafe<ElfSymbolTable>(nameof(ElfSymbolTableSectionHeaderIndices), nameof(Link), this, reader.Diagnostics, out var symbolTable, ElfSectionType.SymbolTable, ElfSectionType.DynamicLinkerSymbolTable);
 
+            if (symbolTable is null)
+            {
+                return;
+            }
+
             for (int i = 0; i < _entries.Count; i++)
             {
                 var entry = _entries[i];
@@ -96,27 +101,34 @@ namespace LibObjectFile.Elf
             Link.TryGetSectionSafe<ElfSymbolTable>(nameof(ElfSymbolTableSectionHeaderIndices), nameof(Link), this, diagnostics, out var symbolTable, ElfSectionType.SymbolTable, ElfSectionType.DynamicLinkerSymbolTable);
 
             int numberOfEntries = 0;
-            for (int i = 0; i < symbolTable.Entries.Count; i++)
+
+            if (symbolTable is not null)
             {
-                if (symbolTable.Entries[i].Section.Section is { SectionIndex: >= ElfNative.SHN_LORESERVE })
+                for (int i = 0; i < symbolTable.Entries.Count; i++)
                 {
-                    numberOfEntries = i + 1;
+                    if (symbolTable.Entries[i].Section.Section is { SectionIndex: >= ElfNative.SHN_LORESERVE })
+                    {
+                        numberOfEntries = i + 1;
+                    }
                 }
             }
 
             _entries.Capacity = numberOfEntries;
             _entries.Clear();
 
-            for (int i = 0; i < numberOfEntries; i++)
+            if (symbolTable is not null)
             {
-                var section = symbolTable.Entries[i].Section.Section;
-                if (section is { SectionIndex: >= ElfNative.SHN_LORESERVE })
+                for (int i = 0; i < numberOfEntries; i++)
                 {
-                    _entries.Add(section.SectionIndex);
-                }
-                else
-                {
-                    _entries.Add(0);
+                    var section = symbolTable.Entries[i].Section.Section;
+                    if (section is { SectionIndex: >= ElfNative.SHN_LORESERVE })
+                    {
+                        _entries.Add(section.SectionIndex);
+                    }
+                    else
+                    {
+                        _entries.Add(0);
+                    }
                 }
             }
 

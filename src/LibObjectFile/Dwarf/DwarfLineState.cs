@@ -29,7 +29,7 @@ namespace LibObjectFile.Dwarf
         /// <summary>
         /// The identity of the source file corresponding to a machine instruction.
         /// </summary>
-        public DwarfFileName File { get; set; }
+        public DwarfFileName? File { get; set; }
 
         /// <summary>
         /// An unsigned integer indicating a source line number.
@@ -120,7 +120,7 @@ namespace LibObjectFile.Dwarf
             isDiscriminatorChanged = against.Discriminator != this.Discriminator;
         }
 
-        internal void Reset(DwarfFileName firstFile, bool isStatement)
+        internal void Reset(DwarfFileName? firstFile, bool isStatement)
         {
             Address = 0;
             File = firstFile;

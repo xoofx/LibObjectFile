@@ -6,6 +6,7 @@ using System;
 using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using LibObjectFile.Utils;
 
@@ -19,7 +20,7 @@ using static ElfNative;
 public sealed class ElfObjectFile : ObjectFileNode
 {
     private readonly List<ElfSection> _sections;
-    private ElfSectionHeaderStringTable _sectionHeaderStringTable;
+    private ElfSectionHeaderStringTable? _sectionHeaderStringTable;
     private readonly List<ElfSegment> _segments;
 
     public const int IdentSizeInBytes = ElfNative.EI_NIDENT;
@@ -140,7 +141,7 @@ public sealed class ElfObjectFile : ObjectFileNode
     /// Gets or sets the section header string table used to store the names of the sections.
     /// Must have been added to <see cref="Sections"/>.
     /// </summary>
-    public ElfSectionHeaderStringTable SectionHeaderStringTable
+    public ElfSectionHeaderStringTable? SectionHeaderStringTable
     {
         get => _sectionHeaderStringTable;
         set
@@ -470,7 +471,7 @@ public sealed class ElfObjectFile : ObjectFileNode
         }
         else
         {
-            ElfSection previousSection = null;
+            ElfSection? previousSection = null;
             for (int j = 0; j < index; j++)
             {
                 var sectionBefore = _sections[j];
@@ -654,7 +655,7 @@ public sealed class ElfObjectFile : ObjectFileNode
         return false;
     }
 
-    private static bool TryReadElfObjectFileHeader(Stream stream, out ElfObjectFile file)
+    private static bool TryReadElfObjectFileHeader(Stream stream, [NotNullWhen(true)] out ElfObjectFile? file)
     {
         if (stream == null) throw new ArgumentNullException(nameof(stream));
 
@@ -687,7 +688,7 @@ public sealed class ElfObjectFile : ObjectFileNode
     /// <param name="stream">The stream to read ELF object file from</param>
     /// <param name="options">The options for the reader</param>
     /// <returns>An instance of <see cref="ElfObjectFile"/> if the read was successful.</returns>
-    public static ElfObjectFile Read(Stream stream, ElfReaderOptions options = null)
+    public static ElfObjectFile Read(Stream stream, ElfReaderOptions? options = null)
     {
         if (!TryRead(stream, out var objectFile, out var diagnostics, options))
         {
@@ -704,7 +705,7 @@ public sealed class ElfObjectFile : ObjectFileNode
     /// <param name="diagnostics">A <see cref="DiagnosticBag"/> instance</param>
     /// <param name="options">The options for the reader</param>
     /// <returns><c>true</c> An instance of <see cref="ElfObjectFile"/> if the read was successful.</returns>
-    public static bool TryRead(Stream stream, out ElfObjectFile objectFile, out DiagnosticBag diagnostics, ElfReaderOptions options = null)
+    public static bool TryRead(Stream stream, [NotNullWhen(true)] out ElfObjectFile? objectFile, [NotNullWhen(false)] out DiagnosticBag? diagnostics, ElfReaderOptions? options = null)
     {
         if (stream == null) throw new ArgumentNullException(nameof(stream));
 

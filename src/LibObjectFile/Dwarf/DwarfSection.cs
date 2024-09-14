@@ -22,9 +22,9 @@ namespace LibObjectFile.Dwarf
         /// does not belong to an existing <see cref="ElfObjectFile"/>.
         /// </summary>
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public new DwarfFile Parent
+        public new DwarfFile? Parent
         {
-            get => (DwarfFile)base.Parent;
+            get => (DwarfFile?)base.Parent;
             internal set => base.Parent = value;
         }
     }

@@ -26,13 +26,13 @@ namespace LibObjectFile.Dwarf
 
         public DwarfInteger AsValue;
 
-        public object AsObject;
+        public object? AsObject;
 
-        public DwarfExpression AsExpression => AsObject as DwarfExpression;
+        public DwarfExpression? AsExpression => AsObject as DwarfExpression;
 
-        public DwarfLocationList AsLocationList => AsObject as DwarfLocationList;
+        public DwarfLocationList? AsLocationList => AsObject as DwarfLocationList;
 
-        public DwarfDIE AsReference => AsObject as DwarfDIE;
+        public DwarfDIE? AsReference => AsObject as DwarfDIE;
 
         public override string ToString()
         {

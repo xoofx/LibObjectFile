@@ -13,7 +13,7 @@ namespace LibObjectFile.Dwarf
     {
         public DwarfOperationKindEx Kind { get; set; }
 
-        public object Operand0 { get; set; }
+        public object? Operand0 { get; set; }
 
         public DwarfInteger Operand1;
 
@@ -290,7 +290,7 @@ namespace LibObjectFile.Dwarf
                 {
                     ulong offset;
                     //  a reference to a debugging information entry that describes the dereferenced object’s value
-                    if (reader.CurrentUnit.Version == 2)
+                    if (reader.CurrentUnit!.Version == 2)
                     {
                         offset = reader.ReadUInt();
                     }
@@ -434,7 +434,7 @@ namespace LibObjectFile.Dwarf
             switch (Kind.Value)
             {
                 case DwarfOperationKind.Addr:
-                    endOffset += DwarfHelper.SizeOfUInt(layoutContext.CurrentUnit.AddressSize);
+                    endOffset += DwarfHelper.SizeOfUInt(layoutContext.CurrentUnit!.AddressSize);
                     break;
                 case DwarfOperationKind.Const1u:
                 case DwarfOperationKind.Const1s:
@@ -617,7 +617,7 @@ namespace LibObjectFile.Dwarf
                     break;
 
                 case DwarfOperationKind.CallRef:
-                    endOffset += DwarfHelper.SizeOfUInt(layoutContext.CurrentUnit.AddressSize);
+                    endOffset += DwarfHelper.SizeOfUInt(layoutContext.CurrentUnit!.AddressSize);
                     break;
 
                 case DwarfOperationKind.BitPiece:
@@ -646,7 +646,7 @@ namespace LibObjectFile.Dwarf
                 case DwarfOperationKind.ImplicitPointer:
                 case DwarfOperationKind.GNUImplicitPointer:
                     //  a reference to a debugging information entry that describes the dereferenced object’s value
-                    if (layoutContext.CurrentUnit.Version == 2)
+                    if (layoutContext.CurrentUnit!.Version == 2)
                     {
                         endOffset += DwarfHelper.SizeOfUInt(layoutContext.CurrentUnit.AddressSize);
                     }
@@ -688,7 +688,7 @@ namespace LibObjectFile.Dwarf
                         // must be a DW_TAG_base_type entry that provides the type of the constant provided
 
                         endOffset += SizeOfDIEReference(layoutContext);
-                        endOffset += SizeOfEncodedValue(Kind, Operand1.U64, (byte)Operand2.U64, layoutContext.CurrentUnit.AddressSize);
+                        endOffset += SizeOfEncodedValue(Kind, Operand1.U64, (byte)Operand2.U64, layoutContext.CurrentUnit!.AddressSize);
                         break;
                     }
 
@@ -733,7 +733,7 @@ namespace LibObjectFile.Dwarf
                     break;
 
                 case DwarfOperationKind.GNUEncodedAddr:
-                    endOffset += SizeOfEncodedValue(Kind, Operand1.U64, (byte)Operand2.U64, layoutContext.CurrentUnit.AddressSize);
+                    endOffset += SizeOfEncodedValue(Kind, Operand1.U64, (byte)Operand2.U64, layoutContext.CurrentUnit!.AddressSize);
                     break;
 
                 case DwarfOperationKind.GNUParameterRef:
@@ -881,7 +881,7 @@ namespace LibObjectFile.Dwarf
 
                 case DwarfOperationKind.Bra:
                 case DwarfOperationKind.Skip:
-                    writer.WriteU16((ushort)((long)Offset + 2 - (long)((DwarfOperation)Operand0).Offset));
+                    writer.WriteU16((ushort)((long)Offset + 2 - (long)((DwarfOperation)Operand0!).Offset));
                     break;
 
                 case DwarfOperationKind.Lit0:
@@ -992,15 +992,15 @@ namespace LibObjectFile.Dwarf
                     break;
 
                 case DwarfOperationKind.Call2:
-                    writer.WriteU16((ushort)((DwarfDIE)Operand0).Offset);
+                    writer.WriteU16((ushort)((DwarfDIE)Operand0!).Offset);
                     break;
 
                 case DwarfOperationKind.Call4:
-                    writer.WriteU32((uint)((DwarfDIE)Operand0).Offset);
+                    writer.WriteU32((uint)((DwarfDIE)Operand0!).Offset);
                     break;
 
                 case DwarfOperationKind.CallRef:
-                    writer.WriteUInt(((DwarfDIE)Operand0).Offset);
+                    writer.WriteUInt(((DwarfDIE)Operand0!).Offset);
                     break;
 
                 case DwarfOperationKind.BitPiece:
@@ -1010,7 +1010,7 @@ namespace LibObjectFile.Dwarf
 
                 case DwarfOperationKind.ImplicitValue:
                     {
-                        var stream = (Stream)Operand0;
+                        var stream = (Stream)Operand0!;
                         writer.WriteULEB128((ulong)stream.Position);
                         writer.Write(stream);
                         break;
@@ -1019,9 +1019,9 @@ namespace LibObjectFile.Dwarf
                 case DwarfOperationKind.ImplicitPointer:
                 case DwarfOperationKind.GNUImplicitPointer:
                     {
-                        ulong offset = ((DwarfDIE)Operand0).Offset;
+                        ulong offset = ((DwarfDIE)Operand0!).Offset;
                         //  a reference to a debugging information entry that describes the dereferenced object’s value
-                        if (writer.CurrentUnit.Version == 2)
+                        if (writer.CurrentUnit!.Version == 2)
                         {
                             writer.WriteUInt(offset);
                         }
@@ -1037,7 +1037,7 @@ namespace LibObjectFile.Dwarf
                 case DwarfOperationKind.EntryValue:
                 case DwarfOperationKind.GNUEntryValue:
                     {
-                        var expression = (DwarfExpression)Operand0;
+                        var expression = (DwarfExpression)Operand0!;
                         writer.WriteULEB128(expression.Size);
                         expression.WriteInternal(writer);
                         break;
@@ -1051,7 +1051,7 @@ namespace LibObjectFile.Dwarf
                         // The first operand is an unsigned LEB128 integer that represents the offset
                         // of a debugging information entry in the current compilation unit, which
                         // must be a DW_TAG_base_type entry that provides the type of the constant provided
-                        writer.WriteULEB128(((DwarfDIE)Operand0).Offset);
+                        writer.WriteULEB128(((DwarfDIE)Operand0!).Offset);
                         WriteEncodedValue(writer, Kind, Operand1.U64, (byte)Operand2.U64);
                         break;
                     }
@@ -1068,7 +1068,7 @@ namespace LibObjectFile.Dwarf
 
                         // The second operand is an unsigned LEB128 number that represents the offset
                         // of a debugging information entry in the current compilation unit
-                        writer.WriteULEB128(((DwarfDIE)Operand0).Offset);
+                        writer.WriteULEB128(((DwarfDIE)Operand0!).Offset);
                         break;
                     }
 
@@ -1085,7 +1085,7 @@ namespace LibObjectFile.Dwarf
 
                         // The second operand is an unsigned LEB128 number that represents the offset
                         // of a debugging information entry in the current compilation unit
-                        writer.WriteULEB128(((DwarfDIE)Operand0).Offset);
+                        writer.WriteULEB128(((DwarfDIE)Operand0!).Offset);
                         break;
                     }
 
@@ -1093,7 +1093,7 @@ namespace LibObjectFile.Dwarf
                 case DwarfOperationKind.GNUConvert:
                 case DwarfOperationKind.Reinterpret:
                 case DwarfOperationKind.GNUReinterpret:
-                    writer.WriteULEB128(((DwarfDIE)Operand0).Offset);
+                    writer.WriteULEB128(((DwarfDIE)Operand0!).Offset);
                     break;
 
                 case DwarfOperationKind.GNUPushTlsAddress:
@@ -1166,7 +1166,7 @@ namespace LibObjectFile.Dwarf
         private static void DwarfExpressionLocationDIEReferenceResolver(ref DwarfReader.DwarfDIEReference dieRef)
         {
             var op = (DwarfOperation)dieRef.DwarfObject;
-            op.Operand0 = dieRef.Resolved;
+            op.Operand0 = dieRef.Resolved!;
         }
     }
 }

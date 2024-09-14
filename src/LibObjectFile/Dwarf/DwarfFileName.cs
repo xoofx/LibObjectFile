@@ -8,9 +8,14 @@ namespace LibObjectFile.Dwarf
 {
     public sealed class DwarfFileName
     {
-        public string Name { get; set; }
+        public DwarfFileName(string name)
+        {
+            Name = name;
+        }
 
-        public string Directory { get; set; }
+        public string Name { get; }
+
+        public string? Directory { get; set; }
         
         public ulong Time { get; set; }
 
@@ -18,7 +23,6 @@ namespace LibObjectFile.Dwarf
 
         public override string ToString()
         {
-            if (string.IsNullOrEmpty(Name)) return "<empty>";
             if (Directory != null)
             {
                 return Directory.Contains(Path.AltDirectorySeparatorChar) ? $"{Directory}{Path.AltDirectorySeparatorChar}{Name}" : $"{Directory}{Path.DirectorySeparatorChar}{Name}";

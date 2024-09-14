@@ -3,6 +3,7 @@
 // See the license.txt file in the project root for more information.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace LibObjectFile.Elf
 {
@@ -23,13 +24,13 @@ namespace LibObjectFile.Elf
             SpecialIndex = index;
         }
 
-        public ElfSectionLink(ElfSection section)
+        public ElfSectionLink(ElfSection? section)
         {
             Section = section;
             SpecialIndex = 0;
         }
 
-        public readonly ElfSection Section;
+        public readonly ElfSection? Section;
 
         public readonly uint SpecialIndex;
 
@@ -50,7 +51,7 @@ namespace LibObjectFile.Elf
             return Equals(Section, other.Section) && SpecialIndex == other.SpecialIndex;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is ElfSectionLink other && Equals(other);
         }
@@ -103,13 +104,13 @@ namespace LibObjectFile.Elf
             return $"Unknown Section Value 0x{SpecialIndex:X8}";
         }
 
-        public static implicit operator ElfSectionLink(ElfSection section)
+        public static implicit operator ElfSectionLink(ElfSection? section)
         {
             return new ElfSectionLink(section);
         }
         
         
-        public bool TryGetSectionSafe<TSection>(string className, string propertyName, object context, DiagnosticBag diagnostics, out TSection section, params ElfSectionType[] sectionTypes) where TSection : ElfSection
+        public bool TryGetSectionSafe<TSection>(string className, string propertyName, object context, DiagnosticBag diagnostics, [NotNullWhen(true)] out TSection? section, params ElfSectionType[] sectionTypes) where TSection : ElfSection
         {
             section = null;
 

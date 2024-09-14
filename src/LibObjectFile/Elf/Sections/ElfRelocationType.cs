@@ -32,7 +32,7 @@ namespace LibObjectFile.Elf
             return Arch.Equals(other.Arch) && Value == other.Value;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is ElfRelocationType other && Equals(other);
         }
@@ -55,7 +55,7 @@ namespace LibObjectFile.Elf
             return !left.Equals(right);
         }
 
-        public string Name => ToStringInternal();
+        public string? Name => ToStringInternal();
 
         public override string ToString()
         {

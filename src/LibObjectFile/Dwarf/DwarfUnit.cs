@@ -12,7 +12,7 @@ namespace LibObjectFile.Dwarf
     /// </summary>
     public abstract class DwarfUnit : DwarfContainer
     {
-        private DwarfDIE _root;
+        private DwarfDIE? _root;
 
         /// <summary>
         /// Gets or sets the encoding of this unit.
@@ -47,10 +47,10 @@ namespace LibObjectFile.Dwarf
         /// <summary>
         /// Gets or sets the root <see cref="DwarfDIE"/> of this compilation unit.
         /// </summary>
-        public DwarfDIE Root
+        public DwarfDIE? Root
         {
             get => _root;
-            set => AttachChild<DwarfContainer, DwarfDIE>(this, value, ref _root, true);
+            set => AttachNullableChild<DwarfContainer, DwarfDIE>(this, value, ref _root);
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace LibObjectFile.Dwarf
         /// <remarks>
         /// This abbreviation is automatically setup after reading or after updating the layout through <see cref="DwarfFile.UpdateLayout"/>.
         /// </remarks>
-        public DwarfAbbreviation Abbreviation { get; internal set; }
+        public DwarfAbbreviation? Abbreviation { get; internal set; }
 
         public override void Verify(DiagnosticBag diagnostics)
         {
@@ -155,11 +155,11 @@ namespace LibObjectFile.Dwarf
             Size = reader.Offset - Offset;
         }
 
-        internal static DwarfUnit ReadInstance(DwarfReader reader, out ulong offsetEndOfUnit)
+        internal static DwarfUnit? ReadInstance(DwarfReader reader, out ulong offsetEndOfUnit)
         {
             var startOffset = reader.Offset;
 
-            DwarfUnit unit = null;
+            DwarfUnit? unit = null;
 
             // 1. unit_length 
             var unit_length = reader.ReadUnitLength();

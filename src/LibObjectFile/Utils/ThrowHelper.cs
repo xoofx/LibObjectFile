@@ -4,6 +4,7 @@
 
 using System;
 using System.Buffers;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 
@@ -39,7 +40,7 @@ namespace LibObjectFile.Utils
         /// Reads a null terminated UTF8 string from the stream.
         /// </summary>
         /// <returns><c>true</c> if the string was successfully read from the stream, false otherwise</returns>
-        public static bool TryReadStringUTF8NullTerminated(this Stream stream, out string text)
+        public static bool TryReadStringUTF8NullTerminated(this Stream stream, [NotNullWhen(true)] out string? text)
         {
             text = null;
             var buffer = ArrayPool<byte>.Shared.Rent((int)128);

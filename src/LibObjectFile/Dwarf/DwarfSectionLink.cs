@@ -25,7 +25,7 @@ namespace LibObjectFile.Dwarf
             return Offset == other.Offset;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is DwarfSectionLink other && Equals(other);
         }

@@ -12,7 +12,7 @@ namespace LibObjectFile.Elf
     {
         public override ElfNoteTypeEx GetNoteType() => new ElfNoteTypeEx(ElfNoteType.GNU_BUILD_ID);
 
-        public Stream BuildId { get; set; }
+        public Stream? BuildId { get; set; }
 
         public override uint GetDescriptorSize() => BuildId != null ? (uint)BuildId.Length : 0;
 

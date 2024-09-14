@@ -74,7 +74,7 @@ namespace LibObjectFile.Dwarf
 
             HasChildren = hasChildren;
 
-            List<DwarfAttributeDescriptor> descriptors = null;
+            List<DwarfAttributeDescriptor>? descriptors = null;
 
             while (true)
             {

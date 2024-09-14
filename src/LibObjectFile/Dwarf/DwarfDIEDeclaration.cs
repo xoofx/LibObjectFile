@@ -13,7 +13,7 @@ namespace LibObjectFile.Dwarf
             set => SetAttributeValueOpt<ulong>(DwarfAttributeKind.DeclColumn, value);
         }
 
-        public DwarfFileName DeclFile
+        public DwarfFileName? DeclFile
         {
             get => GetAttributeValue<DwarfFileName>(DwarfAttributeKind.DeclFile);
             set => SetAttributeValue<DwarfFileName>(DwarfAttributeKind.DeclFile, value);

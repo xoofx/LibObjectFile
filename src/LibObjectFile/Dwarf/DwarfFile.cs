@@ -18,48 +18,48 @@ namespace LibObjectFile.Dwarf
 
         public DwarfFile()
         {
-            AbbreviationTable = new DwarfAbbreviationTable();
-            StringTable = new DwarfStringTable();
-            LineSection = new DwarfLineSection();
-            InfoSection = new DwarfInfoSection();
-            LocationSection = new DwarfLocationSection();
-            AddressRangeTable = new DwarfAddressRangeTable();
+            AssignChild(this, new DwarfAbbreviationTable(), out _abbreviationTable);
+            AssignChild(this, new DwarfStringTable(), out _stringTable);
+            AssignChild(this, new DwarfLineSection(), out _lineSection);
+            AssignChild(this, new DwarfInfoSection(), out _infoSection);
+            AssignChild(this, new DwarfAddressRangeTable(), out _addressRangeTable);
+            AssignChild(this, new DwarfLocationSection(), out _locationSection);
         }
 
         public DwarfAbbreviationTable AbbreviationTable
         {
             get => _abbreviationTable;
-            set => AttachChild(this, value, ref _abbreviationTable, false);
+            set => AttachChild(this, value, ref _abbreviationTable);
         }
         
         public DwarfStringTable StringTable
         {
             get => _stringTable;
-            set => AttachChild(this, value, ref _stringTable, false);
+            set => AttachChild(this, value, ref _stringTable);
         }
 
         public DwarfLineSection LineSection
         {
             get => _lineSection;
-            set => AttachChild(this, value, ref _lineSection, false);
+            set => AttachChild(this, value, ref _lineSection);
         }
 
         public DwarfAddressRangeTable AddressRangeTable
         {
             get => _addressRangeTable;
-            set => AttachChild(this, value, ref _addressRangeTable, false);
+            set => AttachChild(this, value, ref _addressRangeTable);
         }
 
         public DwarfInfoSection InfoSection
         {
             get => _infoSection;
-            set => AttachChild(this, value, ref _infoSection, false);
+            set => AttachChild(this, value, ref _infoSection);
         }
 
         public DwarfLocationSection LocationSection
         {
             get => _locationSection;
-            set => AttachChild(this, value, ref _locationSection, false);
+            set => AttachChild(this, value, ref _locationSection);
         }
 
         protected override void Read(DwarfReader reader)
@@ -148,9 +148,9 @@ namespace LibObjectFile.Dwarf
             writer.EnableRelocation = writerContext.EnableRelocation;
             
             writer.Log = writerContext.DebugLinePrinter;
-            writer.Stream = writerContext.DebugLineStream;
-            if (writer.Stream != null)
+            if (writerContext.DebugLineStream != null)
             {
+                writer.Stream = writerContext.DebugLineStream;
                 writer.Stream.Position = 0;
                 writer.Stream.SetLength(0);
                 writer.CurrentSection = LineSection;
@@ -159,18 +159,18 @@ namespace LibObjectFile.Dwarf
             }
 
             writer.Log = null;
-            writer.Stream = writerContext.DebugAbbrevStream;
-            if (writer.Stream != null)
+            if (writerContext.DebugAbbrevStream != null)
             {
+                writer.Stream = writerContext.DebugAbbrevStream;
                 writer.Stream.Position = 0;
                 writer.Stream.SetLength(0);
                 writer.CurrentSection = AbbreviationTable;
                 AbbreviationTable.WriteInternal(writer);
             }
 
-            writer.Stream = writerContext.DebugAddressRangeStream;
-            if (writer.Stream != null)
+            if (writerContext.DebugAddressRangeStream != null)
             {
+                writer.Stream = writerContext.DebugAddressRangeStream;
                 writer.Stream.Position = 0;
                 writer.Stream.SetLength(0);
                 writer.CurrentSection = AddressRangeTable;
@@ -178,18 +178,18 @@ namespace LibObjectFile.Dwarf
                 AddressRangeTable.WriteInternal(writer);
             }
             
-            writer.Stream = writerContext.DebugStringStream;
-            if (writer.Stream != null)
+            if (writerContext.DebugStringStream != null)
             {
+                writer.Stream = writerContext.DebugStringStream;
                 writer.Stream.Position = 0;
                 writer.Stream.SetLength(0);
                 writer.CurrentSection = StringTable;
                 StringTable.WriteInternal(writer);
             }
 
-            writer.Stream = writerContext.DebugInfoStream;
-            if (writer.Stream != null)
+            if (writerContext.DebugInfoStream != null)
             {
+                writer.Stream = writerContext.DebugInfoStream;
                 writer.Stream.Position = 0;
                 writer.Stream.SetLength(0);
                 writer.CurrentSection = InfoSection;
@@ -197,9 +197,9 @@ namespace LibObjectFile.Dwarf
                 InfoSection.WriteInternal(writer);
             }
 
-            writer.Stream = writerContext.DebugLocationStream;
-            if (writer.Stream != null)
+            if (writerContext.DebugLocationStream != null)
             {
+                writer.Stream = writerContext.DebugLocationStream;
                 writer.Stream.Position = 0;
                 writer.Stream.SetLength(0);
                 writer.CurrentSection = LocationSection;
@@ -210,7 +210,7 @@ namespace LibObjectFile.Dwarf
             CheckErrors(diagnostics);
         }
         
-        public void WriteToElf(DwarfElfContext elfContext, DwarfLayoutConfig layoutConfig = null)
+        public void WriteToElf(DwarfElfContext elfContext, DwarfLayoutConfig? layoutConfig = null)
         {
             if (elfContext == null) throw new ArgumentNullException(nameof(elfContext));
 
@@ -243,7 +243,7 @@ namespace LibObjectFile.Dwarf
             // String table
             if (StringTable.Size > 0)
             {
-                writer.Stream = elfContext.GetOrCreateStringTable().Stream;
+                writer.Stream = elfContext.GetOrCreateStringTable().Stream!;
                 writer.Stream.Position = 0;
                 writer.Stream.SetLength(0);
                 writer.CurrentSection = StringTable;
@@ -257,7 +257,7 @@ namespace LibObjectFile.Dwarf
             // Abbreviation table
             if (AbbreviationTable.Size > 0)
             {
-                writer.Stream = elfContext.GetOrCreateAbbreviationTable().Stream; 
+                writer.Stream = elfContext.GetOrCreateAbbreviationTable().Stream!; 
                 writer.Stream.Position = 0;
                 writer.Stream.SetLength(0);
                 writer.CurrentSection = AbbreviationTable;
@@ -271,7 +271,7 @@ namespace LibObjectFile.Dwarf
             // Line table
             if (LineSection.Size > 0)
             {
-                writer.Stream = elfContext.GetOrCreateLineSection().Stream;
+                writer.Stream = elfContext.GetOrCreateLineSection().Stream!;
                 writer.Stream.Position = 0;
                 writer.Stream.SetLength(0);
                 writer.CurrentSection = LineSection;
@@ -294,7 +294,7 @@ namespace LibObjectFile.Dwarf
             // AddressRange table
             if (AddressRangeTable.Size > 0)
             {
-                writer.Stream = elfContext.GetOrCreateAddressRangeTable().Stream;
+                writer.Stream = elfContext.GetOrCreateAddressRangeTable().Stream!;
                 writer.Stream.Position = 0;
                 writer.Stream.SetLength(0);
                 writer.CurrentSection = AddressRangeTable;
@@ -318,7 +318,7 @@ namespace LibObjectFile.Dwarf
             // InfoSection
             if (InfoSection.Size > 0)
             {
-                writer.Stream = elfContext.GetOrCreateInfoSection().Stream;
+                writer.Stream = elfContext.GetOrCreateInfoSection().Stream!;
                 writer.Stream.Position = 0;
                 writer.Stream.SetLength(0);
                 writer.CurrentSection = InfoSection;
@@ -342,7 +342,7 @@ namespace LibObjectFile.Dwarf
             // LocationSection
             if (LocationSection.Size > 0)
             {
-                writer.Stream = elfContext.GetOrCreateLocationSection().Stream;
+                writer.Stream = elfContext.GetOrCreateLocationSection().Stream!;
                 writer.Stream.Position = 0;
                 writer.Stream.SetLength(0);
                 writer.CurrentSection = LocationSection;
@@ -374,48 +374,48 @@ namespace LibObjectFile.Dwarf
             var reader = new DwarfReader(readerContext, dwarf, new DiagnosticBag());
 
             reader.Log = null;
-            reader.Stream = readerContext.DebugAbbrevStream;
-            if (reader.Stream != null)
+            if (readerContext.DebugAbbrevStream != null)
             {
+                reader.Stream = readerContext.DebugAbbrevStream;
                 reader.CurrentSection = dwarf.AbbreviationTable;
                 dwarf.AbbreviationTable.ReadInternal(reader);
             }
 
-            reader.Stream = readerContext.DebugStringStream;
-            if (reader.Stream != null)
+            if (readerContext.DebugStringStream != null)
             {
+                reader.Stream = readerContext.DebugStringStream;
                 reader.CurrentSection = dwarf.StringTable;
                 dwarf.StringTable.ReadInternal(reader);
             }
 
             reader.Log = readerContext.DebugLinePrinter;
-            reader.Stream = readerContext.DebugLineStream;
-            if (reader.Stream != null)
+            if (readerContext.DebugLineStream != null)
             {
+                reader.Stream = readerContext.DebugLineStream;
                 reader.CurrentSection = dwarf.LineSection;
                 dwarf.LineSection.ReadInternal(reader);
             }
-
             reader.Log = null;
-            reader.Stream = readerContext.DebugAddressRangeStream;
-            if (reader.Stream != null)
+
+            if (readerContext.DebugAddressRangeStream != null)
             {
+                reader.Stream = readerContext.DebugAddressRangeStream;
                 reader.CurrentSection = dwarf.AddressRangeTable;
                 dwarf.AddressRangeTable.ReadInternal(reader);
             }
 
             reader.Log = null;
-            reader.Stream = readerContext.DebugLocationStream;
-            if (reader.Stream != null)
+            if (readerContext.DebugLocationStream != null)
             {
+                reader.Stream = readerContext.DebugLocationStream;
                 reader.CurrentSection = dwarf.LocationSection;
                 dwarf.LocationSection.ReadInternal(reader);
             }
 
             reader.Log = null;
-            reader.Stream = readerContext.DebugInfoStream;
-            if (reader.Stream != null)
+            if (readerContext.DebugInfoStream != null)
             {
+                reader.Stream = readerContext.DebugInfoStream;
                 reader.DefaultUnitKind = DwarfUnitKind.Compile;
                 reader.CurrentSection = dwarf.InfoSection;
                 dwarf.InfoSection.ReadInternal(reader);

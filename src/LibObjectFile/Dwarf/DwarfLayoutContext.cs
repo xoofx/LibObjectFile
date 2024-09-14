@@ -21,6 +21,6 @@ namespace LibObjectFile.Dwarf
 
         public bool HasErrors => Diagnostics.HasErrors;
         
-        public DwarfUnit CurrentUnit { get; internal set; }
+        public DwarfUnit? CurrentUnit { get; internal set; }
     }
 }

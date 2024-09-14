@@ -33,7 +33,7 @@ namespace LibObjectFile.Dwarf
                     CopyRelocationsX86_64(dwarfRelocSection, elfContext, relocTable);
                     break;
                 default:
-                    throw new NotImplementedException($"The relocation for architecture {relocTable.Parent.Arch} is not supported/implemented.");
+                    throw new NotImplementedException($"The relocation for architecture {relocTable.Parent!.Arch} is not supported/implemented.");
             }
 
         }

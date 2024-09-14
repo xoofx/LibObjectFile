@@ -44,7 +44,7 @@ namespace LibObjectFile.Elf
 
         protected override void Write(ElfWriter writer)
         {
-            for (int i = 0; i < Parent.Segments.Count; i++)
+            for (int i = 0; i < Parent!.Segments.Count; i++)
             {
                 var header = Parent.Segments[i];
                 if (Parent.FileClass == ElfFileClass.Is32)

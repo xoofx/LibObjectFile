@@ -55,6 +55,8 @@ namespace LibObjectFile.CodeGen
             var csFile = csCompilation.Members.OfType<CSharpGeneratedFile>().First();
             var ns = csFile.Members.OfType<CSharpNamespace>().First();
             csFile.Members.Insert(csFile.Members.IndexOf(ns), new CSharpLineElement("#pragma warning disable 1591") );
+            csFile.Members.Insert(csFile.Members.IndexOf(ns), new CSharpLineElement("#pragma warning disable CS8765"));
+            csFile.Members.Insert(csFile.Members.IndexOf(ns), new CSharpLineElement("#nullable enable"));
 
             ProcessEnum(cppOptions, csCompilation, "DW_AT_", "DwarfAttributeKind");
             ProcessEnum(cppOptions, csCompilation, "DW_FORM_", "DwarfAttributeForm");
@@ -509,7 +511,7 @@ namespace LibObjectFile.CodeGen
             var csProperty = new CSharpProperty(propertyName)
             {
                 Visibility = CSharpVisibility.Public,
-                ReturnType = new CSharpFreeType(map.Kind == AttributeKind.Managed ? attrType : $"{attrType}?"),
+                ReturnType = new CSharpNullableType(new CSharpFreeType(attrType)),
             };
 
             var attrName = CSharpifyName(rawAttrName);

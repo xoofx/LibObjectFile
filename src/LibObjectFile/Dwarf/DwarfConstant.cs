@@ -34,15 +34,15 @@ namespace LibObjectFile.Dwarf
         
         public DwarfInteger AsValue;
 
-        public object AsObject;
+        public object? AsObject;
 
-        public DwarfExpression AsExpression => AsObject as DwarfExpression;
+        public DwarfExpression? AsExpression => AsObject as DwarfExpression;
 
-        public DwarfDIE AsReference => AsObject as DwarfDIE;
+        public DwarfDIE? AsReference => AsObject as DwarfDIE;
 
-        public Stream AsStream => AsObject as Stream;
+        public Stream? AsStream => AsObject as Stream;
 
-        public string AsString => AsObject as string;
+        public string? AsString => AsObject as string;
 
         public override string ToString()
         {

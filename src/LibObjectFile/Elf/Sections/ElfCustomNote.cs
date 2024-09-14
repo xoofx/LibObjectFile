@@ -13,20 +13,26 @@ namespace LibObjectFile.Elf
     /// </summary>
     public class ElfCustomNote : ElfNote
     {
+        public ElfCustomNote(string name, ElfNoteTypeEx type)
+        {
+            Name = name;
+            Type = type;
+        }
+
         /// <summary>
         /// Gets or sets the name of this note.
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; }
 
         /// <summary>
         /// Gets or sets the associated descriptor data.
         /// </summary>
-        public Stream Descriptor { get; set; }
+        public Stream? Descriptor { get; set; }
 
         /// <summary>
         /// Gets or sets the type of this note.
         /// </summary>
-        public ElfNoteTypeEx Type { get; set; }
+        public ElfNoteTypeEx Type { get; }
 
         public override string GetName()
         {

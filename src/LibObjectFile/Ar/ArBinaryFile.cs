@@ -15,7 +15,7 @@ namespace LibObjectFile.Ar
         /// <summary>
         /// Gets or sets the stream associated to this entry.
         /// </summary>
-        public Stream Stream { get; set; }
+        public Stream? Stream { get; set; }
 
         protected override void Read(ArArchiveFileReader reader)
         {

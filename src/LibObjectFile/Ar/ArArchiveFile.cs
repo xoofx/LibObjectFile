@@ -48,12 +48,12 @@ public sealed class ArArchiveFile : ObjectFileNode
     /// <summary>
     /// Gets the <see cref="ArSymbolTable"/> associated to this instance. Must be first entry in <see cref="Files"/>
     /// </summary>
-    public ArSymbolTable SymbolTable { get; private set; }
+    public ArSymbolTable? SymbolTable { get; private set; }
 
     /// <summary>
     /// Internal extended file names used for GNU entries.
     /// </summary>
-    internal ArLongNamesTable LongNamesTable { get; set; }
+    internal ArLongNamesTable? LongNamesTable { get; set; }
         
     /// <summary>
     /// Gets the file entries. Use <see cref="AddFile"/> or <see cref="RemoveFile"/> to manipulate the entries.

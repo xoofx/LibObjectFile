@@ -25,7 +25,7 @@ namespace LibObjectFile.Elf
                 throw new InvalidOperationException($"Invalid ElfRelocationTable.Info section. Can only relocate a section that inherits from {nameof(ElfBinarySection)}.");
             }
 
-            Relocate(relocTable, relocTargetBinarySection.Stream, context);
+            Relocate(relocTable, relocTargetBinarySection.Stream!, context);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace LibObjectFile.Elf
         {
             if (stream == null) throw new ArgumentNullException(nameof(stream));
 
-            switch (relocTable.Parent.Arch.Value)
+            switch (relocTable.Parent!.Arch.Value)
             {
                 case ElfArch.X86_64:
                     ApplyX86_64(relocTable, stream, context);
@@ -54,13 +54,13 @@ namespace LibObjectFile.Elf
         private static void ApplyX86_64(this ElfRelocationTable relocTable, Stream stream, in ElfRelocationContext context)
         {
             if (stream == null) throw new ArgumentNullException(nameof(stream));
-            bool isLsb = relocTable.Parent.Encoding == ElfEncoding.Lsb;
+            bool isLsb = relocTable.Parent!.Encoding == ElfEncoding.Lsb;
 
             var GOT = (long)context.GlobalObjectTableAddress;
             var B = (long)context.BaseAddress;
             var G = (long)context.GlobalObjectTableOffset;
 
-            var symbolTable = (ElfSymbolTable)relocTable.Link.Section;
+            var symbolTable = (ElfSymbolTable)relocTable.Link.Section!;
             
             foreach (var reloc in relocTable.Entries)
             {

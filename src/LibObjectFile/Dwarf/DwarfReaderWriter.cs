@@ -9,7 +9,7 @@ namespace LibObjectFile.Dwarf
 {
     public abstract class DwarfReaderWriter : ObjectFileReaderWriter
     {
-        internal DwarfReaderWriter(DwarfFile file, DiagnosticBag diagnostics) : base(null, diagnostics)
+        internal DwarfReaderWriter(DwarfFile file, DiagnosticBag diagnostics) : base(System.IO.Stream.Null, diagnostics)
         {
             File = file;
         }
@@ -20,9 +20,9 @@ namespace LibObjectFile.Dwarf
 
         public DwarfAddressSize AddressSize { get; internal set; }
 
-        public DwarfSection CurrentSection { get; internal set; }
+        public DwarfSection? CurrentSection { get; internal set; }
 
-        public DwarfUnit CurrentUnit { get; internal set; }
+        public DwarfUnit? CurrentUnit { get; internal set; }
 
         public DwarfAddressSize SizeOfUIntEncoding()
         {

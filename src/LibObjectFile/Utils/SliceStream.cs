@@ -81,7 +81,7 @@ public class SliceStream : Stream
         
     private void ThrowIfDisposed()
     {
-        ObjectDisposedException.ThrowIf(_baseStream == null, this);
+        ObjectDisposedException.ThrowIf(_baseStream == Stream.Null, this);
     }
 
     public override long Length
@@ -151,7 +151,7 @@ public class SliceStream : Stream
         base.Dispose(disposing);
         if (disposing)
         {
-            if (_baseStream != null)
+            if (_baseStream != Stream.Null)
             {
                 try
                 {
@@ -161,7 +161,7 @@ public class SliceStream : Stream
                 {
                     // ignored
                 }
-                _baseStream = null;
+                _baseStream = Stream.Null;
             }
         }
     }

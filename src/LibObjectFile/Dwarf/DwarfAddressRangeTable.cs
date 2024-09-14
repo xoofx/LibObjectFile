@@ -29,7 +29,7 @@ namespace LibObjectFile.Dwarf
 
         public ulong DebugInfoOffset { get; private set; }
 
-        public DwarfUnit Unit { get; set; }
+        public DwarfUnit? Unit { get; set; }
         
         public List<DwarfAddressRange> Ranges { get; }
 

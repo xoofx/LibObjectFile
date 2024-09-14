@@ -11,7 +11,7 @@ namespace LibObjectFile.Ar
     /// </summary>
     public abstract partial class ArFile : ArObject
     {
-        private string _name;
+        private string? _name;
         private DateTimeOffset _timestamp;
 
         protected ArFile()
@@ -22,7 +22,7 @@ namespace LibObjectFile.Ar
         /// <summary>
         /// Gets or sets the name of the file in the archive entry.
         /// </summary>
-        public virtual string Name
+        public virtual string? Name
         {
             get => _name;
             set
@@ -44,7 +44,7 @@ namespace LibObjectFile.Ar
         /// <summary>
         /// Gets or sets the real (internal) name used for storing this entry (used by <see cref="ArLongNamesTable"/>)
         /// </summary>
-        internal string InternalName { get; set; }
+        internal string? InternalName { get; set; }
 
         /// <summary>
         /// Gets or sets the timestamp of this file (clamped to seconds since 1970/01/01)

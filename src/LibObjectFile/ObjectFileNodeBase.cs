@@ -4,13 +4,14 @@
 
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace LibObjectFile;
 
 public abstract class ObjectFileNodeBase
 {
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObjectFileNodeBase _parent;
+    private ObjectFileNodeBase? _parent;
 
     /// <summary>
     /// Gets or sets the offset of this section or segment in the parent <see cref="TParentFile"/>.
@@ -20,7 +21,7 @@ public abstract class ObjectFileNodeBase
     /// <summary>
     /// Gets the containing parent.
     /// </summary>
-    public ObjectFileNodeBase Parent
+    public ObjectFileNodeBase? Parent
     {
         get => _parent;
 
@@ -70,7 +71,7 @@ public abstract class ObjectFileNodeBase
     /// <returns><c>true</c> if the either the offset or end of the part is within this segment or section range.</returns>
     public bool Contains(ObjectFileNodeBase node)
     {
-        if (node == null) throw new ArgumentNullException(nameof(node));
+        ArgumentNullException.ThrowIfNull(node);
         return Contains((ulong)node.Offset) || node.Size != 0 && Contains((ulong)(node.Offset + node.Size - 1));
     }
 
@@ -91,25 +92,53 @@ public abstract class ObjectFileNodeBase
     /// <param name="diagnostics">A DiagnosticBag instance to receive the diagnostics.</param>
     public virtual void Verify(DiagnosticBag diagnostics)
     {
-        if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
+        ArgumentNullException.ThrowIfNull(diagnostics);
     }
 
-    protected static void AttachChild<TParent, T>(TParent parent, T child, ref T field, bool allowNull) where T : ObjectFileNodeBase where TParent : ObjectFileNodeBase
+    protected static void AssignChild<TParent, T>(TParent parent, T child, out T field) where T : ObjectFileNodeBase where TParent : ObjectFileNodeBase
     {
         if (parent == null) throw new ArgumentNullException(nameof(parent));
-        if (!allowNull && child == null) throw new ArgumentNullException(nameof(child));
-
-        if (field != null)
-        {
-            field.Parent = null;
-        }
+        if (child == null) throw new ArgumentNullException(nameof(child));
 
         if (child?.Parent != null) throw new InvalidOperationException($"Cannot set the {child.GetType()} as it already belongs to another {child.Parent.GetType()} instance");
-        field = child;
+        field = child!;
 
         if (child != null)
         {
             child.Parent = parent;
         }
     }
+    
+    protected static void AttachChild<TParent, T>(TParent parent, T child, ref T field) where T : ObjectFileNodeBase where TParent : ObjectFileNodeBase
+    {
+        if (parent == null) throw new ArgumentNullException(nameof(parent));
+        field.Parent = null;
+
+        if (child?.Parent != null) throw new InvalidOperationException($"Cannot set the {child.GetType()} as it already belongs to another {child.Parent.GetType()} instance");
+        field = child!;
+
+        if (child != null)
+        {
+            child.Parent = parent;
+        }
+    }
+
+    protected static void AttachNullableChild<TParent, T>(TParent parent, T? child, ref T? field) where T : ObjectFileNodeBase where TParent : ObjectFileNodeBase
+    {
+        if (parent == null) throw new ArgumentNullException(nameof(parent));
+
+        if (field is not null)
+        {
+            field.Parent = null;
+        }
+
+        if (child?.Parent != null) throw new InvalidOperationException($"Cannot set the {child.GetType()} as it already belongs to another {child.Parent.GetType()} instance");
+        field = child!;
+
+        if (child != null)
+        {
+            child.Parent = parent;
+        }
+    }
+
 }

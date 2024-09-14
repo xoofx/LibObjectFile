@@ -74,12 +74,12 @@ namespace LibObjectFile.Elf
                     diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentAlignmentForLoad, $"Invalid segment alignment requirements: Alignment = {alignment} must be a power of 2");
                 }
 
-                if (Range.BeginSection.Parent == null)
+                if (Range.BeginSection?.Parent == null)
                 {
                     diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeBeginSectionParent, $"Invalid null parent {nameof(Range)}.{nameof(Range.BeginSection)} in {this}. The section must be attached to the same {nameof(ElfObjectFile)} than this instance");
                 }
 
-                if (Range.EndSection.Parent == null)
+                if (Range.EndSection?.Parent == null)
                 {
                     diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeEndSectionParent, $"Invalid null parent {nameof(Range)}.{nameof(Range.EndSection)} in {this}. The section must be attached to the same {nameof(ElfObjectFile)} than this instance");
                 }
@@ -103,25 +103,35 @@ namespace LibObjectFile.Elf
 
                 if (Size > 0)
                 {
-                    if (Range.BeginOffset >= Range.BeginSection.Size)
+                    var range = Range;
+                    if (range.BeginSection is null)
                     {
-                        diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeBeginOffset, $"Invalid {nameof(Range)}.{nameof(Range.BeginOffset)}: {Range.BeginOffset} cannot be >= {nameof(Range.BeginSection)}.{nameof(ElfSection.Size)}: {Range.BeginSection.Size} in {this}. The offset must be within the section");
+                        diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeBeginSectionParent, $"Invalid null {nameof(Range)}.{nameof(Range.BeginSection)} in {this}. The section must be attached to the same {nameof(ElfObjectFile)} than this instance");
                     }
-                    if ((Range.EndOffset >= 0 && (ulong)Range.EndOffset >= Range.EndSection.Size))
+                    else if (range.BeginOffset >= range.BeginSection.Size)
                     {
-                        diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeEndOffset, $"Invalid {nameof(Range)}.{nameof(Range.EndOffset)}: {Range.EndOffset} cannot be >= {nameof(Range)}.{nameof(ElfSegmentRange.EndSection)}.{nameof(ElfSection.Size)}: {Range.EndSection.Size} in {this}. The offset must be within the section");
+                        diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeBeginOffset, $"Invalid {nameof(Range)}.{nameof(Range.BeginOffset)}: {Range.BeginOffset} cannot be >= {nameof(Range.BeginSection)}.{nameof(ElfSection.Size)}: {range.BeginSection.Size} in {this}. The offset must be within the section");
+                    }
+
+                    if (range.EndSection is null)
+                    {
+                        diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeEndSectionParent, $"Invalid null {nameof(Range)}.{nameof(Range.EndSection)} in {this}. The section must be attached to the same {nameof(ElfObjectFile)} than this instance");
+                    }
+                    else if ((Range.EndOffset >= 0 && (ulong)Range.EndOffset >= range.EndSection.Size))
+                    {
+                        diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeEndOffset, $"Invalid {nameof(Range)}.{nameof(Range.EndOffset)}: {Range.EndOffset} cannot be >= {nameof(Range)}.{nameof(ElfSegmentRange.EndSection)}.{nameof(ElfSection.Size)}: {range.EndSection.Size} in {this}. The offset must be within the section");
                     }
                     else if (Range.EndOffset < 0)
                     {
-                        var endOffset = (long)Range.EndSection.Size + Range.EndOffset;
+                        var endOffset = (long)range.EndSection.Size + Range.EndOffset;
                         if (endOffset < 0)
                         {
-                            diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeEndOffset, $"Invalid relative {nameof(Range)}.{nameof(Range.EndOffset)}: {Range.EndOffset}. The resulting end offset {endOffset} with {nameof(Range)}.{nameof(ElfSegmentRange.EndSection)}.{nameof(ElfSection.Size)}: {Range.EndSection.Size} cannot be < 0 in {this}. The offset must be within the section");
+                            diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeEndOffset, $"Invalid relative {nameof(Range)}.{nameof(Range.EndOffset)}: {Range.EndOffset}. The resulting end offset {endOffset} with {nameof(Range)}.{nameof(ElfSegmentRange.EndSection)}.{nameof(ElfSection.Size)}: {range.EndSection.Size} cannot be < 0 in {this}. The offset must be within the section");
                         }
                     }
                 }
 
-                if (Range.BeginSection.Parent != null && Range.EndSection.Parent != null)
+                if (Range.BeginSection?.Parent != null && Range.EndSection?.Parent != null)
                 {
                     if (Range.BeginSection.Index > Range.EndSection.Index)
                     {

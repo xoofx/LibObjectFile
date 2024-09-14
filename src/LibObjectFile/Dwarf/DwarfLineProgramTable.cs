@@ -221,7 +221,7 @@ namespace LibObjectFile.Dwarf
                     break;
                 }
 
-                var fileName = new DwarfFileName {Name = name};
+                var fileName = new DwarfFileName(name);
 
                 var directoryIndex = reader.ReadULEB128();
                 if (!name.Contains('/') && !name.Contains('\\') && directoryIndex > 0 && (directoryIndex - 1) < (ulong) directories.Count)
@@ -475,10 +475,12 @@ namespace LibObjectFile.Dwarf
                                     var fileTime = reader.ReadULEB128();
                                     var fileSize = reader.ReadULEB128();
 
-                                    var debugFileName = new DwarfFileName() {Name = fileName};
-                                    debugFileName.Directory = fileDirectoryIndex == 0 || fileDirectoryIndex >= directories.Count ? null : directories[fileDirectoryIndex - 1];
-                                    debugFileName.Time = fileTime;
-                                    debugFileName.Size = fileSize;
+                                    var debugFileName = new DwarfFileName(fileName)
+                                    {
+                                        Directory = fileDirectoryIndex == 0 || fileDirectoryIndex >= directories.Count ? null : directories[fileDirectoryIndex - 1],
+                                        Time = fileTime,
+                                        Size = fileSize
+                                    };
 
                                     state.File = debugFileName;
 
@@ -897,6 +899,10 @@ namespace LibObjectFile.Dwarf
                     if (fileNameChanged)
                     {
                         var fileName = debugLine.File;
+                        if (fileName is null)
+                        {
+                            throw new InvalidOperationException("File name cannot be null");
+                        }
 
                         // DW_LNS_set_file
                         if (_fileNameToIndex.TryGetValue(fileName, out var fileIndex))
@@ -1166,6 +1172,11 @@ namespace LibObjectFile.Dwarf
                     if (fileNameChanged)
                     {
                         var fileName = debugLine.File;
+
+                        if (fileName is null)
+                        {
+                            throw new InvalidOperationException("File name cannot be null");
+                        }
 
                         // DW_LNS_set_file
                         if (_fileNameToIndex.TryGetValue(fileName, out var fileIndex))

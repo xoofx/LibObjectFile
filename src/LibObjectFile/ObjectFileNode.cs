@@ -10,7 +10,7 @@ namespace LibObjectFile;
 public abstract class ObjectFileNode : ObjectFileNodeBase
 {
     /// <summary>
-    /// Updates the layout of this node.
+    /// Updates the size of this node.
     /// </summary>
     /// <param name="diagnostics">The diagnostics.</param>
     public abstract void UpdateLayout(DiagnosticBag diagnostics);

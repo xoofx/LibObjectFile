@@ -18,9 +18,10 @@ namespace LibObjectFile.Ar
 
         public ArLongNamesTable()
         {
+            FileNames = new Dictionary<int, string>();
         }
 
-        public override string Name
+        public override string? Name
         {
             get => DefaultName;
             set => base.Name = value;
@@ -32,8 +33,7 @@ namespace LibObjectFile.Ar
 
         protected override void Read(ArArchiveFileReader reader)
         {
-            FileNames = new Dictionary<int, string>();
-
+            FileNames.Clear();
             var buffer = ArrayPool<byte>.Shared.Rent((int)Size);
             int readCount = reader.Stream.Read(buffer, 0, (int)Size);
             int startFileIndex = 0;
@@ -63,7 +63,7 @@ namespace LibObjectFile.Ar
         {
             var buffer = ArrayPool<byte>.Shared.Rent((int)Size);
             uint offset = 0;
-            for (var i = (int)Index; i < Parent.Files.Count; i++)
+            for (var i = (int)Index; i < Parent!.Files.Count; i++)
             {
                 var file = Parent.Files[i];
 

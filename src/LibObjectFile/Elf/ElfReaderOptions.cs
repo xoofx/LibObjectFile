@@ -19,13 +19,13 @@ namespace LibObjectFile.Elf
         /// Gets or sets a delegate that can be used to replace the creation of <see cref="ElfNote"/> when
         /// reading from a Stream.
         /// </summary>
-        public TryCreateNoteDelegate TryCreateNote { get; set; }
+        public TryCreateNoteDelegate? TryCreateNote { get; set; }
         
         /// <summary>
         /// Gets or sets a delegate that can be used to replace the creation of <see cref="ElfSection"/> when
         /// reading from a Stream.
         /// </summary>
-        public TryCreateSectionDelegate TryCreateSection { get; set; }
+        public TryCreateSectionDelegate? TryCreateSection { get; set; }
 
         /// <summary>
         /// Tries to create a section instance from the specified type. Might return null.

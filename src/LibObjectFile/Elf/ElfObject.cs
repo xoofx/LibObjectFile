@@ -26,9 +26,9 @@ public abstract class ElfObject : ObjectFileNode
     /// does not belong to an existing <see cref="ElfObjectFile"/>.
     /// </summary>
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    public new ElfObjectFile Parent
+    public new ElfObjectFile? Parent
     {
-        get => (ElfObjectFile)base.Parent;
+        get => (ElfObjectFile?)base.Parent;
         internal set => base.Parent = value;
     }
 }

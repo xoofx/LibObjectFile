@@ -50,7 +50,7 @@ namespace LibObjectFile.Elf
 
         protected override void Read(ElfReader reader)
         {
-            if (Parent.FileClass == ElfFileClass.Is32)
+            if (Parent!.FileClass == ElfFileClass.Is32)
             {
                 Read32(reader);
             }
@@ -62,7 +62,7 @@ namespace LibObjectFile.Elf
 
         protected override void Write(ElfWriter writer)
         {
-            if (Parent.FileClass == ElfFileClass.Is32)
+            if (Parent!.FileClass == ElfFileClass.Is32)
             {
                 Write32(writer);
             }
@@ -92,7 +92,7 @@ namespace LibObjectFile.Elf
 
                     var offset = reader.Decode(rel.r_offset);
                     var r_info = reader.Decode(rel.r_info);
-                    var type = new ElfRelocationType(Parent.Arch, r_info & 0xFF);
+                    var type = new ElfRelocationType(Parent!.Arch, r_info & 0xFF);
                     var symbolIndex = r_info >> 8;
                     var addend = reader.Decode(rel.r_addend);
 
@@ -114,7 +114,7 @@ namespace LibObjectFile.Elf
                     var offset = reader.Decode(rel.r_offset);
 
                     var r_info = reader.Decode(rel.r_info);
-                    var type = new ElfRelocationType(Parent.Arch, r_info & 0xFF);
+                    var type = new ElfRelocationType(Parent!.Arch, r_info & 0xFF);
                     var symbolIndex = r_info >> 8;
 
                     var entry = new ElfRelocation(offset, type, symbolIndex, 0);
@@ -140,7 +140,7 @@ namespace LibObjectFile.Elf
                     var offset = reader.Decode(rel.r_offset);
 
                     var r_info = reader.Decode(rel.r_info);
-                    var type = new ElfRelocationType(Parent.Arch, (uint)(r_info & 0xFFFFFFFF));
+                    var type = new ElfRelocationType(Parent!.Arch, (uint)(r_info & 0xFFFFFFFF));
                     var symbolIndex = (uint)(r_info >> 32);
                     var addend = reader.Decode(rel.r_addend);
 
@@ -162,7 +162,7 @@ namespace LibObjectFile.Elf
                     var offset = reader.Decode(rel.r_offset);
 
                     var r_info = reader.Decode(rel.r_info);
-                    var type = new ElfRelocationType(Parent.Arch, (uint)(r_info & 0xFFFFFFFF));
+                    var type = new ElfRelocationType(Parent!.Arch, (uint)(r_info & 0xFFFFFFFF));
                     var symbolIndex = (uint)(r_info >> 32);
 
                     var entry = new ElfRelocation(offset, type, symbolIndex, 0);
@@ -288,7 +288,7 @@ namespace LibObjectFile.Elf
                     diagnostics.Error(DiagnosticId.ELF_ERR_InvalidRelocationEntryAddend, $"Invalid relocation entry {i} in section [{Index}] `{nameof(ElfRelocationTable)}`. The addend != 0 while the section is not a `{ElfSectionType.RelocationAddends}`", this);
                 }
 
-                if (entry.Type.Arch != Parent.Arch)
+                if (entry.Type.Arch != Parent!.Arch)
                 {
                     diagnostics.Error(DiagnosticId.ELF_ERR_InvalidRelocationEntryArch, $"Invalid Arch `{entry.Type.Arch}` for relocation entry {i} in section [{Index}] `{nameof(ElfRelocationTable)}`. The arch doesn't match the arch `{Parent.Arch}`", this);
                 }

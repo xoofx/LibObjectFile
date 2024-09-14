@@ -78,7 +78,7 @@ namespace LibObjectFile.Ar
 
             if (name == null)
             {
-                name = file.Name;
+                name = file.Name!;
                 if (ArArchiveFile.Kind != ArArchiveKind.Common && !name.EndsWith("/"))
                 {
                     postFixSlash = true;
@@ -130,7 +130,7 @@ namespace LibObjectFile.Ar
             {
                 uint nameLength = bsdNameLength.Value;
                 var bufferName = ArrayPool<byte>.Shared.Rent((int) nameLength);
-                Encoding.UTF8.GetBytes(file.Name, 0, file.Name.Length, bufferName, 0);
+                Encoding.UTF8.GetBytes(file.Name!, 0, file.Name!.Length, bufferName, 0);
                 try
                 {
                     Stream.Write(bufferName, 0, (int)nameLength);

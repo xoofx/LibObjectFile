@@ -46,7 +46,7 @@ namespace LibObjectFile.Dwarf
             }
 
             // End of list
-            endOffset += 2 * DwarfHelper.SizeOfUInt(layoutContext.CurrentUnit.AddressSize);
+            endOffset += 2 * DwarfHelper.SizeOfUInt(layoutContext.CurrentUnit!.AddressSize);
 
             Size = endOffset - Offset;
         }

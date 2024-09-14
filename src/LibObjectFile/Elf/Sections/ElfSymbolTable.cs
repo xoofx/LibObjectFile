@@ -45,7 +45,7 @@ namespace LibObjectFile.Elf
 
         protected override void Read(ElfReader reader)
         {
-            if (Parent.FileClass == ElfFileClass.Is32)
+            if (Parent!.FileClass == ElfFileClass.Is32)
             {
                 Read32(reader);
             }
@@ -57,7 +57,7 @@ namespace LibObjectFile.Elf
 
         protected override void Write(ElfWriter writer)
         {
-            if (Parent.FileClass == ElfFileClass.Is32)
+            if (Parent!.FileClass == ElfFileClass.Is32)
             {
                 Write32(writer);
             }
@@ -136,7 +136,7 @@ namespace LibObjectFile.Elf
         
         private void Write32(ElfWriter writer)
         {
-            var stringTable = (ElfStringTable)Link.Section;
+            var stringTable = (ElfStringTable)Link.Section!;
 
             // Write all entries
             for (int i = 0; i < Entries.Count; i++)
@@ -144,7 +144,7 @@ namespace LibObjectFile.Elf
                 var entry = Entries[i];
 
                 var sym = new ElfNative.Elf32_Sym();
-                writer.Encode(out sym.st_name, (ushort)stringTable.GetOrCreateIndex(entry.Name));
+                writer.Encode(out sym.st_name, (ushort)stringTable.GetOrCreateIndex(entry.Name!));
                 writer.Encode(out sym.st_value, (uint)entry.Value);
                 writer.Encode(out sym.st_size, (uint)entry.Size);
                 sym.st_info = (byte)(((byte) entry.Bind << 4) | (byte) entry.Type);
@@ -158,14 +158,14 @@ namespace LibObjectFile.Elf
 
         private void Write64(ElfWriter writer)
         {
-            var stringTable = (ElfStringTable)Link.Section;
+            var stringTable = (ElfStringTable)Link.Section!;
 
             for (int i = 0; i < Entries.Count; i++)
             {
                 var entry = Entries[i];
 
                 var sym = new ElfNative.Elf64_Sym();
-                writer.Encode(out sym.st_name, stringTable.GetOrCreateIndex(entry.Name));
+                writer.Encode(out sym.st_name, stringTable.GetOrCreateIndex(entry.Name!));
                 writer.Encode(out sym.st_value, entry.Value);
                 writer.Encode(out sym.st_size, entry.Size);
                 sym.st_info = (byte)(((byte)entry.Bind << 4) | (byte)entry.Type);
@@ -260,7 +260,7 @@ namespace LibObjectFile.Elf
             if (needsSectionHeaderIndices)
             {
                 bool foundSectionHeaderIndices = false;
-                foreach (ElfSection otherSection in Parent.Sections)
+                foreach (ElfSection otherSection in Parent!.Sections)
                 {
                     if (otherSection is ElfSymbolTableSectionHeaderIndices && otherSection.Link.Section == this)
                     {

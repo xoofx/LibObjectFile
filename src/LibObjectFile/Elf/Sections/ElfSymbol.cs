@@ -59,7 +59,7 @@ namespace LibObjectFile.Elf
             return Value == other.Value && Size == other.Size && Type == other.Type && Bind == other.Bind && Visibility == other.Visibility && Section.Equals(other.Section) && Name == other.Name;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is ElfSymbol other && Equals(other);
         }

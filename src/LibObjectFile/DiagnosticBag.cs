@@ -74,7 +74,7 @@ namespace LibObjectFile
         /// <param name="id">The identifier of the diagnostic.</param>
         /// <param name="message">The text of the message</param>
         /// <param name="context">An optional context</param>
-        public void Error(DiagnosticId id, string message, object context = null)
+        public void Error(DiagnosticId id, string message, object? context = null)
         {
             if (message == null) throw new ArgumentNullException(nameof(message));
             Log(new DiagnosticMessage(DiagnosticKind.Error, id, message, context));
@@ -86,7 +86,7 @@ namespace LibObjectFile
         /// <param name="id">The identifier of the diagnostic.</param>
         /// <param name="message">The text of the message</param>
         /// <param name="context">An optional context</param>
-        public void Warning(DiagnosticId id, string message, object context = null)
+        public void Warning(DiagnosticId id, string message, object? context = null)
         {
             if (message == null) throw new ArgumentNullException(nameof(message));
             Log(new DiagnosticMessage(DiagnosticKind.Warning, id, message, context));

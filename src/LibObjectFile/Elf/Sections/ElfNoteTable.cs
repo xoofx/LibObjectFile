@@ -158,18 +158,14 @@ namespace LibObjectFile.Elf
                 }
             }
 
-            ElfNote note = null;
+            ElfNote? note = null;
 
             if (reader.Options.TryCreateNote != null)
             {
                 note = reader.Options.TryCreateNote(name, type);
             }
 
-            return note ?? new ElfCustomNote()
-            {
-                Name = name,
-                Type = type
-            };
+            return note ?? new ElfCustomNote(name, type);
         }
     }
 }

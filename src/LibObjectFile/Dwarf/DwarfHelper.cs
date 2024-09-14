@@ -9,7 +9,7 @@ namespace LibObjectFile.Dwarf
 {
     public static partial class DwarfHelper
     {
-        public static ulong SizeOfStringUTF8NullTerminated(string text)
+        public static ulong SizeOfStringUTF8NullTerminated(string? text)
         {
             if (text == null) return 0;
             return (ulong)Encoding.UTF8.GetByteCount(text) + 1;

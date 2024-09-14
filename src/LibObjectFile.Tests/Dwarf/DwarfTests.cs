@@ -389,14 +389,12 @@ namespace LibObjectFile.Tests.Dwarf
             var dwarfFile = new DwarfFile();
             
             // Create .debug_line information
-            var fileName = new DwarfFileName()
+            var fileName = new DwarfFileName("check1.cpp")
             {
-                Name = "check1.cpp",
                 Directory = Environment.CurrentDirectory,
             };
-            var fileName2 = new DwarfFileName()
+            var fileName2 = new DwarfFileName("check2.cpp")
             {
-                Name = "check2.cpp",
                 Directory = Environment.CurrentDirectory,
             };
 

@@ -22,7 +22,7 @@ namespace LibObjectFile.Elf
                 return sh_name.Equals(other.sh_name) && sh_type.Equals(other.sh_type) && sh_flags.Equals(other.sh_flags) && sh_addr.Equals(other.sh_addr) && sh_offset.Equals(other.sh_offset) && sh_size.Equals(other.sh_size) && sh_link.Equals(other.sh_link) && sh_info.Equals(other.sh_info) && sh_addralign.Equals(other.sh_addralign) && sh_entsize.Equals(other.sh_entsize);
             }
 
-            public override bool Equals(object obj)
+            public override bool Equals(object? obj)
             {
                 return obj is Elf32_Shdr other && Equals(other);
             }
@@ -67,7 +67,7 @@ namespace LibObjectFile.Elf
                 return sh_name.Equals(other.sh_name) && sh_type.Equals(other.sh_type) && sh_flags.Equals(other.sh_flags) && sh_addr.Equals(other.sh_addr) && sh_offset.Equals(other.sh_offset) && sh_size.Equals(other.sh_size) && sh_link.Equals(other.sh_link) && sh_info.Equals(other.sh_info) && sh_addralign.Equals(other.sh_addralign) && sh_entsize.Equals(other.sh_entsize);
             }
 
-            public override bool Equals(object obj)
+            public override bool Equals(object? obj)
             {
                 return obj is Elf64_Shdr other && Equals(other);
             }

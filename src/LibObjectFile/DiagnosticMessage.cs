@@ -17,7 +17,7 @@ namespace LibObjectFile
             Message = message;
         }
 
-        public DiagnosticMessage(DiagnosticKind kind, DiagnosticId id, string message, object context)
+        public DiagnosticMessage(DiagnosticKind kind, DiagnosticId id, string message, object? context)
         {
             Kind = kind;
             Id = id;
@@ -38,7 +38,7 @@ namespace LibObjectFile
         /// <summary>
         /// Gets the context of this message.
         /// </summary>
-        public object Context { get; }
+        public object? Context { get; }
 
         /// <summary>
         /// Gets the associated text of this message.

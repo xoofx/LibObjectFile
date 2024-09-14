@@ -26,7 +26,7 @@ namespace LibObjectFile.Elf
             return Value == other.Value;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is ElfHeaderFlags other && Equals(other);
         }

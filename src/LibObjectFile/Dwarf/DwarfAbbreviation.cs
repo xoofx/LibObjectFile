@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace LibObjectFile.Dwarf
@@ -84,7 +85,7 @@ namespace LibObjectFile.Dwarf
             return item;
         }
 
-        public bool TryFindByCode(ulong code, out DwarfAbbreviationItem item)
+        public bool TryFindByCode(ulong code, [NotNullWhen(true)] out DwarfAbbreviationItem? item)
         {
             item = null;
             if (code == 0)

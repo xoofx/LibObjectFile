@@ -46,7 +46,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Gets or sets the associated stream to this section.
         /// </summary>
-        public Stream Stream { get; set; }
+        public Stream? Stream { get; set; }
 
         protected override void Read(ElfReader reader)
         {

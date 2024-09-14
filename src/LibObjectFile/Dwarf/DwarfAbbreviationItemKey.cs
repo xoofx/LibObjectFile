@@ -27,7 +27,7 @@ namespace LibObjectFile.Dwarf
             return Tag == other.Tag && HasChildren == other.HasChildren && Descriptors.Equals(other.Descriptors);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is DwarfAbbreviationItemKey other && Equals(other);
         }

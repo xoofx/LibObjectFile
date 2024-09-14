@@ -22,7 +22,7 @@ namespace LibObjectFile.Ar
             Symbols = new List<ArSymbol>();
         }
 
-        public override string Name
+        public override string? Name
         {
             get
             {
@@ -117,7 +117,7 @@ namespace LibObjectFile.Ar
         protected override void AfterRead(DiagnosticBag diagnostics)
         {
             var offsets = new Dictionary<ulong, ArFile>();
-            foreach (var fileEntry in Parent.Files)
+            foreach (var fileEntry in Parent!.Files)
             {
                 offsets[fileEntry.Offset] = fileEntry;
             }
@@ -143,7 +143,7 @@ namespace LibObjectFile.Ar
             writer.Stream.WriteU32(false, (uint)Symbols.Count);
 
             uint stringOffset = 0;
-            bool isBSD = Parent.Kind == ArArchiveKind.BSD;
+            bool isBSD = Parent!.Kind == ArArchiveKind.BSD;
             foreach (var symbol in Symbols)
             {
                 if (isBSD)

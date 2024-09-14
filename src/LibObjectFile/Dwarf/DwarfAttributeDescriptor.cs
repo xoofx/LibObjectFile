@@ -29,7 +29,7 @@ namespace LibObjectFile.Dwarf
             return Kind.Equals(other.Kind) && Form.Equals(other.Form);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is DwarfAttributeDescriptor other && Equals(other);
         }

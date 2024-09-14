@@ -24,9 +24,9 @@ public abstract class ArObject : ObjectFileNode
     /// does not belong to an existing <see cref="ElfObjectFile"/>.
     /// </summary>
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    public new ArArchiveFile Parent
+    public new ArArchiveFile? Parent
     {
-        get => (ArArchiveFile)base.Parent;
+        get => (ArArchiveFile?)base.Parent;
         internal set => base.Parent = value;
     }
 }

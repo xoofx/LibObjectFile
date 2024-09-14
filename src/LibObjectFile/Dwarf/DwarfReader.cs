@@ -37,9 +37,9 @@ namespace LibObjectFile.Dwarf
 
         internal int DIELevel { get; set; }
 
-        internal DwarfDIE CurrentDIE => _stack.Count > 0 ? _stack.Peek() : null;
+        internal DwarfDIE? CurrentDIE => _stack.Count > 0 ? _stack.Peek() : null;
 
-        internal DwarfLineProgramTable CurrentLineProgramTable => _stackWithLineProgramTable.Count > 0 ? _stackWithLineProgramTable.Peek().CurrentLineProgramTable : null;
+        internal DwarfLineProgramTable? CurrentLineProgramTable => _stackWithLineProgramTable.Count > 0 ? _stackWithLineProgramTable.Peek().CurrentLineProgramTable : null;
 
         internal DwarfAttributeDescriptor CurrentAttributeDescriptor { get; set; }
 
@@ -49,7 +49,7 @@ namespace LibObjectFile.Dwarf
 
         internal void PushDIE(DwarfDIE die)
         {
-            _registeredDIEPerCompilationUnit.Add(die.Offset - CurrentUnit.Offset, die);
+            _registeredDIEPerCompilationUnit.Add(die.Offset - CurrentUnit!.Offset, die);
             _registeredDIEPerSection.Add(die.Offset, die);
             _stack.Push(die);
         }
@@ -62,8 +62,11 @@ namespace LibObjectFile.Dwarf
                 return;
             }
 
-            _stackWithLineProgramTable.Push(dieWithLineProgramTable);
-            dieWithLineProgramTable.CurrentLineProgramTable = lineTable;
+            if (dieWithLineProgramTable != null)
+            {
+                _stackWithLineProgramTable.Push(dieWithLineProgramTable);
+                dieWithLineProgramTable.CurrentLineProgramTable = lineTable;
+            }
         }
 
         internal void PopDIE()
@@ -162,7 +165,7 @@ namespace LibObjectFile.Dwarf
 
             public readonly DwarfDIEReferenceResolver Resolver;
 
-            public DwarfDIE Resolved;
+            public DwarfDIE? Resolved;
         }
 
         internal delegate void DwarfDIEReferenceResolver(ref DwarfDIEReference reference);

@@ -43,7 +43,7 @@ namespace LibObjectFile.Elf
 
         public readonly ulong EndOffset;
         
-        public readonly ElfSection Section;
+        public readonly ElfSection? Section;
 
         public int CompareTo(ElfFilePart other)
         {
@@ -67,7 +67,7 @@ namespace LibObjectFile.Elf
             return StartOffset == other.StartOffset && EndOffset == other.EndOffset;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is ElfFilePart other && Equals(other);
         }

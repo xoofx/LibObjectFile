@@ -25,7 +25,7 @@ namespace LibObjectFile.Ar
         /// <summary>
         /// Gets or sets the ELF object file.
         /// </summary>
-        public ElfObjectFile ElfObjectFile { get; set; }
+        public ElfObjectFile? ElfObjectFile { get; set; }
 
         protected override void Read(ArArchiveFileReader reader)
         {

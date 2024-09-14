@@ -9,7 +9,7 @@ namespace LibObjectFile.Dwarf;
 
 public abstract class DwarfObject : ObjectFileNodeBase
 {
-    public DwarfFile GetParentFile()
+    public DwarfFile? GetParentFile()
     {
         var check = (ObjectFileNodeBase)this;
         while (check != null)
@@ -20,7 +20,7 @@ public abstract class DwarfObject : ObjectFileNodeBase
         return null;
     }
 
-    public DwarfUnit GetParentUnit()
+    public DwarfUnit? GetParentUnit()
     {
         var check = (ObjectFileNodeBase)this;
         while (check != null)
@@ -31,7 +31,7 @@ public abstract class DwarfObject : ObjectFileNodeBase
         return null;
     }
 
-    public DwarfSection GetParentSection()
+    public DwarfSection? GetParentSection()
     {
         var check = (ObjectFileNodeBase)this;
         while (check != null)
@@ -59,9 +59,9 @@ public abstract class DwarfObject<TContainer> : DwarfObject where TContainer : O
     /// does not belong to an existing <see cref="ElfObjectFile"/>.
     /// </summary>
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    public new TContainer Parent
+    public new TContainer? Parent
     {
-        get => (TContainer)base.Parent;
+        get => (TContainer?)base.Parent;
         internal set => base.Parent = value;
     }
 

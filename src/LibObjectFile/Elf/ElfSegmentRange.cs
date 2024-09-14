@@ -47,7 +47,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// The first section.
         /// </summary>
-        public readonly ElfSection BeginSection;
+        public readonly ElfSection? BeginSection;
 
         /// <summary>
         /// The relative offset in <see cref="BeginSection"/>.
@@ -57,7 +57,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// The last section.
         /// </summary>
-        public readonly ElfSection EndSection;
+        public readonly ElfSection? EndSection;
 
         /// <summary>
         /// The offset in the last section. If the offset is &lt; 0, then the actual offset starts from end of the section where finalEndOffset = section.Size + EndOffset.
@@ -82,7 +82,7 @@ namespace LibObjectFile.Elf
                     return 0;
                 }
 
-                return BeginSection.Offset + BeginOffset;
+                return BeginSection!.Offset + BeginOffset;
             }
         }
 
@@ -94,7 +94,7 @@ namespace LibObjectFile.Elf
             get
             {
                 // If this Begin/End section are not attached we can't calculate any meaningful size
-                if (BeginSection?.Parent == null || EndSection?.Parent == null || BeginSection?.Parent != EndSection?.Parent)
+                if (BeginSection?.Parent == null || EndSection?.Parent == null || BeginSection.Parent != EndSection.Parent)
                 {
                     return 0;
                 }
@@ -111,7 +111,7 @@ namespace LibObjectFile.Elf
             return Equals(BeginSection, other.BeginSection) && BeginOffset == other.BeginOffset && Equals(EndSection, other.EndSection) && EndOffset == other.EndOffset;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is ElfSegmentRange other && Equals(other);
         }
@@ -138,9 +138,9 @@ namespace LibObjectFile.Elf
             return !left.Equals(right);
         }
 
-        public static implicit operator ElfSegmentRange(ElfSection section)
+        public static implicit operator ElfSegmentRange(ElfSection? section)
         {
-            return section == null ? Empty : new ElfSegmentRange(section);
+            return section is null ? Empty : new ElfSegmentRange(section);
         }
     }
 }

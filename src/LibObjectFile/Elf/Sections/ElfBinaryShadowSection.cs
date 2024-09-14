@@ -16,7 +16,7 @@ namespace LibObjectFile.Elf
         {
         }
 
-        public Stream Stream { get; set; }
+        public Stream? Stream { get; set; }
 
         protected override void Read(ElfReader reader)
         {
