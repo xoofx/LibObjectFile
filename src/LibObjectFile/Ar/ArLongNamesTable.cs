@@ -12,7 +12,7 @@ namespace LibObjectFile.Ar
     /// <summary>
     /// Internal class used for loading long file names for GNU `ar` and Windows `lib` archives.
     /// </summary>
-    internal class ArLongNamesTable : ArFile
+    internal sealed class ArLongNamesTable : ArFile
     {
         public const string DefaultName = "//";
 
