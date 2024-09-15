@@ -22,7 +22,7 @@ public abstract class PESectionData : PEObject
         internal set => Parent = value;
     }
 
-    protected abstract void WriteTo(Stream stream);
+    protected abstract void Write(PEImageWriter writer);
 }
 
 /// <summary>
@@ -63,7 +63,7 @@ public sealed class PESectionMemoryData : PESectionData
     {
     }
 
-    protected override void WriteTo(Stream stream) => stream.Write(Data.Span);
+    protected override void Write(PEImageWriter writer) => writer.Write(Data.Span);
 }
 
 /// <summary>
@@ -110,209 +110,9 @@ public sealed class PESectionStreamData : PESectionData
     {
     }
 
-    protected override void WriteTo(Stream stream)
+    protected override void Write(PEImageWriter writer)
     {
         Stream.Position = 0;
-        Stream.CopyTo(stream);
-    }
-}
-
-public abstract class PEDirectory(ImageDataDirectoryKind kind) : PESectionData
-{
-    public ImageDataDirectoryKind Kind { get; } = kind;
-}
-
-public sealed class PEExportDirectory() : PEDirectory(ImageDataDirectoryKind.Export)
-{
-    public override void UpdateLayout(DiagnosticBag diagnostics)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override void WriteTo(Stream stream)
-    {
-        throw new NotImplementedException();
-    }
-}
-
-public sealed class PEImportDirectory() : PEDirectory(ImageDataDirectoryKind.Import)
-{
-    public override void UpdateLayout(DiagnosticBag diagnostics)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override void WriteTo(Stream stream)
-    {
-        throw new NotImplementedException();
-    }
-}
-
-public sealed class PEResourceDirectory() : PEDirectory(ImageDataDirectoryKind.Resource)
-{
-    public override void UpdateLayout(DiagnosticBag diagnostics)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override void WriteTo(Stream stream)
-    {
-        throw new NotImplementedException();
-    }
-}
-
-public sealed class PEExceptionDirectory() : PEDirectory(ImageDataDirectoryKind.Exception)
-{
-    public override void UpdateLayout(DiagnosticBag diagnostics)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override void WriteTo(Stream stream)
-    {
-        throw new NotImplementedException();
-    }
-}
-
-public sealed class PEBaseRelocationDirectory() : PEDirectory(ImageDataDirectoryKind.BaseRelocation)
-{
-    public override void UpdateLayout(DiagnosticBag diagnostics)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override void WriteTo(Stream stream)
-    {
-        throw new NotImplementedException();
-    }
-}
-
-public sealed class PEDebugDirectory() : PEDirectory(ImageDataDirectoryKind.Debug)
-{
-    public override void UpdateLayout(DiagnosticBag diagnostics)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override void WriteTo(Stream stream)
-    {
-        throw new NotImplementedException();
-    }
-}
-
-public sealed class PELoadConfigDirectory() : PEDirectory(ImageDataDirectoryKind.LoadConfig)
-{
-    public override void UpdateLayout(DiagnosticBag diagnostics)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override void WriteTo(Stream stream)
-    {
-        throw new NotImplementedException();
-    }
-}
-
-public sealed class PEBoundImportDirectory() : PEDirectory(ImageDataDirectoryKind.BoundImport)
-{
-    public override void UpdateLayout(DiagnosticBag diagnostics)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override void WriteTo(Stream stream)
-    {
-        throw new NotImplementedException();
-    }
-}
-
-public sealed class PEImportAddressTable() : PEDirectory(ImageDataDirectoryKind.ImportAddressTable)
-{
-    public override void UpdateLayout(DiagnosticBag diagnostics)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override void WriteTo(Stream stream)
-    {
-        throw new NotImplementedException();
-    }
-}
-
-public sealed class PETlsDirectory() : PEDirectory(ImageDataDirectoryKind.Tls)
-{
-    public override void UpdateLayout(DiagnosticBag diagnostics)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override void WriteTo(Stream stream)
-    {
-        throw new NotImplementedException();
-    }
-}
-
-public sealed class PEDelayImportDirectory() : PEDirectory(ImageDataDirectoryKind.DelayImport)
-{
-    public override void UpdateLayout(DiagnosticBag diagnostics)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override void WriteTo(Stream stream)
-    {
-        throw new NotImplementedException();
-    }
-}
-
-public sealed class PEClrMetadata() : PEDirectory(ImageDataDirectoryKind.ClrMetadata)
-{
-    public override void UpdateLayout(DiagnosticBag diagnostics)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override void WriteTo(Stream stream)
-    {
-        throw new NotImplementedException();
-    }
-}
-
-public sealed class PEArchitectureDirectory() : PEDirectory(ImageDataDirectoryKind.Architecture)
-{
-    public override void UpdateLayout(DiagnosticBag diagnostics)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override void WriteTo(Stream stream)
-    {
-        throw new NotImplementedException();
-    }
-}
-
-public sealed class PEGlobalPointerDirectory() : PEDirectory(ImageDataDirectoryKind.GlobalPointer)
-{
-    public override void UpdateLayout(DiagnosticBag diagnostics)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override void WriteTo(Stream stream)
-    {
-        throw new NotImplementedException();
-    }
-}
-
-public sealed class PESecurityDirectory() : PEDirectory(ImageDataDirectoryKind.Security)
-{
-    public override void UpdateLayout(DiagnosticBag diagnostics)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override void WriteTo(Stream stream)
-    {
-        throw new NotImplementedException();
+        Stream.CopyTo(writer.Stream);
     }
 }
