@@ -111,6 +111,12 @@ public class SliceStream : Stream
     }
     public override long Seek(long offset, SeekOrigin origin)
     {
+        ThrowIfDisposed();
+        if (!CanSeek)
+        {
+            throw new NotSupportedException("This stream doesn't support seeking");
+        }
+
         long newPosition = _localPosition;
         switch (origin)
         {
@@ -139,7 +145,8 @@ public class SliceStream : Stream
 
     public override void SetLength(long value)
     {
-        throw new NotSupportedException();
+        ThrowIfDisposed();
+        throw new NotSupportedException("This stream does not support setting the length");
     }
 
     public override void Flush()
