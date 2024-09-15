@@ -13,14 +13,14 @@ namespace LibObjectFile.Utils;
 /// <summary>
 /// Defines a stream as a slice of another existing stream.
 /// </summary>
-public class SliceStream : Stream
+public class SubStream : Stream
 {
     private Stream _baseStream;
     private readonly long _length;
     private readonly long _basePosition;
     private long _localPosition;
 
-    public SliceStream(Stream baseStream, long position, long length)
+    public SubStream(Stream baseStream, long position, long length)
     {
         if (baseStream == null) throw new ArgumentNullException(nameof(baseStream));
         if (!baseStream.CanSeek) throw new ArgumentException("Invalid base stream that can't be seek.");

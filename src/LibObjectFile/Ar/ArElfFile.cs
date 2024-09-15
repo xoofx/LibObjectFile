@@ -31,7 +31,7 @@ namespace LibObjectFile.Ar
         {
             var startPosition = reader.Stream.Position;
             var endPosition = startPosition + (long) Size;
-            ElfObjectFile = ElfObjectFile.Read(new SliceStream(reader.Stream, reader.Stream.Position, (long)Size));
+            ElfObjectFile = ElfObjectFile.Read(new SubStream(reader.Stream, reader.Stream.Position, (long)Size));
             reader.Stream.Position = endPosition;
         }
 

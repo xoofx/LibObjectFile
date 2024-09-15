@@ -70,11 +70,10 @@ namespace LibObjectFile
         /// <param name="buffer">The buffer to receive the content of the read.</param>
         /// <param name="offset">The offset into the buffer.</param>
         /// <param name="count">The number of bytes to write from the buffer.</param>
-        public int Read(byte[] buffer, int offset, int count)
-        {
-            return Stream.Read(buffer, offset, count);
-        }
-        
+        public int Read(byte[] buffer, int offset, int count) => Stream.Read(buffer, offset, count);
+
+        public int Read(Span<byte> buffer) => Stream.Read(buffer);
+
         /// <summary>
         /// Reads a null terminated UTF8 string from the stream.
         /// </summary>
@@ -210,17 +209,17 @@ namespace LibObjectFile
 
         /// <summary>
         /// Reads from the current <see cref="Stream"/> <see cref="size"/> bytes and return the data as
-        /// a <see cref="SliceStream"/> if <see cref="IsReadOnly"/> is <c>false</c> otherwise as a 
+        /// a <see cref="SubStream"/> if <see cref="IsReadOnly"/> is <c>false</c> otherwise as a 
         /// <see cref="MemoryStream"/>.
         /// </summary>
         /// <param name="size">Size of the data to read.</param>
-        /// <returns>A <see cref="SliceStream"/> if <see cref="IsReadOnly"/> is <c>false</c> otherwise as a 
+        /// <returns>A <see cref="SubStream"/> if <see cref="IsReadOnly"/> is <c>false</c> otherwise as a 
         /// <see cref="MemoryStream"/>.</returns>
         public Stream ReadAsStream(ulong size)
         {
             if (IsReadOnly)
             {
-                var stream = ReadAsSliceStream(size);
+                var stream = ReadAsSubStream(size);
                 Stream.Position += stream.Length;
                 return stream;
             }
@@ -238,6 +237,12 @@ namespace LibObjectFile
         {
             Stream.Write(buffer, offset, count);
         }
+
+        /// <summary>
+        /// Writes to the <see cref="Stream"/> and current position from the specified buffer.
+        /// </summary>
+        /// <param name="buffer">The buffer to write</param>
+        public void Write(ReadOnlySpan<byte> buffer) => Stream.Write(buffer);
 
         /// <summary>
         /// Writes an element of type <paramref name="{T}"/> to the stream.
@@ -286,7 +291,7 @@ namespace LibObjectFile
             }
         }
         
-        private SliceStream ReadAsSliceStream(ulong size)
+        private SubStream ReadAsSubStream(ulong size)
         {
             var position = Stream.Position;
             if (position + (long)size > Stream.Length)
@@ -304,7 +309,7 @@ namespace LibObjectFile
                 }
             }
 
-            return new SliceStream(Stream, position, (long)size);
+            return new SubStream(Stream, position, (long)size);
         }
 
         private MemoryStream ReadAsMemoryStream(ulong size)
