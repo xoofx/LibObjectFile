@@ -114,5 +114,14 @@ namespace LibObjectFile
         DWARF_WRN_InvalidExtendedOpCodeLength = 2019,
         DWARF_ERR_InvalidParentForLocationList = 2020,
 
+        // PE errors
+        PE_ERR_InvalidDosHeaderSize = 3000,
+        PE_ERR_InvalidDosHeaderMagic = 3001,
+        PE_ERR_InvalidDosStubSize = 3002,
+        PE_ERR_InvalidPESignature = 3003,
+        PE_ERR_InvalidCoffHeaderSize = 3004,
+        PE_ERR_InvalidOptionalHeaderSize = 3005,
+        PE_ERR_InvalidOptionalHeaderMagic = 3006,
+        PE_ERR_InvalidSectionHeadersSize = 3007,
     }
 }
