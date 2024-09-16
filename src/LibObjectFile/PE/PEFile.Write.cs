@@ -46,12 +46,12 @@ partial class PEFile
             return false;
         }
 
-        WriteInternal(peWriter);
+        Write(peWriter);
         
         return !diagnostics.HasErrors;
     }
 
-    private void WriteInternal(PEImageWriter writer)
+    protected override void Write(PEImageWriter writer)
     {
         throw new NotImplementedException();
     }

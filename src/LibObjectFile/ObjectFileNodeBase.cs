@@ -14,9 +14,9 @@ public abstract class ObjectFileNodeBase
     private ObjectFileNodeBase? _parent;
 
     /// <summary>
-    /// Gets or sets the offset of this section or segment in the parent <see cref="TParentFile"/>.
+    /// Gets or sets the position of this element relative to the top level parent.
     /// </summary>
-    public ulong Offset { get; set; }
+    public ulong Position { get; set; }
 
     /// <summary>
     /// Gets the containing parent.
@@ -45,7 +45,7 @@ public abstract class ObjectFileNodeBase
     }
 
     /// <summary>
-    /// Index within the containing list in the <see cref="TParentFile"/>
+    /// Index within the containing list in a parent.
     /// </summary>
     public uint Index { get; internal set; }
 
@@ -61,7 +61,7 @@ public abstract class ObjectFileNodeBase
     /// <returns><c>true</c> if the offset is within the segment or section range.</returns>
     public bool Contains(ulong offset)
     {
-        return offset >= Offset && offset < Offset + Size;
+        return offset >= Position && offset < Position + Size;
     }
 
     /// <summary>
@@ -72,7 +72,7 @@ public abstract class ObjectFileNodeBase
     public bool Contains(ObjectFileNodeBase node)
     {
         ArgumentNullException.ThrowIfNull(node);
-        return Contains((ulong)node.Offset) || node.Size != 0 && Contains((ulong)(node.Offset + node.Size - 1));
+        return Contains((ulong)node.Position) || node.Size != 0 && Contains((ulong)(node.Position + node.Size - 1));
     }
 
     /// <summary>

@@ -38,10 +38,10 @@ namespace LibObjectFile.Dwarf
 
         protected override void Read(DwarfReader reader)
         {
-            while (reader.Offset < reader.Length)
+            while (reader.Position < reader.Length)
             {
                 var programTable = new DwarfLineProgramTable();
-                programTable.Offset = reader.Offset;
+                programTable.Position = reader.Position;
                 programTable.ReadInternal(reader);
                 AddLineProgramTable(programTable);
             }
@@ -63,7 +63,7 @@ namespace LibObjectFile.Dwarf
 
             foreach (var dwarfLineProgramTable in _tables)
             {
-                dwarfLineProgramTable.Offset = Offset + sizeOf;
+                dwarfLineProgramTable.Position = Position + sizeOf;
                 dwarfLineProgramTable.UpdateLayoutInternal(layoutContext);
                 sizeOf += dwarfLineProgramTable.Size;
             }
@@ -72,14 +72,14 @@ namespace LibObjectFile.Dwarf
 
         protected override void Write(DwarfWriter writer)
         {
-            var startOffset = writer.Offset;
+            var startOffset = writer.Position;
 
             foreach (var dwarfLineProgramTable in _tables)
             {
                 dwarfLineProgramTable.WriteInternal(writer);
             }
 
-            Debug.Assert(Size == writer.Offset - startOffset, $"Expected Size: {Size} != Written Size: {writer.Offset - startOffset}");
+            Debug.Assert(Size == writer.Position - startOffset, $"Expected Size: {Size} != Written Size: {writer.Position - startOffset}");
         }
 
         public override string ToString()

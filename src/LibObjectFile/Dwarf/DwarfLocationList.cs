@@ -36,11 +36,11 @@ namespace LibObjectFile.Dwarf
 
         protected override void UpdateLayout(DwarfLayoutContext layoutContext)
         {
-            var endOffset = Offset;
+            var endOffset = Position;
 
             foreach (var locationListEntry in _locationListEntries)
             {
-                locationListEntry.Offset = endOffset;
+                locationListEntry.Position = endOffset;
                 locationListEntry.UpdateLayoutInternal(layoutContext);
                 endOffset += locationListEntry.Size;
             }
@@ -48,14 +48,14 @@ namespace LibObjectFile.Dwarf
             // End of list
             endOffset += 2 * DwarfHelper.SizeOfUInt(layoutContext.CurrentUnit!.AddressSize);
 
-            Size = endOffset - Offset;
+            Size = endOffset - Position;
         }
 
         protected override void Read(DwarfReader reader)
         {
-            reader.OffsetToLocationList.Add(reader.Offset, this);
+            reader.OffsetToLocationList.Add(reader.Position, this);
 
-            while (reader.Offset < reader.Length)
+            while (reader.Position < reader.Length)
             {
                 var locationListEntry = new DwarfLocationListEntry();
                 locationListEntry.ReadInternal(reader);

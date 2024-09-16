@@ -8,6 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection.PortableExecutable;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace LibObjectFile.PE;
 
@@ -70,10 +71,20 @@ public partial class PEFile : PEObject
     /// </summary>
     public ImageOptionalHeader OptionalHeader;
 
+    /// <summary>
+    /// Gets the directories.
+    /// </summary>
+    /// <returns>
+    /// Directories must be added/removed from <see cref="PESection.AddData"/> or <see cref="PESection.RemoveData"/>.
+    /// </returns>
+    public PEDirectoryTable Directories { get; } = new();
 
+    /// <summary>
+    /// Gets the sections.
+    /// </summary>
     public IReadOnlyList<PESection> Sections => _sections;
     
-    public PESection AddSection(string name, uint virtualAddress, uint virtualSize, SectionCharacteristics characteristics = SectionCharacteristics.MemRead)
+    public PESection AddSection(PESectionName name, uint virtualAddress, uint virtualSize, SectionCharacteristics characteristics = SectionCharacteristics.MemRead)
     {
         var section = new PESection(this, name)
         {
@@ -89,10 +100,10 @@ public partial class PEFile : PEObject
 
     public void RemoveSection(PESection section) => _sections.Remove(section);
     
-    public bool TryFindSection(uint virtualAddress, [NotNullWhen(true)] out PESection? section)
+    public bool TryFindSection(RVA virtualAddress, [NotNullWhen(true)] out PESection? section)
         => TryFindSection(virtualAddress, 0, out section);
 
-    public bool TryFindSection(uint virtualAddress, uint virtualSize, [NotNullWhen(true)] out PESection? section)
+    public bool TryFindSection(RVA virtualAddress, uint virtualSize, [NotNullWhen(true)] out PESection? section)
     {
         var sections = CollectionsMarshal.AsSpan(_sections);
         foreach (var trySection in sections)
@@ -118,7 +129,7 @@ public partial class PEFile : PEObject
 
         _sections.Remove(section);
     }
-
+    
     public void ClearSections() => _sections.Clear();
 
     public PESection GetSection(PESectionName name)
@@ -148,9 +159,66 @@ public partial class PEFile : PEObject
         section = null;
         return false;
     }
+
+    public List<PESectionData> GetAllSectionData()
+    {
+        var dataList = new List<PESectionData>();
+
+        // Precalculate the capacity
+        int count = 0;
+        var sections = _sections;
+        foreach (var section in sections)
+        {
+            count += section.DataParts.Count;
+        }
+        dataList.Capacity = count;
+
+        foreach (var section in sections)
+        {
+            var va = section.VirtualAddress;
+            foreach (var data in section.DataParts)
+            {
+                var size = (uint)data.Size;
+                data.VirtualAddress = va;
+                va += size;
+                dataList.Add(data);
+            }
+        }
+
+        return dataList;
+    }
     
     public override void UpdateLayout(DiagnosticBag diagnostics)
     {
         // TODO
+    }
+
+    protected override bool PrintMembers(StringBuilder builder)
+    {
+        if ((CoffHeader.Characteristics & Characteristics.Dll) != 0)
+        {
+            builder.Append("Dll ");
+        }
+        else if ((CoffHeader.Characteristics & Characteristics.ExecutableImage) != 0)
+        {
+            builder.Append("Exe ");
+        }
+        else
+        {
+            builder.Append("Unknown ");
+        }
+
+        switch (OptionalHeader.Magic)
+        {
+            case ImageOptionalHeaderMagic.PE32:
+                builder.Append("PE32");
+                break;
+            case ImageOptionalHeaderMagic.PE32Plus:
+                builder.Append("PE32+");
+                break;
+        }
+
+        builder.Append($"Directories[{Directories.Count}], Sections[{Sections.Count}]");
+        return true;
     }
 }

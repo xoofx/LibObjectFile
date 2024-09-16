@@ -88,7 +88,7 @@ namespace LibObjectFile.Dwarf
 
         protected override void UpdateLayout(DwarfLayoutContext layoutContext)
         {
-            var offset = this.Offset;
+            var offset = this.Position;
 
             // 1. unit_length 
             offset += DwarfHelper.SizeOfUnitLength(Is64BitEncoding);
@@ -118,14 +118,14 @@ namespace LibObjectFile.Dwarf
                 
                 Root.UpdateAbbreviationItem(layoutContext);
                 
-                DebugAbbreviationOffset = Abbreviation.Offset;
+                DebugAbbreviationOffset = Abbreviation.Position;
 
-                Root.Offset = offset;
+                Root.Position = offset;
                 Root.UpdateLayoutInternal(layoutContext);
                 offset += Root.Size;
             }
 
-            Size = offset - Offset;
+            Size = offset - Position;
             UnitLength = offset - offsetAfterUnitLength;
         }
 
@@ -141,7 +141,7 @@ namespace LibObjectFile.Dwarf
 
             foreach (var abbreviation in reader.File.AbbreviationTable.Abbreviations)
             {
-                if (abbreviation.Offset == DebugAbbreviationOffset)
+                if (abbreviation.Position == DebugAbbreviationOffset)
                 {
                     Abbreviation = abbreviation;
                     break;
@@ -152,19 +152,19 @@ namespace LibObjectFile.Dwarf
 
             reader.ResolveAttributeReferenceWithinCompilationUnit();
 
-            Size = reader.Offset - Offset;
+            Size = reader.Position - Position;
         }
 
         internal static DwarfUnit? ReadInstance(DwarfReader reader, out ulong offsetEndOfUnit)
         {
-            var startOffset = reader.Offset;
+            var startOffset = reader.Position;
 
             DwarfUnit? unit = null;
 
             // 1. unit_length 
             var unit_length = reader.ReadUnitLength();
 
-            offsetEndOfUnit = (ulong)reader.Offset + unit_length;
+            offsetEndOfUnit = (ulong)reader.Position + unit_length;
 
             // 2. version (uhalf) 
             var version = reader.ReadU16();
@@ -198,7 +198,7 @@ namespace LibObjectFile.Dwarf
             unit.UnitLength = unit_length;
             unit.Kind = unitKind;
             unit.Is64BitEncoding = reader.Is64BitEncoding;
-            unit.Offset = startOffset;
+            unit.Position = startOffset;
             unit.Version = version;
 
             unit.ReadHeader(reader);
@@ -210,14 +210,14 @@ namespace LibObjectFile.Dwarf
 
         protected override void Write(DwarfWriter writer)
         {
-            var startOffset = writer.Offset;
-            Debug.Assert(Offset == writer.Offset);
+            var startOffset = writer.Position;
+            Debug.Assert(Position == writer.Position);
 
             // 1. unit_length 
             Is64BitEncoding = Is64BitEncoding;
             writer.WriteUnitLength(UnitLength);
 
-            var offsetAfterUnitLength = writer.Offset;
+            var offsetAfterUnitLength = writer.Position;
 
             // 2. version (uhalf) 
             writer.WriteU16(Version);
@@ -234,8 +234,8 @@ namespace LibObjectFile.Dwarf
             Root?.WriteInternal(writer);
             // TODO: check size of unit length
 
-            Debug.Assert(Size == writer.Offset - startOffset);
-            Debug.Assert(UnitLength == writer.Offset - offsetAfterUnitLength);
+            Debug.Assert(Size == writer.Position - startOffset);
+            Debug.Assert(UnitLength == writer.Position - offsetAfterUnitLength);
         }
     }
 }

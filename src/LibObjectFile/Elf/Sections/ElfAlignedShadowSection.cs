@@ -36,8 +36,8 @@ namespace LibObjectFile.Elf
         {
             if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
 
-            var nextSectionOffset = AlignHelper.AlignToUpper(Offset, UpperAlignment);
-            Size = nextSectionOffset - Offset;
+            var nextSectionOffset = AlignHelper.AlignToUpper(Position, UpperAlignment);
+            Size = nextSectionOffset - Position;
             if (Size >= int.MaxValue)
             {
                 diagnostics.Error(DiagnosticId.ELF_ERR_InvalidAlignmentOutOfRange, $"Invalid alignment 0x{UpperAlignment:x} resulting in an offset beyond int.MaxValue");

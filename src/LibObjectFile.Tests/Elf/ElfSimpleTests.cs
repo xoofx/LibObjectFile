@@ -100,7 +100,7 @@ public class ElfSimpleTests : ElfTestBase
         elf.UpdateLayout(diagnostics);
         Assert.False(diagnostics.HasErrors);
             
-        Assert.AreEqual(1024, bssSection.Offset);
+        Assert.AreEqual(1024, bssSection.Position);
 
         AssertReadElf(elf, "test_bss.elf");
     }
@@ -419,7 +419,7 @@ public class ElfSimpleTests : ElfTestBase
 
         elf.Print(Console.Out);
 
-        Assert.AreEqual(alignedSection.UpperAlignment, codeSection.Offset, "Invalid alignment");
+        Assert.AreEqual(alignedSection.UpperAlignment, codeSection.Position, "Invalid alignment");
     }
 
     [Test]

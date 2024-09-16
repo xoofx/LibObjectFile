@@ -218,7 +218,7 @@ namespace LibObjectFile.Elf
                 // Write only section with content
                 if (section.HasContent)
                 {
-                    Stream.Position = (long)(_startOfFile + section.Offset);
+                    Stream.Position = (long)(_startOfFile + section.Position);
                     section.WriteInternal(this);
                 }
             }
@@ -270,7 +270,7 @@ namespace LibObjectFile.Elf
             _encoder.Encode(out shdr.sh_type, (uint)section.Type);
             _encoder.Encode(out shdr.sh_flags, (uint)section.Flags);
             _encoder.Encode(out shdr.sh_addr, (uint)section.VirtualAddress);
-            _encoder.Encode(out shdr.sh_offset, (uint)section.Offset);
+            _encoder.Encode(out shdr.sh_offset, (uint)section.Position);
             if (section.Index == 0 && ObjectFile.VisibleSectionCount >= ElfNative.SHN_LORESERVE)
             {
                 _encoder.Encode(out shdr.sh_size, ObjectFile.VisibleSectionCount);
@@ -295,7 +295,7 @@ namespace LibObjectFile.Elf
             _encoder.Encode(out shdr.sh_type, (uint)section.Type);
             _encoder.Encode(out shdr.sh_flags, (uint)section.Flags);
             _encoder.Encode(out shdr.sh_addr, section.VirtualAddress);
-            _encoder.Encode(out shdr.sh_offset, section.Offset);
+            _encoder.Encode(out shdr.sh_offset, section.Position);
             if (section.Index == 0 && ObjectFile.VisibleSectionCount >= ElfNative.SHN_LORESERVE)
             {
                 _encoder.Encode(out shdr.sh_size, ObjectFile.VisibleSectionCount);

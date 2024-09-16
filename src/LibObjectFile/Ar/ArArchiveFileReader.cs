@@ -74,7 +74,7 @@ namespace LibObjectFile.Ar
                 {
                     if (_futureHeaders != null)
                     {
-                        Diagnostics.Error(DiagnosticId.AR_ERR_InvalidDuplicatedFutureHeadersTable, $"Invalid duplicated future headers table found at offset {fileEntry.Offset} while another table was already found at offset {_futureHeaders.Offset}. This file is invalid.");
+                        Diagnostics.Error(DiagnosticId.AR_ERR_InvalidDuplicatedFutureHeadersTable, $"Invalid duplicated future headers table found at offset {fileEntry.Position} while another table was already found at offset {_futureHeaders.Position}. This file is invalid.");
                         break;
                     }
 
@@ -217,7 +217,7 @@ namespace LibObjectFile.Ar
             entry.OwnerId = (uint)ownerId;
             entry.GroupId = (uint)groupId;
             entry.FileMode = fileMode;
-            entry.Offset = (ulong)entryOffset;
+            entry.Position = (ulong)entryOffset;
             entry.Size = fileSize;
 
             // Read the BSD name if necessary

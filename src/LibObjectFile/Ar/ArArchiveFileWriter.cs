@@ -69,7 +69,7 @@ namespace LibObjectFile.Ar
 
         private void WriteFileEntry(Span<byte> buffer, ArFile file)
         {
-            Debug.Assert((ulong)(Stream.Position - _startStreamOffset) == file.Offset);
+            Debug.Assert((ulong)(Stream.Position - _startStreamOffset) == file.Position);
             buffer.Fill((byte)' ');
 
             var name = file.InternalName;

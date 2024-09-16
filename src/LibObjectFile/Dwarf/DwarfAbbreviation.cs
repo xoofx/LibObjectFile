@@ -114,7 +114,7 @@ namespace LibObjectFile.Dwarf
 
         private bool TryReadNext(DwarfReader reader)
         {
-            var startOffset = (ulong)reader.Offset;
+            var startOffset = (ulong)reader.Position;
             var code = reader.ReadULEB128();
             if (code == 0)
             {
@@ -123,7 +123,7 @@ namespace LibObjectFile.Dwarf
 
             var item = new DwarfAbbreviationItem
             {
-                Offset = startOffset, 
+                Position = startOffset, 
                 Code = code
             };
 
@@ -168,18 +168,18 @@ namespace LibObjectFile.Dwarf
 
         protected override void Read(DwarfReader reader)
         {
-            Offset = reader.Offset;
+            Position = reader.Position;
             while (TryReadNext(reader))
             {
             }
 
-            Size = (ulong)reader.Offset - Offset;
+            Size = (ulong)reader.Position - Position;
         }
 
         protected override void Write(DwarfWriter writer)
         {
-            var startOffset = writer.Offset;
-            Debug.Assert(startOffset == Offset);
+            var startOffset = writer.Position;
+            Debug.Assert(startOffset == Position);
             if (_mapItems.Count > 0)
             {
                 foreach (var itemPair in _mapItems)
@@ -203,19 +203,19 @@ namespace LibObjectFile.Dwarf
             // End of abbreviation item
             writer.WriteULEB128(0);
 
-            Debug.Assert(writer.Offset - startOffset == Size);
+            Debug.Assert(writer.Position - startOffset == Size);
         }
 
         protected override void UpdateLayout(DwarfLayoutContext layoutContext)
         {
-            var endOffset = Offset;
+            var endOffset = Position;
 
             if (_mapItems.Count > 0)
             {
                 foreach (var itemPair in _mapItems)
                 {
                     var item = itemPair.Value;
-                    item.Offset = endOffset;
+                    item.Position = endOffset;
                     item.UpdateLayoutInternal(layoutContext);
                     endOffset += item.Size;
                 }
@@ -227,7 +227,7 @@ namespace LibObjectFile.Dwarf
                 {
                     foreach (var item in _items)
                     {
-                        item.Offset = endOffset;
+                        item.Position = endOffset;
                         item.UpdateLayoutInternal(layoutContext);
                         endOffset += item.Size;
                     }
@@ -236,7 +236,7 @@ namespace LibObjectFile.Dwarf
 
             endOffset += DwarfHelper.SizeOfULEB128(0);
 
-            Size = endOffset - Offset;
+            Size = endOffset - Position;
         }
     }
 }

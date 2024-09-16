@@ -4,22 +4,26 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Reflection;
 using System.Reflection.PortableExecutable;
+using System.Text;
 
 namespace LibObjectFile.PE;
 
 /// <summary>
 /// Defines a section in a Portable Executable (PE) image.
 /// </summary>
-public class PESection : PEObject
+public class PESection : PEObject, IVirtualAddressable
 {
-    private readonly List<PESectionData> _dataList;
+    private readonly List<PESectionData> _dataParts;
+    private RVA _virtualAddress;
 
     internal PESection(PEFile peFile, PESectionName name)
     {
         Parent = peFile;
         Name = name;
-        _dataList = new List<PESectionData>();
+        _dataParts = new List<PESectionData>();
         // Most of the time readable
         Characteristics = SectionCharacteristics.MemRead;
     }
@@ -37,7 +41,15 @@ public class PESection : PEObject
     /// <summary>
     /// The address of the first byte of the section when loaded into memory, relative to the image base.
     /// </summary>
-    public uint VirtualAddress { get; set; }
+    public RVA VirtualAddress
+    {
+        get => _virtualAddress;
+        set
+        {
+            _virtualAddress = value;
+            UpdateSectionDataIndicesAndVirtualAddress(0);
+        }
+    }
 
     /// <summary>
     /// The total size of the section when loaded into memory.
@@ -73,8 +85,8 @@ public class PESection : PEObject
     /// <summary>
     /// Gets the list of data associated with this section.
     /// </summary>
-    public IReadOnlyList<PESectionData> DataList => _dataList;
-
+    public IReadOnlyList<PESectionData> DataParts => _dataParts;
+    
     /// <summary>
     /// Adds a new data to this section.
     /// </summary>
@@ -85,7 +97,21 @@ public class PESection : PEObject
         ArgumentNullException.ThrowIfNull(data);
         if (data.Section != null) throw new ArgumentException("Data is already associated with a section", nameof(data));
         data.Section = this;
-        _dataList.Add(data);
+        data.Index = (uint)_dataParts.Count;
+        _dataParts.Add(data);
+        UpdateSectionDataIndicesAndVirtualAddress((int)data.Index);
+    }
+
+    public void InsertData(int index, PESectionData data)
+    {
+        ArgumentNullException.ThrowIfNull(data);
+        if (index < 0 || index > _dataParts.Count) throw new ArgumentOutOfRangeException(nameof(index));
+
+        if (data.Section != null) throw new ArgumentException("Data is already associated with a section", nameof(data));
+        data.Section = this;
+        data.Index = (uint)index;
+        _dataParts.Insert(index, data);
+        UpdateSectionDataIndicesAndVirtualAddress(index);
     }
 
     /// <summary>
@@ -97,8 +123,8 @@ public class PESection : PEObject
     {
         ArgumentNullException.ThrowIfNull(data);
         if (data.Section != this) throw new ArgumentException("Data is not associated with this section", nameof(data));
-        data.Section = null;
-        _dataList.Remove(data);
+        var index = (int)data.Index;
+        RemoveDataAt(index);
     }
 
     /// <summary>
@@ -107,9 +133,14 @@ public class PESection : PEObject
     /// <param name="index">The index of the data to remove.</param>
     public void RemoveDataAt(int index)
     {
-        var data = _dataList[index];
+        if (index < 0 || index > _dataParts.Count) throw new ArgumentOutOfRangeException(nameof(index));
+
+        var list = _dataParts;
+        var data = list[index];
         data.Section = null;
-        _dataList.RemoveAt(index);
+        data.Index = 0;
+        list.RemoveAt(index);
+        UpdateSectionDataIndicesAndVirtualAddress(index);
     }
 
     /// <summary>
@@ -117,7 +148,7 @@ public class PESection : PEObject
     /// </summary>
     /// <param name="virtualAddress">The virtual address to check if it belongs to this section.</param>
     /// <returns><c>true</c> if the virtual address is within the section range.</returns>
-    public bool ContainsVirtual(uint virtualAddress)
+    public bool ContainsVirtual(RVA virtualAddress)
     {
         return virtualAddress >= VirtualAddress && virtualAddress < VirtualAddress + VirtualSize;
     }
@@ -128,7 +159,7 @@ public class PESection : PEObject
     /// <param name="virtualAddress">The virtual address to check if it belongs to this section.</param>
     /// <param name="size">The size to check if it belongs to this section.</param>
     /// <returns><c>true</c> if the virtual address and size is within the section range.</returns>
-    public bool ContainsVirtual(uint virtualAddress, uint size)
+    public bool ContainsVirtual(RVA virtualAddress, uint size)
     {
         return virtualAddress >= VirtualAddress && virtualAddress + size <= VirtualAddress + VirtualSize;
     }
@@ -136,9 +167,47 @@ public class PESection : PEObject
     /// <inheritdoc />
     public override void UpdateLayout(DiagnosticBag diagnostics)
     {
-        foreach (var data in DataList)
+        foreach (var data in DataParts)
         {
             data.UpdateLayout(diagnostics);
+        }
+    }
+
+    /// <inheritdoc />
+    protected override void Write(PEImageWriter writer)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <inheritdoc />
+    protected override void PrintName(StringBuilder builder)
+    {
+        builder.Append(Name);
+    }
+
+    /// <inheritdoc />
+    protected override bool PrintMembers(StringBuilder builder)
+    {
+        builder.Append($"VirtualAddress = {VirtualAddress}, VirtualSize = 0x{VirtualSize:X4}, DataParts[{DataParts.Count}]");
+        return true;
+    }
+
+    private void UpdateSectionDataIndicesAndVirtualAddress(int startIndex)
+    {
+        var va = VirtualAddress;
+        var list = _dataParts;
+        if (startIndex > 0)
+        {
+            var previousData = list[startIndex - 1];
+            va = previousData.VirtualAddress + (uint)previousData.Size;
+        }
+        
+        for (int i = startIndex; i < list.Count; i++)
+        {
+            var data = list[i];
+            data.Index = (uint)i;
+            data.VirtualAddress = va;
+            va += (uint)data.Size;
         }
     }
 }

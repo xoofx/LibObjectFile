@@ -28,7 +28,7 @@ namespace LibObjectFile.Dwarf
 
             writer.WriteLine();
 
-            writer.WriteLine($"  Number TAG (0x{abbreviation.Offset})");
+            writer.WriteLine($"  Number TAG (0x{abbreviation.Position})");
 
             foreach (var item in abbreviation.Items)
             {
@@ -78,10 +78,10 @@ namespace LibObjectFile.Dwarf
             if (writer == null) throw new ArgumentNullException(nameof(writer));
             writer.WriteLine("Contents of the .debug_info section:");
             writer.WriteLine();
-            writer.WriteLine($"  Compilation Unit @ offset 0x{unit.Offset:x}:");
+            writer.WriteLine($"  Compilation Unit @ offset 0x{unit.Position:x}:");
             writer.WriteLine($"   Length:        0x{unit.UnitLength:x}");
             writer.WriteLine($"   Version:       {unit.Version}");
-            writer.WriteLine($"   Abbrev Offset: 0x{unit.Abbreviation?.Offset ?? 0:x}");
+            writer.WriteLine($"   Abbrev Offset: 0x{unit.Abbreviation?.Position ?? 0:x}");
             writer.WriteLine($"   Pointer Size:  {(uint)unit.AddressSize}");
             if (unit.Root != null)
             {
@@ -93,7 +93,7 @@ namespace LibObjectFile.Dwarf
         {
             if (writer == null) throw new ArgumentNullException(nameof(writer));
 
-            writer.WriteLine($" <{level}><{die.Offset:x}>: Abbrev Number: {die.Abbrev!.Code} ({die.Tag})");
+            writer.WriteLine($" <{level}><{die.Position:x}>: Abbrev Number: {die.Abbrev!.Code} ({die.Tag})");
 
             foreach (var attr in die.Attributes)
             {
@@ -101,7 +101,7 @@ namespace LibObjectFile.Dwarf
                 switch (attr.ValueAsObject)
                 {
                     case DwarfDIE dieRef:
-                        attrValue = $"<0x{dieRef.Offset:x}>";
+                        attrValue = $"<0x{dieRef.Position:x}>";
                         break;
                     case string str:
                         attrValue = str;
@@ -133,7 +133,7 @@ namespace LibObjectFile.Dwarf
                     }
                 }
 
-                writer.WriteLine($"    <{attr.Offset:x}>   {attr.Kind,-18}    : {attrValue}");
+                writer.WriteLine($"    <{attr.Position:x}>   {attr.Kind,-18}    : {attrValue}");
             }
 
             foreach (var child in die.Children)

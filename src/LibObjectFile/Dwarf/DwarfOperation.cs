@@ -23,7 +23,7 @@ namespace LibObjectFile.Dwarf
 
         protected override void Read(DwarfReader reader)
         {
-            Offset = reader.Offset;
+            Position = reader.Position;
             var kind = new DwarfOperationKindEx(reader.ReadU8());
             Kind = kind;
 
@@ -422,12 +422,12 @@ namespace LibObjectFile.Dwarf
             }
 
             // Store the size of the current op
-            Size = reader.Offset - Offset;
+            Size = reader.Position - Position;
         }
 
         protected override void UpdateLayout(DwarfLayoutContext layoutContext)
         {
-            var endOffset = Offset;
+            var endOffset = Position;
             // 1 byte per opcode
             endOffset += 1;
 
@@ -667,7 +667,7 @@ namespace LibObjectFile.Dwarf
                     }
                     else if (Operand0 is DwarfExpression expr)
                     {
-                        expr.Offset = endOffset;
+                        expr.Position = endOffset;
                         expr.UpdateLayoutInternal(layoutContext);
                         endOffset += DwarfHelper.SizeOfULEB128(expr.Size);
                     }
@@ -744,7 +744,7 @@ namespace LibObjectFile.Dwarf
                     throw new NotSupportedException($"The {nameof(DwarfOperationKind)} {Kind} is not supported");
             }
 
-            Size = endOffset - Offset;
+            Size = endOffset - Position;
         }
 
         private ulong SizeOfDIEReference(DwarfLayoutContext context)
@@ -757,9 +757,9 @@ namespace LibObjectFile.Dwarf
             {
                 // TODO: check that die reference is within this section
 
-                if (die.Offset < Offset)
+                if (die.Position < Position)
                 {
-                    return DwarfHelper.SizeOfULEB128(die.Offset);
+                    return DwarfHelper.SizeOfULEB128(die.Position);
                 }
                 else
                 {
@@ -797,8 +797,8 @@ namespace LibObjectFile.Dwarf
 
         protected override void Write(DwarfWriter writer)
         {
-            var startOpOffset = Offset;
-            Debug.Assert(startOpOffset == Offset);
+            var startOpOffset = Position;
+            Debug.Assert(startOpOffset == Position);
 
             writer.WriteU8((byte)Kind);
 
@@ -881,7 +881,7 @@ namespace LibObjectFile.Dwarf
 
                 case DwarfOperationKind.Bra:
                 case DwarfOperationKind.Skip:
-                    writer.WriteU16((ushort)((long)Offset + 2 - (long)((DwarfOperation)Operand0!).Offset));
+                    writer.WriteU16((ushort)((long)Position + 2 - (long)((DwarfOperation)Operand0!).Position));
                     break;
 
                 case DwarfOperationKind.Lit0:
@@ -992,15 +992,15 @@ namespace LibObjectFile.Dwarf
                     break;
 
                 case DwarfOperationKind.Call2:
-                    writer.WriteU16((ushort)((DwarfDIE)Operand0!).Offset);
+                    writer.WriteU16((ushort)((DwarfDIE)Operand0!).Position);
                     break;
 
                 case DwarfOperationKind.Call4:
-                    writer.WriteU32((uint)((DwarfDIE)Operand0!).Offset);
+                    writer.WriteU32((uint)((DwarfDIE)Operand0!).Position);
                     break;
 
                 case DwarfOperationKind.CallRef:
-                    writer.WriteUInt(((DwarfDIE)Operand0!).Offset);
+                    writer.WriteUInt(((DwarfDIE)Operand0!).Position);
                     break;
 
                 case DwarfOperationKind.BitPiece:
@@ -1019,7 +1019,7 @@ namespace LibObjectFile.Dwarf
                 case DwarfOperationKind.ImplicitPointer:
                 case DwarfOperationKind.GNUImplicitPointer:
                     {
-                        ulong offset = ((DwarfDIE)Operand0!).Offset;
+                        ulong offset = ((DwarfDIE)Operand0!).Position;
                         //  a reference to a debugging information entry that describes the dereferenced object’s value
                         if (writer.CurrentUnit!.Version == 2)
                         {
@@ -1051,7 +1051,7 @@ namespace LibObjectFile.Dwarf
                         // The first operand is an unsigned LEB128 integer that represents the offset
                         // of a debugging information entry in the current compilation unit, which
                         // must be a DW_TAG_base_type entry that provides the type of the constant provided
-                        writer.WriteULEB128(((DwarfDIE)Operand0!).Offset);
+                        writer.WriteULEB128(((DwarfDIE)Operand0!).Position);
                         WriteEncodedValue(writer, Kind, Operand1.U64, (byte)Operand2.U64);
                         break;
                     }
@@ -1068,7 +1068,7 @@ namespace LibObjectFile.Dwarf
 
                         // The second operand is an unsigned LEB128 number that represents the offset
                         // of a debugging information entry in the current compilation unit
-                        writer.WriteULEB128(((DwarfDIE)Operand0!).Offset);
+                        writer.WriteULEB128(((DwarfDIE)Operand0!).Position);
                         break;
                     }
 
@@ -1085,7 +1085,7 @@ namespace LibObjectFile.Dwarf
 
                         // The second operand is an unsigned LEB128 number that represents the offset
                         // of a debugging information entry in the current compilation unit
-                        writer.WriteULEB128(((DwarfDIE)Operand0!).Offset);
+                        writer.WriteULEB128(((DwarfDIE)Operand0!).Position);
                         break;
                     }
 
@@ -1093,7 +1093,7 @@ namespace LibObjectFile.Dwarf
                 case DwarfOperationKind.GNUConvert:
                 case DwarfOperationKind.Reinterpret:
                 case DwarfOperationKind.GNUReinterpret:
-                    writer.WriteULEB128(((DwarfDIE)Operand0!).Offset);
+                    writer.WriteULEB128(((DwarfDIE)Operand0!).Position);
                     break;
 
                 case DwarfOperationKind.GNUPushTlsAddress:
@@ -1112,7 +1112,7 @@ namespace LibObjectFile.Dwarf
                     throw new NotSupportedException($"The {nameof(DwarfOperationKind)} {Kind} is not supported");
             }
 
-            Debug.Assert(writer.Offset - startOpOffset == Size);
+            Debug.Assert(writer.Position - startOpOffset == Size);
         }
 
         private static ulong ReadEncodedValue(DwarfReader reader, DwarfOperationKind kind, out byte size)

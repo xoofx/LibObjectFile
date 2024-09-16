@@ -119,7 +119,7 @@ namespace LibObjectFile.Ar
             var offsets = new Dictionary<ulong, ArFile>();
             foreach (var fileEntry in Parent!.Files)
             {
-                offsets[fileEntry.Offset] = fileEntry;
+                offsets[fileEntry.Position] = fileEntry;
             }
 
             for (var i = 0; i < Symbols.Count; i++)
@@ -151,7 +151,7 @@ namespace LibObjectFile.Ar
                     writer.Stream.WriteU32(false, stringOffset);
                 }
 
-                writer.Stream.WriteU32(false, (uint)symbol.File.Offset);
+                writer.Stream.WriteU32(false, (uint)symbol.File.Position);
 
                 if (isBSD)
                 {

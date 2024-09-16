@@ -37,26 +37,26 @@ namespace LibObjectFile.Dwarf
         {
             var addressRangeTable = reader.File.AddressRangeTable;
             
-            while (reader.Offset < reader.Length)
+            while (reader.Position < reader.Length)
             {
                 // 7.5 Format of Debugging Information
                 // - Each such contribution consists of a compilation unit header
 
-                var startOffset = Offset;
+                var startOffset = Position;
 
                 reader.ClearResolveAttributeReferenceWithinCompilationUnit();
 
                 var cu = DwarfUnit.ReadInstance(reader, out var offsetEndOfUnit);
                 if (cu == null)
                 {
-                    reader.Offset = offsetEndOfUnit;
+                    reader.Position = offsetEndOfUnit;
                     continue;
                 }
 
                 reader.CurrentUnit = cu;
 
                 // Link AddressRangeTable to Unit
-                if (addressRangeTable.DebugInfoOffset == cu.Offset)
+                if (addressRangeTable.DebugInfoOffset == cu.Position)
                 {
                     addressRangeTable.Unit = cu;
                 }
@@ -79,27 +79,27 @@ namespace LibObjectFile.Dwarf
 
         protected override void UpdateLayout(DwarfLayoutContext layoutContext)
         {
-            var offset = Offset;
+            var offset = Position;
             foreach (var unit in Units)
             {
                 layoutContext.CurrentUnit = unit;
-                unit.Offset = offset;
+                unit.Position = offset;
                 unit.UpdateLayoutInternal(layoutContext);
                 offset += unit.Size;
             }
-            Size = offset - Offset;
+            Size = offset - Position;
         }
 
         protected override void Write(DwarfWriter writer)
         {
-            Debug.Assert(Offset == writer.Offset);
+            Debug.Assert(Position == writer.Position);
             foreach (var unit in _units)
             {
                 writer.CurrentUnit = unit;
                 unit.WriteInternal(writer);
             }
             writer.CurrentUnit = null;
-            Debug.Assert(Size == writer.Offset - Offset);
+            Debug.Assert(Size == writer.Position - Position);
         }
     }
 }

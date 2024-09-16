@@ -22,7 +22,7 @@ namespace LibObjectFile.Dwarf
             if (CurrentSection is DwarfRelocatableSection relocSection)
             {
 
-                relocSection.Relocations.Add(new DwarfRelocation(Offset, target, addressSize, address));
+                relocSection.Relocations.Add(new DwarfRelocation(Position, target, addressSize, address));
 
             }
             else

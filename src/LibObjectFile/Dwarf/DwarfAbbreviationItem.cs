@@ -31,7 +31,7 @@ namespace LibObjectFile.Dwarf
 
         protected override void UpdateLayout(DwarfLayoutContext layoutContext)
         {
-            var endOffset = Offset;
+            var endOffset = Position;
 
             // Code
             endOffset += DwarfHelper.SizeOfULEB128(Code);
@@ -53,7 +53,7 @@ namespace LibObjectFile.Dwarf
             // Null Kind and Form
             endOffset += DwarfHelper.SizeOfULEB128(0) * 2;
 
-            Size = endOffset - Offset;
+            Size = endOffset - Position;
         }
 
         protected override void Read(DwarfReader reader)
@@ -92,13 +92,13 @@ namespace LibObjectFile.Dwarf
 
             Descriptors = descriptors != null ? new DwarfAttributeDescriptors(descriptors.ToArray()) : new DwarfAttributeDescriptors();
 
-            Size = reader.Offset - Offset;
+            Size = reader.Position - Position;
         }
 
         protected override void Write(DwarfWriter writer)
         {
-            var startOffset = writer.Offset;
-            Debug.Assert(startOffset == Offset);
+            var startOffset = writer.Position;
+            Debug.Assert(startOffset == Position);
 
             // Code
             writer.WriteULEB128(Code);
@@ -119,7 +119,7 @@ namespace LibObjectFile.Dwarf
             writer.WriteULEB128(0);
             writer.WriteULEB128(0);
 
-            Debug.Assert(writer.Offset - startOffset == Size);
+            Debug.Assert(writer.Position - startOffset == Size);
         }
     }
 }

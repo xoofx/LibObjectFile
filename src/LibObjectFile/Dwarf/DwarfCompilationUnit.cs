@@ -42,7 +42,7 @@ namespace LibObjectFile.Dwarf
             if (Version < 5)
             {
                 // 3. debug_abbrev_offset (section offset) 
-                var abbrevOffset = Abbreviation!.Offset;
+                var abbrevOffset = Abbreviation!.Position;
                 if (writer.EnableRelocation)
                 {
                     writer.RecordRelocation(DwarfRelocationTarget.DebugAbbrev, writer.SizeOfUIntEncoding(), abbrevOffset);
@@ -61,7 +61,7 @@ namespace LibObjectFile.Dwarf
                 writer.WriteAddressSize(AddressSize);
 
                 // 5. debug_abbrev_offset (section offset) 
-                var abbrevOffset = Abbreviation!.Offset;
+                var abbrevOffset = Abbreviation!.Position;
                 if (writer.EnableRelocation)
                 {
                     writer.RecordRelocation(DwarfRelocationTarget.DebugAbbrev, writer.SizeOfUIntEncoding(), abbrevOffset);

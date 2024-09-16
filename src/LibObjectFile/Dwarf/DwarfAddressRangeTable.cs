@@ -37,7 +37,7 @@ namespace LibObjectFile.Dwarf
 
         protected override void Read(DwarfReader reader)
         {
-            Offset = reader.Offset;
+            Position = reader.Position;
             var unitLength = reader.ReadUnitLength();
             Is64BitEncoding = reader.Is64BitEncoding;
             Version = reader.ReadU16();
@@ -58,7 +58,7 @@ namespace LibObjectFile.Dwarf
             var align = (ulong)segment_selector_size + (ulong)AddressSize * 2;
 
             // SPECS 7.21: The first tuple following the header in each set begins at an offset that is a multiple of the size of a single tuple
-            reader.Offset = AlignHelper.AlignToUpper(reader.Offset, align);
+            reader.Position = AlignHelper.AlignToUpper(reader.Position, align);
 
             while (true)
             {
@@ -115,7 +115,7 @@ namespace LibObjectFile.Dwarf
                 Ranges.Add(new DwarfAddressRange(segment, address, length));
             }
 
-            Size = reader.Offset - Offset;
+            Size = reader.Position - Position;
         }
 
         public override void Verify(DiagnosticBag diagnostics)
@@ -171,13 +171,13 @@ namespace LibObjectFile.Dwarf
 
             if (Unit != null)
             {
-                DebugInfoOffset = Unit.Offset;
+                DebugInfoOffset = Unit.Position;
             }
         }
 
         protected override void Write(DwarfWriter writer)
         {
-            var startOffset = writer.Offset;
+            var startOffset = writer.Position;
 
             // unit_length
             writer.WriteUnitLength(Size - DwarfHelper.SizeOfUnitLength(Is64BitEncoding));
@@ -203,12 +203,12 @@ namespace LibObjectFile.Dwarf
             var align = (ulong)SegmentSelectorSize + (ulong)AddressSize * 2;
 
             // SPECS 7.21: The first tuple following the header in each set begins at an offset that is a multiple of the size of a single tuple
-            var nextOffset = AlignHelper.AlignToUpper(writer.Offset, align);
-            for (ulong offset = writer.Offset; offset < nextOffset; offset++)
+            var nextOffset = AlignHelper.AlignToUpper(writer.Position, align);
+            for (ulong offset = writer.Position; offset < nextOffset; offset++)
             {
                 writer.WriteU8(0);
             }
-            Debug.Assert(writer.Offset == nextOffset);
+            Debug.Assert(writer.Position == nextOffset);
 
             foreach (var range in Ranges)
             {
@@ -271,7 +271,7 @@ namespace LibObjectFile.Dwarf
                     break;
             }
 
-            Debug.Assert(writer.Offset - startOffset == Size);
+            Debug.Assert(writer.Position - startOffset == Size);
         }
     }
 }

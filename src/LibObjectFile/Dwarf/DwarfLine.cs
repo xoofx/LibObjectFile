@@ -164,7 +164,7 @@ namespace LibObjectFile.Dwarf
         
         public override string ToString()
         {
-            return $"{nameof(Offset)}: 0x{Offset:x8}, {nameof(Address)}: 0x{Address:x16}, {nameof(File)}: {File}, {nameof(Line)}: {Line,4}, {nameof(Column)}: {Column,2}, {nameof(IsStatement)}: {Bool2Str(IsStatement),5}, {nameof(IsBasicBlock)}: {Bool2Str(IsBasicBlock),5}, {nameof(IsPrologueEnd)}: {Bool2Str(IsPrologueEnd),5}, {nameof(IsEpilogueBegin)}: {Bool2Str(IsEpilogueBegin),5}, {nameof(Isa)}: {Isa,3}, {nameof(Discriminator)}: {Discriminator,3}";
+            return $"{nameof(Position)}: 0x{Position:x8}, {nameof(Address)}: 0x{Address:x16}, {nameof(File)}: {File}, {nameof(Line)}: {Line,4}, {nameof(Column)}: {Column,2}, {nameof(IsStatement)}: {Bool2Str(IsStatement),5}, {nameof(IsBasicBlock)}: {Bool2Str(IsBasicBlock),5}, {nameof(IsPrologueEnd)}: {Bool2Str(IsPrologueEnd),5}, {nameof(IsEpilogueBegin)}: {Bool2Str(IsEpilogueBegin),5}, {nameof(Isa)}: {Isa,3}, {nameof(Discriminator)}: {Discriminator,3}";
         }
 
         private static string Bool2Str(bool value) => value.ToString(CultureInfo.InvariantCulture).ToLowerInvariant();

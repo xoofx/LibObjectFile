@@ -39,10 +39,10 @@ namespace LibObjectFile
             set => _stream = value;
         }
 
-        public ulong Offset
+        public ulong Position
         {
             get => (ulong) Stream.Position;
-            set => Stream.Position = (long) value;
+            set => Stream.Seek((long)value, SeekOrigin.Begin);
         }
 
         public ulong Length
@@ -73,6 +73,8 @@ namespace LibObjectFile
         public int Read(byte[] buffer, int offset, int count) => Stream.Read(buffer, offset, count);
 
         public int Read(Span<byte> buffer) => Stream.Read(buffer);
+        
+        public void ReadExactly(Span<byte> buffer) => Stream.ReadExactly(buffer);
 
         /// <summary>
         /// Reads a null terminated UTF8 string from the stream.
@@ -220,7 +222,7 @@ namespace LibObjectFile
             if (IsReadOnly)
             {
                 var stream = ReadAsSubStream(size);
-                Stream.Position += stream.Length;
+                Stream.Seek(stream.Length, SeekOrigin.Current);
                 return stream;
             }
 
@@ -270,7 +272,7 @@ namespace LibObjectFile
             if (inputStream == null) throw new ArgumentNullException(nameof(inputStream));
             if (bufferSize <= 0) throw new ArgumentOutOfRangeException(nameof(bufferSize));
 
-            inputStream.Position = 0;
+            inputStream.Seek(0, SeekOrigin.Begin);
             size = size == 0 ? (ulong)inputStream.Length : size;
             var buffer = ArrayPool<byte>.Shared.Rent(bufferSize);
 
@@ -284,7 +286,7 @@ namespace LibObjectFile
                 size -= (ulong)sizeRead;
             }
 
-            inputStream.Position = 0;
+            inputStream.Seek(0, SeekOrigin.Begin);
             if (size != 0)
             {
                 throw new InvalidOperationException("Unable to write stream entirely");
@@ -320,22 +322,10 @@ namespace LibObjectFile
             memoryStream.SetLength((long)size);
 
             var buffer = memoryStream.GetBuffer();
-            while (size != 0)
-            {
-                var lengthToRead = size >= int.MaxValue ? int.MaxValue : (int)size;
-                var lengthRead = Stream.Read(buffer, 0, lengthToRead);
-                if (lengthRead < 0) break;
-                if ((uint)lengthRead >= size)
-                {
-                    size -= (uint)lengthRead;
-                }
-                else
-                {
-                    break;
-                }
-            }
+            var span = new Span<byte>(buffer, 0, (int)size);
+            var readSize = Stream.Read(span);
 
-            if (size != 0)
+            if ((int)size != readSize)
             {
                 Diagnostics.Error(DiagnosticId.CMN_ERR_UnexpectedEndOfFile, $"Unexpected end of file. Expecting to read {size} bytes at offset {Stream.Position}");
             }

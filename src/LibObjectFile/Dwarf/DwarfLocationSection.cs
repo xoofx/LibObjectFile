@@ -37,10 +37,10 @@ namespace LibObjectFile.Dwarf
 
         protected override void Read(DwarfReader reader)
         {
-            while (reader.Offset < reader.Length)
+            while (reader.Position < reader.Length)
             {
                 var locationList = new DwarfLocationList();
-                locationList.Offset = reader.Offset;
+                locationList.Position = reader.Position;
                 locationList.ReadInternal(reader);
                 AddLocationList(locationList);
             }
@@ -62,7 +62,7 @@ namespace LibObjectFile.Dwarf
 
             foreach (var locationList in _locationLists)
             {
-                locationList.Offset = Offset + sizeOf;
+                locationList.Position = Position + sizeOf;
                 locationList.UpdateLayoutInternal(layoutContext);
                 sizeOf += locationList.Size;
             }
@@ -71,14 +71,14 @@ namespace LibObjectFile.Dwarf
 
         protected override void Write(DwarfWriter writer)
         {
-            var startOffset = writer.Offset;
+            var startOffset = writer.Position;
 
             foreach (var locationList in _locationLists)
             {
                 locationList.WriteInternal(writer);
             }
 
-            Debug.Assert(Size == writer.Offset - startOffset, $"Expected Size: {Size} != Written Size: {writer.Offset - startOffset}");
+            Debug.Assert(Size == writer.Position - startOffset, $"Expected Size: {Size} != Written Size: {writer.Position - startOffset}");
         }
 
         public override string ToString()

@@ -56,7 +56,7 @@ namespace LibObjectFile.Elf
 
             if (OffsetKind == ValueKind.Auto)
             {
-                Offset = Range.Offset;
+                Position = Range.Offset;
             }
             
             if (Range.IsEmpty)

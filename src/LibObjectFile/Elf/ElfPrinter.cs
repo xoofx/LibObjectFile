@@ -98,7 +98,7 @@ namespace LibObjectFile.Elf
             {
                 var section = elf.Sections[i];
                 if (section.IsShadow) continue;
-                writer.WriteLine($"  [{section.SectionIndex,2:#0}] {GetElfSectionName(section),-17} {GetElfSectionType(section.Type),-15} {section.VirtualAddress:x16} {section.Offset:x6} {section.Size:x6} {section.TableEntrySize:x2} {GetElfSectionFlags(section.Flags),3} {section.Link.GetIndex(),2} {section.Info.GetIndex(),3} {section.Alignment,2}");
+                writer.WriteLine($"  [{section.SectionIndex,2:#0}] {GetElfSectionName(section),-17} {GetElfSectionType(section.Type),-15} {section.VirtualAddress:x16} {section.Position:x6} {section.Size:x6} {section.TableEntrySize:x2} {GetElfSectionFlags(section.Flags),3} {section.Link.GetIndex(),2} {section.Info.GetIndex(),3} {section.Alignment,2}");
             }
             writer.WriteLine(@"Key to Flags:
   W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
@@ -141,7 +141,7 @@ namespace LibObjectFile.Elf
             for (int i = 0; i < elf.Segments.Count; i++)
             {
                 var phdr = elf.Segments[i];
-                writer.WriteLine($"  {GetElfSegmentType(phdr.Type),-14} 0x{phdr.Offset:x6} 0x{phdr.VirtualAddress:x16} 0x{phdr.PhysicalAddress:x16} 0x{phdr.Size:x6} 0x{phdr.SizeInMemory:x6} {GetElfSegmentFlags(phdr.Flags),3} 0x{phdr.Alignment:x}");
+                writer.WriteLine($"  {GetElfSegmentType(phdr.Type),-14} 0x{phdr.Position:x6} 0x{phdr.VirtualAddress:x16} 0x{phdr.PhysicalAddress:x16} 0x{phdr.Size:x6} 0x{phdr.SizeInMemory:x6} {GetElfSegmentFlags(phdr.Flags),3} 0x{phdr.Alignment:x}");
             }
 
             if (elf.Segments.Count > 0 && elf.VisibleSectionCount > 0 && elf.SectionHeaderStringTable != null)
@@ -183,7 +183,7 @@ namespace LibObjectFile.Elf
                     var relocTable = (ElfRelocationTable) section;
 
                     writer.WriteLine();
-                    writer.WriteLine($"Relocation section {(elf.SectionHeaderStringTable == null ? "0" : $"'{section.Name}'")} at offset 0x{section.Offset:x} contains {relocTable.Entries.Count} {(relocTable.Entries.Count > 1 ? "entries" : "entry")}:");
+                    writer.WriteLine($"Relocation section {(elf.SectionHeaderStringTable == null ? "0" : $"'{section.Name}'")} at offset 0x{section.Position:x} contains {relocTable.Entries.Count} {(relocTable.Entries.Count > 1 ? "entries" : "entry")}:");
                      
                     if (elf.FileClass == ElfFileClass.Is32)
                     {
@@ -488,15 +488,15 @@ namespace LibObjectFile.Elf
                     /* Any section besides one of type SHT_NOBITS must have file		
                        offsets within the segment.  */
                     && (section.Type == ElfSectionType.NoBits
-                        || ((section).Offset >= segment.Offset
+                        || ((section).Position >= segment.Position
 
                             && (!(isStrict)
 
-                                || (section.Offset - segment.Offset
+                                || (section.Position - segment.Position
 
                                     <= segment.Size - 1))
 
-                            && ((section.Offset - segment.Offset
+                            && ((section.Position - segment.Position
                                  + GetSectionSize(section, segment))
 
                                 <= segment.Size)))
@@ -524,9 +524,9 @@ namespace LibObjectFile.Elf
                         || segment.SizeInMemory == 0
                         || ((section.Type == ElfSectionType.NoBits
 
-                             || (section.Offset > segment.Offset
+                             || (section.Position > segment.Position
 
-                                 && (section.Offset - segment.Offset
+                                 && (section.Position - segment.Position
 
                                      < segment.Size)))
 

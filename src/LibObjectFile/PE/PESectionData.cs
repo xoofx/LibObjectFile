@@ -4,13 +4,14 @@
 
 using System;
 using System.IO;
+using System.Text;
 
 namespace LibObjectFile.PE;
 
 /// <summary>
 /// Base class for data contained in a <see cref="PESection"/>.
 /// </summary>
-public abstract class PESectionData : PEObject
+public abstract class PESectionData : PEObject, IVirtualAddressable
 {
     /// <summary>
     /// Gets the parent <see cref="PESection"/> of this section data.
@@ -22,7 +23,30 @@ public abstract class PESectionData : PEObject
         internal set => Parent = value;
     }
 
-    protected abstract void Write(PEImageWriter writer);
+    /// <summary>
+    /// Gets the virtual address of this section data.
+    /// </summary>
+    /// <remarks>
+    /// This property is updated dynamically based on the previous section data.
+    /// </remarks>
+    public RVA VirtualAddress
+    {
+        get;
+        internal set;
+    }
+
+    /// <summary>
+    /// Checks if the specified virtual address is contained by this instance.
+    /// </summary>
+    /// <param name="virtualAddress">The virtual address to check if it belongs to this instance.</param>
+    /// <returns><c>true</c> if the specified virtual address is contained by this instance; otherwise, <c>false</c>.</returns>
+    public bool ContainsVirtual(RVA virtualAddress) => VirtualAddress <= virtualAddress && virtualAddress < VirtualAddress + Size;
+
+    protected override bool PrintMembers(StringBuilder builder)
+    {
+        builder.Append($"VirtualAddress: {VirtualAddress}, Size = 0x{Size:X4}");
+        return true;
+    }
 }
 
 /// <summary>

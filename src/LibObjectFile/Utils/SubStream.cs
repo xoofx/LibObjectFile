@@ -42,7 +42,7 @@ public class SubStream : Stream
         if (remaining <= 0) return 0;
         if (remaining < buffer.Length) buffer = buffer.Slice(0, (int)remaining);
 
-        _baseStream.Position = _basePosition + _localPosition;
+        _baseStream.Seek(_basePosition + _localPosition, SeekOrigin.Begin);
         int read = _baseStream.Read(buffer);
         _localPosition += read;
 
@@ -55,7 +55,7 @@ public class SubStream : Stream
 
         if (_localPosition >= _length) return -1;
 
-        _baseStream.Position = _basePosition + _localPosition;
+        _baseStream.Seek(_basePosition + _localPosition, SeekOrigin.Begin);
         int read = _baseStream.ReadByte();
         _localPosition++;
 
@@ -72,7 +72,7 @@ public class SubStream : Stream
         if (remaining <= 0) return 0;
         if (remaining < buffer.Length) buffer = buffer.Slice(0, (int)remaining);
 
-        _baseStream.Position = _basePosition + _localPosition;
+        _baseStream.Seek(_basePosition + _localPosition, SeekOrigin.Begin);
         var read = await _baseStream.ReadAsync(buffer, cancellationToken);
 
         _localPosition += read;
@@ -137,7 +137,7 @@ public class SubStream : Stream
         if (newPosition > _length) throw new ArgumentOutOfRangeException(nameof(offset), $"New resulting position {newPosition} is > Length {_length}");
 
         // Check that we can seek on the origin stream
-        _baseStream.Position = _basePosition + newPosition;
+        _baseStream.Seek(_basePosition + newPosition, SeekOrigin.Begin);
         _localPosition = newPosition;
 
         return newPosition;
@@ -184,7 +184,7 @@ public class SubStream : Stream
         long length = Length;
         var isOverLength = _localPosition + buffer.Length > length;
         var maxLength = isOverLength ? (int)(length - _localPosition) : buffer.Length;
-        _baseStream.Position = _basePosition + _localPosition;
+        _baseStream.Seek(_basePosition + _localPosition, SeekOrigin.Begin);
         _baseStream.Write(buffer.Slice(0, maxLength));
         _localPosition += maxLength;
         if (isOverLength)
@@ -198,7 +198,7 @@ public class SubStream : Stream
         ThrowIfDisposed();
         if (_localPosition >= _length) ThrowCannotWriteOutside();
 
-        _baseStream.Position = _basePosition + _localPosition;
+        _baseStream.Seek(_basePosition + _localPosition, SeekOrigin.Begin);
         _baseStream.WriteByte(value);
         _localPosition++;
     }
@@ -214,7 +214,7 @@ public class SubStream : Stream
         long length = Length;
         var isOverLength = _localPosition + buffer.Length > length;
         var maxLength = isOverLength ? (int)(length - _localPosition) : buffer.Length;
-        _baseStream.Position = _basePosition + _localPosition;
+        _baseStream.Seek(_basePosition + _localPosition, SeekOrigin.Begin);
         await _baseStream.WriteAsync(buffer.Slice(0, maxLength), cancellationToken);
         _localPosition += maxLength;
         if (isOverLength)

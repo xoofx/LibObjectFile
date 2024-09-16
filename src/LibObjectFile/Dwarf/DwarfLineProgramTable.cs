@@ -104,14 +104,14 @@ namespace LibObjectFile.Dwarf
         protected override void Read(DwarfReader reader)
         {
             var log = reader.Log;
-            var startOfSection = reader.Offset;
+            var startOfSection = reader.Position;
 
             reader.OffsetToLineProgramTable.Add(startOfSection, this);
 
             var unitLength = reader.ReadUnitLength();
             Is64BitEncoding = reader.Is64BitEncoding;
             AddressSize = reader.AddressSize;
-            var startPosition = reader.Offset;
+            var startPosition = reader.Position;
             var version = reader.ReadU16();
 
             if (version < 2 || version >= 5)
@@ -180,7 +180,7 @@ namespace LibObjectFile.Dwarf
                 }
             }
 
-            var directoriesOffset = reader.Offset;
+            var directoriesOffset = reader.Position;
             var directories = new List<string>();
             while (true)
             {
@@ -210,7 +210,7 @@ namespace LibObjectFile.Dwarf
                 }
             }
 
-            var fileNamesOffset = reader.Offset;
+            var fileNamesOffset = reader.Position;
             bool printDumpHeader = true;
             while (true)
             {
@@ -258,18 +258,18 @@ namespace LibObjectFile.Dwarf
             }
 
             var state = _stateLine;
-            state.Offset = reader.Offset;
+            state.Position = reader.Position;
             var firstFileName = FileNames.Count > 0 ? FileNames[0] : null;
             state.Reset(firstFileName, default_is_stmt != 0);
 
             var intFileNameCount = FileNames.Count;
 
             printDumpHeader = true;
-            var currentSequence = new DwarfLineSequence {Offset = state.Offset};
+            var currentSequence = new DwarfLineSequence {Position = state.Position};
 
             while (true)
             {
-                var currentLength = reader.Offset - startPosition;
+                var currentLength = reader.Position - startPosition;
                 if (currentLength >= unitLength)
                 {
                     break;
@@ -284,7 +284,7 @@ namespace LibObjectFile.Dwarf
                         printDumpHeader = false;
                     }
 
-                    log.Write($"  [0x{reader.Offset:x8}]");
+                    log.Write($"  [0x{reader.Position:x8}]");
                 }
 
                 var opcode = reader.ReadU8();
@@ -292,7 +292,7 @@ namespace LibObjectFile.Dwarf
                 {
                     case DwarfNative.DW_LNS_copy:
                         currentSequence.Add(state.Clone());
-                        state.Offset = reader.Offset;
+                        state.Position = reader.Position;
                         state.SpecialReset();
                         if (log != null)
                         {
@@ -431,10 +431,10 @@ namespace LibObjectFile.Dwarf
                         break;
                     case 0:
                         var sizeOfExtended = reader.ReadULEB128();
-                        var lengthOffset = reader.Offset;
-                        var endOffset = reader.Offset + sizeOfExtended;
+                        var lengthOffset = reader.Position;
+                        var endOffset = reader.Position + sizeOfExtended;
                         bool hasValidOpCode = true;
-                        if (reader.Offset < endOffset)
+                        if (reader.Position < endOffset)
                         {
                             var sub_opcode = reader.ReadU8();
 
@@ -448,12 +448,12 @@ namespace LibObjectFile.Dwarf
                             {
                                 case DwarfNative.DW_LNE_end_sequence:
                                     currentSequence.Add(state.Clone());
-                                    currentSequence.Size = reader.Offset - currentSequence.Offset;
+                                    currentSequence.Size = reader.Position - currentSequence.Position;
                                     AddLineSequence(currentSequence);
 
-                                    currentSequence = new DwarfLineSequence() {Offset = reader.Offset};
+                                    currentSequence = new DwarfLineSequence() {Position = reader.Position};
 
-                                    state.Offset = reader.Offset;
+                                    state.Position = reader.Position;
                                     state.Reset(firstFileName, default_is_stmt != 0);
                                     if (log != null)
                                     {
@@ -515,12 +515,12 @@ namespace LibObjectFile.Dwarf
                         }
 
                         // Log a warning if the end offset doesn't match what we are expecting
-                        if (hasValidOpCode && reader.Offset != endOffset)
+                        if (hasValidOpCode && reader.Position != endOffset)
                         {
                             reader.Diagnostics.Warning(DiagnosticId.DWARF_WRN_InvalidExtendedOpCodeLength, $"Invalid length {sizeOfExtended} at offset 0x{lengthOffset:x}");
                         }
 
-                        reader.Offset = endOffset;
+                        reader.Position = endOffset;
                         break;
                     default:
                         if (opcode < opcode_base)
@@ -577,7 +577,7 @@ namespace LibObjectFile.Dwarf
                             }
 
                             currentSequence.Add(state.Clone());
-                            state.Offset = reader.Offset;
+                            state.Position = reader.Position;
                             state.SpecialReset();
                         }
 
@@ -757,7 +757,7 @@ namespace LibObjectFile.Dwarf
 
         protected override void Write(DwarfWriter writer)
         {
-            var startOffset = writer.Offset;
+            var startOffset = writer.Position;
 
             writer.Is64BitEncoding = Is64BitEncoding;
             writer.WriteUnitLength(Size - DwarfHelper.SizeOfUnitLength(Is64BitEncoding));
@@ -765,7 +765,7 @@ namespace LibObjectFile.Dwarf
             writer.WriteU16(Version);
             writer.WriteUIntFromEncoding(HeaderLength);
 
-            var startOfHeader = writer.Offset;
+            var startOfHeader = writer.Position;
 
             writer.WriteU8(MinimumInstructionLength);
 
@@ -818,12 +818,12 @@ namespace LibObjectFile.Dwarf
             // empty string
             writer.WriteU8(0);
 
-            var headSizeWritten = writer.Offset - startOfHeader;
+            var headSizeWritten = writer.Position - startOfHeader;
             Debug.Assert(HeaderLength == headSizeWritten, $"Expected Header Length: {HeaderLength} != Written Header Length: {headSizeWritten}");
             
             WriteDebugLineOpCodes(writer, OpCodeBase);
 
-            Debug.Assert(Size == writer.Offset - startOffset, $"Expected Size: {Size} != Written Size: {writer.Offset - startOffset}");
+            Debug.Assert(Size == writer.Position - startOffset, $"Expected Size: {Size} != Written Size: {writer.Position - startOffset}");
         }
 
         private void WriteDebugLineOpCodes(DwarfWriter writer, uint opCodeBase)
@@ -886,7 +886,7 @@ namespace LibObjectFile.Dwarf
                         out isaChanged,
                         out isDiscriminatorChanged);
 
-                    Debug.Assert(debugLine.Offset == writer.Offset, $"Expected Debug Line Offset: {debugLine.Offset} != Written Offset: {writer.Offset}");
+                    Debug.Assert(debugLine.Position == writer.Position, $"Expected Debug Line Offset: {debugLine.Position} != Written Offset: {writer.Position}");
 
                     // DW_LNS_set_column
                     if (deltaColumn != 0)
@@ -1093,7 +1093,7 @@ namespace LibObjectFile.Dwarf
                         writer.WriteU8(DwarfNative.DW_LNS_copy);
                     }
 
-                    Debug.Assert(debugLine.Size == writer.Offset - debugLine.Offset, $"Expected Debug Line Size: {debugLine.Size} != Written Size: {writer.Offset - debugLine.Offset}");
+                    Debug.Assert(debugLine.Size == writer.Position - debugLine.Position, $"Expected Debug Line Size: {debugLine.Size} != Written Size: {writer.Position - debugLine.Position}");
                 }
             }
         }
@@ -1123,7 +1123,7 @@ namespace LibObjectFile.Dwarf
             {
                 var lines = lineSequence.Lines;
 
-                lineSequence.Offset = Offset + sizeOf;
+                lineSequence.Position = Position + sizeOf;
                 hasSetAddress = false;
 
                 for (var lineIndex = 0; lineIndex < lines.Count; lineIndex++)
@@ -1159,7 +1159,7 @@ namespace LibObjectFile.Dwarf
                         out isaChanged,
                         out isDiscriminatorChanged);
 
-                    debugLine.Offset = Offset + sizeOf;
+                    debugLine.Position = Position + sizeOf;
 
                     // DW_LNS_set_column
                     if (deltaColumn != 0)
@@ -1357,9 +1357,9 @@ namespace LibObjectFile.Dwarf
                         sizeOf += 1; // writer.WriteU8(DwarfNative.DW_LNS_copy);
                     }
 
-                    debugLine.Size = Offset + sizeOf - debugLine.Offset;
+                    debugLine.Size = Position + sizeOf - debugLine.Position;
                 }
-                lineSequence.Size = Offset + sizeOf - lineSequence.Offset;
+                lineSequence.Size = Position + sizeOf - lineSequence.Position;
             }
         }
         

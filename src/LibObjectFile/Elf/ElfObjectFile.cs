@@ -242,13 +242,13 @@ public sealed class ElfObjectFile : ObjectFileNode
 
                 var align = section.Alignment == 0 ? 1 : section.Alignment;
                 offset = AlignHelper.AlignToUpper(offset, align);
-                section.Offset = offset;
+                section.Position = offset;
 
                 if (section is ElfProgramHeaderTable programHeaderTable)
                 {
                     if (Segments.Count > 0)
                     {
-                        Layout.OffsetOfProgramHeaderTable = section.Offset;
+                        Layout.OffsetOfProgramHeaderTable = section.Position;
                         Layout.SizeOfProgramHeaderEntry = (ushort) section.TableEntrySize;
                         programHeaderTableFoundAndUpdated = true;
                     }

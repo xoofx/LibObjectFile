@@ -70,7 +70,7 @@ namespace LibObjectFile.Elf
         public bool IsEmpty => this == Empty;
 
         /// <summary>
-        /// Returns the absolute offset of this range taking into account the <see cref="BeginSection"/>.<see cref="ElfObject.Offset"/>.
+        /// Returns the absolute offset of this range taking into account the <see cref="BeginSection"/>.<see cref="ObjectFileNodeBase.Position"/>.
         /// </summary>
         public ulong Offset
         {
@@ -82,7 +82,7 @@ namespace LibObjectFile.Elf
                     return 0;
                 }
 
-                return BeginSection!.Offset + BeginOffset;
+                return BeginSection!.Position + BeginOffset;
             }
         }
 
@@ -99,7 +99,7 @@ namespace LibObjectFile.Elf
                     return 0;
                 }
 
-                ulong size = EndSection.Offset - BeginSection.Offset;
+                ulong size = EndSection.Position - BeginSection.Position;
                 size -= BeginOffset;
                 size += EndOffset < 0 ? (ulong)((long)EndSection.Size + EndOffset + 1) : (ulong)(EndOffset + 1);
                 return size;

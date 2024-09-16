@@ -130,7 +130,7 @@ namespace LibObjectFile.Dwarf
             var addressSize = layoutContext.CurrentUnit!.AddressSize;
             var is64BitEncoding = layoutContext.CurrentUnit.Is64BitEncoding;
 
-            var endOffset = Offset;
+            var endOffset = Position;
             switch (Form.Value)
             {
                 case DwarfAttributeForm.Addr:
@@ -209,7 +209,7 @@ namespace LibObjectFile.Dwarf
                 case DwarfAttributeForm.RefUdata:
                     {
                         var dieRef = (DwarfDIE)ValueAsObject!;
-                        endOffset += DwarfHelper.SizeOfULEB128(dieRef.Offset - layoutContext.CurrentUnit.Offset); // WriteULEB128((dieRef.Offset - _currentUnit.Offset));
+                        endOffset += DwarfHelper.SizeOfULEB128(dieRef.Position - layoutContext.CurrentUnit.Position); // WriteULEB128((dieRef.Offset - _currentUnit.Offset));
                         break;
                     }
 
@@ -233,7 +233,7 @@ namespace LibObjectFile.Dwarf
 
                 case DwarfAttributeForm.Exprloc:
                     var expr = (DwarfExpression)ValueAsObject!;
-                    expr.Offset = endOffset;
+                    expr.Position = endOffset;
                     expr.UpdateLayoutInternal(layoutContext);
                     endOffset += expr.Size;
                     break;
@@ -271,7 +271,7 @@ namespace LibObjectFile.Dwarf
                     throw new NotSupportedException($"Unknown {nameof(DwarfAttributeForm)}: {Form}");
             }
 
-            Size = endOffset - Offset;
+            Size = endOffset - Position;
         }
 
         protected override void Read(DwarfReader reader)
@@ -283,7 +283,7 @@ namespace LibObjectFile.Dwarf
 
             ReadAttributeFormRawValue(reader);
 
-            Size = reader.Offset - Offset;
+            Size = reader.Position - Position;
             
             ResolveAttributeValue(reader);
         }
@@ -791,8 +791,8 @@ namespace LibObjectFile.Dwarf
 
         protected override void Write(DwarfWriter writer)
         {
-            var startAttributeOffset = Offset;
-            Debug.Assert(Offset == startAttributeOffset);
+            var startAttributeOffset = Position;
+            Debug.Assert(Position == startAttributeOffset);
 
             switch (Form.Value)
             {
@@ -883,37 +883,37 @@ namespace LibObjectFile.Dwarf
                 case DwarfAttributeForm.RefAddr:
                 {
                     var dieRef = (DwarfDIE) ValueAsObject!;
-                    writer.WriteUIntFromEncoding(dieRef.Offset);
+                    writer.WriteUIntFromEncoding(dieRef.Position);
                     break;
                 }
                 case DwarfAttributeForm.Ref1:
                 {
                     var dieRef = (DwarfDIE) ValueAsObject!;
-                    writer.WriteU8((byte) (dieRef.Offset - writer.CurrentUnit!.Offset));
+                    writer.WriteU8((byte) (dieRef.Position - writer.CurrentUnit!.Position));
                     break;
                 }
                 case DwarfAttributeForm.Ref2:
                 {
                     var dieRef = (DwarfDIE) ValueAsObject!;
-                    writer.WriteU16((ushort) (dieRef.Offset - writer.CurrentUnit!.Offset));
+                    writer.WriteU16((ushort) (dieRef.Position - writer.CurrentUnit!.Position));
                     break;
                 }
                 case DwarfAttributeForm.Ref4:
                 {
                     var dieRef = (DwarfDIE) ValueAsObject!;
-                    writer.WriteU32((uint) (dieRef.Offset - writer.CurrentUnit!.Offset));
+                    writer.WriteU32((uint) (dieRef.Position - writer.CurrentUnit!.Position));
                     break;
                 }
                 case DwarfAttributeForm.Ref8:
                 {
                     var dieRef = (DwarfDIE) ValueAsObject!;
-                    writer.WriteU64((dieRef.Offset - writer.CurrentUnit!.Offset));
+                    writer.WriteU64((dieRef.Position - writer.CurrentUnit!.Position));
                     break;
                 }
                 case DwarfAttributeForm.RefUdata:
                 {
                     var dieRef = (DwarfDIE) ValueAsObject!;
-                    writer.WriteULEB128((dieRef.Offset - writer.CurrentUnit!.Offset));
+                    writer.WriteULEB128((dieRef.Position - writer.CurrentUnit!.Position));
                     break;
                 }
 
@@ -935,7 +935,7 @@ namespace LibObjectFile.Dwarf
                 {
                     if (ValueAsObject != null)
                     {
-                        writer.WriteUIntFromEncoding(((DwarfObject) ValueAsObject).Offset);
+                        writer.WriteUIntFromEncoding(((DwarfObject) ValueAsObject).Position);
                     }
                     else
                     {
@@ -982,7 +982,7 @@ namespace LibObjectFile.Dwarf
                     throw new NotSupportedException($"Unknown {nameof(DwarfAttributeForm)}: {Form}");
             }
 
-            Debug.Assert(writer.Offset - startAttributeOffset == Size);
+            Debug.Assert(writer.Position - startAttributeOffset == Size);
         }
 
         private static readonly DwarfReader.DwarfDIEReferenceResolver DwarfAttributeDIEReferenceResolverInstance = DwarfAttributeDIEReferenceResolver;

@@ -3,6 +3,7 @@
 // See the license.txt file in the project root for more information.
 
 using System;
+using System.Numerics;
 using System.Text;
 
 namespace LibObjectFile.PE;

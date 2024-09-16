@@ -44,43 +44,43 @@ namespace LibObjectFile.Dwarf
         
         protected override void UpdateLayout(DwarfLayoutContext layoutContext)
         {
-            ulong endOffset = Offset;
+            ulong endOffset = Position;
             foreach (var abbreviation in _abbreviations)
             {
-                abbreviation.Offset = endOffset;
+                abbreviation.Position = endOffset;
                 abbreviation.UpdateLayoutInternal(layoutContext);
                 endOffset += abbreviation.Size;
             }
 
-            Size = endOffset - Offset;
+            Size = endOffset - Position;
         }
 
         protected override void Read(DwarfReader reader)
         {
-            var endOffset = reader.Offset;
-            while (reader.Offset < reader.Length)
+            var endOffset = reader.Position;
+            while (reader.Position < reader.Length)
             {
                 var abbreviation = new DwarfAbbreviation
                 {
-                    Offset = endOffset
+                    Position = endOffset
                 };
                 abbreviation.ReadInternal(reader);
                 endOffset += abbreviation.Size;
                 AddAbbreviation(abbreviation);
             }
 
-            Size = endOffset - Offset;
+            Size = endOffset - Position;
         }
 
         protected override void Write(DwarfWriter writer)
         {
-            var startOffset = writer.Offset;
+            var startOffset = writer.Position;
             foreach (var abbreviation in _abbreviations)
             {
                 abbreviation.WriteInternal(writer);
             }
 
-            Debug.Assert(writer.Offset - startOffset == Size);
+            Debug.Assert(writer.Position - startOffset == Size);
         }
     }
 }

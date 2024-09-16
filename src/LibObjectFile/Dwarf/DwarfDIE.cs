@@ -362,7 +362,7 @@ namespace LibObjectFile.Dwarf
         {
             var abbrev = Abbrev;
 
-            var endOffset = Offset;
+            var endOffset = Position;
             if (abbrev is null)
             {
                 throw new InvalidOperationException("Abbreviation is not set");
@@ -371,7 +371,7 @@ namespace LibObjectFile.Dwarf
 
             foreach (var attr in _attributes)
             {
-                attr.Offset = endOffset;
+                attr.Position = endOffset;
                 attr.UpdateLayoutInternal(layoutContext);
                 endOffset += attr.Size;
             }
@@ -380,7 +380,7 @@ namespace LibObjectFile.Dwarf
             {
                 foreach (var child in _children)
                 {
-                    child.Offset = endOffset;
+                    child.Position = endOffset;
                     child.UpdateLayout(layoutContext);
                     endOffset += child.Size;
                 }
@@ -389,7 +389,7 @@ namespace LibObjectFile.Dwarf
                 endOffset += DwarfHelper.SizeOfULEB128(0);
             }
 
-            Size = endOffset - Offset;
+            Size = endOffset - Position;
         }
 
         protected override void Read(DwarfReader reader)
@@ -413,7 +413,7 @@ namespace LibObjectFile.Dwarf
                     
                     var attribute = new DwarfAttribute()
                     {
-                        Offset = reader.Offset,
+                        Position = reader.Position,
                     };
 
                     attribute.ReadInternal(reader);
@@ -437,12 +437,12 @@ namespace LibObjectFile.Dwarf
 
             reader.PopDIE();
 
-            Size = reader.Offset - Offset;
+            Size = reader.Position - Position;
         }
 
         internal static DwarfDIE? ReadInstance(DwarfReader reader)
         {
-            var startDIEOffset = reader.Offset;
+            var startDIEOffset = reader.Position;
             var abbreviationCode = reader.ReadULEB128();
             DwarfDIE? die = null;
 
@@ -455,7 +455,7 @@ namespace LibObjectFile.Dwarf
                 }
 
                 die = DIEHelper.ConvertTagToDwarfDIE((ushort) abbreviationItem.Tag);
-                die.Offset = startDIEOffset;
+                die.Position = startDIEOffset;
                 die.Abbrev = abbreviationItem;
                 die.Tag = abbreviationItem.Tag;
                 die.ReadInternal(reader);
@@ -470,7 +470,7 @@ namespace LibObjectFile.Dwarf
             // to it, we can detect if it is a forward or backward reference.
             // If it is a backward reference, we will be able to encode the offset
             // otherwise we will have to pad the encoding with NOP (for DwarfOperation in expressions)
-            Offset = ulong.MaxValue;
+            Position = ulong.MaxValue;
 
             // TODO: pool if not used by GetOrCreate below
             var descriptorArray = new DwarfAttributeDescriptor[Attributes.Count];
@@ -495,8 +495,8 @@ namespace LibObjectFile.Dwarf
 
         protected override void Write(DwarfWriter writer)
         {
-            var startDIEOffset = Offset;
-            Debug.Assert(Offset == startDIEOffset);
+            var startDIEOffset = Position;
+            Debug.Assert(Position == startDIEOffset);
             var abbrev = Abbrev;
             if (abbrev is null)
             {
@@ -519,7 +519,7 @@ namespace LibObjectFile.Dwarf
                 writer.WriteULEB128(0);
             }
 
-            Debug.Assert(Size == writer.Offset - startDIEOffset);
+            Debug.Assert(Size == writer.Position - startDIEOffset);
         }
     }
 }

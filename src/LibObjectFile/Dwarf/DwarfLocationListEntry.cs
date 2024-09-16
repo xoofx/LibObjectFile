@@ -42,17 +42,17 @@ namespace LibObjectFile.Dwarf
 
         protected override void UpdateLayout(DwarfLayoutContext layoutContext)
         {
-            var endOffset = Offset;
+            var endOffset = Position;
 
             endOffset += 2 * DwarfHelper.SizeOfUInt(layoutContext.CurrentUnit!.AddressSize);
             if (Expression != null)
             {
-                Expression.Offset = endOffset;
+                Expression.Position = endOffset;
                 Expression.UpdateLayoutInternal(layoutContext, inLocationSection: true);
                 endOffset += Expression.Size;
             }
 
-            Size = endOffset - Offset;
+            Size = endOffset - Position;
         }
 
         protected override void Write(DwarfWriter writer)

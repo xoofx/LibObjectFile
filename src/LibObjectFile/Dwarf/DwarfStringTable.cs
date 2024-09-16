@@ -74,7 +74,7 @@ namespace LibObjectFile.Dwarf
         protected override void Read(DwarfReader reader)
         {
             Stream = reader.ReadAsStream((ulong) reader.Stream.Length);
-            Size = reader.Offset - Offset;
+            Size = reader.Position - Position;
         }
 
         protected override void Write(DwarfWriter writer)

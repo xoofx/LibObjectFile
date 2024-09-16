@@ -364,13 +364,13 @@ public sealed class ArArchiveFile : ObjectFileNode
                 var headerSize = LongNamesTable.Size;
                 if (headerSize > 0)
                 {
-                    LongNamesTable.Offset = size;
+                    LongNamesTable.Position = size;
                     size += ArFile.FileEntrySizeInBytes + LongNamesTable.Size;
                     if ((size & 1) != 0) size++;
                 }
             }
                 
-            entry.Offset = size;
+            entry.Position = size;
             size += ArFile.FileEntrySizeInBytes + entry.Size;
             if ((size & 1) != 0) size++;
         }

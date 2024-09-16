@@ -7,6 +7,7 @@ using System.Buffers;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Reflection.PortableExecutable;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using LibObjectFile.PE.Internal;
@@ -194,7 +195,7 @@ partial class PEFile
                 diagnostics.Error(DiagnosticId.PE_ERR_InvalidSectionHeadersSize, "Invalid section headers");
             }
 
-            InitializeSections(sectionHeaders);
+            InitializeSections(imageReader, sectionHeaders);
         }
         finally
         {
@@ -202,15 +203,17 @@ partial class PEFile
         }
     }
 
-    private void InitializeSections(ReadOnlySpan<RawImageSectionHeader> headers)
+    private void InitializeSections(PEImageReader imageReader, ReadOnlySpan<RawImageSectionHeader> headers)
     {
         _sections.Clear();
+
+        // Create sections
         foreach (var section in headers)
         {
             // We don't validate the name
             var peSection = new PESection(this, new PESectionName(section.NameAsString, false))
             {
-                Offset = section.PointerToRawData,
+                Position = section.PointerToRawData,
                 Size = section.SizeOfRawData,
                 VirtualAddress = section.VirtualAddress,
                 VirtualSize = section.VirtualSize,
@@ -223,5 +226,91 @@ partial class PEFile
             };
             _sections.Add(peSection);
         }
+
+        // Create directories and find the section for each directory
+        var maxNumberOfDirectory = (int)Math.Min(OptionalHeader.NumberOfRvaAndSizes, 15);
+        Span<ImageDataDirectory> dataDirectories = OptionalHeader.DataDirectory;
+        for (int i = 0; i < maxNumberOfDirectory && i < dataDirectories.Length; i++)
+        {
+            var directoryEntry = dataDirectories[i];
+            if (directoryEntry.VirtualAddress == 0 || directoryEntry.Size == 0)
+            {
+                continue;
+            }
+
+            if (!TryFindSection(directoryEntry.VirtualAddress, directoryEntry.Size, out var peSection))
+            {
+                imageReader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidDataDirectorySection, $"Unable to find the section for the DataDirectory at virtual address {directoryEntry.VirtualAddress}, size {directoryEntry.Size}");
+                continue;
+            }
+
+            var offsetInSection = directoryEntry.VirtualAddress - peSection.VirtualAddress;
+            var directory = PEDirectory.Create((ImageDataDirectoryKind)i, new(peSection, offsetInSection));
+            directory.Position = peSection.Position + offsetInSection;
+            directory.Size = directoryEntry.Size;
+            Directories.Set(directory.Kind, directory);
+            
+            // Insert the directory at the right position in the section
+            int sectionDataIndex = 0;
+            for (; sectionDataIndex < peSection.DataParts.Count; sectionDataIndex++)
+            {
+                var sectionData = peSection.DataParts[sectionDataIndex];
+                if (directory.Position < sectionData.Position)
+                {
+                    break;
+                }
+            }
+            
+            peSection.InsertData(sectionDataIndex, directory);
+        }
+        
+        // Create Stream data sections for remaining data per section based on directories already loaded
+        foreach (var section in _sections)
+        {
+            var sectionPosition = section.Position;
+
+            for (var i = 0; i < section.DataParts.Count; i++)
+            {
+                var data = section.DataParts[i];
+                if (data.Position != sectionPosition)
+                {
+                    var sectionData = new PESectionStreamData()
+                    {
+                        Position = sectionPosition,
+                    };
+                    var size = data.Position - sectionPosition;
+                    imageReader.Position = sectionPosition;
+                    sectionData.Stream = imageReader.ReadAsStream(size);
+
+                    section.InsertData(i, sectionData);
+                    sectionPosition = data.Position;
+                    i++;
+                }
+
+                sectionPosition += data.Size;
+            }
+
+            if (sectionPosition < section.Position + section.Size)
+            {
+                var sectionData = new PESectionStreamData()
+                {
+                    Position = sectionPosition,
+                };
+                var size = section.Position + section.Size - sectionPosition;
+                imageReader.Position = sectionPosition;
+                sectionData.Stream = imageReader.ReadAsStream(size);
+
+                section.AddData(sectionData);
+            }
+
+            for (var i = 0; i < section.DataParts.Count; i++)
+            {
+                var sectionData = section.DataParts[i];
+                Console.WriteLine($"section: {section.Name} {sectionData}");
+            }
+        }
+
+        // Read directories
+        Directories.BaseRelocation?.Read(imageReader);
     }
 }

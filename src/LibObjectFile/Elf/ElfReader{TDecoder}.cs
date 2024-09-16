@@ -161,7 +161,7 @@ namespace LibObjectFile.Elf
             return new ElfSegment
             {
                 Type = new ElfSegmentType(_decoder.Decode(hdr.p_type)),
-                Offset =_decoder.Decode(hdr.p_offset),
+                Position =_decoder.Decode(hdr.p_offset),
                 VirtualAddress = _decoder.Decode(hdr.p_vaddr),
                 PhysicalAddress = _decoder.Decode(hdr.p_paddr),
                 Size = _decoder.Decode(hdr.p_filesz),
@@ -182,7 +182,7 @@ namespace LibObjectFile.Elf
             return new ElfSegment
             {
                 Type = new ElfSegmentType(_decoder.Decode(hdr.p_type)),
-                Offset = _decoder.Decode(hdr.p_offset),
+                Position = _decoder.Decode(hdr.p_offset),
                 VirtualAddress = _decoder.Decode(hdr.p_vaddr),
                 PhysicalAddress = _decoder.Decode(hdr.p_paddr),
                 Size = _decoder.Decode(hdr.p_filesz),
@@ -273,7 +273,7 @@ namespace LibObjectFile.Elf
                 section.Type = (ElfSectionType)_decoder.Decode(rawSection.sh_type);
                 section.Flags = (ElfSectionFlags)_decoder.Decode(rawSection.sh_flags);
                 section.VirtualAddress = _decoder.Decode(rawSection.sh_addr);
-                section.Offset = _decoder.Decode(rawSection.sh_offset);
+                section.Position = _decoder.Decode(rawSection.sh_offset);
                 section.Alignment = _decoder.Decode(rawSection.sh_addralign);
                 section.Link = new ElfSectionLink(_decoder.Decode(rawSection.sh_link));
                 section.Info = new ElfSectionLink(_decoder.Decode(rawSection.sh_info));
@@ -307,7 +307,7 @@ namespace LibObjectFile.Elf
                 section.Type = (ElfSectionType)_decoder.Decode(rawSection.sh_type);
                 section.Flags = (ElfSectionFlags)_decoder.Decode(rawSection.sh_flags);
                 section.VirtualAddress = _decoder.Decode(rawSection.sh_addr);
-                section.Offset = _decoder.Decode(rawSection.sh_offset);
+                section.Position = _decoder.Decode(rawSection.sh_offset);
                 section.Alignment = _decoder.Decode(rawSection.sh_addralign);
                 section.Link = new ElfSectionLink(_decoder.Decode(rawSection.sh_link));
                 section.Info = new ElfSectionLink(_decoder.Decode(rawSection.sh_info));
@@ -433,7 +433,7 @@ namespace LibObjectFile.Elf
 
             if (_hasValidSectionStringTable)
             {
-                Stream.Position = (long)ObjectFile.SectionHeaderStringTable!.Offset;
+                Stream.Position = (long)ObjectFile.SectionHeaderStringTable!.Position;
                 ObjectFile.SectionHeaderStringTable.ReadInternal(this);
             }
 
@@ -480,7 +480,7 @@ namespace LibObjectFile.Elf
 
                 if (section.HasContent)
                 {
-                    Stream.Position = (long)section.Offset;
+                    Stream.Position = (long)section.Position;
                     section.ReadInternal(this);
                 }
             }
@@ -496,7 +496,7 @@ namespace LibObjectFile.Elf
             {
                 var programHeaderTable = new ElfProgramHeaderTable()
                 {
-                    Offset = Layout.OffsetOfProgramHeaderTable,
+                    Position = Layout.OffsetOfProgramHeaderTable,
                 };
 
                 // Add the shadow section ElfProgramHeaderTable
@@ -528,12 +528,12 @@ namespace LibObjectFile.Elf
                 var section = orderedSections[i];
                 section.Verify(this.Diagnostics);
 
-                if (lastOffset > 0 && section.Offset > lastOffset)
+                if (lastOffset > 0 && section.Position > lastOffset)
                 {
-                    if (section.Offset > lastOffset)
+                    if (section.Position > lastOffset)
                     {
                         // Create parts for the segment
-                        fileParts.CreateParts(lastOffset + 1, section.Offset - 1);
+                        fileParts.CreateParts(lastOffset + 1, section.Position - 1);
                         hasShadowSections = true;
                     }
                 }
@@ -545,15 +545,15 @@ namespace LibObjectFile.Elf
 
                 // Collect sections parts
                 fileParts.Insert(new ElfFilePart(section));
-                lastOffset = section.Offset + section.Size - 1;
+                lastOffset = section.Position + section.Size - 1;
 
                 // Verify overlapping sections and generate and error
                 if (i + 1 < orderedSections.Count)
                 {
                     var otherSection = orderedSections[i + 1];
-                    if (otherSection.Offset < section.Offset + section.Size)
+                    if (otherSection.Position < section.Position + section.Size)
                     {
-                        Diagnostics.Warning(DiagnosticId.ELF_ERR_InvalidOverlappingSections, $"The section {section} [{section.Offset} : {section.Offset + section.Size - 1}] is overlapping with the section {otherSection} [{otherSection.Offset} : {otherSection.Offset + otherSection.Size - 1}]");
+                        Diagnostics.Warning(DiagnosticId.ELF_ERR_InvalidOverlappingSections, $"The section {section} [{section.Position} : {section.Position + section.Size - 1}] is overlapping with the section {otherSection} [{otherSection.Position} : {otherSection.Position + otherSection.Size - 1}]");
                     }
                 }
             }
@@ -565,13 +565,13 @@ namespace LibObjectFile.Elf
             {
                 if (segment.Size == 0) continue;
 
-                var segmentEndOffset = segment.Offset + segment.Size - 1;
+                var segmentEndOffset = segment.Position + segment.Size - 1;
                 foreach (var section in orderedSections)
                 {
                     if (section.Size == 0 || !section.HasContent) continue;
 
-                    var sectionEndOffset = section.Offset + section.Size - 1;
-                    if (segment.Offset == section.Offset && segmentEndOffset == sectionEndOffset)
+                    var sectionEndOffset = section.Position + section.Size - 1;
+                    if (segment.Position == section.Position && segmentEndOffset == sectionEndOffset)
                     {
                         // Single case: segment == section
                         // If we found a section, we will bind the program header to this section
@@ -584,7 +584,7 @@ namespace LibObjectFile.Elf
 
                 if (segment.Range.IsEmpty)
                 {
-                    var offset = segment.Offset;
+                    var offset = segment.Position;
 
                     // If a segment offset is set to 0, we need to take into
                     // account the fact that the Elf header is already being handled
@@ -620,12 +620,12 @@ namespace LibObjectFile.Elf
                         var shadowSection = new ElfBinaryShadowSection()
                         {
                             Name = ".shadow." + shadowCount,
-                            Offset = part.StartOffset, 
+                            Position = part.StartOffset, 
                             Size = part.EndOffset - part.StartOffset + 1
                         };
                         shadowCount++;
 
-                        Stream.Position = (long)shadowSection.Offset;
+                        Stream.Position = (long)shadowSection.Position;
                         shadowSection.ReadInternal(this);
 
                         // Insert the shadow section with this order
@@ -653,14 +653,14 @@ namespace LibObjectFile.Elf
                     if (segment.Size == 0) continue;
                     if (!segment.Range.IsEmpty) continue;
 
-                    var segmentEndOffset = segment.Offset + segment.Size - 1;
+                    var segmentEndOffset = segment.Position + segment.Size - 1;
                     for (var i = 0; i < orderedSections.Count; i++)
                     {
                         var section = orderedSections[i];
                         if (section.Size == 0 || !section.HasContent) continue;
 
-                        var sectionEndOffset = section.Offset + section.Size - 1;
-                        if (segment.Offset >= section.Offset && segment.Offset <= sectionEndOffset)
+                        var sectionEndOffset = section.Position + section.Size - 1;
+                        if (segment.Position >= section.Position && segment.Position <= sectionEndOffset)
                         {
                             ElfSection beginSection = section;
                             ElfSection? endSection = null;
@@ -669,9 +669,9 @@ namespace LibObjectFile.Elf
                                 var nextSection = orderedSections[j];
                                 if (nextSection.Size == 0 || !nextSection.HasContent) continue;
 
-                                sectionEndOffset = nextSection.Offset + nextSection.Size - 1;
+                                sectionEndOffset = nextSection.Position + nextSection.Size - 1;
 
-                                if (segmentEndOffset >= nextSection.Offset && segmentEndOffset <= sectionEndOffset)
+                                if (segmentEndOffset >= nextSection.Position && segmentEndOffset <= sectionEndOffset)
                                 {
                                     endSection = nextSection;
                                     break;
@@ -685,7 +685,7 @@ namespace LibObjectFile.Elf
                             }
                             else
                             {
-                                segment.Range = new ElfSegmentRange(beginSection, segment.Offset - beginSection.Offset, endSection, (long)(segmentEndOffset - endSection.Offset));
+                                segment.Range = new ElfSegmentRange(beginSection, segment.Position - beginSection.Position, endSection, (long)(segmentEndOffset - endSection.Position));
                             }
 
                             segment.OffsetKind = ValueKind.Auto;
@@ -848,7 +848,7 @@ namespace LibObjectFile.Elf
 
         private static int CompareSectionOffsetsAndSizes(ElfSection left, ElfSection right)
         {
-            int result = left.Offset.CompareTo(right.Offset);
+            int result = left.Position.CompareTo(right.Position);
             if (result == 0)
             {
                 result = left.Size.CompareTo(right.Size);

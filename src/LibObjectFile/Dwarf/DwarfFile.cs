@@ -85,7 +85,7 @@ namespace LibObjectFile.Dwarf
 
             var layoutContext = new DwarfLayoutContext(this, config, diagnostics);
 
-            LineSection.Offset = 0;
+            LineSection.Position = 0;
             LineSection.UpdateLayoutInternal(layoutContext);
             if (layoutContext.HasErrors)
             {
@@ -94,10 +94,10 @@ namespace LibObjectFile.Dwarf
 
             // Reset the abbreviation table
             // TODO: Make this configurable via the DwarfWriterContext
-            AbbreviationTable.Offset = 0;
+            AbbreviationTable.Position = 0;
             AbbreviationTable.Reset();
 
-            InfoSection.Offset = 0;
+            InfoSection.Position = 0;
             InfoSection.UpdateLayoutInternal(layoutContext);
             if (layoutContext.HasErrors)
             {
@@ -105,7 +105,7 @@ namespace LibObjectFile.Dwarf
             }
 
             // Update AddressRangeTable layout after Info
-            AddressRangeTable.Offset = 0;
+            AddressRangeTable.Position = 0;
             AddressRangeTable.UpdateLayoutInternal(layoutContext);
             if (layoutContext.HasErrors)
             {
@@ -113,7 +113,7 @@ namespace LibObjectFile.Dwarf
             }
 
             // Update string table right after updating the layout of Info
-            StringTable.Offset = 0;
+            StringTable.Position = 0;
             StringTable.UpdateLayoutInternal(layoutContext);
             if (layoutContext.HasErrors)
             {
@@ -121,10 +121,10 @@ namespace LibObjectFile.Dwarf
             }
 
             // Update the abbrev table right after we have computed the entire layout of Info
-            AbbreviationTable.Offset = 0;
+            AbbreviationTable.Position = 0;
             AbbreviationTable.UpdateLayoutInternal(layoutContext);
 
-            LocationSection.Offset = 0;
+            LocationSection.Position = 0;
             LocationSection.UpdateLayoutInternal(layoutContext);
         }
 

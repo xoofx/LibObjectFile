@@ -49,8 +49,8 @@ namespace LibObjectFile.Dwarf
 
         internal void PushDIE(DwarfDIE die)
         {
-            _registeredDIEPerCompilationUnit.Add(die.Offset - CurrentUnit!.Offset, die);
-            _registeredDIEPerSection.Add(die.Offset, die);
+            _registeredDIEPerCompilationUnit.Add(die.Position - CurrentUnit!.Position, die);
+            _registeredDIEPerSection.Add(die.Position, die);
             _stack.Push(die);
         }
 

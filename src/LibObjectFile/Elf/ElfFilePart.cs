@@ -35,7 +35,7 @@ namespace LibObjectFile.Elf
         {
             Section = section ?? throw new ArgumentNullException(nameof(section));
             Debug.Assert(section.Size > 0);
-            StartOffset = section.Offset;
+            StartOffset = section.Position;
             EndOffset = StartOffset + Section.Size - 1;
         }
         

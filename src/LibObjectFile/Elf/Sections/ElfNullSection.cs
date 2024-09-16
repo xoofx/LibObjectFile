@@ -22,7 +22,7 @@ namespace LibObjectFile.Elf
                 Alignment != 0 ||
                 !Link.IsEmpty ||
                 !Info.IsEmpty ||
-                Offset != 0 ||
+                Position != 0 ||
                 Size != 0)
             {
                 diagnostics.Error(DiagnosticId.ELF_ERR_InvalidNullSection, "Invalid Null section. This section should not be modified and all properties must be null");

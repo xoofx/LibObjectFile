@@ -53,27 +53,27 @@ namespace LibObjectFile.Dwarf
 
         internal void ReadInternal(DwarfReader reader, bool inLocationSection = false)
         {
-            Offset = reader.Offset;
+            Position = reader.Position;
             var size = inLocationSection ? reader.ReadU16() : reader.ReadULEB128();
             OperationLengthInBytes = size;
-            var endPosition = reader.Offset + size;
+            var endPosition = reader.Position + size;
 
-            while (reader.Offset < endPosition)
+            while (reader.Position < endPosition)
             {
-                var op = new DwarfOperation() {Offset = reader.Offset};
+                var op = new DwarfOperation() {Position = reader.Position};
                 op.ReadInternal(reader);
                 AddOperation(op);
             }
 
-            Size = reader.Offset - Offset;
+            Size = reader.Position - Position;
         }
 
         internal void WriteInternal(DwarfWriter writer, bool inLocationSection = false)
         {
-            Debug.Assert(Offset == writer.Offset);
+            Debug.Assert(Position == writer.Position);
             Debug.Assert(!inLocationSection || OperationLengthInBytes <= ushort.MaxValue);
 
-            var startExpressionOffset = writer.Offset;
+            var startExpressionOffset = writer.Position;
             if (inLocationSection)
             {
                 writer.WriteU16((ushort)OperationLengthInBytes);
@@ -88,27 +88,27 @@ namespace LibObjectFile.Dwarf
                 op.WriteInternal(writer);
             }
 
-            Debug.Assert(writer.Offset - startExpressionOffset == Size);
+            Debug.Assert(writer.Position - startExpressionOffset == Size);
         }
 
         internal void UpdateLayoutInternal(DwarfLayoutContext layoutContext, bool inLocationSection = false)
         {
-            var endOffset = Offset;
+            var endOffset = Position;
             foreach (var op in _operations)
             {
-                op.Offset = endOffset;
+                op.Position = endOffset;
                 op.UpdateLayoutInternal(layoutContext);
                 endOffset += op.Size;
             }
 
-            OperationLengthInBytes = endOffset - Offset;
+            OperationLengthInBytes = endOffset - Position;
 
             // We need to shift the expression which is prefixed by its size encoded in LEB128,
             // or fixed-size U2 in .debug_loc section
             var deltaLength = inLocationSection ? sizeof(ushort) : DwarfHelper.SizeOfULEB128(Size);
             foreach (var op in InternalOperations)
             {
-                op.Offset += deltaLength;
+                op.Position += deltaLength;
             }
 
             Size = OperationLengthInBytes + deltaLength;

@@ -63,7 +63,7 @@ namespace LibObjectFile.Elf
             var hdr = new ElfNative.Elf32_Phdr();
 
             writer.Encode(out hdr.p_type, segment.Type.Value);
-            writer.Encode(out hdr.p_offset, (uint)segment.Offset);
+            writer.Encode(out hdr.p_offset, (uint)segment.Position);
             writer.Encode(out hdr.p_vaddr, (uint)segment.VirtualAddress);
             writer.Encode(out hdr.p_paddr, (uint)segment.PhysicalAddress);
             writer.Encode(out hdr.p_filesz, (uint)segment.Size);
@@ -79,7 +79,7 @@ namespace LibObjectFile.Elf
             var hdr = new ElfNative.Elf64_Phdr();
 
             writer.Encode(out hdr.p_type, segment.Type.Value);
-            writer.Encode(out hdr.p_offset, segment.Offset);
+            writer.Encode(out hdr.p_offset, segment.Position);
             writer.Encode(out hdr.p_vaddr, segment.VirtualAddress);
             writer.Encode(out hdr.p_paddr, segment.PhysicalAddress);
             writer.Encode(out hdr.p_filesz, segment.Size);
