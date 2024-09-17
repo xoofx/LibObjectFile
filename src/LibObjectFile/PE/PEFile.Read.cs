@@ -7,7 +7,6 @@ using System.Buffers;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Reflection.PortableExecutable;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using LibObjectFile.PE.Internal;
@@ -48,17 +47,17 @@ partial class PEFile
         var reader = new PEImageReader(peFile, stream, options);
         diagnostics = reader.Diagnostics;
 
-        peFile.ReadFromInternal(reader);
+        peFile.Read(reader);
 
         return !reader.Diagnostics.HasErrors;
     }
 
-    internal void ReadFromInternal(PEImageReader imageReader)
+    protected override void Read(PEImageReader reader)
     {
         Debug.Assert(Unsafe.SizeOf<ImageDosHeader>() == 64);
 
-        var diagnostics = imageReader.Diagnostics;
-        int read = imageReader.Read(MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref DosHeader, 1)));
+        var diagnostics = reader.Diagnostics;
+        int read = reader.Read(MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref DosHeader, 1)));
         if (read != Unsafe.SizeOf<ImageDosHeader>())
         {
             diagnostics.Error(DiagnosticId.PE_ERR_InvalidDosHeaderSize, "Invalid DOS header");
@@ -76,7 +75,7 @@ partial class PEFile
         if (dosStubSize > 0)
         {
             var dosStub = new byte[dosStubSize];
-            read = imageReader.Read(dosStub);
+            read = reader.Read(dosStub);
             if (read != dosStubSize)
             {
                 diagnostics.Error(DiagnosticId.PE_ERR_InvalidDosStubSize, "Invalid DOS stub");
@@ -92,14 +91,14 @@ partial class PEFile
         // Read any DOS stub extra data (e.g Rich)
         if (DosHeader.FileAddressPEHeader > read)
         {
-            _dosStubExtra = imageReader.ReadAsStream((ulong)(DosHeader.FileAddressPEHeader - read));
+            _dosStubExtra = reader.ReadAsStream((ulong)(DosHeader.FileAddressPEHeader - read));
         }
 
         // Read the PE signature
-        imageReader.Stream.Seek(DosHeader.FileAddressPEHeader, SeekOrigin.Begin);
+        reader.Stream.Seek(DosHeader.FileAddressPEHeader, SeekOrigin.Begin);
 
         var signature = default(ImagePESignature);
-        read = imageReader.Read(MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref signature, 1)));
+        read = reader.Read(MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref signature, 1)));
         if (read != sizeof(ImagePESignature))
         {
             diagnostics.Error(DiagnosticId.PE_ERR_InvalidPESignature, "Invalid PE signature");
@@ -115,7 +114,7 @@ partial class PEFile
         // Read the COFF header
         Debug.Assert(Unsafe.SizeOf<ImageCoffHeader>() == 20);
         var coffHeader = default(ImageCoffHeader);
-        read = imageReader.Read(MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref coffHeader, 1)));
+        read = reader.Read(MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref coffHeader, 1)));
         if (read != Unsafe.SizeOf<ImageCoffHeader>())
         {
             diagnostics.Error(DiagnosticId.PE_ERR_InvalidCoffHeaderSize, "Invalid COFF header");
@@ -127,7 +126,7 @@ partial class PEFile
         try
         {
             var optionalHeader = new Span<byte>(tempArray, 0, CoffHeader.SizeOfOptionalHeader);
-            read = imageReader.Read(optionalHeader);
+            read = reader.Read(optionalHeader);
             if (read != CoffHeader.SizeOfOptionalHeader)
             {
                 diagnostics.Error(DiagnosticId.PE_ERR_InvalidOptionalHeaderSize, "Invalid optional header");
@@ -187,7 +186,7 @@ partial class PEFile
             var sizeOfSections = CoffHeader.NumberOfSections * Unsafe.SizeOf<RawImageSectionHeader>();
             tempArray = ArrayPool<byte>.Shared.Rent(sizeOfSections);
             var spanSections = new Span<byte>(tempArray, 0, sizeOfSections);
-            read = imageReader.Read(spanSections);
+            read = reader.Read(spanSections);
 
             var sectionHeaders = MemoryMarshal.Cast<byte, RawImageSectionHeader>(spanSections);
             if (read != spanSections.Length)
@@ -195,7 +194,7 @@ partial class PEFile
                 diagnostics.Error(DiagnosticId.PE_ERR_InvalidSectionHeadersSize, "Invalid section headers");
             }
 
-            InitializeSections(imageReader, sectionHeaders);
+            InitializeSections(reader, sectionHeaders);
         }
         finally
         {
@@ -303,14 +302,15 @@ partial class PEFile
                 section.AddData(sectionData);
             }
 
-            for (var i = 0; i < section.DataParts.Count; i++)
-            {
-                var sectionData = section.DataParts[i];
-                Console.WriteLine($"section: {section.Name} {sectionData}");
-            }
+            //for (var i = 0; i < section.DataParts.Count; i++)
+            //{
+            //    var sectionData = section.DataParts[i];
+            //    Console.WriteLine($"section: {section.Name} {sectionData}");
+            //}
         }
 
         // Read directories
-        Directories.BaseRelocation?.Read(imageReader);
+        // TODO: Read all directories
+        Directories.BaseRelocation?.ReadInternal(imageReader);
     }
 }

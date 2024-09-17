@@ -42,6 +42,11 @@ public abstract class PESectionData : PEObject, IVirtualAddressable
     /// <returns><c>true</c> if the specified virtual address is contained by this instance; otherwise, <c>false</c>.</returns>
     public bool ContainsVirtual(RVA virtualAddress) => VirtualAddress <= virtualAddress && virtualAddress < VirtualAddress + Size;
 
+
+    internal void ReadInternal(PEImageReader reader) => Read(reader);
+
+    internal void WriteInternal(PEImageWriter writer) => Write(writer);
+
     protected override bool PrintMembers(StringBuilder builder)
     {
         builder.Append($"VirtualAddress: {VirtualAddress}, Size = 0x{Size:X4}");
@@ -85,6 +90,11 @@ public sealed class PESectionMemoryData : PESectionData
     /// <inheritdoc />
     public override void UpdateLayout(DiagnosticBag diagnostics)
     {
+    }
+
+    protected override void Read(PEImageReader reader)
+    {
+        // No need to read, as the data is already provided via a stream
     }
 
     protected override void Write(PEImageWriter writer) => writer.Write(Data.Span);
@@ -132,6 +142,11 @@ public sealed class PESectionStreamData : PESectionData
 
     public override void UpdateLayout(DiagnosticBag diagnostics)
     {
+    }
+
+    protected override void Read(PEImageReader reader)
+    {
+        // No need to read, as the data is already provided via a stream
     }
 
     protected override void Write(PEImageWriter writer)

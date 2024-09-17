@@ -15,7 +15,8 @@ public abstract class PEDirectory : PESectionData
     }
 
     public ImageDataDirectoryKind Kind { get; }
-    
+
+
     /// <summary>
     /// Factory method to create a new instance of <see cref="PEDirectory"/> based on the kind.
     /// </summary>
@@ -56,19 +57,7 @@ public sealed class PEExportDirectory : PEDirectory
         throw new NotImplementedException();
     }
 
-    protected override void Write(PEImageWriter writer)
-    {
-        throw new NotImplementedException();
-    }
-}
-
-public sealed class PEImportDirectory : PEDirectory
-{
-    public PEImportDirectory() : base(ImageDataDirectoryKind.Import)
-    {
-    }
-
-    public override void UpdateLayout(DiagnosticBag diagnostics)
+    protected override void Read(PEImageReader reader)
     {
         throw new NotImplementedException();
     }
@@ -90,6 +79,11 @@ public sealed class PEResourceDirectory : PEDirectory
         throw new NotImplementedException();
     }
 
+    protected override void Read(PEImageReader reader)
+    {
+        throw new NotImplementedException();
+    }
+
     protected override void Write(PEImageWriter writer)
     {
         throw new NotImplementedException();
@@ -103,6 +97,11 @@ public sealed class PEExceptionDirectory : PEDirectory
     }
     
     public override void UpdateLayout(DiagnosticBag diagnostics)
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override void Read(PEImageReader reader)
     {
         throw new NotImplementedException();
     }
@@ -124,6 +123,11 @@ public sealed class PEDebugDirectory : PEDirectory
         throw new NotImplementedException();
     }
 
+    protected override void Read(PEImageReader reader)
+    {
+        throw new NotImplementedException();
+    }
+
     protected override void Write(PEImageWriter writer)
     {
         throw new NotImplementedException();
@@ -137,6 +141,11 @@ public sealed class PELoadConfigDirectory : PEDirectory
     }
     
     public override void UpdateLayout(DiagnosticBag diagnostics)
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override void Read(PEImageReader reader)
     {
         throw new NotImplementedException();
     }
@@ -158,6 +167,11 @@ public sealed class PEBoundImportDirectory : PEDirectory
         throw new NotImplementedException();
     }
 
+    protected override void Read(PEImageReader reader)
+    {
+        throw new NotImplementedException();
+    }
+
     protected override void Write(PEImageWriter writer)
     {
         throw new NotImplementedException();
@@ -171,6 +185,11 @@ public sealed class PEImportAddressTable : PEDirectory
     }
 
     public override void UpdateLayout(DiagnosticBag diagnostics)
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override void Read(PEImageReader reader)
     {
         throw new NotImplementedException();
     }
@@ -192,6 +211,11 @@ public sealed class PETlsDirectory : PEDirectory
         throw new NotImplementedException();
     }
 
+    protected override void Read(PEImageReader reader)
+    {
+        throw new NotImplementedException();
+    }
+
     protected override void Write(PEImageWriter writer)
     {
         throw new NotImplementedException();
@@ -205,6 +229,11 @@ public sealed class PEDelayImportDirectory : PEDirectory
     }
     
     public override void UpdateLayout(DiagnosticBag diagnostics)
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override void Read(PEImageReader reader)
     {
         throw new NotImplementedException();
     }
@@ -226,6 +255,11 @@ public sealed class PEClrMetadata : PEDirectory
         throw new NotImplementedException();
     }
 
+    protected override void Read(PEImageReader reader)
+    {
+        throw new NotImplementedException();
+    }
+
     protected override void Write(PEImageWriter writer)
     {
         throw new NotImplementedException();
@@ -238,6 +272,11 @@ public sealed class PEArchitectureDirectory : PEDirectory
     {
     }
     public override void UpdateLayout(DiagnosticBag diagnostics)
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override void Read(PEImageReader reader)
     {
         throw new NotImplementedException();
     }
@@ -259,6 +298,11 @@ public sealed class PEGlobalPointerDirectory : PEDirectory
         throw new NotImplementedException();
     }
 
+    protected override void Read(PEImageReader reader)
+    {
+        throw new NotImplementedException();
+    }
+
     protected override void Write(PEImageWriter writer)
     {
         throw new NotImplementedException();
@@ -272,6 +316,11 @@ public sealed class PESecurityDirectory : PEDirectory
     }
 
     public override void UpdateLayout(DiagnosticBag diagnostics)
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override void Read(PEImageReader reader)
     {
         throw new NotImplementedException();
     }

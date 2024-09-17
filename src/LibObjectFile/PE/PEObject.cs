@@ -10,6 +10,8 @@ namespace LibObjectFile.PE;
 [DebuggerDisplay("{ToString(),nq}")]
 public abstract class PEObject : ObjectFileNode
 {
+    protected abstract void Read(PEImageReader reader);
+
     protected abstract void Write(PEImageWriter writer);
 
     // TODO: move PrintName and PrintMembers to ObjectFileNode

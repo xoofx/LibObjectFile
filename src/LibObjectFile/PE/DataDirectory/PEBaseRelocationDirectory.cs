@@ -29,7 +29,7 @@ public sealed class PEBaseRelocationDirectory : PEDirectory
         Size = size;
     }
 
-    public unsafe void Read(PEImageReader reader)
+    protected override unsafe void Read(PEImageReader reader)
     {
         reader.Position = Position;
         var size = (int)Size;

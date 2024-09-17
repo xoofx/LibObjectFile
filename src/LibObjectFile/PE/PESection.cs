@@ -174,6 +174,11 @@ public class PESection : PEObject, IVirtualAddressable
         }
     }
 
+    protected override void Read(PEImageReader reader)
+    {
+        throw new NotImplementedException();
+    }
+
     /// <inheritdoc />
     protected override void Write(PEImageWriter writer)
     {
