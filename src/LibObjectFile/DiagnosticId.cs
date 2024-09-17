@@ -123,12 +123,17 @@ namespace LibObjectFile
         PE_ERR_InvalidOptionalHeaderSize = 3005,
         PE_ERR_InvalidOptionalHeaderMagic = 3006,
         PE_ERR_InvalidSectionHeadersSize = 3007,
+        PE_ERR_InvalidParent = 3008,
 
         // PE BaseRelocation
-        PE_ERR_BaseRelocationDirectoryInvalidEndOfStream = 3008,
-        PE_ERR_BaseRelocationDirectoryInvalidSection = 3009,
-        PE_ERR_BaseRelocationDirectoryInvalidSectionData = 3010,
-        PE_ERR_InvalidDataDirectorySection = 3011,
-        PE_ERR_BaseRelocationDirectoryInvalidVirtualAddress = 3012,
+        PE_ERR_BaseRelocationDirectoryInvalidEndOfStream = 3020,
+        PE_ERR_BaseRelocationDirectoryInvalidSection = 3021,
+        PE_ERR_BaseRelocationDirectoryInvalidSectionData = 3022,
+        PE_ERR_InvalidDataDirectorySection = 3023,
+        PE_ERR_BaseRelocationDirectoryInvalidVirtualAddress = 3024,
+
+        // PE Import
+        PE_ERR_ImportDirectoryInvalidEndOfStream = 3040,
+        PE_ERR_ImportLookupTableInvalidEndOfStream = 3041,
     }
 }

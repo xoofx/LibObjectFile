@@ -52,6 +52,6 @@ public sealed class PEBaseRelocationPageBlock
 
     public override string ToString()
     {
-        return $"{nameof(PEBaseRelocationPageBlock)}, Section = {SectionRVALink.Element.Name}, RVA = {SectionRVALink.VirtualAddress}, Size = {SizeOf}, Parts[{Parts.Count}]";
+        return $"{nameof(PEBaseRelocationPageBlock)}, Section = {SectionRVALink.Element?.Name}, RVA = {SectionRVALink.VirtualAddress}, Size = {SizeOf}, Parts[{Parts.Count}]";
     }
 }

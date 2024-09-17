@@ -4,6 +4,7 @@
 
 using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace LibObjectFile.PE;
@@ -16,11 +17,11 @@ public abstract class PESectionData : PEObject, IVirtualAddressable
     /// <summary>
     /// Gets the parent <see cref="PESection"/> of this section data.
     /// </summary>
-    public PESection? Section
+    public new PESection? Parent
     {
-        get => (PESection?)Parent;
+        get => (PESection?)base.Parent;
 
-        internal set => Parent = value;
+        internal set => base.Parent = value;
     }
 
     /// <summary>
@@ -40,8 +41,18 @@ public abstract class PESectionData : PEObject, IVirtualAddressable
     /// </summary>
     /// <param name="virtualAddress">The virtual address to check if it belongs to this instance.</param>
     /// <returns><c>true</c> if the specified virtual address is contained by this instance; otherwise, <c>false</c>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool ContainsVirtual(RVA virtualAddress) => VirtualAddress <= virtualAddress && virtualAddress < VirtualAddress + Size;
 
+    public virtual int ReadAt(uint offset, Span<byte> destination)
+    {
+        throw new NotSupportedException($"The read operation is not supported for {this.GetType().FullName}");
+    }
+
+    public virtual void WriteAt(uint offset, ReadOnlySpan<byte> source)
+    {
+        throw new NotSupportedException($"The write operation is not supported for {this.GetType().FullName}");
+    }
 
     internal void ReadInternal(PEImageReader reader) => Read(reader);
 

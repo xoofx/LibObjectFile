@@ -3,6 +3,9 @@
 // See the license.txt file in the project root for more information.
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
@@ -12,7 +15,7 @@ namespace LibObjectFile.PE;
 /// Contains the array of directory entries in a Portable Executable (PE) file.
 /// </summary>
 [DebuggerDisplay($"{nameof(PEDirectoryTable)} {nameof(Count)} = {{{nameof(Count)}}}")]
-public sealed class PEDirectoryTable
+public sealed class PEDirectoryTable : IEnumerable<PEDirectory>
 {
     private InternalArray _entries;
     private int _count;
@@ -103,7 +106,12 @@ public sealed class PEDirectoryTable
     /// </summary>
     public PEClrMetadata? ClrMetadata => (PEClrMetadata?)this[ImageDataDirectoryKind.ClrMetadata];
 
-
+    /// <summary>
+    /// Gets the enumerator for the directory entries.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public Enumerator GetEnumerator() => new(this);
+    
     internal void Set(ImageDataDirectoryKind kind, PEDirectory? directory)
     {
         ref var entry = ref _entries[(int)kind];
@@ -125,5 +133,58 @@ public sealed class PEDirectoryTable
     private struct InternalArray
     {
         private PEDirectory? _element;
+    }
+
+    /// <summary>
+    /// Enumerator for the directory entries.
+    /// </summary>
+    public struct Enumerator : IEnumerator<PEDirectory>
+    {
+        private readonly PEDirectoryTable _table;
+        private int _index;
+
+        internal Enumerator(PEDirectoryTable table)
+        {
+            _table = table;
+            _index = -1;
+        }
+
+        public PEDirectory Current => _index >= 0 ? _table._entries[_index]! : null!;
+
+        object? IEnumerator.Current => Current;
+
+
+        public void Dispose()
+        {
+        }
+
+        public bool MoveNext()
+        {
+            Span<PEDirectory?> entries = _table._entries;
+            while (++_index < entries.Length)
+            {
+                if (_table._entries[_index] is not null)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public void Reset()
+        {
+            _index = -1;
+        }
+    }
+
+    IEnumerator<PEDirectory> IEnumerable<PEDirectory>.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }

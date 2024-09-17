@@ -12,11 +12,16 @@ namespace LibObjectFile.PE;
 /// <typeparam name="TVirtualAddressable">The type of the virtual addressable object.</typeparam>
 /// <param name="Element">The virtual addressable object linked.</param>
 /// <param name="OffsetInElement">The offset within this element.</param>
-public record struct RVALink<TVirtualAddressable>(TVirtualAddressable Element, uint OffsetInElement)
-    where TVirtualAddressable : IVirtualAddressable
+public record struct RVALink<TVirtualAddressable>(TVirtualAddressable? Element, uint OffsetInElement)
+    where TVirtualAddressable : class, IVirtualAddressable
 {
+    /// <summary>
+    /// Gets a value indicating whether this instance is null.
+    /// </summary>
+    public bool IsNull => Element == null;
+    
     /// <summary>
     /// Gets the virtual address of within the element.
     /// </summary>
-    public RVA VirtualAddress => Element.VirtualAddress + OffsetInElement;
+    public RVA VirtualAddress => (Element?.VirtualAddress ?? 0) + OffsetInElement;
 }

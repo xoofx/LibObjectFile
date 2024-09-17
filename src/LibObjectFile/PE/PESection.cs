@@ -5,8 +5,12 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using System.Reflection;
 using System.Reflection.PortableExecutable;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using LibObjectFile.Utils;
 
@@ -22,7 +26,7 @@ public class PESection : PEObject, IVirtualAddressable
 
     internal PESection(PEFile peFile, PESectionName name)
     {
-        Parent = peFile;
+        base.Parent = peFile;
         Name = name;
         _dataParts = new List<PESectionData>();
         // Most of the time readable
@@ -32,7 +36,7 @@ public class PESection : PEObject, IVirtualAddressable
     /// <summary>
     /// Gets the parent <see cref="PEFile"/> of this section.
     /// </summary>
-    public PEFile? ImageFile => (PEFile?)Parent;
+    public new PEFile? Parent => (PEFile?)base.Parent;
 
     /// <summary>
     /// Gets the name of this section.
@@ -96,8 +100,8 @@ public class PESection : PEObject, IVirtualAddressable
     public void AddData(PESectionData data)
     {
         ArgumentNullException.ThrowIfNull(data);
-        if (data.Section != null) throw new ArgumentException("Data is already associated with a section", nameof(data));
-        data.Section = this;
+        if (data.Parent != null) throw new ArgumentException("Data is already associated with a section", nameof(data));
+        data.Parent = this;
         data.Index = (uint)_dataParts.Count;
         _dataParts.Add(data);
         UpdateSectionDataIndicesAndVirtualAddress((int)data.Index);
@@ -108,8 +112,8 @@ public class PESection : PEObject, IVirtualAddressable
         ArgumentNullException.ThrowIfNull(data);
         if (index < 0 || index > _dataParts.Count) throw new ArgumentOutOfRangeException(nameof(index));
 
-        if (data.Section != null) throw new ArgumentException("Data is already associated with a section", nameof(data));
-        data.Section = this;
+        if (data.Parent != null) throw new ArgumentException("Data is already associated with a section", nameof(data));
+        data.Parent = this;
         data.Index = (uint)index;
         _dataParts.Insert(index, data);
         UpdateSectionDataIndicesAndVirtualAddress(index);
@@ -123,7 +127,7 @@ public class PESection : PEObject, IVirtualAddressable
     public void RemoveData(PESectionData data)
     {
         ArgumentNullException.ThrowIfNull(data);
-        if (data.Section != this) throw new ArgumentException("Data is not associated with this section", nameof(data));
+        if (data.Parent != this) throw new ArgumentException("Data is not associated with this section", nameof(data));
         var index = (int)data.Index;
         RemoveDataAt(index);
     }
@@ -138,10 +142,50 @@ public class PESection : PEObject, IVirtualAddressable
 
         var list = _dataParts;
         var data = list[index];
-        data.Section = null;
+        data.Parent = null;
         data.Index = 0;
         list.RemoveAt(index);
         UpdateSectionDataIndicesAndVirtualAddress(index);
+    }
+
+    /// <summary>
+    /// Tries to find the section data that contains the specified virtual address.
+    /// </summary>
+    /// <param name="virtualAddress">The virtual address to search for.</param>
+    /// <param name="sectionData">The section data that contains the virtual address, if found.</param>
+    /// <returns><c>true</c> if the section data was found; otherwise, <c>false</c>.</returns>
+    public bool TryFindSectionData(RVA virtualAddress, [NotNullWhen(true)] out PESectionData? sectionData)
+    {
+        // Binary search
+        nint left = 0;
+
+        var dataParts = CollectionsMarshal.AsSpan(_dataParts);
+        nint right = dataParts.Length - 1;
+        ref var firstData = ref MemoryMarshal.GetReference(dataParts);
+
+        while (left <= right)
+        {
+            nint mid = left + (right - left) >>> 1;
+            var trySectionData = Unsafe.Add(ref firstData, mid);
+
+            if (trySectionData.ContainsVirtual(virtualAddress))
+            {
+                sectionData = trySectionData;
+                return true;
+            }
+
+            if (trySectionData.VirtualAddress < virtualAddress)
+            {
+                left = mid + 1;
+            }
+            else
+            {
+                right = mid - 1;
+            }
+        }
+
+        sectionData = null;
+        return false;
     }
 
     /// <summary>
@@ -196,6 +240,38 @@ public class PESection : PEObject, IVirtualAddressable
     {
         builder.Append($"VirtualAddress = {VirtualAddress}, VirtualSize = 0x{VirtualSize:X4}, DataParts[{DataParts.Count}]");
         return true;
+    }
+
+    /// <summary>
+    /// Gets the default characteristics for a section name.
+    /// </summary>
+    /// <param name="sectionName">The name of the section</param>
+    /// <returns>The default characteristics for the specified section name.</returns>
+    /// <remarks>
+    /// The default characteristics are:
+    /// <list type="bullet">
+    ///  <item><description>.text: ContainsCode | MemExecute | MemRead</description></item>
+    ///  <item><description>.data: ContainsInitializedData | MemRead | MemWrite</description></item>
+    ///  <item><description>.bss: ContainsUninitializedData | MemRead | MemWrite</description></item>
+    ///  <item><description>.idata: ContainsInitializedData | MemRead | MemWrite</description></item>
+    ///  <item><description>.reloc: ContainsInitializedData | MemDiscardable | MemRead</description></item>
+    ///  <item><description>.tls: ContainsInitializedData | MemRead | MemWrite</description></item>
+    /// </list>
+    ///
+    /// Otherwise the default characteristics is ContainsInitializedData | MemRead.
+    /// </remarks>
+    public static SectionCharacteristics GetDefaultSectionCharacteristics(PESectionName sectionName)
+    {
+        return sectionName.Name switch
+        {
+            ".text" => SectionCharacteristics.ContainsCode | SectionCharacteristics.MemExecute | SectionCharacteristics.MemRead,
+            ".data" => SectionCharacteristics.ContainsInitializedData | SectionCharacteristics.MemRead | SectionCharacteristics.MemWrite,
+            ".bss" => SectionCharacteristics.ContainsUninitializedData | SectionCharacteristics.MemRead | SectionCharacteristics.MemWrite,
+            ".idata" => SectionCharacteristics.ContainsInitializedData | SectionCharacteristics.MemRead | SectionCharacteristics.MemWrite,
+            ".reloc" => SectionCharacteristics.ContainsInitializedData | SectionCharacteristics.MemDiscardable | SectionCharacteristics.MemRead,
+            ".tls" => SectionCharacteristics.ContainsInitializedData | SectionCharacteristics.MemRead | SectionCharacteristics.MemWrite,
+            _ => SectionCharacteristics.ContainsInitializedData |  SectionCharacteristics.MemRead
+        };
     }
 
     private void UpdateSectionDataIndicesAndVirtualAddress(int startIndex)

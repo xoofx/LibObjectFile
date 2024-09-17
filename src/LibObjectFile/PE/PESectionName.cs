@@ -11,7 +11,7 @@ namespace LibObjectFile.PE;
 /// <summary>
 /// A section name in a Portable Executable (PE) image.
 /// </summary>
-public readonly record struct PESectionName
+public readonly partial record struct PESectionName
 {
     /// <summary>
     /// Internal constructor used to bypass the validation of the section name.

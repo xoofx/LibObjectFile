@@ -85,13 +85,13 @@ public partial class PEFile : PEObject
     /// </summary>
     public ReadOnlyList<PESection> Sections => _sections;
     
-    public PESection AddSection(PESectionName name, uint virtualAddress, uint virtualSize, SectionCharacteristics characteristics = SectionCharacteristics.MemRead)
+    public PESection AddSection(PESectionName name, uint virtualAddress, uint virtualSize)
     {
         var section = new PESection(this, name)
         {
             VirtualAddress = virtualAddress,
             VirtualSize = virtualSize,
-            Characteristics = characteristics
+            Characteristics = PESection.GetDefaultSectionCharacteristics(name)
         };
         _sections.Add(section);
         return section;
