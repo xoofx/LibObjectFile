@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using LibObjectFile.Utils;
 
 namespace LibObjectFile.Dwarf
 {
@@ -16,7 +17,7 @@ namespace LibObjectFile.Dwarf
             _abbreviations = new List<DwarfAbbreviation>();
         }
 
-        public IReadOnlyList<DwarfAbbreviation> Abbreviations => _abbreviations;
+        public ReadOnlyList<DwarfAbbreviation> Abbreviations => _abbreviations;
 
         internal void AddAbbreviation(DwarfAbbreviation abbreviation)
         {

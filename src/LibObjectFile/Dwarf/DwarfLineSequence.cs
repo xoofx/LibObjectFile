@@ -5,6 +5,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using LibObjectFile.Utils;
 
 namespace LibObjectFile.Dwarf
 {
@@ -21,7 +22,7 @@ namespace LibObjectFile.Dwarf
             _lines = new List<DwarfLine>();
         }
 
-        public IReadOnlyList<DwarfLine> Lines => _lines;
+        public ReadOnlyList<DwarfLine> Lines => _lines;
 
         public void Add(DwarfLine line)
         {

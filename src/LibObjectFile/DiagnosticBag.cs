@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using LibObjectFile.Utils;
 
 namespace LibObjectFile
 {
@@ -25,7 +26,7 @@ namespace LibObjectFile
         /// <summary>
         /// List of messages.
         /// </summary>
-        public IReadOnlyList<DiagnosticMessage> Messages => _messages;
+        public ReadOnlyList<DiagnosticMessage> Messages => _messages;
 
         /// <summary>
         /// If this instance contains error messages.

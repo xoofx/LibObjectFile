@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using LibObjectFile.Utils;
 
 namespace LibObjectFile.Dwarf
 {
@@ -16,7 +17,7 @@ namespace LibObjectFile.Dwarf
             _units = new List<DwarfUnit>();
         }
 
-        public IReadOnlyList<DwarfUnit> Units => _units;
+        public ReadOnlyList<DwarfUnit> Units => _units;
 
         public void AddUnit(DwarfUnit unit)
         {

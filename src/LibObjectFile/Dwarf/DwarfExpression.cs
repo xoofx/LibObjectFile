@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using LibObjectFile.Utils;
 
 namespace LibObjectFile.Dwarf
 {
@@ -18,7 +19,7 @@ namespace LibObjectFile.Dwarf
             _operations = new List<DwarfOperation>();
         }
 
-        public IReadOnlyList<DwarfOperation> Operations => _operations;
+        public ReadOnlyList<DwarfOperation> Operations => _operations;
 
         internal List<DwarfOperation> InternalOperations => _operations;
 

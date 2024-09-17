@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using LibObjectFile.Utils;
 
 namespace LibObjectFile.Dwarf
 {
@@ -84,7 +85,7 @@ namespace LibObjectFile.Dwarf
 
         public List<DwarfFileName> FileNames { get; }
 
-        public IReadOnlyList<DwarfLineSequence> LineSequences => _lineSequences;
+        public ReadOnlyList<DwarfLineSequence> LineSequences => _lineSequences;
 
         public void AddLineSequence(DwarfLineSequence line)
         {

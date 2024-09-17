@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using LibObjectFile.Utils;
 
 namespace LibObjectFile.Ar;
 
@@ -58,7 +59,7 @@ public sealed class ArArchiveFile : ObjectFileNode
     /// <summary>
     /// Gets the file entries. Use <see cref="AddFile"/> or <see cref="RemoveFile"/> to manipulate the entries.
     /// </summary>
-    public IReadOnlyList<ArFile> Files => _files;
+    public ReadOnlyList<ArFile> Files => _files;
         
     /// <summary>
     /// Adds a file to <see cref="Files"/>.

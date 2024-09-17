@@ -8,6 +8,7 @@ using System.Collections.Immutable;
 using System.Reflection;
 using System.Reflection.PortableExecutable;
 using System.Text;
+using LibObjectFile.Utils;
 
 namespace LibObjectFile.PE;
 
@@ -85,7 +86,7 @@ public class PESection : PEObject, IVirtualAddressable
     /// <summary>
     /// Gets the list of data associated with this section.
     /// </summary>
-    public IReadOnlyList<PESectionData> DataParts => _dataParts;
+    public ReadOnlyList<PESectionData> DataParts => _dataParts;
     
     /// <summary>
     /// Adds a new data to this section.

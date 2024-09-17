@@ -5,6 +5,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using LibObjectFile.Utils;
 
 namespace LibObjectFile.Dwarf
 {
@@ -19,7 +20,7 @@ namespace LibObjectFile.Dwarf
             _tables = new List<DwarfLineProgramTable>();
         }
 
-        public IReadOnlyList<DwarfLineProgramTable> LineTables => _tables;
+        public ReadOnlyList<DwarfLineProgramTable> LineTables => _tables;
 
         public void AddLineProgramTable(DwarfLineProgramTable line)
         {

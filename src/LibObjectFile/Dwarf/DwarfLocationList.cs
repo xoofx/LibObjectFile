@@ -4,6 +4,7 @@
 
 using System.Text;
 using System.Collections.Generic;
+using LibObjectFile.Utils;
 
 namespace LibObjectFile.Dwarf
 {
@@ -17,7 +18,7 @@ namespace LibObjectFile.Dwarf
             _locationListEntries = new List<DwarfLocationListEntry>();
         }
 
-        public IReadOnlyList<DwarfLocationListEntry> LocationListEntries => _locationListEntries;
+        public ReadOnlyList<DwarfLocationListEntry> LocationListEntries => _locationListEntries;
 
         public void AddLocationListEntry(DwarfLocationListEntry locationListEntry)
         {

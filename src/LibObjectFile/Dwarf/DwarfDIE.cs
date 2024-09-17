@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using LibObjectFile.Utils;
 
 namespace LibObjectFile.Dwarf
 {
@@ -34,9 +35,9 @@ namespace LibObjectFile.Dwarf
             set => _tag = value;
         }
 
-        public IReadOnlyList<DwarfAttribute> Attributes => _attributes;
+        public ReadOnlyList<DwarfAttribute> Attributes => _attributes;
 
-        public IReadOnlyList<DwarfDIE> Children => _children;
+        public ReadOnlyList<DwarfDIE> Children => _children;
 
         public DwarfAbbreviationItem? Abbrev { get; internal set; }
 

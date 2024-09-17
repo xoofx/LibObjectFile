@@ -120,12 +120,12 @@ public sealed class ElfObjectFile : ObjectFileNode
     /// <summary>
     /// List of the segments - program headers defined by this instance.
     /// </summary>
-    public IReadOnlyList<ElfSegment> Segments => _segments;
+    public ReadOnlyList<ElfSegment> Segments => _segments;
 
     /// <summary>
     /// List of the sections - program headers defined by this instance.
     /// </summary>
-    public IReadOnlyList<ElfSection> Sections => _sections;
+    public ReadOnlyList<ElfSection> Sections => _sections;
         
     /// <summary>
     /// Number of visible sections excluding <see cref="ElfShadowSection"/> in the <see cref="Sections"/>.

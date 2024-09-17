@@ -9,6 +9,7 @@ using System.IO;
 using System.Reflection.PortableExecutable;
 using System.Runtime.InteropServices;
 using System.Text;
+using LibObjectFile.Utils;
 
 namespace LibObjectFile.PE;
 
@@ -82,7 +83,7 @@ public partial class PEFile : PEObject
     /// <summary>
     /// Gets the sections.
     /// </summary>
-    public IReadOnlyList<PESection> Sections => _sections;
+    public ReadOnlyList<PESection> Sections => _sections;
     
     public PESection AddSection(PESectionName name, uint virtualAddress, uint virtualSize, SectionCharacteristics characteristics = SectionCharacteristics.MemRead)
     {
