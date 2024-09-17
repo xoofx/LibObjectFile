@@ -7,7 +7,7 @@ namespace LibObjectFile.PE;
 /// <summary>
 /// Represents the different relocation types for an image file.
 /// </summary>
-public enum BaseRelocationType : ushort
+public enum PEBaseRelocationType : ushort
 {
     /// <summary>
     /// The base relocation is skipped. This type can be used to pad a block.

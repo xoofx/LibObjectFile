@@ -20,7 +20,7 @@ public readonly struct PEBaseRelocation : IEquatable<PEBaseRelocation>
 
     private readonly ushort _value;
     
-    public PEBaseRelocation(BaseRelocationType type, ushort virtualOffset)
+    public PEBaseRelocation(PEBaseRelocationType type, ushort virtualOffset)
     {
         if (virtualOffset > MaxVirtualOffset)
         {
@@ -40,7 +40,7 @@ public readonly struct PEBaseRelocation : IEquatable<PEBaseRelocation>
     /// <summary>
     /// Gets the type of the base relocation.
     /// </summary>
-    public BaseRelocationType Type => (BaseRelocationType)(_value & TypeMask);
+    public PEBaseRelocationType Type => (PEBaseRelocationType)(_value & TypeMask);
 
     /// <summary>
     /// Gets the virtual offset of the base relocation relative to the offset of the associated <see cref="PEBaseRelocationPageBlock"/>.
