@@ -10,7 +10,7 @@ namespace LibObjectFile;
 /// <summary>
 /// An exception used when diagnostics error are happening during read/write.
 /// </summary>
-public class ObjectFileException : Exception
+public sealed class ObjectFileException : Exception
 {
     public ObjectFileException(string message, DiagnosticBag diagnostics) : base(message)
     {

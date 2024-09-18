@@ -4,6 +4,7 @@
 
 using System;
 using System.IO;
+using LibObjectFile.IO;
 
 namespace LibObjectFile.Elf;
 

@@ -579,7 +579,7 @@ internal abstract class ElfReader<TDecoder> : ElfReader where TDecoder : struct,
                     // If we found a section, we will bind the program header to this section
                     // and switch the offset calculation to auto
                     segment.Range = section;
-                    segment.OffsetKind = ValueKind.Auto;
+                    segment.OffsetCalculationMode = ElfOffsetCalculationMode.Auto;
                     break;
                 }
             }
@@ -690,7 +690,7 @@ internal abstract class ElfReader<TDecoder> : ElfReader where TDecoder : struct,
                             segment.Range = new ElfSegmentRange(beginSection, segment.Position - beginSection.Position, endSection, (long)(segmentEndOffset - endSection.Position));
                         }
 
-                        segment.OffsetKind = ValueKind.Auto;
+                        segment.OffsetCalculationMode = ElfOffsetCalculationMode.Auto;
                         break;
                     }
                 }

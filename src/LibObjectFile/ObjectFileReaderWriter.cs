@@ -55,8 +55,6 @@ public abstract class ObjectFileReaderWriter : VisitorContextBase
 
     public bool IsLittleEndian { get; protected set; }
 
-    public TextWriter? Log { get; set; }
-
     /// <summary>
     /// Reads from the <see cref="Stream"/> and current position to the specified buffer.
     /// </summary>

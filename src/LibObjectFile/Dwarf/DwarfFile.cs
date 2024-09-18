@@ -148,7 +148,7 @@ public class DwarfFile : DwarfContainer
         writer.AddressSize = writerContext.AddressSize;
         writer.EnableRelocation = writerContext.EnableRelocation;
             
-        writer.Log = writerContext.DebugLinePrinter;
+        writer.DebugLog = writerContext.DebugLinePrinter;
         if (writerContext.DebugLineStream != null)
         {
             writer.Stream = writerContext.DebugLineStream;
@@ -159,7 +159,7 @@ public class DwarfFile : DwarfContainer
             LineSection.Write(writer);
         }
 
-        writer.Log = null;
+        writer.DebugLog = null;
         if (writerContext.DebugAbbrevStream != null)
         {
             writer.Stream = writerContext.DebugAbbrevStream;
@@ -376,7 +376,7 @@ public class DwarfFile : DwarfContainer
         var dwarf = new DwarfFile();
         var reader = new DwarfReader(readerContext, dwarf, new DiagnosticBag());
 
-        reader.Log = null;
+        reader.DebugLog = null;
         if (readerContext.DebugAbbrevStream != null)
         {
             reader.Stream = readerContext.DebugAbbrevStream;
@@ -391,14 +391,14 @@ public class DwarfFile : DwarfContainer
             dwarf.StringTable.Read(reader);
         }
 
-        reader.Log = readerContext.DebugLinePrinter;
+        reader.DebugLog = readerContext.DebugLinePrinter;
         if (readerContext.DebugLineStream != null)
         {
             reader.Stream = readerContext.DebugLineStream;
             reader.CurrentSection = dwarf.LineSection;
             dwarf.LineSection.Read(reader);
         }
-        reader.Log = null;
+        reader.DebugLog = null;
 
         if (readerContext.DebugAddressRangeStream != null)
         {
@@ -407,7 +407,7 @@ public class DwarfFile : DwarfContainer
             dwarf.AddressRangeTable.Read(reader);
         }
 
-        reader.Log = null;
+        reader.DebugLog = null;
         if (readerContext.DebugLocationStream != null)
         {
             reader.Stream = readerContext.DebugLocationStream;
@@ -415,7 +415,7 @@ public class DwarfFile : DwarfContainer
             dwarf.LocationSection.Read(reader);
         }
 
-        reader.Log = null;
+        reader.DebugLog = null;
         if (readerContext.DebugInfoStream != null)
         {
             reader.Stream = readerContext.DebugInfoStream;

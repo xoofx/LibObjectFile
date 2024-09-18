@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using LibObjectFile.Diagnostics;
+using LibObjectFile.IO;
 
 namespace LibObjectFile.Ar;
 

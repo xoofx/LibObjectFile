@@ -13,7 +13,7 @@ namespace LibObjectFile.Elf;
 /// </summary>
 public sealed class ElfSegment : ElfObject
 {
-    public ValueKind OffsetKind { get; set; }
+    public ElfOffsetCalculationMode OffsetCalculationMode { get; set; }
         
     /// <summary>
     /// Gets or sets the type of this segment.
@@ -55,7 +55,7 @@ public sealed class ElfSegment : ElfObject
     {
         var diagnostics = context.Diagnostics;
 
-        if (OffsetKind == ValueKind.Auto)
+        if (OffsetCalculationMode == ElfOffsetCalculationMode.Auto)
         {
             Position = Range.Offset;
         }

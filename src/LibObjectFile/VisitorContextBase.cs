@@ -2,8 +2,10 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
-using LibObjectFile;
 using LibObjectFile.Diagnostics;
+using System.IO;
+
+namespace LibObjectFile;
 
 /// <summary>
 /// Base class used for layout-ing an object file.
@@ -19,6 +21,8 @@ public abstract class VisitorContextBase(ObjectFileElement file, DiagnosticBag d
 
 
     public bool HasErrors => Diagnostics.HasErrors;
+
+    public TextWriter? DebugLog { get; set; }
 }
 
 /// <summary>

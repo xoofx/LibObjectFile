@@ -297,33 +297,33 @@ public class DwarfDIE : DwarfContainer
         AddAttribute(new DwarfAttribute() {  Kind = kind, ValueAsObject = value});
     }
 
-    protected void SetAttributeLinkValue<TLink>(DwarfAttributeKind kind, TLink link) where TLink : IObjectFileNodeLink
-    {
-        for (int i = 0; i < _attributes.Count; i++)
-        {
-            var attr = _attributes[i];
-            if (attr.Kind == kind)
-            {
-                if (link == null)
-                {
-                    RemoveAttributeAt(i);
-                }
-                else
-                {
-                    attr.ValueAsU64 = link.GetRelativeOffset();
-                    attr.ValueAsObject = link.GetObjectFileNode();
-                }
-                return;
-            }
-        }
+    //protected void SetAttributeLinkValue<TLink>(DwarfAttributeKind kind, TLink link) where TLink : IObjectFileNodeLink
+    //{
+    //    for (int i = 0; i < _attributes.Count; i++)
+    //    {
+    //        var attr = _attributes[i];
+    //        if (attr.Kind == kind)
+    //        {
+    //            if (link == null)
+    //            {
+    //                RemoveAttributeAt(i);
+    //            }
+    //            else
+    //            {
+    //                attr.ValueAsU64 = link.GetRelativeOffset();
+    //                attr.ValueAsObject = link.GetObjectFileNode();
+    //            }
+    //            return;
+    //        }
+    //    }
 
-        AddAttribute(new DwarfAttribute()
-        {
-            Kind = kind, 
-            ValueAsU64 = link.GetRelativeOffset(),
-            ValueAsObject = link.GetObjectFileNode()
-        });
-    }
+    //    AddAttribute(new DwarfAttribute()
+    //    {
+    //        Kind = kind, 
+    //        ValueAsU64 = link.GetRelativeOffset(),
+    //        ValueAsObject = link.GetObjectFileNode()
+    //    });
+    //}
 
     protected unsafe void SetAttributeValueOpt<TValue>(DwarfAttributeKind kind, TValue? value) where TValue : unmanaged
     {

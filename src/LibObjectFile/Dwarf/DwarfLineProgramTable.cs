@@ -103,7 +103,7 @@ public sealed class DwarfLineProgramTable : DwarfObject<DwarfLineSection>
 
     public override void Read(DwarfReader reader)
     {
-        var log = reader.Log;
+        var log = reader.DebugLog;
         var startOfSection = reader.Position;
 
         reader.OffsetToLineProgramTable.Add(startOfSection, this);
