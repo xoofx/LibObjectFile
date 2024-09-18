@@ -29,10 +29,10 @@ public readonly struct ObjectList<TObject> : IList<TObject>
     /// Initializes a new instance of the <see cref="ObjectList{TObject}"/> class.
     /// </summary>
     /// <param name="parent">The parent object file node.</param>
-    public ObjectList(ObjectFileNode parent, Action<ObjectFileNode, TObject>? added = null, Action<ObjectFileNode, TObject>? removing = null)
+    public ObjectList(ObjectFileNode parent, Action<ObjectFileNode, TObject>? added = null, Action<ObjectFileNode, TObject>? removing = null, Action<ObjectFileNode, int, TObject>? removed = null,  Action<ObjectFileNode, int, TObject, TObject>? updated = null)
     {
         ArgumentNullException.ThrowIfNull(parent);
-        _items = new InternalList(parent, added, removing);
+        _items = new InternalList(parent, added, removing, removed, updated);
     }
 
     public int Count => _items.Count;
@@ -59,9 +59,9 @@ public readonly struct ObjectList<TObject> : IList<TObject>
             var item = items[i];
             items.Removing(item);
             items.RemoveAt(i);
-
             item.Parent = null;
             item.ResetIndex();
+            items.Removed(i, item);
         }
 
         items.Clear();
@@ -132,7 +132,7 @@ public readonly struct ObjectList<TObject> : IList<TObject>
             // Bind new entry
             items[index] = value;
             value.Index = index;
-            items.Added(value);
+            items.Updated(index, previousItem, value);
         }
     }
 
@@ -159,10 +159,12 @@ public readonly struct ObjectList<TObject> : IList<TObject>
         return item;
     }
     
-    private sealed class InternalList(ObjectFileNode parent, Action<ObjectFileNode, TObject>? added, Action<ObjectFileNode, TObject>? removing) : List<TObject>
+    private sealed class InternalList(ObjectFileNode parent, Action<ObjectFileNode, TObject>? added, Action<ObjectFileNode, TObject>? removing, Action<ObjectFileNode, int, TObject>? removed, Action<ObjectFileNode, int, TObject, TObject>? updated) : List<TObject>
     {
         private readonly Action<ObjectFileNode, TObject>? _added = added;
         private readonly Action<ObjectFileNode, TObject>? _removing = removing;
+        private readonly Action<ObjectFileNode, int, TObject>? _removed = removed;
+        private readonly Action<ObjectFileNode, int, TObject, TObject>? _updated = updated;
         public readonly ObjectFileNode Parent = parent;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -170,6 +172,12 @@ public readonly struct ObjectList<TObject> : IList<TObject>
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Removing(TObject item) => _removing?.Invoke(Parent, item);
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void Updated(int index, TObject previousItem, TObject newItem) => _updated?.Invoke(Parent, index, previousItem, newItem);
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void Removed(int index, TObject removedItem) => _removed?.Invoke(Parent, index, removedItem);
     }
 
     internal sealed class ObjectListDebuggerView

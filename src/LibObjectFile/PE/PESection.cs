@@ -21,14 +21,14 @@ namespace LibObjectFile.PE;
 /// </summary>
 public class PESection : PEObject, IVirtualAddressable
 {
-    private readonly List<PESectionData> _dataParts;
-    private RVA _virtualAddress;
+    private readonly ObjectList<PESectionData> _dataParts;
 
-    internal PESection(PEFile peFile, PESectionName name)
+    public PESection(PESectionName name, RVA virtualAddress, RVA virtualSize)
     {
-        base.Parent = peFile;
         Name = name;
-        _dataParts = new List<PESectionData>();
+        VirtualAddress = virtualAddress;
+        VirtualSize = virtualSize;
+        _dataParts = new ObjectList<PESectionData>(this, SectionDataAdded, null, SectionDataRemoved, SectionDataUpdated);
         // Most of the time readable
         Characteristics = SectionCharacteristics.MemRead;
     }
@@ -46,42 +46,14 @@ public class PESection : PEObject, IVirtualAddressable
     /// <summary>
     /// The address of the first byte of the section when loaded into memory, relative to the image base.
     /// </summary>
-    public RVA VirtualAddress
-    {
-        get => _virtualAddress;
-        set
-        {
-            _virtualAddress = value;
-            UpdateSectionDataIndicesAndVirtualAddress(0);
-        }
-    }
+    public RVA VirtualAddress { get; }
 
     /// <summary>
     /// The total size of the section when loaded into memory.
     /// If this value is greater than <see cref="Size"/>, the section is zero-padded.
     /// </summary>
-    public uint VirtualSize { get; set; }
+    public uint VirtualSize { get; }
     
-    /// <summary>
-    /// The file pointer to the beginning of the relocation entries for the section, if present.
-    /// </summary>
-    public uint PointerToRelocations { get; set; }
-
-    /// <summary>
-    /// The file pointer to the beginning of the line-number entries for the section, if present.
-    /// </summary>
-    public uint PointerToLineNumbers { get; set; }
-
-    /// <summary>
-    /// The number of relocation entries for the section.
-    /// </summary>
-    public ushort NumberOfRelocations { get; set; }
-
-    /// <summary>
-    /// The number of line-number entries for the section.
-    /// </summary>
-    public ushort NumberOfLineNumbers { get; set; }
-
     /// <summary>
     /// Flags that describe the characteristics of the section.
     /// </summary>
@@ -90,63 +62,7 @@ public class PESection : PEObject, IVirtualAddressable
     /// <summary>
     /// Gets the list of data associated with this section.
     /// </summary>
-    public ReadOnlyList<PESectionData> DataParts => _dataParts;
-    
-    /// <summary>
-    /// Adds a new data to this section.
-    /// </summary>
-    /// <param name="data">The data to add.</param>
-    /// <exception cref="ArgumentException">If the data is already associated with a section.</exception>
-    public void AddData(PESectionData data)
-    {
-        ArgumentNullException.ThrowIfNull(data);
-        if (data.Parent != null) throw new ArgumentException("Data is already associated with a section", nameof(data));
-        data.Parent = this;
-        data.Index = _dataParts.Count;
-        _dataParts.Add(data);
-        UpdateSectionDataIndicesAndVirtualAddress((int)data.Index);
-    }
-
-    public void InsertData(int index, PESectionData data)
-    {
-        ArgumentNullException.ThrowIfNull(data);
-        if (index < 0 || index > _dataParts.Count) throw new ArgumentOutOfRangeException(nameof(index));
-
-        if (data.Parent != null) throw new ArgumentException("Data is already associated with a section", nameof(data));
-        data.Parent = this;
-        data.Index = index;
-        _dataParts.Insert(index, data);
-        UpdateSectionDataIndicesAndVirtualAddress(index);
-    }
-
-    /// <summary>
-    /// Removes the specified data from this section.
-    /// </summary>
-    /// <param name="data">The data to remove.</param>
-    /// <exception cref="ArgumentException">If the data is already associated with a section.</exception>
-    public void RemoveData(PESectionData data)
-    {
-        ArgumentNullException.ThrowIfNull(data);
-        if (data.Parent != this) throw new ArgumentException("Data is not associated with this section", nameof(data));
-        var index = (int)data.Index;
-        RemoveDataAt(index);
-    }
-
-    /// <summary>
-    /// Removes the data at the specified index.
-    /// </summary>
-    /// <param name="index">The index of the data to remove.</param>
-    public void RemoveDataAt(int index)
-    {
-        if (index < 0 || index > _dataParts.Count) throw new ArgumentOutOfRangeException(nameof(index));
-
-        var list = _dataParts;
-        var data = list[index];
-        data.Parent = null;
-        data.Index = 0;
-        list.RemoveAt(index);
-        UpdateSectionDataIndicesAndVirtualAddress(index);
-    }
+    public ObjectList<PESectionData> DataParts => _dataParts;
 
     /// <summary>
     /// Tries to find the section data that contains the specified virtual address.
@@ -159,7 +75,7 @@ public class PESection : PEObject, IVirtualAddressable
         // Binary search
         nint low = 0;
 
-        var dataParts = CollectionsMarshal.AsSpan(_dataParts);
+        var dataParts = CollectionsMarshal.AsSpan(_dataParts.UnsafeList);
         nint high = dataParts.Length - 1;
         ref var firstData = ref MemoryMarshal.GetReference(dataParts);
 
@@ -210,9 +126,12 @@ public class PESection : PEObject, IVirtualAddressable
     /// <inheritdoc />
     public override void UpdateLayout(DiagnosticBag diagnostics)
     {
+        var va = VirtualAddress;
         foreach (var data in DataParts)
         {
+            data.VirtualAddress = va;
             data.UpdateLayout(diagnostics);
+            va += (uint)data.Size;
         }
     }
 
@@ -271,11 +190,28 @@ public class PESection : PEObject, IVirtualAddressable
             _ => SectionCharacteristics.ContainsInitializedData |  SectionCharacteristics.MemRead
         };
     }
+    
+    private static void SectionDataAdded(ObjectFileNode parent, PESectionData sectionData)
+    {
+        var section = (PESection) parent;
+        section.UpdateSectionDataVirtualAddress(sectionData.Index);
+    }
+    
+    private static void SectionDataRemoved(ObjectFileNode parent, int index, PESectionData removedSectionData)
+    {
+        var section = (PESection) parent;
+        section.UpdateSectionDataVirtualAddress(index);
+    }
+    private static void SectionDataUpdated(ObjectFileNode parent, int index, PESectionData previousSectionData, PESectionData newSectionData)
+    {
+        var section = (PESection) parent;
+        section.UpdateSectionDataVirtualAddress(index);
+    }
 
-    private void UpdateSectionDataIndicesAndVirtualAddress(int startIndex)
+    private void UpdateSectionDataVirtualAddress(int startIndex)
     {
         var va = VirtualAddress;
-        var list = _dataParts;
+        var list = _dataParts.UnsafeList;
         if (startIndex > 0)
         {
             var previousData = list[startIndex - 1];
@@ -285,7 +221,6 @@ public class PESection : PEObject, IVirtualAddressable
         for (int i = startIndex; i < list.Count; i++)
         {
             var data = list[i];
-            data.Index = i;
             data.VirtualAddress = va;
             va += (uint)data.Size;
         }

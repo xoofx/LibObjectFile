@@ -210,18 +210,11 @@ partial class PEFile
         foreach (var section in headers)
         {
             // We don't validate the name
-            var peSection = new PESection(this, new PESectionName(section.NameAsString, false))
+            var peSection = new PESection( new PESectionName(section.NameAsString, false), section.VirtualAddress, section.VirtualSize)
             {
                 Position = section.PointerToRawData,
                 Size = section.SizeOfRawData,
-                VirtualAddress = section.VirtualAddress,
-                VirtualSize = section.VirtualSize,
                 Characteristics = section.Characteristics,
-
-                PointerToRelocations = section.PointerToRelocations,
-                PointerToLineNumbers = section.PointerToLineNumbers,
-                NumberOfRelocations = section.NumberOfRelocations,
-                NumberOfLineNumbers = section.NumberOfLineNumbers
             };
             _sections.Add(peSection);
         }
@@ -251,16 +244,17 @@ partial class PEFile
             
             // Insert the directory at the right position in the section
             int sectionDataIndex = 0;
-            for (; sectionDataIndex < peSection.DataParts.Count; sectionDataIndex++)
+            var dataParts = peSection.DataParts;
+            for (; sectionDataIndex < dataParts.Count; sectionDataIndex++)
             {
-                var sectionData = peSection.DataParts[sectionDataIndex];
+                var sectionData = dataParts[sectionDataIndex];
                 if (directory.Position < sectionData.Position)
                 {
                     break;
                 }
             }
             
-            peSection.InsertData(sectionDataIndex, directory);
+            dataParts.Insert(sectionDataIndex, directory);
         }
         
         // Create Stream data sections for remaining data per section based on directories already loaded
@@ -268,9 +262,10 @@ partial class PEFile
         {
             var sectionPosition = section.Position;
 
-            for (var i = 0; i < section.DataParts.Count; i++)
+            var dataParts = section.DataParts;
+            for (var i = 0; i < dataParts.Count; i++)
             {
-                var data = section.DataParts[i];
+                var data = dataParts[i];
                 if (data.Position != sectionPosition)
                 {
                     var sectionData = new PESectionStreamData()
@@ -281,7 +276,7 @@ partial class PEFile
                     imageReader.Position = sectionPosition;
                     sectionData.Stream = imageReader.ReadAsStream(size);
 
-                    section.InsertData(i, sectionData);
+                    dataParts.Insert(i, sectionData);
                     sectionPosition = data.Position;
                     i++;
                 }
@@ -299,7 +294,7 @@ partial class PEFile
                 imageReader.Position = sectionPosition;
                 sectionData.Stream = imageReader.ReadAsStream(size);
 
-                section.AddData(sectionData);
+                dataParts.Add(sectionData);
             }
 
             //for (var i = 0; i < section.DataParts.Count; i++)

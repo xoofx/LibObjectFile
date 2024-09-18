@@ -21,13 +21,14 @@ public partial class PEFile : PEObject
 {
     private byte[] _dosStub = [];
     private Stream? _dosStubExtra;
-    private readonly List<PESection> _sections = new();
+    private readonly ObjectList<PESection> _sections;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PEFile"/> class.
     /// </summary>
     public PEFile()
     {
+        _sections = new(this);
         // TODO: Add default initialization
     }
 
@@ -36,6 +37,7 @@ public partial class PEFile : PEObject
     /// </summary>
     internal PEFile(bool unused)
     {
+        _sections = new(this);
     }
 
     /// <summary>
@@ -94,23 +96,17 @@ public partial class PEFile : PEObject
     /// <summary>
     /// Gets the sections.
     /// </summary>
-    public ReadOnlyList<PESection> Sections => _sections;
+    public ObjectList<PESection> Sections => _sections;
     
     public PESection AddSection(PESectionName name, uint virtualAddress, uint virtualSize)
     {
-        var section = new PESection(this, name)
+        var section = new PESection(name, virtualAddress, virtualSize)
         {
-            VirtualAddress = virtualAddress,
-            VirtualSize = virtualSize,
             Characteristics = PESection.GetDefaultSectionCharacteristics(name)
         };
         _sections.Add(section);
         return section;
     }
-
-    public void RemoveSectionAt(int index) => _sections.RemoveAt(index);
-
-    public void RemoveSection(PESection section) => _sections.Remove(section);
     
     public bool TryFindSection(RVA virtualAddress, [NotNullWhen(true)] out PESection? section)
         => TryFindSection(virtualAddress, 0, out section);
@@ -118,7 +114,7 @@ public partial class PEFile : PEObject
     public bool TryFindSection(RVA virtualAddress, uint virtualSize, [NotNullWhen(true)] out PESection? section)
     {
         nint low = 0;
-        var sections = CollectionsMarshal.AsSpan(_sections);
+        var sections = CollectionsMarshal.AsSpan(_sections.UnsafeList);
         nint high = sections.Length - 1;
         ref var firstSection = ref MemoryMarshal.GetReference(sections);
 
@@ -180,7 +176,7 @@ public partial class PEFile : PEObject
     public bool TryGetSection(PESectionName name, [NotNullWhen(true)] out PESection? section)
     {
         ArgumentNullException.ThrowIfNull(name);
-        var sections = CollectionsMarshal.AsSpan(_sections);
+        var sections = CollectionsMarshal.AsSpan(_sections.UnsafeList);
         foreach (var trySection in sections)
         {
             if (trySection.Name == name)
