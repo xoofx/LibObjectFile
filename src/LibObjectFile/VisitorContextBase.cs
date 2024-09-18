@@ -3,6 +3,7 @@
 // See the license.txt file in the project root for more information.
 
 using LibObjectFile;
+using LibObjectFile.Diagnostics;
 
 /// <summary>
 /// Base class used for layout-ing an object file.

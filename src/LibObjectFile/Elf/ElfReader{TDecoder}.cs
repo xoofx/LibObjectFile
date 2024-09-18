@@ -5,7 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using static System.Collections.Specialized.BitVector32;
+using LibObjectFile.Diagnostics;
 
 namespace LibObjectFile.Elf;
 

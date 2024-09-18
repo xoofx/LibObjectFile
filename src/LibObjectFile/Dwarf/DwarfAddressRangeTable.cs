@@ -2,10 +2,9 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
+using LibObjectFile.Diagnostics;
 using LibObjectFile.Utils;
 
 namespace LibObjectFile.Dwarf;
@@ -58,7 +57,7 @@ public class DwarfAddressRangeTable : DwarfRelocatableSection
         var align = (ulong)segment_selector_size + (ulong)AddressSize * 2;
 
         // SPECS 7.21: The first tuple following the header in each set begins at an offset that is a multiple of the size of a single tuple
-        reader.Position = AlignHelper.AlignToUpper(reader.Position, align);
+        reader.Position = AlignHelper.AlignUp(reader.Position, align);
 
         while (true)
         {
@@ -161,7 +160,7 @@ public class DwarfAddressRangeTable : DwarfRelocatableSection
         var align = (ulong)SegmentSelectorSize + (ulong)AddressSize * 2;
 
         // SPECS 7.21: The first tuple following the header in each set begins at an offset that is a multiple of the size of a single tuple
-        sizeOf = AlignHelper.AlignToUpper(sizeOf, align);
+        sizeOf = AlignHelper.AlignUp(sizeOf, align);
 
         // SizeOf ranges + 1 (for last 0 entry)
         sizeOf += ((ulong)Ranges.Count + 1UL) * align;
@@ -202,7 +201,7 @@ public class DwarfAddressRangeTable : DwarfRelocatableSection
         var align = (ulong)SegmentSelectorSize + (ulong)AddressSize * 2;
 
         // SPECS 7.21: The first tuple following the header in each set begins at an offset that is a multiple of the size of a single tuple
-        var nextOffset = AlignHelper.AlignToUpper(writer.Position, align);
+        var nextOffset = AlignHelper.AlignUp(writer.Position, align);
         for (ulong offset = writer.Position; offset < nextOffset; offset++)
         {
             writer.WriteU8(0);

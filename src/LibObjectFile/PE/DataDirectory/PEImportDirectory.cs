@@ -3,10 +3,10 @@
 // See the license.txt file in the project root for more information.
 
 using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using LibObjectFile.Collections;
+using LibObjectFile.Diagnostics;
 using LibObjectFile.PE.Internal;
-using LibObjectFile.Utils;
 
 namespace LibObjectFile.PE;
 

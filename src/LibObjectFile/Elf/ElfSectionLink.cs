@@ -4,6 +4,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using LibObjectFile.Diagnostics;
 
 namespace LibObjectFile.Elf;
 

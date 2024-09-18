@@ -4,6 +4,7 @@
 
 using System;
 using System.Buffers;
+using LibObjectFile.Diagnostics;
 using LibObjectFile.Utils;
 
 namespace LibObjectFile.Elf;
@@ -34,7 +35,7 @@ public sealed class ElfAlignedShadowSection : ElfShadowSection
 
     public override void UpdateLayout(ElfVisitorContext context)
     {
-        var nextSectionOffset = AlignHelper.AlignToUpper(Position, UpperAlignment);
+        var nextSectionOffset = AlignHelper.AlignUp(Position, UpperAlignment);
         Size = nextSectionOffset - Position;
         if (Size >= int.MaxValue)
         {

@@ -8,19 +8,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 
-namespace LibObjectFile.Utils;
+namespace LibObjectFile.IO;
 
-/// <summary>
-/// Internal helper class for throwing exceptions.
-/// </summary>
-internal static class ThrowHelper
-{
-    public static InvalidOperationException InvalidEnum(object v)
-    {
-        return new InvalidOperationException($"Invalid Enum {v.GetType()}.{v}");
-    }
-}
-    
 public static class StreamExtensions
 {
     /// <summary>
@@ -29,7 +18,7 @@ public static class StreamExtensions
     /// <returns><c>true</c> if the string was successfully read from the stream, false otherwise</returns>
     public static string ReadStringUTF8NullTerminated(this Stream stream)
     {
-        if (!TryReadStringUTF8NullTerminated(stream, out var text))
+        if (!stream.TryReadStringUTF8NullTerminated(out var text))
         {
             throw new EndOfStreamException();
         }
@@ -43,7 +32,7 @@ public static class StreamExtensions
     public static bool TryReadStringUTF8NullTerminated(this Stream stream, [NotNullWhen(true)] out string? text)
     {
         text = null;
-        var buffer = ArrayPool<byte>.Shared.Rent((int)128);
+        var buffer = ArrayPool<byte>.Shared.Rent(128);
         int textLength = 0;
         try
         {
@@ -63,7 +52,7 @@ public static class StreamExtensions
 
                 if (textLength > buffer.Length)
                 {
-                    var newBuffer = ArrayPool<byte>.Shared.Rent((int)textLength * 2);
+                    var newBuffer = ArrayPool<byte>.Shared.Rent(textLength * 2);
                     Array.Copy(buffer, 0, newBuffer, 0, buffer.Length);
                     ArrayPool<byte>.Shared.Return(buffer);
                     buffer = newBuffer;

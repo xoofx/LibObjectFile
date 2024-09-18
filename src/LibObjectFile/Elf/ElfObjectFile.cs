@@ -5,9 +5,10 @@
 using System;
 using System.Buffers;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using LibObjectFile.Collections;
+using LibObjectFile.Diagnostics;
 using LibObjectFile.Utils;
 
 namespace LibObjectFile.Elf;
@@ -256,7 +257,7 @@ public sealed class ElfObjectFile : ElfObjectBase
                 }
 
                 var align = section.Alignment == 0 ? 1 : section.Alignment;
-                offset = AlignHelper.AlignToUpper(offset, align);
+                offset = AlignHelper.AlignUp(offset, align);
                 section.Position = offset;
 
                 if (section is ElfProgramHeaderTable programHeaderTable)
@@ -309,7 +310,7 @@ public sealed class ElfObjectFile : ElfObjectBase
             }
 
             // The Section Header Table will be put just after all the sections
-            Layout.OffsetOfSectionHeaderTable = AlignHelper.AlignToUpper(offset, FileClass == ElfFileClass.Is32 ? 4u : 8u);
+            Layout.OffsetOfSectionHeaderTable = AlignHelper.AlignUp(offset, FileClass == ElfFileClass.Is32 ? 4u : 8u);
 
             Layout.TotalSize = Layout.OffsetOfSectionHeaderTable + (ulong)VisibleSectionCount * Layout.SizeOfSectionHeaderEntry;
         }

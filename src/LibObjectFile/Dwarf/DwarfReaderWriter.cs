@@ -3,7 +3,7 @@
 // See the license.txt file in the project root for more information.
 
 using System;
-using System.IO;
+using LibObjectFile.Diagnostics;
 
 namespace LibObjectFile.Dwarf;
 

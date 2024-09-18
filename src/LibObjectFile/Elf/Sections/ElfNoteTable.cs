@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using LibObjectFile.Diagnostics;
 using LibObjectFile.Utils;
 
 namespace LibObjectFile.Elf;
@@ -47,10 +48,10 @@ public sealed class ElfNoteTable : ElfSection
         {
             var name = elfNote.GetName();
             size += (ulong)Encoding.UTF8.GetByteCount(name) + 1;
-            size = AlignHelper.AlignToUpper(size, 4);
+            size = AlignHelper.AlignUp(size, 4);
 
             size += (ulong)elfNote.GetDescriptorSize();
-            size = AlignHelper.AlignToUpper(size, 4);
+            size = AlignHelper.AlignUp(size, 4);
 
             size += entrySize;
         }

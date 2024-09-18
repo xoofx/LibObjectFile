@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using LibObjectFile.Diagnostics;
 
 namespace LibObjectFile.Dwarf;
 

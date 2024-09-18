@@ -6,6 +6,7 @@ using System;
 using System.Buffers;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using LibObjectFile.Diagnostics;
 using LibObjectFile.PE.Internal;
 
 namespace LibObjectFile.PE;

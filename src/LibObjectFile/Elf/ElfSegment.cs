@@ -2,9 +2,9 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
-using System;
+using System.Numerics;
 using System.Text;
-using LibObjectFile.Utils;
+using LibObjectFile.Diagnostics;
 
 namespace LibObjectFile.Elf;
 
@@ -70,7 +70,7 @@ public sealed class ElfSegment : ElfObject
 
             // TODO: Add checks that Alignment is Power Of 2
             var alignment = Alignment == 0 ? Alignment = 1 : Alignment;
-            if (!AlignHelper.IsPowerOfTwo(alignment))
+            if (!BitOperations.IsPow2(alignment))
             {
                 diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentAlignmentForLoad, $"Invalid segment alignment requirements: Alignment = {alignment} must be a power of 2");
             }

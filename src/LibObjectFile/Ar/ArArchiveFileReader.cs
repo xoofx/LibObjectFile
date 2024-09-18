@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
+using LibObjectFile.Diagnostics;
 using LibObjectFile.Elf;
 
 namespace LibObjectFile.Ar;

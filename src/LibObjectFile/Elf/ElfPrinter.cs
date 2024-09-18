@@ -3,10 +3,8 @@
 // See the license.txt file in the project root for more information.
 
 using System;
-using System.Buffers;
 using System.IO;
 using System.Text;
-using System.Xml;
 
 namespace LibObjectFile.Elf;
 

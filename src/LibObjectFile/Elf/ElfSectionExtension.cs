@@ -3,7 +3,6 @@
 // See the license.txt file in the project root for more information.
 
 using System;
-using LibObjectFile.Utils;
 
 namespace LibObjectFile.Elf;
 
@@ -146,7 +145,7 @@ public static class ElfSectionExtension
                 section.Flags = ElfSectionFlags.Alloc | ElfSectionFlags.Executable;
                 break;
             default:
-                throw ThrowHelper.InvalidEnum(sectionSpecialType);
+                throw new InvalidOperationException($"Invalid Enum {sectionSpecialType.GetType()}.{sectionSpecialType}");
         }
         return section;
     }

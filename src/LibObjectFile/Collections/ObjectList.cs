@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-namespace LibObjectFile.Utils;
+namespace LibObjectFile.Collections;
 
 /// <summary>
 /// A list of objects that are attached to a parent object.
@@ -29,7 +29,7 @@ public readonly struct ObjectList<TObject> : IList<TObject>
     /// Initializes a new instance of the <see cref="ObjectList{TObject}"/> class.
     /// </summary>
     /// <param name="parent">The parent object file node.</param>
-    public ObjectList(ObjectFileElement parent, Action<ObjectFileElement, TObject>? added = null, Action<ObjectFileElement, TObject>? removing = null, Action<ObjectFileElement, int, TObject>? removed = null,  Action<ObjectFileElement, int, TObject, TObject>? updated = null)
+    public ObjectList(ObjectFileElement parent, Action<ObjectFileElement, TObject>? added = null, Action<ObjectFileElement, TObject>? removing = null, Action<ObjectFileElement, int, TObject>? removed = null, Action<ObjectFileElement, int, TObject, TObject>? updated = null)
     {
         ArgumentNullException.ThrowIfNull(parent);
         _items = new InternalList(parent, added, removing, removed, updated);
@@ -81,7 +81,7 @@ public readonly struct ObjectList<TObject> : IList<TObject>
 
         item.Parent = null;
         item.ResetIndex();
-        
+
         return items.Remove(item);
     }
 
@@ -91,7 +91,7 @@ public readonly struct ObjectList<TObject> : IList<TObject>
     {
         var items = _items;
         items.Insert(index, CheckAdd(item));
-        
+
         for (int i = index; i < items.Count; i++)
         {
             items[i].Index = i;
@@ -106,7 +106,7 @@ public readonly struct ObjectList<TObject> : IList<TObject>
         var item = items[index];
         item.Parent = null;
         item.Index = 0;
-        
+
         items.RemoveAt(index);
 
         for (int i = index; i < items.Count; i++)
@@ -147,7 +147,7 @@ public readonly struct ObjectList<TObject> : IList<TObject>
     {
         return ((IEnumerable)_items).GetEnumerator();
     }
-    
+
     public TObject CheckAdd(TObject item)
     {
         ArgumentNullException.ThrowIfNull(item);
@@ -158,13 +158,14 @@ public readonly struct ObjectList<TObject> : IList<TObject>
         item.Parent = _items.Parent;
         return item;
     }
-    
+
     private sealed class InternalList(ObjectFileElement parent, Action<ObjectFileElement, TObject>? added, Action<ObjectFileElement, TObject>? removing, Action<ObjectFileElement, int, TObject>? removed, Action<ObjectFileElement, int, TObject, TObject>? updated) : List<TObject>
     {
         private readonly Action<ObjectFileElement, TObject>? _added = added;
         private readonly Action<ObjectFileElement, TObject>? _removing = removing;
         private readonly Action<ObjectFileElement, int, TObject>? _removed = removed;
         private readonly Action<ObjectFileElement, int, TObject, TObject>? _updated = updated;
+
         public readonly ObjectFileElement Parent = parent;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -172,10 +173,10 @@ public readonly struct ObjectList<TObject> : IList<TObject>
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Removing(TObject item) => _removing?.Invoke(Parent, item);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Updated(int index, TObject previousItem, TObject newItem) => _updated?.Invoke(Parent, index, previousItem, newItem);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Removed(int index, TObject removedItem) => _removed?.Invoke(Parent, index, removedItem);
     }
@@ -186,8 +187,8 @@ public readonly struct ObjectList<TObject> : IList<TObject>
 
         public ObjectListDebuggerView(ObjectList<TObject> collection)
         {
-            ArgumentNullException.ThrowIfNull((object)collection, nameof(collection));
-            this._collection = collection.UnsafeList;
+            ArgumentNullException.ThrowIfNull(collection, nameof(collection));
+            _collection = collection.UnsafeList;
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
@@ -195,7 +196,7 @@ public readonly struct ObjectList<TObject> : IList<TObject>
         {
             get
             {
-                var array = new TObject[this._collection.Count];
+                var array = new TObject[_collection.Count];
                 _collection.CopyTo(array, 0);
                 return array;
             }

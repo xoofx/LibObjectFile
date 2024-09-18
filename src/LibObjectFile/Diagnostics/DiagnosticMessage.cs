@@ -2,7 +2,7 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
-namespace LibObjectFile;
+namespace LibObjectFile.Diagnostics;
 
 /// <summary>
 /// A diagnostic message.
@@ -44,7 +44,7 @@ public readonly struct DiagnosticMessage
     /// Gets the associated text of this message.
     /// </summary>
     public string Message { get; }
-        
+
     public override string ToString()
     {
         return $"{Kind} LB{(uint)Id:0000}: {Message}";

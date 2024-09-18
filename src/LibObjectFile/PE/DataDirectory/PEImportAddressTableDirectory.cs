@@ -3,7 +3,7 @@
 // See the license.txt file in the project root for more information.
 
 using System;
-using LibObjectFile.Utils;
+using LibObjectFile.Collections;
 
 namespace LibObjectFile.PE;
 

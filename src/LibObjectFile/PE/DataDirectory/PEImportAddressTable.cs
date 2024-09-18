@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using LibObjectFile.Diagnostics;
 
 namespace LibObjectFile.PE;
 

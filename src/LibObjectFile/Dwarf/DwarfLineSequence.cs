@@ -5,7 +5,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using LibObjectFile.Utils;
+using LibObjectFile.Collections;
 
 namespace LibObjectFile.Dwarf;
 

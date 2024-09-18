@@ -7,7 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace LibObjectFile.Utils;
+namespace LibObjectFile.Collections;
 
 /// <summary>
 /// A lightweight read-only wrapper around a List&lt;T> that avoids the cost of interface dispatch from IReadOnlyList&lt;T>.
@@ -48,15 +48,15 @@ public readonly struct ReadOnlyList<T> : IReadOnlyList<T>
     /// </summary>
     /// <param name="items">The list to convert.</param>
     public static implicit operator ReadOnlyList<T>(List<T> items) => new(items);
-    
+
     internal sealed class ReadOnlyListView
     {
         private readonly List<T> _collection;
 
         public ReadOnlyListView(List<T> collection)
         {
-            ArgumentNullException.ThrowIfNull((object)collection, nameof(collection));
-            this._collection = collection;
+            ArgumentNullException.ThrowIfNull(collection, nameof(collection));
+            _collection = collection;
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
@@ -64,8 +64,8 @@ public readonly struct ReadOnlyList<T> : IReadOnlyList<T>
         {
             get
             {
-                T[] array = new T[this._collection.Count];
-                this._collection.CopyTo(array, 0);
+                T[] array = new T[_collection.Count];
+                _collection.CopyTo(array, 0);
                 return array;
             }
         }

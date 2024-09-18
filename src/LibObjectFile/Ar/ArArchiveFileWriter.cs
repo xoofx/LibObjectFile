@@ -7,6 +7,7 @@ using System.Buffers;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using LibObjectFile.Diagnostics;
 
 namespace LibObjectFile.Ar;
 

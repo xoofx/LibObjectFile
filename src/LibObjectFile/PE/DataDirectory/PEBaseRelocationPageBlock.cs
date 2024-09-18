@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
-using static System.Reflection.Metadata.BlobBuilder;
 
 namespace LibObjectFile.PE;
 

@@ -5,6 +5,7 @@
 using System;
 using System.Diagnostics;
 using System.Text;
+using LibObjectFile.Diagnostics;
 
 namespace LibObjectFile.Elf;
 

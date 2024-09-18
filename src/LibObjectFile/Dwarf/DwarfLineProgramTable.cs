@@ -5,9 +5,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Text;
-using LibObjectFile.Utils;
+using LibObjectFile.Collections;
+using LibObjectFile.Diagnostics;
 
 namespace LibObjectFile.Dwarf;
 

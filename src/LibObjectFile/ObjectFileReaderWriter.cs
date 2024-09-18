@@ -4,11 +4,10 @@
 
 using System;
 using System.Buffers;
-using System.Buffers.Binary;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Text;
-using LibObjectFile.Utils;
+using LibObjectFile.Diagnostics;
+using LibObjectFile.IO;
 
 namespace LibObjectFile;
 

@@ -5,8 +5,8 @@
 using System;
 using System.IO;
 using System.Text;
+using LibObjectFile.Diagnostics;
 using LibObjectFile.Elf;
-using NUnit.Framework;
 
 namespace LibObjectFile.Tests.Elf;
 

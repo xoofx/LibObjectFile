@@ -6,9 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
-using LibObjectFile.Utils;
+using LibObjectFile.Collections;
 
-namespace LibObjectFile;
+namespace LibObjectFile.Diagnostics;
 
 /// <summary>
 /// A container for <see cref="DiagnosticMessage"/> used for error reporting while reading/writing object files.
@@ -54,7 +54,7 @@ public class DiagnosticBag
             diagnostics.Log(diagnosticMessage);
         }
     }
-        
+
     /// <summary>
     /// Logs the specified <see cref="DiagnosticMessage"/>.
     /// </summary>

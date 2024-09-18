@@ -8,7 +8,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LibObjectFile.Utils;
+namespace LibObjectFile.IO;
 
 /// <summary>
 /// Defines a stream as a slice of another existing stream.
@@ -78,10 +78,10 @@ public class SubStream : Stream
         _localPosition += read;
         return read;
     }
-        
+
     private void ThrowIfDisposed()
     {
-        ObjectDisposedException.ThrowIf(_baseStream == Stream.Null, this);
+        ObjectDisposedException.ThrowIf(_baseStream == Null, this);
     }
 
     public override long Length
@@ -158,7 +158,7 @@ public class SubStream : Stream
         base.Dispose(disposing);
         if (disposing)
         {
-            if (_baseStream != Stream.Null)
+            if (_baseStream != Null)
             {
                 try
                 {
@@ -168,7 +168,7 @@ public class SubStream : Stream
                 {
                     // ignored
                 }
-                _baseStream = Stream.Null;
+                _baseStream = Null;
             }
         }
     }
@@ -192,7 +192,7 @@ public class SubStream : Stream
             ThrowCannotWriteOutside();
         }
     }
-        
+
     public override void WriteByte(byte value)
     {
         ThrowIfDisposed();

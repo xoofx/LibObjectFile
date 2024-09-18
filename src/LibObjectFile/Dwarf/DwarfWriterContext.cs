@@ -3,7 +3,6 @@
 // See the license.txt file in the project root for more information.
 
 using System;
-using LibObjectFile.Elf;
 
 namespace LibObjectFile.Dwarf;
 

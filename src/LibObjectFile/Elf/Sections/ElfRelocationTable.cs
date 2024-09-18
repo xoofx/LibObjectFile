@@ -4,7 +4,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
+using LibObjectFile.Diagnostics;
 
 namespace LibObjectFile.Elf;
 

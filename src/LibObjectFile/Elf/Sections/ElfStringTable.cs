@@ -7,8 +7,8 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
 using System.Linq;
+using System.Text;
 
 namespace LibObjectFile.Elf;
 

@@ -4,6 +4,7 @@
 
 using System;
 using System.Text;
+using LibObjectFile.Diagnostics;
 
 namespace LibObjectFile.Ar;
 

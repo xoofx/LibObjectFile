@@ -3,16 +3,13 @@
 // See the license.txt file in the project root for more information.
 
 using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using System.Reflection;
 using System.Reflection.PortableExecutable;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
-using LibObjectFile.Utils;
+using LibObjectFile.Collections;
 
 namespace LibObjectFile.PE;
 
