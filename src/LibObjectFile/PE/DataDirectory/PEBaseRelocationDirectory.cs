@@ -19,7 +19,7 @@ public sealed class PEBaseRelocationDirectory : PEDirectory
     
     public List<PEBaseRelocationPageBlock> Blocks { get; } = new();
 
-    public override void UpdateLayout(DiagnosticBag diagnostics)
+    public override void UpdateLayout(PEVisitorContext context)
     {
         var size = 0UL;
         foreach (var block in Blocks)
@@ -29,7 +29,7 @@ public sealed class PEBaseRelocationDirectory : PEDirectory
         Size = size;
     }
 
-    protected override unsafe void Read(PEImageReader reader)
+    public override unsafe void Read(PEImageReader reader)
     {
         reader.Position = Position;
         var size = (int)Size;
@@ -45,7 +45,7 @@ public sealed class PEBaseRelocationDirectory : PEDirectory
                 return;
             }
 
-            var allSectionData = reader.PEFile.GetAllSectionData();
+            var allSectionData = reader.File.GetAllSectionData();
 
             int blockIndex = 0;
             while (span.Length > 0)
@@ -53,7 +53,7 @@ public sealed class PEBaseRelocationDirectory : PEDirectory
                 var location = MemoryMarshal.Read<ImageBaseRelocation>(span);
                 span = span.Slice(sizeof(ImageBaseRelocation));
 
-                if (!reader.PEFile.TryFindSection(location.PageVirtualAddress, out var section))
+                if (!reader.File.TryFindSection(location.PageVirtualAddress, out var section))
                 {
                     reader.Diagnostics.Error(DiagnosticId.PE_ERR_BaseRelocationDirectoryInvalidVirtualAddress, $"Unable to find the section containing the virtual address {location.PageVirtualAddress} in block #{blockIndex}");
                     continue;
@@ -137,7 +137,7 @@ public sealed class PEBaseRelocationDirectory : PEDirectory
         return false;
     }
 
-    protected override void Write(PEImageWriter writer)
+    public override void Write(PEImageWriter writer)
     {
         throw new NotImplementedException();
     }

@@ -22,7 +22,7 @@ internal readonly struct PEImportFunctionTable()
 
     public void Read(PEImageReader reader, ulong position)
     {
-        var peFile = reader.PEFile;
+        var peFile = reader.File;
         reader.Position = position;
 
         if (peFile.IsPE32)

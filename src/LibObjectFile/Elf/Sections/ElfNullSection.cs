@@ -4,42 +4,30 @@
 
 using System;
 
-namespace LibObjectFile.Elf
+namespace LibObjectFile.Elf;
+
+/// <summary>
+/// A null section with the type <see cref="ElfSectionType.Null"/>.
+/// </summary>
+public sealed class ElfNullSection : ElfSection
 {
-    /// <summary>
-    /// A null section with the type <see cref="ElfSectionType.Null"/>.
-    /// </summary>
-    public sealed class ElfNullSection : ElfSection
+    public override void Verify(ElfVisitorContext context)
     {
-        public override void Verify(DiagnosticBag diagnostics)
+        if (Type != ElfSectionType.Null ||
+            Flags != ElfSectionFlags.None ||
+            !Name.IsEmpty ||
+            VirtualAddress != 0 ||
+            Alignment != 0 ||
+            !Link.IsEmpty ||
+            !Info.IsEmpty ||
+            Position != 0 ||
+            Size != 0)
         {
-            base.Verify(diagnostics);
+            context.Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidNullSection, "Invalid Null section. This section should not be modified and all properties must be null");
+        }
+    }
 
-            if (Type != ElfSectionType.Null ||
-                Flags != ElfSectionFlags.None ||
-                !Name.IsEmpty ||
-                VirtualAddress != 0 ||
-                Alignment != 0 ||
-                !Link.IsEmpty ||
-                !Info.IsEmpty ||
-                Position != 0 ||
-                Size != 0)
-            {
-                diagnostics.Error(DiagnosticId.ELF_ERR_InvalidNullSection, "Invalid Null section. This section should not be modified and all properties must be null");
-            }
-        }
-
-        public override void UpdateLayout(DiagnosticBag diagnostics)
-        {
-            if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
-        }
-        
-        protected override void Read(ElfReader reader)
-        {
-        }
-
-        protected override void Write(ElfWriter writer)
-        {
-        }
+    public override void UpdateLayout(ElfVisitorContext context)
+    {
     }
 }

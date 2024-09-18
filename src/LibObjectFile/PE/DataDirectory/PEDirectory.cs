@@ -45,7 +45,7 @@ public abstract class PEDirectory : PESectionData
         };
     }
 
-    protected override void ValidateParent(ObjectFileNodeBase parent)
+    protected override void ValidateParent(ObjectFileElement parent)
     {
         if (parent is not PESection)
         {
@@ -60,17 +60,17 @@ public sealed class PEExportDirectory : PEDirectory
     {
     }
 
-    public override void UpdateLayout(DiagnosticBag diagnostics)
+    public override void UpdateLayout(PEVisitorContext context)
     {
         throw new NotImplementedException();
     }
 
-    protected override void Read(PEImageReader reader)
+    public override void Read(PEImageReader reader)
     {
         throw new NotImplementedException();
     }
 
-    protected override void Write(PEImageWriter writer)
+    public override void Write(PEImageWriter writer)
     {
         throw new NotImplementedException();
     }
@@ -81,18 +81,18 @@ public sealed class PEResourceDirectory : PEDirectory
     public PEResourceDirectory() : base(ImageDataDirectoryKind.Resource)
     {
     }
-    
-    public override void UpdateLayout(DiagnosticBag diagnostics)
+
+    public override void UpdateLayout(PEVisitorContext context)
     {
         throw new NotImplementedException();
     }
 
-    protected override void Read(PEImageReader reader)
+    public override void Read(PEImageReader reader)
     {
         throw new NotImplementedException();
     }
 
-    protected override void Write(PEImageWriter writer)
+    public override void Write(PEImageWriter writer)
     {
         throw new NotImplementedException();
     }
@@ -103,18 +103,18 @@ public sealed class PEExceptionDirectory : PEDirectory
     public PEExceptionDirectory() : base(ImageDataDirectoryKind.Exception)
     {
     }
-    
-    public override void UpdateLayout(DiagnosticBag diagnostics)
+
+    public override void UpdateLayout(PEVisitorContext context)
     {
         throw new NotImplementedException();
     }
 
-    protected override void Read(PEImageReader reader)
+    public override void Read(PEImageReader reader)
     {
         throw new NotImplementedException();
     }
 
-    protected override void Write(PEImageWriter writer)
+    public override void Write(PEImageWriter writer)
     {
         throw new NotImplementedException();
     }
@@ -125,18 +125,18 @@ public sealed class PEDebugDirectory : PEDirectory
     public PEDebugDirectory() : base(ImageDataDirectoryKind.Debug)
     {
     }
-    
-    public override void UpdateLayout(DiagnosticBag diagnostics)
+
+    public override void UpdateLayout(PEVisitorContext context)
     {
         throw new NotImplementedException();
     }
 
-    protected override void Read(PEImageReader reader)
+    public override void Read(PEImageReader reader)
     {
         throw new NotImplementedException();
     }
 
-    protected override void Write(PEImageWriter writer)
+    public override void Write(PEImageWriter writer)
     {
         throw new NotImplementedException();
     }
@@ -147,18 +147,18 @@ public sealed class PELoadConfigDirectory : PEDirectory
     public PELoadConfigDirectory() : base(ImageDataDirectoryKind.LoadConfig)
     {
     }
-    
-    public override void UpdateLayout(DiagnosticBag diagnostics)
+
+    public override void UpdateLayout(PEVisitorContext context)
     {
         throw new NotImplementedException();
     }
 
-    protected override void Read(PEImageReader reader)
+    public override void Read(PEImageReader reader)
     {
         throw new NotImplementedException();
     }
 
-    protected override void Write(PEImageWriter writer)
+    public override void Write(PEImageWriter writer)
     {
         throw new NotImplementedException();
     }
@@ -170,17 +170,17 @@ public sealed class PEBoundImportDirectory : PEDirectory
     {
     }
 
-    public override void UpdateLayout(DiagnosticBag diagnostics)
+    public override void UpdateLayout(PEVisitorContext context)
     {
         throw new NotImplementedException();
     }
 
-    protected override void Read(PEImageReader reader)
+    public override void Read(PEImageReader reader)
     {
         throw new NotImplementedException();
     }
 
-    protected override void Write(PEImageWriter writer)
+    public override void Write(PEImageWriter writer)
     {
         throw new NotImplementedException();
     }
@@ -192,17 +192,17 @@ public sealed class PETlsDirectory : PEDirectory
     {
     }
 
-    public override void UpdateLayout(DiagnosticBag diagnostics)
+    public override void UpdateLayout(PEVisitorContext context)
     {
         throw new NotImplementedException();
     }
 
-    protected override void Read(PEImageReader reader)
+    public override void Read(PEImageReader reader)
     {
         throw new NotImplementedException();
     }
 
-    protected override void Write(PEImageWriter writer)
+    public override void Write(PEImageWriter writer)
     {
         throw new NotImplementedException();
     }
@@ -213,18 +213,18 @@ public sealed class PEDelayImportDirectory : PEDirectory
     public PEDelayImportDirectory() : base(ImageDataDirectoryKind.DelayImport)
     {
     }
-    
-    public override void UpdateLayout(DiagnosticBag diagnostics)
+
+    public override void UpdateLayout(PEVisitorContext context)
     {
         throw new NotImplementedException();
     }
 
-    protected override void Read(PEImageReader reader)
+    public override void Read(PEImageReader reader)
     {
         throw new NotImplementedException();
     }
 
-    protected override void Write(PEImageWriter writer)
+    public override void Write(PEImageWriter writer)
     {
         throw new NotImplementedException();
     }
@@ -236,17 +236,17 @@ public sealed class PEClrMetadata : PEDirectory
     {
     }
 
-    public override void UpdateLayout(DiagnosticBag diagnostics)
+    public override void UpdateLayout(PEVisitorContext context)
     {
         throw new NotImplementedException();
     }
 
-    protected override void Read(PEImageReader reader)
+    public override void Read(PEImageReader reader)
     {
         throw new NotImplementedException();
     }
 
-    protected override void Write(PEImageWriter writer)
+    public override void Write(PEImageWriter writer)
     {
         throw new NotImplementedException();
     }
@@ -257,17 +257,18 @@ public sealed class PEArchitectureDirectory : PEDirectory
     public PEArchitectureDirectory() : base(ImageDataDirectoryKind.Architecture)
     {
     }
-    public override void UpdateLayout(DiagnosticBag diagnostics)
+
+    public override void UpdateLayout(PEVisitorContext context)
     {
         throw new NotImplementedException();
     }
 
-    protected override void Read(PEImageReader reader)
+    public override void Read(PEImageReader reader)
     {
         throw new NotImplementedException();
     }
 
-    protected override void Write(PEImageWriter writer)
+    public override void Write(PEImageWriter writer)
     {
         throw new NotImplementedException();
     }
@@ -279,17 +280,17 @@ public sealed class PEGlobalPointerDirectory : PEDirectory
     {
     }
 
-    public override void UpdateLayout(DiagnosticBag diagnostics)
+    public override void UpdateLayout(PEVisitorContext context)
     {
         throw new NotImplementedException();
     }
 
-    protected override void Read(PEImageReader reader)
+    public override void Read(PEImageReader reader)
     {
         throw new NotImplementedException();
     }
 
-    protected override void Write(PEImageWriter writer)
+    public override void Write(PEImageWriter writer)
     {
         throw new NotImplementedException();
     }
@@ -301,17 +302,17 @@ public sealed class PESecurityDirectory : PEDirectory
     {
     }
 
-    public override void UpdateLayout(DiagnosticBag diagnostics)
+    public override void UpdateLayout(PEVisitorContext context)
     {
         throw new NotImplementedException();
     }
 
-    protected override void Read(PEImageReader reader)
+    public override void Read(PEImageReader reader)
     {
         throw new NotImplementedException();
     }
 
-    protected override void Write(PEImageWriter writer)
+    public override void Write(PEImageWriter writer)
     {
         throw new NotImplementedException();
     }

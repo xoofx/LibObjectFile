@@ -4,47 +4,46 @@
 
 using System;
 
-namespace LibObjectFile.Dwarf
+namespace LibObjectFile.Dwarf;
+
+[Flags]
+public enum DwarfAttributeEncoding
 {
-    [Flags]
-    public enum DwarfAttributeEncoding
-    {
-        None,
+    None,
 
-        Address = 1,
+    Address = 1,
 
-        Block = 1 << 1,
+    Block = 1 << 1,
 
-        Constant = 1 << 2,
+    Constant = 1 << 2,
 
-        ExpressionLocation = 1 << 3,
+    ExpressionLocation = 1 << 3,
 
-        Flag = 1 << 4,
+    Flag = 1 << 4,
 
-        LinePointer = 1 << 5,
+    LinePointer = 1 << 5,
 
-        LocationListPointer = 1 << 6,
+    LocationListPointer = 1 << 6,
 
-        MacroPointer = 1 << 7,
+    MacroPointer = 1 << 7,
 
-        RangeListPointer = 1 << 8,
+    RangeListPointer = 1 << 8,
 
-        Reference = 1 << 9,
+    Reference = 1 << 9,
 
-        String = 1 << 10,
+    String = 1 << 10,
 
-        RangeList = 1 << 11,
+    RangeList = 1 << 11,
 
-        Indirect = 1 << 12,
+    Indirect = 1 << 12,
 
-        LocationList = 1 << 13,
+    LocationList = 1 << 13,
 
-        AddressPointer = 1 << 14,
+    AddressPointer = 1 << 14,
 
-        LocationListsPointer = 1 << 15,
+    LocationListsPointer = 1 << 15,
 
-        RangeListsPointer = 1 << 16,
+    RangeListsPointer = 1 << 16,
 
-        StringOffsetPointer = 1 << 17,
-    }
+    StringOffsetPointer = 1 << 17,
 }

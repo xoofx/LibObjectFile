@@ -52,7 +52,7 @@ partial class PEFile
         return !reader.Diagnostics.HasErrors;
     }
 
-    protected override void Read(PEImageReader reader)
+    public override void Read(PEImageReader reader)
     {
         Debug.Assert(Unsafe.SizeOf<ImageDosHeader>() == 64);
 
@@ -306,6 +306,6 @@ partial class PEFile
 
         // Read directories
         // TODO: Read all directories
-        Directories.BaseRelocation?.ReadInternal(imageReader);
+        Directories.BaseRelocation?.Read(imageReader);
     }
 }

@@ -2,22 +2,22 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
-using System;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
+using System;
+using System.Text;
 
 namespace LibObjectFile;
 
-public abstract class ObjectFileNodeBase
+public abstract class ObjectFileElement
 {
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObjectFileNodeBase? _parent;
+    private ObjectFileElement? _parent;
 
-    protected ObjectFileNodeBase()
+    protected ObjectFileElement()
     {
         Index = -1;
     }
-    
+
     /// <summary>
     /// Gets or sets the position of this element relative to the top level parent.
     /// </summary>
@@ -26,7 +26,7 @@ public abstract class ObjectFileNodeBase
     /// <summary>
     /// Gets the containing parent.
     /// </summary>
-    public ObjectFileNodeBase? Parent
+    public ObjectFileElement? Parent
     {
         get => _parent;
 
@@ -45,7 +45,7 @@ public abstract class ObjectFileNodeBase
         }
     }
 
-    protected virtual void ValidateParent(ObjectFileNodeBase parent)
+    protected virtual void ValidateParent(ObjectFileElement parent)
     {
     }
 
@@ -77,35 +77,38 @@ public abstract class ObjectFileNodeBase
     /// <summary>
     /// Checks this instance contains either the beginning or the end of the specified section or segment.
     /// </summary>
-    /// <param name="node">The specified section or segment.</param>
+    /// <param name="element">The specified section or segment.</param>
     /// <returns><c>true</c> if the either the offset or end of the part is within this segment or section range.</returns>
-    public bool Contains(ObjectFileNodeBase node)
+    public bool Contains(ObjectFileElement element)
     {
-        ArgumentNullException.ThrowIfNull(node);
-        return Contains((ulong)node.Position) || node.Size != 0 && Contains((ulong)(node.Position + node.Size - 1));
+        ArgumentNullException.ThrowIfNull(element);
+        return Contains((ulong)element.Position) || element.Size != 0 && Contains((ulong)(element.Position + element.Size - 1));
+    }
+    
+    public sealed override string ToString()
+    {
+        var builder = new StringBuilder();
+        PrintName(builder);
+        builder.Append(" { ");
+        if (PrintMembers(builder))
+        {
+            builder.Append(' ');
+        }
+        builder.Append('}');
+        return builder.ToString();
     }
 
-    /// <summary>
-    /// Verifies the integrity of this file.
-    /// </summary>
-    /// <returns>The result of the diagnostics</returns>
-    public DiagnosticBag Verify()
+    protected virtual void PrintName(StringBuilder builder)
     {
-        var diagnostics = new DiagnosticBag();
-        Verify(diagnostics);
-        return diagnostics;
+        builder.Append(GetType().Name);
     }
 
-    /// <summary>
-    /// Verifies the integrity of this file.
-    /// </summary>
-    /// <param name="diagnostics">A DiagnosticBag instance to receive the diagnostics.</param>
-    public virtual void Verify(DiagnosticBag diagnostics)
+    protected virtual bool PrintMembers(StringBuilder builder)
     {
-        ArgumentNullException.ThrowIfNull(diagnostics);
+        return false;
     }
 
-    protected static void AssignChild<TParent, T>(TParent parent, T child, out T field) where T : ObjectFileNodeBase where TParent : ObjectFileNodeBase
+    protected static void AssignChild<TParent, T>(TParent parent, T child, out T field) where T : ObjectFileElement where TParent : ObjectFileElement
     {
         if (parent == null) throw new ArgumentNullException(nameof(parent));
         if (child == null) throw new ArgumentNullException(nameof(child));
@@ -118,8 +121,8 @@ public abstract class ObjectFileNodeBase
             child.Parent = parent;
         }
     }
-    
-    protected static void AttachChild<TParent, T>(TParent parent, T child, ref T field) where T : ObjectFileNodeBase where TParent : ObjectFileNodeBase
+
+    protected static void AttachChild<TParent, T>(TParent parent, T child, ref T field) where T : ObjectFileElement where TParent : ObjectFileElement
     {
         if (parent == null) throw new ArgumentNullException(nameof(parent));
         field.Parent = null;
@@ -133,7 +136,7 @@ public abstract class ObjectFileNodeBase
         }
     }
 
-    protected static void AttachNullableChild<TParent, T>(TParent parent, T? child, ref T? field) where T : ObjectFileNodeBase where TParent : ObjectFileNodeBase
+    protected static void AttachNullableChild<TParent, T>(TParent parent, T? child, ref T? field) where T : ObjectFileElement where TParent : ObjectFileElement
     {
         if (parent == null) throw new ArgumentNullException(nameof(parent));
 
@@ -151,4 +154,27 @@ public abstract class ObjectFileNodeBase
         }
     }
 
+}
+
+public abstract class ObjectFileElement<TLayoutContext, TVerifyContext, TReader, TWriter> : ObjectFileElement
+    where TLayoutContext : VisitorContextBase
+    where TVerifyContext : VisitorContextBase
+    where TReader : ObjectFileReaderWriter
+    where TWriter : ObjectFileReaderWriter
+{
+    public virtual void UpdateLayout(TLayoutContext layoutContext)
+    {
+    }
+
+    public virtual void Verify(TVerifyContext diagnostics)
+    {
+    }
+
+    public virtual void Read(TReader reader)
+    {
+    }
+
+    public virtual void Write(TWriter writer)
+    {
+    }
 }

@@ -8,17 +8,12 @@ using LibObjectFile.Elf;
 
 namespace LibObjectFile.Ar;
 
-public abstract class ArObject : ObjectFileNode
+public abstract class ArObjectBase : ObjectFileElement<ArVisitorContext, ArVisitorContext, ArArchiveFileReader, ArArchiveFileWriter>
 {
-    protected override void ValidateParent(ObjectFileNodeBase parent)
-    {
-        if (!(parent is ArArchiveFile))
-        {
-            throw new ArgumentException($"Parent must inherit from type {nameof(ArArchiveFile)}");
-        }
-    }
+}
 
-
+public abstract class ArObject : ArObjectBase
+{
     /// <summary>
     /// Gets the containing <see cref="ElfObjectFile"/>. Might be null if this section or segment
     /// does not belong to an existing <see cref="ElfObjectFile"/>.
@@ -28,5 +23,13 @@ public abstract class ArObject : ObjectFileNode
     {
         get => (ArArchiveFile?)base.Parent;
         internal set => base.Parent = value;
+    }
+
+    protected override void ValidateParent(ObjectFileElement parent)
+    {
+        if (!(parent is ArArchiveFile))
+        {
+            throw new ArgumentException($"Parent must inherit from type {nameof(ArArchiveFile)}");
+        }
     }
 }

@@ -5,35 +5,33 @@
 using System;
 using System.IO;
 
-namespace LibObjectFile.Ar
+namespace LibObjectFile.Ar;
+
+/// <summary>
+/// An binary stream <see cref="ArFile"/>.
+/// </summary>
+public sealed class ArBinaryFile : ArFile
 {
     /// <summary>
-    /// An binary stream <see cref="ArFile"/>.
+    /// Gets or sets the stream associated to this entry.
     /// </summary>
-    public sealed class ArBinaryFile : ArFile
+    public Stream? Stream { get; set; }
+
+    public override void Read(ArArchiveFileReader reader)
     {
-        /// <summary>
-        /// Gets or sets the stream associated to this entry.
-        /// </summary>
-        public Stream? Stream { get; set; }
+        Stream = reader.ReadAsStream(Size);
+    }
 
-        protected override void Read(ArArchiveFileReader reader)
+    public override void Write(ArArchiveFileWriter writer)
+    {
+        if (Stream != null)
         {
-            Stream = reader.ReadAsStream(Size);
+            writer.Write(Stream);
         }
+    }
 
-        protected override void Write(ArArchiveFileWriter writer)
-        {
-            if (Stream != null)
-            {
-                writer.Write(Stream);
-            }
-        }
-
-        public override void UpdateLayout(DiagnosticBag diagnostics)
-        {
-            if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
-            Size = Stream != null ? (ulong) Stream.Length : 0;
-        }
+    public override void UpdateLayout(ArVisitorContext context)
+    {
+        Size = Stream != null ? (ulong) Stream.Length : 0;
     }
 }

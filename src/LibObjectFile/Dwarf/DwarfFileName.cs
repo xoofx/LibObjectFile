@@ -4,31 +4,30 @@
 
 using System.IO;
 
-namespace LibObjectFile.Dwarf
+namespace LibObjectFile.Dwarf;
+
+public sealed class DwarfFileName
 {
-    public sealed class DwarfFileName
+    public DwarfFileName(string name)
     {
-        public DwarfFileName(string name)
-        {
-            Name = name;
-        }
+        Name = name;
+    }
 
-        public string Name { get; }
+    public string Name { get; }
 
-        public string? Directory { get; set; }
+    public string? Directory { get; set; }
         
-        public ulong Time { get; set; }
+    public ulong Time { get; set; }
 
-        public ulong Size { get; set; }
+    public ulong Size { get; set; }
 
-        public override string ToString()
+    public override string ToString()
+    {
+        if (Directory != null)
         {
-            if (Directory != null)
-            {
-                return Directory.Contains(Path.AltDirectorySeparatorChar) ? $"{Directory}{Path.AltDirectorySeparatorChar}{Name}" : $"{Directory}{Path.DirectorySeparatorChar}{Name}";
-            }
-
-            return Name;
+            return Directory.Contains(Path.AltDirectorySeparatorChar) ? $"{Directory}{Path.AltDirectorySeparatorChar}{Name}" : $"{Directory}{Path.DirectorySeparatorChar}{Name}";
         }
+
+        return Name;
     }
 }

@@ -53,16 +53,16 @@ public sealed class PEImportDirectoryEntry : PEObject
             _importLookupTable = value;
         }
     }
-    
-    public override unsafe void UpdateLayout(DiagnosticBag diagnostics)
+
+    public override unsafe void UpdateLayout(PEVisitorContext context)
     {
         Size = (ulong)sizeof(RawImportDirectoryEntry);
 
         // Update the layout of the import lookup table
-        ImportLookupTable.UpdateLayout(diagnostics);
+        ImportLookupTable.UpdateLayout(context);
     }
 
-    protected override void Read(PEImageReader reader) => throw new System.NotSupportedException();
+    public override void Read(PEImageReader reader) => throw new System.NotSupportedException();
 
-    protected override void Write(PEImageWriter writer) => throw new System.NotSupportedException();
+    public override void Write(PEImageWriter writer) => throw new System.NotSupportedException();
 }

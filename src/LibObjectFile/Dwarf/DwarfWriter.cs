@@ -4,42 +4,41 @@
 
 using System;
 
-namespace LibObjectFile.Dwarf
+namespace LibObjectFile.Dwarf;
+
+public sealed class DwarfWriter : DwarfReaderWriter
 {
-    public sealed class DwarfWriter : DwarfReaderWriter
+    internal DwarfWriter(DwarfFile file, bool isLittleEndian, DiagnosticBag diagnostics) : base(file, diagnostics)
     {
-        internal DwarfWriter(DwarfFile file, bool isLittleEndian, DiagnosticBag diagnostics) : base(file, diagnostics)
+        IsLittleEndian = isLittleEndian;
+    }
+
+    public override bool IsReadOnly => false;
+
+    public bool EnableRelocation { get; internal set; }
+
+    public void RecordRelocation(DwarfRelocationTarget target, DwarfAddressSize addressSize, ulong address)
+    {
+        if (CurrentSection is DwarfRelocatableSection relocSection)
         {
-            IsLittleEndian = isLittleEndian;
+
+            relocSection.Relocations.Add(new DwarfRelocation(Position, target, addressSize, address));
+
         }
-
-        public override bool IsReadOnly => false;
-
-        public bool EnableRelocation { get; internal set; }
-
-        public void RecordRelocation(DwarfRelocationTarget target, DwarfAddressSize addressSize, ulong address)
+        else
         {
-            if (CurrentSection is DwarfRelocatableSection relocSection)
-            {
-
-                relocSection.Relocations.Add(new DwarfRelocation(Position, target, addressSize, address));
-
-            }
-            else
-            {
-                throw new InvalidOperationException($"Invalid {nameof(CurrentSection)} in {nameof(DwarfWriter)}. It must be a {nameof(DwarfRelocatableSection)}.");
-            }
+            throw new InvalidOperationException($"Invalid {nameof(CurrentSection)} in {nameof(DwarfWriter)}. It must be a {nameof(DwarfRelocatableSection)}.");
         }
+    }
 
-        public void WriteAddress(DwarfRelocationTarget target, ulong address)
+    public void WriteAddress(DwarfRelocationTarget target, ulong address)
+    {
+        if (EnableRelocation)
         {
-            if (EnableRelocation)
-            {
-                RecordRelocation(target, AddressSize, address);
-                // If the relocation is recorded, we write 0 as an address
-                address = 0;
-            }
-            WriteUInt(address);
+            RecordRelocation(target, AddressSize, address);
+            // If the relocation is recorded, we write 0 as an address
+            address = 0;
         }
+        WriteUInt(address);
     }
 }

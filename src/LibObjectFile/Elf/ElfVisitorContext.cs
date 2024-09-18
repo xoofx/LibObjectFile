@@ -4,10 +4,9 @@
 
 namespace LibObjectFile.Elf;
 
-public abstract class ElfGnuNote : ElfNote
+public class ElfVisitorContext : VisitorContextBase<ElfObjectFile>
 {
-    public override string GetName()
+    internal ElfVisitorContext(ElfObjectFile elfObjectFile, DiagnosticBag diagnostics) : base(elfObjectFile, diagnostics)
     {
-        return "GNU";
     }
 }

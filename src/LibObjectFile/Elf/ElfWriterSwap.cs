@@ -4,15 +4,14 @@
 
 using System.IO;
 
-namespace LibObjectFile.Elf
+namespace LibObjectFile.Elf;
+
+/// <summary>
+/// Internal implementation of <see cref="ElfWriter{TEncoder}"/> with a <see cref="ElfEncoderSwap"/>.
+/// </summary>
+internal sealed class ElfWriterSwap : ElfWriter<ElfEncoderSwap>
 {
-    /// <summary>
-    /// Internal implementation of <see cref="ElfWriter{TEncoder}"/> with a <see cref="ElfEncoderSwap"/>.
-    /// </summary>
-    internal sealed class ElfWriterSwap : ElfWriter<ElfEncoderSwap>
+    public ElfWriterSwap(ElfObjectFile elfObjectFile, Stream stream) : base(elfObjectFile, stream)
     {
-        public ElfWriterSwap(ElfObjectFile elfObjectFile, Stream stream) : base(elfObjectFile, stream)
-        {
-        }
     }
 }

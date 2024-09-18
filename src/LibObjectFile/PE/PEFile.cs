@@ -217,11 +217,9 @@ public partial class PEFile : PEObject
 
         return dataList;
     }
-    
-    public override void UpdateLayout(DiagnosticBag diagnostics)
-    {
 
-        
+    public override void UpdateLayout(PEVisitorContext layoutContext)
+    {
     }
 
     protected override bool PrintMembers(StringBuilder builder)
@@ -252,4 +250,5 @@ public partial class PEFile : PEObject
         builder.Append($"Directories[{Directories.Count}], Sections[{Sections.Count}]");
         return true;
     }
+
 }

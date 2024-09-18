@@ -17,7 +17,7 @@ using static ElfNative;
 /// <summary>
 /// Defines an ELF object file that can be manipulated in memory.
 /// </summary>
-public sealed class ElfObjectFile : ObjectFileNode
+public sealed class ElfObjectFile : ElfObjectBase
 {
     private readonly List<ElfSection> _sections;
     private ElfSectionHeaderStringTable? _sectionHeaderStringTable;
@@ -166,14 +166,27 @@ public sealed class ElfObjectFile : ObjectFileNode
     /// Gets the current calculated layout of this instance (e.g offset of the program header table)
     /// </summary>
     public ElfObjectLayout Layout { get; }
+    
+    public DiagnosticBag Verify()
+    {
+        var diagnostics = new DiagnosticBag();
+        Verify(diagnostics);
+        return diagnostics;
+    }
 
     /// <summary>
     /// Verifies the integrity of this ELF object file.
     /// </summary>
     /// <param name="diagnostics">A DiagnosticBag instance to receive the diagnostics.</param>
-    public override void Verify(DiagnosticBag diagnostics)
+    public void Verify(DiagnosticBag diagnostics)
     {
-        if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
+        var context = new ElfVisitorContext(this, diagnostics);
+        Verify(context);
+    }
+
+    public override void Verify(ElfVisitorContext context)
+    {
+        var diagnostics = context.Diagnostics;
 
         if (FileClass == ElfFileClass.None)
         {
@@ -188,13 +201,13 @@ public sealed class ElfObjectFile : ObjectFileNode
 
         foreach (var segment in Segments)
         {
-            segment.Verify(diagnostics);
+            segment.Verify(context);
         }
 
         // Verify all sections before doing anything else
         foreach (var section in Sections)
         {
-            section.Verify(diagnostics);
+            section.Verify(context);
         }
     }
 
@@ -211,11 +224,13 @@ public sealed class ElfObjectFile : ObjectFileNode
     /// </summary>
     /// <param name="diagnostics">A DiagnosticBag instance to receive the diagnostics.</param>
     /// <returns><c>true</c> if the calculation of the layout is successful. otherwise <c>false</c></returns>
-    public override unsafe void UpdateLayout(DiagnosticBag diagnostics)
+    public unsafe void UpdateLayout(DiagnosticBag diagnostics)
     {
         if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
 
         Size = 0;
+
+        var context = new ElfVisitorContext(this, diagnostics);
             
         ulong offset = FileClass == ElfFileClass.Is32 ? (uint)sizeof(ElfNative.Elf32_Ehdr) : (uint)sizeof(ElfNative.Elf64_Ehdr);
         Layout.SizeOfElfHeader = (ushort)offset;
@@ -280,7 +295,7 @@ public sealed class ElfObjectFile : ObjectFileNode
                     }
                 }
 
-                section.UpdateLayout(diagnostics);
+                section.UpdateLayout(context);
 
                 // Console.WriteLine($"{section.ToString(),-50} Offset: {section.Offset:x4} Size: {section.Size:x4}");
 
@@ -311,7 +326,7 @@ public sealed class ElfObjectFile : ObjectFileNode
             for (int i = 0; i < Segments.Count; i++)
             {
                 var programHeader = Segments[i];
-                programHeader.UpdateLayout(diagnostics);
+                programHeader.UpdateLayout(context);
             }
         }
 
@@ -774,5 +789,9 @@ public sealed class ElfObjectFile : ObjectFileNode
         var delta = left.StreamIndex.CompareTo(right.StreamIndex);
         if (delta != 0) return delta;
         return left.Index.CompareTo(right.Index);
+    }
+
+    public override void UpdateLayout(ElfVisitorContext layoutContext)
+    {
     }
 }

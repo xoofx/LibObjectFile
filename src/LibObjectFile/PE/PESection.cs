@@ -124,24 +124,24 @@ public class PESection : PEObject, IVirtualAddressable
         => virtualAddress >= VirtualAddress && virtualAddress + size <= VirtualAddress + VirtualSize;
 
     /// <inheritdoc />
-    public override void UpdateLayout(DiagnosticBag diagnostics)
+    public override void UpdateLayout(PEVisitorContext context)
     {
         var va = VirtualAddress;
         foreach (var data in DataParts)
         {
             data.VirtualAddress = va;
-            data.UpdateLayout(diagnostics);
+            data.UpdateLayout(context);
             va += (uint)data.Size;
         }
     }
 
-    protected override void Read(PEImageReader reader)
+    public override void Read(PEImageReader reader)
     {
         throw new NotImplementedException();
     }
 
     /// <inheritdoc />
-    protected override void Write(PEImageWriter writer)
+    public override void Write(PEImageWriter writer)
     {
         throw new NotImplementedException();
     }
@@ -191,18 +191,18 @@ public class PESection : PEObject, IVirtualAddressable
         };
     }
     
-    private static void SectionDataAdded(ObjectFileNode parent, PESectionData sectionData)
+    private static void SectionDataAdded(ObjectFileElement parent, PESectionData sectionData)
     {
         var section = (PESection) parent;
         section.UpdateSectionDataVirtualAddress(sectionData.Index);
     }
     
-    private static void SectionDataRemoved(ObjectFileNode parent, int index, PESectionData removedSectionData)
+    private static void SectionDataRemoved(ObjectFileElement parent, int index, PESectionData removedSectionData)
     {
         var section = (PESection) parent;
         section.UpdateSectionDataVirtualAddress(index);
     }
-    private static void SectionDataUpdated(ObjectFileNode parent, int index, PESectionData previousSectionData, PESectionData newSectionData)
+    private static void SectionDataUpdated(ObjectFileElement parent, int index, PESectionData previousSectionData, PESectionData newSectionData)
     {
         var section = (PESection) parent;
         section.UpdateSectionDataVirtualAddress(index);

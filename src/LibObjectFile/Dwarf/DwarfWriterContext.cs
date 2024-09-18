@@ -5,22 +5,21 @@
 using System;
 using LibObjectFile.Elf;
 
-namespace LibObjectFile.Dwarf
+namespace LibObjectFile.Dwarf;
+
+public class DwarfWriterContext : DwarfReaderWriterContext
 {
-    public class DwarfWriterContext : DwarfReaderWriterContext
+    public DwarfWriterContext() : this(new DwarfLayoutConfig())
     {
-        public DwarfWriterContext() : this(new DwarfLayoutConfig())
-        {
-        }
-
-        public DwarfWriterContext(DwarfLayoutConfig layoutConfig)
-        {
-            LayoutConfig = layoutConfig ?? throw new ArgumentNullException(nameof(layoutConfig));
-            EnableRelocation = true;
-        }
-
-        public DwarfLayoutConfig LayoutConfig { get; }
-        
-        public bool EnableRelocation { get; set; }
     }
+
+    public DwarfWriterContext(DwarfLayoutConfig layoutConfig)
+    {
+        LayoutConfig = layoutConfig ?? throw new ArgumentNullException(nameof(layoutConfig));
+        EnableRelocation = true;
+    }
+
+    public DwarfLayoutConfig LayoutConfig { get; }
+        
+    public bool EnableRelocation { get; set; }
 }

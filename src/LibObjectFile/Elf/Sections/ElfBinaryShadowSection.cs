@@ -5,35 +5,32 @@
 using System;
 using System.IO;
 
-namespace LibObjectFile.Elf
+namespace LibObjectFile.Elf;
+
+/// <summary>
+/// Equivalent of <see cref="ElfBinarySection"/> but used for shadow.
+/// </summary>
+public sealed class ElfBinaryShadowSection : ElfShadowSection
 {
-    /// <summary>
-    /// Equivalent of <see cref="ElfBinarySection"/> but used for shadow.
-    /// </summary>
-    public sealed class ElfBinaryShadowSection : ElfShadowSection
+    public ElfBinaryShadowSection()
     {
-        public ElfBinaryShadowSection()
-        {
-        }
+    }
 
-        public Stream? Stream { get; set; }
+    public Stream? Stream { get; set; }
 
-        protected override void Read(ElfReader reader)
-        {
-            Stream = reader.ReadAsStream(Size);
-        }
+    public override void Read(ElfReader reader)
+    {
+        Stream = reader.ReadAsStream(Size);
+    }
 
-        protected override void Write(ElfWriter writer)
-        {
-            if (Stream == null) return;
-            writer.Write(Stream);
-        }
+    public override void Write(ElfWriter writer)
+    {
+        if (Stream == null) return;
+        writer.Write(Stream);
+    }
 
-        public override void UpdateLayout(DiagnosticBag diagnostics)
-        {
-            if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
-
-            Size = Stream != null ? (ulong)Stream.Length : 0;
-        }
+    public override void UpdateLayout(ElfVisitorContext context)
+    {
+        Size = Stream != null ? (ulong)Stream.Length : 0;
     }
 }

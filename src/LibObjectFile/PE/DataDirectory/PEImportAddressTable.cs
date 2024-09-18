@@ -19,28 +19,26 @@ public class PEImportAddressTable : PEObject
     public new PEImportAddressTableDirectory? Parent => (PEImportAddressTableDirectory?)base.Parent;
     
     public List<PEImportFunctionEntry> Entries => FunctionTable.Entries;
-    
-    public override void UpdateLayout(DiagnosticBag diagnostics)
-    {
-        var peFile = Parent?.Parent?.Parent;
-        if (peFile is null)
-        {
-            diagnostics.Error(DiagnosticId.PE_ERR_ImportLookupTableInvalidParent, "The parent of the Import Address Table is null.");
-            return;
-        }
 
-        Size = FunctionTable.CalculateSize(peFile, diagnostics);
+    public override void UpdateLayout(PEVisitorContext context)
+    {
+        UpdateSize(context.File, context.Diagnostics);
     }
 
-    protected override void Read(PEImageReader reader)
+    public override void Read(PEImageReader reader)
     {
         FunctionTable.Read(reader, Position);
-        UpdateLayout(reader.Diagnostics);
+        UpdateSize(reader.File, reader.Diagnostics);
     }
 
-    protected override void Write(PEImageWriter writer) => FunctionTable.Write(writer);
+    private void UpdateSize(PEFile file, DiagnosticBag diagnostics)
+    {
+        Size = FunctionTable.CalculateSize(file, diagnostics);
+    }
 
-    protected override void ValidateParent(ObjectFileNodeBase parent)
+    public override void Write(PEImageWriter writer) => FunctionTable.Write(writer);
+
+    protected override void ValidateParent(ObjectFileElement parent)
     {
         if (parent is not PEImportAddressTableDirectory)
         {

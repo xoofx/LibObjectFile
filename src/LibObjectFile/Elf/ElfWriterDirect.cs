@@ -4,15 +4,14 @@
 
 using System.IO;
 
-namespace LibObjectFile.Elf
+namespace LibObjectFile.Elf;
+
+/// <summary>
+/// Internal implementation of <see cref="ElfWriter{TEncoder}"/> with a <see cref="ElfDecoderDirect"/>.
+/// </summary>
+internal sealed class ElfWriterDirect : ElfWriter<ElfEncoderDirect>
 {
-    /// <summary>
-    /// Internal implementation of <see cref="ElfWriter{TEncoder}"/> with a <see cref="ElfDecoderDirect"/>.
-    /// </summary>
-    internal sealed class ElfWriterDirect : ElfWriter<ElfEncoderDirect>
+    public ElfWriterDirect(ElfObjectFile elfObjectFile, Stream stream) : base(elfObjectFile, stream)
     {
-        public ElfWriterDirect(ElfObjectFile elfObjectFile, Stream stream) : base(elfObjectFile, stream)
-        {
-        }
     }
 }

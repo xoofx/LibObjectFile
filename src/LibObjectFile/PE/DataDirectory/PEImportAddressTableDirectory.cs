@@ -17,19 +17,19 @@ public sealed class PEImportAddressTableDirectory : PEDirectory
     }
 
     public ObjectList<PEImportAddressTable> Tables => _tables;
-    
-    public override void UpdateLayout(DiagnosticBag diagnostics)
+
+    public override void UpdateLayout(PEVisitorContext context)
     {
         ulong size = 0;
         foreach (var table in _tables)
         {
-            table.UpdateLayout(diagnostics);
+            table.UpdateLayout(context);
             size += table.Size;
         }
         Size = size;
     }
 
-    protected override void Read(PEImageReader reader) => throw new NotSupportedException(); // Not called directly for this object, we are calling on tables directly
+    public override void Read(PEImageReader reader) => throw new NotSupportedException(); // Not called directly for this object, we are calling on tables directly
 
-    protected override void Write(PEImageWriter writer) => throw new NotSupportedException(); // Not called directly for this object, we are calling on tables directly
+    public override void Write(PEImageWriter writer) => throw new NotSupportedException(); // Not called directly for this object, we are calling on tables directly
 }

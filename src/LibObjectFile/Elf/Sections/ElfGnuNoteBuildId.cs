@@ -6,53 +6,52 @@ using System.Buffers;
 using System.IO;
 using System.Text;
 
-namespace LibObjectFile.Elf
+namespace LibObjectFile.Elf;
+
+public class ElfGnuNoteBuildId : ElfGnuNote
 {
-    public class ElfGnuNoteBuildId : ElfGnuNote
+    public override ElfNoteTypeEx GetNoteType() => new ElfNoteTypeEx(ElfNoteType.GNU_BUILD_ID);
+
+    public Stream? BuildId { get; set; }
+
+    public override uint GetDescriptorSize() => BuildId != null ? (uint)BuildId.Length : 0;
+
+    public override string GetDescriptorAsText()
     {
-        public override ElfNoteTypeEx GetNoteType() => new ElfNoteTypeEx(ElfNoteType.GNU_BUILD_ID);
+        var builder = new StringBuilder();
+        builder.Append("Build ID: ");
 
-        public Stream? BuildId { get; set; }
-
-        public override uint GetDescriptorSize() => BuildId != null ? (uint)BuildId.Length : 0;
-
-        public override string GetDescriptorAsText()
+        if (BuildId != null)
         {
-            var builder = new StringBuilder();
-            builder.Append("Build ID: ");
+            BuildId.Position = 0;
+            var length = (int)BuildId.Length;
+            var buffer = ArrayPool<byte>.Shared.Rent(length);
+            length = BuildId.Read(buffer, 0, length);
+            BuildId.Position = 0;
 
-            if (BuildId != null)
+            for (int i = 0; i < length; i++)
             {
-                BuildId.Position = 0;
-                var length = (int)BuildId.Length;
-                var buffer = ArrayPool<byte>.Shared.Rent(length);
-                length = BuildId.Read(buffer, 0, length);
-                BuildId.Position = 0;
-
-                for (int i = 0; i < length; i++)
-                {
-                    builder.Append($"{buffer[i]:x2}");
-                }
-            }
-
-            return builder.ToString();
-        }
-
-
-        protected override void ReadDescriptor(ElfReader reader, uint descriptorLength)
-        {
-            if (descriptorLength > 0)
-            {
-                BuildId = reader.ReadAsStream(descriptorLength);
+                builder.Append($"{buffer[i]:x2}");
             }
         }
 
-        protected override void WriteDescriptor(ElfWriter writer)
+        return builder.ToString();
+    }
+
+
+    protected override void ReadDescriptor(ElfReader reader, uint descriptorLength)
+    {
+        if (descriptorLength > 0)
         {
-            if (BuildId != null)
-            {
-                writer.Write(BuildId);
-            }
+            BuildId = reader.ReadAsStream(descriptorLength);
+        }
+    }
+
+    protected override void WriteDescriptor(ElfWriter writer)
+    {
+        if (BuildId != null)
+        {
+            writer.Write(BuildId);
         }
     }
 }

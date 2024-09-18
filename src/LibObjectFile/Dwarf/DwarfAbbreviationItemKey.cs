@@ -4,58 +4,57 @@
 
 using System;
 
-namespace LibObjectFile.Dwarf
+namespace LibObjectFile.Dwarf;
+
+public readonly struct DwarfAbbreviationItemKey : IEquatable<DwarfAbbreviationItemKey>
 {
-    public readonly struct DwarfAbbreviationItemKey : IEquatable<DwarfAbbreviationItemKey>
+    public DwarfAbbreviationItemKey(DwarfTagEx tag, bool hasChildren, DwarfAttributeDescriptors descriptors)
     {
-        public DwarfAbbreviationItemKey(DwarfTagEx tag, bool hasChildren, DwarfAttributeDescriptors descriptors)
+        Tag = tag;
+        HasChildren = hasChildren;
+        Descriptors = descriptors;
+    }
+
+
+    public readonly DwarfTagEx Tag;
+
+    public readonly bool HasChildren;
+
+    public readonly DwarfAttributeDescriptors Descriptors;
+
+    public bool Equals(DwarfAbbreviationItemKey other)
+    {
+        return Tag == other.Tag && HasChildren == other.HasChildren && Descriptors.Equals(other.Descriptors);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is DwarfAbbreviationItemKey other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        unchecked
         {
-            Tag = tag;
-            HasChildren = hasChildren;
-            Descriptors = descriptors;
+            var hashCode = Tag.GetHashCode();
+            hashCode = (hashCode * 397) ^ HasChildren.GetHashCode();
+            hashCode = (hashCode * 397) ^ Descriptors.GetHashCode();
+            return hashCode;
         }
+    }
 
+    public static bool operator ==(DwarfAbbreviationItemKey left, DwarfAbbreviationItemKey right)
+    {
+        return left.Equals(right);
+    }
 
-        public readonly DwarfTagEx Tag;
+    public static bool operator !=(DwarfAbbreviationItemKey left, DwarfAbbreviationItemKey right)
+    {
+        return !left.Equals(right);
+    }
 
-        public readonly bool HasChildren;
-
-        public readonly DwarfAttributeDescriptors Descriptors;
-
-        public bool Equals(DwarfAbbreviationItemKey other)
-        {
-            return Tag == other.Tag && HasChildren == other.HasChildren && Descriptors.Equals(other.Descriptors);
-        }
-
-        public override bool Equals(object? obj)
-        {
-            return obj is DwarfAbbreviationItemKey other && Equals(other);
-        }
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hashCode = Tag.GetHashCode();
-                hashCode = (hashCode * 397) ^ HasChildren.GetHashCode();
-                hashCode = (hashCode * 397) ^ Descriptors.GetHashCode();
-                return hashCode;
-            }
-        }
-
-        public static bool operator ==(DwarfAbbreviationItemKey left, DwarfAbbreviationItemKey right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(DwarfAbbreviationItemKey left, DwarfAbbreviationItemKey right)
-        {
-            return !left.Equals(right);
-        }
-
-        public override string ToString()
-        {
-            return $"{nameof(Tag)}: {Tag}, {nameof(HasChildren)}: {HasChildren}, {nameof(Descriptors)}: {Descriptors}";
-        }
+    public override string ToString()
+    {
+        return $"{nameof(Tag)}: {Tag}, {nameof(HasChildren)}: {HasChildren}, {nameof(Descriptors)}: {Descriptors}";
     }
 }

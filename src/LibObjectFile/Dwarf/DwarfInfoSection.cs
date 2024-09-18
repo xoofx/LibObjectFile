@@ -6,101 +6,98 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using LibObjectFile.Utils;
 
-namespace LibObjectFile.Dwarf
+namespace LibObjectFile.Dwarf;
+
+public sealed class DwarfInfoSection : DwarfRelocatableSection
 {
-    public sealed class DwarfInfoSection : DwarfRelocatableSection
+    private readonly List<DwarfUnit> _units;
+
+    public DwarfInfoSection()
     {
-        private readonly List<DwarfUnit> _units;
+        _units = new List<DwarfUnit>();
+    }
 
-        public DwarfInfoSection()
-        {
-            _units = new List<DwarfUnit>();
-        }
+    public ReadOnlyList<DwarfUnit> Units => _units;
 
-        public ReadOnlyList<DwarfUnit> Units => _units;
+    public void AddUnit(DwarfUnit unit)
+    {
+        _units.Add(this, unit);
+    }
 
-        public void AddUnit(DwarfUnit unit)
-        {
-            _units.Add(this, unit);
-        }
+    public void RemoveUnit(DwarfUnit unit)
+    {
+        _units.Remove(this, unit);
+    }
 
-        public void RemoveUnit(DwarfUnit unit)
-        {
-            _units.Remove(this, unit);
-        }
+    public DwarfUnit RemoveUnitAt(int index)
+    {
+        return _units.RemoveAt(this, index);
+    }
 
-        public DwarfUnit RemoveUnitAt(int index)
-        {
-            return _units.RemoveAt(this, index);
-        }
-
-        protected override void Read(DwarfReader reader)
-        {
-            var addressRangeTable = reader.File.AddressRangeTable;
+    public override void Read(DwarfReader reader)
+    {
+        var addressRangeTable = reader.File.AddressRangeTable;
             
-            while (reader.Position < reader.Length)
+        while (reader.Position < reader.Length)
+        {
+            // 7.5 Format of Debugging Information
+            // - Each such contribution consists of a compilation unit header
+
+            var startOffset = Position;
+
+            reader.ClearResolveAttributeReferenceWithinCompilationUnit();
+
+            var cu = DwarfUnit.ReadInstance(reader, out var offsetEndOfUnit);
+            if (cu == null)
             {
-                // 7.5 Format of Debugging Information
-                // - Each such contribution consists of a compilation unit header
+                reader.Position = offsetEndOfUnit;
+                continue;
+            }
 
-                var startOffset = Position;
+            reader.CurrentUnit = cu;
 
-                reader.ClearResolveAttributeReferenceWithinCompilationUnit();
-
-                var cu = DwarfUnit.ReadInstance(reader, out var offsetEndOfUnit);
-                if (cu == null)
-                {
-                    reader.Position = offsetEndOfUnit;
-                    continue;
-                }
-
-                reader.CurrentUnit = cu;
-
-                // Link AddressRangeTable to Unit
-                if (addressRangeTable.DebugInfoOffset == cu.Position)
-                {
-                    addressRangeTable.Unit = cu;
-                }
+            // Link AddressRangeTable to Unit
+            if (addressRangeTable.DebugInfoOffset == cu.Position)
+            {
+                addressRangeTable.Unit = cu;
+            }
                 
-                AddUnit(cu);
-            }
-
-            reader.ResolveAttributeReferenceWithinSection();
+            AddUnit(cu);
         }
 
-        public override void Verify(DiagnosticBag diagnostics)
+        reader.ResolveAttributeReferenceWithinSection();
+    }
+
+    public override void Verify(DwarfVerifyContext context)
+    {
+        foreach (var unit in _units)
         {
-            base.Verify(diagnostics);
-
-            foreach (var unit in _units)
-            {
-                unit.Verify(diagnostics);
-            }
+            unit.Verify(context);
         }
+    }
 
-        protected override void UpdateLayout(DwarfLayoutContext layoutContext)
+    public override void UpdateLayout(DwarfLayoutContext layoutContext)
+    {
+        var offset = Position;
+        foreach (var unit in Units)
         {
-            var offset = Position;
-            foreach (var unit in Units)
-            {
-                layoutContext.CurrentUnit = unit;
-                unit.Position = offset;
-                unit.UpdateLayoutInternal(layoutContext);
-                offset += unit.Size;
-            }
-            Size = offset - Position;
+            layoutContext.CurrentUnit = unit;
+            unit.Position = offset;
+            unit.UpdateLayout(layoutContext);
+            offset += unit.Size;
         }
+        Size = offset - Position;
+    }
 
-        protected override void Write(DwarfWriter writer)
+    public override void Write(DwarfWriter writer)
+    {
+        Debug.Assert(Position == writer.Position);
+        foreach (var unit in _units)
         {
-            Debug.Assert(Position == writer.Position);
-            foreach (var unit in _units)
-            {
-                writer.CurrentUnit = unit;
-                unit.WriteInternal(writer);
-            }
-            writer.CurrentUnit = null;
-            Debug.Assert(Size == writer.Position - Position);
+            writer.CurrentUnit = unit;
+            unit.Write(writer);
         }
+        writer.CurrentUnit = null;
+        Debug.Assert(Size == writer.Position - Position);
     }
 }

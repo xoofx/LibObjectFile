@@ -8,13 +8,12 @@ namespace LibObjectFile.PE;
 
 public sealed class PEImageReader : ObjectFileReaderWriter
 {
-    internal PEImageReader(PEFile file, Stream stream, PEImageReaderOptions readerOptions) : base(stream)
+    internal PEImageReader(PEFile file, Stream stream, PEImageReaderOptions readerOptions) : base(file, stream)
     {
-        PEFile = file;
         Options = readerOptions;
     }
 
-    public PEFile PEFile { get; }
+    public new PEFile File => (PEFile)base.File;
 
     public PEImageReaderOptions Options { get; }
 

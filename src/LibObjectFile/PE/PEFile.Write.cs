@@ -34,13 +34,15 @@ partial class PEFile
         var peWriter = new PEImageWriter(this, stream);
         diagnostics = peWriter.Diagnostics;
 
-        Verify(diagnostics);
+        var context = new PEVisitorContext(this, diagnostics);
+
+        Verify(context);
         if (diagnostics.HasErrors)
         {
             return false;
         }
 
-        UpdateLayout(diagnostics);
+        UpdateLayout(context);
         if (diagnostics.HasErrors)
         {
             return false;
@@ -51,7 +53,7 @@ partial class PEFile
         return !diagnostics.HasErrors;
     }
 
-    protected override void Write(PEImageWriter writer)
+    public override void Write(PEImageWriter writer)
     {
         throw new NotImplementedException();
     }

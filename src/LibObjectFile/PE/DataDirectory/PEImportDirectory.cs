@@ -20,12 +20,12 @@ public sealed class PEImportDirectory : PEDirectory
     }
     public ObjectList<PEImportDirectoryEntry> Entries => _entries;
 
-    public override unsafe void UpdateLayout(DiagnosticBag diagnostics)
+    public override unsafe void UpdateLayout(PEVisitorContext context)
     {
         Size = (ulong)((_entries.Count + 1) * sizeof(RawImportDirectoryEntry));
     }
 
-    protected override void Read(PEImageReader reader)
+    public override void Read(PEImageReader reader)
     {
         var diagnostics = reader.Diagnostics;
 
@@ -54,7 +54,7 @@ public sealed class PEImportDirectory : PEDirectory
             }
 
             // Find the section data for the ImportLookupTableRVA
-            if (!reader.PEFile.TryFindSectionData(rawEntry.ImportAddressTableRVA, out var sectionData))
+            if (!reader.File.TryFindSectionData(rawEntry.ImportAddressTableRVA, out var sectionData))
             {
                 diagnostics.Error(DiagnosticId.PE_ERR_ImportDirectoryInvalidImportAddressTableRVA, $"Unable to find the section data for ImportAddressTableRVA {rawEntry.ImportAddressTableRVA}");
                 return;
@@ -64,7 +64,7 @@ public sealed class PEImportDirectory : PEDirectory
             var importLookupAddressTablePositionInFile = sectionData.Position + rawEntry.ImportLookupTableRVA - sectionData.VirtualAddress;
 
             // Find the section data for the ImportLookupTableRVA
-            if (!reader.PEFile.TryFindSectionData(rawEntry.ImportLookupTableRVA, out sectionData))
+            if (!reader.File.TryFindSectionData(rawEntry.ImportLookupTableRVA, out sectionData))
             {
                 diagnostics.Error(DiagnosticId.PE_ERR_ImportDirectoryInvalidImportLookupTableRVA, $"Unable to find the section data for ImportLookupTableRVA {rawEntry.ImportLookupTableRVA}");
                 return;
@@ -96,12 +96,12 @@ public sealed class PEImportDirectory : PEDirectory
         var entries = CollectionsMarshal.AsSpan(_entries.UnsafeList);
         foreach (ref var entry in entries)
         {
-            entry.ImportAddressTable.ReadInternal(reader);
-            entry.ImportLookupTable.ReadInternal(reader);
+            entry.ImportAddressTable.Read(reader);
+            entry.ImportLookupTable.Read(reader);
         }
     }
 
-    protected override void Write(PEImageWriter writer)
+    public override void Write(PEImageWriter writer)
     {
         throw new NotImplementedException();
     }

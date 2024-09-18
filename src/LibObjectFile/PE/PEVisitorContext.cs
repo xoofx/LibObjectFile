@@ -2,12 +2,11 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
-namespace LibObjectFile.Elf;
+namespace LibObjectFile.PE;
 
-public abstract class ElfGnuNote : ElfNote
+public sealed class PEVisitorContext : VisitorContextBase<PEFile>
 {
-    public override string GetName()
+    internal PEVisitorContext(PEFile peFile, DiagnosticBag diagnostics) : base(peFile, diagnostics)
     {
-        return "GNU";
     }
 }

@@ -2,84 +2,86 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
-namespace LibObjectFile.Dwarf
+using System.Text;
+
+namespace LibObjectFile.Dwarf;
+
+public class DwarfLocationListEntry : DwarfObject<DwarfLocationList>
 {
-    public class DwarfLocationListEntry : DwarfObject<DwarfLocationList>
+    public ulong Start;
+
+    public ulong End;
+
+    public DwarfExpression? Expression;
+
+    public DwarfLocationListEntry()
     {
-        public ulong Start;
+    }
 
-        public ulong End;
+    public override void Read(DwarfReader reader)
+    {
+        Start = reader.ReadUInt();
+        End = reader.ReadUInt();
 
-        public DwarfExpression? Expression;
-
-        public DwarfLocationListEntry()
+        if (Start == 0 && End == 0)
         {
+            // End of list
+            return;
         }
 
-        protected override void Read(DwarfReader reader)
+        bool isBaseAddress =
+            (reader.AddressSize == DwarfAddressSize.Bit64 && Start == ulong.MaxValue) ||
+            (reader.AddressSize == DwarfAddressSize.Bit32 && Start == uint.MaxValue);
+        if (isBaseAddress)
         {
-            Start = reader.ReadUInt();
-            End = reader.ReadUInt();
-
-            if (Start == 0 && End == 0)
-            {
-                // End of list
-                return;
-            }
-
-            bool isBaseAddress =
-                (reader.AddressSize == DwarfAddressSize.Bit64 && Start == ulong.MaxValue) ||
-                (reader.AddressSize == DwarfAddressSize.Bit32 && Start == uint.MaxValue);
-            if (isBaseAddress)
-            {
-                // Sets new base address for following entries
-                return;
-            }
-
-            Expression = new DwarfExpression();
-            Expression.ReadInternal(reader, inLocationSection: true);
+            // Sets new base address for following entries
+            return;
         }
 
-        protected override void UpdateLayout(DwarfLayoutContext layoutContext)
+        Expression = new DwarfExpression();
+        Expression.ReadInternal(reader, inLocationSection: true);
+    }
+
+    public override void UpdateLayout(DwarfLayoutContext layoutContext)
+    {
+        var endOffset = Position;
+
+        endOffset += 2 * DwarfHelper.SizeOfUInt(layoutContext.CurrentUnit!.AddressSize);
+        if (Expression != null)
         {
-            var endOffset = Position;
-
-            endOffset += 2 * DwarfHelper.SizeOfUInt(layoutContext.CurrentUnit!.AddressSize);
-            if (Expression != null)
-            {
-                Expression.Position = endOffset;
-                Expression.UpdateLayoutInternal(layoutContext, inLocationSection: true);
-                endOffset += Expression.Size;
-            }
-
-            Size = endOffset - Position;
+            Expression.Position = endOffset;
+            Expression.UpdateLayout(layoutContext, inLocationSection: true);
+            endOffset += Expression.Size;
         }
 
-        protected override void Write(DwarfWriter writer)
-        {
-            bool isBaseAddress =
-                (writer.AddressSize == DwarfAddressSize.Bit64 && Start == ulong.MaxValue) ||
-                (writer.AddressSize == DwarfAddressSize.Bit32 && Start == uint.MaxValue);
-            if (isBaseAddress)
-            {
-                writer.WriteUInt(Start);
-                writer.WriteAddress(DwarfRelocationTarget.Code, End);
-            }
-            else
-            {
-                writer.WriteAddress(DwarfRelocationTarget.Code, Start);
-                writer.WriteAddress(DwarfRelocationTarget.Code, End);
-            }
+        Size = endOffset - Position;
+    }
 
-            if (Expression != null)
-            {
-                Expression.WriteInternal(writer, inLocationSection: true);
-            }
+    public override void Write(DwarfWriter writer)
+    {
+        bool isBaseAddress =
+            (writer.AddressSize == DwarfAddressSize.Bit64 && Start == ulong.MaxValue) ||
+            (writer.AddressSize == DwarfAddressSize.Bit32 && Start == uint.MaxValue);
+        if (isBaseAddress)
+        {
+            writer.WriteUInt(Start);
+            writer.WriteAddress(DwarfRelocationTarget.Code, End);
+        }
+        else
+        {
+            writer.WriteAddress(DwarfRelocationTarget.Code, Start);
+            writer.WriteAddress(DwarfRelocationTarget.Code, End);
         }
 
-        public override string ToString()
+        if (Expression != null)
         {
-            return $"Location: {Start:x} - {End:x} {Expression}";
+            Expression.WriteInternal(writer, inLocationSection: true);
         }
+    }
+
+    protected override bool PrintMembers(StringBuilder builder)
+    {
+        builder.Append($"Location: {Start:x} - {End:x} {Expression}");
+        return true;
     }
 }

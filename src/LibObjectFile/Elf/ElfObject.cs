@@ -7,20 +7,23 @@ using System.Diagnostics;
 
 namespace LibObjectFile.Elf;
 
+public abstract class ElfObjectBase : ObjectFileElement<ElfVisitorContext, ElfVisitorContext, ElfReader, ElfWriter>
+{
+}
+
 /// <summary>
 /// Base class for an <see cref="ElfSection"/> and <see cref="ElfSegment"/>.
 /// </summary>
-public abstract class ElfObject : ObjectFileNode
+public abstract class ElfObject : ElfObjectBase
 {
-    protected override void ValidateParent(ObjectFileNodeBase parent)
+    protected override void ValidateParent(ObjectFileElement parent)
     {
         if (!(parent is ElfObjectFile))
         {
             throw new ArgumentException($"Parent must inherit from type {nameof(ElfObjectFile)}");
         }
     }
-
-
+    
     /// <summary>
     /// Gets the containing <see cref="ElfObjectFile"/>. Might be null if this section or segment
     /// does not belong to an existing <see cref="ElfObjectFile"/>.

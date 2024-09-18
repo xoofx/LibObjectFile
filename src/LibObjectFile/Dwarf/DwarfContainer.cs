@@ -4,13 +4,8 @@
 
 using System;
 
-namespace LibObjectFile.Dwarf
+namespace LibObjectFile.Dwarf;
+
+public abstract class DwarfContainer : DwarfObject<DwarfContainer>
 {
-    public abstract class DwarfContainer : DwarfObject<DwarfContainer>
-    {
-        public override void Verify(DiagnosticBag diagnostics)
-        {
-            if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
-        }
-    }
 }

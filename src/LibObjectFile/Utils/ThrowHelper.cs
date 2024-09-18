@@ -8,78 +8,77 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 
-namespace LibObjectFile.Utils
+namespace LibObjectFile.Utils;
+
+/// <summary>
+/// Internal helper class for throwing exceptions.
+/// </summary>
+internal static class ThrowHelper
+{
+    public static InvalidOperationException InvalidEnum(object v)
+    {
+        return new InvalidOperationException($"Invalid Enum {v.GetType()}.{v}");
+    }
+}
+    
+public static class StreamExtensions
 {
     /// <summary>
-    /// Internal helper class for throwing exceptions.
+    /// Reads a null terminated UTF8 string from the stream.
     /// </summary>
-    internal static class ThrowHelper
+    /// <returns><c>true</c> if the string was successfully read from the stream, false otherwise</returns>
+    public static string ReadStringUTF8NullTerminated(this Stream stream)
     {
-        public static InvalidOperationException InvalidEnum(object v)
+        if (!TryReadStringUTF8NullTerminated(stream, out var text))
         {
-            return new InvalidOperationException($"Invalid Enum {v.GetType()}.{v}");
+            throw new EndOfStreamException();
         }
+        return text;
     }
-    
-    public static class StreamExtensions
+
+    /// <summary>
+    /// Reads a null terminated UTF8 string from the stream.
+    /// </summary>
+    /// <returns><c>true</c> if the string was successfully read from the stream, false otherwise</returns>
+    public static bool TryReadStringUTF8NullTerminated(this Stream stream, [NotNullWhen(true)] out string? text)
     {
-        /// <summary>
-        /// Reads a null terminated UTF8 string from the stream.
-        /// </summary>
-        /// <returns><c>true</c> if the string was successfully read from the stream, false otherwise</returns>
-        public static string ReadStringUTF8NullTerminated(this Stream stream)
+        text = null;
+        var buffer = ArrayPool<byte>.Shared.Rent((int)128);
+        int textLength = 0;
+        try
         {
-            if (!TryReadStringUTF8NullTerminated(stream, out var text))
+            while (true)
             {
-                throw new EndOfStreamException();
-            }
-            return text;
-        }
-
-        /// <summary>
-        /// Reads a null terminated UTF8 string from the stream.
-        /// </summary>
-        /// <returns><c>true</c> if the string was successfully read from the stream, false otherwise</returns>
-        public static bool TryReadStringUTF8NullTerminated(this Stream stream, [NotNullWhen(true)] out string? text)
-        {
-            text = null;
-            var buffer = ArrayPool<byte>.Shared.Rent((int)128);
-            int textLength = 0;
-            try
-            {
-                while (true)
+                // TODO: not efficient to read byte by byte
+                int nextByte = stream.ReadByte();
+                if (nextByte < 0)
                 {
-                    // TODO: not efficient to read byte by byte
-                    int nextByte = stream.ReadByte();
-                    if (nextByte < 0)
-                    {
-                        return false;
-                    }
-
-                    if (nextByte == 0)
-                    {
-                        break;
-                    }
-
-                    if (textLength > buffer.Length)
-                    {
-                        var newBuffer = ArrayPool<byte>.Shared.Rent((int)textLength * 2);
-                        Array.Copy(buffer, 0, newBuffer, 0, buffer.Length);
-                        ArrayPool<byte>.Shared.Return(buffer);
-                        buffer = newBuffer;
-                    }
-
-                    buffer[textLength++] = (byte)nextByte;
+                    return false;
                 }
 
-                text = Encoding.UTF8.GetString(buffer, 0, textLength);
-            }
-            finally
-            {
-                ArrayPool<byte>.Shared.Return(buffer);
+                if (nextByte == 0)
+                {
+                    break;
+                }
+
+                if (textLength > buffer.Length)
+                {
+                    var newBuffer = ArrayPool<byte>.Shared.Rent((int)textLength * 2);
+                    Array.Copy(buffer, 0, newBuffer, 0, buffer.Length);
+                    ArrayPool<byte>.Shared.Return(buffer);
+                    buffer = newBuffer;
+                }
+
+                buffer[textLength++] = (byte)nextByte;
             }
 
-            return true;
+            text = Encoding.UTF8.GetString(buffer, 0, textLength);
         }
+        finally
+        {
+            ArrayPool<byte>.Shared.Return(buffer);
+        }
+
+        return true;
     }
 }

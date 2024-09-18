@@ -13,7 +13,7 @@ namespace LibObjectFile.Ar;
 /// <summary>
 /// An 'ar' archive file.
 /// </summary>
-public sealed class ArArchiveFile : ObjectFileNode
+public sealed class ArArchiveFile : ArObjectBase
 {
     private readonly List<ArFile> _files;
 
@@ -179,9 +179,23 @@ public sealed class ArArchiveFile : ObjectFileNode
         return file;
     }
 
-    public override void Verify(DiagnosticBag diagnostics)
+    public DiagnosticBag Verify()
     {
-        if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
+        var diagnostics = new DiagnosticBag();
+        Verify(diagnostics);
+        return diagnostics;
+    }
+
+    public void Verify(DiagnosticBag diagnostics)
+    {
+        ArgumentNullException.ThrowIfNull(diagnostics);
+        var context = new ArVisitorContext(this, diagnostics);
+        Verify(context);
+    }
+
+    public override void Verify(ArVisitorContext context)
+    {
+        var diagnostics = context.Diagnostics;
 
         for (var i = 0; i < Files.Count; i++)
         {
@@ -199,7 +213,7 @@ public sealed class ArArchiveFile : ObjectFileNode
                 }
             }
 
-            item.Verify(diagnostics);
+            item.Verify(context);
         }
     }
 
@@ -309,10 +323,17 @@ public sealed class ArArchiveFile : ObjectFileNode
         var writer = new ArArchiveFileWriter(this, stream);
         writer.Write();
     }
-        
-    public override void UpdateLayout(DiagnosticBag diagnostics)
+
+    public override void UpdateLayout(ArVisitorContext visitorContext)
     {
-        if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
+
+    }
+
+
+    public void UpdateLayout(DiagnosticBag diagnostics)
+    {
+        ArgumentNullException.ThrowIfNull(diagnostics);
+        var layoutContext = new ArVisitorContext(this, diagnostics);
 
         Size = 0;
 
@@ -353,13 +374,13 @@ public sealed class ArArchiveFile : ObjectFileNode
         {
             var entry = Files[i];
 
-            entry.UpdateLayout(diagnostics);
+            entry.UpdateLayout(layoutContext);
             if (diagnostics.HasErrors) return;
 
             // If we have a GNU headers and they are required, add them to the offset and size
             if (LongNamesTable != null && LongNamesTable.Index == i)
             {
-                LongNamesTable.UpdateLayout(diagnostics);
+                LongNamesTable.UpdateLayout(layoutContext);
                 if (diagnostics.HasErrors) return;
 
                 var headerSize = LongNamesTable.Size;

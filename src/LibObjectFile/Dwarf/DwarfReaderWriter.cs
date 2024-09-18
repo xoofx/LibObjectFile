@@ -5,169 +5,167 @@
 using System;
 using System.IO;
 
-namespace LibObjectFile.Dwarf
+namespace LibObjectFile.Dwarf;
+
+public abstract class DwarfReaderWriter : ObjectFileReaderWriter
 {
-    public abstract class DwarfReaderWriter : ObjectFileReaderWriter
+    internal DwarfReaderWriter(DwarfFile file, DiagnosticBag diagnostics) : base(file, System.IO.Stream.Null, diagnostics)
     {
-        internal DwarfReaderWriter(DwarfFile file, DiagnosticBag diagnostics) : base(System.IO.Stream.Null, diagnostics)
+    }
+
+    public new DwarfFile File => (DwarfFile)base.File;
+
+    public bool Is64BitEncoding { get; set; }
+
+    public DwarfAddressSize AddressSize { get; internal set; }
+
+    public DwarfSection? CurrentSection { get; internal set; }
+
+    public DwarfUnit? CurrentUnit { get; internal set; }
+
+    public DwarfAddressSize SizeOfUIntEncoding()
+    {
+        return Is64BitEncoding ? DwarfAddressSize.Bit64 : DwarfAddressSize.Bit32;
+    }
+
+    public DwarfAddressSize ReadAddressSize()
+    {
+        var address_size = (DwarfAddressSize)ReadU8();
+        switch (address_size)
         {
-            File = file;
+            case DwarfAddressSize.Bit8:
+            case DwarfAddressSize.Bit16:
+            case DwarfAddressSize.Bit32:
+            case DwarfAddressSize.Bit64:
+                break;
+            default:
+                Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidAddressSize, $"Unsupported address size {(uint)address_size}.");
+                break;
         }
 
-        public DwarfFile File { get; }
+        return address_size;
+    }
 
-        public bool Is64BitEncoding { get; set; }
+    public void WriteAddressSize(DwarfAddressSize addressSize)
+    {
+        WriteU8((byte)addressSize);
+    }
 
-        public DwarfAddressSize AddressSize { get; internal set; }
-
-        public DwarfSection? CurrentSection { get; internal set; }
-
-        public DwarfUnit? CurrentUnit { get; internal set; }
-
-        public DwarfAddressSize SizeOfUIntEncoding()
+    public ulong ReadUnitLength()
+    {
+        Is64BitEncoding = false;
+        uint length = ReadU32();
+        if (length >= 0xFFFFFFF0)
         {
-            return Is64BitEncoding ? DwarfAddressSize.Bit64 : DwarfAddressSize.Bit32;
-        }
-
-        public DwarfAddressSize ReadAddressSize()
-        {
-            var address_size = (DwarfAddressSize)ReadU8();
-            switch (address_size)
+            if (length != 0xFFFFFFFF)
             {
-                case DwarfAddressSize.Bit8:
-                case DwarfAddressSize.Bit16:
-                case DwarfAddressSize.Bit32:
-                case DwarfAddressSize.Bit64:
-                    break;
-                default:
-                    Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidAddressSize, $"Unsupported address size {(uint)address_size}.");
-                    break;
+                throw new InvalidOperationException($"Unsupported unit length prefix 0x{length:x8}");
             }
 
-            return address_size;
+            Is64BitEncoding = true;
+            return ReadU64();
         }
+        return length;
+    }
 
-        public void WriteAddressSize(DwarfAddressSize addressSize)
+    public void WriteUnitLength(ulong length)
+    {
+        if (Is64BitEncoding)
         {
-            WriteU8((byte)addressSize);
+            WriteU32(0xFFFFFFFF);
+            WriteU64(length);
         }
-
-        public ulong ReadUnitLength()
+        else
         {
-            Is64BitEncoding = false;
-            uint length = ReadU32();
             if (length >= 0xFFFFFFF0)
             {
-                if (length != 0xFFFFFFFF)
-                {
-                    throw new InvalidOperationException($"Unsupported unit length prefix 0x{length:x8}");
-                }
+                throw new ArgumentOutOfRangeException(nameof(length), $"Must be < 0xFFFFFFF0 but is 0x{length:X}");
+            }
+            WriteU32((uint)length);
+        }
+    }
 
-                Is64BitEncoding = true;
+    public ulong ReadUIntFromEncoding()
+    {
+        return Is64BitEncoding ? ReadU64() : ReadU32();
+    }
+
+    public void WriteUIntFromEncoding(ulong value)
+    {
+        if (Is64BitEncoding)
+        {
+            WriteU64(value);
+        }
+        else
+        {
+            WriteU32((uint)value);
+        }
+    }
+
+    public ulong ReadUInt()
+    {
+        switch (AddressSize)
+        {
+            case DwarfAddressSize.Bit8:
+                return ReadU8();
+            case DwarfAddressSize.Bit16:
+                return ReadU16();
+            case DwarfAddressSize.Bit32:
+                return ReadU32();
+            case DwarfAddressSize.Bit64:
                 return ReadU64();
-            }
-            return length;
+            default:
+                throw new ArgumentOutOfRangeException($"Invalid AddressSize {AddressSize}");
         }
+    }
 
-        public void WriteUnitLength(ulong length)
+    public void WriteUInt(ulong target)
+    {
+        switch (AddressSize)
         {
-            if (Is64BitEncoding)
-            {
-                WriteU32(0xFFFFFFFF);
-                WriteU64(length);
-            }
-            else
-            {
-                if (length >= 0xFFFFFFF0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(length), $"Must be < 0xFFFFFFF0 but is 0x{length:X}");
-                }
-                WriteU32((uint)length);
-            }
+            case DwarfAddressSize.Bit8:
+                WriteU8((byte)target);
+                break;
+            case DwarfAddressSize.Bit16:
+                WriteU16((ushort)target);
+                break;
+            case DwarfAddressSize.Bit32:
+                WriteU32((uint)target);
+                break;
+            case DwarfAddressSize.Bit64:
+                WriteU64(target);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException($"Invalid AddressSize {AddressSize}");
         }
+    }
 
-        public ulong ReadUIntFromEncoding()
-        {
-            return Is64BitEncoding ? ReadU64() : ReadU32();
-        }
+    public ulong ReadULEB128()
+    {
+        return Stream.ReadULEB128();
+    }
 
-        public void WriteUIntFromEncoding(ulong value)
-        {
-            if (Is64BitEncoding)
-            {
-                WriteU64(value);
-            }
-            else
-            {
-                WriteU32((uint)value);
-            }
-        }
+    public uint ReadULEB128AsU32()
+    {
+        return Stream.ReadULEB128AsU32();
+    }
 
-        public ulong ReadUInt()
-        {
-            switch (AddressSize)
-            {
-                case DwarfAddressSize.Bit8:
-                    return ReadU8();
-                case DwarfAddressSize.Bit16:
-                    return ReadU16();
-                case DwarfAddressSize.Bit32:
-                    return ReadU32();
-                case DwarfAddressSize.Bit64:
-                    return ReadU64();
-                default:
-                    throw new ArgumentOutOfRangeException($"Invalid AddressSize {AddressSize}");
-            }
-        }
+    public int ReadLEB128AsI32()
+    {
+        return Stream.ReadLEB128AsI32();
+    }
 
-        public void WriteUInt(ulong target)
-        {
-            switch (AddressSize)
-            {
-                case DwarfAddressSize.Bit8:
-                    WriteU8((byte)target);
-                    break;
-                case DwarfAddressSize.Bit16:
-                    WriteU16((ushort)target);
-                    break;
-                case DwarfAddressSize.Bit32:
-                    WriteU32((uint)target);
-                    break;
-                case DwarfAddressSize.Bit64:
-                    WriteU64(target);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException($"Invalid AddressSize {AddressSize}");
-            }
-        }
+    public long ReadILEB128()
+    {
+        return Stream.ReadSignedLEB128();
+    }
 
-        public ulong ReadULEB128()
-        {
-            return Stream.ReadULEB128();
-        }
-
-        public uint ReadULEB128AsU32()
-        {
-            return Stream.ReadULEB128AsU32();
-        }
-
-        public int ReadLEB128AsI32()
-        {
-            return Stream.ReadLEB128AsI32();
-        }
-
-        public long ReadILEB128()
-        {
-            return Stream.ReadSignedLEB128();
-        }
-
-        public void WriteULEB128(ulong value)
-        {
-            Stream.WriteULEB128(value);
-        }
-        public void WriteILEB128(long value)
-        {
-            Stream.WriteILEB128(value);
-        }
+    public void WriteULEB128(ulong value)
+    {
+        Stream.WriteULEB128(value);
+    }
+    public void WriteILEB128(long value)
+    {
+        Stream.WriteILEB128(value);
     }
 }

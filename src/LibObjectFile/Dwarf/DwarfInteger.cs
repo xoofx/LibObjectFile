@@ -4,38 +4,37 @@
 
 using System.Runtime.InteropServices;
 
-namespace LibObjectFile.Dwarf
+namespace LibObjectFile.Dwarf;
+
+[StructLayout(LayoutKind.Explicit)]
+public struct DwarfInteger
 {
-    [StructLayout(LayoutKind.Explicit)]
-    public struct DwarfInteger
+    [FieldOffset(0)]
+    public ulong U64;
+
+    [FieldOffset(0)]
+    public long I64;
+
+    [FieldOffset(0)]
+    public sbyte I8;
+
+    [FieldOffset(0)]
+    public byte U8;
+
+    [FieldOffset(0)]
+    public short I16;
+
+    [FieldOffset(0)]
+    public ushort U16;
+
+    [FieldOffset(0)]
+    public int I32;
+
+    [FieldOffset(0)]
+    public uint U32;
+
+    public override string ToString()
     {
-        [FieldOffset(0)]
-        public ulong U64;
-
-        [FieldOffset(0)]
-        public long I64;
-
-        [FieldOffset(0)]
-        public sbyte I8;
-
-        [FieldOffset(0)]
-        public byte U8;
-
-        [FieldOffset(0)]
-        public short I16;
-
-        [FieldOffset(0)]
-        public ushort U16;
-
-        [FieldOffset(0)]
-        public int I32;
-
-        [FieldOffset(0)]
-        public uint U32;
-
-        public override string ToString()
-        {
-            return $"0x{U64:x16}";
-        }
+        return $"0x{U64:x16}";
     }
 }

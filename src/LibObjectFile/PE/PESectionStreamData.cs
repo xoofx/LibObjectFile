@@ -47,16 +47,12 @@ public class PESectionStreamData : PESectionData
         set => throw new InvalidOperationException();
     }
 
-    public override void UpdateLayout(DiagnosticBag diagnostics)
-    {
-    }
-
-    protected override void Read(PEImageReader reader)
+    public override void Read(PEImageReader reader)
     {
         // No need to read, as the data is already provided via a stream
     }
 
-    protected override void Write(PEImageWriter writer)
+    public override void Write(PEImageWriter writer)
     {
         Stream.Position = 0;
         Stream.CopyTo(writer.Stream);

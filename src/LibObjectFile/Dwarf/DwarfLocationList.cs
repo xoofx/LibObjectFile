@@ -6,103 +6,99 @@ using System.Text;
 using System.Collections.Generic;
 using LibObjectFile.Utils;
 
-namespace LibObjectFile.Dwarf
+namespace LibObjectFile.Dwarf;
+
+public class DwarfLocationList : DwarfContainer
 {
+    private readonly List<DwarfLocationListEntry> _locationListEntries;
 
-    public class DwarfLocationList : DwarfContainer
+    public DwarfLocationList()
     {
-        private readonly List<DwarfLocationListEntry> _locationListEntries;
+        _locationListEntries = new List<DwarfLocationListEntry>();
+    }
 
-        public DwarfLocationList()
+    public ReadOnlyList<DwarfLocationListEntry> LocationListEntries => _locationListEntries;
+
+    public void AddLocationListEntry(DwarfLocationListEntry locationListEntry)
+    {
+        _locationListEntries.Add(this, locationListEntry);
+    }
+
+    public void RemoveLocationList(DwarfLocationListEntry locationListEntry)
+    {
+        _locationListEntries.Remove(this, locationListEntry);
+    }
+
+    public DwarfLocationListEntry RemoveLocationListEntryAt(int index)
+    {
+        return _locationListEntries.RemoveAt(this, index);
+    }
+
+    public override void UpdateLayout(DwarfLayoutContext layoutContext)
+    {
+        var endOffset = Position;
+
+        foreach (var locationListEntry in _locationListEntries)
         {
-            _locationListEntries = new List<DwarfLocationListEntry>();
+            locationListEntry.Position = endOffset;
+            locationListEntry.UpdateLayout(layoutContext);
+            endOffset += locationListEntry.Size;
         }
 
-        public ReadOnlyList<DwarfLocationListEntry> LocationListEntries => _locationListEntries;
+        // End of list
+        endOffset += 2 * DwarfHelper.SizeOfUInt(layoutContext.CurrentUnit!.AddressSize);
 
-        public void AddLocationListEntry(DwarfLocationListEntry locationListEntry)
+        Size = endOffset - Position;
+    }
+
+    public override void Read(DwarfReader reader)
+    {
+        reader.OffsetToLocationList.Add(reader.Position, this);
+
+        while (reader.Position < reader.Length)
         {
-            _locationListEntries.Add(this, locationListEntry);
-        }
+            var locationListEntry = new DwarfLocationListEntry();
+            locationListEntry.Read(reader);
 
-        public void RemoveLocationList(DwarfLocationListEntry locationListEntry)
-        {
-            _locationListEntries.Remove(this, locationListEntry);
-        }
-
-        public DwarfLocationListEntry RemoveLocationListEntryAt(int index)
-        {
-            return _locationListEntries.RemoveAt(this, index);
-        }
-
-        protected override void UpdateLayout(DwarfLayoutContext layoutContext)
-        {
-            var endOffset = Position;
-
-            foreach (var locationListEntry in _locationListEntries)
+            if (locationListEntry.Start == 0 && locationListEntry.End == 0)
             {
-                locationListEntry.Position = endOffset;
-                locationListEntry.UpdateLayoutInternal(layoutContext);
-                endOffset += locationListEntry.Size;
+                // End of list
+                return;
             }
 
-            // End of list
-            endOffset += 2 * DwarfHelper.SizeOfUInt(layoutContext.CurrentUnit!.AddressSize);
+            _locationListEntries.Add(locationListEntry);
+        }
+    }
 
-            Size = endOffset - Position;
+    public override void Write(DwarfWriter writer)
+    {
+        foreach (var locationListEntry in _locationListEntries)
+        {
+            locationListEntry.Write(writer);
         }
 
-        protected override void Read(DwarfReader reader)
+        // End of list
+        writer.WriteUInt(0);
+        writer.WriteUInt(0);
+    }
+
+    protected override bool PrintMembers(StringBuilder builder)
+    {
+        for (int i = 0; i < _locationListEntries.Count; i++)
         {
-            reader.OffsetToLocationList.Add(reader.Position, this);
-
-            while (reader.Position < reader.Length)
+            if (i == 3)
             {
-                var locationListEntry = new DwarfLocationListEntry();
-                locationListEntry.ReadInternal(reader);
-
-                if (locationListEntry.Start == 0 && locationListEntry.End == 0)
-                {
-                    // End of list
-                    return;
-                }
-
-                _locationListEntries.Add(locationListEntry);
+                builder.Append(", ...");
+                break;
             }
-        }
-
-        protected override void Write(DwarfWriter writer)
-        {
-            foreach (var locationListEntry in _locationListEntries)
+            else if (i != 0)
             {
-                locationListEntry.WriteInternal(writer);
+                builder.Append(", ");
             }
 
-            // End of list
-            writer.WriteUInt(0);
-            writer.WriteUInt(0);
+            builder.Append(_locationListEntries[i].ToString());
         }
 
-        public override string ToString()
-        {
-            var builder = new StringBuilder();
-
-            for (int i = 0; i < _locationListEntries.Count; i++)
-            {
-                if (i == 3)
-                {
-                    builder.Append(", ...");
-                    return builder.ToString();
-                }
-                else if (i != 0)
-                {
-                    builder.Append(", ");
-                }
-
-                builder.Append(_locationListEntries[i].ToString());
-            }
-
-            return builder.ToString();
-        }
+        return true;
     }
 }

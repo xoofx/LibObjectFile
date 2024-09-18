@@ -65,10 +65,4 @@ public abstract class PESectionData : PEObject, IVirtualAddressable
 internal sealed class PESectionDataTemp : PESectionData
 {
     public static readonly PESectionDataTemp Instance = new ();
-    
-    protected override void Read(PEImageReader reader) => throw new NotSupportedException();
-
-    protected override void Write(PEImageWriter writer) => throw new NotSupportedException();
-
-    public override void UpdateLayout(DiagnosticBag diagnostics) => throw new NotSupportedException();
 }
