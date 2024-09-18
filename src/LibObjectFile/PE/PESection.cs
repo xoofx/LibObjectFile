@@ -102,7 +102,7 @@ public class PESection : PEObject, IVirtualAddressable
         ArgumentNullException.ThrowIfNull(data);
         if (data.Parent != null) throw new ArgumentException("Data is already associated with a section", nameof(data));
         data.Parent = this;
-        data.Index = (uint)_dataParts.Count;
+        data.Index = _dataParts.Count;
         _dataParts.Add(data);
         UpdateSectionDataIndicesAndVirtualAddress((int)data.Index);
     }
@@ -114,7 +114,7 @@ public class PESection : PEObject, IVirtualAddressable
 
         if (data.Parent != null) throw new ArgumentException("Data is already associated with a section", nameof(data));
         data.Parent = this;
-        data.Index = (uint)index;
+        data.Index = index;
         _dataParts.Insert(index, data);
         UpdateSectionDataIndicesAndVirtualAddress(index);
     }
@@ -157,15 +157,15 @@ public class PESection : PEObject, IVirtualAddressable
     public bool TryFindSectionData(RVA virtualAddress, [NotNullWhen(true)] out PESectionData? sectionData)
     {
         // Binary search
-        nint left = 0;
+        nint low = 0;
 
         var dataParts = CollectionsMarshal.AsSpan(_dataParts);
-        nint right = dataParts.Length - 1;
+        nint high = dataParts.Length - 1;
         ref var firstData = ref MemoryMarshal.GetReference(dataParts);
 
-        while (left <= right)
+        while (low <= high)
         {
-            nint mid = left + (right - left) >>> 1;
+            nint mid = low + (high - low) >>> 1;
             var trySectionData = Unsafe.Add(ref firstData, mid);
 
             if (trySectionData.ContainsVirtual(virtualAddress))
@@ -176,11 +176,11 @@ public class PESection : PEObject, IVirtualAddressable
 
             if (trySectionData.VirtualAddress < virtualAddress)
             {
-                left = mid + 1;
+                low = mid + 1;
             }
             else
             {
-                right = mid - 1;
+                high = mid - 1;
             }
         }
 
@@ -193,10 +193,9 @@ public class PESection : PEObject, IVirtualAddressable
     /// </summary>
     /// <param name="virtualAddress">The virtual address to check if it belongs to this section.</param>
     /// <returns><c>true</c> if the virtual address is within the section range.</returns>
-    public bool ContainsVirtual(RVA virtualAddress)
-    {
-        return virtualAddress >= VirtualAddress && virtualAddress < VirtualAddress + VirtualSize;
-    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public bool ContainsVirtual(RVA virtualAddress) 
+        => virtualAddress >= VirtualAddress && virtualAddress < VirtualAddress + VirtualSize;
 
     /// <summary>
     /// Checks if the specified virtual address and size is contained by this section.
@@ -204,11 +203,10 @@ public class PESection : PEObject, IVirtualAddressable
     /// <param name="virtualAddress">The virtual address to check if it belongs to this section.</param>
     /// <param name="size">The size to check if it belongs to this section.</param>
     /// <returns><c>true</c> if the virtual address and size is within the section range.</returns>
-    public bool ContainsVirtual(RVA virtualAddress, uint size)
-    {
-        return virtualAddress >= VirtualAddress && virtualAddress + size <= VirtualAddress + VirtualSize;
-    }
-    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public bool ContainsVirtual(RVA virtualAddress, uint size) 
+        => virtualAddress >= VirtualAddress && virtualAddress + size <= VirtualAddress + VirtualSize;
+
     /// <inheritdoc />
     public override void UpdateLayout(DiagnosticBag diagnostics)
     {
@@ -287,7 +285,7 @@ public class PESection : PEObject, IVirtualAddressable
         for (int i = startIndex; i < list.Count; i++)
         {
             var data = list[i];
-            data.Index = (uint)i;
+            data.Index = i;
             data.VirtualAddress = va;
             va += (uint)data.Size;
         }

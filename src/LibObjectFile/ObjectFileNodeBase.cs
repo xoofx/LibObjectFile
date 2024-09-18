@@ -13,6 +13,11 @@ public abstract class ObjectFileNodeBase
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private ObjectFileNodeBase? _parent;
 
+    protected ObjectFileNodeBase()
+    {
+        Index = -1;
+    }
+    
     /// <summary>
     /// Gets or sets the position of this element relative to the top level parent.
     /// </summary>
@@ -45,9 +50,14 @@ public abstract class ObjectFileNodeBase
     }
 
     /// <summary>
-    /// Index within the containing list in a parent.
+    /// Index within the containing list in a parent. If this object is not part of a list, this value is -1.
     /// </summary>
-    public uint Index { get; internal set; }
+    public int Index { get; internal set; }
+
+    internal void ResetIndex()
+    {
+        Index = -1;
+    }
 
     /// <summary>
     /// Gets or sets the size of this section or segment in the parent <see cref="TParentFile"/>.

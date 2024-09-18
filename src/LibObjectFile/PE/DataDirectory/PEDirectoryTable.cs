@@ -99,7 +99,7 @@ public sealed class PEDirectoryTable : IEnumerable<PEDirectory>
     /// <summary>
     /// Gets the import address table directory information from the PE file.
     /// </summary>
-    public PEImportAddressTable? ImportAddressTable => (PEImportAddressTable?)this[ImageDataDirectoryKind.ImportAddressTable];
+    public PEImportAddressTableDirectory? ImportAddressTable => (PEImportAddressTableDirectory?)this[ImageDataDirectoryKind.ImportAddressTable];
 
     /// <summary>
     /// Gets the CLR metadata directory information from the PE file, if present.

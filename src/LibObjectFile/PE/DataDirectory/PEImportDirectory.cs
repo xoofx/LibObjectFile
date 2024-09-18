@@ -3,29 +3,37 @@
 // See the license.txt file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using LibObjectFile.PE.Internal;
+using LibObjectFile.Utils;
 
 namespace LibObjectFile.PE;
 
 public sealed class PEImportDirectory : PEDirectory
 {
+    private readonly ObjectList<PEImportDirectoryEntry> _entries;
+
     public PEImportDirectory() : base(ImageDataDirectoryKind.Import)
     {
+        _entries = new(this);
     }
-    
-    public override void UpdateLayout(DiagnosticBag diagnostics)
+    public ObjectList<PEImportDirectoryEntry> Entries => _entries;
+
+    public override unsafe void UpdateLayout(DiagnosticBag diagnostics)
     {
-        throw new NotImplementedException();
+        Size = (ulong)((_entries.Count + 1) * sizeof(RawImportDirectoryEntry));
     }
 
     protected override void Read(PEImageReader reader)
     {
         var diagnostics = reader.Diagnostics;
 
+        reader.Position = Position;
+
         // Read Import Directory Entries
-        RawImportDirectoryEntry entry = default;
-        var entrySpan = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref entry, 1));
+        RawImportDirectoryEntry rawEntry = default;
+        var entrySpan = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref rawEntry, 1));
 
         while (true)
         {
@@ -36,12 +44,60 @@ public sealed class PEImportDirectory : PEDirectory
                 return;
             }
 
+            // TODO: handle bound imports through entry.TimeDateStamp
+
             // Check for null entry (last entry in the import directory)
-            if (entry.ImportLookupTableRVA == 0 && entry.TimeDateStamp == 0 && entry.ForwarderChain == 0 && entry.NameRVA == 0 && entry.ImportAddressTableRVA == 0)
+            if (rawEntry.ImportLookupTableRVA == 0 && rawEntry.TimeDateStamp == 0 && rawEntry.ForwarderChain == 0 && rawEntry.NameRVA == 0 && rawEntry.ImportAddressTableRVA == 0)
             {
                 // Last entry
                 break;
             }
+
+            // Find the section data for the ImportLookupTableRVA
+            if (!reader.PEFile.TryFindSectionData(rawEntry.ImportAddressTableRVA, out var sectionData))
+            {
+                diagnostics.Error(DiagnosticId.PE_ERR_ImportDirectoryInvalidImportAddressTableRVA, $"Unable to find the section data for ImportAddressTableRVA {rawEntry.ImportAddressTableRVA}");
+                return;
+            }
+
+            // Calculate its position within the original stream
+            var importLookupAddressTablePositionInFile = sectionData.Position + rawEntry.ImportLookupTableRVA - sectionData.VirtualAddress;
+
+            // Find the section data for the ImportLookupTableRVA
+            if (!reader.PEFile.TryFindSectionData(rawEntry.ImportLookupTableRVA, out sectionData))
+            {
+                diagnostics.Error(DiagnosticId.PE_ERR_ImportDirectoryInvalidImportLookupTableRVA, $"Unable to find the section data for ImportLookupTableRVA {rawEntry.ImportLookupTableRVA}");
+                return;
+            }
+
+            // Calculate its position within the original stream
+            var importLookupTablePositionInFile = sectionData.Position + rawEntry.ImportLookupTableRVA - sectionData.VirtualAddress;
+            
+            // Store a fake entry for post-processing section data to allow to recreate PEImportLookupTable from existing PESectionStreamData
+            _entries.Add(
+                new PEImportDirectoryEntry(
+                    // Name
+                    new(new(PESectionDataTemp.Instance, rawEntry.NameRVA)),
+                    // ImportAddressTable
+                    new PEImportAddressTable()
+                    {
+                        Position = importLookupAddressTablePositionInFile
+                    },
+                    // ImportLookupTable
+                    new PEImportLookupTable()
+                    {
+                        Position = importLookupTablePositionInFile
+                    }
+                )
+            );
+        }
+
+        // Resolve ImportLookupTable and ImportAddressTable section data links
+        var entries = CollectionsMarshal.AsSpan(_entries.UnsafeList);
+        foreach (ref var entry in entries)
+        {
+            entry.ImportAddressTable.ReadInternal(reader);
+            entry.ImportLookupTable.ReadInternal(reader);
         }
     }
 

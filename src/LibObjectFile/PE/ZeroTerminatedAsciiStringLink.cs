@@ -6,5 +6,7 @@ namespace LibObjectFile.PE;
 
 public record struct ZeroTerminatedAsciiStringLink(RVALink<PESectionData> Link)
 {
-    public string? GetName() => Link.Element?.ReadZeroTerminatedAsciiString(Link.OffsetInElement);
+    public bool IsNull => Link.IsNull;
+
+    public string? ToText() => Link.Element?.ReadZeroTerminatedAsciiString(Link.OffsetInElement);
 }

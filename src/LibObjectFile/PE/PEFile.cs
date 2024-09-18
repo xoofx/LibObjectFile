@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection.PortableExecutable;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using LibObjectFile.Utils;
@@ -73,6 +74,16 @@ public partial class PEFile : PEObject
     public ImageOptionalHeader OptionalHeader;
 
     /// <summary>
+    /// Gets a boolean indicating whether this instance is a PE32 image.
+    /// </summary>
+    public bool IsPE32 => OptionalHeader.Magic == ImageOptionalHeaderMagic.PE32;
+
+    /// <summary>
+    /// Gets a boolean indicating whether this instance is a PE32+ image.
+    /// </summary>
+    public bool IsPE32Plus => OptionalHeader.Magic == ImageOptionalHeaderMagic.PE32Plus;
+
+    /// <summary>
     /// Gets the directories.
     /// </summary>
     /// <returns>
@@ -106,13 +117,29 @@ public partial class PEFile : PEObject
 
     public bool TryFindSection(RVA virtualAddress, uint virtualSize, [NotNullWhen(true)] out PESection? section)
     {
+        nint low = 0;
         var sections = CollectionsMarshal.AsSpan(_sections);
-        foreach (var trySection in sections)
+        nint high = sections.Length - 1;
+        ref var firstSection = ref MemoryMarshal.GetReference(sections);
+
+        while (low <= high)
         {
-            if (trySection.ContainsVirtual(virtualAddress, virtualSize))
+            nint mid = low + ((high - low) >>> 1);
+            var midSection = Unsafe.Add(ref firstSection, mid);
+
+            if (midSection.ContainsVirtual(virtualAddress, virtualSize))
             {
-                section = trySection;
+                section = midSection;
                 return true;
+            }
+
+            if (midSection.VirtualAddress < virtualAddress)
+            {
+                low = mid + 1;
+            }
+            else
+            {
+                high = mid - 1;
             }
         }
 
@@ -120,6 +147,12 @@ public partial class PEFile : PEObject
         return false;
     }
 
+    public bool TryFindSectionData(RVA virtualAddress, [NotNullWhen(true)] out PESectionData? sectionData)
+    {
+        sectionData = null;
+        return TryFindSection(virtualAddress, out var section) && section.TryFindSectionData(virtualAddress, out sectionData);
+    }
+    
     public void RemoveSection(PESectionName name)
     {
         ArgumentNullException.ThrowIfNull(name);
@@ -191,7 +224,8 @@ public partial class PEFile : PEObject
     
     public override void UpdateLayout(DiagnosticBag diagnostics)
     {
-        // TODO
+
+        
     }
 
     protected override bool PrintMembers(StringBuilder builder)

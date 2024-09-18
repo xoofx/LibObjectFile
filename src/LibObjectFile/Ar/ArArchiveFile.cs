@@ -81,7 +81,7 @@ public sealed class ArArchiveFile : ObjectFileNode
         }
 
         file.Parent = this;
-        file.Index = (uint)_files.Count;
+        file.Index = _files.Count;
         _files.Add(file);
     }
 
@@ -123,7 +123,7 @@ public sealed class ArArchiveFile : ObjectFileNode
             }
         }
             
-        file.Index = (uint)index;
+        file.Index = index;
         _files.Insert(index, file);
         file.Parent = this;
 

@@ -332,7 +332,7 @@ public sealed class ElfObjectFile : ObjectFileNode
         }
 
         segment.Parent = this;
-        segment.Index = (uint)_segments.Count;
+        segment.Index = _segments.Count;
         _segments.Add(segment);
     }
 
@@ -351,7 +351,7 @@ public sealed class ElfObjectFile : ObjectFileNode
             if (segment.Parent != this) throw new InvalidOperationException($"Cannot add the segment as it is already added to another {nameof(ElfObjectFile)} instance");
         }
 
-        segment.Index = (uint)index;
+        segment.Index = index;
         _segments.Insert(index, segment);
         segment.Parent = this;
 
@@ -415,7 +415,7 @@ public sealed class ElfObjectFile : ObjectFileNode
         }
 
         section.Parent = this;
-        section.Index = (uint)_sections.Count;
+        section.Index = _sections.Count;
         _sections.Add(section);
 
         if (section.IsShadow)
@@ -454,7 +454,7 @@ public sealed class ElfObjectFile : ObjectFileNode
         }
 
         section.Parent = this;
-        section.Index = (uint)index;
+        section.Index = index;
         _sections.Insert(index, section);
 
         if (section.IsShadow)

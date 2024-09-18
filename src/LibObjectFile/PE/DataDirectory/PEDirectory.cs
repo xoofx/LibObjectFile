@@ -39,10 +39,18 @@ public abstract class PEDirectory : PESectionData
             ImageDataDirectoryKind.LoadConfig => new PELoadConfigDirectory(),
             ImageDataDirectoryKind.BoundImport => new PEBoundImportDirectory(),
             ImageDataDirectoryKind.DelayImport => new PEDelayImportDirectory(),
-            ImageDataDirectoryKind.ImportAddressTable => new PEImportAddressTable(),
+            ImageDataDirectoryKind.ImportAddressTable => new PEImportAddressTableDirectory(),
             ImageDataDirectoryKind.ClrMetadata => new PEClrMetadata(),
             _ => throw new ArgumentOutOfRangeException(nameof(kind))
         };
+    }
+
+    protected override void ValidateParent(ObjectFileNodeBase parent)
+    {
+        if (parent is not PESection)
+        {
+            throw new ArgumentException($"Invalid parent type [{parent?.GetType()}] for [{GetType()}]");
+        }
     }
 }
 
@@ -159,28 +167,6 @@ public sealed class PELoadConfigDirectory : PEDirectory
 public sealed class PEBoundImportDirectory : PEDirectory
 {
     public PEBoundImportDirectory() : base(ImageDataDirectoryKind.BoundImport)
-    {
-    }
-
-    public override void UpdateLayout(DiagnosticBag diagnostics)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override void Read(PEImageReader reader)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override void Write(PEImageWriter writer)
-    {
-        throw new NotImplementedException();
-    }
-}
-
-public sealed class PEImportAddressTable : PEDirectory
-{
-    public PEImportAddressTable() : base(ImageDataDirectoryKind.ImportAddressTable)
     {
     }
 

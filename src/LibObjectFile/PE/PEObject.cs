@@ -10,6 +10,11 @@ namespace LibObjectFile.PE;
 [DebuggerDisplay("{ToString(),nq}")]
 public abstract class PEObject : ObjectFileNode
 {
+    internal void ReadInternal(PEImageReader reader) => Read(reader);
+
+    internal void WriteInternal(PEImageWriter writer) => Write(writer);
+
+
     protected abstract void Read(PEImageReader reader);
 
     protected abstract void Write(PEImageWriter writer);

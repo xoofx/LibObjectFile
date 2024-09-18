@@ -23,7 +23,7 @@ namespace LibObjectFile
             }
 
             element.Parent = parent;
-            element.Index = (uint)list.Count;
+            element.Index = list.Count;
             list.Add(element);
         }
 
@@ -63,7 +63,7 @@ namespace LibObjectFile
                 list.Insert(index, element);
             }
 
-            element.Index = (uint)index;
+            element.Index = index;
             
             // Update the index of following attributes
             for (int i = index + 1; i < list.Count; i++)
@@ -88,7 +88,7 @@ namespace LibObjectFile
                 if (element.Parent != parent) throw new InvalidOperationException($"Cannot add the {element.GetType()}  as it is already added to another {parent.GetType()} instance");
             }
 
-            element.Index = (uint)index;
+            element.Index = index;
             list.Insert(index, element);
             element.Parent = parent;
 

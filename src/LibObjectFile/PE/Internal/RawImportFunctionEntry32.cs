@@ -5,14 +5,18 @@
 namespace LibObjectFile.PE.Internal;
 
 #pragma warning disable CS0649
-internal struct RawImportFunctionEntry32
+internal readonly struct RawImportFunctionEntry32
 {
+    private readonly uint _hintNameTableRVA;
+
     public RawImportFunctionEntry32(uint hintNameTableRVA)
     {
-        HintNameTableRVA = hintNameTableRVA;
+        _hintNameTableRVA = hintNameTableRVA;
     }
 
-    public uint HintNameTableRVA;
+    public uint HintNameTableRVA => IsImportByOrdinal ? 0U : _hintNameTableRVA;
+
+    public bool IsNull => HintNameTableRVA == 0;
 
     public bool IsImportByOrdinal => (HintNameTableRVA & 0x8000_0000U) != 0;
 

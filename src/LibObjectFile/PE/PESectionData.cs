@@ -3,7 +3,6 @@
 // See the license.txt file in the project root for more information.
 
 using System;
-using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -54,10 +53,6 @@ public abstract class PESectionData : PEObject, IVirtualAddressable
         throw new NotSupportedException($"The write operation is not supported for {this.GetType().FullName}");
     }
 
-    internal void ReadInternal(PEImageReader reader) => Read(reader);
-
-    internal void WriteInternal(PEImageWriter writer) => Write(writer);
-
     protected override bool PrintMembers(StringBuilder builder)
     {
         builder.Append($"VirtualAddress: {VirtualAddress}, Size = 0x{Size:X4}");
@@ -65,104 +60,15 @@ public abstract class PESectionData : PEObject, IVirtualAddressable
     }
 }
 
-/// <summary>
-/// Defines a raw section data in a Portable Executable (PE) image.
-/// </summary>
-public sealed class PESectionMemoryData : PESectionData
+
+
+internal sealed class PESectionDataTemp : PESectionData
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="PESectionMemoryData"/> class.
-    /// </summary>
-    public PESectionMemoryData() : this(Array.Empty<byte>())
-    {
-    }
+    public static readonly PESectionDataTemp Instance = new ();
+    
+    protected override void Read(PEImageReader reader) => throw new NotSupportedException();
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="PESectionMemoryData"/> class.
-    /// </summary>
-    /// <param name="data">The raw data.</param>
-    public PESectionMemoryData(Memory<byte> data)
-    {
-        Data = data;
-    }
+    protected override void Write(PEImageWriter writer) => throw new NotSupportedException();
 
-    /// <summary>
-    /// Gets the raw data.
-    /// </summary>
-    public Memory<byte> Data { get; set; }
-
-    /// <inheritdoc />
-    public override ulong Size
-    {
-        get => (ulong)Data.Length;
-        set => throw new InvalidOperationException();
-    }
-
-    /// <inheritdoc />
-    public override void UpdateLayout(DiagnosticBag diagnostics)
-    {
-    }
-
-    protected override void Read(PEImageReader reader)
-    {
-        // No need to read, as the data is already provided via a stream
-    }
-
-    protected override void Write(PEImageWriter writer) => writer.Write(Data.Span);
-}
-
-/// <summary>
-/// Gets a stream section data in a Portable Executable (PE) image.
-/// </summary>
-public sealed class PESectionStreamData : PESectionData
-{
-    private Stream _stream;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="PESectionStreamData"/> class.
-    /// </summary>
-    public PESectionStreamData()
-    {
-        _stream = Stream.Null;
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="PESectionStreamData"/> class.
-    /// </summary>
-    /// <param name="stream">The stream containing the data of this section data.</param>
-    public PESectionStreamData(Stream stream)
-    {
-        ArgumentNullException.ThrowIfNull(stream);
-        _stream = stream;
-    }
-
-    /// <summary>
-    /// Gets the stream containing the data of this section data.
-    /// </summary>
-    public Stream Stream
-    {
-        get => _stream;
-        set => _stream = value ?? throw new ArgumentNullException(nameof(value));
-    }
-
-    public override ulong Size
-    {
-        get => (ulong)Stream.Length;
-        set => throw new InvalidOperationException();
-    }
-
-    public override void UpdateLayout(DiagnosticBag diagnostics)
-    {
-    }
-
-    protected override void Read(PEImageReader reader)
-    {
-        // No need to read, as the data is already provided via a stream
-    }
-
-    protected override void Write(PEImageWriter writer)
-    {
-        Stream.Position = 0;
-        Stream.CopyTo(writer.Stream);
-    }
+    public override void UpdateLayout(DiagnosticBag diagnostics) => throw new NotSupportedException();
 }

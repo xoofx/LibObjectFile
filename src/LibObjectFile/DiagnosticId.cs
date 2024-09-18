@@ -135,5 +135,9 @@ namespace LibObjectFile
         // PE Import
         PE_ERR_ImportDirectoryInvalidEndOfStream = 3040,
         PE_ERR_ImportLookupTableInvalidEndOfStream = 3041,
+        PE_ERR_ImportLookupTableInvalidHintNameTableRVA = 3042,
+        PE_ERR_ImportLookupTableInvalidParent = 3043,
+        PE_ERR_ImportDirectoryInvalidImportAddressTableRVA = 3044,
+        PE_ERR_ImportDirectoryInvalidImportLookupTableRVA = 3045,
     }
 }
