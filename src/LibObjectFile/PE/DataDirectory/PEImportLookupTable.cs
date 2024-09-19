@@ -17,12 +17,6 @@ public sealed class PEImportLookupTable : PESectionData
         FunctionTable = new PEImportFunctionTable();
     }
 
-    public new PEImportDirectoryEntry? Parent
-    {
-        get => (PEImportDirectoryEntry?)base.Parent;
-        set => base.Parent = value;
-    }
-
     public List<PEImportFunctionEntry> Entries => FunctionTable.Entries;
 
     public override void UpdateLayout(PEVisitorContext context)

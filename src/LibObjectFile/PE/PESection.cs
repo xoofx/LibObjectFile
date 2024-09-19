@@ -31,11 +31,6 @@ public sealed class PESection : PEVirtualObject
     }
 
     /// <summary>
-    /// Gets the parent <see cref="PEFile"/> of this section.
-    /// </summary>
-    public new PEFile? Parent => (PEFile?)base.Parent;
-
-    /// <summary>
     /// Gets the name of this section.
     /// </summary>
     public PESectionName Name { get; }

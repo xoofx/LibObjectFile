@@ -17,8 +17,6 @@ public class PEImportAddressTable : PESectionData
         FunctionTable = new PEImportFunctionTable();
     }
 
-    public new PEImportAddressTableDirectory? Parent => (PEImportAddressTableDirectory?)base.Parent;
-    
     public List<PEImportFunctionEntry> Entries => FunctionTable.Entries;
 
     public override void UpdateLayout(PEVisitorContext context)

@@ -16,12 +16,6 @@ public sealed class PEImportDirectoryEntry : PEObject
         ImportLookupTable = importLookupTable;
     }
 
-    public new PEImportDirectory? Parent
-    {
-        get => (PEImportDirectory?)base.Parent;
-        set => base.Parent = value;
-    }
-    
     public ZeroTerminatedAsciiStringLink ImportDllNameLink { get; set; }
 
     public PEImportAddressTable ImportAddressTable { get; set; }
