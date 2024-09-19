@@ -156,7 +156,7 @@ public sealed class ArArchiveFile : ArObjectBase
 
         var i = (int)file.Index;
         _files.RemoveAt(i);
-        file.Index = 0;
+        file.ResetIndex();
 
         // Update indices for other sections
         for (int j = i + 1; j < _files.Count; j++)

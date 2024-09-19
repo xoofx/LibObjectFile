@@ -94,7 +94,7 @@ public readonly struct SortedObjectList<TObject> : IList<TObject>
         var items = _items;
         var item = items[index];
         item.Parent = null;
-        item.Index = 0;
+        item.ResetIndex();
 
         items.RemoveAt(index);
 

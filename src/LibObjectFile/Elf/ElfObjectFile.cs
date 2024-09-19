@@ -393,7 +393,7 @@ public sealed class ElfObjectFile : ElfObjectBase
 
         var i = (int)segment.Index;
         _segments.RemoveAt(i);
-        segment.Index = 0;
+        segment.ResetIndex();
 
         // Update indices for other sections
         for (int j = i + 1; j < _segments.Count; j++)
@@ -533,7 +533,7 @@ public sealed class ElfObjectFile : ElfObjectBase
 
         var i = (int)section.Index;
         _sections.RemoveAt(i);
-        section.Index = 0;
+        section.ResetIndex();
 
         bool wasShadow = section.IsShadow;
 
