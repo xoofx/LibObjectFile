@@ -10,29 +10,14 @@ namespace LibObjectFile.Dwarf;
 
 public class DwarfAbbreviationTable : DwarfSection
 {
-    private readonly List<DwarfAbbreviation> _abbreviations;
+    private readonly ObjectList<DwarfAbbreviation> _abbreviations;
 
     public DwarfAbbreviationTable()
     {
-        _abbreviations = new List<DwarfAbbreviation>();
+        _abbreviations = new ObjectList<DwarfAbbreviation>(this);
     }
 
-    public ReadOnlyList<DwarfAbbreviation> Abbreviations => _abbreviations;
-
-    internal void AddAbbreviation(DwarfAbbreviation abbreviation)
-    {
-        _abbreviations.Add(this, abbreviation);
-    }
-
-    internal void RemoveAbbreviation(DwarfAbbreviation abbreviation)
-    {
-        _abbreviations.Remove(this, abbreviation);
-    }
-
-    internal DwarfAbbreviation RemoveAbbreviationAt(int index)
-    {
-        return _abbreviations.RemoveAt(this, index);
-    }
+    public ObjectList<DwarfAbbreviation> Abbreviations => _abbreviations;
 
     internal void Reset()
     {
@@ -67,7 +52,7 @@ public class DwarfAbbreviationTable : DwarfSection
             };
             abbreviation.Read(reader);
             endOffset += abbreviation.Size;
-            AddAbbreviation(abbreviation);
+            _abbreviations.Add(abbreviation);
         }
 
         Size = endOffset - Position;

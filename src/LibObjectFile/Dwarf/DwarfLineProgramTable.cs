@@ -17,7 +17,7 @@ public sealed class DwarfLineProgramTable : DwarfObject<DwarfLineSection>
     private readonly Dictionary<string, uint> _directoryNameToIndex;
     private readonly Dictionary<DwarfFileName, uint> _fileNameToIndex;
     private readonly List<string> _directoryNames;
-    private readonly List<DwarfLineSequence> _lineSequences;
+    private readonly ObjectList<DwarfLineSequence> _lineSequences;
     private readonly DwarfLine _stateLine;
     private byte _minimumInstructionLength;
     private byte _maximumOperationsPerInstruction;
@@ -26,7 +26,7 @@ public sealed class DwarfLineProgramTable : DwarfObject<DwarfLineSection>
     public DwarfLineProgramTable()
     {
         FileNames = new List<DwarfFileName>();
-        _lineSequences = new List<DwarfLineSequence>();
+        _lineSequences = new ObjectList<DwarfLineSequence>(this);
         _directoryNameToIndex = new Dictionary<string, uint>();
         _fileNameToIndex = new Dictionary<DwarfFileName, uint>();
         _directoryNames = new List<string>();
@@ -84,22 +84,7 @@ public sealed class DwarfLineProgramTable : DwarfObject<DwarfLineSection>
 
     public List<DwarfFileName> FileNames { get; }
 
-    public ReadOnlyList<DwarfLineSequence> LineSequences => _lineSequences;
-
-    public void AddLineSequence(DwarfLineSequence line)
-    {
-        _lineSequences.Add(this, line);
-    }
-
-    public void RemoveLineSequence(DwarfLineSequence line)
-    {
-        _lineSequences.Remove(this, line);
-    }
-
-    public DwarfLineSequence RemoveLineSequenceAt(int index)
-    {
-        return _lineSequences.RemoveAt(this, index);
-    }
+    public ObjectList<DwarfLineSequence> LineSequences => _lineSequences;
 
     public override void Read(DwarfReader reader)
     {
@@ -291,7 +276,7 @@ public sealed class DwarfLineProgramTable : DwarfObject<DwarfLineSection>
             switch (opcode)
             {
                 case DwarfNative.DW_LNS_copy:
-                    currentSequence.Add(state.Clone());
+                    currentSequence.Lines.Add(state.Clone());
                     state.Position = reader.Position;
                     state.SpecialReset();
                     if (log != null)
@@ -447,9 +432,9 @@ public sealed class DwarfLineProgramTable : DwarfObject<DwarfLineSection>
                         switch (sub_opcode)
                         {
                             case DwarfNative.DW_LNE_end_sequence:
-                                currentSequence.Add(state.Clone());
+                                currentSequence.Lines.Add(state.Clone());
                                 currentSequence.Size = reader.Position - currentSequence.Position;
-                                AddLineSequence(currentSequence);
+                                _lineSequences.Add(currentSequence);
 
                                 currentSequence = new DwarfLineSequence() {Position = reader.Position};
 
@@ -576,7 +561,7 @@ public sealed class DwarfLineProgramTable : DwarfObject<DwarfLineSection>
                             log.WriteLine($" and Line by {line_inc} to {state.Line}");
                         }
 
-                        currentSequence.Add(state.Clone());
+                        currentSequence.Lines.Add(state.Clone());
                         state.Position = reader.Position;
                         state.SpecialReset();
                     }

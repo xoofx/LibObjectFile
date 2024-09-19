@@ -12,30 +12,15 @@ namespace LibObjectFile.Dwarf;
 [DebuggerDisplay("Count = {LineTables.Count,nq}")]
 public sealed class DwarfLineSection : DwarfRelocatableSection
 {
-    private readonly List<DwarfLineProgramTable> _tables;
+    private readonly ObjectList<DwarfLineProgramTable> _tables;
 
 
     public DwarfLineSection()
     {
-        _tables = new List<DwarfLineProgramTable>();
+        _tables = new ObjectList<DwarfLineProgramTable>(this);
     }
 
-    public ReadOnlyList<DwarfLineProgramTable> LineTables => _tables;
-
-    public void AddLineProgramTable(DwarfLineProgramTable line)
-    {
-        _tables.Add(this, line);
-    }
-
-    public void RemoveLineProgramTable(DwarfLineProgramTable line)
-    {
-        _tables.Remove(this, line);
-    }
-
-    public DwarfLineProgramTable RemoveLineProgramTableAt(int index)
-    {
-        return _tables.RemoveAt(this, index);
-    }
+    public ObjectList<DwarfLineProgramTable> LineTables => _tables;
 
     public override void Read(DwarfReader reader)
     {
@@ -44,7 +29,7 @@ public sealed class DwarfLineSection : DwarfRelocatableSection
             var programTable = new DwarfLineProgramTable();
             programTable.Position = reader.Position;
             programTable.Read(reader);
-            AddLineProgramTable(programTable);
+            _tables.Add(programTable);
         }
     }
 

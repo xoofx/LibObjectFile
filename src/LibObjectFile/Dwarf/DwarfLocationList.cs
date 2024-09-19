@@ -10,29 +10,14 @@ namespace LibObjectFile.Dwarf;
 
 public class DwarfLocationList : DwarfContainer
 {
-    private readonly List<DwarfLocationListEntry> _locationListEntries;
+    private readonly ObjectList<DwarfLocationListEntry> _locationListEntries;
 
     public DwarfLocationList()
     {
-        _locationListEntries = new List<DwarfLocationListEntry>();
+        _locationListEntries = new ObjectList<DwarfLocationListEntry>(this);
     }
 
-    public ReadOnlyList<DwarfLocationListEntry> LocationListEntries => _locationListEntries;
-
-    public void AddLocationListEntry(DwarfLocationListEntry locationListEntry)
-    {
-        _locationListEntries.Add(this, locationListEntry);
-    }
-
-    public void RemoveLocationList(DwarfLocationListEntry locationListEntry)
-    {
-        _locationListEntries.Remove(this, locationListEntry);
-    }
-
-    public DwarfLocationListEntry RemoveLocationListEntryAt(int index)
-    {
-        return _locationListEntries.RemoveAt(this, index);
-    }
+    public ObjectList<DwarfLocationListEntry> LocationListEntries => _locationListEntries;
 
     public override void UpdateLayout(DwarfLayoutContext layoutContext)
     {

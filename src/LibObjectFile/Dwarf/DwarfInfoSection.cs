@@ -10,29 +10,14 @@ namespace LibObjectFile.Dwarf;
 
 public sealed class DwarfInfoSection : DwarfRelocatableSection
 {
-    private readonly List<DwarfUnit> _units;
+    private readonly ObjectList<DwarfUnit> _units;
 
     public DwarfInfoSection()
     {
-        _units = new List<DwarfUnit>();
+        _units = new ObjectList<DwarfUnit>(this);
     }
 
-    public ReadOnlyList<DwarfUnit> Units => _units;
-
-    public void AddUnit(DwarfUnit unit)
-    {
-        _units.Add(this, unit);
-    }
-
-    public void RemoveUnit(DwarfUnit unit)
-    {
-        _units.Remove(this, unit);
-    }
-
-    public DwarfUnit RemoveUnitAt(int index)
-    {
-        return _units.RemoveAt(this, index);
-    }
+    public ObjectList<DwarfUnit> Units => _units;
 
     public override void Read(DwarfReader reader)
     {
@@ -62,7 +47,7 @@ public sealed class DwarfInfoSection : DwarfRelocatableSection
                 addressRangeTable.Unit = cu;
             }
                 
-            AddUnit(cu);
+            _units.Add(cu);
         }
 
         reader.ResolveAttributeReferenceWithinSection();

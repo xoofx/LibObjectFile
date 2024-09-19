@@ -12,35 +12,16 @@ namespace LibObjectFile.Dwarf;
 [DebuggerDisplay("Count = {Operations.Count,nq}")]
 public class DwarfExpression : DwarfObject<DwarfObject>
 {
-    private readonly List<DwarfOperation> _operations;
+    private readonly ObjectList<DwarfOperation> _operations;
 
     public DwarfExpression()
     {
-        _operations = new List<DwarfOperation>();
+        _operations = new ObjectList<DwarfOperation>(this);
     }
 
-    public ReadOnlyList<DwarfOperation> Operations => _operations;
-
-    internal List<DwarfOperation> InternalOperations => _operations;
+    public ObjectList<DwarfOperation> Operations => _operations;
 
     public ulong OperationLengthInBytes { get; internal set; }
-
-    public void AddOperation(DwarfOperation operation)
-    {
-        if (operation == null) throw new ArgumentNullException(nameof(operation));
-        _operations.Add(this, operation);
-    }
-
-    public void RemoveOperation(DwarfOperation operation)
-    {
-        if (operation == null) throw new ArgumentNullException(nameof(operation));
-        _operations.Remove(this, operation);
-    }
-
-    public DwarfOperation RemoveOperationAt(int index)
-    {
-        return _operations.RemoveAt(this, index);
-    }
 
     public override void Verify(DwarfVerifyContext context)
     {
@@ -61,7 +42,7 @@ public class DwarfExpression : DwarfObject<DwarfObject>
         {
             var op = new DwarfOperation() {Position = reader.Position};
             op.Read(reader);
-            AddOperation(op);
+            Operations.Add(op);
         }
 
         Size = reader.Position - Position;
@@ -105,7 +86,7 @@ public class DwarfExpression : DwarfObject<DwarfObject>
         // We need to shift the expression which is prefixed by its size encoded in LEB128,
         // or fixed-size U2 in .debug_loc section
         var deltaLength = inLocationSection ? sizeof(ushort) : DwarfHelper.SizeOfULEB128(Size);
-        foreach (var op in InternalOperations)
+        foreach (var op in _operations.UnsafeList)
         {
             op.Position += deltaLength;
         }

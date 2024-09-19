@@ -114,7 +114,7 @@ public abstract class DwarfUnit : DwarfContainer
         {
             // Before updating the layout, we need to compute the abbreviation
             Abbreviation = new DwarfAbbreviation();
-            layoutContext.File.AbbreviationTable.AddAbbreviation(Abbreviation);
+            layoutContext.File.AbbreviationTable.Abbreviations.Add(Abbreviation);
                 
             Root.UpdateAbbreviationItem(layoutContext);
                 

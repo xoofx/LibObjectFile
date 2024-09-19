@@ -15,28 +15,18 @@ namespace LibObjectFile.Dwarf;
 [DebuggerDisplay("Count = {Lines.Count,nq}")]
 public class DwarfLineSequence : DwarfObject<DwarfLineProgramTable>, IEnumerable<DwarfLine>
 {
-    private readonly List<DwarfLine> _lines;
+    private readonly ObjectList<DwarfLine> _lines;
 
     public DwarfLineSequence()
     {
-        _lines = new List<DwarfLine>();
+        _lines = new ObjectList<DwarfLine>(this);
     }
 
-    public ReadOnlyList<DwarfLine> Lines => _lines;
+    public ObjectList<DwarfLine> Lines => _lines;
 
     public void Add(DwarfLine line)
     {
-        _lines.Add(this, line);
-    }
-
-    public void Remove(DwarfLine line)
-    {
-        _lines.Remove(this, line);
-    }
-
-    public DwarfLine RemoveAt(int index)
-    {
-        return _lines.RemoveAt(this, index);
+        _lines.Add(line);
     }
 
     public override void UpdateLayout(DwarfLayoutContext layoutContext)

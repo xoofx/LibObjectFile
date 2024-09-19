@@ -12,29 +12,15 @@ namespace LibObjectFile.Dwarf;
 [DebuggerDisplay("Count = {LineTables.Count,nq}")]
 public sealed class DwarfLocationSection : DwarfRelocatableSection
 {
-    private readonly List<DwarfLocationList> _locationLists;
+    private readonly ObjectList<DwarfLocationList> _locationLists;
 
     public DwarfLocationSection()
     {
-        _locationLists = new List<DwarfLocationList>();
+        _locationLists = new ObjectList<DwarfLocationList>(this);
+
     }
 
-    public ReadOnlyList<DwarfLocationList> LocationLists => _locationLists;
-
-    public void AddLocationList(DwarfLocationList locationList)
-    {
-        _locationLists.Add(this, locationList);
-    }
-
-    public void RemoveLocationList(DwarfLocationList locationList)
-    {
-        _locationLists.Remove(this, locationList);
-    }
-
-    public DwarfLocationList RemoveLineProgramTableAt(int index)
-    {
-        return _locationLists.RemoveAt(this, index);
-    }
+    public ObjectList<DwarfLocationList> LocationLists => _locationLists;
 
     public override void Read(DwarfReader reader)
     {
@@ -43,7 +29,7 @@ public sealed class DwarfLocationSection : DwarfRelocatableSection
             var locationList = new DwarfLocationList();
             locationList.Position = reader.Position;
             locationList.Read(reader);
-            AddLocationList(locationList);
+            _locationLists.Add(locationList);
         }
     }
 
