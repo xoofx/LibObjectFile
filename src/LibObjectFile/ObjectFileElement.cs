@@ -19,9 +19,14 @@ public abstract class ObjectFileElement
     }
 
     /// <summary>
-    /// Gets or sets the position of this element relative to the top level parent.
+    /// Gets or sets the absolute position of this element relative to the top level parent.
     /// </summary>
     public ulong Position { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the size in bytes of this element in the top level parent. This value might need to be updated via UpdateLayout on the top level parent.
+    /// </summary>
+    public virtual ulong Size { get; set; }
 
     /// <summary>
     /// Gets the containing parent.
@@ -45,24 +50,10 @@ public abstract class ObjectFileElement
         }
     }
 
-    protected virtual void ValidateParent(ObjectFileElement parent)
-    {
-    }
-
     /// <summary>
     /// If the object is part of a list in its parent, this property returns the index within the containing list in the parent. Otherwise, this value is -1.
     /// </summary>
     public int Index { get; internal set; }
-
-    internal void ResetIndex()
-    {
-        Index = -1;
-    }
-
-    /// <summary>
-    /// Gets or sets the size of this section or segment in the parent <see cref="TParentFile"/>.
-    /// </summary>
-    public virtual ulong Size { get; set; }
 
     /// <summary>
     /// Checks if the specified offset is contained by this instance.
@@ -106,6 +97,15 @@ public abstract class ObjectFileElement
     protected virtual bool PrintMembers(StringBuilder builder)
     {
         return false;
+    }
+
+    protected virtual void ValidateParent(ObjectFileElement parent)
+    {
+    }
+
+    internal void ResetIndex()
+    {
+        Index = -1;
     }
 }
 
