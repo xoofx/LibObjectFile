@@ -13,7 +13,7 @@ namespace LibObjectFile.Dwarf;
 /// </summary>
 public abstract class DwarfUnit : DwarfContainer
 {
-    private DwarfDIE? _root;
+    private ObjectFileElementHolder<DwarfDIE> _root;
 
     /// <summary>
     /// Gets or sets the encoding of this unit.
@@ -51,7 +51,7 @@ public abstract class DwarfUnit : DwarfContainer
     public DwarfDIE? Root
     {
         get => _root;
-        set => AttachNullableChild<DwarfContainer, DwarfDIE>(this, value, ref _root);
+        set => _root.Set(this, value);
     }
 
     /// <summary>

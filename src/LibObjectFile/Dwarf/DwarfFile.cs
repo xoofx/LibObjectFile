@@ -10,57 +10,57 @@ namespace LibObjectFile.Dwarf;
 
 public class DwarfFile : DwarfContainer
 {
-    private DwarfAbbreviationTable _abbreviationTable;
-    private DwarfStringTable _stringTable;
-    private DwarfLineSection _lineSection;
-    private DwarfInfoSection _infoSection;
-    private DwarfAddressRangeTable _addressRangeTable;
-    private DwarfLocationSection _locationSection;
+    private ObjectFileElementHolder<DwarfAbbreviationTable> _abbreviationTable;
+    private ObjectFileElementHolder<DwarfStringTable> _stringTable;
+    private ObjectFileElementHolder<DwarfLineSection> _lineSection;
+    private ObjectFileElementHolder<DwarfInfoSection> _infoSection;
+    private ObjectFileElementHolder<DwarfAddressRangeTable> _addressRangeTable;
+    private ObjectFileElementHolder<DwarfLocationSection> _locationSection;
 
     public DwarfFile()
     {
-        AssignChild(this, new DwarfAbbreviationTable(), out _abbreviationTable);
-        AssignChild(this, new DwarfStringTable(), out _stringTable);
-        AssignChild(this, new DwarfLineSection(), out _lineSection);
-        AssignChild(this, new DwarfInfoSection(), out _infoSection);
-        AssignChild(this, new DwarfAddressRangeTable(), out _addressRangeTable);
-        AssignChild(this, new DwarfLocationSection(), out _locationSection);
+        _abbreviationTable = new(this, new DwarfAbbreviationTable());
+        _stringTable = new(this, new DwarfStringTable());
+        _lineSection = new(this, new DwarfLineSection());
+        _infoSection = new(this, new DwarfInfoSection());
+        _addressRangeTable = new(this, new DwarfAddressRangeTable());
+        _locationSection = new(this, new DwarfLocationSection());
     }
 
     public DwarfAbbreviationTable AbbreviationTable
     {
         get => _abbreviationTable;
-        set => AttachChild(this, value, ref _abbreviationTable);
+        set => _abbreviationTable.Set(this, value);
     }
         
     public DwarfStringTable StringTable
     {
         get => _stringTable;
-        set => AttachChild(this, value, ref _stringTable);
+        set => _stringTable.Set(this, value);
     }
 
     public DwarfLineSection LineSection
     {
         get => _lineSection;
-        set => AttachChild(this, value, ref _lineSection);
+        set => _lineSection.Set(this, value);
     }
 
     public DwarfAddressRangeTable AddressRangeTable
     {
         get => _addressRangeTable;
-        set => AttachChild(this, value, ref _addressRangeTable);
+        set => _addressRangeTable.Set(this, value);
     }
 
     public DwarfInfoSection InfoSection
     {
         get => _infoSection;
-        set => AttachChild(this, value, ref _infoSection);
+        set => _infoSection.Set(this, value);
     }
 
     public DwarfLocationSection LocationSection
     {
         get => _locationSection;
-        set => AttachChild(this, value, ref _locationSection);
+        set => _locationSection.Set(this, value);
     }
 
     public override void Read(DwarfReader reader)

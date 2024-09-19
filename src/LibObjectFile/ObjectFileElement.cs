@@ -50,7 +50,7 @@ public abstract class ObjectFileElement
     }
 
     /// <summary>
-    /// Index within the containing list in a parent. If this object is not part of a list, this value is -1.
+    /// If the object is part of a list in its parent, this property returns the index within the containing list in the parent. Otherwise, this value is -1.
     /// </summary>
     public int Index { get; internal set; }
 
@@ -78,7 +78,7 @@ public abstract class ObjectFileElement
     /// Checks this instance contains either the beginning or the end of the specified section or segment.
     /// </summary>
     /// <param name="element">The specified section or segment.</param>
-    /// <returns><c>true</c> if the either the offset or end of the part is within this segment or section range.</returns>
+    /// <returns><c>true</c> if either the offset or end of the part is within this segment or section range.</returns>
     public bool Contains(ObjectFileElement element)
     {
         ArgumentNullException.ThrowIfNull(element);
@@ -107,53 +107,6 @@ public abstract class ObjectFileElement
     {
         return false;
     }
-
-    protected static void AssignChild<TParent, T>(TParent parent, T child, out T field) where T : ObjectFileElement where TParent : ObjectFileElement
-    {
-        if (parent == null) throw new ArgumentNullException(nameof(parent));
-        if (child == null) throw new ArgumentNullException(nameof(child));
-
-        if (child?.Parent != null) throw new InvalidOperationException($"Cannot set the {child.GetType()} as it already belongs to another {child.Parent.GetType()} instance");
-        field = child!;
-
-        if (child != null)
-        {
-            child.Parent = parent;
-        }
-    }
-
-    protected static void AttachChild<TParent, T>(TParent parent, T child, ref T field) where T : ObjectFileElement where TParent : ObjectFileElement
-    {
-        if (parent == null) throw new ArgumentNullException(nameof(parent));
-        field.Parent = null;
-
-        if (child?.Parent != null) throw new InvalidOperationException($"Cannot set the {child.GetType()} as it already belongs to another {child.Parent.GetType()} instance");
-        field = child!;
-
-        if (child != null)
-        {
-            child.Parent = parent;
-        }
-    }
-
-    protected static void AttachNullableChild<TParent, T>(TParent parent, T? child, ref T? field) where T : ObjectFileElement where TParent : ObjectFileElement
-    {
-        if (parent == null) throw new ArgumentNullException(nameof(parent));
-
-        if (field is not null)
-        {
-            field.Parent = null;
-        }
-
-        if (child?.Parent != null) throw new InvalidOperationException($"Cannot set the {child.GetType()} as it already belongs to another {child.Parent.GetType()} instance");
-        field = child!;
-
-        if (child != null)
-        {
-            child.Parent = parent;
-        }
-    }
-
 }
 
 public abstract class ObjectFileElement<TLayoutContext, TVerifyContext, TReader, TWriter> : ObjectFileElement
