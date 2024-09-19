@@ -54,7 +54,7 @@ public readonly struct ObjectList<TObject> : IList<TObject>
     public void Clear()
     {
         var items = _items;
-        for (var i = items.Count - 1; i >= 0; i++)
+        for (var i = items.Count - 1; i >= 0; i--)
         {
             var item = items[i];
             items.Removing(item);
