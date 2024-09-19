@@ -18,11 +18,11 @@ public abstract class ObjectFileReaderWriter : VisitorContextBase
 {
     private Stream _stream;
 
-    protected ObjectFileReaderWriter(ObjectFileElement file, Stream stream) : this(file, stream, new DiagnosticBag())
+    internal ObjectFileReaderWriter(ObjectFileElement file, Stream stream) : this(file, stream, new DiagnosticBag())
     {
     }
 
-    protected ObjectFileReaderWriter(ObjectFileElement file, Stream stream, DiagnosticBag diagnostics) : base(file, diagnostics)
+    internal ObjectFileReaderWriter(ObjectFileElement file, Stream stream, DiagnosticBag diagnostics) : base(file, diagnostics)
     {
         _stream = stream;
         IsLittleEndian = true;

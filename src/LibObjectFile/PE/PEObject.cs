@@ -6,5 +6,8 @@ using System.Diagnostics;
 
 namespace LibObjectFile.PE;
 
+/// <summary>
+/// Base class for all Portable Executable (PE) objects.
+/// </summary>
 [DebuggerDisplay("{ToString(),nq}")]
 public abstract class PEObject : ObjectFileElement<PEVisitorContext, PEVisitorContext, PEImageReader, PEImageWriter>;

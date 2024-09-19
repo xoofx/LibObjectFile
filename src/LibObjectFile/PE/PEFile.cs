@@ -107,41 +107,12 @@ public partial class PEFile : PEObject
         _sections.Add(section);
         return section;
     }
-    
+
     public bool TryFindSection(RVA virtualAddress, [NotNullWhen(true)] out PESection? section)
-        => TryFindSection(virtualAddress, 0, out section);
+        => _sections.TryFindByVirtualAddress(virtualAddress, out section);
 
-    public bool TryFindSection(RVA virtualAddress, uint virtualSize, [NotNullWhen(true)] out PESection? section)
-    {
-        nint low = 0;
-        var sections = CollectionsMarshal.AsSpan(_sections.UnsafeList);
-        nint high = sections.Length - 1;
-        ref var firstSection = ref MemoryMarshal.GetReference(sections);
-
-        while (low <= high)
-        {
-            nint mid = low + ((high - low) >>> 1);
-            var midSection = Unsafe.Add(ref firstSection, mid);
-
-            if (midSection.ContainsVirtual(virtualAddress, virtualSize))
-            {
-                section = midSection;
-                return true;
-            }
-
-            if (midSection.VirtualAddress < virtualAddress)
-            {
-                low = mid + 1;
-            }
-            else
-            {
-                high = mid - 1;
-            }
-        }
-
-        section = null;
-        return false;
-    }
+    public bool TryFindSection(RVA virtualAddress, uint size, [NotNullWhen(true)] out PESection? section)
+        => _sections.TryFindByVirtualAddress(virtualAddress, size, out section);
 
     public bool TryFindSectionData(RVA virtualAddress, [NotNullWhen(true)] out PESectionData? sectionData)
     {
@@ -205,12 +176,8 @@ public partial class PEFile : PEObject
 
         foreach (var section in sections)
         {
-            var va = section.VirtualAddress;
             foreach (var data in section.DataParts)
             {
-                var size = (uint)data.Size;
-                data.VirtualAddress = va;
-                va += size;
                 dataList.Add(data);
             }
         }

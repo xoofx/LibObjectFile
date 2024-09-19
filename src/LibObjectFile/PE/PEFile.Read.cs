@@ -269,7 +269,7 @@ partial class PEFile
                 var data = dataParts[i];
                 if (data.Position != sectionPosition)
                 {
-                    var sectionData = new PESectionStreamData()
+                    var sectionData = new PEStreamSectionData()
                     {
                         Position = sectionPosition,
                     };
@@ -287,7 +287,7 @@ partial class PEFile
 
             if (sectionPosition < section.Position + section.Size)
             {
-                var sectionData = new PESectionStreamData()
+                var sectionData = new PEStreamSectionData()
                 {
                     Position = sectionPosition,
                 };
@@ -298,11 +298,11 @@ partial class PEFile
                 dataParts.Add(sectionData);
             }
 
-            //for (var i = 0; i < section.DataParts.Count; i++)
-            //{
-            //    var sectionData = section.DataParts[i];
-            //    Console.WriteLine($"section: {section.Name} {sectionData}");
-            //}
+            for (var i = 0; i < section.DataParts.Count; i++)
+            {
+                var sectionData = section.DataParts[i];
+                Console.WriteLine($"section: {section.Name} {sectionData}");
+            }
         }
 
         // Read directories

@@ -16,16 +16,16 @@ namespace LibObjectFile.PE;
 /// <summary>
 /// Defines a section in a Portable Executable (PE) image.
 /// </summary>
-public class PESection : PEObject, IVirtualAddressable
+public sealed class PESection : PEVirtualObject
 {
     private readonly ObjectList<PESectionData> _dataParts;
 
-    public PESection(PESectionName name, RVA virtualAddress, RVA virtualSize)
+    public PESection(PESectionName name, RVA virtualAddress, RVA virtualSize) : base(true)
     {
         Name = name;
         VirtualAddress = virtualAddress;
         VirtualSize = virtualSize;
-        _dataParts = new ObjectList<PESectionData>(this, SectionDataAdded, null, SectionDataRemoved, SectionDataUpdated);
+        _dataParts = PEVirtualObject.CreateObjectList<PESectionData>(this);
         // Most of the time readable
         Characteristics = SectionCharacteristics.MemRead;
     }
@@ -39,11 +39,6 @@ public class PESection : PEObject, IVirtualAddressable
     /// Gets the name of this section.
     /// </summary>
     public PESectionName Name { get; }
-
-    /// <summary>
-    /// The address of the first byte of the section when loaded into memory, relative to the image base.
-    /// </summary>
-    public RVA VirtualAddress { get; }
 
     /// <summary>
     /// The total size of the section when loaded into memory.
@@ -68,57 +63,7 @@ public class PESection : PEObject, IVirtualAddressable
     /// <param name="sectionData">The section data that contains the virtual address, if found.</param>
     /// <returns><c>true</c> if the section data was found; otherwise, <c>false</c>.</returns>
     public bool TryFindSectionData(RVA virtualAddress, [NotNullWhen(true)] out PESectionData? sectionData)
-    {
-        // Binary search
-        nint low = 0;
-
-        var dataParts = CollectionsMarshal.AsSpan(_dataParts.UnsafeList);
-        nint high = dataParts.Length - 1;
-        ref var firstData = ref MemoryMarshal.GetReference(dataParts);
-
-        while (low <= high)
-        {
-            nint mid = low + (high - low) >>> 1;
-            var trySectionData = Unsafe.Add(ref firstData, mid);
-
-            if (trySectionData.ContainsVirtual(virtualAddress))
-            {
-                sectionData = trySectionData;
-                return true;
-            }
-
-            if (trySectionData.VirtualAddress < virtualAddress)
-            {
-                low = mid + 1;
-            }
-            else
-            {
-                high = mid - 1;
-            }
-        }
-
-        sectionData = null;
-        return false;
-    }
-
-    /// <summary>
-    /// Checks if the specified virtual address is contained by this section.
-    /// </summary>
-    /// <param name="virtualAddress">The virtual address to check if it belongs to this section.</param>
-    /// <returns><c>true</c> if the virtual address is within the section range.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool ContainsVirtual(RVA virtualAddress) 
-        => virtualAddress >= VirtualAddress && virtualAddress < VirtualAddress + VirtualSize;
-
-    /// <summary>
-    /// Checks if the specified virtual address and size is contained by this section.
-    /// </summary>
-    /// <param name="virtualAddress">The virtual address to check if it belongs to this section.</param>
-    /// <param name="size">The size to check if it belongs to this section.</param>
-    /// <returns><c>true</c> if the virtual address and size is within the section range.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool ContainsVirtual(RVA virtualAddress, uint size) 
-        => virtualAddress >= VirtualAddress && virtualAddress + size <= VirtualAddress + VirtualSize;
+        => _dataParts.TryFindByVirtualAddress(virtualAddress, out sectionData);
 
     /// <inheritdoc />
     public override void UpdateLayout(PEVisitorContext context)
@@ -155,6 +100,26 @@ public class PESection : PEObject, IVirtualAddressable
         builder.Append($"VirtualAddress = {VirtualAddress}, VirtualSize = 0x{VirtualSize:X4}, DataParts[{DataParts.Count}]");
         return true;
     }
+    
+    protected override bool TryFindByVirtualAddressInChildren(RVA virtualAddress, out PEVirtualObject? result)
+    {
+        var parts = CollectionsMarshal.AsSpan(_dataParts.UnsafeList);
+        foreach (var data in parts)
+        {
+            if (data.TryFindByVirtualAddress(virtualAddress, out result))
+            {
+                return true;
+            }
+        }
+
+        result = null;
+        return false;
+    }
+
+    protected override void UpdateVirtualAddressInChildren()
+    {
+        // TODO?
+    }
 
     /// <summary>
     /// Gets the default characteristics for a section name.
@@ -186,40 +151,5 @@ public class PESection : PEObject, IVirtualAddressable
             ".tls" => SectionCharacteristics.ContainsInitializedData | SectionCharacteristics.MemRead | SectionCharacteristics.MemWrite,
             _ => SectionCharacteristics.ContainsInitializedData |  SectionCharacteristics.MemRead
         };
-    }
-    
-    private static void SectionDataAdded(ObjectFileElement parent, PESectionData sectionData)
-    {
-        var section = (PESection) parent;
-        section.UpdateSectionDataVirtualAddress(sectionData.Index);
-    }
-    
-    private static void SectionDataRemoved(ObjectFileElement parent, int index, PESectionData removedSectionData)
-    {
-        var section = (PESection) parent;
-        section.UpdateSectionDataVirtualAddress(index);
-    }
-    private static void SectionDataUpdated(ObjectFileElement parent, int index, PESectionData previousSectionData, PESectionData newSectionData)
-    {
-        var section = (PESection) parent;
-        section.UpdateSectionDataVirtualAddress(index);
-    }
-
-    private void UpdateSectionDataVirtualAddress(int startIndex)
-    {
-        var va = VirtualAddress;
-        var list = _dataParts.UnsafeList;
-        if (startIndex > 0)
-        {
-            var previousData = list[startIndex - 1];
-            va = previousData.VirtualAddress + (uint)previousData.Size;
-        }
-        
-        for (int i = startIndex; i < list.Count; i++)
-        {
-            var data = list[i];
-            data.VirtualAddress = va;
-            va += (uint)data.Size;
-        }
     }
 }

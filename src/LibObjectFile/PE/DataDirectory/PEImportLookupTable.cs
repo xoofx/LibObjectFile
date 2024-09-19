@@ -8,11 +8,11 @@ using LibObjectFile.Diagnostics;
 
 namespace LibObjectFile.PE;
 
-public sealed class PEImportLookupTable : PEObject
+public sealed class PEImportLookupTable : PEVirtualObject
 {
     internal readonly PEImportFunctionTable FunctionTable;
 
-    public PEImportLookupTable()
+    public PEImportLookupTable() : base(false)
     {
         FunctionTable = new PEImportFunctionTable();
     }

@@ -11,37 +11,11 @@ namespace LibObjectFile.PE;
 /// <summary>
 /// Base class for data contained in a <see cref="PESection"/>.
 /// </summary>
-public abstract class PESectionData : PEObject, IVirtualAddressable
+public abstract class PESectionData : PEVirtualObject
 {
-    /// <summary>
-    /// Gets the parent <see cref="PESection"/> of this section data.
-    /// </summary>
-    public new PESection? Parent
+    protected PESectionData(bool hasChildren) : base(hasChildren)
     {
-        get => (PESection?)base.Parent;
-
-        internal set => base.Parent = value;
     }
-
-    /// <summary>
-    /// Gets the virtual address of this section data.
-    /// </summary>
-    /// <remarks>
-    /// This property is updated dynamically based on the previous section data.
-    /// </remarks>
-    public RVA VirtualAddress
-    {
-        get;
-        internal set;
-    }
-
-    /// <summary>
-    /// Checks if the specified virtual address is contained by this instance.
-    /// </summary>
-    /// <param name="virtualAddress">The virtual address to check if it belongs to this instance.</param>
-    /// <returns><c>true</c> if the specified virtual address is contained by this instance; otherwise, <c>false</c>.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool ContainsVirtual(RVA virtualAddress) => VirtualAddress <= virtualAddress && virtualAddress < VirtualAddress + Size;
 
     public virtual int ReadAt(uint offset, Span<byte> destination)
     {
@@ -55,14 +29,19 @@ public abstract class PESectionData : PEObject, IVirtualAddressable
 
     protected override bool PrintMembers(StringBuilder builder)
     {
-        builder.Append($"VirtualAddress: {VirtualAddress}, Size = 0x{Size:X4}");
+        builder.Append($"VirtualAddress =  {VirtualAddress}, Size = 0x{Size:X4}");
+        if (Parent is PESection section)
+        {
+            builder.Append($", Section = {section.Name}");
+        }
         return true;
     }
-}
 
-
-
-internal sealed class PESectionDataTemp : PESectionData
-{
-    public static readonly PESectionDataTemp Instance = new ();
+    protected override void ValidateParent(ObjectFileElement parent)
+    {
+        if (parent is not PESection && parent is not PESectionData)
+        {
+            throw new ArgumentException($"Invalid parent type {parent.GetType().FullName}. Expecting a parent of type {typeof(PESection).FullName} or {typeof(PESectionData).FullName}");
+        }
+    }
 }

@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace LibObjectFile.Collections;
@@ -29,10 +30,10 @@ public readonly struct SortedObjectList<TObject> : IList<TObject>
     /// Initializes a new instance of the <see cref="SortedObjectList{TObject}"/> class.
     /// </summary>
     /// <param name="parent">The parent object file node.</param>
-    public SortedObjectList(ObjectFileElement parent, Action<ObjectFileElement, TObject>? added = null, Action<ObjectFileElement, TObject>? removing = null, Action<ObjectFileElement, int, TObject>? removed = null, Action<ObjectFileElement, int, TObject, TObject>? updated = null)
+    public SortedObjectList(ObjectFileElement parent)
     {
         ArgumentNullException.ThrowIfNull(parent);
-        _items = new InternalList(parent, added, removing, removed, updated);
+        _items = new InternalList(parent);
     }
 
     public int Count => _items.Count;
@@ -44,11 +45,24 @@ public readonly struct SortedObjectList<TObject> : IList<TObject>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Add(TObject item)
     {
+        CheckAdd(item);
         var items = _items;
-        int index = items.Count;
-        items.Add(CheckAdd(item));
-        item.Index = index;
-        items.Added(item);
+        if (items.Count > 0 && item.CompareTo(items[^1]) > 0)
+        {
+            int index = items.Count;
+            items.Add(AssignAdd(item));
+            item.Index = index;
+        }
+        else
+        {
+            var index = items.BinarySearch(item);
+            if (index < 0)
+            {
+                index = ~index;
+            }
+            items.Insert(index, AssignAdd(item));
+            item.Index = index;
+        }
     }
 
     public void Clear()
@@ -57,11 +71,9 @@ public readonly struct SortedObjectList<TObject> : IList<TObject>
         for (var i = items.Count - 1; i >= 0; i--)
         {
             var item = items[i];
-            items.Removing(item);
             items.RemoveAt(i);
             item.Parent = null;
             item.ResetIndex();
-            items.Removed(i, item);
         }
 
         items.Clear();
@@ -87,7 +99,31 @@ public readonly struct SortedObjectList<TObject> : IList<TObject>
 
     public int IndexOf(TObject item) => _items.IndexOf(item);
 
-    public void Insert(int index, TObject item) => throw new NotSupportedException("Insert is not supported");
+    public void Insert(int index, TObject item)
+    {
+        if ((uint)index > (uint)_items.Count) throw new ArgumentOutOfRangeException(nameof(index));
+
+        CheckAdd(item);
+        var items = _items;
+
+        var expectedIndex = items.BinarySearch(item);
+        if (expectedIndex < 0)
+        {
+            expectedIndex = ~expectedIndex;
+        }
+
+        if (expectedIndex != index)
+        {
+            throw new ArgumentException($"The index {index} is not valid for the item {item} to maintain the order of the list");
+        }
+
+        items.Insert(index, AssignAdd(item));
+
+        for (int i = index; i < items.Count; i++)
+        {
+            items[i].Index = i;
+        }
+    }
 
     public void RemoveAt(int index)
     {
@@ -109,19 +145,37 @@ public readonly struct SortedObjectList<TObject> : IList<TObject>
         get => _items[index];
         set
         {
-            value = CheckAdd(value);
+            if ((uint)index >= (uint)_items.Count) throw new ArgumentOutOfRangeException(nameof(index));
+            CheckAdd(value);
 
             // Unbind previous entry
             var items = _items;
-            var previousItem = items[index];
-            items.Removing(previousItem);
-            previousItem.Parent = null;
-            previousItem.ResetIndex();
 
-            // Bind new entry
-            items[index] = value;
-            value.Index = index;
-            items.Updated(index, previousItem, value);
+            var expectedIndex = items.BinarySearch(value);
+            if (expectedIndex < 0)
+            {
+                expectedIndex = ~expectedIndex;
+            }
+            if (expectedIndex != index)
+            {
+                throw new ArgumentException($"The index {index} is not valid for the item {value} to maintain the order of the list");
+            }
+
+            if (index < items.Count)
+            {
+                var previousItem = items[index];
+                previousItem.Parent = null;
+                previousItem.ResetIndex();
+
+                // Bind new entry
+                items[index] = AssignAdd(value);
+                value.Index = index;
+            }
+            else
+            {
+                items.Add(AssignAdd(value));
+                value.Index = items.Count - 1;
+            }
         }
     }
 
@@ -137,37 +191,25 @@ public readonly struct SortedObjectList<TObject> : IList<TObject>
         return ((IEnumerable)_items).GetEnumerator();
     }
 
-    public TObject CheckAdd(TObject item)
+    private void CheckAdd(TObject item)
     {
         ArgumentNullException.ThrowIfNull(item);
         if (item.Parent != null)
         {
             throw new ArgumentException($"The object is already attached to another parent", nameof(item));
         }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private TObject AssignAdd(TObject item)
+    {
         item.Parent = _items.Parent;
         return item;
     }
 
-    private sealed class InternalList(ObjectFileElement parent, Action<ObjectFileElement, TObject>? added, Action<ObjectFileElement, TObject>? removing, Action<ObjectFileElement, int, TObject>? removed, Action<ObjectFileElement, int, TObject, TObject>? updated) : List<TObject>
+    private sealed class InternalList(ObjectFileElement parent) : List<TObject>
     {
-        private readonly Action<ObjectFileElement, TObject>? _added = added;
-        private readonly Action<ObjectFileElement, TObject>? _removing = removing;
-        private readonly Action<ObjectFileElement, int, TObject>? _removed = removed;
-        private readonly Action<ObjectFileElement, int, TObject, TObject>? _updated = updated;
-
         public readonly ObjectFileElement Parent = parent;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Added(TObject item) => _added?.Invoke(Parent, item);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Removing(TObject item) => _removing?.Invoke(Parent, item);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Updated(int index, TObject previousItem, TObject newItem) => _updated?.Invoke(Parent, index, previousItem, newItem);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Removed(int index, TObject removedItem) => _removed?.Invoke(Parent, index, removedItem);
     }
 
     internal sealed class ObjectListDebuggerView

@@ -78,7 +78,7 @@ internal readonly struct PEImportFunctionTable()
             Entries.Add(
                 entry.IsImportByOrdinal
                     ? new PEImportFunctionEntry(entry.Ordinal)
-                    : new PEImportFunctionEntry(new ZeroTerminatedAsciiStringLink(new(PESectionDataTemp.Instance, entry.HintNameTableRVA)))
+                    : new PEImportFunctionEntry(new ZeroTerminatedAsciiStringLink(new(PETempSectionData.Instance, entry.HintNameTableRVA)))
             );
         }
     }
@@ -104,7 +104,7 @@ internal readonly struct PEImportFunctionTable()
             Entries.Add(
                 entry.IsImportByOrdinal
                     ? new PEImportFunctionEntry(entry.Ordinal)
-                    : new PEImportFunctionEntry(new ZeroTerminatedAsciiStringLink(new(PESectionDataTemp.Instance, entry.HintNameTableRVA)))
+                    : new PEImportFunctionEntry(new ZeroTerminatedAsciiStringLink(new(PETempSectionData.Instance, entry.HintNameTableRVA)))
             );
         }
     }

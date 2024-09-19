@@ -42,7 +42,7 @@ public sealed class PEBaseRelocationPageBlockPart
     {
         get
         {
-            var size = sizeof(uint) + sizeof(uint) + Relocations.Count * sizeof(ushort);
+            var size = sizeof(uint) + sizeof(uint) + (Relocations.Count + 1) * sizeof(ushort);
             // Align to 4 bytes
             size = (size + 3) & ~3;
             return (uint)size;

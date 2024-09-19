@@ -29,10 +29,18 @@ public readonly struct ObjectList<TObject> : IList<TObject>
     /// Initializes a new instance of the <see cref="ObjectList{TObject}"/> class.
     /// </summary>
     /// <param name="parent">The parent object file node.</param>
-    public ObjectList(ObjectFileElement parent, Action<ObjectFileElement, TObject>? added = null, Action<ObjectFileElement, TObject>? removing = null, Action<ObjectFileElement, int, TObject>? removed = null, Action<ObjectFileElement, int, TObject, TObject>? updated = null)
+    public ObjectList(
+        ObjectFileElement parent,
+        Action<ObjectFileElement, int, TObject>? adding= null,
+        Action<ObjectFileElement, TObject>? added = null,
+        Action<ObjectFileElement, TObject>? removing = null,
+        Action<ObjectFileElement, int, TObject>? removed = null,
+        Action<ObjectFileElement, int, TObject, TObject>? updating = null,
+        Action<ObjectFileElement, int, TObject, TObject>? updated = null
+        )
     {
         ArgumentNullException.ThrowIfNull(parent);
-        _items = new InternalList(parent, added, removing, removed, updated);
+        _items = new InternalList(parent, adding, added, removing, removed, updating, updated);
     }
 
     public int Count => _items.Count;
@@ -44,9 +52,11 @@ public readonly struct ObjectList<TObject> : IList<TObject>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Add(TObject item)
     {
+        CheckAdd(item);
         var items = _items;
         int index = items.Count;
-        items.Add(CheckAdd(item));
+        items.Adding(index, item);
+        items.Add(AssignAdd(item));
         item.Index = index;
         items.Added(item);
     }
@@ -89,8 +99,12 @@ public readonly struct ObjectList<TObject> : IList<TObject>
 
     public void Insert(int index, TObject item)
     {
+        if ((uint)index > (uint)_items.Count) throw new ArgumentOutOfRangeException(nameof(index));
+
+        CheckAdd(item);
         var items = _items;
-        items.Insert(index, CheckAdd(item));
+        items.Adding(index, item);
+        items.Insert(index, AssignAdd(item));
 
         for (int i = index; i < items.Count; i++)
         {
@@ -104,6 +118,7 @@ public readonly struct ObjectList<TObject> : IList<TObject>
     {
         var items = _items;
         var item = items[index];
+        items.Removing(item);
         item.Parent = null;
         item.ResetIndex();
 
@@ -120,17 +135,18 @@ public readonly struct ObjectList<TObject> : IList<TObject>
         get => _items[index];
         set
         {
-            value = CheckAdd(value);
+            CheckAdd(value);
 
             // Unbind previous entry
             var items = _items;
             var previousItem = items[index];
+            items.Updating(index, previousItem, value);
             items.Removing(previousItem);
             previousItem.Parent = null;
             previousItem.ResetIndex();
 
             // Bind new entry
-            items[index] = value;
+            items[index] = AssignAdd(value);
             value.Index = index;
             items.Updated(index, previousItem, value);
         }
@@ -148,31 +164,51 @@ public readonly struct ObjectList<TObject> : IList<TObject>
         return ((IEnumerable)_items).GetEnumerator();
     }
 
-    public TObject CheckAdd(TObject item)
+    private void CheckAdd(TObject item)
     {
         ArgumentNullException.ThrowIfNull(item);
         if (item.Parent != null)
         {
             throw new ArgumentException($"The object is already attached to another parent", nameof(item));
         }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private TObject AssignAdd(TObject item)
+    {
         item.Parent = _items.Parent;
         return item;
     }
 
-    private sealed class InternalList(ObjectFileElement parent, Action<ObjectFileElement, TObject>? added, Action<ObjectFileElement, TObject>? removing, Action<ObjectFileElement, int, TObject>? removed, Action<ObjectFileElement, int, TObject, TObject>? updated) : List<TObject>
+    private sealed class InternalList(ObjectFileElement parent, 
+        Action<ObjectFileElement, int, TObject>? adding, 
+        Action<ObjectFileElement, TObject>? added, 
+        Action<ObjectFileElement, TObject>? removing, 
+        Action<ObjectFileElement, int, TObject>? removed,
+        Action<ObjectFileElement, int, TObject, TObject>? updating,
+        Action<ObjectFileElement, int, TObject, TObject>? updated
+        ) : List<TObject>
     {
+        private readonly Action<ObjectFileElement, int, TObject>? _adding = adding;
         private readonly Action<ObjectFileElement, TObject>? _added = added;
         private readonly Action<ObjectFileElement, TObject>? _removing = removing;
         private readonly Action<ObjectFileElement, int, TObject>? _removed = removed;
+        private readonly Action<ObjectFileElement, int, TObject, TObject>? _updating = updating;
         private readonly Action<ObjectFileElement, int, TObject, TObject>? _updated = updated;
 
         public readonly ObjectFileElement Parent = parent;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void Adding(int index, TObject item) => _adding?.Invoke(Parent, index, item);
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Added(TObject item) => _added?.Invoke(Parent, item);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Removing(TObject item) => _removing?.Invoke(Parent, item);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void Updating(int index, TObject previousItem, TObject newItem) => _updating?.Invoke(Parent, index, previousItem, newItem);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Updated(int index, TObject previousItem, TObject newItem) => _updated?.Invoke(Parent, index, previousItem, newItem);

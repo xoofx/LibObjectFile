@@ -13,7 +13,7 @@ namespace LibObjectFile.PE;
 
 public sealed class PEBaseRelocationDirectory : PEDirectory
 {
-    public PEBaseRelocationDirectory() : base(ImageDataDirectoryKind.BaseRelocation)
+    public PEBaseRelocationDirectory() : base(ImageDataDirectoryKind.BaseRelocation, false)
     {
     }
     
@@ -24,7 +24,7 @@ public sealed class PEBaseRelocationDirectory : PEDirectory
         var size = 0UL;
         foreach (var block in Blocks)
         {
-            size += block.SizeOf;
+            size += block.CalculateSizeOf();
         }
         Size = size;
     }
@@ -156,7 +156,7 @@ public sealed class PEBaseRelocationDirectory : PEDirectory
             builder.Append(", ");
         }
 
-        builder.Append($", Blocks[{Blocks.Count}]");
+        builder.Append($"Blocks[{Blocks.Count}]");
         return true;
     }
 }

@@ -3,30 +3,60 @@
 // See the license.txt file in the project root for more information.
 
 using System;
+using System.Runtime.InteropServices;
 using LibObjectFile.Collections;
 
 namespace LibObjectFile.PE;
 
 public sealed class PEImportAddressTableDirectory : PEDirectory
 {
-    private readonly ObjectList<PEImportAddressTable> _tables;
+    private readonly ObjectList<PESectionData> _content;
 
-    public PEImportAddressTableDirectory() : base(ImageDataDirectoryKind.ImportAddressTable)
+    public PEImportAddressTableDirectory() : base(ImageDataDirectoryKind.ImportAddressTable, true)
     {
-        _tables = new ObjectList<PEImportAddressTable>(this);
+        _content = CreateObjectList<PESectionData>(this);
     }
 
-    public ObjectList<PEImportAddressTable> Tables => _tables;
+    public ObjectList<PESectionData> Content => _content;
 
     public override void UpdateLayout(PEVisitorContext context)
     {
         ulong size = 0;
-        foreach (var table in _tables)
+        var va = VirtualAddress;
+        foreach (var table in _content)
         {
+            table.VirtualAddress = va;
+            // Update layout will update virtual address
             table.UpdateLayout(context);
+            va += (uint)table.Size;
             size += table.Size;
         }
         Size = size;
+    }
+
+    protected override bool TryFindByVirtualAddressInChildren(RVA virtualAddress, out PEVirtualObject? result)
+    {
+        var content = CollectionsMarshal.AsSpan(_content.UnsafeList);
+        foreach (var table in content)
+        {
+            if (table.TryFindByVirtualAddress(virtualAddress, out result))
+            {
+                return true;
+            }
+        }
+
+        result = null;
+        return false;
+    }
+    
+    protected override void UpdateVirtualAddressInChildren()
+    {
+        var va = VirtualAddress;
+        foreach (var table in _content)
+        {
+            table.UpdateVirtualAddress(va);
+            va += (uint)table.Size;
+        }
     }
 
     public override void Read(PEImageReader reader) => throw new NotSupportedException(); // Not called directly for this object, we are calling on tables directly

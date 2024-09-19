@@ -14,7 +14,7 @@ public sealed class PEImportDirectory : PEDirectory
 {
     private readonly ObjectList<PEImportDirectoryEntry> _entries;
 
-    public PEImportDirectory() : base(ImageDataDirectoryKind.Import)
+    public PEImportDirectory() : base(ImageDataDirectoryKind.Import, false)
     {
         _entries = new(this);
     }
@@ -77,7 +77,7 @@ public sealed class PEImportDirectory : PEDirectory
             _entries.Add(
                 new PEImportDirectoryEntry(
                     // Name
-                    new(new(PESectionDataTemp.Instance, rawEntry.NameRVA)),
+                    new(new(PETempSectionData.Instance, rawEntry.NameRVA)),
                     // ImportAddressTable
                     new PEImportAddressTable()
                     {

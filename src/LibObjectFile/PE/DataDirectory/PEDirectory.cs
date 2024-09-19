@@ -8,7 +8,7 @@ namespace LibObjectFile.PE;
 
 public abstract class PEDirectory : PESectionData
 {
-    protected PEDirectory(ImageDataDirectoryKind kind)
+    protected PEDirectory(ImageDataDirectoryKind kind, bool hasChildren) : base(hasChildren)
     {
         Kind = kind;
     }
@@ -55,7 +55,7 @@ public abstract class PEDirectory : PESectionData
 
 public sealed class PEExportDirectory : PEDirectory
 {
-    public PEExportDirectory() : base(ImageDataDirectoryKind.Export)
+    public PEExportDirectory() : base(ImageDataDirectoryKind.Export, true)
     {
     }
 
@@ -77,7 +77,7 @@ public sealed class PEExportDirectory : PEDirectory
 
 public sealed class PEResourceDirectory : PEDirectory
 {
-    public PEResourceDirectory() : base(ImageDataDirectoryKind.Resource)
+    public PEResourceDirectory() : base(ImageDataDirectoryKind.Resource, false)
     {
     }
 
@@ -99,7 +99,7 @@ public sealed class PEResourceDirectory : PEDirectory
 
 public sealed class PEExceptionDirectory : PEDirectory
 {
-    public PEExceptionDirectory() : base(ImageDataDirectoryKind.Exception)
+    public PEExceptionDirectory() : base(ImageDataDirectoryKind.Exception, false)
     {
     }
 
@@ -121,7 +121,7 @@ public sealed class PEExceptionDirectory : PEDirectory
 
 public sealed class PEDebugDirectory : PEDirectory
 {
-    public PEDebugDirectory() : base(ImageDataDirectoryKind.Debug)
+    public PEDebugDirectory() : base(ImageDataDirectoryKind.Debug, false)
     {
     }
 
@@ -143,7 +143,7 @@ public sealed class PEDebugDirectory : PEDirectory
 
 public sealed class PELoadConfigDirectory : PEDirectory
 {
-    public PELoadConfigDirectory() : base(ImageDataDirectoryKind.LoadConfig)
+    public PELoadConfigDirectory() : base(ImageDataDirectoryKind.LoadConfig, false)
     {
     }
 
@@ -165,7 +165,7 @@ public sealed class PELoadConfigDirectory : PEDirectory
 
 public sealed class PEBoundImportDirectory : PEDirectory
 {
-    public PEBoundImportDirectory() : base(ImageDataDirectoryKind.BoundImport)
+    public PEBoundImportDirectory() : base(ImageDataDirectoryKind.BoundImport, false)
     {
     }
 
@@ -187,7 +187,7 @@ public sealed class PEBoundImportDirectory : PEDirectory
 
 public sealed class PETlsDirectory : PEDirectory
 {
-    public PETlsDirectory() : base(ImageDataDirectoryKind.Tls)
+    public PETlsDirectory() : base(ImageDataDirectoryKind.Tls, false)
     {
     }
 
@@ -209,7 +209,7 @@ public sealed class PETlsDirectory : PEDirectory
 
 public sealed class PEDelayImportDirectory : PEDirectory
 {
-    public PEDelayImportDirectory() : base(ImageDataDirectoryKind.DelayImport)
+    public PEDelayImportDirectory() : base(ImageDataDirectoryKind.DelayImport, false)
     {
     }
 
@@ -231,7 +231,7 @@ public sealed class PEDelayImportDirectory : PEDirectory
 
 public sealed class PEClrMetadata : PEDirectory
 {
-    public PEClrMetadata() : base(ImageDataDirectoryKind.ClrMetadata)
+    public PEClrMetadata() : base(ImageDataDirectoryKind.ClrMetadata, false)
     {
     }
 
@@ -253,7 +253,7 @@ public sealed class PEClrMetadata : PEDirectory
 
 public sealed class PEArchitectureDirectory : PEDirectory
 {
-    public PEArchitectureDirectory() : base(ImageDataDirectoryKind.Architecture)
+    public PEArchitectureDirectory() : base(ImageDataDirectoryKind.Architecture, false)
     {
     }
 
@@ -275,7 +275,7 @@ public sealed class PEArchitectureDirectory : PEDirectory
 
 public sealed class PEGlobalPointerDirectory : PEDirectory
 {
-    public PEGlobalPointerDirectory() : base(ImageDataDirectoryKind.GlobalPointer)
+    public PEGlobalPointerDirectory() : base(ImageDataDirectoryKind.GlobalPointer, false)
     {
     }
 
@@ -297,7 +297,7 @@ public sealed class PEGlobalPointerDirectory : PEDirectory
 
 public sealed class PESecurityDirectory : PEDirectory
 {
-    public PESecurityDirectory() : base(ImageDataDirectoryKind.Security)
+    public PESecurityDirectory() : base(ImageDataDirectoryKind.Security, false)
     {
     }
 

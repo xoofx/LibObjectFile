@@ -10,23 +10,23 @@ namespace LibObjectFile.PE;
 /// <summary>
 /// Gets a stream section data in a Portable Executable (PE) image.
 /// </summary>
-public class PESectionStreamData : PESectionData
+public class PEStreamSectionData : PESectionData
 {
     private Stream _stream;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="PESectionStreamData"/> class.
+    /// Initializes a new instance of the <see cref="PEStreamSectionData"/> class.
     /// </summary>
-    public PESectionStreamData()
+    public PEStreamSectionData() : base(false)
     {
         _stream = Stream.Null;
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="PESectionStreamData"/> class.
+    /// Initializes a new instance of the <see cref="PEStreamSectionData"/> class.
     /// </summary>
     /// <param name="stream">The stream containing the data of this section data.</param>
-    public PESectionStreamData(Stream stream)
+    public PEStreamSectionData(Stream stream) : base(false)
     {
         ArgumentNullException.ThrowIfNull(stream);
         _stream = stream;

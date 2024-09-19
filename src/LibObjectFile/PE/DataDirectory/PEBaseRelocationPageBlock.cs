@@ -35,22 +35,19 @@ public sealed class PEBaseRelocationPageBlock
     /// <summary>
     /// Gets the size of this block.
     /// </summary>
-    internal uint SizeOf
+    internal uint CalculateSizeOf()
     {
-        get
+        uint size = 0;
+        foreach (var part in Parts)
         {
-            uint size = 0;
-            foreach (var part in Parts)
-            {
-                size += part.SizeOf;
-            }
-
-            return size;
+            size += part.SizeOf;
         }
+
+        return size;
     }
 
     public override string ToString()
     {
-        return $"{nameof(PEBaseRelocationPageBlock)}, Section = {SectionRVALink.Element?.Name}, RVA = {SectionRVALink.VirtualAddress}, Size = {SizeOf}, Parts[{Parts.Count}]";
+        return $"{nameof(PEBaseRelocationPageBlock)}, Section = {SectionRVALink.Element?.Name}, RVA = {SectionRVALink.VirtualAddress}, Size = {CalculateSizeOf()}, Parts[{Parts.Count}]";
     }
 }
