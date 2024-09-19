@@ -22,11 +22,11 @@ public abstract class ObjectFileElement
     /// Gets or sets the absolute position of this element relative to the top level parent.
     /// </summary>
     public ulong Position { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the size in bytes of this element in the top level parent. This value might need to be updated via UpdateLayout on the top level parent.
     /// </summary>
-    public virtual ulong Size { get; set; }
+    public ulong Size { get; set; }
 
     /// <summary>
     /// Gets the containing parent.

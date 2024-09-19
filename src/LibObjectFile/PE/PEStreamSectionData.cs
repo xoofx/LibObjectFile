@@ -20,6 +20,7 @@ public class PEStreamSectionData : PESectionData
     public PEStreamSectionData() : base(false)
     {
         _stream = Stream.Null;
+        Size = 0;
     }
 
     /// <summary>
@@ -30,6 +31,7 @@ public class PEStreamSectionData : PESectionData
     {
         ArgumentNullException.ThrowIfNull(stream);
         _stream = stream;
+        Size = (ulong)stream.Length;
     }
 
     /// <summary>
@@ -38,13 +40,16 @@ public class PEStreamSectionData : PESectionData
     public Stream Stream
     {
         get => _stream;
-        set => _stream = value ?? throw new ArgumentNullException(nameof(value));
+        set
+        {
+            _stream = value ?? throw new ArgumentNullException(nameof(value));
+            Size = (ulong)value.Length;
+        }
     }
 
-    public override ulong Size
+    public override void UpdateLayout(PEVisitorContext layoutContext)
     {
-        get => (ulong)Stream.Length;
-        set => throw new InvalidOperationException();
+        Size = (ulong)Stream.Length;
     }
 
     public override void Read(PEImageReader reader)
