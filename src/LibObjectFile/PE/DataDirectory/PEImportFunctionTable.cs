@@ -34,8 +34,6 @@ internal readonly struct PEImportFunctionTable()
         {
             Read64(reader);
         }
-
-        CalculateSize(peFile, reader.Diagnostics);
     }
 
     public void ResolveSectionDataLinks(PEFile peFile, DiagnosticBag diagnostics)
@@ -59,10 +57,10 @@ internal readonly struct PEImportFunctionTable()
 
     private unsafe void Read32(PEImageReader reader)
     {
+        RawImportFunctionEntry32 entry = default;
+        var span = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref entry, 1));
         while (true)
         {
-            RawImportFunctionEntry32 entry = default;
-            var span = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref entry, 1));
             int read = reader.Read(span);
             if (read != sizeof(RawImportFunctionEntry32))
             {
@@ -85,10 +83,10 @@ internal readonly struct PEImportFunctionTable()
 
     private unsafe void Read64(PEImageReader reader)
     {
+        RawImportFunctionEntry64 entry = default;
+        var span = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref entry, 1));
         while (true)
         {
-            RawImportFunctionEntry64 entry = default;
-            var span = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref entry, 1));
             int read = reader.Read(span);
             if (read != sizeof(RawImportFunctionEntry64))
             {

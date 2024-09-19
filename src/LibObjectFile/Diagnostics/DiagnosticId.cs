@@ -139,4 +139,5 @@ public enum DiagnosticId
     PE_ERR_ImportLookupTableInvalidParent = 3043,
     PE_ERR_ImportDirectoryInvalidImportAddressTableRVA = 3044,
     PE_ERR_ImportDirectoryInvalidImportLookupTableRVA = 3045,
+    PE_ERR_ImportAddressTableNotFound = 3046
 }

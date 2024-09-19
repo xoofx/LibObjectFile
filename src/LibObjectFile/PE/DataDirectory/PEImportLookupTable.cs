@@ -8,7 +8,7 @@ using LibObjectFile.Diagnostics;
 
 namespace LibObjectFile.PE;
 
-public sealed class PEImportLookupTable : PEVirtualObject
+public sealed class PEImportLookupTable : PESectionData
 {
     internal readonly PEImportFunctionTable FunctionTable;
 
@@ -42,12 +42,4 @@ public sealed class PEImportLookupTable : PEVirtualObject
     }
 
     public override void Write(PEImageWriter writer) => FunctionTable.Write(writer);
-    
-    protected override void ValidateParent(ObjectFileElement parent)
-    {
-        if (parent is not PEImportDirectoryEntry)
-        {
-            throw new ArgumentException($"Invalid parent type [{parent?.GetType()}] for [{GetType()}]");
-        }
-    }
 }

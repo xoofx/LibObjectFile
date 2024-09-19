@@ -20,9 +20,9 @@ public sealed class PEImportDirectory : PEDirectory
     }
     public ObjectList<PEImportDirectoryEntry> Entries => _entries;
 
-    public override unsafe void UpdateLayout(PEVisitorContext context)
+    public override void UpdateLayout(PEVisitorContext context)
     {
-        Size = (ulong)((_entries.Count + 1) * sizeof(RawImportDirectoryEntry));
+        UpdateSize();
     }
 
     public override void Read(PEImageReader reader)
@@ -54,24 +54,24 @@ public sealed class PEImportDirectory : PEDirectory
             }
 
             // Find the section data for the ImportLookupTableRVA
-            if (!reader.File.TryFindSectionData(rawEntry.ImportAddressTableRVA, out var sectionData))
+            if (!reader.File.TryFindSection(rawEntry.ImportAddressTableRVA, out var section))
             {
                 diagnostics.Error(DiagnosticId.PE_ERR_ImportDirectoryInvalidImportAddressTableRVA, $"Unable to find the section data for ImportAddressTableRVA {rawEntry.ImportAddressTableRVA}");
                 return;
             }
 
             // Calculate its position within the original stream
-            var importLookupAddressTablePositionInFile = sectionData.Position + rawEntry.ImportLookupTableRVA - sectionData.VirtualAddress;
+            var importLookupAddressTablePositionInFile = section.Position + rawEntry.ImportLookupTableRVA - section.VirtualAddress;
 
             // Find the section data for the ImportLookupTableRVA
-            if (!reader.File.TryFindSectionData(rawEntry.ImportLookupTableRVA, out sectionData))
+            if (!reader.File.TryFindSection(rawEntry.ImportLookupTableRVA, out section))
             {
                 diagnostics.Error(DiagnosticId.PE_ERR_ImportDirectoryInvalidImportLookupTableRVA, $"Unable to find the section data for ImportLookupTableRVA {rawEntry.ImportLookupTableRVA}");
                 return;
             }
 
             // Calculate its position within the original stream
-            var importLookupTablePositionInFile = sectionData.Position + rawEntry.ImportLookupTableRVA - sectionData.VirtualAddress;
+            var importLookupTablePositionInFile = section.Position + rawEntry.ImportLookupTableRVA - section.VirtualAddress;
             
             // Store a fake entry for post-processing section data to allow to recreate PEImportLookupTable from existing PESectionStreamData
             _entries.Add(
@@ -92,6 +92,8 @@ public sealed class PEImportDirectory : PEDirectory
             );
         }
 
+        UpdateSize();
+
         // Resolve ImportLookupTable and ImportAddressTable section data links
         var entries = CollectionsMarshal.AsSpan(_entries.UnsafeList);
         foreach (ref var entry in entries)
@@ -99,6 +101,11 @@ public sealed class PEImportDirectory : PEDirectory
             entry.ImportAddressTable.Read(reader);
             entry.ImportLookupTable.Read(reader);
         }
+    }
+
+    private unsafe void UpdateSize()
+    {
+        Size = (ulong)((_entries.Count + 1) * sizeof(RawImportDirectoryEntry));
     }
 
     public override void Write(PEImageWriter writer)

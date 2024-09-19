@@ -10,14 +10,14 @@ namespace LibObjectFile.PE;
 
 public sealed class PEImportAddressTableDirectory : PEDirectory
 {
-    private readonly ObjectList<PESectionData> _content;
+    private readonly ObjectList<PEVirtualObject> _content;
 
     public PEImportAddressTableDirectory() : base(ImageDataDirectoryKind.ImportAddressTable, true)
     {
-        _content = CreateObjectList<PESectionData>(this);
+        _content = CreateObjectList<PEVirtualObject>(this);
     }
 
-    public ObjectList<PESectionData> Content => _content;
+    public ObjectList<PEVirtualObject> Content => _content;
 
     public override void UpdateLayout(PEVisitorContext context)
     {

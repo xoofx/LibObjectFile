@@ -8,7 +8,7 @@ using LibObjectFile.Diagnostics;
 
 namespace LibObjectFile.PE;
 
-public class PEImportAddressTable : PEVirtualObject
+public class PEImportAddressTable : PESectionData
 {
     internal readonly PEImportFunctionTable FunctionTable;
 

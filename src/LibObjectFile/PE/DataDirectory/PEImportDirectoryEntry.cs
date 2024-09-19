@@ -9,8 +9,6 @@ namespace LibObjectFile.PE;
 
 public sealed class PEImportDirectoryEntry : PEObject
 {
-    private PEImportLookupTable? _importLookupTable;
-
     public PEImportDirectoryEntry(ZeroTerminatedAsciiStringLink importDllNameLink, PEImportAddressTable importAddressTable, PEImportLookupTable importLookupTable)
     {
         ImportDllNameLink = importDllNameLink;
@@ -28,31 +26,7 @@ public sealed class PEImportDirectoryEntry : PEObject
 
     public PEImportAddressTable ImportAddressTable { get; set; }
 
-    public PEImportLookupTable ImportLookupTable
-    {
-        get => _importLookupTable!;
-        set
-        {
-            ArgumentNullException.ThrowIfNull(value);
-            if (value == _importLookupTable)
-            {
-                return;
-            }
-
-            if (value.Parent is not null)
-            {
-                throw new InvalidOperationException("The import lookup table is already attached to another parent");
-            }
-
-            if (_importLookupTable is not null)
-            {
-                _importLookupTable.Parent = null;
-            }
-
-            value.Parent = this;
-            _importLookupTable = value;
-        }
-    }
+    public PEImportLookupTable ImportLookupTable { get; set; }
 
     public override unsafe void UpdateLayout(PEVisitorContext context)
     {

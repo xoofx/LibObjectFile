@@ -4,13 +4,16 @@
 
 using System;
 using System.Buffers;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Reflection.PortableExecutable;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using LibObjectFile.Diagnostics;
 using LibObjectFile.PE.Internal;
+using static System.Collections.Specialized.BitVector32;
 
 namespace LibObjectFile.PE;
 
@@ -220,6 +223,8 @@ partial class PEFile
             _sections.Add(peSection);
         }
 
+        var sectionDatas = new List<PESectionData>();
+
         // Create directories and find the section for each directory
         var maxNumberOfDirectory = (int)Math.Min(OptionalHeader.NumberOfRvaAndSizes, 15);
         Span<ImageDataDirectory> dataDirectories = OptionalHeader.DataDirectory;
@@ -238,10 +243,53 @@ partial class PEFile
             }
 
             var offsetInSection = directoryEntry.VirtualAddress - peSection.VirtualAddress;
-            var directory = PEDirectory.Create((ImageDataDirectoryKind)i, new(peSection, offsetInSection));
+            var directory = PEDirectory.Create((ImageDataDirectoryKind)i);
             directory.Position = peSection.Position + offsetInSection;
             directory.Size = directoryEntry.Size;
+
             Directories.Set(directory.Kind, directory);
+
+            sectionDatas.Add(directory);
+        }
+
+        // Special case for Import Directory, we preload it to load ImportLookupTable and ImportAddressTable
+        // so that we can attach them below to the right section data before creating the remaining interleaved streams
+        var importDirectory = Directories.Import;
+        if (importDirectory != null)
+        {
+            // Read Import Directory Entries first
+            importDirectory.Read(imageReader);
+
+            var importAddressTableDirectory = Directories.ImportAddressTable;
+            if (importAddressTableDirectory is null)
+            {
+                imageReader.Diagnostics.Error(DiagnosticId.PE_ERR_ImportAddressTableNotFound, "Unable to find the Import Address Table");
+                return;
+            }
+
+            // Register the import address table directory
+            foreach (var entry in importDirectory.Entries)
+            {
+                importAddressTableDirectory.Content.Add(entry.ImportAddressTable);
+                sectionDatas.Add(entry.ImportLookupTable);
+            }
+        }
+        
+        // Attach all the section data we have created (directories, import tables) to the sections
+        foreach (var vObj in sectionDatas)
+        {
+            int sectionIndex = 0;
+            for (; sectionIndex < _sections.Count; sectionIndex++)
+            {
+                var section = _sections[sectionIndex];
+                if (section.Contains(vObj.Position))
+                {
+                    break;
+                }
+            }
+
+            sectionIndex = Math.Min(sectionIndex, Math.Max(0, _sections.Count - 1));
+            var peSection = _sections[sectionIndex];
             
             // Insert the directory at the right position in the section
             int sectionDataIndex = 0;
@@ -249,15 +297,15 @@ partial class PEFile
             for (; sectionDataIndex < dataParts.Count; sectionDataIndex++)
             {
                 var sectionData = dataParts[sectionDataIndex];
-                if (directory.Position < sectionData.Position)
+                if (vObj.Position < sectionData.Position)
                 {
                     break;
                 }
             }
-            
-            dataParts.Insert(sectionDataIndex, directory);
+
+            dataParts.Insert(sectionDataIndex, vObj);
         }
-        
+
         // Create Stream data sections for remaining data per section based on directories already loaded
         foreach (var section in _sections)
         {
@@ -298,10 +346,21 @@ partial class PEFile
                 dataParts.Add(sectionData);
             }
 
-            for (var i = 0; i < section.DataParts.Count; i++)
+            //for (var i = 0; i < section.DataParts.Count; i++)
+            //{
+            //    var sectionData = section.DataParts[i];
+            //    Console.WriteLine($"section: {section.Name} {sectionData}");
+            //}
+        }
+
+        // Post fix the ImportLookupTable and ImportAddressTable
+        // To attach proper links to the actual streams
+        if (importDirectory is not null)
+        {
+            foreach (var entry in importDirectory.Entries)
             {
-                var sectionData = section.DataParts[i];
-                Console.WriteLine($"section: {section.Name} {sectionData}");
+                entry.ImportAddressTable.FunctionTable.ResolveSectionDataLinks(this, imageReader.Diagnostics);
+                entry.ImportLookupTable.FunctionTable.ResolveSectionDataLinks(this, imageReader.Diagnostics);
             }
         }
 

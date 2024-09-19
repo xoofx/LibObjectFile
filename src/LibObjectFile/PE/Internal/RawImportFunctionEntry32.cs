@@ -16,9 +16,9 @@ internal readonly struct RawImportFunctionEntry32
 
     public uint HintNameTableRVA => IsImportByOrdinal ? 0U : _hintNameTableRVA;
 
-    public bool IsNull => HintNameTableRVA == 0;
+    public bool IsNull => _hintNameTableRVA == 0;
 
-    public bool IsImportByOrdinal => (HintNameTableRVA & 0x8000_0000U) != 0;
+    public bool IsImportByOrdinal => (_hintNameTableRVA & 0x8000_0000U) != 0;
 
-    public ushort Ordinal => IsImportByOrdinal ? (ushort)HintNameTableRVA : (ushort)0;
+    public ushort Ordinal => IsImportByOrdinal ? (ushort)_hintNameTableRVA : (ushort)0;
 }

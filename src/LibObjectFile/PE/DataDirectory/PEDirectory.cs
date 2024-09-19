@@ -21,7 +21,7 @@ public abstract class PEDirectory : PESectionData
     /// </summary>
     /// <param name="kind">The kind of PE directory entry.</param>
     /// <returns>A PE directory entry.</returns>
-    internal static PEDirectory Create(ImageDataDirectoryKind kind, RVALink<PESection> link)
+    internal static PEDirectory Create(ImageDataDirectoryKind kind)
     {
         return kind switch
         {
