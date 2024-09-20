@@ -9,14 +9,14 @@ namespace LibObjectFile.PE;
 
 public sealed class PEImportDirectoryEntry : PEObject
 {
-    public PEImportDirectoryEntry(ZeroTerminatedAsciiStringLink importDllNameLink, PEImportAddressTable importAddressTable, PEImportLookupTable importLookupTable)
+    public PEImportDirectoryEntry(PEAsciiStringLink importDllNameLink, PEImportAddressTable importAddressTable, PEImportLookupTable importLookupTable)
     {
         ImportDllNameLink = importDllNameLink;
         ImportAddressTable = importAddressTable;
         ImportLookupTable = importLookupTable;
     }
 
-    public ZeroTerminatedAsciiStringLink ImportDllNameLink { get; set; }
+    public PEAsciiStringLink ImportDllNameLink { get; set; }
 
     public PEImportAddressTable ImportAddressTable { get; set; }
 

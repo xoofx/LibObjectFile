@@ -346,6 +346,8 @@ partial class PEFile
         // To attach proper links to the actual streams
         if (importDirectory is not null)
         {
+            importDirectory.ResolveNames(this, imageReader.Diagnostics);
+
             foreach (var entry in importDirectory.Entries)
             {
                 entry.ImportAddressTable.FunctionTable.ResolveSectionDataLinks(this, imageReader.Diagnostics);
@@ -404,13 +406,13 @@ partial class PEFile
             var data = listOrderedByPosition[i];
             if (currentPosition < data.Position)
             {
-                var sectionData = new PEStreamSectionData()
+                var size = data.Position - currentPosition;
+                imageReader.Position = currentPosition;
+
+                var sectionData = new PEStreamSectionData(imageReader.ReadAsStream(size))
                 {
                     Position = currentPosition,
                 };
-                var size = data.Position - currentPosition;
-                imageReader.Position = currentPosition;
-                sectionData.Stream = imageReader.ReadAsStream(size);
 
                 dataParts.Insert(data.Index, sectionData);
                 currentPosition = data.Position;
@@ -426,13 +428,12 @@ partial class PEFile
 
         if (currentPosition < startPosition + totalSize)
         {
-            var sectionData = new PEStreamSectionData()
+            var size = startPosition + totalSize - currentPosition;
+            imageReader.Position = currentPosition;
+            var sectionData = new PEStreamSectionData(imageReader.ReadAsStream(size))
             {
                 Position = currentPosition,
             };
-            var size = startPosition + totalSize - currentPosition;
-            imageReader.Position = currentPosition;
-            sectionData.Stream = imageReader.ReadAsStream(size);
 
             dataParts.Add(sectionData);
         }

@@ -25,6 +25,32 @@ public sealed class PEImportDirectory : PEDataDirectory
         UpdateSize();
     }
 
+    internal void ResolveNames(PEFile peFile, DiagnosticBag diagnostics)
+    {
+        var entries = CollectionsMarshal.AsSpan(_entries.UnsafeList);
+        foreach (ref var entry in entries)
+        {
+            var va = entry.ImportDllNameLink.Link.OffsetInElement;
+            if (!peFile.TryFindSectionData(va, out var sectionData))
+            {
+                diagnostics.Error(DiagnosticId.PE_ERR_ImportLookupTableInvalidHintNameTableRVA, $"Unable to find the section data for HintNameTableRVA {va}");
+                return;
+            }
+
+            var streamSectionData = sectionData as PEStreamSectionData;
+            if (streamSectionData is null)
+            {
+                diagnostics.Error(DiagnosticId.PE_ERR_ImportLookupTableInvalidHintNameTableRVA, $"The section data for HintNameTableRVA {va} is not a stream section data");
+                return;
+            }
+
+            entry = new PEImportDirectoryEntry(
+                new PEAsciiStringLink(new(streamSectionData, va - sectionData.VirtualAddress)),
+                entry.ImportAddressTable,
+                entry.ImportLookupTable);
+        }
+    }
+
     public override void Read(PEImageReader reader)
     {
         var diagnostics = reader.Diagnostics;
@@ -77,7 +103,7 @@ public sealed class PEImportDirectory : PEDataDirectory
             _entries.Add(
                 new PEImportDirectoryEntry(
                     // Name
-                    new(new(PETempSectionData.Instance, rawEntry.NameRVA)),
+                    new(new(PEStreamSectionData.Empty, rawEntry.NameRVA)),
                     // ImportAddressTable
                     new PEImportAddressTable()
                     {

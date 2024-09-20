@@ -11,14 +11,14 @@ public readonly struct PEImportFunctionEntry
 {
     // Encodes the RVA through a link to the PE section data and the offset in the section data
     // If the PE section data is null, the offset is the ordinal
-    private readonly PESectionData? _peSectionData;
+    private readonly PEStreamSectionData? _peSectionData;
     private readonly uint _offset;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PEImportFunctionEntry"/> class by name.
     /// </summary>
     /// <param name="name">The name of the import.</param>
-    public PEImportFunctionEntry(ZeroTerminatedAsciiStringLink name)
+    public PEImportFunctionEntry(PEAsciiStringLink name)
     {
         _peSectionData = name.Link.Element;
         _offset = name.Link.OffsetInElement;
@@ -42,11 +42,10 @@ public readonly struct PEImportFunctionEntry
     /// <summary>
     /// Gets the name of the import if not by ordinal.
     /// </summary>
-    public ZeroTerminatedAsciiStringLink Name => _peSectionData is null ? default : new ZeroTerminatedAsciiStringLink(new(_peSectionData, _offset));
+    public PEImportHintNameLink HintName => _peSectionData is null ? default : new PEImportHintNameLink(new(_peSectionData, _offset));
 
     /// <summary>
     /// Gets the ordinal of the import if by ordinal.
     /// </summary>
     public ushort Ordinal => _peSectionData is null ? (ushort)(_offset) : (ushort)0;
-
 }
