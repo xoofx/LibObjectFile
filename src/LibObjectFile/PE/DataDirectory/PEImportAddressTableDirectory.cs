@@ -8,16 +8,16 @@ using LibObjectFile.Collections;
 
 namespace LibObjectFile.PE;
 
-public sealed class PEImportAddressTableDirectory : PEDirectory
+public sealed class PEImportAddressTableDirectory : PEDataDirectory
 {
-    private readonly ObjectList<PEVirtualObject> _content;
+    private readonly ObjectList<PESectionData> _content;
 
-    public PEImportAddressTableDirectory() : base(ImageDataDirectoryKind.ImportAddressTable, true)
+    public PEImportAddressTableDirectory() : base(PEDataDirectoryKind.ImportAddressTable, true)
     {
-        _content = CreateObjectList<PEVirtualObject>(this);
+        _content = CreateObjectList<PESectionData>(this);
     }
 
-    public ObjectList<PEVirtualObject> Content => _content;
+    public ObjectList<PESectionData> Content => _content;
 
     public override void UpdateLayout(PEVisitorContext context)
     {

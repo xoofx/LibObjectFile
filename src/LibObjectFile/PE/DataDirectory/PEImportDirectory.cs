@@ -10,11 +10,11 @@ using LibObjectFile.PE.Internal;
 
 namespace LibObjectFile.PE;
 
-public sealed class PEImportDirectory : PEDirectory
+public sealed class PEImportDirectory : PEDataDirectory
 {
     private readonly ObjectList<PEImportDirectoryEntry> _entries;
 
-    public PEImportDirectory() : base(ImageDataDirectoryKind.Import, false)
+    public PEImportDirectory() : base(PEDataDirectoryKind.Import, false)
     {
         _entries = new(this);
     }

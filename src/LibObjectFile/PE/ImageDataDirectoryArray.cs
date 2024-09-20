@@ -23,5 +23,5 @@ public struct ImageDataDirectoryArray
     /// <param name="kind">The index of the <see cref="ImageDataDirectory"/> to get or set.</param>
     /// <returns>The <see cref="ImageDataDirectory"/> at the specified index.</returns>
     [UnscopedRef]
-    public ref ImageDataDirectory this[ImageDataDirectoryKind kind] => ref this[(int)kind];
+    public ref ImageDataDirectory this[PEDataDirectoryKind kind] => ref this[(int)kind];
 }

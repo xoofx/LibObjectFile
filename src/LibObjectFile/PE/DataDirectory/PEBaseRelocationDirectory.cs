@@ -11,9 +11,9 @@ using LibObjectFile.Diagnostics;
 
 namespace LibObjectFile.PE;
 
-public sealed class PEBaseRelocationDirectory : PEDirectory
+public sealed class PEBaseRelocationDirectory : PEDataDirectory
 {
-    public PEBaseRelocationDirectory() : base(ImageDataDirectoryKind.BaseRelocation, false)
+    public PEBaseRelocationDirectory() : base(PEDataDirectoryKind.BaseRelocation, false)
     {
     }
     

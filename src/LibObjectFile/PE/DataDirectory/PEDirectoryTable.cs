@@ -15,7 +15,7 @@ namespace LibObjectFile.PE;
 /// Contains the array of directory entries in a Portable Executable (PE) file.
 /// </summary>
 [DebuggerDisplay($"{nameof(PEDirectoryTable)} {nameof(Count)} = {{{nameof(Count)}}}")]
-public sealed class PEDirectoryTable : IEnumerable<PEDirectory>
+public sealed class PEDirectoryTable : IEnumerable<PEDataDirectory>
 {
     private InternalArray _entries;
     private int _count;
@@ -24,7 +24,7 @@ public sealed class PEDirectoryTable : IEnumerable<PEDirectory>
     {
     }
 
-    public PEDirectory? this[ImageDataDirectoryKind kind] => _entries[(int)kind];
+    public PEDataDirectory? this[PEDataDirectoryKind kind] => _entries[(int)kind];
 
     /// <summary>
     /// Gets the number of directory entries in the array.
@@ -34,77 +34,77 @@ public sealed class PEDirectoryTable : IEnumerable<PEDirectory>
     /// <summary>
     /// Gets the export directory information from the PE file.
     /// </summary>
-    public PEExportDirectory? Export => (PEExportDirectory?)this[ImageDataDirectoryKind.Export];
+    public PEExportDirectory? Export => (PEExportDirectory?)this[PEDataDirectoryKind.Export];
 
     /// <summary>
     /// Gets the import directory information from the PE file.
     /// </summary>
-    public PEImportDirectory? Import => (PEImportDirectory?)this[ImageDataDirectoryKind.Import];
+    public PEImportDirectory? Import => (PEImportDirectory?)this[PEDataDirectoryKind.Import];
 
     /// <summary>
     /// Gets the resource directory information from the PE file.
     /// </summary>
-    public PEResourceDirectory? Resource => (PEResourceDirectory?)this[ImageDataDirectoryKind.Resource];
+    public PEResourceDirectory? Resource => (PEResourceDirectory?)this[PEDataDirectoryKind.Resource];
 
     /// <summary>
     /// Gets the exception directory information from the PE file.
     /// </summary>
-    public PEExceptionDirectory? Exception => (PEExceptionDirectory?)this[ImageDataDirectoryKind.Exception];
+    public PEExceptionDirectory? Exception => (PEExceptionDirectory?)this[PEDataDirectoryKind.Exception];
 
     /// <summary>
     /// Gets the security directory information from the PE file.
     /// </summary>
-    public PESecurityDirectory? Security => (PESecurityDirectory?)this[ImageDataDirectoryKind.Security];
+    public PESecurityDirectory? Security => (PESecurityDirectory?)this[PEDataDirectoryKind.Security];
 
     /// <summary>
     /// Gets the base relocation directory information from the PE file.
     /// </summary>
-    public PEBaseRelocationDirectory? BaseRelocation => (PEBaseRelocationDirectory?)this[ImageDataDirectoryKind.BaseRelocation];
+    public PEBaseRelocationDirectory? BaseRelocation => (PEBaseRelocationDirectory?)this[PEDataDirectoryKind.BaseRelocation];
 
     /// <summary>
     /// Gets the debug directory information from the PE file.
     /// </summary>
-    public PEDebugDirectory? Debug => (PEDebugDirectory?)this[ImageDataDirectoryKind.Debug];
+    public PEDebugDirectory? Debug => (PEDebugDirectory?)this[PEDataDirectoryKind.Debug];
 
     /// <summary>
     /// Gets the architecture-specific directory information from the PE file.
     /// </summary>
-    public PEArchitectureDirectory? Architecture => (PEArchitectureDirectory?)this[ImageDataDirectoryKind.Architecture];
+    public PEArchitectureDirectory? Architecture => (PEArchitectureDirectory?)this[PEDataDirectoryKind.Architecture];
 
     /// <summary>
     /// Gets the global pointer directory information from the PE file.
     /// </summary>
-    public PEGlobalPointerDirectory? GlobalPointer => (PEGlobalPointerDirectory?)this[ImageDataDirectoryKind.GlobalPointer];
+    public PEGlobalPointerDirectory? GlobalPointer => (PEGlobalPointerDirectory?)this[PEDataDirectoryKind.GlobalPointer];
 
     /// <summary>
     /// Gets the TLS (Thread Local Storage) directory information from the PE file.
     /// </summary>
-    public PETlsDirectory? Tls => (PETlsDirectory?)this[ImageDataDirectoryKind.Tls];
+    public PETlsDirectory? Tls => (PETlsDirectory?)this[PEDataDirectoryKind.Tls];
 
     /// <summary>
     /// Gets the load configuration directory information from the PE file.
     /// </summary>
-    public PELoadConfigDirectory? LoadConfig => (PELoadConfigDirectory?)this[ImageDataDirectoryKind.LoadConfig];
+    public PELoadConfigDirectory? LoadConfig => (PELoadConfigDirectory?)this[PEDataDirectoryKind.LoadConfig];
 
     /// <summary>
     /// Gets the bound import directory information from the PE file.
     /// </summary>
-    public PEBoundImportDirectory? BoundImport => (PEBoundImportDirectory?)this[ImageDataDirectoryKind.BoundImport];
+    public PEBoundImportDirectory? BoundImport => (PEBoundImportDirectory?)this[PEDataDirectoryKind.BoundImport];
 
     /// <summary>
     /// Gets the delay import directory information from the PE file.
     /// </summary>
-    public PEDelayImportDirectory? DelayImport => (PEDelayImportDirectory?)this[ImageDataDirectoryKind.DelayImport];
+    public PEDelayImportDirectory? DelayImport => (PEDelayImportDirectory?)this[PEDataDirectoryKind.DelayImport];
 
     /// <summary>
     /// Gets the import address table directory information from the PE file.
     /// </summary>
-    public PEImportAddressTableDirectory? ImportAddressTable => (PEImportAddressTableDirectory?)this[ImageDataDirectoryKind.ImportAddressTable];
+    public PEImportAddressTableDirectory? ImportAddressTableDirectory => (PEImportAddressTableDirectory?)this[PEDataDirectoryKind.ImportAddressTable];
 
     /// <summary>
     /// Gets the CLR metadata directory information from the PE file, if present.
     /// </summary>
-    public PEClrMetadata? ClrMetadata => (PEClrMetadata?)this[ImageDataDirectoryKind.ClrMetadata];
+    public PEClrMetadata? ClrMetadata => (PEClrMetadata?)this[PEDataDirectoryKind.ClrMetadata];
 
     /// <summary>
     /// Gets the enumerator for the directory entries.
@@ -112,7 +112,7 @@ public sealed class PEDirectoryTable : IEnumerable<PEDirectory>
     [EditorBrowsable(EditorBrowsableState.Never)]
     public Enumerator GetEnumerator() => new(this);
     
-    internal void Set(ImageDataDirectoryKind kind, PEDirectory? directory)
+    internal void Set(PEDataDirectoryKind kind, PEDataDirectory? directory)
     {
         ref var entry = ref _entries[(int)kind];
         var previousEntry = entry;
@@ -132,13 +132,13 @@ public sealed class PEDirectoryTable : IEnumerable<PEDirectory>
     [InlineArray(15)]
     private struct InternalArray
     {
-        private PEDirectory? _element;
+        private PEDataDirectory? _element;
     }
 
     /// <summary>
     /// Enumerator for the directory entries.
     /// </summary>
-    public struct Enumerator : IEnumerator<PEDirectory>
+    public struct Enumerator : IEnumerator<PEDataDirectory>
     {
         private readonly PEDirectoryTable _table;
         private int _index;
@@ -149,7 +149,7 @@ public sealed class PEDirectoryTable : IEnumerable<PEDirectory>
             _index = -1;
         }
 
-        public PEDirectory Current => _index >= 0 ? _table._entries[_index]! : null!;
+        public PEDataDirectory Current => _index >= 0 ? _table._entries[_index]! : null!;
 
         object? IEnumerator.Current => Current;
 
@@ -160,7 +160,7 @@ public sealed class PEDirectoryTable : IEnumerable<PEDirectory>
 
         public bool MoveNext()
         {
-            Span<PEDirectory?> entries = _table._entries;
+            Span<PEDataDirectory?> entries = _table._entries;
             while (++_index < entries.Length)
             {
                 if (_table._entries[_index] is not null)
@@ -178,7 +178,7 @@ public sealed class PEDirectoryTable : IEnumerable<PEDirectory>
         }
     }
 
-    IEnumerator<PEDirectory> IEnumerable<PEDirectory>.GetEnumerator()
+    IEnumerator<PEDataDirectory> IEnumerable<PEDataDirectory>.GetEnumerator()
     {
         return GetEnumerator();
     }

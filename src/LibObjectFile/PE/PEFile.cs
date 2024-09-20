@@ -98,6 +98,11 @@ public partial class PEFile : PEObject
     /// </summary>
     public ObjectList<PESection> Sections => _sections;
     
+    /// <summary>
+    /// Gets or sets the data present after the sections in the file.
+    /// </summary>
+    public Stream? DataAfterSections { get; set; }
+
     public PESection AddSection(PESectionName name, uint virtualAddress, uint virtualSize)
     {
         var section = new PESection(name, virtualAddress, virtualSize)

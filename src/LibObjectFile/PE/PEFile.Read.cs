@@ -11,9 +11,9 @@ using System.IO;
 using System.Reflection.PortableExecutable;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using LibObjectFile.Collections;
 using LibObjectFile.Diagnostics;
 using LibObjectFile.PE.Internal;
-using static System.Collections.Specialized.BitVector32;
 
 namespace LibObjectFile.PE;
 
@@ -198,7 +198,19 @@ partial class PEFile
                 diagnostics.Error(DiagnosticId.PE_ERR_InvalidSectionHeadersSize, "Invalid section headers");
             }
 
-            InitializeSections(reader, sectionHeaders);
+            // Read all sections and directories
+            if (TryInitializeSections(reader, sectionHeaders, out var positionAfterLastSection))
+            {
+                // Read the remaining of the file
+                reader.Position = positionAfterLastSection;
+                var sizeToRead = reader.Length - reader.Position;
+
+                // If we have any data left after the sections, we read it
+                if (sizeToRead > 0)
+                {
+                    DataAfterSections = reader.ReadAsStream(sizeToRead);
+                }
+            }
         }
         finally
         {
@@ -206,9 +218,11 @@ partial class PEFile
         }
     }
 
-    private void InitializeSections(PEImageReader imageReader, ReadOnlySpan<RawImageSectionHeader> headers)
+    private bool TryInitializeSections(PEImageReader imageReader, ReadOnlySpan<RawImageSectionHeader> headers, out ulong positionAfterLastSection)
     {
         _sections.Clear();
+
+        positionAfterLastSection = 0;
 
         // Create sections
         foreach (var section in headers)
@@ -220,10 +234,18 @@ partial class PEFile
                 Size = section.SizeOfRawData,
                 Characteristics = section.Characteristics,
             };
+
+            var positionAfterSection = section.PointerToRawData + section.SizeOfRawData;
+            if (positionAfterSection > positionAfterLastSection)
+            {
+                positionAfterLastSection = positionAfterSection;
+            }
+
             _sections.Add(peSection);
         }
 
-        var sectionDatas = new List<PESectionData>();
+        // A list that contains all the section data that we have created (e.g. from directories, import tables...)
+        var sectionDataList = new List<PESectionData>();
 
         // Create directories and find the section for each directory
         var maxNumberOfDirectory = (int)Math.Min(OptionalHeader.NumberOfRvaAndSizes, 15);
@@ -243,13 +265,13 @@ partial class PEFile
             }
 
             var offsetInSection = directoryEntry.VirtualAddress - peSection.VirtualAddress;
-            var directory = PEDirectory.Create((ImageDataDirectoryKind)i);
+            var directory = PEDataDirectory.Create((PEDataDirectoryKind)i);
             directory.Position = peSection.Position + offsetInSection;
             directory.Size = directoryEntry.Size;
 
             Directories.Set(directory.Kind, directory);
 
-            sectionDatas.Add(directory);
+            sectionDataList.Add(directory);
         }
 
         // Special case for Import Directory, we preload it to load ImportLookupTable and ImportAddressTable
@@ -260,32 +282,40 @@ partial class PEFile
             // Read Import Directory Entries first
             importDirectory.Read(imageReader);
 
-            var importAddressTableDirectory = Directories.ImportAddressTable;
+            var importAddressTableDirectory = Directories.ImportAddressTableDirectory;
             if (importAddressTableDirectory is null)
             {
                 imageReader.Diagnostics.Error(DiagnosticId.PE_ERR_ImportAddressTableNotFound, "Unable to find the Import Address Table");
-                return;
+                return false;
             }
 
             // Register the import address table directory
             foreach (var entry in importDirectory.Entries)
             {
                 importAddressTableDirectory.Content.Add(entry.ImportAddressTable);
-                sectionDatas.Add(entry.ImportLookupTable);
+                sectionDataList.Add(entry.ImportLookupTable);
             }
         }
         
-        // Attach all the section data we have created (directories, import tables) to the sections
-        foreach (var vObj in sectionDatas)
+        // Attach all the section data we have created (from e.g. directories, import tables) to the sections
+        foreach (var vObj in sectionDataList)
         {
             int sectionIndex = 0;
+            bool sectionFound = false;
             for (; sectionIndex < _sections.Count; sectionIndex++)
             {
                 var section = _sections[sectionIndex];
                 if (section.Contains(vObj.Position))
                 {
+                    sectionFound = true;
                     break;
                 }
+            }
+
+            if (!sectionFound)
+            {
+                imageReader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Unable to find the section for {vObj} at position {vObj.Position}");
+                return false;
             }
 
             sectionIndex = Math.Min(sectionIndex, Math.Max(0, _sections.Count - 1));
@@ -309,48 +339,7 @@ partial class PEFile
         // Create Stream data sections for remaining data per section based on directories already loaded
         foreach (var section in _sections)
         {
-            var sectionPosition = section.Position;
-
-            var dataParts = section.DataParts;
-            for (var i = 0; i < dataParts.Count; i++)
-            {
-                var data = dataParts[i];
-                if (data.Position != sectionPosition)
-                {
-                    var sectionData = new PEStreamSectionData()
-                    {
-                        Position = sectionPosition,
-                    };
-                    var size = data.Position - sectionPosition;
-                    imageReader.Position = sectionPosition;
-                    sectionData.Stream = imageReader.ReadAsStream(size);
-
-                    dataParts.Insert(i, sectionData);
-                    sectionPosition = data.Position;
-                    i++;
-                }
-
-                sectionPosition += data.Size;
-            }
-
-            if (sectionPosition < section.Position + section.Size)
-            {
-                var sectionData = new PEStreamSectionData()
-                {
-                    Position = sectionPosition,
-                };
-                var size = section.Position + section.Size - sectionPosition;
-                imageReader.Position = sectionPosition;
-                sectionData.Stream = imageReader.ReadAsStream(size);
-
-                dataParts.Add(sectionData);
-            }
-
-            //for (var i = 0; i < section.DataParts.Count; i++)
-            //{
-            //    var sectionData = section.DataParts[i];
-            //    Console.WriteLine($"section: {section.Name} {sectionData}");
-            //}
+            FillSectionDataWithMissingStreams(imageReader, section, section.DataParts, section.Position, section.Size);
         }
 
         // Post fix the ImportLookupTable and ImportAddressTable
@@ -362,10 +351,90 @@ partial class PEFile
                 entry.ImportAddressTable.FunctionTable.ResolveSectionDataLinks(this, imageReader.Diagnostics);
                 entry.ImportLookupTable.FunctionTable.ResolveSectionDataLinks(this, imageReader.Diagnostics);
             }
+
+            // Make sur that we have the full content of the Import Address Table Directory as well
+            // as it was loaded indirectly by the Import Directory
+            var importAddressTableDirectory = Directories.ImportAddressTableDirectory!;
+            FillSectionDataWithMissingStreams(imageReader, importAddressTableDirectory, importAddressTableDirectory.Content, importAddressTableDirectory.Position, importAddressTableDirectory.Size);
         }
 
         // Read directories
         // TODO: Read all directories
         Directories.BaseRelocation?.Read(imageReader);
+
+        bool hasErrors = false;
+
+        // Validate the VirtualAddress of the directories
+        for (int i = 0; i < maxNumberOfDirectory && i < dataDirectories.Length; i++)
+        {
+            var directoryEntry = dataDirectories[i];
+            if (directoryEntry.VirtualAddress == 0 || directoryEntry.Size == 0)
+            {
+                continue;
+            }
+
+            // We have the guarantee that the directory is not null
+            var directory = Directories[(PEDataDirectoryKind)i]!;
+
+            if (directory.VirtualAddress != directoryEntry.VirtualAddress)
+            {
+                imageReader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Invalid virtual address for directory {directory.Kind} at {directory.VirtualAddress} != {directoryEntry.VirtualAddress}");
+                hasErrors = true;
+            }
+        }
+        
+        // Returns the position after the last section
+        return !hasErrors;
+    }
+
+    /// <summary>
+    /// For a list of section data (e.g. used by a section or a ImportAddressTableDirectory...), we need to fill any hole with the actual stream of original data from the image
+    /// </summary>
+    private static void FillSectionDataWithMissingStreams(PEImageReader imageReader, PEObject container, ObjectList<PESectionData> dataParts, ulong startPosition, ulong totalSize)
+    {
+        var currentPosition = startPosition;
+
+        for (var i = 0; i < dataParts.Count; i++)
+        {
+            var data = dataParts[i];
+            if (currentPosition < data.Position)
+            {
+                var sectionData = new PEStreamSectionData()
+                {
+                    Position = currentPosition,
+                };
+                var size = data.Position - currentPosition;
+                imageReader.Position = currentPosition;
+                sectionData.Stream = imageReader.ReadAsStream(size);
+
+                dataParts.Insert(i, sectionData);
+                currentPosition = data.Position;
+                i++;
+            }
+            else if (currentPosition > data.Position)
+            {
+                imageReader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Invalid section data position {currentPosition} > {data.Position} in {container}");
+                return;
+            }
+
+            currentPosition += data.Size;
+        }
+
+        if (currentPosition < startPosition + totalSize)
+        {
+            var sectionData = new PEStreamSectionData()
+            {
+                Position = currentPosition,
+            };
+            var size = startPosition + totalSize - currentPosition;
+            imageReader.Position = currentPosition;
+            sectionData.Stream = imageReader.ReadAsStream(size);
+
+            dataParts.Add(sectionData);
+        }
+        else if (currentPosition > startPosition + totalSize)
+        {
+            imageReader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Invalid section data position {currentPosition} > {startPosition + totalSize} in {container}");
+        }
     }
 }

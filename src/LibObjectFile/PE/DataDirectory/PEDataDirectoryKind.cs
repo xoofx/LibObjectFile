@@ -7,7 +7,7 @@ namespace LibObjectFile.PE;
 /// <summary>
 /// Defines directory entry indices.
 /// </summary>
-public enum ImageDataDirectoryKind : ushort
+public enum PEDataDirectoryKind : ushort
 {
     /// <summary>
     /// Export Directory
