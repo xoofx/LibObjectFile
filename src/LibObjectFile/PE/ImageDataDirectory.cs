@@ -16,7 +16,7 @@ public struct ImageDataDirectory
     /// <summary>
     /// The relative virtual address of the data directory.
     /// </summary>
-    public uint VirtualAddress;
+    public RVA VirtualAddress;
 
     /// <summary>
     /// The size of the data directory, in bytes.

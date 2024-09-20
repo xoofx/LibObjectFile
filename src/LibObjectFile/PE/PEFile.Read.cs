@@ -394,9 +394,14 @@ partial class PEFile
     {
         var currentPosition = startPosition;
 
-        for (var i = 0; i < dataParts.Count; i++)
+        // We are working on position, while the list is ordered by VirtualAddress
+        var listOrderedByPosition = new List<PESectionData>();
+        listOrderedByPosition.AddRange(dataParts.UnsafeList);
+        listOrderedByPosition.Sort((a, b) => a.Position.CompareTo(b.Position));
+
+        for (var i = 0; i < listOrderedByPosition.Count; i++)
         {
-            var data = dataParts[i];
+            var data = listOrderedByPosition[i];
             if (currentPosition < data.Position)
             {
                 var sectionData = new PEStreamSectionData()
@@ -407,9 +412,8 @@ partial class PEFile
                 imageReader.Position = currentPosition;
                 sectionData.Stream = imageReader.ReadAsStream(size);
 
-                dataParts.Insert(i, sectionData);
+                dataParts.Insert(data.Index, sectionData);
                 currentPosition = data.Position;
-                i++;
             }
             else if (currentPosition > data.Position)
             {

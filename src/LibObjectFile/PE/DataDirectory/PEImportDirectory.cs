@@ -61,7 +61,7 @@ public sealed class PEImportDirectory : PEDataDirectory
             }
 
             // Calculate its position within the original stream
-            var importLookupAddressTablePositionInFile = section.Position + rawEntry.ImportLookupTableRVA - section.VirtualAddress;
+            var importLookupAddressTablePositionInFile = section.Position + rawEntry.ImportAddressTableRVA - section.VirtualAddress;
 
             // Find the section data for the ImportLookupTableRVA
             if (!reader.File.TryFindSection(rawEntry.ImportLookupTableRVA, out section))
