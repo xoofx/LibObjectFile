@@ -7,7 +7,7 @@ namespace LibObjectFile.PE;
 #pragma warning disable CS0649
 public readonly struct PEExportFunctionEntry
 {
-    private readonly PEVirtualObject? _container;
+    private readonly PEObject? _container;
     private readonly uint _offset;
     private readonly bool _isForwarderRVA;
 

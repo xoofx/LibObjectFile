@@ -60,7 +60,7 @@ internal unsafe struct RawImageSectionHeader
     /// <summary>
     /// The address of the first byte of the section when loaded into memory, relative to the image base.
     /// </summary>
-    public uint VirtualAddress;
+    public RVA RVA;
 
     /// <summary>
     /// The size of the section's raw data in the file, in bytes.

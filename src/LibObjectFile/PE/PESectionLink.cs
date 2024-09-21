@@ -20,7 +20,7 @@ public readonly struct PESectionLink : RVALink
 
     public PESection? Section { get; }
 
-    public PEVirtualObject? Container => Section;
+    public PEObject? Container => Section;
 
     public RVO RVO { get; }
 

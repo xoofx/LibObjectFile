@@ -52,9 +52,9 @@ public sealed class PEBaseRelocationDirectory : PEDataDirectory
             var location = MemoryMarshal.Read<ImageBaseRelocation>(buffer.Span);
             buffer = buffer.Slice(sizeof(ImageBaseRelocation));
 
-            if (!reader.File.TryFindSection(location.PageVirtualAddress, out var section))
+            if (!reader.File.TryFindSection(location.PageRVA, out var section))
             {
-                reader.Diagnostics.Error(DiagnosticId.PE_ERR_BaseRelocationDirectoryInvalidVirtualAddress, $"Unable to find the section containing the virtual address {location.PageVirtualAddress} in block #{blockIndex}");
+                reader.Diagnostics.Error(DiagnosticId.PE_ERR_BaseRelocationDirectoryInvalidVirtualAddress, $"Unable to find the section containing the virtual address {location.PageRVA} in block #{blockIndex}");
                 continue;
             }
 
@@ -62,7 +62,7 @@ public sealed class PEBaseRelocationDirectory : PEDataDirectory
 
             
             // Create a block
-            var block = new PEBaseRelocationBlock(new PESectionLink(section, (uint)(location.PageVirtualAddress - section.RVA)))
+            var block = new PEBaseRelocationBlock(new PESectionLink(section, (uint)(location.PageRVA - section.RVA)))
             {
                 BlockBuffer = buffer.Slice(0, sizeOfRelocations)
             };
@@ -106,7 +106,7 @@ public sealed class PEBaseRelocationDirectory : PEDataDirectory
     private struct ImageBaseRelocation
     {
 #pragma warning disable CS0649
-        public RVA PageVirtualAddress;
+        public RVA PageRVA;
         public uint SizeOfBlock;
     }
 }

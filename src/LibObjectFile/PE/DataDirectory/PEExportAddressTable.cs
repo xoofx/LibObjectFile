@@ -47,7 +47,7 @@ public class PEExportAddressTable : PESectionData
             for (int i = 0; i < Values.Count; i++)
             {
                 var rva = spanRva[i];
-                if (!reader.File.TryFindVirtualContainer(rva, out var container))
+                if (!reader.File.TryFindContainerByRVA(rva, out var container))
                 {
                     reader.Diagnostics.Error(DiagnosticId.PE_ERR_ExportAddressTableInvalidRVA, $"Unable to find the section data for RVA {rva}");
                     return;

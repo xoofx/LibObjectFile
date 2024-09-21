@@ -7,7 +7,7 @@ namespace LibObjectFile.PE;
 // ReSharper disable once InconsistentNaming
 public interface RVALink
 {
-    public PEVirtualObject? Container { get; }
+    public PEObject? Container { get; }
 
     public RVO RVO { get; }
 }

@@ -10,13 +10,13 @@ namespace LibObjectFile.PE;
 [DebuggerDisplay("{ToString(),nq}")]
 public struct PEFunctionAddressLink : RVALink
 {
-    public PEFunctionAddressLink(PEVirtualObject? container, RVO rvo)
+    public PEFunctionAddressLink(PEObject? container, RVO rvo)
     {
         Container = container;
         RVO = rvo;
     }
 
-    public PEVirtualObject? Container { get; }
+    public PEObject? Container { get; }
 
     public RVO RVO { get; }
 

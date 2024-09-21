@@ -10,7 +10,7 @@ using LibObjectFile.Collections;
 
 namespace LibObjectFile.PE;
 
-public static class PEVirtualObjectExtensions
+public static class PEObjectExtensions
 {
     /// <summary>
     /// Tries to find a virtual object by its virtual address.
@@ -18,8 +18,8 @@ public static class PEVirtualObjectExtensions
     /// <param name="virtualAddress">The virtual address to search for.</param>
     /// <param name="item">The section data that contains the virtual address, if found.</param>
     /// <returns><c>true</c> if the section data was found; otherwise, <c>false</c>.</returns>
-    public static bool TryFindByVirtualAddress<TVirtualObject>(this ObjectList<TVirtualObject> list, RVA virtualAddress, uint size, [NotNullWhen(true)] out TVirtualObject? item)
-        where TVirtualObject : PEVirtualObject
+    public static bool TryFindByRVA<TPEObject>(this ObjectList<TPEObject> list, RVA virtualAddress, uint size, [NotNullWhen(true)] out TPEObject? item)
+        where TPEObject : PEObject
     {
         // Binary search
         nint low = 0;
@@ -60,8 +60,8 @@ public static class PEVirtualObjectExtensions
     /// <param name="virtualAddress">The virtual address to search for.</param>
     /// <param name="item">The section data that contains the virtual address, if found.</param>
     /// <returns><c>true</c> if the section data was found; otherwise, <c>false</c>.</returns>
-    public static bool TryFindByVirtualAddress<TVirtualObject>(this ObjectList<TVirtualObject> list, RVA virtualAddress, bool recurse, [NotNullWhen(true)] out PEVirtualObject? item)
-        where TVirtualObject : PEVirtualObject
+    public static bool TryFindByRVA<TPEObject>(this ObjectList<TPEObject> list, RVA virtualAddress, bool recurse, [NotNullWhen(true)] out PEObject? item)
+        where TPEObject : PEObject
     {
         // Binary search
         nint low = 0;
@@ -77,7 +77,7 @@ public static class PEVirtualObjectExtensions
 
             if (trySectionData.ContainsVirtual(virtualAddress))
             {
-                if (recurse && trySectionData.TryFindByVirtualAddress(virtualAddress, out var virtualItem))
+                if (recurse && trySectionData.TryFindByRVA(virtualAddress, out var virtualItem))
                 {
                     item = virtualItem;
                     return item is not null;

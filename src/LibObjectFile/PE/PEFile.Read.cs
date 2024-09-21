@@ -228,7 +228,7 @@ partial class PEFile
         foreach (var section in headers)
         {
             // We don't validate the name
-            var peSection = new PESection( new PESectionName(section.NameAsString, false), section.VirtualAddress, section.VirtualSize)
+            var peSection = new PESection( new PESectionName(section.NameAsString, false), section.RVA, section.VirtualSize)
             {
                 Position = section.PointerToRawData,
                 Size = section.SizeOfRawData,
@@ -253,18 +253,18 @@ partial class PEFile
         for (int i = 0; i < maxNumberOfDirectory && i < dataDirectories.Length; i++)
         {
             var directoryEntry = dataDirectories[i];
-            if (directoryEntry.VirtualAddress == 0 || directoryEntry.Size == 0)
+            if (directoryEntry.RVA == 0 || directoryEntry.Size == 0)
             {
                 continue;
             }
 
-            if (!TryFindSection(directoryEntry.VirtualAddress, directoryEntry.Size, out var peSection))
+            if (!TryFindSection(directoryEntry.RVA, directoryEntry.Size, out var peSection))
             {
-                reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidDataDirectorySection, $"Unable to find the section for the DataDirectory at virtual address {directoryEntry.VirtualAddress}, size {directoryEntry.Size}");
+                reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidDataDirectorySection, $"Unable to find the section for the DataDirectory at virtual address {directoryEntry.RVA}, size {directoryEntry.Size}");
                 continue;
             }
 
-            var offsetInSection = directoryEntry.VirtualAddress - peSection.RVA;
+            var offsetInSection = directoryEntry.RVA - peSection.RVA;
             var directory = PEDataDirectory.Create((PEDataDirectoryKind)i);
             directory.Position = peSection.Position + offsetInSection;
             directory.Size = directoryEntry.Size;
@@ -316,7 +316,7 @@ partial class PEFile
             
             // Insert the directory at the right position in the section
             int sectionDataIndex = 0;
-            var dataParts = peSection.DataParts;
+            var dataParts = peSection.Content;
 
             bool addedToDirectory = false;
 
@@ -358,7 +358,7 @@ partial class PEFile
         // Create Stream data sections for remaining data per section based on directories already loaded
         foreach (var section in _sections)
         {
-            FillSectionDataWithMissingStreams(reader, section, section.DataParts, section.Position, section.Size);
+            FillSectionDataWithMissingStreams(reader, section, section.Content, section.Position, section.Size);
 
             var previousSize = section.Size;
             section.UpdateLayout(reader);
@@ -382,7 +382,7 @@ partial class PEFile
         for (int i = 0; i < maxNumberOfDirectory && i < dataDirectories.Length; i++)
         {
             var directoryEntry = dataDirectories[i];
-            if (directoryEntry.VirtualAddress == 0 || directoryEntry.Size == 0)
+            if (directoryEntry.RVA == 0 || directoryEntry.Size == 0)
             {
                 continue;
             }
@@ -390,9 +390,9 @@ partial class PEFile
             // We have the guarantee that the directory is not null
             var directory = Directories[(PEDataDirectoryKind)i]!;
 
-            if (directory.RVA != directoryEntry.VirtualAddress)
+            if (directory.RVA != directoryEntry.RVA)
             {
-                reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Invalid virtual address for directory {directory.Kind} at {directory.RVA} != {directoryEntry.VirtualAddress}");
+                reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Invalid virtual address for directory {directory.Kind} at {directory.RVA} != {directoryEntry.RVA}");
                 hasErrors = true;
             }
         }
@@ -404,7 +404,7 @@ partial class PEFile
     /// <summary>
     /// For a list of section data (e.g. used by a section or a ImportAddressTableDirectory...), we need to fill any hole with the actual stream of original data from the image
     /// </summary>
-    private static void FillSectionDataWithMissingStreams(PEImageReader imageReader, PEObject container, ObjectList<PESectionData> dataParts, ulong startPosition, ulong totalSize)
+    private static void FillSectionDataWithMissingStreams(PEImageReader imageReader, PEObjectBase container, ObjectList<PESectionData> dataParts, ulong startPosition, ulong totalSize)
     {
         var currentPosition = startPosition;
 

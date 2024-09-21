@@ -11,9 +11,9 @@ namespace LibObjectFile.PE;
 /// <summary>
 /// Base class for data contained in a <see cref="PESection"/>.
 /// </summary>
-public abstract class PESectionData : PEVirtualObject
+public abstract class PESectionData : PEObject
 {
-    protected PESectionData(bool hasChildren) : base(hasChildren)
+    protected PESectionData(bool isContainer) : base(isContainer)
     {
     }
     
@@ -25,16 +25,6 @@ public abstract class PESectionData : PEVirtualObject
     public virtual void WriteAt(uint offset, ReadOnlySpan<byte> source)
     {
         throw new NotSupportedException($"The write operation is not supported for {this.GetType().FullName}");
-    }
-
-    protected override bool PrintMembers(StringBuilder builder)
-    {
-        builder.Append($"VirtualAddress =  {RVA}, Size = 0x{Size:X4}");
-        if (Parent is PESection section)
-        {
-            builder.Append($", Section = {section.Name}");
-        }
-        return true;
     }
 
     protected override void ValidateParent(ObjectFileElement parent)

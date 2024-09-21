@@ -17,7 +17,7 @@ public readonly struct PEImportHintNameLink : RVALink<PEImportHintName>
 
     public readonly PEStreamSectionData? StreamSectionData;
 
-    public PEVirtualObject? Container => StreamSectionData;
+    public PEObject? Container => StreamSectionData;
 
     public RVO RVO { get; }
 

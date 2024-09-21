@@ -49,7 +49,7 @@ internal readonly struct PEImportFunctionTable()
             {
                 // The RVO is an RVA until we bind it to a container below
                 var va = (RVA)(uint)entry.HintName.RVO;
-                if (!peFile.TryFindVirtualContainer(va, out var container))
+                if (!peFile.TryFindContainerByRVA(va, out var container))
                 {
                     diagnostics.Error(DiagnosticId.PE_ERR_ImportLookupTableInvalidHintNameTableRVA, $"Unable to find the section data for HintNameTableRVA {va}");
                     return;

@@ -17,7 +17,7 @@ namespace LibObjectFile.PE;
 /// <summary>
 /// A Portable Executable file that can be read, modified and written.
 /// </summary>
-public partial class PEFile : PEObject
+public partial class PEFile : PEObjectBase
 {
     private byte[] _dosStub = [];
     private Stream? _dosStubExtra;
@@ -113,18 +113,18 @@ public partial class PEFile : PEObject
         return section;
     }
 
-    public bool TryFindSection(RVA virtualAddress, [NotNullWhen(true)] out PESection? section)
+    public bool TryFindSection(RVA rva, [NotNullWhen(true)] out PESection? section)
     {
-        var result = _sections.TryFindByVirtualAddress(virtualAddress, false, out var sectionObj);
+        var result = _sections.TryFindByRVA(rva, false, out var sectionObj);
         section = sectionObj as PESection;
         return result && section is not null;
     }
 
-    public bool TryFindSection(RVA virtualAddress, uint size, [NotNullWhen(true)] out PESection? section)
-        => _sections.TryFindByVirtualAddress(virtualAddress, size, out section);
+    public bool TryFindSection(RVA rva, uint size, [NotNullWhen(true)] out PESection? section)
+        => _sections.TryFindByRVA(rva, size, out section);
 
-    public bool TryFindVirtualContainer(RVA virtualAddress, [NotNullWhen(true)] out PEVirtualObject? container)
-        => _sections.TryFindByVirtualAddress(virtualAddress, true, out container);
+    public bool TryFindContainerByRVA(RVA rva, [NotNullWhen(true)] out PEObject? container)
+        => _sections.TryFindByRVA(rva, true, out container);
     
     public void RemoveSection(PESectionName name)
     {
@@ -176,13 +176,13 @@ public partial class PEFile : PEObject
         var sections = _sections;
         foreach (var section in sections)
         {
-            count += section.DataParts.Count;
+            count += section.Content.Count;
         }
         dataList.Capacity = count;
 
         foreach (var section in sections)
         {
-            foreach (var data in section.DataParts)
+            foreach (var data in section.Content)
             {
                 dataList.Add(data);
             }

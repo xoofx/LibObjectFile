@@ -122,7 +122,7 @@ public sealed class PEImportDirectory : PEDataDirectory
         {
             // The RVO is actually an RVA until we bind it here
             var va = (RVA)(uint)entry.ImportDllNameLink.RVO;
-            if (!peFile.TryFindVirtualContainer(va, out var container))
+            if (!peFile.TryFindContainerByRVA(va, out var container))
             {
                 diagnostics.Error(DiagnosticId.PE_ERR_ImportLookupTableInvalidHintNameTableRVA, $"Unable to find the section data for HintNameTableRVA {va}");
                 return;

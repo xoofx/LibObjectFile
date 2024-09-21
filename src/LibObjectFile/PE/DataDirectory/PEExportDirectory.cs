@@ -124,7 +124,7 @@ public sealed class PEExportDirectory : PEDataDirectory
         var peFile = reader.File;
         var diagnostics = reader.Diagnostics;
 
-        if (!peFile.TryFindVirtualContainer(NameLink.RVA(), out var container))
+        if (!peFile.TryFindContainerByRVA(NameLink.RVA(), out var container))
         {
             diagnostics.Error(DiagnosticId.PE_ERR_ExportDirectoryInvalidName, $"Unable to find the section data for Name {NameLink.RVA()}");
             return;

@@ -5,7 +5,7 @@
 namespace LibObjectFile.PE;
 
 /// <summary>
-/// Defines a Relative Virtual Offset (RVO) that is relative to an RVA in a Portable Executable (PE) image.
+/// Defines a Relative Virtual Offset (RVO) that is relative to a <see cref="PEObject"/> in a Portable Executable (PE) image.
 /// </summary>
 /// <param name="Value">The value of the relative offset.</param>
 public record struct RVO(uint Value)

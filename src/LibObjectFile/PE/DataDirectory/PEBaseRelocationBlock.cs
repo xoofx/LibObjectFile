@@ -88,7 +88,7 @@ public sealed class PEBaseRelocationBlock
             var va = blockBaseAddress + relocation.OffsetInBlockPart;
 
             // Find the section data containing the virtual address
-            if (!peFile.TryFindVirtualContainer(va, out var vObj))
+            if (!peFile.TryFindContainerByRVA(va, out var vObj))
             {
                 reader.Diagnostics.Error(DiagnosticId.PE_ERR_BaseRelocationDirectoryInvalidVirtualAddress, $"Unable to find the section data containing the virtual address 0x{va:X4}");
                 continue;

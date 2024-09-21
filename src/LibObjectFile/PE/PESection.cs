@@ -16,16 +16,16 @@ namespace LibObjectFile.PE;
 /// <summary>
 /// Defines a section in a Portable Executable (PE) image.
 /// </summary>
-public sealed class PESection : PEVirtualObject
+public sealed class PESection : PEObject
 {
-    private readonly ObjectList<PESectionData> _dataParts;
+    private readonly ObjectList<PESectionData> _content;
 
     public PESection(PESectionName name, RVA rva, RVA virtualSize) : base(true)
     {
         Name = name;
         RVA = rva;
         VirtualSize = virtualSize;
-        _dataParts = PEVirtualObject.CreateObjectList<PESectionData>(this);
+        _content = PEObject.CreateObjectList<PESectionData>(this);
         // Most of the time readable
         Characteristics = SectionCharacteristics.MemRead;
     }
@@ -49,7 +49,7 @@ public sealed class PESection : PEVirtualObject
     /// <summary>
     /// Gets the list of data associated with this section.
     /// </summary>
-    public ObjectList<PESectionData> DataParts => _dataParts;
+    public ObjectList<PESectionData> Content => _content;
 
     /// <summary>
     /// Tries to find the section data that contains the specified virtual address.
@@ -59,7 +59,7 @@ public sealed class PESection : PEVirtualObject
     /// <returns><c>true</c> if the section data was found; otherwise, <c>false</c>.</returns>
     public bool TryFindSectionData(RVA virtualAddress, [NotNullWhen(true)] out PESectionData? sectionData)
     {
-        var result = _dataParts.TryFindByVirtualAddress(virtualAddress, true, out var sectionObj);
+        var result = _content.TryFindByRVA(virtualAddress, true, out var sectionObj);
         sectionData = sectionObj as PESectionData;
         return result && sectionData is not null;
     }
@@ -68,7 +68,7 @@ public sealed class PESection : PEVirtualObject
     public override void UpdateLayout(PEVisitorContext context)
     {
         var va = RVA;
-        foreach (var data in DataParts)
+        foreach (var data in Content)
         {
             data.RVA = va;
             data.UpdateLayout(context);
@@ -96,16 +96,26 @@ public sealed class PESection : PEVirtualObject
     /// <inheritdoc />
     protected override bool PrintMembers(StringBuilder builder)
     {
-        builder.Append($"VirtualAddress = {RVA}, VirtualSize = 0x{VirtualSize:X4}, DataParts[{DataParts.Count}]");
+        builder.Append($"{Name} ");
+        base.PrintMembers(builder);
+        builder.Append($", Content[{Content.Count}]");
         return true;
     }
     
-    protected override bool TryFindByVirtualAddressInChildren(RVA rva, out PEVirtualObject? result) 
-        => _dataParts.TryFindByVirtualAddress(rva, true, out result);
+    protected override bool TryFindByRVAInChildren(RVA rva, out PEObject? result) 
+        => _content.TryFindByRVA(rva, true, out result);
 
-    protected override void UpdateVirtualAddressInChildren()
+    protected override void UpdateRVAInChildren()
     {
         // TODO?
+    }
+
+    protected override void ValidateParent(ObjectFileElement parent)
+    {
+        if (parent is not PEFile)
+        {
+            throw new ArgumentException($"Invalid parent type {parent.GetType().FullName}. Expecting a parent of type {typeof(PEFile).FullName}");
+        }
     }
 
     /// <summary>

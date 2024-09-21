@@ -71,15 +71,15 @@ public abstract class PEDataDirectory : PESectionData
         }
     }
 
-    protected override bool TryFindByVirtualAddressInChildren(RVA rva, out PEVirtualObject? result)
-        => Content.TryFindByVirtualAddress(rva, true, out result);
+    protected override bool TryFindByRVAInChildren(RVA rva, out PEObject? result)
+        => Content.TryFindByRVA(rva, true, out result);
 
-    protected override void UpdateVirtualAddressInChildren()
+    protected override void UpdateRVAInChildren()
     {
         var va = RVA;
         foreach (var table in Content)
         {
-            table.UpdateVirtualAddress(va);
+            table.UpdateRVA(va);
             va += (uint)table.Size;
         }
     }
