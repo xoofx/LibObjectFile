@@ -21,19 +21,14 @@ public sealed class PEImportLookupTable : PESectionData
 
     public override void UpdateLayout(PEVisitorContext context)
     {
-        UpdateSize(context.File, context.Diagnostics);
+        Size = FunctionTable.CalculateSize(context);
     }
 
     public override void Read(PEImageReader reader)
     {
         FunctionTable.Read(reader, Position);
-        UpdateSize(reader.File, reader.Diagnostics);
+        UpdateLayout(reader);
     }
-
-    private void UpdateSize(PEFile file, DiagnosticBag diagnostics)
-    {
-        Size = FunctionTable.CalculateSize(file, diagnostics);
-    }
-
+    
     public override void Write(PEImageWriter writer) => FunctionTable.Write(writer);
 }

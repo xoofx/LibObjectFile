@@ -5,6 +5,7 @@
 using System;
 using System.Buffers;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using LibObjectFile.Diagnostics;
 using LibObjectFile.IO;
@@ -64,7 +65,7 @@ public abstract class ObjectFileReaderWriter : VisitorContextBase
     public int Read(byte[] buffer, int offset, int count) => Stream.Read(buffer, offset, count);
 
     public int Read(Span<byte> buffer) => Stream.Read(buffer);
-        
+
     public void ReadExactly(Span<byte> buffer) => Stream.ReadExactly(buffer);
 
     /// <summary>
@@ -191,11 +192,8 @@ public abstract class ObjectFileReaderWriter : VisitorContextBase
                 data = default;
             }
 
-            fixed (void* pData = &data)
-            {
-                var span = new Span<byte>(pData, sizeToRead);
-                byteRead = Stream.Read(span);
-            }
+            Unsafe.SkipInit(out data);
+            byteRead = Stream.Read(MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref data, 1)));
         }
         return byteRead == sizeToRead;
     }

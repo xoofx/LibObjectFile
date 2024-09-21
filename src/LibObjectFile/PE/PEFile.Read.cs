@@ -218,7 +218,7 @@ partial class PEFile
         }
     }
 
-    private bool TryInitializeSections(PEImageReader imageReader, ReadOnlySpan<RawImageSectionHeader> headers, out ulong positionAfterLastSection)
+    private bool TryInitializeSections(PEImageReader reader, ReadOnlySpan<RawImageSectionHeader> headers, out ulong positionAfterLastSection)
     {
         _sections.Clear();
 
@@ -260,7 +260,7 @@ partial class PEFile
 
             if (!TryFindSection(directoryEntry.VirtualAddress, directoryEntry.Size, out var peSection))
             {
-                imageReader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidDataDirectorySection, $"Unable to find the section for the DataDirectory at virtual address {directoryEntry.VirtualAddress}, size {directoryEntry.Size}");
+                reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidDataDirectorySection, $"Unable to find the section for the DataDirectory at virtual address {directoryEntry.VirtualAddress}, size {directoryEntry.Size}");
                 continue;
             }
 
@@ -272,29 +272,22 @@ partial class PEFile
             Directories.Set(directory.Kind, directory);
 
             sectionDataList.Add(directory);
-        }
 
-        // Special case for Import Directory, we preload it to load ImportLookupTable and ImportAddressTable
-        // so that we can attach them below to the right section data before creating the remaining interleaved streams
-        var importDirectory = Directories.Import;
-        if (importDirectory != null)
-        {
-            // Read Import Directory Entries first
-            importDirectory.Read(imageReader);
+            // Read the content of the directory
+            directory.Read(reader);
 
-            var importAddressTableDirectory = Directories.ImportAddressTableDirectory;
-            if (importAddressTableDirectory is null)
+            if (reader.Diagnostics.HasErrors)
             {
-                imageReader.Diagnostics.Error(DiagnosticId.PE_ERR_ImportAddressTableNotFound, "Unable to find the Import Address Table");
                 return false;
             }
 
-            // Register the import address table directory
-            foreach (var entry in importDirectory.Entries)
-            {
-                importAddressTableDirectory.Content.Add(entry.ImportAddressTable);
-                sectionDataList.Add(entry.ImportLookupTable);
-            }
+        }
+
+        // Get all implicit section data from directories after registering directories
+        foreach (var directory in Directories)
+        {
+            // Add all implicit section data
+            sectionDataList.AddRange(directory.CollectImplicitSectionDataList());
         }
         
         // Attach all the section data we have created (from e.g. directories, import tables) to the sections
@@ -314,7 +307,7 @@ partial class PEFile
 
             if (!sectionFound)
             {
-                imageReader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Unable to find the section for {vObj} at position {vObj.Position}");
+                reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Unable to find the section for {vObj} at position {vObj.Position}");
                 return false;
             }
 
@@ -324,6 +317,9 @@ partial class PEFile
             // Insert the directory at the right position in the section
             int sectionDataIndex = 0;
             var dataParts = peSection.DataParts;
+
+            bool addedToDirectory = false;
+
             for (; sectionDataIndex < dataParts.Count; sectionDataIndex++)
             {
                 var sectionData = dataParts[sectionDataIndex];
@@ -331,38 +327,54 @@ partial class PEFile
                 {
                     break;
                 }
+                else if (sectionData.Contains(vObj.Position, (uint)vObj.Size))
+                {
+                    if (sectionData is PEDataDirectory dataDirectory)
+                    {
+                        addedToDirectory = true;
+                        dataDirectory.Content.Add(vObj);
+                        break;
+                    }
+                    else
+                    {
+                        reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Invalid section data {sectionData} at position {sectionData.Position} contains {vObj} at position {vObj.Position}");
+                        return false;
+                    }
+                }
             }
 
-            dataParts.Insert(sectionDataIndex, vObj);
+            if (!addedToDirectory)
+            {
+                dataParts.Insert(sectionDataIndex, vObj);
+            }
+        }
+
+        // Make sure that we have a proper stream for all directories
+        foreach (var directory in Directories)
+        {
+            FillDirectoryWithStreams(reader, directory);
         }
 
         // Create Stream data sections for remaining data per section based on directories already loaded
         foreach (var section in _sections)
         {
-            FillSectionDataWithMissingStreams(imageReader, section, section.DataParts, section.Position, section.Size);
-        }
+            FillSectionDataWithMissingStreams(reader, section, section.DataParts, section.Position, section.Size);
 
-        // Post fix the ImportLookupTable and ImportAddressTable
-        // To attach proper links to the actual streams
-        if (importDirectory is not null)
-        {
-            importDirectory.ResolveNames(this, imageReader.Diagnostics);
-
-            foreach (var entry in importDirectory.Entries)
+            var previousSize = section.Size;
+            section.UpdateLayout(reader);
+            var newSize = section.Size;
+            if (newSize != previousSize)
             {
-                entry.ImportAddressTable.FunctionTable.ResolveSectionDataLinks(this, imageReader.Diagnostics);
-                entry.ImportLookupTable.FunctionTable.ResolveSectionDataLinks(this, imageReader.Diagnostics);
+                reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Invalid size for section {section} at {section.Position} with size {section.Size} != {previousSize}");
+                return false;
             }
-
-            // Make sur that we have the full content of the Import Address Table Directory as well
-            // as it was loaded indirectly by the Import Directory
-            var importAddressTableDirectory = Directories.ImportAddressTableDirectory!;
-            FillSectionDataWithMissingStreams(imageReader, importAddressTableDirectory, importAddressTableDirectory.Content, importAddressTableDirectory.Position, importAddressTableDirectory.Size);
         }
 
-        // Read directories
-        // TODO: Read all directories
-        Directories.BaseRelocation?.Read(imageReader);
+        // Final binding of directories with the actual section data
+        foreach (var directory in Directories)
+        {
+            directory.Bind(reader);
+        }
 
         bool hasErrors = false;
 
@@ -380,7 +392,7 @@ partial class PEFile
 
             if (directory.VirtualAddress != directoryEntry.VirtualAddress)
             {
-                imageReader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Invalid virtual address for directory {directory.Kind} at {directory.VirtualAddress} != {directoryEntry.VirtualAddress}");
+                reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Invalid virtual address for directory {directory.Kind} at {directory.VirtualAddress} != {directoryEntry.VirtualAddress}");
                 hasErrors = true;
             }
         }
@@ -441,5 +453,10 @@ partial class PEFile
         {
             imageReader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Invalid section data position {currentPosition} > {startPosition + totalSize} in {container}");
         }
+    }
+
+    private static void FillDirectoryWithStreams(PEImageReader imageReader, PEDataDirectory directory)
+    {
+        FillSectionDataWithMissingStreams(imageReader, directory, directory.Content, directory.Position + directory.HeaderSize, directory.Size - directory.HeaderSize);
     }
 }

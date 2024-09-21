@@ -10,25 +10,25 @@ namespace LibObjectFile.PE;
 /// <summary>
 /// A block of base relocations for a page.
 /// </summary>
-[DebuggerDisplay("{nameof(PEBaseRelocationPageBlock),nq} Link = {SectionDataRVALink}, Relocations[{Relocations.Count}]")]
+[DebuggerDisplay("{nameof(PEBaseRelocationPageBlock),nq} Link = {SectionDataLink}, Relocations[{Relocations.Count}]")]
 public sealed class PEBaseRelocationPageBlockPart
 {
-    public PEBaseRelocationPageBlockPart(RVALink<PESectionData> sectionDataRVALink)
+    public PEBaseRelocationPageBlockPart(PESectionDataLink sectionDataLink)
     {
-        SectionDataRVALink = sectionDataRVALink;
+        SectionDataLink = sectionDataLink;
         Relocations = new List<PEBaseRelocation>();
     }
 
-    internal PEBaseRelocationPageBlockPart(RVALink<PESectionData> sectionDataRVALink, List<PEBaseRelocation> relocations)
+    internal PEBaseRelocationPageBlockPart(PESectionDataLink sectionDataLink, List<PEBaseRelocation> relocations)
     {
-        SectionDataRVALink = sectionDataRVALink;
+        SectionDataLink = sectionDataLink;
         Relocations = relocations;
     }
 
     /// <summary>
     /// Gets or sets the linked <see cref="PESectionData"/> and its virtual offset within it.
     /// </summary>
-    public RVALink<PESectionData> SectionDataRVALink { get; }
+    public PESectionDataLink SectionDataLink { get; }
 
     /// <summary>
     /// Gets the list of relocations for this block.
@@ -51,6 +51,6 @@ public sealed class PEBaseRelocationPageBlockPart
 
     public override string ToString()
     {
-        return $"{nameof(PEBaseRelocationPageBlock)} Link = {SectionDataRVALink}, Relocations[{Relocations.Count}]";
+        return $"{nameof(PEBaseRelocationBlock)} Link = {SectionDataLink}, Relocations[{Relocations.Count}]";
     }
 }

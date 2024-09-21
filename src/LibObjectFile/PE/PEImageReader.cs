@@ -11,6 +11,7 @@ public sealed class PEImageReader : ObjectFileReaderWriter
     internal PEImageReader(PEFile file, Stream stream, PEImageReaderOptions readerOptions) : base(file, stream)
     {
         Options = readerOptions;
+        VisitorContext = new PEVisitorContext(File, Diagnostics);
     }
 
     public new PEFile File => (PEFile)base.File;
@@ -18,4 +19,9 @@ public sealed class PEImageReader : ObjectFileReaderWriter
     public PEImageReaderOptions Options { get; }
 
     public override bool IsReadOnly => Options.IsReadOnly;
+
+    public PEVisitorContext VisitorContext { get; }
+
+
+    public static implicit operator PEVisitorContext(PEImageReader reader) => reader.VisitorContext;
 }

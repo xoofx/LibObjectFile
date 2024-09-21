@@ -3,18 +3,86 @@
 // See the license.txt file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Metadata.Ecma335;
+using LibObjectFile.Collections;
+using LibObjectFile.Diagnostics;
 
 namespace LibObjectFile.PE;
 
 public abstract class PEDataDirectory : PESectionData
 {
-    protected PEDataDirectory(PEDataDirectoryKind kind, bool hasChildren) : base(hasChildren)
+    protected PEDataDirectory(PEDataDirectoryKind kind) : base(true)
     {
         Kind = kind;
+        Content = CreateObjectList<PESectionData>(this);
     }
 
     public PEDataDirectoryKind Kind { get; }
 
+    internal uint HeaderSize { get; private protected set; }
+
+    /// <summary>
+    /// Gets the content of this directory.
+    /// </summary>
+    public ObjectList<PESectionData> Content { get; }
+
+    public sealed override void UpdateLayout(PEVisitorContext context)
+    {
+        var va = VirtualAddress;
+
+        // We compute the size of the directory header
+        // Each directory have a specific layout, so we delegate the computation to the derived class
+        var headerSize = ComputeHeaderSize(context);
+        HeaderSize = headerSize;
+        va += headerSize;
+        ulong size = headerSize;
+
+        // A directory could have a content in addition to the header
+        // So we update the VirtualAddress of each content and update the layout
+        foreach (var table in Content)
+        {
+            table.VirtualAddress = va;
+            
+            // Update layout will update virtual address
+            table.UpdateLayout(context);
+
+            va += (uint)table.Size;
+            size += table.Size;
+        }
+
+        Size = size;
+    }
+
+    internal virtual IEnumerable<PESectionData> CollectImplicitSectionDataList() => Enumerable.Empty<PESectionData>();
+
+    internal virtual void Bind(PEImageReader reader)
+    {
+    }
+
+    protected abstract uint ComputeHeaderSize(PEVisitorContext context);
+    
+    protected override void ValidateParent(ObjectFileElement parent)
+    {
+        if (parent is not PESection)
+        {
+            throw new ArgumentException($"Invalid parent type [{parent?.GetType()}] for [{GetType()}]");
+        }
+    }
+
+    protected override bool TryFindByVirtualAddressInChildren(RVA virtualAddress, out PEVirtualObject? result)
+        => Content.TryFindByVirtualAddress(virtualAddress, true, out result);
+
+    protected override void UpdateVirtualAddressInChildren()
+    {
+        var va = VirtualAddress;
+        foreach (var table in Content)
+        {
+            table.UpdateVirtualAddress(va);
+            va += (uint)table.Size;
+        }
+    }
 
     /// <summary>
     /// Factory method to create a new instance of <see cref="PEDataDirectory"/> based on the kind.
@@ -43,52 +111,22 @@ public abstract class PEDataDirectory : PESectionData
             _ => throw new ArgumentOutOfRangeException(nameof(kind))
         };
     }
-
-    protected override void ValidateParent(ObjectFileElement parent)
-    {
-        if (parent is not PESection)
-        {
-            throw new ArgumentException($"Invalid parent type [{parent?.GetType()}] for [{GetType()}]");
-        }
-    }
-}
-
-public sealed class PEExportDirectory : PEDataDirectory
-{
-    public PEExportDirectory() : base(PEDataDirectoryKind.Export, true)
-    {
-    }
-
-    public override void UpdateLayout(PEVisitorContext context)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override void Read(PEImageReader reader)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override void Write(PEImageWriter writer)
-    {
-        throw new NotImplementedException();
-    }
 }
 
 public sealed class PEResourceDirectory : PEDataDirectory
 {
-    public PEResourceDirectory() : base(PEDataDirectoryKind.Resource, false)
+    public PEResourceDirectory() : base(PEDataDirectoryKind.Resource)
     {
+    }
+    protected override uint ComputeHeaderSize(PEVisitorContext context)
+    {
+        return 0;
     }
 
-    public override void UpdateLayout(PEVisitorContext context)
-    {
-        throw new NotImplementedException();
-    }
 
     public override void Read(PEImageReader reader)
     {
-        throw new NotImplementedException();
+        // TBD
     }
 
     public override void Write(PEImageWriter writer)
@@ -99,18 +137,18 @@ public sealed class PEResourceDirectory : PEDataDirectory
 
 public sealed class PEExceptionDirectory : PEDataDirectory
 {
-    public PEExceptionDirectory() : base(PEDataDirectoryKind.Exception, false)
+    public PEExceptionDirectory() : base(PEDataDirectoryKind.Exception)
     {
+    }
+    protected override uint ComputeHeaderSize(PEVisitorContext context)
+    {
+        return 0;
     }
 
-    public override void UpdateLayout(PEVisitorContext context)
-    {
-        throw new NotImplementedException();
-    }
 
     public override void Read(PEImageReader reader)
     {
-        throw new NotImplementedException();
+        // TBD
     }
 
     public override void Write(PEImageWriter writer)
@@ -121,18 +159,18 @@ public sealed class PEExceptionDirectory : PEDataDirectory
 
 public sealed class PEDebugDirectory : PEDataDirectory
 {
-    public PEDebugDirectory() : base(PEDataDirectoryKind.Debug, false)
+    public PEDebugDirectory() : base(PEDataDirectoryKind.Debug)
     {
+    }
+    protected override uint ComputeHeaderSize(PEVisitorContext context)
+    {
+        return 0;
     }
 
-    public override void UpdateLayout(PEVisitorContext context)
-    {
-        throw new NotImplementedException();
-    }
 
     public override void Read(PEImageReader reader)
     {
-        throw new NotImplementedException();
+        // TBD
     }
 
     public override void Write(PEImageWriter writer)
@@ -143,18 +181,18 @@ public sealed class PEDebugDirectory : PEDataDirectory
 
 public sealed class PELoadConfigDirectory : PEDataDirectory
 {
-    public PELoadConfigDirectory() : base(PEDataDirectoryKind.LoadConfig, false)
+    public PELoadConfigDirectory() : base(PEDataDirectoryKind.LoadConfig)
     {
+    }
+    protected override uint ComputeHeaderSize(PEVisitorContext context)
+    {
+        return 0;
     }
 
-    public override void UpdateLayout(PEVisitorContext context)
-    {
-        throw new NotImplementedException();
-    }
 
     public override void Read(PEImageReader reader)
     {
-        throw new NotImplementedException();
+        // TBD
     }
 
     public override void Write(PEImageWriter writer)
@@ -165,18 +203,17 @@ public sealed class PELoadConfigDirectory : PEDataDirectory
 
 public sealed class PEBoundImportDirectory : PEDataDirectory
 {
-    public PEBoundImportDirectory() : base(PEDataDirectoryKind.BoundImport, false)
+    public PEBoundImportDirectory() : base(PEDataDirectoryKind.BoundImport)
     {
     }
-
-    public override void UpdateLayout(PEVisitorContext context)
+    protected override uint ComputeHeaderSize(PEVisitorContext context)
     {
-        throw new NotImplementedException();
+        return 0;
     }
 
     public override void Read(PEImageReader reader)
     {
-        throw new NotImplementedException();
+        // TBD
     }
 
     public override void Write(PEImageWriter writer)
@@ -187,18 +224,18 @@ public sealed class PEBoundImportDirectory : PEDataDirectory
 
 public sealed class PETlsDirectory : PEDataDirectory
 {
-    public PETlsDirectory() : base(PEDataDirectoryKind.Tls, false)
+    public PETlsDirectory() : base(PEDataDirectoryKind.Tls)
     {
     }
 
-    public override void UpdateLayout(PEVisitorContext context)
+    protected override uint ComputeHeaderSize(PEVisitorContext context)
     {
-        throw new NotImplementedException();
+        return 0;
     }
-
+    
     public override void Read(PEImageReader reader)
     {
-        throw new NotImplementedException();
+        // TBD
     }
 
     public override void Write(PEImageWriter writer)
@@ -209,18 +246,17 @@ public sealed class PETlsDirectory : PEDataDirectory
 
 public sealed class PEDelayImportDirectory : PEDataDirectory
 {
-    public PEDelayImportDirectory() : base(PEDataDirectoryKind.DelayImport, false)
+    public PEDelayImportDirectory() : base(PEDataDirectoryKind.DelayImport)
     {
     }
-
-    public override void UpdateLayout(PEVisitorContext context)
+    protected override uint ComputeHeaderSize(PEVisitorContext context)
     {
-        throw new NotImplementedException();
+        return 0;
     }
 
     public override void Read(PEImageReader reader)
     {
-        throw new NotImplementedException();
+        // TBD
     }
 
     public override void Write(PEImageWriter writer)
@@ -231,18 +267,18 @@ public sealed class PEDelayImportDirectory : PEDataDirectory
 
 public sealed class PEClrMetadata : PEDataDirectory
 {
-    public PEClrMetadata() : base(PEDataDirectoryKind.ClrMetadata, false)
+    public PEClrMetadata() : base(PEDataDirectoryKind.ClrMetadata)
     {
     }
 
-    public override void UpdateLayout(PEVisitorContext context)
+    protected override uint ComputeHeaderSize(PEVisitorContext context)
     {
-        throw new NotImplementedException();
+        return 0;
     }
 
     public override void Read(PEImageReader reader)
     {
-        throw new NotImplementedException();
+        // TBD
     }
 
     public override void Write(PEImageWriter writer)
@@ -253,18 +289,18 @@ public sealed class PEClrMetadata : PEDataDirectory
 
 public sealed class PEArchitectureDirectory : PEDataDirectory
 {
-    public PEArchitectureDirectory() : base(PEDataDirectoryKind.Architecture, false)
+    public PEArchitectureDirectory() : base(PEDataDirectoryKind.Architecture)
     {
     }
 
-    public override void UpdateLayout(PEVisitorContext context)
+    protected override uint ComputeHeaderSize(PEVisitorContext context)
     {
-        throw new NotImplementedException();
+        return 0;
     }
 
     public override void Read(PEImageReader reader)
     {
-        throw new NotImplementedException();
+        // TBD
     }
 
     public override void Write(PEImageWriter writer)
@@ -275,18 +311,18 @@ public sealed class PEArchitectureDirectory : PEDataDirectory
 
 public sealed class PEGlobalPointerDirectory : PEDataDirectory
 {
-    public PEGlobalPointerDirectory() : base(PEDataDirectoryKind.GlobalPointer, false)
+    public PEGlobalPointerDirectory() : base(PEDataDirectoryKind.GlobalPointer)
     {
     }
-
-    public override void UpdateLayout(PEVisitorContext context)
+    
+    protected override uint ComputeHeaderSize(PEVisitorContext context)
     {
-        throw new NotImplementedException();
+        return 0;
     }
 
     public override void Read(PEImageReader reader)
     {
-        throw new NotImplementedException();
+        // TBD
     }
 
     public override void Write(PEImageWriter writer)
@@ -297,18 +333,18 @@ public sealed class PEGlobalPointerDirectory : PEDataDirectory
 
 public sealed class PESecurityDirectory : PEDataDirectory
 {
-    public PESecurityDirectory() : base(PEDataDirectoryKind.Security, false)
+    public PESecurityDirectory() : base(PEDataDirectoryKind.Security)
     {
     }
 
-    public override void UpdateLayout(PEVisitorContext context)
+    protected override uint ComputeHeaderSize(PEVisitorContext context)
     {
-        throw new NotImplementedException();
+        return 0;
     }
 
     public override void Read(PEImageReader reader)
     {
-        throw new NotImplementedException();
+        // TBD
     }
 
     public override void Write(PEImageWriter writer)

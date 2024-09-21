@@ -7,17 +7,26 @@ namespace LibObjectFile.PE;
 /// <summary>
 /// A link to a PE Import Hint Name in a <see cref="PEStreamSectionData"/>.
 /// </summary>
-/// <param name="Link">The link.</param>
-public readonly record struct PEImportHintNameLink(RVALink<PEStreamSectionData> Link)
+public readonly struct PEImportHintNameLink : RVALink<PEImportHintName>
 {
-    /// <summary>
-    /// Gets a value indicating whether this instance is null.
-    /// </summary>
-    public bool IsNull => Link.IsNull;
+    public PEImportHintNameLink(PEStreamSectionData? streamSectionData, uint offsetInSection)
+    {
+        StreamSectionData = streamSectionData;
+        Offset = offsetInSection;
+    }
 
+    public readonly PEStreamSectionData? StreamSectionData;
+
+    public PEVirtualObject? Container => StreamSectionData;
+
+    public uint Offset { get; }
+
+    /// <inheritdoc />
+    public override string ToString() => this.ToDisplayText();
+    
     /// <summary>
     /// Resolves this link to a PE Import Hint Name.
     /// </summary>
     /// <returns>The PE Import Hint Name resolved.</returns>
-    public PEImportHintName Resolve() => Link.Element is null ? default : Link.Element.ReadHintName(Link.OffsetInElement);
+    public PEImportHintName Resolve() => StreamSectionData?.ReadHintName(Offset) ?? default;
 }

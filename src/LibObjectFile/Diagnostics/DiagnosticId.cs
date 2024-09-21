@@ -141,4 +141,12 @@ public enum DiagnosticId
     PE_ERR_ImportDirectoryInvalidImportLookupTableRVA = 3045,
     PE_ERR_ImportAddressTableNotFound = 3046,
     PE_ERR_InvalidInternalState = 3047,
+
+    // PE Export
+    PE_ERR_ExportAddressTableInvalidRVA = 3060,
+    PE_ERR_ExportDirectoryInvalidAddressOfNames = 3061,
+    PE_ERR_ExportDirectoryInvalidAddressOfFunctions = 3062,
+    PE_ERR_ExportDirectoryInvalidAddressOfNameOrdinals = 3063,
+    PE_ERR_ExportDirectoryInvalidName = 3064,
+    PE_ERR_ExportNameTableInvalidRVA = 3065,
 }

@@ -3,6 +3,7 @@
 // See the license.txt file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using LibObjectFile.Collections;
 using LibObjectFile.Diagnostics;
@@ -14,43 +15,13 @@ public sealed class PEImportDirectory : PEDataDirectory
 {
     private readonly ObjectList<PEImportDirectoryEntry> _entries;
 
-    public PEImportDirectory() : base(PEDataDirectoryKind.Import, false)
+    public PEImportDirectory() : base(PEDataDirectoryKind.Import)
     {
         _entries = new(this);
     }
+
     public ObjectList<PEImportDirectoryEntry> Entries => _entries;
-
-    public override void UpdateLayout(PEVisitorContext context)
-    {
-        UpdateSize();
-    }
-
-    internal void ResolveNames(PEFile peFile, DiagnosticBag diagnostics)
-    {
-        var entries = CollectionsMarshal.AsSpan(_entries.UnsafeList);
-        foreach (ref var entry in entries)
-        {
-            var va = entry.ImportDllNameLink.Link.OffsetInElement;
-            if (!peFile.TryFindSectionData(va, out var sectionData))
-            {
-                diagnostics.Error(DiagnosticId.PE_ERR_ImportLookupTableInvalidHintNameTableRVA, $"Unable to find the section data for HintNameTableRVA {va}");
-                return;
-            }
-
-            var streamSectionData = sectionData as PEStreamSectionData;
-            if (streamSectionData is null)
-            {
-                diagnostics.Error(DiagnosticId.PE_ERR_ImportLookupTableInvalidHintNameTableRVA, $"The section data for HintNameTableRVA {va} is not a stream section data");
-                return;
-            }
-
-            entry = new PEImportDirectoryEntry(
-                new PEAsciiStringLink(new(streamSectionData, va - sectionData.VirtualAddress)),
-                entry.ImportAddressTable,
-                entry.ImportLookupTable);
-        }
-    }
-
+    
     public override void Read(PEImageReader reader)
     {
         var diagnostics = reader.Diagnostics;
@@ -103,7 +74,7 @@ public sealed class PEImportDirectory : PEDataDirectory
             _entries.Add(
                 new PEImportDirectoryEntry(
                     // Name
-                    new(new(PEStreamSectionData.Empty, rawEntry.NameRVA)),
+                    new(PEStreamSectionData.Empty, rawEntry.NameRVA),
                     // ImportAddressTable
                     new PEImportAddressTable()
                     {
@@ -118,7 +89,8 @@ public sealed class PEImportDirectory : PEDataDirectory
             );
         }
 
-        UpdateSize();
+        // Update the header size
+        HeaderSize = ComputeHeaderSize(reader);
 
         // Resolve ImportLookupTable and ImportAddressTable section data links
         var entries = CollectionsMarshal.AsSpan(_entries.UnsafeList);
@@ -129,17 +101,62 @@ public sealed class PEImportDirectory : PEDataDirectory
         }
     }
 
-    private unsafe void UpdateSize()
+    protected override unsafe uint ComputeHeaderSize(PEVisitorContext context) => CalculateSize();
+
+    internal override IEnumerable<PESectionData> CollectImplicitSectionDataList()
     {
-        Size = (ulong)((_entries.Count + 1) * sizeof(RawImportDirectoryEntry));
+        foreach (var entry in _entries.UnsafeList)
+        {
+            yield return entry.ImportAddressTable;
+            yield return entry.ImportLookupTable;
+        }
+    }
+
+    internal override void Bind(PEImageReader reader)
+    {
+        var peFile = reader.File;
+        var diagnostics = reader.Diagnostics;
+
+        var entries = CollectionsMarshal.AsSpan(_entries.UnsafeList);
+        foreach (ref var entry in entries)
+        {
+            var va = entry.ImportDllNameLink.Offset;
+            if (!peFile.TryFindVirtualContainer(va, out var container))
+            {
+                diagnostics.Error(DiagnosticId.PE_ERR_ImportLookupTableInvalidHintNameTableRVA, $"Unable to find the section data for HintNameTableRVA {va}");
+                return;
+            }
+
+            var streamSectionData = container as PEStreamSectionData;
+            if (streamSectionData is null)
+            {
+                diagnostics.Error(DiagnosticId.PE_ERR_ImportLookupTableInvalidHintNameTableRVA, $"The section data for HintNameTableRVA {va} is not a stream section data");
+                return;
+            }
+
+            entry = new PEImportDirectoryEntry(
+                new PEAsciiStringLink(streamSectionData, va - container.VirtualAddress),
+                entry.ImportAddressTable,
+                entry.ImportLookupTable);
+        }
+
+
+        foreach (var entry in Entries)
+        {
+            entry.ImportAddressTable.FunctionTable.Bind(reader);
+            entry.ImportLookupTable.FunctionTable.Bind(reader);
+        }
+    }
+
+    private unsafe uint CalculateSize()
+    {
+        return (uint)(((_entries.Count + 1) * sizeof(RawImportDirectoryEntry)));
     }
 
     public override void Write(PEImageWriter writer)
     {
         throw new NotImplementedException();
     }
-
-
 
     //private struct HintNameTableEntry
     //{

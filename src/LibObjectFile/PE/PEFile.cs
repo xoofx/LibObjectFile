@@ -114,16 +114,17 @@ public partial class PEFile : PEObject
     }
 
     public bool TryFindSection(RVA virtualAddress, [NotNullWhen(true)] out PESection? section)
-        => _sections.TryFindByVirtualAddress(virtualAddress, out section);
+    {
+        var result = _sections.TryFindByVirtualAddress(virtualAddress, false, out var sectionObj);
+        section = sectionObj as PESection;
+        return result && section is not null;
+    }
 
     public bool TryFindSection(RVA virtualAddress, uint size, [NotNullWhen(true)] out PESection? section)
         => _sections.TryFindByVirtualAddress(virtualAddress, size, out section);
 
-    public bool TryFindSectionData(RVA virtualAddress, [NotNullWhen(true)] out PESectionData? sectionData)
-    {
-        sectionData = null;
-        return TryFindSection(virtualAddress, out var section) && section.TryFindSectionData(virtualAddress, out sectionData);
-    }
+    public bool TryFindVirtualContainer(RVA virtualAddress, [NotNullWhen(true)] out PEVirtualObject? container)
+        => _sections.TryFindByVirtualAddress(virtualAddress, true, out container);
     
     public void RemoveSection(PESectionName name)
     {

@@ -10,56 +10,15 @@ namespace LibObjectFile.PE;
 
 public sealed class PEImportAddressTableDirectory : PEDataDirectory
 {
-    private readonly ObjectList<PESectionData> _content;
-
-    public PEImportAddressTableDirectory() : base(PEDataDirectoryKind.ImportAddressTable, true)
+    public PEImportAddressTableDirectory() : base(PEDataDirectoryKind.ImportAddressTable)
     {
-        _content = CreateObjectList<PESectionData>(this);
     }
 
-    public ObjectList<PESectionData> Content => _content;
-
-    public override void UpdateLayout(PEVisitorContext context)
+    public override void Read(PEImageReader reader)
     {
-        ulong size = 0;
-        var va = VirtualAddress;
-        foreach (var table in _content)
-        {
-            table.VirtualAddress = va;
-            // Update layout will update virtual address
-            table.UpdateLayout(context);
-            va += (uint)table.Size;
-            size += table.Size;
-        }
-        Size = size;
     }
-
-    protected override bool TryFindByVirtualAddressInChildren(RVA virtualAddress, out PEVirtualObject? result)
-    {
-        var content = CollectionsMarshal.AsSpan(_content.UnsafeList);
-        foreach (var table in content)
-        {
-            if (table.TryFindByVirtualAddress(virtualAddress, out result))
-            {
-                return true;
-            }
-        }
-
-        result = null;
-        return false;
-    }
-    
-    protected override void UpdateVirtualAddressInChildren()
-    {
-        var va = VirtualAddress;
-        foreach (var table in _content)
-        {
-            table.UpdateVirtualAddress(va);
-            va += (uint)table.Size;
-        }
-    }
-
-    public override void Read(PEImageReader reader) => throw new NotSupportedException(); // Not called directly for this object, we are calling on tables directly
 
     public override void Write(PEImageWriter writer) => throw new NotSupportedException(); // Not called directly for this object, we are calling on tables directly
+
+    protected override uint ComputeHeaderSize(PEVisitorContext context) => 0;
 }

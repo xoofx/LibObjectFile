@@ -20,8 +20,8 @@ public readonly struct PEImportFunctionEntry
     /// <param name="name">The name of the import.</param>
     public PEImportFunctionEntry(PEAsciiStringLink name)
     {
-        _peSectionData = name.Link.Element;
-        _offset = name.Link.OffsetInElement;
+        _peSectionData = name.StreamSectionData;
+        _offset = name.Offset;
     }
 
     /// <summary>
@@ -42,7 +42,7 @@ public readonly struct PEImportFunctionEntry
     /// <summary>
     /// Gets the name of the import if not by ordinal.
     /// </summary>
-    public PEImportHintNameLink HintName => _peSectionData is null ? default : new PEImportHintNameLink(new(_peSectionData, _offset));
+    public PEImportHintNameLink HintName => _peSectionData is null ? default : new PEImportHintNameLink(_peSectionData, _offset);
 
     /// <summary>
     /// Gets the ordinal of the import if by ordinal.

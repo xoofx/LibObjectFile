@@ -13,140 +13,83 @@ namespace LibObjectFile.PE;
 
 public sealed class PEBaseRelocationDirectory : PEDataDirectory
 {
-    public PEBaseRelocationDirectory() : base(PEDataDirectoryKind.BaseRelocation, false)
+    public PEBaseRelocationDirectory() : base(PEDataDirectoryKind.BaseRelocation)
     {
     }
     
-    public List<PEBaseRelocationPageBlock> Blocks { get; } = new();
+    public List<PEBaseRelocationBlock> Blocks { get; } = new();
 
-    public override void UpdateLayout(PEVisitorContext context)
+    protected override uint ComputeHeaderSize(PEVisitorContext context)
     {
-        var size = 0UL;
+        var size = 0U;
         foreach (var block in Blocks)
         {
             size += block.CalculateSizeOf();
         }
-        Size = size;
-    }
 
+        return size;
+    }
+    
     public override unsafe void Read(PEImageReader reader)
     {
         reader.Position = Position;
         var size = (int)Size;
 
-        var buffer = ArrayPool<byte>.Shared.Rent((int)size);
-        try
+        var array = new byte[size]; // Ideally would be nice to have this coming from ArrayPool with a ref counting
+        var buffer = array.AsMemory(0, (int)size);
+        int read = reader.Read(buffer.Span);
+        if (read != size)
         {
-            var span = buffer.AsSpan(0, (int)size);
-            int read = reader.Read(span);
-            if (read != size)
+            reader.Diagnostics.Error(DiagnosticId.PE_ERR_BaseRelocationDirectoryInvalidEndOfStream, $"Unable to read the full content of the BaseRelocation directory. Expected {size} bytes, but read {read} bytes");
+            return;
+        }
+
+        var allSectionData = reader.File.GetAllSectionData();
+
+        int blockIndex = 0;
+        while (buffer.Length > 0)
+        {
+            var location = MemoryMarshal.Read<ImageBaseRelocation>(buffer.Span);
+            buffer = buffer.Slice(sizeof(ImageBaseRelocation));
+
+            if (!reader.File.TryFindSection(location.PageVirtualAddress, out var section))
             {
-                reader.Diagnostics.Error(DiagnosticId.PE_ERR_BaseRelocationDirectoryInvalidEndOfStream, $"Unable to read the full content of the BaseRelocation directory. Expected {size} bytes, but read {read} bytes");
-                return;
+                reader.Diagnostics.Error(DiagnosticId.PE_ERR_BaseRelocationDirectoryInvalidVirtualAddress, $"Unable to find the section containing the virtual address {location.PageVirtualAddress} in block #{blockIndex}");
+                continue;
             }
 
-            var allSectionData = reader.File.GetAllSectionData();
+            var sizeOfRelocations = (int)location.SizeOfBlock - sizeof(ImageBaseRelocation);
 
-            int blockIndex = 0;
-            while (span.Length > 0)
+            
+            // Create a block
+            var block = new PEBaseRelocationBlock(new PESectionLink(section, (uint)(location.PageVirtualAddress - section.VirtualAddress)))
             {
-                var location = MemoryMarshal.Read<ImageBaseRelocation>(span);
-                span = span.Slice(sizeof(ImageBaseRelocation));
+                BlockBuffer = buffer.Slice(0, sizeOfRelocations)
+            };
+            Blocks.Add(block);
 
-                if (!reader.File.TryFindSection(location.PageVirtualAddress, out var section))
-                {
-                    reader.Diagnostics.Error(DiagnosticId.PE_ERR_BaseRelocationDirectoryInvalidVirtualAddress, $"Unable to find the section containing the virtual address {location.PageVirtualAddress} in block #{blockIndex}");
-                    continue;
-                }
-
-                var sizeOfRelocations = (int)location.SizeOfBlock - sizeof(ImageBaseRelocation);
-
-                var relocSpan = MemoryMarshal.Cast<byte, PEBaseRelocation>(span.Slice(0, sizeOfRelocations));
-
-                // Remove padding zeros at the end of the block
-                if (relocSpan.Length > 0 && relocSpan[^1].IsZero)
-                {
-                    relocSpan = relocSpan.Slice(0, relocSpan.Length - 1);
-                }
-                
-                // Create a block
-                var block = new PEBaseRelocationPageBlock(new(section, location.PageVirtualAddress - section.VirtualAddress));
-                Blocks.Add(block);
-
-                PEBaseRelocationPageBlockPart? currentBlockPart = null;
-                var currentSectionDataIndex = 0;
-
-                // Iterate on all relocations
-                foreach (var relocation in relocSpan)
-                {
-                    if (relocation.IsZero)
-                    {
-                        continue;
-                    }
-
-                    var va = location.PageVirtualAddress + relocation.OffsetInBlockPart;
-
-                    // Find the section data containing the virtual address
-                    if (!TryFindSectionData(allSectionData, currentSectionDataIndex, va, out var newSectionDataIndex))
-                    {
-                        reader.Diagnostics.Error(DiagnosticId.PE_ERR_BaseRelocationDirectoryInvalidVirtualAddress, $"Unable to find the section data containing the virtual address 0x{va:X4}");
-                        continue;
-                    }
-                    
-                    var sectionData = allSectionData[newSectionDataIndex];
-                    var offsetInSectionData = va - sectionData.VirtualAddress;
-                    currentSectionDataIndex = newSectionDataIndex;
-
-                    // Create a new block part if the section data is different, or it is the first relocation
-                    if (currentBlockPart is null || currentBlockPart.SectionDataRVALink.Element != sectionData)
-                    {
-                        currentBlockPart = new PEBaseRelocationPageBlockPart(new(sectionData, offsetInSectionData));
-                        block.Parts.Add(currentBlockPart);
-                    }
-
-                    var newRelocation = new PEBaseRelocation(relocation.Type, (ushort)(offsetInSectionData - currentBlockPart.SectionDataRVALink.OffsetInElement));
-
-                    currentBlockPart.Relocations.Add(newRelocation);
-                }
-
-                // Move to the next block
-                span = span.Slice(sizeOfRelocations);
-                blockIndex++;
-            }
+            // Move to the next block
+            buffer = buffer.Slice(sizeOfRelocations);
+            blockIndex++;
         }
-        finally
-        {
-            ArrayPool<byte>.Shared.Return(buffer);
-        }
+
+        // Update the header size
+        HeaderSize = ComputeHeaderSize(reader);
     }
 
-    private bool TryFindSectionData(List<PESectionData> allSectionData, int startIndex, uint virtualAddress, out int indexFound)
+    internal override void Bind(PEImageReader reader)
     {
-        var span = CollectionsMarshal.AsSpan(allSectionData);
-        for (int i = startIndex; i < span.Length; i++)
+        foreach (var block in Blocks)
         {
-            ref var sectionData = ref span[i];
-            if (sectionData.ContainsVirtual(virtualAddress))
-            {
-                indexFound = i;
-                return true;
-            }
+            block.ReadAndBind(reader);
         }
 
-        indexFound = -1;
-        return false;
+        HeaderSize = ComputeHeaderSize(reader);
     }
 
     public override void Write(PEImageWriter writer)
     {
         throw new NotImplementedException();
-    }
-
-#pragma warning disable CS0649
-    private struct ImageBaseRelocation
-    {
-        public RVA PageVirtualAddress;
-        public uint SizeOfBlock;
     }
 
     protected override bool PrintMembers(StringBuilder builder)
@@ -158,5 +101,12 @@ public sealed class PEBaseRelocationDirectory : PEDataDirectory
 
         builder.Append($"Blocks[{Blocks.Count}]");
         return true;
+    }
+
+    private struct ImageBaseRelocation
+    {
+#pragma warning disable CS0649
+        public RVA PageVirtualAddress;
+        public uint SizeOfBlock;
     }
 }

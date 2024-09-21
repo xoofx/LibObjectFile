@@ -60,7 +60,7 @@ public static class PEVirtualObjectExtensions
     /// <param name="virtualAddress">The virtual address to search for.</param>
     /// <param name="item">The section data that contains the virtual address, if found.</param>
     /// <returns><c>true</c> if the section data was found; otherwise, <c>false</c>.</returns>
-    public static bool TryFindByVirtualAddress<TVirtualObject>(this ObjectList<TVirtualObject> list, RVA virtualAddress, [NotNullWhen(true)] out TVirtualObject? item)
+    public static bool TryFindByVirtualAddress<TVirtualObject>(this ObjectList<TVirtualObject> list, RVA virtualAddress, bool recurse, [NotNullWhen(true)] out PEVirtualObject? item)
         where TVirtualObject : PEVirtualObject
     {
         // Binary search
@@ -77,6 +77,12 @@ public static class PEVirtualObjectExtensions
 
             if (trySectionData.ContainsVirtual(virtualAddress))
             {
+                if (recurse && trySectionData.TryFindByVirtualAddress(virtualAddress, out var virtualItem))
+                {
+                    item = virtualItem;
+                    return item is not null;
+                }
+
                 item = trySectionData;
                 return true;
             }

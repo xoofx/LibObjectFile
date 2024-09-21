@@ -28,14 +28,19 @@ public abstract class PEVirtualObject : PEObject
     /// The address of the first byte of the section when loaded into memory, relative to the image base.
     /// </summary>
     public RVA VirtualAddress { get; internal set; }
-    
+
+    /// <summary>
+    /// The size of this object in virtual memory.
+    /// </summary>
+    public virtual uint VirtualSize => (uint)Size;
+
     /// <summary>
     /// Checks if the specified virtual address is contained in this object.
     /// </summary>
     /// <param name="virtualAddress">The virtual address to check.</param>
     /// <returns><c>true</c> if the specified virtual address is contained in this object; otherwise, <c>false</c>.</returns>
     public bool ContainsVirtual(RVA virtualAddress)
-        => VirtualAddress <=  virtualAddress && virtualAddress < VirtualAddress + (uint)Size;
+        => VirtualAddress <=  virtualAddress && virtualAddress < VirtualAddress + VirtualSize;
 
     /// <summary>
     /// Checks if the specified virtual address is contained in this object.
@@ -45,7 +50,7 @@ public abstract class PEVirtualObject : PEObject
     /// <returns><c>true</c> if the specified virtual address is contained in this object; otherwise, <c>false</c>.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool ContainsVirtual(RVA virtualAddress, uint size) 
-        => VirtualAddress <= virtualAddress && virtualAddress + size <= VirtualAddress + (uint)Size;
+        => VirtualAddress <= virtualAddress && virtualAddress + size <= VirtualAddress + VirtualSize;
 
     /// <summary>
     /// Tries to find a virtual object by its virtual address.
@@ -57,18 +62,13 @@ public abstract class PEVirtualObject : PEObject
     {
         if (ContainsVirtual(virtualAddress))
         {
-            if (HasChildren)
+            if (HasChildren && TryFindByVirtualAddressInChildren(virtualAddress, out result))
             {
-                if (TryFindByVirtualAddressInChildren(virtualAddress, out result))
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                result = this;
                 return true;
             }
+
+            result = this;
+            return true;
         }
 
         result = null;
@@ -139,6 +139,10 @@ public abstract class PEVirtualObject : PEObject
             else
             {
                 va = parent.VirtualAddress;
+                if (parent is PEDataDirectory directory)
+                {
+                    va += directory.HeaderSize;
+                }
             }
 
             for (int i = startIndex; i < span.Length; i++)

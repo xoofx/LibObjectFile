@@ -7,17 +7,26 @@ namespace LibObjectFile.PE;
 /// <summary>
 /// A link to a null terminated ASCII string in a <see cref="PESectionData"/>.
 /// </summary>
-/// <param name="Link">The link.</param>
-public readonly record struct PEAsciiStringLink(RVALink<PEStreamSectionData> Link)
+public readonly struct PEAsciiStringLink : RVALink<string?>
 {
-    /// <summary>
-    /// Gets a value indicating whether this instance is null.
-    /// </summary>
-    public bool IsNull => Link.IsNull;
+    public PEAsciiStringLink(PEStreamSectionData? streamSectionData, uint offsetInSection)
+    {
+        StreamSectionData = streamSectionData;
+        Offset = offsetInSection;
+    }
+
+    public readonly PEStreamSectionData? StreamSectionData;
+
+    public PEVirtualObject? Container => StreamSectionData;
+
+    public uint Offset { get; }
+
+    /// <inheritdoc />
+    public override string ToString() => this.ToDisplayText();
 
     /// <summary>
     /// Resolves this link to a string.
     /// </summary>
     /// <returns>The string resolved.</returns>
-    public string? Resolve() => Link.Element?.ReadAsciiString(Link.OffsetInElement);
+    public string? Resolve() => StreamSectionData?.ReadAsciiString(Offset);
 }

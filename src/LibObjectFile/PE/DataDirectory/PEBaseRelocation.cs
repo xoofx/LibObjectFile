@@ -43,7 +43,7 @@ public readonly struct PEBaseRelocation : IEquatable<PEBaseRelocation>
     public PEBaseRelocationType Type => (PEBaseRelocationType)(_value & TypeMask);
 
     /// <summary>
-    /// Gets the virtual offset of the base relocation relative to the offset of the associated <see cref="PEBaseRelocationPageBlock"/>.
+    /// Gets the virtual offset of the base relocation relative to the offset of the associated <see cref="PEBaseRelocationBlock"/>.
     /// </summary>
     public ushort OffsetInBlockPart => (ushort)(_value & VirtualOffsetMask);
 

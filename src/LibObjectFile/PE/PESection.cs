@@ -39,7 +39,7 @@ public sealed class PESection : PEVirtualObject
     /// The total size of the section when loaded into memory.
     /// If this value is greater than <see cref="Size"/>, the section is zero-padded.
     /// </summary>
-    public uint VirtualSize { get; }
+    public override uint VirtualSize { get; }
     
     /// <summary>
     /// Flags that describe the characteristics of the section.
@@ -58,7 +58,11 @@ public sealed class PESection : PEVirtualObject
     /// <param name="sectionData">The section data that contains the virtual address, if found.</param>
     /// <returns><c>true</c> if the section data was found; otherwise, <c>false</c>.</returns>
     public bool TryFindSectionData(RVA virtualAddress, [NotNullWhen(true)] out PESectionData? sectionData)
-        => _dataParts.TryFindByVirtualAddress(virtualAddress, out sectionData);
+    {
+        var result = _dataParts.TryFindByVirtualAddress(virtualAddress, true, out var sectionObj);
+        sectionData = sectionObj as PESectionData;
+        return result && sectionData is not null;
+    }
 
     /// <inheritdoc />
     public override void UpdateLayout(PEVisitorContext context)
@@ -96,20 +100,8 @@ public sealed class PESection : PEVirtualObject
         return true;
     }
     
-    protected override bool TryFindByVirtualAddressInChildren(RVA virtualAddress, out PEVirtualObject? result)
-    {
-        var parts = CollectionsMarshal.AsSpan(_dataParts.UnsafeList);
-        foreach (var data in parts)
-        {
-            if (data.TryFindByVirtualAddress(virtualAddress, out result))
-            {
-                return true;
-            }
-        }
-
-        result = null;
-        return false;
-    }
+    protected override bool TryFindByVirtualAddressInChildren(RVA virtualAddress, out PEVirtualObject? result) 
+        => _dataParts.TryFindByVirtualAddress(virtualAddress, true, out result);
 
     protected override void UpdateVirtualAddressInChildren()
     {

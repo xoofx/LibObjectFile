@@ -58,11 +58,16 @@ public abstract class ObjectFileElement
     /// <summary>
     /// Checks if the specified offset is contained by this instance.
     /// </summary>
-    /// <param name="offset">The offset to check if it belongs to this instance.</param>
+    /// <param name="position">The offset to check if it belongs to this instance.</param>
     /// <returns><c>true</c> if the offset is within the segment or section range.</returns>
-    public bool Contains(ulong offset)
+    public bool Contains(ulong position)
     {
-        return offset >= Position && offset < Position + Size;
+        return position >= Position && position < Position + Size;
+    }
+
+    public bool Contains(ulong position, uint size)
+    {
+        return position >= Position && position + size <= Position + Size;
     }
 
     /// <summary>

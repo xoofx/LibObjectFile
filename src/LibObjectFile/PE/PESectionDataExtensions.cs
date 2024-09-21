@@ -45,7 +45,7 @@ public static class PESectionDataExtensions
             throw new InvalidOperationException("The position is too large to be stored in a uint");
         }
 
-        return new PEAsciiStringLink(new(streamData, (uint)position));
+        return new PEAsciiStringLink(streamData, (uint)position);
     }
 
     public static PEImportHintNameLink WriteHintName(this PEStreamSectionData streamData, PEImportHintName hintName)
@@ -56,7 +56,7 @@ public static class PESectionDataExtensions
             throw new InvalidOperationException("The position is too large to be stored in a uint");
         }
 
-        return new PEImportHintNameLink(new(streamData, (uint)position));
+        return new PEImportHintNameLink(streamData, (uint)position);
     }
     
     public static long WriteAsciiString(this Stream stream, string value)

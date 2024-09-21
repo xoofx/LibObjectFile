@@ -15,8 +15,9 @@ internal readonly struct PEImportFunctionTable()
 {
     public List<PEImportFunctionEntry> Entries { get; } = new();
 
-    public unsafe ulong CalculateSize(PEFile peFile, DiagnosticBag diagnostics)
+    public unsafe ulong CalculateSize(PEVisitorContext context)
     {
+        var peFile = context.File;
         // +1 for the null terminator
         return (ulong)((Entries.Count + 1) * (peFile.IsPE32 ? sizeof(RawImportFunctionEntry32) : sizeof(RawImportFunctionEntry64)));
     }
@@ -36,28 +37,31 @@ internal readonly struct PEImportFunctionTable()
         }
     }
 
-    public void ResolveSectionDataLinks(PEFile peFile, DiagnosticBag diagnostics)
+    public void Bind(PEImageReader reader)
     {
+        var peFile = reader.File;
+        var diagnostics = reader.Diagnostics;
+
         var entries = CollectionsMarshal.AsSpan(Entries);
         foreach (ref var entry in entries)
         {
             if (!entry.IsImportByOrdinal)
             {
-                var va = entry.HintName.Link.OffsetInElement;
-                if (!peFile.TryFindSectionData(va, out var sectionData))
+                var va = entry.HintName.Offset;
+                if (!peFile.TryFindVirtualContainer(va, out var container))
                 {
                     diagnostics.Error(DiagnosticId.PE_ERR_ImportLookupTableInvalidHintNameTableRVA, $"Unable to find the section data for HintNameTableRVA {va}");
                     return;
                 }
 
-                var streamSectionData = sectionData as PEStreamSectionData;
+                var streamSectionData = container as PEStreamSectionData;
                 if (streamSectionData is null)
                 {
                     diagnostics.Error(DiagnosticId.PE_ERR_ImportLookupTableInvalidHintNameTableRVA, $"The section data for HintNameTableRVA {va} is not a stream section data");
                     return;
                 }
 
-                entry = new PEImportFunctionEntry(new PEAsciiStringLink(new(streamSectionData, va - sectionData.VirtualAddress)));
+                entry = new PEImportFunctionEntry(new PEAsciiStringLink(streamSectionData, va - container.VirtualAddress));
             }
         }
     }
@@ -83,7 +87,7 @@ internal readonly struct PEImportFunctionTable()
             Entries.Add(
                 entry.IsImportByOrdinal
                     ? new PEImportFunctionEntry(entry.Ordinal)
-                    : new PEImportFunctionEntry(new PEAsciiStringLink(new(PEStreamSectionData.Empty, entry.HintNameTableRVA)))
+                    : new PEImportFunctionEntry(new PEAsciiStringLink(PEStreamSectionData.Empty, entry.HintNameTableRVA))
             );
         }
     }
@@ -109,7 +113,7 @@ internal readonly struct PEImportFunctionTable()
             Entries.Add(
                 entry.IsImportByOrdinal
                     ? new PEImportFunctionEntry(entry.Ordinal)
-                    : new PEImportFunctionEntry(new PEAsciiStringLink(new(PEStreamSectionData.Empty, entry.HintNameTableRVA)))
+                    : new PEImportFunctionEntry(new PEAsciiStringLink(PEStreamSectionData.Empty, entry.HintNameTableRVA))
             );
         }
     }
@@ -135,7 +139,7 @@ internal readonly struct PEImportFunctionTable()
             for (var i = 0; i < Entries.Count; i++)
             {
                 var entry = Entries[i];
-                var va = entry.HintName.Link.VirtualAddress;
+                var va = entry.HintName.RVA();
                 span[i] = new RawImportFunctionEntry32(entry.IsImportByOrdinal ? 0x8000_0000U | entry.Ordinal : va);
             }
 
@@ -159,7 +163,7 @@ internal readonly struct PEImportFunctionTable()
             for (var i = 0; i < Entries.Count; i++)
             {
                 var entry = Entries[i];
-                var va = entry.HintName.Link.VirtualAddress;
+                var va = entry.HintName.RVA();
                 span[i] = new RawImportFunctionEntry64(entry.IsImportByOrdinal ? 0x8000_0000_0000_0000UL | entry.Ordinal : va);
             }
             // Last entry is null terminator

@@ -16,7 +16,7 @@ public abstract class PESectionData : PEVirtualObject
     protected PESectionData(bool hasChildren) : base(hasChildren)
     {
     }
-
+    
     public virtual int ReadAt(uint offset, Span<byte> destination)
     {
         throw new NotSupportedException($"The read operation is not supported for {this.GetType().FullName}");

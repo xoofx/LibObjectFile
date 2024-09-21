@@ -4,22 +4,24 @@
 
 namespace LibObjectFile.PE;
 
-/// <summary>
-/// Defines a link into a virtual addressable object at a specific virtual offset.
-/// </summary>
-/// <typeparam name="TVirtualAddressable">The type of the virtual addressable object.</typeparam>
-/// <param name="Element">The virtual addressable object linked.</param>
-/// <param name="OffsetInElement">The offset within this element.</param>
-public record struct RVALink<TVirtualAddressable>(TVirtualAddressable? Element, uint OffsetInElement)
-    where TVirtualAddressable : PEVirtualObject
+// ReSharper disable once InconsistentNaming
+public interface RVALink
 {
-    /// <summary>
-    /// Gets a value indicating whether this instance is null.
-    /// </summary>
-    public bool IsNull => Element == null;
-    
-    /// <summary>
-    /// Gets the virtual address of within the element.
-    /// </summary>
-    public RVA VirtualAddress => (Element?.VirtualAddress ?? 0) + OffsetInElement;
+    public PEVirtualObject? Container { get; }
+
+    public uint Offset { get; }
+}
+
+public interface RVALink<out TData> : RVALink
+{
+    public TData Resolve();
+}
+
+public static class RVALinkExtensions
+{
+    public static bool IsNull<TRVALink>(this TRVALink link) where TRVALink : RVALink => link.Container is null;
+
+    public static RVA RVA<TRVALink>(this TRVALink link) where TRVALink : RVALink => link.Container is not null ? link.Container.VirtualAddress + link.Offset : 0;
+
+    public static string ToDisplayText<TRVALink>(this TRVALink link) where TRVALink : RVALink => link.Container is not null ? $"{link.Container}, Offset = {link.Offset}" : $"<empty>";
 }
