@@ -5,18 +5,31 @@
 namespace LibObjectFile.PE;
 
 #pragma warning disable CS0649
-public struct PEExportFunctionEntry
+public readonly struct PEExportFunctionEntry
 {
-    public PEExportFunctionEntry(PEFunctionAddressLink exportRVA, PEAsciiStringLink forwarderRVA)
+    private readonly PEVirtualObject? _container;
+    private readonly uint _offset;
+    private readonly bool _isForwarderRVA;
+
+    public PEExportFunctionEntry(PEFunctionAddressLink exportRVA)
     {
-        ExportRVA = exportRVA;
-        ForwarderRVA = forwarderRVA;
+        _container = exportRVA.Container;
+        _offset = exportRVA.Offset;
+        _isForwarderRVA = false;
     }
 
+    public PEExportFunctionEntry(PEAsciiStringLink forwarderRVA)
+    {
+        _container = forwarderRVA.StreamSectionData;
+        _offset = forwarderRVA.Offset;
+        _isForwarderRVA = true;
+    }
 
-    public PEFunctionAddressLink ExportRVA;
+    public bool IsForwarderRVA => _isForwarderRVA;
+    
+    public PEFunctionAddressLink ExportRVA => IsForwarderRVA ? default : new(_container, _offset);
 
-    public PEAsciiStringLink ForwarderRVA;
+    public PEAsciiStringLink ForwarderRVA => IsForwarderRVA ? new(_container as PEStreamSectionData, _offset) : default;
 
     public override string ToString() => ForwarderRVA.IsNull() ? $"{ExportRVA}" : $"{ExportRVA}, ForwarderRVA = {ForwarderRVA}";
 }

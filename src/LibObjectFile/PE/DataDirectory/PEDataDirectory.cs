@@ -123,7 +123,6 @@ public sealed class PEResourceDirectory : PEDataDirectory
         return 0;
     }
 
-
     public override void Read(PEImageReader reader)
     {
         // TBD

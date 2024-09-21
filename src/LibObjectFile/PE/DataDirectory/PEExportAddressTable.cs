@@ -5,6 +5,7 @@
 using System;
 using System.Buffers;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using LibObjectFile.Diagnostics;
 
@@ -51,28 +52,32 @@ public class PEExportAddressTable : PESectionData
                     reader.Diagnostics.Error(DiagnosticId.PE_ERR_ExportAddressTableInvalidRVA, $"Unable to find the section data for RVA {rva}");
                     return;
                 }
-                
-                PEAsciiStringLink forwarderLink = default;
 
-                //if (rva.ForwarderRVA.Value != 0)
-                //{
-                //    if (!reader.File.TryFindSectionData(rva.ForwarderRVA, out var sectionData))
-                //    {
-                //        reader.Diagnostics.Error(DiagnosticId.PE_ERR_ExportAddressTableInvalidRVA, $"Unable to find the section data for forwarder RVA {rva.ForwarderRVA}");
-                //        return;
-                //    }
+                if (functionContainer is PEStreamSectionData streamSectionData)
+                {
+                    var parent = functionContainer.Parent;
+                    while (parent != null && !(parent is PESection))
+                    {
+                        parent = parent.Parent;
+                    }
 
-                //    var streamSectionData = sectionData as PEStreamSectionData;
-                //    if (streamSectionData is null)
-                //    {
-                //        reader.Diagnostics.Error(DiagnosticId.PE_ERR_ExportAddressTableInvalidRVA, $"The section data for forwarder RVA {rva.ForwarderRVA} is not a stream section data");
-                //        return;
-                //    }
+                    Debug.Assert(parent != null);
+                    var section = (PESection)parent!;
+                    if (section.Name == PESectionName.EData)
+                    {
+                        Values[i] = new PEExportFunctionEntry(new PEAsciiStringLink(streamSectionData, rva - streamSectionData.VirtualAddress));
 
-                //    forwarderLink = new PEAsciiStringLink(streamSectionData, rva.ForwarderRVA - streamSectionData.VirtualAddress);
-                //}
-                
-                Values[i] = new PEExportFunctionEntry(new(functionContainer, rva - functionContainer.VirtualAddress), forwarderLink);
+                    }
+                    else
+                    {
+                        Values[i] = new PEExportFunctionEntry(new PEFunctionAddressLink(streamSectionData, rva - streamSectionData.VirtualAddress));
+                    }
+                }
+                else
+                {
+                    reader.Diagnostics.Error(DiagnosticId.PE_ERR_ExportAddressTableInvalidRVA, $"Invalid RVA {rva} for Export Address Table");
+                    return;
+                }
             }
         }
         finally
