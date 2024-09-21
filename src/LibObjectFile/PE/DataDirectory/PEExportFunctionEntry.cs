@@ -14,14 +14,14 @@ public readonly struct PEExportFunctionEntry
     public PEExportFunctionEntry(PEFunctionAddressLink exportRVA)
     {
         _container = exportRVA.Container;
-        _offset = exportRVA.Offset;
+        _offset = exportRVA.RVO;
         _isForwarderRVA = false;
     }
 
     public PEExportFunctionEntry(PEAsciiStringLink forwarderRVA)
     {
         _container = forwarderRVA.StreamSectionData;
-        _offset = forwarderRVA.Offset;
+        _offset = forwarderRVA.RVO;
         _isForwarderRVA = true;
     }
 

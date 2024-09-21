@@ -27,7 +27,7 @@ public abstract class PEVirtualObject : PEObject
     /// <summary>
     /// The address of the first byte of the section when loaded into memory, relative to the image base.
     /// </summary>
-    public RVA VirtualAddress { get; internal set; }
+    public RVA RVA { get; internal set; }
 
     /// <summary>
     /// The size of this object in virtual memory.
@@ -37,32 +37,32 @@ public abstract class PEVirtualObject : PEObject
     /// <summary>
     /// Checks if the specified virtual address is contained in this object.
     /// </summary>
-    /// <param name="virtualAddress">The virtual address to check.</param>
+    /// <param name="rva">The virtual address to check.</param>
     /// <returns><c>true</c> if the specified virtual address is contained in this object; otherwise, <c>false</c>.</returns>
-    public bool ContainsVirtual(RVA virtualAddress)
-        => VirtualAddress <=  virtualAddress && virtualAddress < VirtualAddress + VirtualSize;
+    public bool ContainsVirtual(RVA rva)
+        => RVA <=  rva && rva < RVA + VirtualSize;
 
     /// <summary>
     /// Checks if the specified virtual address is contained in this object.
     /// </summary>
-    /// <param name="virtualAddress">The virtual address to check.</param>
+    /// <param name="rva">The virtual address to check.</param>
     /// <param name="size">The size of the data that must be contained.</param>
     /// <returns><c>true</c> if the specified virtual address is contained in this object; otherwise, <c>false</c>.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool ContainsVirtual(RVA virtualAddress, uint size) 
-        => VirtualAddress <= virtualAddress && virtualAddress + size <= VirtualAddress + VirtualSize;
+    public bool ContainsVirtual(RVA rva, uint size) 
+        => RVA <= rva && rva + size <= RVA + VirtualSize;
 
     /// <summary>
     /// Tries to find a virtual object by its virtual address.
     /// </summary>
-    /// <param name="virtualAddress">The virtual address to search for.</param>
+    /// <param name="rva">The virtual address to search for.</param>
     /// <param name="result">The virtual object that contains the virtual address, if found.</param>
     /// <returns><c>true</c> if the virtual object was found; otherwise, <c>false</c>.</returns>
-    public bool TryFindByVirtualAddress(RVA virtualAddress, out PEVirtualObject? result)
+    public bool TryFindByVirtualAddress(RVA rva, out PEVirtualObject? result)
     {
-        if (ContainsVirtual(virtualAddress))
+        if (ContainsVirtual(rva))
         {
-            if (HasChildren && TryFindByVirtualAddressInChildren(virtualAddress, out result))
+            if (HasChildren && TryFindByVirtualAddressInChildren(rva, out result))
             {
                 return true;
             }
@@ -78,18 +78,18 @@ public abstract class PEVirtualObject : PEObject
     /// <summary>
     /// Try to find a virtual object by its virtual address in children.
     /// </summary>
-    /// <param name="virtualAddress">The virtual address to search for.</param>
+    /// <param name="rva">The virtual address to search for.</param>
     /// <param name="result">The virtual object that contains the virtual address, if found.</param>
     /// <returns><c>true</c> if the virtual object was found; otherwise, <c>false</c>.</returns>
     /// <exception cref="NotImplementedException"></exception>
-    protected virtual bool TryFindByVirtualAddressInChildren(RVA virtualAddress, out PEVirtualObject? result)
+    protected virtual bool TryFindByVirtualAddressInChildren(RVA rva, out PEVirtualObject? result)
     {
         throw new NotImplementedException("This method must be implemented by PEVirtualObject with children");
     }
 
-    internal void UpdateVirtualAddress(RVA virtualAddress)
+    internal void UpdateVirtualAddress(RVA rva)
     {
-        VirtualAddress = virtualAddress;
+        RVA = rva;
         if (HasChildren)
         {
             UpdateVirtualAddressInChildren();
@@ -134,11 +134,11 @@ public abstract class PEVirtualObject : PEObject
             if (startIndex > 0)
             {
                 var previousData = span[startIndex - 1];
-                va = previousData.VirtualAddress + (uint)previousData.Size;
+                va = previousData.RVA + (uint)previousData.Size;
             }
             else
             {
-                va = parent.VirtualAddress;
+                va = parent.RVA;
                 if (parent is PEDataDirectory directory)
                 {
                     va += directory.HeaderSize;
@@ -149,7 +149,7 @@ public abstract class PEVirtualObject : PEObject
             {
                 var data = span[i];
 
-                data.VirtualAddress = va;
+                data.RVA = va;
                 data.UpdateVirtualAddressInChildren();
 
                 va += (uint)data.Size;

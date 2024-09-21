@@ -12,17 +12,17 @@ namespace LibObjectFile.PE;
 [DebuggerDisplay("{ToString(),nq}")]
 public readonly struct PESectionDataLink : RVALink
 {
-    public PESectionDataLink(PESectionData? sectionData, uint offset)
+    public PESectionDataLink(PESectionData? sectionData, uint rvo)
     {
         SectionData = sectionData;
-        Offset = offset;
+        RVO = rvo;
     }
 
     public PESectionData? SectionData { get; }
 
     public PEVirtualObject? Container => SectionData;
 
-    public uint Offset { get; }
+    public RVO RVO { get; }
 
     public override string ToString() => this.ToDisplayText();
 }

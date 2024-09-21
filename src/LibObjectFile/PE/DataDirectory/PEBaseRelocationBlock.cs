@@ -101,7 +101,7 @@ public sealed class PEBaseRelocationBlock
                 continue;
             }
 
-            var offsetInSectionData = va - sectionData.VirtualAddress;
+            var offsetInSectionData = va - sectionData.RVA;
 
             // Create a new block part if the section data is different, or it is the first relocation
             if (currentBlockPart is null || currentBlockPart.SectionDataLink.SectionData != sectionData)
@@ -110,7 +110,7 @@ public sealed class PEBaseRelocationBlock
                 Parts.Add(currentBlockPart);
             }
 
-            var newRelocation = new PEBaseRelocation(relocation.Type, (ushort)(offsetInSectionData - currentBlockPart.SectionDataLink.Offset));
+            var newRelocation = new PEBaseRelocation(relocation.Type, (ushort)(offsetInSectionData - currentBlockPart.SectionDataLink.RVO));
             currentBlockPart.Relocations.Add(newRelocation);
         }
 

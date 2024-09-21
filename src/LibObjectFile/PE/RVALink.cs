@@ -9,7 +9,7 @@ public interface RVALink
 {
     public PEVirtualObject? Container { get; }
 
-    public uint Offset { get; }
+    public RVO RVO { get; }
 }
 
 public interface RVALink<out TData> : RVALink
@@ -21,7 +21,7 @@ public static class RVALinkExtensions
 {
     public static bool IsNull<TRVALink>(this TRVALink link) where TRVALink : RVALink => link.Container is null;
 
-    public static RVA RVA<TRVALink>(this TRVALink link) where TRVALink : RVALink => link.Container is not null ? link.Container.VirtualAddress + link.Offset : 0;
+    public static RVA RVA<TRVALink>(this TRVALink link) where TRVALink : RVALink => link.Container is not null ? link.Container.RVA + link.RVO : 0;
 
-    public static string ToDisplayText<TRVALink>(this TRVALink link) where TRVALink : RVALink => link.Container is not null ? $"{link.Container}, Offset = {link.Offset}" : $"<empty>";
+    public static string ToDisplayText<TRVALink>(this TRVALink link) where TRVALink : RVALink => link.Container is not null ? $"{link.Container}, Offset = {link.RVO}" : $"<empty>";
 }

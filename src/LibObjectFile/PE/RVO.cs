@@ -5,22 +5,22 @@
 namespace LibObjectFile.PE;
 
 /// <summary>
-/// Defines a Relative Virtual Address (RVA) in a Portable Executable (PE) image.
+/// Defines a Relative Virtual Offset (RVO) that is relative to an RVA in a Portable Executable (PE) image.
 /// </summary>
-/// <param name="Value">The value of the address</param>
-public record struct RVA(uint Value)
+/// <param name="Value">The value of the relative offset.</param>
+public record struct RVO(uint Value)
 {
     /// <summary>
-    /// Converts a <see cref="RVA"/> to a <see cref="uint"/>.
+    /// Converts a <see cref="RVO"/> to a <see cref="uint"/>.
     /// </summary>
     /// <param name="value">The value to convert.</param>
-    public static implicit operator uint(RVA value) => value.Value;
+    public static implicit operator uint(RVO value) => value.Value;
 
     /// <summary>
-    /// Converts a <see cref="uint"/> to a <see cref="RVA"/>.
+    /// Converts a <see cref="uint"/> to a <see cref="RVO"/>.
     /// </summary>
     /// <param name="value">The value to convert.</param>
-    public static implicit operator RVA(uint value) => new(value);
+    public static implicit operator RVO(uint value) => new(value);
 
     /// <inheritdoc />
     public override string ToString() => $"0x{Value:X}";

@@ -30,7 +30,7 @@ public abstract class PEDataDirectory : PESectionData
 
     public sealed override void UpdateLayout(PEVisitorContext context)
     {
-        var va = VirtualAddress;
+        var va = RVA;
 
         // We compute the size of the directory header
         // Each directory have a specific layout, so we delegate the computation to the derived class
@@ -43,7 +43,7 @@ public abstract class PEDataDirectory : PESectionData
         // So we update the VirtualAddress of each content and update the layout
         foreach (var table in Content)
         {
-            table.VirtualAddress = va;
+            table.RVA = va;
             
             // Update layout will update virtual address
             table.UpdateLayout(context);
@@ -71,12 +71,12 @@ public abstract class PEDataDirectory : PESectionData
         }
     }
 
-    protected override bool TryFindByVirtualAddressInChildren(RVA virtualAddress, out PEVirtualObject? result)
-        => Content.TryFindByVirtualAddress(virtualAddress, true, out result);
+    protected override bool TryFindByVirtualAddressInChildren(RVA rva, out PEVirtualObject? result)
+        => Content.TryFindByVirtualAddress(rva, true, out result);
 
     protected override void UpdateVirtualAddressInChildren()
     {
-        var va = VirtualAddress;
+        var va = RVA;
         foreach (var table in Content)
         {
             table.UpdateVirtualAddress(va);

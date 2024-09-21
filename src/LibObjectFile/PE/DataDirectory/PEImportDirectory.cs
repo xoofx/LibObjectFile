@@ -13,14 +13,14 @@ namespace LibObjectFile.PE;
 
 public sealed class PEImportDirectory : PEDataDirectory
 {
-    private readonly ObjectList<PEImportDirectoryEntry> _entries;
+    private readonly List<PEImportDirectoryEntry> _entries;
 
     public PEImportDirectory() : base(PEDataDirectoryKind.Import)
     {
-        _entries = new(this);
+        _entries = new();
     }
 
-    public ObjectList<PEImportDirectoryEntry> Entries => _entries;
+    public List<PEImportDirectoryEntry> Entries => _entries;
     
     public override void Read(PEImageReader reader)
     {
@@ -58,7 +58,7 @@ public sealed class PEImportDirectory : PEDataDirectory
             }
 
             // Calculate its position within the original stream
-            var importLookupAddressTablePositionInFile = section.Position + rawEntry.ImportAddressTableRVA - section.VirtualAddress;
+            var importLookupAddressTablePositionInFile = section.Position + rawEntry.ImportAddressTableRVA - section.RVA;
 
             // Find the section data for the ImportLookupTableRVA
             if (!reader.File.TryFindSection(rawEntry.ImportLookupTableRVA, out section))
@@ -68,13 +68,13 @@ public sealed class PEImportDirectory : PEDataDirectory
             }
 
             // Calculate its position within the original stream
-            var importLookupTablePositionInFile = section.Position + rawEntry.ImportLookupTableRVA - section.VirtualAddress;
+            var importLookupTablePositionInFile = section.Position + rawEntry.ImportLookupTableRVA - section.RVA;
             
             // Store a fake entry for post-processing section data to allow to recreate PEImportLookupTable from existing PESectionStreamData
             _entries.Add(
                 new PEImportDirectoryEntry(
                     // Name
-                    new(PEStreamSectionData.Empty, rawEntry.NameRVA),
+                    new(PEStreamSectionData.Empty, (RVO)(uint)rawEntry.NameRVA), // Store the RVA as a fake RVO until we bind it in the Bind phase
                     // ImportAddressTable
                     new PEImportAddressTable()
                     {
@@ -93,7 +93,7 @@ public sealed class PEImportDirectory : PEDataDirectory
         HeaderSize = ComputeHeaderSize(reader);
 
         // Resolve ImportLookupTable and ImportAddressTable section data links
-        var entries = CollectionsMarshal.AsSpan(_entries.UnsafeList);
+        var entries = CollectionsMarshal.AsSpan(_entries);
         foreach (ref var entry in entries)
         {
             entry.ImportAddressTable.Read(reader);
@@ -105,7 +105,7 @@ public sealed class PEImportDirectory : PEDataDirectory
 
     internal override IEnumerable<PESectionData> CollectImplicitSectionDataList()
     {
-        foreach (var entry in _entries.UnsafeList)
+        foreach (var entry in _entries)
         {
             yield return entry.ImportAddressTable;
             yield return entry.ImportLookupTable;
@@ -117,10 +117,11 @@ public sealed class PEImportDirectory : PEDataDirectory
         var peFile = reader.File;
         var diagnostics = reader.Diagnostics;
 
-        var entries = CollectionsMarshal.AsSpan(_entries.UnsafeList);
+        var entries = CollectionsMarshal.AsSpan(_entries);
         foreach (ref var entry in entries)
         {
-            var va = entry.ImportDllNameLink.Offset;
+            // The RVO is actually an RVA until we bind it here
+            var va = (RVA)(uint)entry.ImportDllNameLink.RVO;
             if (!peFile.TryFindVirtualContainer(va, out var container))
             {
                 diagnostics.Error(DiagnosticId.PE_ERR_ImportLookupTableInvalidHintNameTableRVA, $"Unable to find the section data for HintNameTableRVA {va}");
@@ -135,7 +136,7 @@ public sealed class PEImportDirectory : PEDataDirectory
             }
 
             entry = new PEImportDirectoryEntry(
-                new PEAsciiStringLink(streamSectionData, va - container.VirtualAddress),
+                new PEAsciiStringLink(streamSectionData, va - container.RVA),
                 entry.ImportAddressTable,
                 entry.ImportLookupTable);
         }

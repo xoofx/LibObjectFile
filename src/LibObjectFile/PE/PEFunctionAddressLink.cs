@@ -10,17 +10,17 @@ namespace LibObjectFile.PE;
 [DebuggerDisplay("{ToString(),nq}")]
 public struct PEFunctionAddressLink : RVALink
 {
-    public PEFunctionAddressLink(PEVirtualObject? container, uint offsetInSection)
+    public PEFunctionAddressLink(PEVirtualObject? container, RVO rvo)
     {
         Container = container;
-        Offset = offsetInSection;
+        RVO = rvo;
     }
 
     public PEVirtualObject? Container { get; }
 
-    public uint Offset { get; }
+    public RVO RVO { get; }
 
-    public RVA RVA => Container is not null ? Container.VirtualAddress + Offset : 0;
+    public RVA RVA => Container is not null ? Container.RVA + RVO : 0;
 
-    public override string ToString() => Container is not null ? $"{Container}, Offset = {Offset}" : $"<empty>";
+    public override string ToString() => Container is not null ? $"{Container}, Offset = {RVO}" : $"<empty>";
 }

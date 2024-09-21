@@ -264,7 +264,7 @@ partial class PEFile
                 continue;
             }
 
-            var offsetInSection = directoryEntry.VirtualAddress - peSection.VirtualAddress;
+            var offsetInSection = directoryEntry.VirtualAddress - peSection.RVA;
             var directory = PEDataDirectory.Create((PEDataDirectoryKind)i);
             directory.Position = peSection.Position + offsetInSection;
             directory.Size = directoryEntry.Size;
@@ -390,9 +390,9 @@ partial class PEFile
             // We have the guarantee that the directory is not null
             var directory = Directories[(PEDataDirectoryKind)i]!;
 
-            if (directory.VirtualAddress != directoryEntry.VirtualAddress)
+            if (directory.RVA != directoryEntry.VirtualAddress)
             {
-                reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Invalid virtual address for directory {directory.Kind} at {directory.VirtualAddress} != {directoryEntry.VirtualAddress}");
+                reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Invalid virtual address for directory {directory.Kind} at {directory.RVA} != {directoryEntry.VirtualAddress}");
                 hasErrors = true;
             }
         }

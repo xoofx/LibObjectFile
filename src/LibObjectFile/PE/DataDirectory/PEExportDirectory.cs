@@ -76,7 +76,8 @@ public sealed class PEExportDirectory : PEDataDirectory
         }
 
         // Link to a fake section data until we have recorded the different export tables in the sections
-        NameLink = new PEAsciiStringLink(PEStreamSectionData.Empty, exportDirectory.Name);
+        // Store a fake RVO that is the RVA until we resolve it in the Bind phase
+        NameLink = new PEAsciiStringLink(PEStreamSectionData.Empty, (RVO)(uint)exportDirectory.Name);
         
         if (!reader.File.TryFindSection(exportDirectory.AddressOfFunctions, out var sectionAddressOfFunctions))
         {
@@ -98,19 +99,19 @@ public sealed class PEExportDirectory : PEDataDirectory
 
         ExportFunctionAddressTable = new PEExportAddressTable((int)exportDirectory.NumberOfFunctions)
         {
-            Position = sectionAddressOfFunctions.Position + exportDirectory.AddressOfFunctions - sectionAddressOfFunctions.VirtualAddress,
+            Position = sectionAddressOfFunctions.Position + exportDirectory.AddressOfFunctions - sectionAddressOfFunctions.RVA,
             Size = (ulong)(exportDirectory.NumberOfFunctions * sizeof(RVA))
         };
 
         ExportNameTable = new PEExportNameTable((int)exportDirectory.NumberOfNames)
         {
-            Position = sectionAddressOfNames.Position + exportDirectory.AddressOfNames - sectionAddressOfNames.VirtualAddress,
+            Position = sectionAddressOfNames.Position + exportDirectory.AddressOfNames - sectionAddressOfNames.RVA,
             Size = (ulong)(exportDirectory.NumberOfNames * sizeof(RVA))
         };
 
         ExportOrdinalTable = new PEExportOrdinalTable((int)exportDirectory.NumberOfFunctions)
         {
-            Position = sectionAddressOfNameOrdinals.Position + exportDirectory.AddressOfNameOrdinals - sectionAddressOfNameOrdinals.VirtualAddress,
+            Position = sectionAddressOfNameOrdinals.Position + exportDirectory.AddressOfNameOrdinals - sectionAddressOfNameOrdinals.RVA,
             Size = (ulong)(exportDirectory.NumberOfFunctions * sizeof(ushort))
         };
 
@@ -136,7 +137,7 @@ public sealed class PEExportDirectory : PEDataDirectory
             return;
         }
 
-        NameLink = new PEAsciiStringLink(streamSectionData, NameLink.Offset);
+        NameLink = new PEAsciiStringLink(streamSectionData, NameLink.RVO);
 
         if (ExportFunctionAddressTable is not null)
         {

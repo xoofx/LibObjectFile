@@ -29,7 +29,7 @@ public abstract class PESectionData : PEVirtualObject
 
     protected override bool PrintMembers(StringBuilder builder)
     {
-        builder.Append($"VirtualAddress =  {VirtualAddress}, Size = 0x{Size:X4}");
+        builder.Append($"VirtualAddress =  {RVA}, Size = 0x{Size:X4}");
         if (Parent is PESection section)
         {
             builder.Append($", Section = {section.Name}");

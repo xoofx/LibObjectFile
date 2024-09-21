@@ -21,7 +21,7 @@ public readonly struct PEImportFunctionEntry
     public PEImportFunctionEntry(PEAsciiStringLink name)
     {
         _peSectionData = name.StreamSectionData;
-        _offset = name.Offset;
+        _offset = name.RVO;
     }
 
     /// <summary>

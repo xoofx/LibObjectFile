@@ -9,17 +9,17 @@ namespace LibObjectFile.PE;
 /// </summary>
 public readonly struct PEAsciiStringLink : RVALink<string?>
 {
-    public PEAsciiStringLink(PEStreamSectionData? streamSectionData, uint offsetInSection)
+    public PEAsciiStringLink(PEStreamSectionData? streamSectionData, RVO rvo)
     {
         StreamSectionData = streamSectionData;
-        Offset = offsetInSection;
+        RVO = rvo;
     }
 
     public readonly PEStreamSectionData? StreamSectionData;
 
     public PEVirtualObject? Container => StreamSectionData;
 
-    public uint Offset { get; }
+    public RVO RVO { get; }
 
     /// <inheritdoc />
     public override string ToString() => this.ToDisplayText();
@@ -28,5 +28,5 @@ public readonly struct PEAsciiStringLink : RVALink<string?>
     /// Resolves this link to a string.
     /// </summary>
     /// <returns>The string resolved.</returns>
-    public string? Resolve() => StreamSectionData?.ReadAsciiString(Offset);
+    public string? Resolve() => StreamSectionData?.ReadAsciiString(RVO);
 }

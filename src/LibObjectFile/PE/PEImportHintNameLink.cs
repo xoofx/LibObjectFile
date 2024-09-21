@@ -9,17 +9,17 @@ namespace LibObjectFile.PE;
 /// </summary>
 public readonly struct PEImportHintNameLink : RVALink<PEImportHintName>
 {
-    public PEImportHintNameLink(PEStreamSectionData? streamSectionData, uint offsetInSection)
+    public PEImportHintNameLink(PEStreamSectionData? streamSectionData, RVO rvoInSection)
     {
         StreamSectionData = streamSectionData;
-        Offset = offsetInSection;
+        RVO = rvoInSection;
     }
 
     public readonly PEStreamSectionData? StreamSectionData;
 
     public PEVirtualObject? Container => StreamSectionData;
 
-    public uint Offset { get; }
+    public RVO RVO { get; }
 
     /// <inheritdoc />
     public override string ToString() => this.ToDisplayText();
@@ -28,5 +28,5 @@ public readonly struct PEImportHintNameLink : RVALink<PEImportHintName>
     /// Resolves this link to a PE Import Hint Name.
     /// </summary>
     /// <returns>The PE Import Hint Name resolved.</returns>
-    public PEImportHintName Resolve() => StreamSectionData?.ReadHintName(Offset) ?? default;
+    public PEImportHintName Resolve() => StreamSectionData?.ReadHintName(RVO) ?? default;
 }

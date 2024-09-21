@@ -47,7 +47,8 @@ internal readonly struct PEImportFunctionTable()
         {
             if (!entry.IsImportByOrdinal)
             {
-                var va = entry.HintName.Offset;
+                // The RVO is an RVA until we bind it to a container below
+                var va = (RVA)(uint)entry.HintName.RVO;
                 if (!peFile.TryFindVirtualContainer(va, out var container))
                 {
                     diagnostics.Error(DiagnosticId.PE_ERR_ImportLookupTableInvalidHintNameTableRVA, $"Unable to find the section data for HintNameTableRVA {va}");
@@ -61,7 +62,7 @@ internal readonly struct PEImportFunctionTable()
                     return;
                 }
 
-                entry = new PEImportFunctionEntry(new PEAsciiStringLink(streamSectionData, va - container.VirtualAddress));
+                entry = new PEImportFunctionEntry(new PEAsciiStringLink(streamSectionData, va - container.RVA));
             }
         }
     }

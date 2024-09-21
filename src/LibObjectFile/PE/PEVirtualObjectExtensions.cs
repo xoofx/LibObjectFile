@@ -39,7 +39,7 @@ public static class PEVirtualObjectExtensions
                 return true;
             }
 
-            if (virtualAddress > trySectionData.VirtualAddress)
+            if (virtualAddress > trySectionData.RVA)
             {
                 low = mid + 1;
             }
@@ -87,7 +87,7 @@ public static class PEVirtualObjectExtensions
                 return true;
             }
 
-            if (virtualAddress > trySectionData.VirtualAddress)
+            if (virtualAddress > trySectionData.RVA)
             {
                 low = mid + 1;
             }

@@ -62,7 +62,7 @@ public sealed class PEBaseRelocationDirectory : PEDataDirectory
 
             
             // Create a block
-            var block = new PEBaseRelocationBlock(new PESectionLink(section, (uint)(location.PageVirtualAddress - section.VirtualAddress)))
+            var block = new PEBaseRelocationBlock(new PESectionLink(section, (uint)(location.PageVirtualAddress - section.RVA)))
             {
                 BlockBuffer = buffer.Slice(0, sizeOfRelocations)
             };

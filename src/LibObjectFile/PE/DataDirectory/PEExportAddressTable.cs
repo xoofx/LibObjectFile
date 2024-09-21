@@ -47,36 +47,36 @@ public class PEExportAddressTable : PESectionData
             for (int i = 0; i < Values.Count; i++)
             {
                 var rva = spanRva[i];
-                if (!reader.File.TryFindVirtualContainer(rva, out var functionContainer))
+                if (!reader.File.TryFindVirtualContainer(rva, out var container))
                 {
                     reader.Diagnostics.Error(DiagnosticId.PE_ERR_ExportAddressTableInvalidRVA, $"Unable to find the section data for RVA {rva}");
                     return;
                 }
 
-                if (functionContainer is PEStreamSectionData streamSectionData)
+                ObjectFileElement? parent = container;
+                while (parent != null && parent is not PESection)
                 {
-                    var parent = functionContainer.Parent;
-                    while (parent != null && !(parent is PESection))
+                    parent = parent.Parent;
+                }
+
+                Debug.Assert(parent is not null);
+                var section = (PESection)parent!;
+
+                if (section.Name == PESectionName.EData)
+                {
+                    var streamSectionData = container as PEStreamSectionData;
+                    if (streamSectionData is null)
                     {
-                        parent = parent.Parent;
+                        reader.Diagnostics.Error(DiagnosticId.PE_ERR_ExportAddressTableInvalidRVA, $"Invalid forwarder RVA {rva} for Export Address Table");
+                        return;
                     }
 
-                    Debug.Assert(parent != null);
-                    var section = (PESection)parent!;
-                    if (section.Name == PESectionName.EData)
-                    {
-                        Values[i] = new PEExportFunctionEntry(new PEAsciiStringLink(streamSectionData, rva - streamSectionData.VirtualAddress));
+                    Values[i] = new PEExportFunctionEntry(new PEAsciiStringLink(streamSectionData, rva - streamSectionData.RVA));
 
-                    }
-                    else
-                    {
-                        Values[i] = new PEExportFunctionEntry(new PEFunctionAddressLink(streamSectionData, rva - streamSectionData.VirtualAddress));
-                    }
                 }
                 else
                 {
-                    reader.Diagnostics.Error(DiagnosticId.PE_ERR_ExportAddressTableInvalidRVA, $"Invalid RVA {rva} for Export Address Table");
-                    return;
+                    Values[i] = new PEExportFunctionEntry(new PEFunctionAddressLink(container, rva - container.RVA));
                 }
             }
         }

@@ -59,7 +59,7 @@ public class PEExportNameTable : PESectionData
                     return;
                 }
 
-                Values[i] = new PEAsciiStringLink(streamSectionData, rva - streamSectionData.VirtualAddress);
+                Values[i] = new PEAsciiStringLink(streamSectionData, rva - streamSectionData.RVA);
             }
         }
         finally

@@ -20,10 +20,10 @@ public sealed class PESection : PEVirtualObject
 {
     private readonly ObjectList<PESectionData> _dataParts;
 
-    public PESection(PESectionName name, RVA virtualAddress, RVA virtualSize) : base(true)
+    public PESection(PESectionName name, RVA rva, RVA virtualSize) : base(true)
     {
         Name = name;
-        VirtualAddress = virtualAddress;
+        RVA = rva;
         VirtualSize = virtualSize;
         _dataParts = PEVirtualObject.CreateObjectList<PESectionData>(this);
         // Most of the time readable
@@ -67,10 +67,10 @@ public sealed class PESection : PEVirtualObject
     /// <inheritdoc />
     public override void UpdateLayout(PEVisitorContext context)
     {
-        var va = VirtualAddress;
+        var va = RVA;
         foreach (var data in DataParts)
         {
-            data.VirtualAddress = va;
+            data.RVA = va;
             data.UpdateLayout(context);
             va += (uint)data.Size;
         }
@@ -96,12 +96,12 @@ public sealed class PESection : PEVirtualObject
     /// <inheritdoc />
     protected override bool PrintMembers(StringBuilder builder)
     {
-        builder.Append($"VirtualAddress = {VirtualAddress}, VirtualSize = 0x{VirtualSize:X4}, DataParts[{DataParts.Count}]");
+        builder.Append($"VirtualAddress = {RVA}, VirtualSize = 0x{VirtualSize:X4}, DataParts[{DataParts.Count}]");
         return true;
     }
     
-    protected override bool TryFindByVirtualAddressInChildren(RVA virtualAddress, out PEVirtualObject? result) 
-        => _dataParts.TryFindByVirtualAddress(virtualAddress, true, out result);
+    protected override bool TryFindByVirtualAddressInChildren(RVA rva, out PEVirtualObject? result) 
+        => _dataParts.TryFindByVirtualAddress(rva, true, out result);
 
     protected override void UpdateVirtualAddressInChildren()
     {
