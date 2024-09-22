@@ -29,6 +29,7 @@ public partial class PEFile : PEObjectBase
     public PEFile()
     {
         _sections = new(this);
+        ExtraData = new(this);
         // TODO: Add default initialization
     }
 
@@ -38,6 +39,7 @@ public partial class PEFile : PEObjectBase
     internal PEFile(bool unused)
     {
         _sections = new(this);
+        ExtraData = new(this);
     }
 
     /// <summary>
@@ -99,9 +101,9 @@ public partial class PEFile : PEObjectBase
     public ObjectList<PESection> Sections => _sections;
     
     /// <summary>
-    /// Gets or sets the data present after the sections in the file.
+    /// Gets the data present after the sections in the file (e.g <see cref="PESecurityDirectory"/>)
     /// </summary>
-    public Stream? DataAfterSections { get; set; }
+    public ObjectList<PEExtraData> ExtraData { get; }
 
     public PESection AddSection(PESectionName name, uint virtualAddress, uint virtualSize)
     {

@@ -160,4 +160,7 @@ public enum DiagnosticId
     PE_ERR_InvalidExceptionDirectory_Entries = 3100,
     PE_ERR_InvalidExceptionDirectory_Entry = 3101,
     PE_ERR_InvalidExceptionDirectory_Size = 3102,
+
+    // PE Certificate directory
+    PE_ERR_InvalidCertificateEntry = 3200,
 }

@@ -202,14 +202,9 @@ partial class PEFile
             if (TryInitializeSections(reader, sectionHeaders, out var positionAfterLastSection))
             {
                 // Read the remaining of the file
-                reader.Position = positionAfterLastSection;
-                var sizeToRead = reader.Length - reader.Position;
+                var sizeToRead = reader.Length - positionAfterLastSection;
 
-                // If we have any data left after the sections, we read it
-                if (sizeToRead > 0)
-                {
-                    DataAfterSections = reader.ReadAsStream(sizeToRead);
-                }
+                FillExtraDataWithMissingStreams(reader, positionAfterLastSection, sizeToRead);
             }
         }
         finally
@@ -264,23 +259,42 @@ partial class PEFile
                 continue;
             }
 
-            var offsetInSection = directoryEntry.RVA - peSection.RVA;
-            var directory = PEDataDirectory.Create((PEDataDirectoryKind)i);
-            directory.Position = peSection.Position + offsetInSection;
-            directory.Size = directoryEntry.Size;
+            var kind = (PEDataDirectoryKind)i;
+            if (kind == PEDataDirectoryKind.Security)
+            {
+                var directory = new PESecurityDirectory();
+                
+                // The PE certificate directory is a special case as it is not a standard directory. It doesn't use RVA but the position in the file
+                directory.Position = (uint)directoryEntry.RVA;
+                directory.Size = directoryEntry.Size;
 
-            Directories.Set(directory.Kind, directory);
+                Directories.Set(directory);
 
-            sectionDataList.Add(directory);
+                // The PESecurityDirectory is a special case as it doesn't use RVA but the position in the file. It belongs after the sections to the extra data
+                ExtraData.Add(directory);
+                
+                directory.Read(reader);
+            }
+            else
+            {
+                var directory = PEDataDirectory.Create((PEDataDirectoryKind)i);
+                var offsetInSection = directoryEntry.RVA - peSection.RVA;
+                directory.Position = peSection.Position + offsetInSection;
 
-            // Read the content of the directory
-            directory.Read(reader);
+                directory.Size = directoryEntry.Size;
+
+                Directories.Set(directory.Kind, directory);
+
+                sectionDataList.Add(directory);
+
+                // Read the content of the directory
+                directory.Read(reader);
+            }
 
             if (reader.Diagnostics.HasErrors)
             {
                 return false;
             }
-
         }
 
         // Get all implicit section data from directories after registering directories
@@ -390,10 +404,21 @@ partial class PEFile
             // We have the guarantee that the directory is not null
             var directory = Directories[(PEDataDirectoryKind)i]!;
 
-            if (directory.RVA != directoryEntry.RVA)
+            if (directory is PEDataDirectory peDataDirectory)
             {
-                reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Invalid virtual address for directory {directory.Kind} at {directory.RVA} != {directoryEntry.RVA}");
-                hasErrors = true;
+                if (peDataDirectory.RVA != directoryEntry.RVA)
+                {
+                    reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Invalid virtual address for directory {peDataDirectory.Kind} at {peDataDirectory.RVA} != {directoryEntry.RVA}");
+                    hasErrors = true;
+                }
+            }
+            else if (directory is PESecurityDirectory peSecurityDirectory)
+            {
+                if (peSecurityDirectory.Position != directoryEntry.RVA)
+                {
+                    reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Invalid position for security directory at {peSecurityDirectory.Position} != {directoryEntry.RVA}");
+                    hasErrors = true;
+                }
             }
         }
         
@@ -455,6 +480,61 @@ partial class PEFile
         }
     }
 
+
+    private void FillExtraDataWithMissingStreams(PEImageReader imageReader, ulong extraPosition, ulong extraTotalSize)
+    {
+        var currentPosition = extraPosition;
+        imageReader.Position = extraPosition;
+
+        // We are working on position, while the list is ordered by VirtualAddress
+        var listOrderedByPosition = new List<PEExtraData>();
+        listOrderedByPosition.AddRange(ExtraData.UnsafeList);
+        listOrderedByPosition.Sort((a, b) => a.Position.CompareTo(b.Position));
+
+        for (var i = 0; i < listOrderedByPosition.Count; i++)
+        {
+            var data = listOrderedByPosition[i];
+            if (currentPosition < data.Position)
+            {
+                var size = data.Position - currentPosition;
+                imageReader.Position = currentPosition;
+
+                var sectionData = new PEStreamExtraData(imageReader.ReadAsStream(size))
+                {
+                    Position = currentPosition,
+                    Size = size,
+                };
+
+                ExtraData.Insert(data.Index, sectionData);
+                currentPosition = data.Position;
+            }
+            else if (currentPosition > data.Position)
+            {
+                imageReader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Invalid extra data position {currentPosition} > {data.Position}");
+                return;
+            }
+
+            currentPosition += data.Size;
+        }
+
+        if (currentPosition < extraPosition + extraTotalSize)
+        {
+            var size = extraPosition + extraTotalSize - currentPosition;
+            imageReader.Position = currentPosition;
+            var sectionData = new PEStreamExtraData(imageReader.ReadAsStream(size))
+            {
+                Position = currentPosition,
+                Size = size,
+            };
+
+            ExtraData.Add(sectionData);
+        }
+        else if (currentPosition > extraPosition + extraTotalSize)
+        {
+            imageReader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Invalid extra data position {currentPosition} > {extraPosition + extraTotalSize}");
+        }
+    }
+    
     private static void FillDirectoryWithStreams(PEImageReader imageReader, PEDataDirectory directory)
     {
         FillSectionDataWithMissingStreams(imageReader, directory, directory.Content, directory.Position + directory.HeaderSize, directory.Size - directory.HeaderSize);

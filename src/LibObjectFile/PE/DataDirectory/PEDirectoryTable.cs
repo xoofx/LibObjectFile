@@ -24,7 +24,7 @@ public sealed class PEDirectoryTable : IEnumerable<PEDataDirectory>
     {
     }
 
-    public PEDataDirectory? this[PEDataDirectoryKind kind] => _entries[(int)kind];
+    public PEObjectBase? this[PEDataDirectoryKind kind] => _entries[(int)kind];
 
     /// <summary>
     /// Gets the number of directory entries in the array.
@@ -111,6 +111,24 @@ public sealed class PEDirectoryTable : IEnumerable<PEDataDirectory>
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
     public Enumerator GetEnumerator() => new(this);
+
+    internal void Set(PESecurityDirectory? directory)
+    {
+        var kind = PEDataDirectoryKind.Security;
+        ref var entry = ref _entries[(int)kind];
+        var previousEntry = entry;
+        entry = directory;
+
+        if (previousEntry is not null)
+        {
+            _count--;
+        }
+
+        if (directory is not null)
+        {
+            _count++;
+        }
+    }
     
     internal void Set(PEDataDirectoryKind kind, PEDataDirectory? directory)
     {
@@ -132,7 +150,7 @@ public sealed class PEDirectoryTable : IEnumerable<PEDataDirectory>
     [InlineArray(15)]
     private struct InternalArray
     {
-        private PEDataDirectory? _element;
+        private PEObjectBase? _element;
     }
 
     /// <summary>
@@ -149,7 +167,7 @@ public sealed class PEDirectoryTable : IEnumerable<PEDataDirectory>
             _index = -1;
         }
 
-        public PEDataDirectory Current => _index >= 0 ? _table._entries[_index]! : null!;
+        public PEDataDirectory Current => _index >= 0 ? (PEDataDirectory)_table._entries[_index]! : null!;
 
         object? IEnumerator.Current => Current;
 
@@ -160,10 +178,10 @@ public sealed class PEDirectoryTable : IEnumerable<PEDataDirectory>
 
         public bool MoveNext()
         {
-            Span<PEDataDirectory?> entries = _table._entries;
+            Span<PEObjectBase?> entries = _table._entries;
             while (++_index < entries.Length)
             {
-                if (_table._entries[_index] is not null)
+                if (_table._entries[_index] is PEDataDirectory)
                 {
                     return true;
                 }
