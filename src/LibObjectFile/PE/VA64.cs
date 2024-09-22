@@ -2,10 +2,6 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
-using System;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-
 namespace LibObjectFile.PE;
 
 /// <summary>
@@ -31,19 +27,6 @@ public record struct VA64(ulong Value)
     /// Gets a value indicating whether the <see cref="VA64"/> is null (value is 0).
     /// </summary>
     public bool IsNull => Value == 0;
-
-    /// <summary>
-    /// Writes the <see cref="VA64"/> value to a span of bytes.
-    /// </summary>
-    /// <param name="destination">The destination span of bytes.</param>
-    /// <exception cref="ArgumentOutOfRangeException">Thrown when the destination length is less than 8 bytes.</exception>
-    public void Write(Span<byte> destination)
-    {
-        if (destination.Length < 8)
-            throw new ArgumentOutOfRangeException(nameof(destination), "Destination length must be at least 8 bytes");
-
-        Unsafe.As<byte, ulong>(ref MemoryMarshal.GetReference(destination)) = Value;
-    }
 
     /// <summary>
     /// Returns a string representation of the <see cref="VA64"/> value.
