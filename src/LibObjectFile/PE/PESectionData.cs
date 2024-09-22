@@ -27,7 +27,7 @@ public abstract class PESectionData : PEObject
         throw new NotSupportedException($"The write operation is not supported for {this.GetType().FullName}");
     }
 
-    protected override void ValidateParent(ObjectFileElement parent)
+    protected override void ValidateParent(ObjectElement parent)
     {
         if (parent is not PESection && parent is not PESectionData)
         {

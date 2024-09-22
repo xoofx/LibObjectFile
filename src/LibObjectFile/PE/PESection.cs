@@ -110,7 +110,7 @@ public sealed class PESection : PEObject
         // TODO?
     }
 
-    protected override void ValidateParent(ObjectFileElement parent)
+    protected override void ValidateParent(ObjectElement parent)
     {
         if (parent is not PEFile)
         {

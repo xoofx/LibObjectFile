@@ -9,7 +9,7 @@ namespace LibObjectFile.Dwarf;
 
 public abstract class DwarfSection : DwarfContainer
 {
-    protected override void ValidateParent(ObjectFileElement parent)
+    protected override void ValidateParent(ObjectElement parent)
     {
         if (!(parent is DwarfFile))
         {

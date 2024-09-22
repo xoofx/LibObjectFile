@@ -11,7 +11,7 @@ public abstract class DwarfObject : ObjectFileElement<DwarfLayoutContext, DwarfV
 {
     public DwarfFile? GetParentFile()
     {
-        var check = (ObjectFileElement?)this;
+        var check = (ObjectElement?)this;
         while (check != null)
         {
             if (check is DwarfFile dwarfFile) return dwarfFile;
@@ -22,7 +22,7 @@ public abstract class DwarfObject : ObjectFileElement<DwarfLayoutContext, DwarfV
 
     public DwarfUnit? GetParentUnit()
     {
-        var check = (ObjectFileElement?)this;
+        var check = (ObjectElement?)this;
         while (check != null)
         {
             if (check is DwarfUnit dwarfUnit) return dwarfUnit;
@@ -33,7 +33,7 @@ public abstract class DwarfObject : ObjectFileElement<DwarfLayoutContext, DwarfV
 
     public DwarfSection? GetParentSection()
     {
-        var check = (ObjectFileElement?)this;
+        var check = (ObjectElement?)this;
         while (check != null)
         {
             if (check is DwarfSection dwarfSection) return dwarfSection;
@@ -45,7 +45,7 @@ public abstract class DwarfObject : ObjectFileElement<DwarfLayoutContext, DwarfV
 
 public abstract class DwarfObject<TContainer> : DwarfObject where TContainer : ObjectFileElement
 {
-    protected override void ValidateParent(ObjectFileElement parent)
+    protected override void ValidateParent(ObjectElement parent)
     {
         if (!(parent is TContainer))
         {

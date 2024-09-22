@@ -63,7 +63,7 @@ public abstract class PEDataDirectory : PESectionData
 
     protected abstract uint ComputeHeaderSize(PEVisitorContext context);
     
-    protected override void ValidateParent(ObjectFileElement parent)
+    protected override void ValidateParent(ObjectElement parent)
     {
         if (parent is not PESection)
         {

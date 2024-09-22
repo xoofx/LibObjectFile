@@ -110,35 +110,35 @@ public abstract class PEObject : PEObjectBase
         return true;
     }
 
-    protected override void ValidateParent(ObjectFileElement parent)
+    protected override void ValidateParent(ObjectElement parent)
     {
     }
 
-    public static ObjectList<TVirtualObject> CreateObjectList<TVirtualObject>(PEObject parent) where TVirtualObject : PEObject
+    public static ObjectList<TPEObject> CreateObjectList<TPEObject>(PEObject parent) where TPEObject : PEObject
     {
-        ObjectList<TVirtualObject> objectList = default;
-        objectList = new ObjectList<TVirtualObject>(parent, null, SectionDataAdded, null, SectionDataRemoved, null, SectionDataUpdated);
+        ObjectList<TPEObject> objectList = default;
+        objectList = new ObjectList<TPEObject>(parent, null, SectionDataAdded, null, SectionDataRemoved, null, SectionDataUpdated);
         return objectList;
 
-        void SectionDataAdded(ObjectFileElement vParent, TVirtualObject item)
+        void SectionDataAdded(ObjectElement vParent, TPEObject item)
         {
             // ReSharper disable once AccessToModifiedClosure
             UpdateSectionDataRVA((PEObject)vParent, objectList, item.Index);
         }
 
-        void SectionDataRemoved(ObjectFileElement vParent, int index, TVirtualObject item)
+        void SectionDataRemoved(ObjectElement vParent, int index, TPEObject item)
         {
             // ReSharper disable once AccessToModifiedClosure
             UpdateSectionDataRVA((PEObject)vParent, objectList, index);
         }
 
-        void SectionDataUpdated(ObjectFileElement vParent, int index, TVirtualObject previousItem, TVirtualObject newItem)
+        void SectionDataUpdated(ObjectElement vParent, int index, TPEObject previousItem, TPEObject newItem)
         {
             // ReSharper disable once AccessToModifiedClosure
             UpdateSectionDataRVA((PEObject)vParent, objectList, index);
         }
 
-        static void UpdateSectionDataRVA(PEObject parent, ObjectList<TVirtualObject> items, int startIndex)
+        static void UpdateSectionDataRVA(PEObject parent, ObjectList<TPEObject> items, int startIndex)
         {
             RVA va;
             var span = CollectionsMarshal.AsSpan(items.UnsafeList);

@@ -18,7 +18,7 @@ namespace LibObjectFile.Collections;
 [DebuggerDisplay("Count = {Count}")]
 [DebuggerTypeProxy(typeof(SortedObjectList<>.ObjectListDebuggerView))]
 public readonly struct SortedObjectList<TObject> : IList<TObject>
-    where TObject : ObjectFileElement, IComparable<TObject>
+    where TObject : ObjectElement, IComparable<TObject>
 {
     // We are using an internal list to keep track of the parent object
     private readonly InternalList _items;
@@ -30,7 +30,7 @@ public readonly struct SortedObjectList<TObject> : IList<TObject>
     /// Initializes a new instance of the <see cref="SortedObjectList{TObject}"/> class.
     /// </summary>
     /// <param name="parent">The parent object file node.</param>
-    public SortedObjectList(ObjectFileElement parent)
+    public SortedObjectList(ObjectElement parent)
     {
         ArgumentNullException.ThrowIfNull(parent);
         _items = new InternalList(parent);
@@ -207,11 +207,11 @@ public readonly struct SortedObjectList<TObject> : IList<TObject>
         return item;
     }
 
-    private sealed class InternalList(ObjectFileElement parent) : List<TObject>
+    private sealed class InternalList(ObjectElement parent) : List<TObject>
     {
-        public readonly ObjectFileElement Parent = parent;
+        public readonly ObjectElement Parent = parent;
     }
-
+    
     internal sealed class ObjectListDebuggerView
     {
         private readonly List<TObject> _collection;

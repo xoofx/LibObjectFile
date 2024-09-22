@@ -16,7 +16,7 @@ public abstract class ElfObjectBase : ObjectFileElement<ElfVisitorContext, ElfVi
 /// </summary>
 public abstract class ElfObject : ElfObjectBase
 {
-    protected override void ValidateParent(ObjectFileElement parent)
+    protected override void ValidateParent(ObjectElement parent)
     {
         if (!(parent is ElfObjectFile))
         {

@@ -25,7 +25,7 @@ public abstract class ArObject : ArObjectBase
         internal set => base.Parent = value;
     }
 
-    protected override void ValidateParent(ObjectFileElement parent)
+    protected override void ValidateParent(ObjectElement parent)
     {
         if (!(parent is ArArchiveFile))
         {

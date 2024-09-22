@@ -8,14 +8,11 @@ using System.Text;
 
 namespace LibObjectFile;
 
-public abstract class ObjectFileElement
+public abstract class ObjectFileElement : ObjectElement
 {
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObjectFileElement? _parent;
 
     protected ObjectFileElement()
     {
-        Index = -1;
     }
 
     /// <summary>
@@ -27,33 +24,6 @@ public abstract class ObjectFileElement
     /// Gets or sets the size in bytes of this element in the top level parent. This value might need to be updated via UpdateLayout on the top level parent.
     /// </summary>
     public ulong Size { get; set; }
-
-    /// <summary>
-    /// Gets the containing parent.
-    /// </summary>
-    public ObjectFileElement? Parent
-    {
-        get => _parent;
-
-        internal set
-        {
-            if (value == null)
-            {
-                _parent = null;
-            }
-            else
-            {
-                ValidateParent(value);
-            }
-
-            _parent = value;
-        }
-    }
-
-    /// <summary>
-    /// If the object is part of a list in its parent, this property returns the index within the containing list in the parent. Otherwise, this value is -1.
-    /// </summary>
-    public int Index { get; internal set; }
 
     /// <summary>
     /// Checks if the specified offset is contained by this instance.
@@ -80,37 +50,11 @@ public abstract class ObjectFileElement
         ArgumentNullException.ThrowIfNull(element);
         return Contains((ulong)element.Position) || element.Size != 0 && Contains((ulong)(element.Position + element.Size - 1));
     }
-    
-    public sealed override string ToString()
+   
+    protected override bool PrintMembers(StringBuilder builder)
     {
-        var builder = new StringBuilder();
-        PrintName(builder);
-        builder.Append(" { ");
-        if (PrintMembers(builder))
-        {
-            builder.Append(' ');
-        }
-        builder.Append('}');
-        return builder.ToString();
-    }
-
-    protected virtual void PrintName(StringBuilder builder)
-    {
-        builder.Append(GetType().Name);
-    }
-
-    protected virtual bool PrintMembers(StringBuilder builder)
-    {
-        return false;
-    }
-
-    protected virtual void ValidateParent(ObjectFileElement parent)
-    {
-    }
-
-    internal void ResetIndex()
-    {
-        Index = -1;
+        builder.Append($"Position = 0x{Position:X}, Size = 0x{Size:X}");
+        return true;
     }
 }
 

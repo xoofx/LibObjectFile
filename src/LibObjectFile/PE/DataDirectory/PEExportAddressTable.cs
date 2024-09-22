@@ -53,7 +53,7 @@ public class PEExportAddressTable : PESectionData
                     return;
                 }
 
-                ObjectFileElement? parent = container;
+                ObjectElement? parent = container;
                 while (parent != null && parent is not PESection)
                 {
                     parent = parent.Parent;
