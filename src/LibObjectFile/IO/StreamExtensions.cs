@@ -267,7 +267,7 @@ public static class StreamExtensions
             }
 
             Unsafe.SkipInit(out data);
-            byteRead = stream.Read(MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref data, 1)));
+            byteRead = stream.Read(MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref data, 1)).Slice(0, sizeToRead));
         }
         return byteRead == sizeToRead;
     }

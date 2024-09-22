@@ -200,6 +200,56 @@ public partial class PEFile : PEObjectBase
         return dataList;
     }
 
+    /// <summary>
+    /// Tries to find the section data that contains the specified virtual address.
+    /// </summary>
+    /// <param name="va">The virtual address to search for.</param>
+    /// <param name="result">The section data that contains the virtual address, if found.</param>
+    /// <param name="offset">The offset from the start of the section data.</param>
+    /// <returns><c>true</c> if the section data was found; otherwise, <c>false</c>.</returns>
+    /// <exception cref="InvalidOperationException">If the PEFile is not a PE32 image.</exception>
+    public bool TryFindByVA(VA32 va, [NotNullWhen(true)] out PEObject? result, out RVO offset)
+    {
+        if (!IsPE32) throw new InvalidOperationException("PEFile is not a PE32 image");
+        
+        var rawRva = va - (uint)OptionalHeader.ImageBase;
+        var rva = (RVA)(uint)rawRva;
+        if (rawRva <= int.MaxValue && TryFindContainerByRVA(rva, out result))
+        {
+            offset = rva - result.RVA;
+            return true;
+        }
+
+        result = null;
+        offset = 0;
+        return false;
+    }
+
+    /// <summary>
+    /// Tries to find the section data that contains the specified virtual address.
+    /// </summary>
+    /// <param name="va">The virtual address to search for.</param>
+    /// <param name="result">The section data that contains the virtual address, if found.</param>
+    /// <param name="offset">The offset from the start of the section data.</param>
+    /// <returns><c>true</c> if the section data was found; otherwise, <c>false</c>.</returns>
+    /// <exception cref="InvalidOperationException">If the PEFile is not a PE64 image.</exception>
+    public bool TryFindByVA(VA64 va, [NotNullWhen(true)] out PEObject? result, out RVO offset)
+    {
+        if (IsPE32) throw new InvalidOperationException("PEFile is not a PE64 image");
+
+        var rawRva = va - OptionalHeader.ImageBase;
+        var rva = (RVA)rawRva;
+        if (rawRva <= uint.MaxValue && TryFindContainerByRVA(rva, out result))
+        {
+            offset = rva - result.RVA;
+            return true;
+        }
+
+        result = null;
+        offset = 0;
+        return false;
+    }
+
     public override void UpdateLayout(PELayoutContext layoutContext)
     {
     }
