@@ -113,49 +113,6 @@ public abstract class PEDataDirectory : PESectionData
     }
 }
 
-public sealed class PEResourceDirectory : PEDataDirectory
-{
-    public PEResourceDirectory() : base(PEDataDirectoryKind.Resource)
-    {
-    }
-    protected override uint ComputeHeaderSize(PEVisitorContext context)
-    {
-        return 0;
-    }
-
-    public override void Read(PEImageReader reader)
-    {
-        // TBD
-    }
-
-    public override void Write(PEImageWriter writer)
-    {
-        throw new NotImplementedException();
-    }
-}
-
-public sealed class PEExceptionDirectory : PEDataDirectory
-{
-    public PEExceptionDirectory() : base(PEDataDirectoryKind.Exception)
-    {
-    }
-    protected override uint ComputeHeaderSize(PEVisitorContext context)
-    {
-        return 0;
-    }
-
-
-    public override void Read(PEImageReader reader)
-    {
-        // TBD
-    }
-
-    public override void Write(PEImageWriter writer)
-    {
-        throw new NotImplementedException();
-    }
-}
-
 public sealed class PEDebugDirectory : PEDataDirectory
 {
     public PEDebugDirectory() : base(PEDataDirectoryKind.Debug)

@@ -154,4 +154,10 @@ public enum DiagnosticId
     PE_ERR_InvalidResourceDirectory = 3080,
     PE_ERR_InvalidResourceDirectoryEntry = 3081,
     PE_ERR_InvalidResourceDirectoryEntryRVAOffsetToData = 3082,
+
+
+    // PE Exception directory
+    PE_ERR_InvalidExceptionDirectory_Entries = 3100,
+    PE_ERR_InvalidExceptionDirectory_Entry = 3101,
+    PE_ERR_InvalidExceptionDirectory_Size = 3102,
 }
