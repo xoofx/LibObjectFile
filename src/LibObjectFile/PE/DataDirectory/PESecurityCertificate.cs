@@ -3,7 +3,7 @@
 // See the license.txt file in the project root for more information.
 
 using System.IO;
-using System.Security.Cryptography.Pkcs;
+//using System.Security.Cryptography.Pkcs;
 
 namespace LibObjectFile.PE;
 
@@ -37,24 +37,24 @@ public sealed class PESecurityCertificate
     /// </summary>
     public Stream Data { get; set; }
 
-    /// <summary>
-    /// Decodes the security certificate and returns a <see cref="SignedCms"/> object.
-    /// </summary>
-    /// <returns>The decoded <see cref="SignedCms"/> object.</returns>
-    public SignedCms Decode()
-    {
-        SignedCms signedCms = new SignedCms();
-        var stream = new MemoryStream();
-        Data.Position = 0;
-        Data.CopyTo(stream);
+    ///// <summary>
+    ///// Decodes the security certificate and returns a <see cref="SignedCms"/> object.
+    ///// </summary>
+    ///// <returns>The decoded <see cref="SignedCms"/> object.</returns>
+    //public SignedCms Decode()
+    //{
+    //    SignedCms signedCms = new SignedCms();
+    //    var stream = new MemoryStream();
+    //    Data.Position = 0;
+    //    Data.CopyTo(stream);
 
-        signedCms.Decode(stream.ToArray());
+    //    signedCms.Decode(stream.ToArray());
 
-        // Optionally verify the signature
-        signedCms.CheckSignature(true);  // true to check certificate validity
+    //    // Optionally verify the signature
+    //    signedCms.CheckSignature(true);  // true to check certificate validity
 
-        return signedCms;
-    }
+    //    return signedCms;
+    //}
 
     /// <summary>
     /// Returns a string representation of the security certificate.
