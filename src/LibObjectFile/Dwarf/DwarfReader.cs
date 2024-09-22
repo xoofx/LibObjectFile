@@ -19,7 +19,7 @@ public sealed class DwarfReader : DwarfReaderWriter
 
     internal DwarfReader(DwarfReaderContext context, DwarfFile file, DiagnosticBag diagnostics) : base(file, diagnostics)
     {
-        IsReadOnly = context.IsInputReadOnly;
+        KeepOriginalStreamForSubStreams = context.IsInputReadOnly;
         AddressSize = context.AddressSize;
         IsLittleEndian = context.IsLittleEndian;
         _registeredDIEPerCompilationUnit = new Dictionary<ulong, DwarfDIE>();
@@ -32,7 +32,7 @@ public sealed class DwarfReader : DwarfReaderWriter
         _stackWithLineProgramTable = new Stack<DwarfDIE>();
     }
 
-    public override bool IsReadOnly { get; }
+    public override bool KeepOriginalStreamForSubStreams { get; }
 
     public DwarfUnitKind DefaultUnitKind { get; internal set; }
 

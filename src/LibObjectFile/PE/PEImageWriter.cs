@@ -14,5 +14,5 @@ public sealed class PEImageWriter : ObjectFileReaderWriter
 
     public PEFile PEFile => (PEFile)base.File;
 
-    public override bool IsReadOnly => false;
+    public override bool KeepOriginalStreamForSubStreams => false;
 }

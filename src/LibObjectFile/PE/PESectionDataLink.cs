@@ -12,7 +12,7 @@ namespace LibObjectFile.PE;
 [DebuggerDisplay("{ToString(),nq}")]
 public readonly struct PESectionDataLink : RVALink
 {
-    public PESectionDataLink(PESectionData? sectionData, uint rvo)
+    public PESectionDataLink(PESectionData? sectionData, RVO rvo)
     {
         SectionData = sectionData;
         RVO = rvo;

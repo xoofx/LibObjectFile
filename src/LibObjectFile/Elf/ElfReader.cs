@@ -24,7 +24,7 @@ public abstract class ElfReader : ObjectFileReaderWriter, IElfDecoder
     /// </summary>
     public ElfReaderOptions Options { get; }
 
-    public override bool IsReadOnly => Options.ReadOnly;
+    public override bool KeepOriginalStreamForSubStreams => Options.ReadOnly;
 
     internal abstract void Read();
 

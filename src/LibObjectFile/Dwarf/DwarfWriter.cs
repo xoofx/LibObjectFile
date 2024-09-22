@@ -14,7 +14,7 @@ public sealed class DwarfWriter : DwarfReaderWriter
         IsLittleEndian = isLittleEndian;
     }
 
-    public override bool IsReadOnly => false;
+    public override bool KeepOriginalStreamForSubStreams => false;
 
     public bool EnableRelocation { get; internal set; }
 

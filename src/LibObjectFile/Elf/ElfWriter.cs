@@ -20,7 +20,7 @@ public abstract class ElfWriter : ObjectFileReaderWriter, IElfEncoder
 
     internal abstract void Write();
         
-    public override bool IsReadOnly => false;
+    public override bool KeepOriginalStreamForSubStreams => false;
         
     internal static ElfWriter Create(ElfObjectFile objectFile, Stream stream)
     {

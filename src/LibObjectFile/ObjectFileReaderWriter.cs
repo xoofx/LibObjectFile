@@ -52,7 +52,7 @@ public abstract class ObjectFileReaderWriter : VisitorContextBase
     /// <summary>
     /// Gets a boolean indicating if this reader is operating in read-only mode.
     /// </summary>
-    public abstract bool IsReadOnly { get; }
+    public abstract bool KeepOriginalStreamForSubStreams { get; }
 
     public bool IsLittleEndian { get; protected set; }
 
@@ -168,56 +168,19 @@ public abstract class ObjectFileReaderWriter : VisitorContextBase
     /// <param name="data">The data read.</param>
     /// <returns><c>true</c> if reading was successful. <c>false</c> otherwise.</returns>
     public unsafe bool TryReadData<T>(int sizeToRead, out T data) where T : unmanaged
-    {
-        if (sizeToRead <= 0) throw new ArgumentOutOfRangeException(nameof(sizeToRead));
-
-        int dataByteCount = sizeof(T);
-        int byteRead;
-
-        // If we are requested to read more data than the sizeof(T)
-        // we need to read it to an intermediate buffer before transferring it to T data
-        if (sizeToRead > dataByteCount)
-        {
-            var buffer = ArrayPool<byte>.Shared.Rent(sizeToRead);
-            var span = new Span<byte>(buffer, 0, sizeToRead);
-            byteRead = Stream.Read(span);
-            data = MemoryMarshal.Cast<byte, T>(span)[0];
-            ArrayPool<byte>.Shared.Return(buffer);
-        }
-        else
-        {
-            // Clear the data if the size requested is less than the expected struct to read
-            if (sizeToRead < dataByteCount)
-            {
-                data = default;
-            }
-
-            Unsafe.SkipInit(out data);
-            byteRead = Stream.Read(MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref data, 1)));
-        }
-        return byteRead == sizeToRead;
-    }
+        => Stream.TryReadData(sizeToRead, out data);
 
     /// <summary>
     /// Reads from the current <see cref="Stream"/> <see cref="size"/> bytes and return the data as
-    /// a <see cref="SubStream"/> if <see cref="IsReadOnly"/> is <c>false</c> otherwise as a 
+    /// a <see cref="SubStream"/> if <see cref="KeepOriginalStreamForSubStreams"/> is <c>false</c> otherwise as a 
     /// <see cref="MemoryStream"/>.
     /// </summary>
     /// <param name="size">Size of the data to read.</param>
-    /// <returns>A <see cref="SubStream"/> if <see cref="IsReadOnly"/> is <c>false</c> otherwise as a 
+    /// <returns>A <see cref="SubStream"/> if <see cref="KeepOriginalStreamForSubStreams"/> is <c>false</c> otherwise as a 
     /// <see cref="MemoryStream"/>.</returns>
     public Stream ReadAsStream(ulong size)
-    {
-        if (IsReadOnly)
-        {
-            var stream = ReadAsSubStream(size);
-            Stream.Seek(stream.Length, SeekOrigin.Current);
-            return stream;
-        }
-
-        return ReadAsMemoryStream(size);
-    }
-
+        => Stream.ReadAsStream(size, Diagnostics, KeepOriginalStreamForSubStreams);
+    
     /// <summary>
     /// Writes to the <see cref="Stream"/> and current position from the specified buffer.
     /// </summary>
@@ -280,45 +243,5 @@ public abstract class ObjectFileReaderWriter : VisitorContextBase
         {
             throw new InvalidOperationException("Unable to write stream entirely");
         }
-    }
-        
-    private SubStream ReadAsSubStream(ulong size)
-    {
-        var position = Stream.Position;
-        if (position + (long)size > Stream.Length)
-        {
-            if (position < Stream.Length)
-            {
-                size = Stream.Position < Stream.Length ? (ulong)(Stream.Length - Stream.Position) : 0;
-                Diagnostics.Error(DiagnosticId.CMN_ERR_UnexpectedEndOfFile, $"Unexpected end of file. Expecting to slice {size} bytes at offset {position} while remaining length is {size}");
-            }
-            else
-            {
-                position = Stream.Length;
-                size = 0;
-                Diagnostics.Error(DiagnosticId.CMN_ERR_UnexpectedEndOfFile, $"Unexpected end of file. Position of slice {position} is outside of the stream length {Stream.Length} in bytes");
-            }
-        }
-
-        return new SubStream(Stream, position, (long)size);
-    }
-
-    private MemoryStream ReadAsMemoryStream(ulong size)
-    {
-        var memoryStream = new MemoryStream((int)size);
-        if (size == 0) return memoryStream;
-
-        memoryStream.SetLength((long)size);
-
-        var buffer = memoryStream.GetBuffer();
-        var span = new Span<byte>(buffer, 0, (int)size);
-        var readSize = Stream.Read(span);
-
-        if ((int)size != readSize)
-        {
-            Diagnostics.Error(DiagnosticId.CMN_ERR_UnexpectedEndOfFile, $"Unexpected end of file. Expecting to read {size} bytes at offset {Stream.Position}");
-        }
-            
-        return memoryStream;
     }
 }

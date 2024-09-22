@@ -23,12 +23,12 @@ public class ArArchiveFileReader : ObjectFileReaderWriter
     internal ArArchiveFileReader(ArArchiveFile arArchiveFile, Stream stream, ArArchiveFileReaderOptions options) : base(arArchiveFile, stream)
     {
         Options = options;
-        IsReadOnly = options.IsReadOnly;
+        KeepOriginalStreamForSubStreams = options.IsReadOnly;
     }
         
     public ArArchiveFileReaderOptions Options { get; }
         
-    public override bool IsReadOnly { get; }
+    public override bool KeepOriginalStreamForSubStreams { get; }
 
     public ArArchiveFile ArArchiveFile => (ArArchiveFile)base.File;
 

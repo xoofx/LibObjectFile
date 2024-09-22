@@ -2,11 +2,14 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
+using LibObjectFile.Diagnostics;
 using System;
 using System.Buffers;
 using System.Buffers.Binary;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace LibObjectFile.IO;
@@ -229,5 +232,103 @@ public static class StreamExtensions
         {
             ArrayPool<byte>.Shared.Return(buffer);
         }
+    }
+
+    /// <summary>
+    /// Tries to read an element of type <paramref name="{T}"/> with a specified size.
+    /// </summary>
+    /// <typeparam name="T">Type of the element to read.</typeparam>
+    /// <param name="sizeToRead">Size of the element to read (might be smaller or bigger).</param>
+    /// <param name="data">The data read.</param>
+    /// <returns><c>true</c> if reading was successful. <c>false</c> otherwise.</returns>
+    public static unsafe bool TryReadData<T>(this Stream stream, int sizeToRead, out T data) where T : unmanaged
+    {
+        if (sizeToRead <= 0) throw new ArgumentOutOfRangeException(nameof(sizeToRead));
+
+        int dataByteCount = sizeof(T);
+        int byteRead;
+
+        // If we are requested to read more data than the sizeof(T)
+        // we need to read it to an intermediate buffer before transferring it to T data
+        if (sizeToRead > dataByteCount)
+        {
+            var buffer = ArrayPool<byte>.Shared.Rent(sizeToRead);
+            var span = new Span<byte>(buffer, 0, sizeToRead);
+            byteRead = stream.Read(span);
+            data = MemoryMarshal.Cast<byte, T>(span)[0];
+            ArrayPool<byte>.Shared.Return(buffer);
+        }
+        else
+        {
+            // Clear the data if the size requested is less than the expected struct to read
+            if (sizeToRead < dataByteCount)
+            {
+                data = default;
+            }
+
+            Unsafe.SkipInit(out data);
+            byteRead = stream.Read(MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref data, 1)));
+        }
+        return byteRead == sizeToRead;
+    }
+
+    public static SubStream ReadAsSubStream(this Stream stream, ulong size, DiagnosticBag diagnostics)
+    {
+        var position = stream.Position;
+        if (position + (long)size > stream.Length)
+        {
+            if (position < stream.Length)
+            {
+                size = stream.Position < stream.Length ? (ulong)(stream.Length - stream.Position) : 0;
+                diagnostics.Error(DiagnosticId.CMN_ERR_UnexpectedEndOfFile, $"Unexpected end of file. Expecting to slice {size} bytes at offset {position} while remaining length is {size}");
+            }
+            else
+            {
+                position = stream.Length;
+                size = 0;
+                diagnostics.Error(DiagnosticId.CMN_ERR_UnexpectedEndOfFile, $"Unexpected end of file. Position of slice {position} is outside of the stream length {stream.Length} in bytes");
+            }
+        }
+
+        return new SubStream(stream, position, (long)size);
+    }
+
+    public static MemoryStream ReadAsMemoryStream(this Stream stream, ulong size, DiagnosticBag diagnostics)
+    {
+        var memoryStream = new MemoryStream((int)size);
+        if (size == 0) return memoryStream;
+
+        memoryStream.SetLength((long)size);
+
+        var buffer = memoryStream.GetBuffer();
+        var span = new Span<byte>(buffer, 0, (int)size);
+        var readSize = stream.Read(span);
+
+        if ((int)size != readSize)
+        {
+            diagnostics.Error(DiagnosticId.CMN_ERR_UnexpectedEndOfFile, $"Unexpected end of file. Expecting to read {size} bytes at offset {stream.Position}");
+        }
+
+        return memoryStream;
+    }
+
+    /// <summary>
+    /// Reads from the current <see cref="Stream"/> <see cref="size"/> bytes and return the data as
+    /// a <see cref="SubStream"/> if <see cref="keepOriginalStreamForSubStreams"/> is <c>false</c> otherwise as a 
+    /// <see cref="MemoryStream"/>.
+    /// </summary>
+    /// <param name="size">Size of the data to read.</param>
+    /// <returns>A <see cref="SubStream"/> if <see cref="keepOriginalStreamForSubStreams"/> is <c>false</c> otherwise as a 
+    /// <see cref="MemoryStream"/>.</returns>
+    public static Stream ReadAsStream(this Stream sourceStream, ulong size, DiagnosticBag diagnostics, bool keepOriginalStreamForSubStreams)
+    {
+        if (keepOriginalStreamForSubStreams)
+        {
+            var stream = sourceStream.ReadAsSubStream(size, diagnostics);
+            sourceStream.Seek(stream.Length, SeekOrigin.Current);
+            return stream;
+        }
+
+        return sourceStream.ReadAsMemoryStream(size, diagnostics);
     }
 }

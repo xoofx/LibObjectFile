@@ -18,7 +18,7 @@ public sealed class PEImageReader : ObjectFileReaderWriter
 
     public PEImageReaderOptions Options { get; }
 
-    public override bool IsReadOnly => Options.IsReadOnly;
+    public override bool KeepOriginalStreamForSubStreams => Options.IsReadOnly;
 
     public PEVisitorContext VisitorContext { get; }
 

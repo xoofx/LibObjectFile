@@ -88,12 +88,6 @@ public sealed class PESection : PEObject
     }
 
     /// <inheritdoc />
-    protected override void PrintName(StringBuilder builder)
-    {
-        builder.Append(Name);
-    }
-
-    /// <inheritdoc />
     protected override bool PrintMembers(StringBuilder builder)
     {
         builder.Append($"{Name} ");

@@ -149,4 +149,9 @@ public enum DiagnosticId
     PE_ERR_ExportDirectoryInvalidAddressOfNameOrdinals = 3063,
     PE_ERR_ExportDirectoryInvalidName = 3064,
     PE_ERR_ExportNameTableInvalidRVA = 3065,
+
+    // PE Resource directory
+    PE_ERR_InvalidResourceDirectory = 3080,
+    PE_ERR_InvalidResourceDirectoryEntry = 3081,
+    PE_ERR_InvalidResourceDirectoryEntryRVAOffsetToData = 3082,
 }

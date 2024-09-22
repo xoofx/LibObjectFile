@@ -20,12 +20,12 @@ public class ArArchiveFileWriter: ObjectFileReaderWriter
 
     internal ArArchiveFileWriter(ArArchiveFile archiveFile, Stream stream) : base(archiveFile, stream)
     {
-        IsReadOnly = false;
+        KeepOriginalStreamForSubStreams = false;
     }
 
     public ArArchiveFile ArArchiveFile => (ArArchiveFile)base.File;
 
-    public override bool IsReadOnly { get; }
+    public override bool KeepOriginalStreamForSubStreams { get; }
 
     internal void Write()
     {
