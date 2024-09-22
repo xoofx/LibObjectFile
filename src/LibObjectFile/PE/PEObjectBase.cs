@@ -10,4 +10,14 @@ namespace LibObjectFile.PE;
 /// Base class for all Portable Executable (PE) objects.
 /// </summary>
 [DebuggerDisplay("{ToString(),nq}")]
-public abstract class PEObjectBase : ObjectFileElement<PELayoutContext, PEVisitorContext, PEImageReader, PEImageWriter>;
+public abstract class PEObjectBase : ObjectFileElement<PELayoutContext, PEVisitorContext, PEImageReader, PEImageWriter>
+{
+    /// <summary>
+    /// Gets the PE file containing this object.
+    /// </summary>
+    /// <returns>The PE file containing this object.</returns>
+    /// <remarks>
+    /// This method can return null if the object is not attached to a PE file.
+    /// </remarks>
+    public PEFile? GetPEFile() => FindParent<PEFile>();
+}

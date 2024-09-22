@@ -56,4 +56,16 @@ public class PEStreamSectionData : PESectionData
         Stream.Position = 0;
         Stream.CopyTo(writer.Stream);
     }
+
+    public override int ReadAt(uint offset, Span<byte> destination)
+    {
+        Stream.Position = offset;
+        return Stream.Read(destination);
+    }
+
+    public override void WriteAt(uint offset, ReadOnlySpan<byte> source)
+    {
+        Stream.Position = offset;
+        Stream.Write(source);
+    }
 }

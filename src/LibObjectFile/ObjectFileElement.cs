@@ -56,6 +56,26 @@ public abstract class ObjectFileElement : ObjectElement
         builder.Append($"Position = 0x{Position:X}, Size = 0x{Size:X}");
         return true;
     }
+
+    /// <summary>
+    /// Finds the parent of the specified type.
+    /// </summary>
+    /// <typeparam name="TParent">The type of the parent to find.</typeparam>
+    /// <returns>The parent of the specified type or null if not found.</returns>
+    public TParent? FindParent<TParent>() where TParent : ObjectElement
+    {
+        ObjectElement? thisObject = this;
+        while (thisObject is not null)
+        {
+            if (thisObject is TParent parent)
+            {
+                return parent;
+            }
+            thisObject = thisObject.Parent;
+        }
+
+        return null;
+    }
 }
 
 public abstract class ObjectFileElement<TLayoutContext, TVerifyContext, TReader, TWriter> : ObjectFileElement

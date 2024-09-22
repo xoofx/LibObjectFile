@@ -225,12 +225,13 @@ partial class PEFile
         {
             var firstSectionPosition = headers[0].PointerToRawData;
 
-            var lengthBeforeFirstSection = firstSectionPosition - reader.Position;
+            var position = reader.Position;
+            var lengthBeforeFirstSection = firstSectionPosition - position;
             if (lengthBeforeFirstSection > 0)
             {
                 var extraData = new PEStreamExtraData(reader.ReadAsStream((ulong)lengthBeforeFirstSection))
                 {
-                    Position = reader.Position,
+                    Position = position,
                 };
                 ExtraDataBeforeSections.Add(extraData);
             }

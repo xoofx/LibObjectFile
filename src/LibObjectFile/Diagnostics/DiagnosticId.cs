@@ -163,4 +163,10 @@ public enum DiagnosticId
 
     // PE Certificate directory
     PE_ERR_InvalidCertificateEntry = 3200,
+
+    // PE TLS directory
+    PE_ERR_InvalidTlsStartAddressOfRawData = 3300,
+    PE_ERR_InvalidTlsEndAddressOfRawData = 3301,
+    PE_ERR_InvalidTlsAddressOfIndex = 3302,
+    PE_ERR_InvalidTlsAddressOfCallBacks = 3303,
 }
