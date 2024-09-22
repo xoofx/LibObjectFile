@@ -6,9 +6,19 @@ using LibObjectFile.Diagnostics;
 
 namespace LibObjectFile.PE;
 
-public sealed class PEVisitorContext : VisitorContextBase<PEFile>
+public class PEVisitorContext : VisitorContextBase<PEFile>
 {
     internal PEVisitorContext(PEFile peFile, DiagnosticBag diagnostics) : base(peFile, diagnostics)
     {
     }
+}
+
+public sealed class PELayoutContext : PEVisitorContext
+{
+    internal PELayoutContext(PEFile peFile, DiagnosticBag diagnostics, bool updateSizeOnly = false) : base(peFile, diagnostics)
+    {
+        UpdateSizeOnly = updateSizeOnly;
+    }
+
+    public bool UpdateSizeOnly { get; }
 }

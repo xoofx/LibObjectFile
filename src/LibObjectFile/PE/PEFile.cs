@@ -29,7 +29,8 @@ public partial class PEFile : PEObjectBase
     public PEFile()
     {
         _sections = new(this);
-        ExtraData = new(this);
+        ExtraDataBeforeSections = new(this);
+        ExtraDataAfterSections = new(this);
         // TODO: Add default initialization
     }
 
@@ -39,7 +40,8 @@ public partial class PEFile : PEObjectBase
     internal PEFile(bool unused)
     {
         _sections = new(this);
-        ExtraData = new(this);
+        ExtraDataBeforeSections = new(this);
+        ExtraDataAfterSections = new(this);
     }
 
     /// <summary>
@@ -96,6 +98,11 @@ public partial class PEFile : PEObjectBase
     public PEDirectoryTable Directories { get; } = new();
 
     /// <summary>
+    /// Gets the data present before the sections in the file.
+    /// </summary>
+    public ObjectList<PEExtraData> ExtraDataBeforeSections { get; }
+
+    /// <summary>
     /// Gets the sections.
     /// </summary>
     public ObjectList<PESection> Sections => _sections;
@@ -103,7 +110,7 @@ public partial class PEFile : PEObjectBase
     /// <summary>
     /// Gets the data present after the sections in the file (e.g <see cref="PESecurityDirectory"/>)
     /// </summary>
-    public ObjectList<PEExtraData> ExtraData { get; }
+    public ObjectList<PEExtraData> ExtraDataAfterSections { get; }
 
     public PESection AddSection(PESectionName name, uint virtualAddress, uint virtualSize)
     {
@@ -193,7 +200,7 @@ public partial class PEFile : PEObjectBase
         return dataList;
     }
 
-    public override void UpdateLayout(PEVisitorContext layoutContext)
+    public override void UpdateLayout(PELayoutContext layoutContext)
     {
     }
 

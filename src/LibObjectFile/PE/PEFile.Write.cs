@@ -35,7 +35,7 @@ partial class PEFile
         var peWriter = new PEImageWriter(this, stream);
         diagnostics = peWriter.Diagnostics;
 
-        var context = new PEVisitorContext(this, diagnostics);
+        var context = new PELayoutContext(this, diagnostics);
 
         Verify(context);
         if (diagnostics.HasErrors)

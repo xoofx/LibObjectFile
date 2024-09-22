@@ -28,7 +28,7 @@ public abstract class PEDataDirectory : PESectionData
     /// </summary>
     public ObjectList<PESectionData> Content { get; }
 
-    public sealed override void UpdateLayout(PEVisitorContext context)
+    public sealed override void UpdateLayout(PELayoutContext context)
     {
         var va = RVA;
 
@@ -41,15 +41,22 @@ public abstract class PEDataDirectory : PESectionData
 
         // A directory could have a content in addition to the header
         // So we update the VirtualAddress of each content and update the layout
+        var position = Position;
         foreach (var table in Content)
         {
             table.RVA = va;
-            
-            // Update layout will update virtual address
-            table.UpdateLayout(context);
 
+            // Update layout will update virtual address
+            if (!context.UpdateSizeOnly)
+            {
+                table.Position = position;
+            }
+
+            table.UpdateLayout(context);
+            
             va += (uint)table.Size;
             size += table.Size;
+            position += table.Size;
         }
 
         Size = size;

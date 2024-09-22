@@ -65,14 +65,21 @@ public sealed class PESection : PEObject
     }
 
     /// <inheritdoc />
-    public override void UpdateLayout(PEVisitorContext context)
+    public override void UpdateLayout(PELayoutContext context)
     {
         var va = RVA;
+        var position = Position;
         foreach (var data in Content)
         {
             data.RVA = va;
+            if (!context.UpdateSizeOnly)
+            {
+                data.Position = position;
+            }
+
             data.UpdateLayout(context);
             va += (uint)data.Size;
+            position += data.Size;
         }
     }
 

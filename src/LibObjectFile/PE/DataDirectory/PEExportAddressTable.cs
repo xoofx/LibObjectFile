@@ -24,7 +24,7 @@ public class PEExportAddressTable : PESectionData
 
     public List<PEExportFunctionEntry> Values { get; } = new();
 
-    public override unsafe void UpdateLayout(PEVisitorContext context)
+    public override unsafe void UpdateLayout(PELayoutContext context)
     {
         Size = (ulong)(Values.Count * sizeof(RVA));
     }

@@ -41,7 +41,7 @@ public class PEStreamSectionData : PESectionData
     /// </summary>
     public Stream Stream => _stream;
 
-    public override void UpdateLayout(PEVisitorContext layoutContext)
+    public override void UpdateLayout(PELayoutContext layoutContext)
     {
         Size = (ulong)Stream.Length;
     }

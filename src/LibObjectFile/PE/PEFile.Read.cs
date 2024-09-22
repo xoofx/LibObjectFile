@@ -14,6 +14,7 @@ using System.Runtime.InteropServices;
 using LibObjectFile.Collections;
 using LibObjectFile.Diagnostics;
 using LibObjectFile.PE.Internal;
+using LibObjectFile.Utils;
 
 namespace LibObjectFile.PE;
 
@@ -219,6 +220,22 @@ partial class PEFile
 
         positionAfterLastSection = 0;
 
+        // Load any data stored before the sections
+        if (headers.Length > 0)
+        {
+            var firstSectionPosition = headers[0].PointerToRawData;
+
+            var lengthBeforeFirstSection = firstSectionPosition - reader.Position;
+            if (lengthBeforeFirstSection > 0)
+            {
+                var extraData = new PEStreamExtraData(reader.ReadAsStream((ulong)lengthBeforeFirstSection))
+                {
+                    Position = reader.Position,
+                };
+                ExtraDataBeforeSections.Add(extraData);
+            }
+        }
+
         // Create sections
         foreach (var section in headers)
         {
@@ -271,7 +288,7 @@ partial class PEFile
                 Directories.Set(directory);
 
                 // The PESecurityDirectory is a special case as it doesn't use RVA but the position in the file. It belongs after the sections to the extra data
-                ExtraData.Add(directory);
+                ExtraDataAfterSections.Add(directory);
                 
                 directory.Read(reader);
             }
@@ -375,7 +392,9 @@ partial class PEFile
             FillSectionDataWithMissingStreams(reader, section, section.Content, section.Position, section.Size);
 
             var previousSize = section.Size;
+
             section.UpdateLayout(reader);
+
             var newSize = section.Size;
             if (newSize != previousSize)
             {
@@ -488,7 +507,7 @@ partial class PEFile
 
         // We are working on position, while the list is ordered by VirtualAddress
         var listOrderedByPosition = new List<PEExtraData>();
-        listOrderedByPosition.AddRange(ExtraData.UnsafeList);
+        listOrderedByPosition.AddRange(ExtraDataAfterSections.UnsafeList);
         listOrderedByPosition.Sort((a, b) => a.Position.CompareTo(b.Position));
 
         for (var i = 0; i < listOrderedByPosition.Count; i++)
@@ -505,7 +524,7 @@ partial class PEFile
                     Size = size,
                 };
 
-                ExtraData.Insert(data.Index, sectionData);
+                ExtraDataAfterSections.Insert(data.Index, sectionData);
                 currentPosition = data.Position;
             }
             else if (currentPosition > data.Position)
@@ -527,7 +546,7 @@ partial class PEFile
                 Size = size,
             };
 
-            ExtraData.Add(sectionData);
+            ExtraDataAfterSections.Add(sectionData);
         }
         else if (currentPosition > extraPosition + extraTotalSize)
         {

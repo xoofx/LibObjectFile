@@ -19,7 +19,7 @@ public sealed class PEImportLookupTable : PESectionData
 
     public List<PEImportFunctionEntry> Entries => FunctionTable.Entries;
 
-    public override void UpdateLayout(PEVisitorContext context)
+    public override void UpdateLayout(PELayoutContext context)
     {
         Size = FunctionTable.CalculateSize(context);
     }

@@ -5,7 +5,7 @@
 namespace LibObjectFile.PE;
 
 /// <summary>
-/// Base class for extra data in a PE file accessible via <see cref="PEFile.ExtraData"/>.
+/// Base class for extra data in a PE file accessible via <see cref="PEFile.ExtraDataAfterSections"/>.
 /// </summary>
 public abstract class PEExtraData : PEObjectBase
 {

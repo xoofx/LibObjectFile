@@ -22,7 +22,7 @@ public class PEExportOrdinalTable : PESectionData
     public List<ushort> Values { get; } = new();
 
     
-    public override void UpdateLayout(PEVisitorContext context)
+    public override void UpdateLayout(PELayoutContext context)
     {
         Size = (ulong)Values.Count * sizeof(ushort);
     }

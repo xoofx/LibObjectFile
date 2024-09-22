@@ -8,16 +8,18 @@ using System.IO;
 namespace LibObjectFile.PE;
 
 /// <summary>
-/// Defines a stream extra data in the PE file <see cref="PEFile.ExtraData"/>.
+/// Defines a stream extra data in the PE file <see cref="PEFile.ExtraDataAfterSections"/>.
 /// </summary>
 public sealed class PEStreamExtraData : PEExtraData
 {
+    private Stream _data;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="PEStreamExtraData"/> class.
     /// </summary>
     public PEStreamExtraData()
     {
-        Data = Stream.Null;
+        _data = Stream.Null;
     }
 
     /// <summary>
@@ -27,15 +29,25 @@ public sealed class PEStreamExtraData : PEExtraData
     public PEStreamExtraData(Stream data)
     {
         ArgumentNullException.ThrowIfNull(data);
-        Data = data;
+        _data = data;
+        Size = (uint)data.Length;
     }
 
     /// <summary>
     /// Gets or sets the data stream.
     /// </summary>
-    public Stream Data { get; set; }
+    public Stream Data
+    {
+        get => _data;
+        set
+        {
+            ArgumentNullException.ThrowIfNull(value);
+            _data = value;
+            Size = (uint)value.Length;
+        }
+    }
 
-    public override void UpdateLayout(PEVisitorContext layoutContext)
+    public override void UpdateLayout(PELayoutContext layoutContext)
     {
         Size = (uint)Data.Length;
     }
