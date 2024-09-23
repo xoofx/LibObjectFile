@@ -39,6 +39,14 @@ public sealed class PEBaseRelocationPageBlockPart
 
 
     /// <summary>
+    /// Gets the RVA of a relocation that belongs to this part.
+    /// </summary>
+    /// <param name="relocation">The relocation.</param>
+    /// <returns>The RVA of the relocation.</returns>
+    public RVA GetRVA(PEBaseRelocation relocation)
+        => SectionDataLink.Container is null ? 0 : SectionDataLink.Container.RVA + SectionDataLink.RVO + relocation.OffsetInBlockPart;
+
+    /// <summary>
     /// Read the address from the relocation.
     /// </summary>
     /// <param name="relocation">A relocation that belongs to this block.</param>
