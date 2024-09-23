@@ -151,7 +151,7 @@ public sealed class PEImportDirectory : PEDataDirectory
 
     private unsafe uint CalculateSize()
     {
-        return (uint)(((_entries.Count + 1) * sizeof(RawImportDirectoryEntry)));
+        return _entries.Count == 0 ? 0 : (uint)(((_entries.Count + 1) * sizeof(RawImportDirectoryEntry)));
     }
 
     public override void Write(PEImageWriter writer)

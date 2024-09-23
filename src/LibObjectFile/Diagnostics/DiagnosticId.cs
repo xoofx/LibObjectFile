@@ -169,4 +169,9 @@ public enum DiagnosticId
     PE_ERR_InvalidTlsEndAddressOfRawData = 3301,
     PE_ERR_InvalidTlsAddressOfIndex = 3302,
     PE_ERR_InvalidTlsAddressOfCallBacks = 3303,
+
+    // PE BoundImport directory
+    PE_ERR_BoundImportDirectoryInvalidEndOfStream = 3400,
+    PE_ERR_BoundImportDirectoryInvalidModuleName = 3401,
+    PE_ERR_BoundImportDirectoryInvalidForwarderRefModuleName = 3402,
 }

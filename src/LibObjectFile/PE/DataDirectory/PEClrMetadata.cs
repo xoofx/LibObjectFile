@@ -19,11 +19,9 @@ public sealed class PEClrMetadata : PEDataDirectory
 
     public override void Read(PEImageReader reader)
     {
-        // TBD
     }
 
     public override void Write(PEImageWriter writer)
     {
-        throw new NotImplementedException();
     }
 }

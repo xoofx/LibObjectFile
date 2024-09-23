@@ -19,7 +19,7 @@ internal readonly struct PEImportFunctionTable()
     {
         var peFile = context.File;
         // +1 for the null terminator
-        return (ulong)((Entries.Count + 1) * (peFile.IsPE32 ? sizeof(RawImportFunctionEntry32) : sizeof(RawImportFunctionEntry64)));
+        return Entries.Count == 0 ? 0 : (ulong)((Entries.Count + 1) * (peFile.IsPE32 ? sizeof(RawImportFunctionEntry32) : sizeof(RawImportFunctionEntry64)));
     }
 
     public void Read(PEImageReader reader, ulong position)
