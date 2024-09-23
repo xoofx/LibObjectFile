@@ -109,6 +109,7 @@ public sealed class PEDelayImportDirectory : PEDataDirectory
                     }
                     )
                 {
+                    Attributes = rawEntry.Attributes,
                     BoundImportAddressTable = boundImportAddressTable,
                     UnloadDelayInformationTable = unloadDelayInformationTable
                 }

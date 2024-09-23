@@ -13,6 +13,8 @@ public class PEDelayImportDirectoryEntry
         DelayImportAddressTable = delayImportAddressTable;
         DelayImportNameTable = delayImportNameTable;
     }
+
+    public uint Attributes { get; set; }
     
     public PEAsciiStringLink DllName { get; set; }
 
