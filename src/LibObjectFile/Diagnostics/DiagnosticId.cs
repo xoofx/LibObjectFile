@@ -174,4 +174,14 @@ public enum DiagnosticId
     PE_ERR_BoundImportDirectoryInvalidEndOfStream = 3400,
     PE_ERR_BoundImportDirectoryInvalidModuleName = 3401,
     PE_ERR_BoundImportDirectoryInvalidForwarderRefModuleName = 3402,
+
+    // PE DelayImport directory
+    PE_ERR_ImportDirectoryInvalidDelayLoadImportAddressTableRVA = 3500,
+    PE_ERR_ImportDirectoryInvalidDelayLoadImportNameTableRVA = 3501,
+    PE_ERR_ImportDirectoryInvalidBoundDelayLoadImportAddressTableRVA = 3502,
+    PE_ERR_ImportDirectoryInvalidUnloadDelayLoadImportAddressTableRVA = 3503,
+    PE_ERR_ImportDirectoryInvalidNameRVA = 3504,
+    PE_ERR_ImportDirectoryInvalidModuleHandleRVA = 3505,
+    PE_ERR_DelayImportDirectoryInvalidDllNameRVA = 3506,
+    PE_ERR_DelayImportDirectoryInvalidModuleHandleRVA = 3507,
 }

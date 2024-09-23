@@ -21,6 +21,11 @@ internal struct RawDelayLoadDescriptor
     public RVA NameRVA;
 
     /// <summary>
+    /// The RVA to the HMODULE caching location (PHMODULE)
+    /// </summary>
+    public RVA ModuleHandleRVA;
+    
+    /// <summary>
     /// The RVA of the delay load import address table, which contains the RVAs of the delay load import name table and the delay load import module.
     /// </summary>
     public RVA DelayLoadImportAddressTableRVA;

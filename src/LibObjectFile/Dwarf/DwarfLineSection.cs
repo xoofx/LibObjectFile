@@ -68,7 +68,8 @@ public sealed class DwarfLineSection : DwarfRelocatableSection
 
     protected override bool PrintMembers(StringBuilder builder)
     {
-        builder.Append($"Section .debug_line, Entries: {_tables.Count}");
+        builder.Append($"Section .debug_line, Entries: {_tables.Count}, ");
+        base.PrintMembers(builder);
         return true;
     }
 }

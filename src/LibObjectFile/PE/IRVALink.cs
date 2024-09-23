@@ -5,14 +5,14 @@
 namespace LibObjectFile.PE;
 
 // ReSharper disable once InconsistentNaming
-public interface RVALink
+public interface IRVALink
 {
     public PEObject? Container { get; }
 
     public RVO RVO { get; }
 }
 
-public interface RVALink<out TData> : RVALink
+public interface IRVALink<out TData> : IRVALink
 {
     public TData Resolve();
 }

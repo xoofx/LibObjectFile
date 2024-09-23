@@ -106,7 +106,8 @@ public abstract class PEObject : PEObjectBase
 
     protected override bool PrintMembers(StringBuilder builder)
     {
-        builder.Append($"RVA = {RVA}, VirtualSize = 0x{VirtualSize:X}, Size = 0x{Size:X}");
+        builder.Append($"RVA = {RVA}, VirtualSize = 0x{VirtualSize:X}, ");
+        base.PrintMembers(builder);
         return true;
     }
 

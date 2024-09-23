@@ -7,7 +7,7 @@ namespace LibObjectFile.PE;
 /// <summary>
 /// A link to a null terminated ASCII string in a <see cref="PESectionData"/>.
 /// </summary>
-public readonly struct PEAsciiStringLink : RVALink<string?>
+public readonly struct PEAsciiStringLink : IRVALink<string?>
 {
     public PEAsciiStringLink(PEStreamSectionData? streamSectionData, RVO rvo)
     {

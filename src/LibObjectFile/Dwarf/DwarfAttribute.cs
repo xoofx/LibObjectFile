@@ -119,12 +119,13 @@ public sealed class DwarfAttribute : DwarfObject<DwarfDIE>, IComparable<DwarfAtt
     {
         if (ValueAsObject != null)
         {
-            builder.Append(ValueAsU64 != 0 ? $"{nameof(Kind)}: {Kind}, Value: {ValueAsObject} Offset: {ValueAsU64}" : $"{nameof(Kind)}: {Kind}, Value: {ValueAsObject}");
+            builder.Append(ValueAsU64 != 0 ? $"{nameof(Kind)}: {Kind}, Value: {ValueAsObject} Offset: {ValueAsU64}" : $"{nameof(Kind)}: {Kind}, Value: {ValueAsObject}, ");
         }
         else
         {
-            builder.Append($"{nameof(Kind)}: {Kind}, Value: {ValueAsU64}");
+            builder.Append($"{nameof(Kind)}: {Kind}, Value: {ValueAsU64}, ");
         }
+        base.PrintMembers(builder);
 
         return true;
     }

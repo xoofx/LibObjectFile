@@ -4,6 +4,8 @@
 
 namespace LibObjectFile.PE.Internal;
 
+#pragma warning disable CS0649
+
 internal struct RawPEBoundImportDirectory
 {
     public uint TimeDateStamp;

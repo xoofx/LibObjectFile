@@ -163,7 +163,8 @@ public abstract class ElfSection : ElfObject
 
     protected override bool PrintMembers(StringBuilder builder)
     {
-        builder.Append($"Section [{SectionIndex}](Internal: {Index}) `{Name}` ");
+        builder.Append($"Section [{SectionIndex}](Internal: {Index}) `{Name}`, ");
+        base.PrintMembers(builder);
         return true;
     }
 

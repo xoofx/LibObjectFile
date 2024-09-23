@@ -68,7 +68,8 @@ public sealed class DwarfLocationSection : DwarfRelocatableSection
 
     protected override bool PrintMembers(StringBuilder builder)
     {
-        builder.Append($"Section .debug_loc, Entries: {_locationLists.Count}");
+        builder.Append($"Section .debug_loc, Entries: {_locationLists.Count}, ");
+        base.PrintMembers(builder);
         return true;
     }
 }

@@ -10,7 +10,7 @@ namespace LibObjectFile.PE;
 /// A link to a section
 /// </summary>
 [DebuggerDisplay("{ToString(),nq}")]
-public readonly struct PESectionLink : RVALink
+public readonly struct PESectionLink : IRVALink
 {
     public PESectionLink(PESection? section, uint rvo)
     {

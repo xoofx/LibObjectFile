@@ -8,7 +8,7 @@ namespace LibObjectFile.PE;
 
 #pragma warning disable CS0649
 [DebuggerDisplay("{ToString(),nq}")]
-public struct PEFunctionAddressLink : RVALink
+public struct PEFunctionAddressLink : IRVALink
 {
     public PEFunctionAddressLink(PEObject? container, RVO rvo)
     {

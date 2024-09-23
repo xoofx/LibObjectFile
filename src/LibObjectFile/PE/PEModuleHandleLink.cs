@@ -5,14 +5,14 @@
 namespace LibObjectFile.PE;
 
 /// <summary>
-/// A link to a PE Import Hint Name in a <see cref="PEStreamSectionData"/>.
+/// A link to a module handle.
 /// </summary>
-public readonly struct PEImportHintNameLink : IRVALink<PEImportHintName>
+public readonly struct PEModuleHandleLink : IRVALink
 {
-    public PEImportHintNameLink(PEStreamSectionData? streamSectionData, RVO rvoInSection)
+    public PEModuleHandleLink(PEStreamSectionData? streamSectionData, RVO rvo)
     {
         StreamSectionData = streamSectionData;
-        RVO = rvoInSection;
+        RVO = rvo;
     }
 
     public readonly PEStreamSectionData? StreamSectionData;
@@ -23,10 +23,4 @@ public readonly struct PEImportHintNameLink : IRVALink<PEImportHintName>
 
     /// <inheritdoc />
     public override string ToString() => this.ToDisplayText();
-    
-    /// <summary>
-    /// Resolves this link to a PE Import Hint Name.
-    /// </summary>
-    /// <returns>The PE Import Hint Name resolved.</returns>
-    public PEImportHintName Resolve() => StreamSectionData?.ReadHintName(RVO) ?? default;
 }

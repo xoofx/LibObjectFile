@@ -144,7 +144,8 @@ public sealed class ElfSegment : ElfObject
 
     protected override bool PrintMembers(StringBuilder builder)
     {
-        builder.Append($"[{Index}]");
+        builder.Append($"[{Index}] ");
+        base.PrintMembers(builder);
         return true;
     }
 }

@@ -58,7 +58,8 @@ public class DwarfDIE : DwarfContainer
 
     protected override bool PrintMembers(StringBuilder builder)
     {
-        builder.Append($"{nameof(Tag)}: {Tag}, {nameof(Attributes)}: {Attributes.Count}, {nameof(Children)}: {Children.Count}");
+        builder.Append($"{nameof(Tag)}: {Tag}, {nameof(Attributes)}: {Attributes.Count}, {nameof(Children)}: {Children.Count}, ");
+        base.PrintMembers(builder);
         return true;
     }
 
