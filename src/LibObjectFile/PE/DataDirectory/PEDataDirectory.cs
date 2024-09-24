@@ -96,7 +96,7 @@ public abstract class PEDataDirectory : PESectionData
     /// </summary>
     /// <param name="kind">The kind of PE directory entry.</param>
     /// <returns>A PE directory entry.</returns>
-    internal static PEDataDirectory Create(PEDataDirectoryKind kind)
+    internal static PEDataDirectory Create(PEDataDirectoryKind kind, bool is32Bits)
     {
         return kind switch
         {
@@ -108,8 +108,8 @@ public abstract class PEDataDirectory : PESectionData
             PEDataDirectoryKind.Debug => new PEDebugDirectory(),
             PEDataDirectoryKind.Architecture => new PEArchitectureDirectory(),
             PEDataDirectoryKind.GlobalPointer => new PEGlobalPointerDirectory(),
-            PEDataDirectoryKind.Tls => new PETlsDirectory(),
-            PEDataDirectoryKind.LoadConfig => new PELoadConfigDirectory(),
+            PEDataDirectoryKind.Tls => is32Bits ? new PETlsDirectory32() : new PETlsDirectory64(),
+            PEDataDirectoryKind.LoadConfig => is32Bits ? new PELoadConfigDirectory32() : new PELoadConfigDirectory64(),
             PEDataDirectoryKind.BoundImport => new PEBoundImportDirectory(),
             PEDataDirectoryKind.DelayImport => new PEDelayImportDirectory(),
             PEDataDirectoryKind.ImportAddressTable => new PEImportAddressTableDirectory(),

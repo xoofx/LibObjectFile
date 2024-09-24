@@ -3,84 +3,58 @@
 // See the license.txt file in the project root for more information.
 
 using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace LibObjectFile.PE;
 
-#pragma warning disable CS0649
 /// <summary>
 /// A base relocation in a Portable Executable (PE) image.
 /// </summary>
-public readonly struct PEBaseRelocation : IEquatable<PEBaseRelocation>
+public readonly record struct PEBaseRelocation(PEBaseRelocationType Type, PESectionDataLink Link)
 {
-    public const ushort MaxVirtualOffset = (1 << 12) - 1;
-    private const ushort TypeMask = unchecked((ushort)(~MaxVirtualOffset));
-    private const ushort VirtualOffsetMask = MaxVirtualOffset;
-
-    private readonly ushort _value;
-    
-    public PEBaseRelocation(PEBaseRelocationType type, ushort virtualOffset)
+    /// <summary>
+    /// Reads the address from the section data.
+    /// </summary>
+    /// <param name="file">The PE file.</param>
+    /// <returns>The address read from the section data.</returns>
+    /// <exception cref="InvalidOperationException">The section data link is not set or the type is not supported.</exception>
+    public ulong ReadAddress(PEFile file)
     {
-        if (virtualOffset > MaxVirtualOffset)
+        if (Link.SectionData is null)
         {
-            ThrowVirtualOffsetOutOfRange();
+            throw new InvalidOperationException("The section data link is not set");
         }
-        _value = (ushort)((ushort)type | virtualOffset);
-    }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal PEBaseRelocation(ushort value) => _value = value;
+        if (Type != PEBaseRelocationType.Dir64)
+        {
+            throw new InvalidOperationException($"The base relocation type {Type} not supported. Only Dir64 is supported for this method.");
+        }
+        
+        if (file.IsPE32)
+        {
+            VA32 va = default;
+            var span = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref va, 1));
 
-    /// <summary>
-    /// Gets a value indicating whether the base relocation is zero (used for padding).
-    /// </summary>
-    public bool IsZero => _value == 0;
+            int read = Link.SectionData!.ReadAt(Link.RVO, span);
+            if (read != 4)
+            {
+                throw new InvalidOperationException($"Unable to read the VA32 from the section data type: {Link.SectionData.GetType().FullName}");
+            }
 
-    /// <summary>
-    /// Gets the type of the base relocation.
-    /// </summary>
-    public PEBaseRelocationType Type => (PEBaseRelocationType)(_value & TypeMask);
+            return va;
+        }
+        else
+        {
+            VA64 va = default;
+            var span = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref va, 1));
 
-    /// <summary>
-    /// Gets the virtual offset of the base relocation relative to the offset of the associated <see cref="PEBaseRelocationBlock"/>.
-    /// </summary>
-    public ushort OffsetInBlockPart => (ushort)(_value & VirtualOffsetMask);
+            int read = Link.SectionData!.ReadAt(Link.RVO, span);
+            if (read != 8)
+            {
+                throw new InvalidOperationException($"Unable to read the VA64 from the section data type: {Link.SectionData.GetType().FullName}");
+            }
 
-    /// <inheritdoc />
-    public bool Equals(PEBaseRelocation other) => _value == other._value;
-
-    /// <inheritdoc />
-    public override bool Equals(object? obj) => obj is PEBaseRelocation other && Equals(other);
-
-    /// <inheritdoc />
-    public override int GetHashCode() => _value.GetHashCode();
-
-    /// <summary>
-    /// Compares two <see cref="PEBaseRelocation"/> objects for equality.
-    /// </summary>
-    /// <param name="left">The left value to compare.</param>
-    /// <param name="right">The right value to compare.</param>
-    /// <returns><c>true</c> if values are equal; otherwise <c>false</c>.</returns>
-    public static bool operator ==(PEBaseRelocation left, PEBaseRelocation right) => left.Equals(right);
-
-    /// <summary>
-    /// Compares two <see cref="PEBaseRelocation"/> objects for inequality.
-    /// </summary>
-    /// <param name="left">The left value to compare.</param>
-    /// <param name="right">The right value to compare.</param>
-    /// <returns><c>true</c> if values are not equal; otherwise <c>false</c>.</returns>
-    public static bool operator !=(PEBaseRelocation left, PEBaseRelocation right) => !left.Equals(right);
-
-    /// <inheritdoc />
-    public override string ToString()
-    {
-        return IsZero ? "Zero Padding" : $"{Type} {OffsetInBlockPart}";
-    }
-
-    [DoesNotReturn, MethodImpl(MethodImplOptions.NoInlining)]
-    private static void ThrowVirtualOffsetOutOfRange()
-    {
-        throw new ArgumentOutOfRangeException(nameof(OffsetInBlockPart), $"The virtual offset must be less than {MaxVirtualOffset}");
+            return va;
+        }
     }
 }

@@ -3,6 +3,7 @@
 // See the license.txt file in the project root for more information.
 
 using LibObjectFile.Diagnostics;
+using LibObjectFile.PE.Internal;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,6 +23,7 @@ public sealed class PEBaseRelocationBlock
     /// <param name="sectionLink">The section link.</param>
     public PEBaseRelocationBlock(PESectionLink sectionLink)
     {
+        ArgumentNullException.ThrowIfNull(sectionLink.Section, nameof(sectionLink));
         SectionLink = sectionLink;
     }
 
@@ -33,7 +35,7 @@ public sealed class PEBaseRelocationBlock
     /// <summary>
     /// Gets the list of relocations for this block.
     /// </summary>
-    public List<PEBaseRelocationPageBlockPart> Parts { get; } = new();
+    public List<PEBaseRelocation> Relocations { get; } = new();
 
     /// <summary>
     /// Internal buffer used to read the block before transforming it into parts.
@@ -43,7 +45,7 @@ public sealed class PEBaseRelocationBlock
     /// <summary>
     /// Gets the size of this block.
     /// </summary>
-    internal uint CalculateSizeOf()
+    internal unsafe uint CalculateSizeOf()
     {
         // If we have a block buffer (when reading an image), use it directly until it is transformed into parts
         if (!BlockBuffer.IsEmpty)
@@ -51,20 +53,14 @@ public sealed class PEBaseRelocationBlock
             return (uint)BlockBuffer.Length;
         }
 
-        uint size = 0;
-        foreach (var part in Parts)
-        {
-            size += part.SizeOf;
-        }
-
-        return size;
+        return (uint)(Relocations.Count * sizeof(ushort));
     }
 
     internal void ReadAndBind(PEImageReader reader)
     {
         var buffer = BlockBuffer;
 
-        var relocSpan = MemoryMarshal.Cast<byte, PEBaseRelocation>(buffer.Span);
+        var relocSpan = MemoryMarshal.Cast<byte, RawImageBaseRelocation>(buffer.Span);
 
         // Remove padding zeros at the end of the block
         if (relocSpan.Length > 0 && relocSpan[^1].IsZero)
@@ -72,10 +68,8 @@ public sealed class PEBaseRelocationBlock
             relocSpan = relocSpan.Slice(0, relocSpan.Length - 1);
         }
 
-        PEBaseRelocationPageBlockPart? currentBlockPart = null;
+        var section = SectionLink.Section!;
         var blockBaseAddress = SectionLink.RVA();
-
-        var peFile = reader.File;
 
         // Iterate on all relocations
         foreach (var relocation in relocSpan)
@@ -88,30 +82,15 @@ public sealed class PEBaseRelocationBlock
             var va = blockBaseAddress + relocation.OffsetInBlockPart;
 
             // Find the section data containing the virtual address
-            if (!peFile.TryFindContainerByRVA(va, out var vObj))
+            if (!section.TryFindSectionData(va, out var sectionData))
             {
                 reader.Diagnostics.Error(DiagnosticId.PE_ERR_BaseRelocationDirectoryInvalidVirtualAddress, $"Unable to find the section data containing the virtual address 0x{va:X4}");
                 continue;
             }
 
-            var sectionData = vObj as PESectionData;
-            if (sectionData is null)
-            {
-                reader.Diagnostics.Error(DiagnosticId.PE_ERR_BaseRelocationDirectoryInvalidVirtualAddress, $"The section data containing the virtual address 0x{va:X4} is not a section data");
-                continue;
-            }
-
             var offsetInSectionData = va - sectionData.RVA;
-
-            // Create a new block part if the section data is different, or it is the first relocation
-            if (currentBlockPart is null || currentBlockPart.SectionDataLink.SectionData != sectionData)
-            {
-                currentBlockPart = new PEBaseRelocationPageBlockPart(new(sectionData, offsetInSectionData));
-                Parts.Add(currentBlockPart);
-            }
-
-            var newRelocation = new PEBaseRelocation(relocation.Type, (ushort)(offsetInSectionData - currentBlockPart.SectionDataLink.RVO));
-            currentBlockPart.Relocations.Add(newRelocation);
+            var newRelocation = new PEBaseRelocation(relocation.Type, new(sectionData, offsetInSectionData));
+            Relocations.Add(newRelocation);
         }
 
         // Clear the buffer, as we don't need it anymore
@@ -120,6 +99,6 @@ public sealed class PEBaseRelocationBlock
 
     public override string ToString()
     {
-        return $"{nameof(PEBaseRelocationBlock)}, Section = {SectionLink.Section?.Name}, RVA = {SectionLink.RVA()}, Size = {CalculateSizeOf()}, Parts[{Parts.Count}]";
+        return $"{nameof(PEBaseRelocationBlock)}, Section = {SectionLink.Section?.Name}, RVA = {SectionLink.RVA()}, Size = {CalculateSizeOf()}, Relocations[{Relocations.Count}]";
     }
 }

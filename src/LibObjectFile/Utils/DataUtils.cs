@@ -1,69 +1,32 @@
 ﻿// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
-using System.Runtime.InteropServices;
+
 using System;
 
 namespace LibObjectFile.Utils;
 
 internal static class DataUtils
 {
-    public static unsafe int ReadAt<TData32, TData64>(bool is32Bits, ref TData32 data32, ref TData64 data64, uint offset, Span<byte> destination)
-        where TData32 : unmanaged
-        where TData64 : unmanaged
+    public static int ReadAt(ReadOnlySpan<byte> source, uint offset, Span<byte> destination)
     {
-        if (is32Bits)
-        {
-            var endOffset = offset + destination.Length;
-            if (endOffset > sizeof(TData32))
-            {
-                return 0;
-            }
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(offset, (uint)source.Length);
 
-            var span = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref data32, 1));
-            span.Slice((int)offset, (int)destination.Length).CopyTo(destination);
-        }
-        else
-        {
-            var endOffset = offset + destination.Length;
-            if (endOffset > sizeof(TData64))
-            {
-                return 0;
-            }
+        var lengthToCopy = Math.Min(source.Length - (int)offset, destination.Length);
+        source.Slice((int)offset, lengthToCopy).CopyTo(destination);
 
-            var span = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref data64, 1));
-            span.Slice((int)offset, (int)destination.Length).CopyTo(destination);
-        }
-
-        return destination.Length;
+        return lengthToCopy;
     }
 
-
-    public static unsafe void WriteAt<TData32, TData64>(bool is32Bits, ref TData32 data32, ref TData64 data64, uint offset, ReadOnlySpan<byte> source)
-        where TData32 : unmanaged
-        where TData64 : unmanaged
+    public static unsafe void WriteAt(Span<byte> destination, uint offset, ReadOnlySpan<byte> source)
     {
-        if (is32Bits)
-        {
-            var endOffset = offset + source.Length;
-            if (endOffset > sizeof(TData32))
-            {
-                throw new ArgumentOutOfRangeException(nameof(source), "Source length is too big");
-            }
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(offset, (uint)destination.Length);
 
-            var span = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref data32, 1));
-            source.CopyTo(span.Slice((int)offset, (int)source.Length));
-        }
-        else
+        if (source.Length > (destination.Length - (int)offset))
         {
-            var endOffset = offset + source.Length;
-            if (endOffset > sizeof(TData64))
-            {
-                throw new ArgumentOutOfRangeException(nameof(source), "Source length is too big");
-            }
-
-            var span = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref data64, 1));
-            source.CopyTo(span.Slice((int)offset, (int)source.Length));
+            throw new ArgumentOutOfRangeException(nameof(source), $"The source buffer is too large to fit at the offset {offset} in the destination buffer");
         }
+
+        source.CopyTo(destination.Slice((int)offset, source.Length));
     }
 }

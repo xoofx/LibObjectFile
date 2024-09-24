@@ -152,7 +152,7 @@ public static class PEPrinter
         writer.WriteLine("Sections");
         foreach (var section in file.Sections)
         {
-            writer.WriteLine($" {section.Name,8} {PEDescribe(section)}");
+            writer.WriteLine($" {section.Name,8} {PEDescribe(section)}, Characteristics = 0x{(uint)section.Characteristics:X8} ({section.Characteristics})");
             writer.WriteLine();
             foreach (var data in section.Content)
             {
@@ -217,14 +217,20 @@ public static class PEPrinter
             case PEImportDirectory peImportDirectory:
                 Print(file, peImportDirectory, writer);
                 break;
-            case PELoadConfigDirectory peLoadConfigDirectory:
+            case PELoadConfigDirectory32 peLoadConfigDirectory:
+                Print(file, peLoadConfigDirectory, writer);
+                break;
+            case PELoadConfigDirectory64 peLoadConfigDirectory:
                 Print(file, peLoadConfigDirectory, writer);
                 break;
             case PEResourceDirectory peResourceDirectory:
                 Print(file, peResourceDirectory, writer);
                 break;
-            case PETlsDirectory peTlsDirectory:
-                Print(file, peTlsDirectory, writer);
+            case PETlsDirectory32 peTlsDirectory32:
+                Print(file, peTlsDirectory32, writer);
+                break;
+            case PETlsDirectory64 peTlsDirectory64:
+                Print(file, peTlsDirectory64, writer);
                 break;
             case PEDataDirectory peDataDirectory:
                 Print(file, peDataDirectory, writer);
@@ -268,21 +274,23 @@ public static class PEPrinter
         ArgumentNullException.ThrowIfNull(data);
         ArgumentNullException.ThrowIfNull(writer);
 
-        foreach (var entry in data.Blocks)
+        foreach (var block in data.Blocks)
         {
-            var pageRVA = entry.SectionLink.RVA();
-            writer.WriteLine($"            Block {pageRVA} Parts[{entry.Parts.Count}]");
+            var pageRVA = block.SectionLink.RVA();
+            writer.WriteLine($"            Block {pageRVA} Relocations[{block.Relocations.Count}]");
 
-            foreach (var part in entry.Parts)
+            foreach (var reloc in block.Relocations)
             {
-                writer.WriteLine($"              {PEDescribe(part.SectionDataLink.Container)} Relocs[{part.Relocations.Count}]");
+                var relocRVA = reloc.Link.RVA();
+                var offsetInPage = relocRVA - pageRVA;
 
-                foreach (var reloc in part.Relocations)
+                if (reloc.Type == PEBaseRelocationType.Dir64)
                 {
-                    var relocRVA = part.GetRVA(reloc);
-                    var offsetInPage = relocRVA - pageRVA;
-
-                    writer.WriteLine($"                {reloc.Type,6} OffsetFromSectionData = 0x{reloc.OffsetInBlockPart:X4}, OffsetFromBlock = 0x{offsetInPage:X4}, RVA = {relocRVA}");
+                    writer.WriteLine($"                {reloc.Type,6} Offset = 0x{offsetInPage:X4}, RVA = {relocRVA} (0x{reloc.ReadAddress(file):X16}), SectionData = {{ {PEDescribe(reloc.Link.SectionData)} }}");
+                }
+                else
+                {
+                    writer.WriteLine($"                {reloc.Type,6} Offset = 0x{offsetInPage:X4}, RVA = {relocRVA}, SectionData = {{ {PEDescribe(reloc.Link.SectionData)} }}");
                 }
             }
         }
@@ -386,125 +394,129 @@ public static class PEPrinter
 
     }
 
-    private static void Print(PEFile file, PELoadConfigDirectory data, TextWriter writer)
+    private static void Print(PEFile file, PELoadConfigDirectory32 data, TextWriter writer)
     {
         ArgumentNullException.ThrowIfNull(file);
         ArgumentNullException.ThrowIfNull(data);
         ArgumentNullException.ThrowIfNull(writer);
 
         const int indent = -32;
-        if (data.Is32Bits)
-        {
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.Size),indent} = 0x{data.LoadConfigDirectory32.Size:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.TimeDateStamp),indent} = 0x{data.LoadConfigDirectory32.TimeDateStamp:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.MajorVersion),indent} = {data.LoadConfigDirectory32.MajorVersion}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.MinorVersion),indent} = {data.LoadConfigDirectory32.MinorVersion}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.GlobalFlagsClear),indent} = 0x{data.LoadConfigDirectory32.GlobalFlagsClear:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.GlobalFlagsSet),indent} = 0x{data.LoadConfigDirectory32.GlobalFlagsSet:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.CriticalSectionDefaultTimeout),indent} = 0x{data.LoadConfigDirectory32.CriticalSectionDefaultTimeout:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.DeCommitFreeBlockThreshold),indent} = 0x{data.LoadConfigDirectory32.DeCommitFreeBlockThreshold:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.DeCommitTotalFreeThreshold),indent} = 0x{data.LoadConfigDirectory32.DeCommitTotalFreeThreshold:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.LockPrefixTable),indent} = 0x{data.LoadConfigDirectory32.LockPrefixTable}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.MaximumAllocationSize),indent} = 0x{data.LoadConfigDirectory32.MaximumAllocationSize:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.VirtualMemoryThreshold),indent} = 0x{data.LoadConfigDirectory32.VirtualMemoryThreshold:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.ProcessAffinityMask),indent} = 0x{data.LoadConfigDirectory32.ProcessAffinityMask:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.ProcessHeapFlags),indent} = 0x{data.LoadConfigDirectory32.ProcessHeapFlags:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.CSDVersion),indent} = {data.LoadConfigDirectory32.CSDVersion}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.DependentLoadFlags),indent} = 0x{data.LoadConfigDirectory32.DependentLoadFlags:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.EditList),indent} = {data.LoadConfigDirectory32.EditList}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.SecurityCookie),indent} = {data.LoadConfigDirectory32.SecurityCookie}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.SEHandlerTable),indent} = {data.LoadConfigDirectory32.SEHandlerTable}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.SEHandlerCount),indent} = 0x{data.LoadConfigDirectory32.SEHandlerCount:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.GuardCFCheckFunctionPointer),indent} = {data.LoadConfigDirectory32.GuardCFCheckFunctionPointer}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.GuardCFDispatchFunctionPointer),indent} = {data.LoadConfigDirectory32.GuardCFDispatchFunctionPointer}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.GuardCFFunctionTable),indent} = {data.LoadConfigDirectory32.GuardCFFunctionTable}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.GuardCFFunctionCount),indent} = 0x{data.LoadConfigDirectory32.GuardCFFunctionCount:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.GuardFlags),indent} = {data.LoadConfigDirectory32.GuardFlags}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.TableSizeShift),indent} = 0x{data.LoadConfigDirectory32.TableSizeShift:X}");
-            writer.WriteLine($"            {$"{nameof(PELoadConfigDirectory32.CodeIntegrity)}.{nameof(PELoadConfigCodeIntegrity.Flags)}",indent} = 0x{data.LoadConfigDirectory32.CodeIntegrity.Flags:X}");
-            writer.WriteLine($"            {$"{nameof(PELoadConfigDirectory32.CodeIntegrity)}.{nameof(PELoadConfigCodeIntegrity.Catalog)}",indent} = 0x{data.LoadConfigDirectory32.CodeIntegrity.Catalog:X}");
-            writer.WriteLine($"            {$"{nameof(PELoadConfigDirectory32.CodeIntegrity)}.{nameof(PELoadConfigCodeIntegrity.CatalogOffset)}",indent} = 0x{data.LoadConfigDirectory32.CodeIntegrity.CatalogOffset:X}");
-            writer.WriteLine($"            {$"{nameof(PELoadConfigDirectory32.CodeIntegrity)}.{nameof(PELoadConfigCodeIntegrity.Reserved)}",indent} = 0x{data.LoadConfigDirectory32.CodeIntegrity.Reserved:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.GuardAddressTakenIatEntryTable),indent} = {data.LoadConfigDirectory32.GuardAddressTakenIatEntryTable}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.GuardAddressTakenIatEntryCount),indent} = 0x{data.LoadConfigDirectory32.GuardAddressTakenIatEntryCount:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.GuardLongJumpTargetTable),indent} = {data.LoadConfigDirectory32.GuardLongJumpTargetTable}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.GuardLongJumpTargetCount),indent} = 0x{data.LoadConfigDirectory32.GuardLongJumpTargetCount:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.DynamicValueRelocTable),indent} = {data.LoadConfigDirectory32.DynamicValueRelocTable}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.CHPEMetadataPointer),indent} = {data.LoadConfigDirectory32.CHPEMetadataPointer}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.GuardRFFailureRoutine),indent} = {data.LoadConfigDirectory32.GuardRFFailureRoutine}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.GuardRFFailureRoutineFunctionPointer),indent} = {data.LoadConfigDirectory32.GuardRFFailureRoutineFunctionPointer}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.DynamicValueRelocTableOffset),indent} = 0x{data.LoadConfigDirectory32.DynamicValueRelocTableOffset:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.DynamicValueRelocTableSection),indent} = {data.LoadConfigDirectory32.DynamicValueRelocTableSection}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.Reserved2),indent} = {data.LoadConfigDirectory32.Reserved2}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.GuardRFVerifyStackPointerFunctionPointer),indent} = {data.LoadConfigDirectory32.GuardRFVerifyStackPointerFunctionPointer}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.HotPatchTableOffset),indent} = 0x{data.LoadConfigDirectory32.HotPatchTableOffset:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.Reserved3),indent} = 0x{data.LoadConfigDirectory32.Reserved3:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.EnclaveConfigurationPointer),indent} = {data.LoadConfigDirectory32.EnclaveConfigurationPointer}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.VolatileMetadataPointer),indent} = {data.LoadConfigDirectory32.VolatileMetadataPointer}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.GuardEHContinuationTable),indent} = {data.LoadConfigDirectory32.GuardEHContinuationTable}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.GuardEHContinuationCount),indent} = 0x{data.LoadConfigDirectory32.GuardEHContinuationCount}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.GuardXFGCheckFunctionPointer),indent} = {data.LoadConfigDirectory32.GuardXFGCheckFunctionPointer}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.GuardXFGDispatchFunctionPointer),indent} = {data.LoadConfigDirectory32.GuardXFGDispatchFunctionPointer}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.GuardXFGTableDispatchFunctionPointer),indent} = {data.LoadConfigDirectory32.GuardXFGTableDispatchFunctionPointer}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.CastGuardOsDeterminedFailureMode),indent} = {data.LoadConfigDirectory32.CastGuardOsDeterminedFailureMode}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory32.GuardMemcpyFunctionPointer),indent} = {data.LoadConfigDirectory32.GuardMemcpyFunctionPointer}");
-        }
-        else
-        {
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.Size),indent} = 0x{data.LoadConfigDirectory64.Size:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.TimeDateStamp),indent} = 0x{data.LoadConfigDirectory64.TimeDateStamp:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.MajorVersion),indent} = {data.LoadConfigDirectory64.MajorVersion}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.MinorVersion),indent} = {data.LoadConfigDirectory64.MinorVersion}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.GlobalFlagsClear),indent} = 0x{data.LoadConfigDirectory64.GlobalFlagsClear:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.GlobalFlagsSet),indent} = 0x{data.LoadConfigDirectory64.GlobalFlagsSet:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.CriticalSectionDefaultTimeout),indent} = 0x{data.LoadConfigDirectory64.CriticalSectionDefaultTimeout:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.DeCommitFreeBlockThreshold),indent} = 0x{data.LoadConfigDirectory64.DeCommitFreeBlockThreshold:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.DeCommitTotalFreeThreshold),indent} = 0x{data.LoadConfigDirectory64.DeCommitTotalFreeThreshold:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.LockPrefixTable),indent} = 0x{data.LoadConfigDirectory64.LockPrefixTable}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.MaximumAllocationSize),indent} = 0x{data.LoadConfigDirectory64.MaximumAllocationSize:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.VirtualMemoryThreshold),indent} = 0x{data.LoadConfigDirectory64.VirtualMemoryThreshold:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.ProcessAffinityMask),indent} = 0x{data.LoadConfigDirectory64.ProcessAffinityMask:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.ProcessHeapFlags),indent} = 0x{data.LoadConfigDirectory64.ProcessHeapFlags:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.CSDVersion),indent} = {data.LoadConfigDirectory64.CSDVersion}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.DependentLoadFlags),indent} = 0x{data.LoadConfigDirectory64.DependentLoadFlags:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.EditList),indent} = {data.LoadConfigDirectory64.EditList}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.SecurityCookie),indent} = {data.LoadConfigDirectory64.SecurityCookie}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.SEHandlerTable),indent} = {data.LoadConfigDirectory64.SEHandlerTable}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.SEHandlerCount),indent} = 0x{data.LoadConfigDirectory64.SEHandlerCount:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.GuardCFCheckFunctionPointer),indent} = {data.LoadConfigDirectory64.GuardCFCheckFunctionPointer}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.GuardCFDispatchFunctionPointer),indent} = {data.LoadConfigDirectory64.GuardCFDispatchFunctionPointer}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.GuardCFFunctionTable),indent} = {data.LoadConfigDirectory64.GuardCFFunctionTable}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.GuardCFFunctionCount),indent} = 0x{data.LoadConfigDirectory64.GuardCFFunctionCount:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.GuardFlags),indent} = {data.LoadConfigDirectory64.GuardFlags}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.TableSizeShift),indent} = 0x{data.LoadConfigDirectory64.TableSizeShift:X}");
-            writer.WriteLine($"            {$"{nameof(PELoadConfigDirectory64.CodeIntegrity)}.{nameof(PELoadConfigCodeIntegrity.Flags)}",indent} = 0x{data.LoadConfigDirectory64.CodeIntegrity.Flags:X}");
-            writer.WriteLine($"            {$"{nameof(PELoadConfigDirectory64.CodeIntegrity)}.{nameof(PELoadConfigCodeIntegrity.Catalog)}",indent} = 0x{data.LoadConfigDirectory64.CodeIntegrity.Catalog:X}");
-            writer.WriteLine($"            {$"{nameof(PELoadConfigDirectory64.CodeIntegrity)}.{nameof(PELoadConfigCodeIntegrity.CatalogOffset)}",indent} = 0x{data.LoadConfigDirectory64.CodeIntegrity.CatalogOffset:X}");
-            writer.WriteLine($"            {$"{nameof(PELoadConfigDirectory64.CodeIntegrity)}.{nameof(PELoadConfigCodeIntegrity.Reserved)}",indent} = 0x{data.LoadConfigDirectory64.CodeIntegrity.Reserved:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.GuardAddressTakenIatEntryTable),indent} = {data.LoadConfigDirectory64.GuardAddressTakenIatEntryTable}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.GuardAddressTakenIatEntryCount),indent} = 0x{data.LoadConfigDirectory64.GuardAddressTakenIatEntryCount:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.GuardLongJumpTargetTable),indent} = {data.LoadConfigDirectory64.GuardLongJumpTargetTable}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.GuardLongJumpTargetCount),indent} = 0x{data.LoadConfigDirectory64.GuardLongJumpTargetCount:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.DynamicValueRelocTable),indent} = {data.LoadConfigDirectory64.DynamicValueRelocTable}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.CHPEMetadataPointer),indent} = {data.LoadConfigDirectory64.CHPEMetadataPointer}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.GuardRFFailureRoutine),indent} = {data.LoadConfigDirectory64.GuardRFFailureRoutine}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.GuardRFFailureRoutineFunctionPointer),indent} = {data.LoadConfigDirectory64.GuardRFFailureRoutineFunctionPointer}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.DynamicValueRelocTableOffset),indent} = 0x{data.LoadConfigDirectory64.DynamicValueRelocTableOffset:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.DynamicValueRelocTableSection),indent} = {data.LoadConfigDirectory64.DynamicValueRelocTableSection}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.Reserved2),indent} = {data.LoadConfigDirectory64.Reserved2}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.GuardRFVerifyStackPointerFunctionPointer),indent} = {data.LoadConfigDirectory64.GuardRFVerifyStackPointerFunctionPointer}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.HotPatchTableOffset),indent} = 0x{data.LoadConfigDirectory64.HotPatchTableOffset:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.Reserved3),indent} = 0x{data.LoadConfigDirectory64.Reserved3:X}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.EnclaveConfigurationPointer),indent} = {data.LoadConfigDirectory64.EnclaveConfigurationPointer}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.VolatileMetadataPointer),indent} = {data.LoadConfigDirectory64.VolatileMetadataPointer}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.GuardEHContinuationTable),indent} = {data.LoadConfigDirectory64.GuardEHContinuationTable}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.GuardEHContinuationCount),indent} = 0x{data.LoadConfigDirectory64.GuardEHContinuationCount}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.GuardXFGCheckFunctionPointer),indent} = {data.LoadConfigDirectory64.GuardXFGCheckFunctionPointer}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.GuardXFGDispatchFunctionPointer),indent} = {data.LoadConfigDirectory64.GuardXFGDispatchFunctionPointer}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.GuardXFGTableDispatchFunctionPointer),indent} = {data.LoadConfigDirectory64.GuardXFGTableDispatchFunctionPointer}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.CastGuardOsDeterminedFailureMode),indent} = {data.LoadConfigDirectory64.CastGuardOsDeterminedFailureMode}");
-            writer.WriteLine($"            {nameof(PELoadConfigDirectory64.GuardMemcpyFunctionPointer),indent} = {data.LoadConfigDirectory64.GuardMemcpyFunctionPointer}");
-        }
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.Size),indent} = 0x{data.Data.Size:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.TimeDateStamp),indent} = 0x{data.Data.TimeDateStamp:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.MajorVersion),indent} = {data.Data.MajorVersion}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.MinorVersion),indent} = {data.Data.MinorVersion}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.GlobalFlagsClear),indent} = 0x{data.Data.GlobalFlagsClear:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.GlobalFlagsSet),indent} = 0x{data.Data.GlobalFlagsSet:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.CriticalSectionDefaultTimeout),indent} = 0x{data.Data.CriticalSectionDefaultTimeout:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.DeCommitFreeBlockThreshold),indent} = 0x{data.Data.DeCommitFreeBlockThreshold:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.DeCommitTotalFreeThreshold),indent} = 0x{data.Data.DeCommitTotalFreeThreshold:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.LockPrefixTable),indent} = 0x{data.Data.LockPrefixTable}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.MaximumAllocationSize),indent} = 0x{data.Data.MaximumAllocationSize:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.VirtualMemoryThreshold),indent} = 0x{data.Data.VirtualMemoryThreshold:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.ProcessAffinityMask),indent} = 0x{data.Data.ProcessAffinityMask:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.ProcessHeapFlags),indent} = 0x{data.Data.ProcessHeapFlags:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.CSDVersion),indent} = {data.Data.CSDVersion}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.DependentLoadFlags),indent} = 0x{data.Data.DependentLoadFlags:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.EditList),indent} = {data.Data.EditList}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.SecurityCookie),indent} = {data.Data.SecurityCookie}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.SEHandlerTable),indent} = {data.Data.SEHandlerTable}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.SEHandlerCount),indent} = 0x{data.Data.SEHandlerCount:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.GuardCFCheckFunctionPointer),indent} = {data.Data.GuardCFCheckFunctionPointer}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.GuardCFDispatchFunctionPointer),indent} = {data.Data.GuardCFDispatchFunctionPointer}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.GuardCFFunctionTable),indent} = {data.Data.GuardCFFunctionTable}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.GuardCFFunctionCount),indent} = 0x{data.Data.GuardCFFunctionCount:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.GuardFlags),indent} = {data.Data.GuardFlags}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.TableSizeShift),indent} = 0x{data.Data.TableSizeShift:X}");
+        writer.WriteLine($"            {$"{nameof(PELoadConfigDirectoryData32.CodeIntegrity)}.{nameof(PELoadConfigCodeIntegrity.Flags)}",indent} = 0x{data.Data.CodeIntegrity.Flags:X}");
+        writer.WriteLine($"            {$"{nameof(PELoadConfigDirectoryData32.CodeIntegrity)}.{nameof(PELoadConfigCodeIntegrity.Catalog)}",indent} = 0x{data.Data.CodeIntegrity.Catalog:X}");
+        writer.WriteLine($"            {$"{nameof(PELoadConfigDirectoryData32.CodeIntegrity)}.{nameof(PELoadConfigCodeIntegrity.CatalogOffset)}",indent} = 0x{data.Data.CodeIntegrity.CatalogOffset:X}");
+        writer.WriteLine($"            {$"{nameof(PELoadConfigDirectoryData32.CodeIntegrity)}.{nameof(PELoadConfigCodeIntegrity.Reserved)}",indent} = 0x{data.Data.CodeIntegrity.Reserved:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.GuardAddressTakenIatEntryTable),indent} = {data.Data.GuardAddressTakenIatEntryTable}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.GuardAddressTakenIatEntryCount),indent} = 0x{data.Data.GuardAddressTakenIatEntryCount:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.GuardLongJumpTargetTable),indent} = {data.Data.GuardLongJumpTargetTable}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.GuardLongJumpTargetCount),indent} = 0x{data.Data.GuardLongJumpTargetCount:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.DynamicValueRelocTable),indent} = {data.Data.DynamicValueRelocTable}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.CHPEMetadataPointer),indent} = {data.Data.CHPEMetadataPointer}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.GuardRFFailureRoutine),indent} = {data.Data.GuardRFFailureRoutine}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.GuardRFFailureRoutineFunctionPointer),indent} = {data.Data.GuardRFFailureRoutineFunctionPointer}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.DynamicValueRelocTableOffset),indent} = 0x{data.Data.DynamicValueRelocTableOffset:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.DynamicValueRelocTableSection),indent} = {data.Data.DynamicValueRelocTableSection}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.Reserved2),indent} = {data.Data.Reserved2}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.GuardRFVerifyStackPointerFunctionPointer),indent} = {data.Data.GuardRFVerifyStackPointerFunctionPointer}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.HotPatchTableOffset),indent} = 0x{data.Data.HotPatchTableOffset:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.Reserved3),indent} = 0x{data.Data.Reserved3:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.EnclaveConfigurationPointer),indent} = {data.Data.EnclaveConfigurationPointer}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.VolatileMetadataPointer),indent} = {data.Data.VolatileMetadataPointer}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.GuardEHContinuationTable),indent} = {data.Data.GuardEHContinuationTable}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.GuardEHContinuationCount),indent} = 0x{data.Data.GuardEHContinuationCount}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.GuardXFGCheckFunctionPointer),indent} = {data.Data.GuardXFGCheckFunctionPointer}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.GuardXFGDispatchFunctionPointer),indent} = {data.Data.GuardXFGDispatchFunctionPointer}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.GuardXFGTableDispatchFunctionPointer),indent} = {data.Data.GuardXFGTableDispatchFunctionPointer}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.CastGuardOsDeterminedFailureMode),indent} = {data.Data.CastGuardOsDeterminedFailureMode}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData32.GuardMemcpyFunctionPointer),indent} = {data.Data.GuardMemcpyFunctionPointer}");
+    }
+
+    private static void Print(PEFile file, PELoadConfigDirectory64 data, TextWriter writer)
+    {
+        ArgumentNullException.ThrowIfNull(file);
+        ArgumentNullException.ThrowIfNull(data);
+        ArgumentNullException.ThrowIfNull(writer);
+
+        const int indent = -32;
+
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.Size),indent} = 0x{data.Data.Size:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.TimeDateStamp),indent} = 0x{data.Data.TimeDateStamp:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.MajorVersion),indent} = {data.Data.MajorVersion}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.MinorVersion),indent} = {data.Data.MinorVersion}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.GlobalFlagsClear),indent} = 0x{data.Data.GlobalFlagsClear:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.GlobalFlagsSet),indent} = 0x{data.Data.GlobalFlagsSet:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.CriticalSectionDefaultTimeout),indent} = 0x{data.Data.CriticalSectionDefaultTimeout:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.DeCommitFreeBlockThreshold),indent} = 0x{data.Data.DeCommitFreeBlockThreshold:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.DeCommitTotalFreeThreshold),indent} = 0x{data.Data.DeCommitTotalFreeThreshold:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.LockPrefixTable),indent} = 0x{data.Data.LockPrefixTable}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.MaximumAllocationSize),indent} = 0x{data.Data.MaximumAllocationSize:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.VirtualMemoryThreshold),indent} = 0x{data.Data.VirtualMemoryThreshold:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.ProcessAffinityMask),indent} = 0x{data.Data.ProcessAffinityMask:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.ProcessHeapFlags),indent} = 0x{data.Data.ProcessHeapFlags:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.CSDVersion),indent} = {data.Data.CSDVersion}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.DependentLoadFlags),indent} = 0x{data.Data.DependentLoadFlags:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.EditList),indent} = {data.Data.EditList}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.SecurityCookie),indent} = {data.Data.SecurityCookie}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.SEHandlerTable),indent} = {data.Data.SEHandlerTable}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.SEHandlerCount),indent} = 0x{data.Data.SEHandlerCount:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.GuardCFCheckFunctionPointer),indent} = {data.Data.GuardCFCheckFunctionPointer}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.GuardCFDispatchFunctionPointer),indent} = {data.Data.GuardCFDispatchFunctionPointer}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.GuardCFFunctionTable),indent} = {data.Data.GuardCFFunctionTable}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.GuardCFFunctionCount),indent} = 0x{data.Data.GuardCFFunctionCount:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.GuardFlags),indent} = {data.Data.GuardFlags}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.TableSizeShift),indent} = 0x{data.Data.TableSizeShift:X}");
+        writer.WriteLine($"            {$"{nameof(PELoadConfigDirectoryData64.CodeIntegrity)}.{nameof(PELoadConfigCodeIntegrity.Flags)}",indent} = 0x{data.Data.CodeIntegrity.Flags:X}");
+        writer.WriteLine($"            {$"{nameof(PELoadConfigDirectoryData64.CodeIntegrity)}.{nameof(PELoadConfigCodeIntegrity.Catalog)}",indent} = 0x{data.Data.CodeIntegrity.Catalog:X}");
+        writer.WriteLine($"            {$"{nameof(PELoadConfigDirectoryData64.CodeIntegrity)}.{nameof(PELoadConfigCodeIntegrity.CatalogOffset)}",indent} = 0x{data.Data.CodeIntegrity.CatalogOffset:X}");
+        writer.WriteLine($"            {$"{nameof(PELoadConfigDirectoryData64.CodeIntegrity)}.{nameof(PELoadConfigCodeIntegrity.Reserved)}",indent} = 0x{data.Data.CodeIntegrity.Reserved:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.GuardAddressTakenIatEntryTable),indent} = {data.Data.GuardAddressTakenIatEntryTable}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.GuardAddressTakenIatEntryCount),indent} = 0x{data.Data.GuardAddressTakenIatEntryCount:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.GuardLongJumpTargetTable),indent} = {data.Data.GuardLongJumpTargetTable}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.GuardLongJumpTargetCount),indent} = 0x{data.Data.GuardLongJumpTargetCount:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.DynamicValueRelocTable),indent} = {data.Data.DynamicValueRelocTable}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.CHPEMetadataPointer),indent} = {data.Data.CHPEMetadataPointer}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.GuardRFFailureRoutine),indent} = {data.Data.GuardRFFailureRoutine}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.GuardRFFailureRoutineFunctionPointer),indent} = {data.Data.GuardRFFailureRoutineFunctionPointer}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.DynamicValueRelocTableOffset),indent} = 0x{data.Data.DynamicValueRelocTableOffset:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.DynamicValueRelocTableSection),indent} = {data.Data.DynamicValueRelocTableSection}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.Reserved2),indent} = {data.Data.Reserved2}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.GuardRFVerifyStackPointerFunctionPointer),indent} = {data.Data.GuardRFVerifyStackPointerFunctionPointer}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.HotPatchTableOffset),indent} = 0x{data.Data.HotPatchTableOffset:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.Reserved3),indent} = 0x{data.Data.Reserved3:X}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.EnclaveConfigurationPointer),indent} = {data.Data.EnclaveConfigurationPointer}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.VolatileMetadataPointer),indent} = {data.Data.VolatileMetadataPointer}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.GuardEHContinuationTable),indent} = {data.Data.GuardEHContinuationTable}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.GuardEHContinuationCount),indent} = 0x{data.Data.GuardEHContinuationCount}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.GuardXFGCheckFunctionPointer),indent} = {data.Data.GuardXFGCheckFunctionPointer}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.GuardXFGDispatchFunctionPointer),indent} = {data.Data.GuardXFGDispatchFunctionPointer}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.GuardXFGTableDispatchFunctionPointer),indent} = {data.Data.GuardXFGTableDispatchFunctionPointer}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.CastGuardOsDeterminedFailureMode),indent} = {data.Data.CastGuardOsDeterminedFailureMode}");
+        writer.WriteLine($"            {nameof(PELoadConfigDirectoryData64.GuardMemcpyFunctionPointer),indent} = {data.Data.GuardMemcpyFunctionPointer}");
     }
 
     private static void Print(PEFile file, PEResourceDirectory data, TextWriter writer)
@@ -515,12 +527,18 @@ public static class PEPrinter
 
     }
 
-    private static void Print(PEFile file, PETlsDirectory data, TextWriter writer)
+    private static void Print(PEFile file, PETlsDirectory32 data, TextWriter writer)
     {
         ArgumentNullException.ThrowIfNull(file);
         ArgumentNullException.ThrowIfNull(data);
         ArgumentNullException.ThrowIfNull(writer);
+    }
 
+    private static void Print(PEFile file, PETlsDirectory64 data, TextWriter writer)
+    {
+        ArgumentNullException.ThrowIfNull(file);
+        ArgumentNullException.ThrowIfNull(data);
+        ArgumentNullException.ThrowIfNull(writer);
     }
 
     private static void Print(PEFile file, PEDataDirectory data, TextWriter writer)

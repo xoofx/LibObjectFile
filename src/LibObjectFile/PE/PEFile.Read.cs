@@ -295,7 +295,7 @@ partial class PEFile
             }
             else
             {
-                var directory = PEDataDirectory.Create((PEDataDirectoryKind)i);
+                var directory = PEDataDirectory.Create((PEDataDirectoryKind)i, IsPE32);
                 var offsetInSection = directoryEntry.RVA - peSection.RVA;
                 directory.Position = peSection.Position + offsetInSection;
 

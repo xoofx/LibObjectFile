@@ -2,8 +2,10 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using LibObjectFile.Utils;
 
 namespace LibObjectFile.PE;
 
@@ -18,4 +20,16 @@ public sealed class PEBoundImportAddressTable32() : PEBoundImportAddressTable(tr
     public override int Count => Entries.Count;
 
     internal override void SetCount(int count) => CollectionsMarshal.SetCount(Entries, count);
+
+    public override int ReadAt(uint offset, Span<byte> destination)
+    {
+        var buffer = MemoryMarshal.AsBytes(CollectionsMarshal.AsSpan(Entries));
+        return DataUtils.ReadAt(buffer, offset, destination);
+    }
+
+    public override void WriteAt(uint offset, ReadOnlySpan<byte> source)
+    {
+        var buffer = MemoryMarshal.AsBytes(CollectionsMarshal.AsSpan(Entries));
+        DataUtils.WriteAt(buffer, offset, source);
+    }
 }
