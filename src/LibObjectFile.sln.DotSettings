@@ -6,6 +6,7 @@ See the license.txt file in the project root for more information.</s:String>
 	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=DIE/@EntryIndexedValue">DIE</s:String>
 	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=GNU/@EntryIndexedValue">GNU</s:String>
 	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=LEB/@EntryIndexedValue">LEB</s:String>
+	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=RSDS/@EntryIndexedValue">RSDS</s:String>
 	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=RVA/@EntryIndexedValue">RVA</s:String>
 	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=RVO/@EntryIndexedValue">RVO</s:String>
 	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=VA/@EntryIndexedValue">VA</s:String>

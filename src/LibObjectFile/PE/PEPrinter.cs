@@ -281,16 +281,16 @@ public static class PEPrinter
 
             foreach (var reloc in block.Relocations)
             {
-                var relocRVA = reloc.Link.RVA();
+                var relocRVA = reloc.RVA();
                 var offsetInPage = relocRVA - pageRVA;
 
                 if (reloc.Type == PEBaseRelocationType.Dir64)
                 {
-                    writer.WriteLine($"                {reloc.Type,6} Offset = 0x{offsetInPage:X4}, RVA = {relocRVA} (0x{reloc.ReadAddress(file):X16}), SectionData = {{ {PEDescribe(reloc.Link.SectionData)} }}");
+                    writer.WriteLine($"                {reloc.Type,6} Offset = 0x{offsetInPage:X4}, RVA = {relocRVA} (0x{reloc.ReadAddress(file):X16}), SectionData = {{ {PEDescribe(reloc.Container)} }}");
                 }
                 else
                 {
-                    writer.WriteLine($"                {reloc.Type,6} Offset = 0x{offsetInPage:X4}, RVA = {relocRVA}, SectionData = {{ {PEDescribe(reloc.Link.SectionData)} }}");
+                    writer.WriteLine($"                {reloc.Type,6} Offset = 0x{offsetInPage:X4}, RVA = {relocRVA}, SectionData = {{ {PEDescribe(reloc.Container)} }}");
                 }
             }
         }

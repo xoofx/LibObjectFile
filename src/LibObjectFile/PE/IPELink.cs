@@ -5,14 +5,19 @@
 namespace LibObjectFile.PE;
 
 // ReSharper disable once InconsistentNaming
-public interface IRVALink
+
+
+public interface IPELink;
+
+public interface IPELink<out TObject> : IPELink where TObject: PEObjectBase
 {
-    public PEObject? Container { get; }
+    public TObject? Container { get; }
 
     public RVO RVO { get; }
 }
 
-public interface IRVALink<out TData> : IRVALink
+
+public interface IPELink<out TObject, out TData> : IPELink<TObject> where TObject : PEObjectBase
 {
     public TData Resolve();
 }

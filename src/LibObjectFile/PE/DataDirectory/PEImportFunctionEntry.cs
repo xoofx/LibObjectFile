@@ -20,7 +20,7 @@ public readonly struct PEImportFunctionEntry
     /// <param name="name">The name of the import.</param>
     public PEImportFunctionEntry(PEAsciiStringLink name)
     {
-        _peSectionData = name.StreamSectionData;
+        _peSectionData = name.Container;
         _offset = name.RVO;
     }
 

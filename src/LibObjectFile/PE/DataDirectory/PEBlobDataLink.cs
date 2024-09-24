@@ -6,12 +6,8 @@ using System.Diagnostics;
 
 namespace LibObjectFile.PE;
 
-/// <summary>
-/// A link to a module handle.
-/// </summary>
 [DebuggerDisplay("{ToString(),nq}")]
-public readonly record struct PEModuleHandleLink(PEStreamSectionData? Container, RVO RVO) : IPELink<PEStreamSectionData>
+public readonly record struct PEBlobDataLink(PEObjectBase? Container, RVO RVO, uint Size) : IPELink<PEObjectBase>
 {
-    /// <inheritdoc />
-    public override string ToString() => this.ToDisplayTextWithRVA();
+    public override string ToString() => $"{this.ToDisplayText()}, Size = 0x{Size:X}";
 }

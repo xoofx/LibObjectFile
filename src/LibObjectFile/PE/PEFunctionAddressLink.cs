@@ -8,19 +8,7 @@ namespace LibObjectFile.PE;
 
 #pragma warning disable CS0649
 [DebuggerDisplay("{ToString(),nq}")]
-public struct PEFunctionAddressLink : IRVALink
+public readonly record struct PEFunctionAddressLink(PEObject? Container, RVO RVO) : IPELink<PEObject>
 {
-    public PEFunctionAddressLink(PEObject? container, RVO rvo)
-    {
-        Container = container;
-        RVO = rvo;
-    }
-
-    public PEObject? Container { get; }
-
-    public RVO RVO { get; }
-
-    public RVA RVA => Container is not null ? Container.RVA + RVO : 0;
-
     public override string ToString() => Container is not null ? $"{Container}, Offset = {RVO}" : $"<empty>";
 }

@@ -23,7 +23,7 @@ public sealed class PEBaseRelocationBlock
     /// <param name="sectionLink">The section link.</param>
     public PEBaseRelocationBlock(PESectionLink sectionLink)
     {
-        ArgumentNullException.ThrowIfNull(sectionLink.Section, nameof(sectionLink));
+        ArgumentNullException.ThrowIfNull(sectionLink.Container, nameof(sectionLink));
         SectionLink = sectionLink;
     }
 
@@ -68,7 +68,7 @@ public sealed class PEBaseRelocationBlock
             relocSpan = relocSpan.Slice(0, relocSpan.Length - 1);
         }
 
-        var section = SectionLink.Section!;
+        var section = SectionLink.Container!;
         var blockBaseAddress = SectionLink.RVA();
 
         // Iterate on all relocations
@@ -89,7 +89,7 @@ public sealed class PEBaseRelocationBlock
             }
 
             var offsetInSectionData = va - sectionData.RVA;
-            var newRelocation = new PEBaseRelocation(relocation.Type, new(sectionData, offsetInSectionData));
+            var newRelocation = new PEBaseRelocation(relocation.Type, sectionData, offsetInSectionData);
             Relocations.Add(newRelocation);
         }
 
@@ -99,6 +99,6 @@ public sealed class PEBaseRelocationBlock
 
     public override string ToString()
     {
-        return $"{nameof(PEBaseRelocationBlock)}, Section = {SectionLink.Section?.Name}, RVA = {SectionLink.RVA()}, Size = {CalculateSizeOf()}, Relocations[{Relocations.Count}]";
+        return $"{nameof(PEBaseRelocationBlock)}, Section = {SectionLink.Container?.Name}, RVA = {SectionLink.RVA()}, Size = {CalculateSizeOf()}, Relocations[{Relocations.Count}]";
     }
 }

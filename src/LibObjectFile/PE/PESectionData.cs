@@ -16,16 +16,6 @@ public abstract class PESectionData : PEObject
     protected PESectionData(bool isContainer) : base(isContainer)
     {
     }
-    
-    public virtual int ReadAt(uint offset, Span<byte> destination)
-    {
-        throw new NotSupportedException($"The read operation is not supported for {this.GetType().FullName}");
-    }
-
-    public virtual void WriteAt(uint offset, ReadOnlySpan<byte> source)
-    {
-        throw new NotSupportedException($"The write operation is not supported for {this.GetType().FullName}");
-    }
 
     protected override void ValidateParent(ObjectElement parent)
     {

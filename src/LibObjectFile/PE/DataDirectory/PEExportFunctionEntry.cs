@@ -20,7 +20,7 @@ public readonly struct PEExportFunctionEntry
 
     public PEExportFunctionEntry(PEAsciiStringLink forwarderRVA)
     {
-        _container = forwarderRVA.StreamSectionData;
+        _container = forwarderRVA.Container;
         _offset = forwarderRVA.RVO;
         _isForwarderRVA = true;
     }

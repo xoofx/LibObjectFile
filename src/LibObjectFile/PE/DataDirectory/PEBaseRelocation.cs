@@ -3,6 +3,7 @@
 // See the license.txt file in the project root for more information.
 
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace LibObjectFile.PE;
@@ -10,7 +11,8 @@ namespace LibObjectFile.PE;
 /// <summary>
 /// A base relocation in a Portable Executable (PE) image.
 /// </summary>
-public readonly record struct PEBaseRelocation(PEBaseRelocationType Type, PESectionDataLink Link)
+[DebuggerDisplay("{ToString(),nq}")]
+public readonly record struct PEBaseRelocation(PEBaseRelocationType Type, PESectionData? Container, RVO RVO) : IPELink<PESectionData>
 {
     /// <summary>
     /// Reads the address from the section data.
@@ -20,7 +22,7 @@ public readonly record struct PEBaseRelocation(PEBaseRelocationType Type, PESect
     /// <exception cref="InvalidOperationException">The section data link is not set or the type is not supported.</exception>
     public ulong ReadAddress(PEFile file)
     {
-        if (Link.SectionData is null)
+        if (Container is null)
         {
             throw new InvalidOperationException("The section data link is not set");
         }
@@ -35,10 +37,10 @@ public readonly record struct PEBaseRelocation(PEBaseRelocationType Type, PESect
             VA32 va = default;
             var span = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref va, 1));
 
-            int read = Link.SectionData!.ReadAt(Link.RVO, span);
+            int read = Container!.ReadAt(RVO, span);
             if (read != 4)
             {
-                throw new InvalidOperationException($"Unable to read the VA32 from the section data type: {Link.SectionData.GetType().FullName}");
+                throw new InvalidOperationException($"Unable to read the VA32 from the section data type: {Container.GetType().FullName}");
             }
 
             return va;
@@ -48,13 +50,15 @@ public readonly record struct PEBaseRelocation(PEBaseRelocationType Type, PESect
             VA64 va = default;
             var span = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref va, 1));
 
-            int read = Link.SectionData!.ReadAt(Link.RVO, span);
+            int read = Container!.ReadAt(RVO, span);
             if (read != 8)
             {
-                throw new InvalidOperationException($"Unable to read the VA64 from the section data type: {Link.SectionData.GetType().FullName}");
+                throw new InvalidOperationException($"Unable to read the VA64 from the section data type: {Container.GetType().FullName}");
             }
 
             return va;
         }
     }
+
+    public override string ToString() => $"{Type} {this.ToDisplayTextWithRVA()}";
 }

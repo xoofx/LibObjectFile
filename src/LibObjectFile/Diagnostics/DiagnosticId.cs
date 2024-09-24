@@ -184,4 +184,9 @@ public enum DiagnosticId
     PE_ERR_ImportDirectoryInvalidModuleHandleRVA = 3505,
     PE_ERR_DelayImportDirectoryInvalidDllNameRVA = 3506,
     PE_ERR_DelayImportDirectoryInvalidModuleHandleRVA = 3507,
+
+    // PE Debug directory
+    PE_ERR_DebugDirectorySize = 3600,
+    PE_ERR_DebugDirectorySectionNotFound = 3601,
+    PE_ERR_DebugDirectoryContainerNotFound = 3602,
 }

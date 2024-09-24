@@ -12,6 +12,15 @@ namespace LibObjectFile.PE;
 
 public static class PEObjectExtensions
 {
+    public static bool IsNull<TRVALink>(this TRVALink link) where TRVALink : IPELink<PEObjectBase> => link.Container is null;
+
+    public static string ToDisplayText<TRVALink>(this TRVALink link) where TRVALink : IPELink<PEObjectBase> => link.Container is not null ? $"{link.Container}, Offset = {link.RVO}" : $"<empty>";
+    
+    public static RVA RVA<TRVALink>(this TRVALink link) where TRVALink : IPELink<PEObject> => link.Container is not null ? link.Container.RVA + link.RVO : 0;
+
+    public static string ToDisplayTextWithRVA<TRVALink>(this TRVALink link) where TRVALink : IPELink<PEObject> => link.Container is not null ? $"RVA = {RVA(link)}, {link.Container}, Offset = {link.RVO}" : $"<empty>";
+
+
     /// <summary>
     /// Tries to find a virtual object by its virtual address.
     /// </summary>
@@ -52,8 +61,7 @@ public static class PEObjectExtensions
         item = null;
         return false;
     }
-
-
+    
     /// <summary>
     /// Tries to find a virtual object by its virtual address.
     /// </summary>

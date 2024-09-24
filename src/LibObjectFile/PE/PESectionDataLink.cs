@@ -10,19 +10,7 @@ namespace LibObjectFile.PE;
 /// A link to a section data.
 /// </summary>
 [DebuggerDisplay("{ToString(),nq}")]
-public readonly struct PESectionDataLink : IRVALink
+public readonly record struct PESectionDataLink(PESectionData? Container, RVO RVO) : IPELink<PESectionData>
 {
-    public PESectionDataLink(PESectionData? sectionData, RVO rvo)
-    {
-        SectionData = sectionData;
-        RVO = rvo;
-    }
-
-    public PESectionData? SectionData { get; }
-
-    public PEObject? Container => SectionData;
-
-    public RVO RVO { get; }
-
-    public override string ToString() => this.ToDisplayText();
+    public override string ToString() => this.ToDisplayTextWithRVA();
 }
