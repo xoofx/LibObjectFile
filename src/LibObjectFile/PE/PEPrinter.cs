@@ -603,11 +603,11 @@ public static class PEPrinter
             var entry = data.Values[i];
             if (entry.IsForwarderRVA)
             {
-                writer.WriteLine($"[{i}] Forwarder RVA = {entry.ForwarderRVA}");
+                writer.WriteLine($"[{i}] Forwarder RVA = {entry.ForwarderRVA.RVA()} ({PELink(entry.ForwarderRVA.Container)})");
             }
             else
             {
-                writer.WriteLine($"[{i}] Exported RVA = {entry.ExportRVA}");
+                writer.WriteLine($"[{i}] Exported RVA = {entry.ExportRVA.RVA()} ({PELink(entry.ExportRVA.Container)})");
             }
         }
     }

@@ -12,6 +12,9 @@
     <None Remove="lib_a.cpp" />
     <None Remove="lib_b.cpp" />
     <None Remove="multiple_functions.cpp" />
+    <None Remove="PE\NativeConsole2Win64.exe" />
+    <None Remove="PE\NativeConsoleWin64.exe" />
+    <None Remove="PE\NativeLibraryWin64.dll" />
     <None Remove="small.cpp" />
   </ItemGroup>
 
@@ -26,6 +29,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="lib_a.cpp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PE\NativeConsole2Win64.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PE\NativeConsoleWin64.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PE\NativeLibraryWin64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="small.cpp">

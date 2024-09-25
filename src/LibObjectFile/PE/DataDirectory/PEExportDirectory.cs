@@ -124,20 +124,20 @@ public sealed class PEExportDirectory : PEDataDirectory
         var peFile = reader.File;
         var diagnostics = reader.Diagnostics;
 
-        if (!peFile.TryFindContainerByRVA(NameLink.RVA(), out var container))
+        if (!peFile.TryFindContainerByRVA((RVA)(uint)NameLink.RVO, out var container))
         {
-            diagnostics.Error(DiagnosticId.PE_ERR_ExportDirectoryInvalidName, $"Unable to find the section data for Name {NameLink.RVA()}");
+            diagnostics.Error(DiagnosticId.PE_ERR_ExportDirectoryInvalidName, $"Unable to find the section data for Name {(RVA)(uint)NameLink.RVO}");
             return;
         }
 
         var streamSectionData = container as PEStreamSectionData;
         if (streamSectionData is null)
         {
-            diagnostics.Error(DiagnosticId.PE_ERR_ExportDirectoryInvalidName, $"The section data for Name {NameLink.RVA()} is not a stream section data");
+            diagnostics.Error(DiagnosticId.PE_ERR_ExportDirectoryInvalidName, $"The section data for Name {(RVA)(uint)NameLink.RVO} is not a stream section data");
             return;
         }
 
-        NameLink = new PEAsciiStringLink(streamSectionData, NameLink.RVO);
+        NameLink = new PEAsciiStringLink(streamSectionData, NameLink.RVO - streamSectionData.RVA);
 
         if (ExportFunctionAddressTable is not null)
         {
