@@ -13,7 +13,7 @@ namespace LibObjectFile.PE;
 /// </summary>
 public abstract class PESectionData : PEObject
 {
-    protected PESectionData(bool isContainer) : base(isContainer)
+    protected PESectionData()
     {
     }
 

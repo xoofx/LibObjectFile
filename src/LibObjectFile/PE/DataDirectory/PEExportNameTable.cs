@@ -10,16 +10,18 @@ using LibObjectFile.Diagnostics;
 
 namespace LibObjectFile.PE;
 
-public class PEExportNameTable : PESectionData
+public sealed class PEExportNameTable : PESectionData
 {
-    public PEExportNameTable() : base(false)
+    public PEExportNameTable()
     {
     }
 
-    public PEExportNameTable(int count) : base(false)
+    public PEExportNameTable(int count)
     {
         CollectionsMarshal.SetCount(Values, count);
     }
+
+    public override bool HasChildren => false;
 
     public List<PEAsciiStringLink> Values { get; } = new();
 

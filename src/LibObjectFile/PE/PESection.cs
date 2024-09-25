@@ -20,7 +20,7 @@ public sealed class PESection : PEObject
 {
     private readonly ObjectList<PESectionData> _content;
 
-    public PESection(PESectionName name, RVA rva, RVA virtualSize) : base(true)
+    public PESection(PESectionName name, RVA rva, RVA virtualSize)
     {
         Name = name;
         RVA = rva;
@@ -34,6 +34,8 @@ public sealed class PESection : PEObject
     /// Gets the name of this section.
     /// </summary>
     public PESectionName Name { get; }
+
+    public override bool HasChildren => true;
 
     /// <summary>
     /// The total size of the section when loaded into memory.

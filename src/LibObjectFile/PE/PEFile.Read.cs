@@ -200,13 +200,7 @@ partial class PEFile
             }
 
             // Read all sections and directories
-            if (TryInitializeSections(reader, sectionHeaders, out var positionAfterLastSection))
-            {
-                // Read the remaining of the file
-                var sizeToRead = reader.Length - positionAfterLastSection;
-
-                FillExtraDataWithMissingStreams(reader, positionAfterLastSection, sizeToRead);
-            }
+            ReadSectionsAndDirectories(reader, sectionHeaders);
         }
         finally
         {
@@ -214,29 +208,21 @@ partial class PEFile
         }
     }
 
-    private bool TryInitializeSections(PEImageReader reader, ReadOnlySpan<RawImageSectionHeader> headers, out ulong positionAfterLastSection)
+    private void ReadSectionsAndDirectories(PEImageReader reader, ReadOnlySpan<RawImageSectionHeader> headers)
     {
         _sections.Clear();
 
-        positionAfterLastSection = 0;
+        uint positionAfterHeaders = (uint)reader.Position;
+        uint positionFirstSection = positionAfterHeaders;
 
         // Load any data stored before the sections
         if (headers.Length > 0)
         {
-            var firstSectionPosition = headers[0].PointerToRawData;
-
-            var position = reader.Position;
-            var lengthBeforeFirstSection = firstSectionPosition - position;
-            if (lengthBeforeFirstSection > 0)
-            {
-                var extraData = new PEStreamExtraData(reader.ReadAsStream((ulong)lengthBeforeFirstSection))
-                {
-                    Position = position,
-                };
-                ExtraDataBeforeSections.Add(extraData);
-            }
+            positionFirstSection = headers[0].PointerToRawData;
         }
 
+        uint positionAfterLastSection = positionFirstSection;
+        
         // Create sections
         foreach (var section in headers)
         {
@@ -259,6 +245,7 @@ partial class PEFile
 
         // A list that contains all the section data that we have created (e.g. from directories, import tables...)
         var sectionDataList = new List<PESectionData>();
+        var extraDataList = new List<PEExtraData>();
 
         // Create directories and find the section for each directory
         var maxNumberOfDirectory = (int)Math.Min(OptionalHeader.NumberOfRvaAndSizes, 15);
@@ -289,7 +276,7 @@ partial class PEFile
                 Directories.Set(directory);
 
                 // The PESecurityDirectory is a special case as it doesn't use RVA but the position in the file. It belongs after the sections to the extra data
-                ExtraDataAfterSections.Add(directory);
+                extraDataList.Add(directory);
                 
                 directory.Read(reader);
             }
@@ -311,15 +298,42 @@ partial class PEFile
 
             if (reader.Diagnostics.HasErrors)
             {
-                return false;
+                return;
             }
         }
 
         // Get all implicit section data from directories after registering directories
         foreach (var directory in Directories)
         {
-            // Add all implicit section data
-            sectionDataList.AddRange(directory.CollectImplicitSectionDataList());
+            // Add all implicit data
+            foreach (var implicitData in directory.CollectImplicitSectionDataList())
+            {
+                if (implicitData is PESectionData sectionData)
+                {
+                    sectionDataList.Add(sectionData);
+                }
+                else if (implicitData is PEExtraData extraData)
+                {
+                    extraDataList.Add(extraData);
+                }
+            }
+        }
+
+        // Process all extra data list
+        foreach(var extraData in extraDataList)
+        {
+            if (extraData.Position < positionFirstSection)
+            {
+                ExtraDataBeforeSections.Add(extraData);
+            }
+            else if (extraData.Position >= positionAfterLastSection)
+            {
+                ExtraDataAfterSections.Add(extraData);
+            }
+            else
+            {
+                reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidExtraData, $"Extra data found in the middle of the sections at {extraData.Position}");
+            }
         }
         
         // Attach all the section data we have created (from e.g. directories, import tables) to the sections
@@ -340,7 +354,7 @@ partial class PEFile
             if (!sectionFound)
             {
                 reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Unable to find the section for {vObj} at position {vObj.Position}");
-                return false;
+                return;
             }
 
             sectionIndex = Math.Min(sectionIndex, Math.Max(0, _sections.Count - 1));
@@ -370,7 +384,7 @@ partial class PEFile
                     else
                     {
                         reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Invalid section data {sectionData} at position {sectionData.Position} contains {vObj} at position {vObj.Position}");
-                        return false;
+                        return;
                     }
                 }
             }
@@ -387,6 +401,10 @@ partial class PEFile
             FillDirectoryWithStreams(reader, directory);
         }
 
+        // Create all remaining extra data section data (before and after sections)
+        FillExtraDataWithMissingStreams(reader, ExtraDataBeforeSections, positionAfterHeaders, positionFirstSection - positionAfterHeaders);
+        FillExtraDataWithMissingStreams(reader, ExtraDataAfterSections, positionAfterLastSection, reader.Length - positionAfterLastSection);
+
         // Create Stream data sections for remaining data per section based on directories already loaded
         foreach (var section in _sections)
         {
@@ -400,7 +418,7 @@ partial class PEFile
             if (newSize != previousSize)
             {
                 reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Invalid size for section {section} at {section.Position} with size {section.Size} != {previousSize}");
-                return false;
+                return;
             }
         }
 
@@ -409,9 +427,7 @@ partial class PEFile
         {
             directory.Bind(reader);
         }
-
-        bool hasErrors = false;
-
+        
         // Validate the VirtualAddress of the directories
         for (int i = 0; i < maxNumberOfDirectory && i < dataDirectories.Length; i++)
         {
@@ -429,7 +445,6 @@ partial class PEFile
                 if (peDataDirectory.RVA != directoryEntry.RVA)
                 {
                     reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Invalid virtual address for directory {peDataDirectory.Kind} at {peDataDirectory.RVA} != {directoryEntry.RVA}");
-                    hasErrors = true;
                 }
             }
             else if (directory is PESecurityDirectory peSecurityDirectory)
@@ -437,13 +452,9 @@ partial class PEFile
                 if (peSecurityDirectory.Position != directoryEntry.RVA)
                 {
                     reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Invalid position for security directory at {peSecurityDirectory.Position} != {directoryEntry.RVA}");
-                    hasErrors = true;
                 }
             }
         }
-        
-        // Returns the position after the last section
-        return !hasErrors;
     }
 
     /// <summary>
@@ -499,21 +510,18 @@ partial class PEFile
             imageReader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Invalid section data position {currentPosition} > {startPosition + totalSize} in {container}");
         }
     }
-
-
-    private void FillExtraDataWithMissingStreams(PEImageReader imageReader, ulong extraPosition, ulong extraTotalSize)
+    
+    private static void FillExtraDataWithMissingStreams(PEImageReader imageReader, ObjectList<PEExtraData> list, ulong extraPosition, ulong extraTotalSize)
     {
         var currentPosition = extraPosition;
         imageReader.Position = extraPosition;
 
         // We are working on position, while the list is ordered by VirtualAddress
-        var listOrderedByPosition = new List<PEExtraData>();
-        listOrderedByPosition.AddRange(ExtraDataAfterSections.UnsafeList);
-        listOrderedByPosition.Sort((a, b) => a.Position.CompareTo(b.Position));
-
-        for (var i = 0; i < listOrderedByPosition.Count; i++)
+        list.UnsafeList.Sort((a, b) => a.Position.CompareTo(b.Position));
+        
+        for (var i = 0; i < list.Count; i++)
         {
-            var data = listOrderedByPosition[i];
+            var data = list[i];
             if (currentPosition < data.Position)
             {
                 var size = data.Position - currentPosition;
@@ -525,7 +533,7 @@ partial class PEFile
                     Size = size,
                 };
 
-                ExtraDataAfterSections.Insert(data.Index, sectionData);
+                list.Insert(data.Index, sectionData);
                 currentPosition = data.Position;
             }
             else if (currentPosition > data.Position)
@@ -547,7 +555,7 @@ partial class PEFile
                 Size = size,
             };
 
-            ExtraDataAfterSections.Add(sectionData);
+            list.Add(sectionData);
         }
         else if (currentPosition > extraPosition + extraTotalSize)
         {

@@ -139,7 +139,7 @@ public sealed class PEDelayImportDirectory : PEDataDirectory
             }
         }
     }
-    internal override IEnumerable<PESectionData> CollectImplicitSectionDataList()
+    internal override IEnumerable<PEObjectBase> CollectImplicitSectionDataList()
     {
         foreach (var entry in Entries)
         {

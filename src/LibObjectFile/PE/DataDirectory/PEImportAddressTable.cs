@@ -10,10 +10,12 @@ public class PEImportAddressTable : PESectionData
 {
     internal readonly PEImportFunctionTable FunctionTable;
 
-    public PEImportAddressTable() : base(false)
+    public PEImportAddressTable()
     {
         FunctionTable = new PEImportFunctionTable();
     }
+
+    public override bool HasChildren => false;
 
     public List<PEImportFunctionEntry> Entries => FunctionTable.Entries;
 

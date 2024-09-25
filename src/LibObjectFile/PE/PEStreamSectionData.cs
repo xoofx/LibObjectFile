@@ -12,14 +12,14 @@ namespace LibObjectFile.PE;
 /// </summary>
 public class PEStreamSectionData : PESectionData
 {
-    private readonly Stream _stream;
+    private Stream _stream;
 
     internal static PEStreamSectionData Empty = new();
     
     /// <summary>
     /// Initializes a new instance of the <see cref="PEStreamSectionData"/> class.
     /// </summary>
-    private PEStreamSectionData() : base(false)
+    public PEStreamSectionData()
     {
         _stream = Stream.Null;
         Size = 0;
@@ -29,17 +29,28 @@ public class PEStreamSectionData : PESectionData
     /// Initializes a new instance of the <see cref="PEStreamSectionData"/> class.
     /// </summary>
     /// <param name="stream">The stream containing the data of this section data.</param>
-    public PEStreamSectionData(Stream stream) : base(false)
+    public PEStreamSectionData(Stream stream)
     {
         ArgumentNullException.ThrowIfNull(stream);
         _stream = stream;
         Size = (ulong)stream.Length;
     }
 
+    public override bool HasChildren => false;
+
     /// <summary>
     /// Gets the stream containing the data of this section data.
     /// </summary>
-    public Stream Stream => _stream;
+    public Stream Stream
+    {
+        get => _stream;
+        set
+        {
+            ArgumentNullException.ThrowIfNull(value);
+            _stream = value;
+            Size = (ulong)value.Length;
+        }
+    }
 
     public override void UpdateLayout(PELayoutContext layoutContext)
     {
@@ -48,7 +59,8 @@ public class PEStreamSectionData : PESectionData
 
     public override void Read(PEImageReader reader)
     {
-        // No need to read, as the data is already provided via a stream
+        reader.Position = Position;
+        Stream = reader.ReadAsStream(Size);
     }
 
     public override void Write(PEImageWriter writer)

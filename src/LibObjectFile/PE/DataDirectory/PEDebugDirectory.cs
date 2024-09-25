@@ -27,6 +27,10 @@ public sealed class PEDebugDirectory : PEDataDirectory
 
         var entryCount = size / sizeof(RawImageDebugDirectory);
 
+        var positionBeforeFirstSection = reader.File.Sections.Count > 0 ? reader.File.Sections[0].Position : 0;
+        var positionAfterLastSection = reader.File.Sections.Count > 0 ? reader.File.Sections[^1].Position + reader.File.Sections[^1].Size : 0;
+
+
         var buffer = ArrayPool<byte>.Shared.Rent(size);
         try
         {
@@ -43,38 +47,57 @@ public sealed class PEDebugDirectory : PEDataDirectory
 
             for (int i = 0; i < entryCount; i++)
             {
-                var entry = entries[i];
-                var debugEntry = new PEDebugDirectoryEntry
+                var rawEntry = entries[i];
+                var entry = new PEDebugDirectoryEntry
                 {
-                    Characteristics = entry.Characteristics,
-                    MajorVersion = entry.MajorVersion,
-                    MinorVersion = entry.MinorVersion,
-                    Type = entry.Type,
+                    Characteristics = rawEntry.Characteristics,
+                    MajorVersion = rawEntry.MajorVersion,
+                    MinorVersion = rawEntry.MinorVersion,
+                    Type = rawEntry.Type,
                 };
 
 
-                if (entry.AddressOfRawData != 0)
+                if (rawEntry.AddressOfRawData != 0)
                 {
-                    if (!reader.File.TryFindSection(entry.AddressOfRawData, out var section))
+                    if (!reader.File.TryFindSection(rawEntry.AddressOfRawData, out var section))
                     {
-                        reader.Diagnostics.Error(DiagnosticId.PE_ERR_DebugDirectorySectionNotFound, $"Unable to find the section for the debug directory entry at {entry.AddressOfRawData}");
+                        reader.Diagnostics.Error(DiagnosticId.PE_ERR_DebugDirectorySectionNotFound, $"Unable to find the section for the debug directory entry at {rawEntry.AddressOfRawData}");
                         continue;
                     }
 
-                    var dataLink = new PEBlobDataLink(section, (RVO)(uint)entry.AddressOfRawData, entry.SizeOfData);
-                    debugEntry.DataLink = dataLink;
+                    PESectionData debugSectionData;
+
+                    if (rawEntry.Type == PEDebugKnownType.CodeView)
+                    {
+                        debugSectionData = new PEDebugSectionDataRSDS();
+                    }
+                    else
+                    {
+                        debugSectionData = new PEDebugStreamSectionData();
+                    }
+
+                    debugSectionData.Position = section.Position + (RVA)(uint)rawEntry.AddressOfRawData - section.RVA;
+                    debugSectionData.Size = rawEntry.SizeOfData;
+
+                    entry.SectionData = debugSectionData;
                 }
-                else if (entry.PointerToRawData != 0)
+                else if (rawEntry.PointerToRawData != 0)
                 {
-                    var dataLink = new PEBlobDataLink(reader.File, entry.PointerToRawData, entry.SizeOfData);
-                    debugEntry.DataLink = dataLink;
+
+                    var extraData = new PEDebugStreamExtraData
+                    {
+                        Position = (RVA)(uint)rawEntry.PointerToRawData,
+                        Size = rawEntry.SizeOfData
+                    };
+
+                    entry.ExtraData = extraData;
                 }
                 else
                 {
-                    Debug.Assert(entry.SizeOfData == 0);
+                    Debug.Assert(rawEntry.SizeOfData == 0);
                 }
 
-                Entries.Add(debugEntry);
+                Entries.Add(entry);
             }
         }
         finally
@@ -82,68 +105,37 @@ public sealed class PEDebugDirectory : PEDataDirectory
             ArrayPool<byte>.Shared.Return(buffer);
         }
 
+        // Read the data associated with the debug directory entries
+        foreach (var entry in Entries)
+        {
+            if (entry.SectionData is not null)
+            {
+                entry.SectionData.Read(reader);
+            }
+            else if (entry.ExtraData is not null)
+            {
+                entry.ExtraData.Read(reader);
+            }
+        }
+
         HeaderSize = ComputeHeaderSize(reader);
     }
 
-    internal override void Bind(PEImageReader reader)
+    internal override IEnumerable<PEObjectBase> CollectImplicitSectionDataList()
     {
-        var entries = CollectionsMarshal.AsSpan(Entries);
-        var peFile = reader.File;
-        foreach (var entry in entries)
+        foreach (var entry in Entries)
         {
-
-            if (entry.DataLink.Container is PEFile)
+            if (entry.SectionData is not null)
             {
-                PEObjectBase? container = null;
-
-                foreach (var extraData in peFile.ExtraDataBeforeSections)
-                {
-                    if (peFile.Contains(entry.DataLink.RVO))
-                    {
-                        container = extraData;
-                        break;
-                    }
-                }
-
-                if (container is null)
-                {
-                    foreach (var section in peFile.ExtraDataAfterSections)
-                    {
-                        if (section.Contains(entry.DataLink.RVO))
-                        {
-                            container = section;
-                            break;
-                        }
-                    }
-                }
-
-                if (container is null)
-                {
-                    reader.Diagnostics.Error(DiagnosticId.PE_ERR_DebugDirectoryContainerNotFound, $"Unable to find the container for the debug directory entry at {entry.DataLink.RVO}");
-                    continue;
-                }
-
-                entry.DataLink = new(container, entry.DataLink.RVO - (uint)container.Position, entry.DataLink.Size);
+                yield return entry.SectionData;
             }
-            else if (entry.DataLink.Container is PESection)
+            else if (entry.ExtraData is not null)
             {
-                var section = (PESection)entry.DataLink.Container!;
-
-                if (!section.TryFindSectionData((RVA)(uint)entry.DataLink.RVO, out var container))
-                {
-                    reader.Diagnostics.Error(DiagnosticId.PE_ERR_DebugDirectoryContainerNotFound, $"Unable to find the container for the debug directory entry at {entry.DataLink.RVO}");
-                    continue;
-                }
-
-                entry.DataLink = new(container, entry.DataLink.RVO - container.RVA, entry.DataLink.Size);
-            }
-            else
-            {
-                // Ignore, there are no links
+                yield return entry.ExtraData;
             }
         }
     }
-
+    
     public override void Write(PEImageWriter writer)
     {
         throw new NotImplementedException();

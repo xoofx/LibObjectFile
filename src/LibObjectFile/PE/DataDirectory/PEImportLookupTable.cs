@@ -12,10 +12,12 @@ public sealed class PEImportLookupTable : PESectionData
 {
     internal readonly PEImportFunctionTable FunctionTable;
 
-    public PEImportLookupTable() : base(false)
+    public PEImportLookupTable()
     {
         FunctionTable = new PEImportFunctionTable();
     }
+
+    public override bool HasChildren => false;
 
     public List<PEImportFunctionEntry> Entries => FunctionTable.Entries;
 
@@ -31,4 +33,5 @@ public sealed class PEImportLookupTable : PESectionData
     }
     
     public override void Write(PEImageWriter writer) => FunctionTable.Write(writer);
+
 }

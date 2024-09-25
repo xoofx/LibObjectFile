@@ -124,7 +124,8 @@ public enum DiagnosticId
     PE_ERR_InvalidOptionalHeaderMagic = 3006,
     PE_ERR_InvalidSectionHeadersSize = 3007,
     PE_ERR_InvalidParent = 3008,
-
+    PE_ERR_InvalidExtraData = 3009,
+    
     // PE BaseRelocation
     PE_ERR_BaseRelocationDirectoryInvalidEndOfStream = 3020,
     PE_ERR_BaseRelocationDirectoryInvalidSection = 3021,
@@ -189,4 +190,7 @@ public enum DiagnosticId
     PE_ERR_DebugDirectorySize = 3600,
     PE_ERR_DebugDirectorySectionNotFound = 3601,
     PE_ERR_DebugDirectoryContainerNotFound = 3602,
+    PE_ERR_InvalidDebugDataRSDSSignature = 3603,
+    PE_ERR_InvalidDebugDataRSDSPdbPath = 3604,
+    PE_ERR_DebugDirectoryExtraData = 3605,
 }

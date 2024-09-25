@@ -8,17 +8,19 @@ using LibObjectFile.Diagnostics;
 
 namespace LibObjectFile.PE;
 
-public class PEExportOrdinalTable : PESectionData
+public sealed class PEExportOrdinalTable : PESectionData
 {
-    public PEExportOrdinalTable() : base(false)
+    public PEExportOrdinalTable()
     {
     }
     
-    public PEExportOrdinalTable(int count) : base(false)
+    public PEExportOrdinalTable(int count)
     {
         CollectionsMarshal.SetCount(Values, count);
     }
-    
+
+    public override bool HasChildren => false;
+
     public List<ushort> Values { get; } = new();
 
     

@@ -10,10 +10,12 @@ namespace LibObjectFile.PE;
 
 public abstract class PEThunkAddressTable : PESectionData
 {
-    protected PEThunkAddressTable(bool is32Bits) : base(false)
+    protected PEThunkAddressTable(bool is32Bits)
     {
         Is32Bits = is32Bits;
     }
+
+    public override bool HasChildren => false;
 
     public bool Is32Bits { get; }
 

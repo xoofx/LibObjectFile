@@ -10,56 +10,56 @@ namespace LibObjectFile.PE;
 /// <summary>
 /// Defines a stream extra data in the PE file <see cref="PEFile.ExtraDataAfterSections"/>.
 /// </summary>
-public sealed class PEStreamExtraData : PEExtraData
+public class PEStreamExtraData : PEExtraData
 {
-    private Stream _data;
+    private Stream _stream;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PEStreamExtraData"/> class.
     /// </summary>
     public PEStreamExtraData()
     {
-        _data = Stream.Null;
+        _stream = Stream.Null;
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PEStreamExtraData"/> class.
     /// </summary>
-    /// <param name="data">The data stream.</param>
-    public PEStreamExtraData(Stream data)
+    /// <param name="stream">The data stream.</param>
+    public PEStreamExtraData(Stream stream)
     {
-        ArgumentNullException.ThrowIfNull(data);
-        _data = data;
-        Size = (uint)data.Length;
+        ArgumentNullException.ThrowIfNull(stream);
+        _stream = stream;
+        Size = (uint)stream.Length;
     }
 
     /// <summary>
     /// Gets or sets the data stream.
     /// </summary>
-    public Stream Data
+    public Stream Stream
     {
-        get => _data;
+        get => _stream;
         set
         {
             ArgumentNullException.ThrowIfNull(value);
-            _data = value;
+            _stream = value;
             Size = (uint)value.Length;
         }
     }
 
     public override void UpdateLayout(PELayoutContext layoutContext)
     {
-        Size = (uint)Data.Length;
+        Size = (uint)Stream.Length;
     }
 
     public override void Read(PEImageReader reader)
     {
         reader.Position = Position;
-        Data = reader.ReadAsStream(Size);
+        Stream = reader.ReadAsStream(Size);
     }
 
     public override void Write(PEImageWriter writer)
     {
-        Data.CopyTo(writer.Stream);
+        Stream.CopyTo(writer.Stream);
     }
 }

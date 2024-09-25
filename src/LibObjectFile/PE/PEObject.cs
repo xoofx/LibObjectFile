@@ -15,15 +15,14 @@ namespace LibObjectFile.PE;
 /// </summary>
 public abstract class PEObject : PEObjectBase
 {
-    protected PEObject(bool isContainer)
+    protected PEObject()
     {
-        IsContainer = isContainer;
     }
 
     /// <summary>
     /// Gets a value indicating whether this object has children.
     /// </summary>
-    public bool IsContainer { get; }
+    public abstract bool HasChildren { get; }
 
     /// <summary>
     /// The address of the first byte of the section when loaded into memory, relative to the image base.
@@ -63,7 +62,7 @@ public abstract class PEObject : PEObjectBase
     {
         if (ContainsVirtual(rva))
         {
-            if (IsContainer && TryFindByRVAInChildren(rva, out result))
+            if (HasChildren && TryFindByRVAInChildren(rva, out result))
             {
                 return true;
             }
@@ -91,7 +90,7 @@ public abstract class PEObject : PEObjectBase
     internal void UpdateRVA(RVA rva)
     {
         RVA = rva;
-        if (IsContainer)
+        if (HasChildren)
         {
             UpdateRVAInChildren();
         }

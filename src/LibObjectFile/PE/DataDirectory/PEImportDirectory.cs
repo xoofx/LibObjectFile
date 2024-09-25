@@ -103,7 +103,7 @@ public sealed class PEImportDirectory : PEDataDirectory
 
     protected override unsafe uint ComputeHeaderSize(PEVisitorContext context) => CalculateSize();
 
-    internal override IEnumerable<PESectionData> CollectImplicitSectionDataList()
+    internal override IEnumerable<PEObjectBase> CollectImplicitSectionDataList()
     {
         foreach (var entry in _entries)
         {

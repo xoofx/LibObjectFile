@@ -37,7 +37,7 @@ public sealed class PEExportDirectory : PEDataDirectory
         return (uint)sizeof(RawImageExportDirectory);
     }
 
-    internal override IEnumerable<PESectionData> CollectImplicitSectionDataList()
+    internal override IEnumerable<PEObjectBase> CollectImplicitSectionDataList()
     {
         if (ExportFunctionAddressTable is not null)
         {

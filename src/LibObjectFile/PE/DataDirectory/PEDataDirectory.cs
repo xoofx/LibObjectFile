@@ -13,13 +13,15 @@ namespace LibObjectFile.PE;
 
 public abstract class PEDataDirectory : PESectionData
 {
-    protected PEDataDirectory(PEDataDirectoryKind kind) : base(true)
+    protected PEDataDirectory(PEDataDirectoryKind kind)
     {
         Kind = kind;
         Content = CreateObjectList<PESectionData>(this);
     }
 
     public PEDataDirectoryKind Kind { get; }
+
+    public override bool HasChildren => true;
 
     internal uint HeaderSize { get; private protected set; }
 
@@ -62,7 +64,7 @@ public abstract class PEDataDirectory : PESectionData
         Size = size;
     }
 
-    internal virtual IEnumerable<PESectionData> CollectImplicitSectionDataList() => Enumerable.Empty<PESectionData>();
+    internal virtual IEnumerable<PEObjectBase> CollectImplicitSectionDataList() => Enumerable.Empty<PEObjectBase>();
 
     internal virtual void Bind(PEImageReader reader)
     {

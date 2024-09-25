@@ -16,6 +16,8 @@ namespace LibObjectFile.PE;
 [DebuggerDisplay("{ToString(),nq}")]
 public sealed class PEDebugDirectoryEntry
 {
+    private PEObjectBase? _data;
+
     /// <summary>
     /// Gets or sets the characteristics of the debug directory entry.
     /// </summary>
@@ -42,70 +44,28 @@ public sealed class PEDebugDirectoryEntry
     public PEDebugType Type { get; set; }
 
     /// <summary>
-    /// Gets or sets the data link of the debug directory entry.
+    /// Gets or sets the associated section data to this debug entry.
     /// </summary>
-    public PEBlobDataLink DataLink { get; set; }
-
-    /// <summary>
-    /// Try to get the CodeView (RSDS) information from this debug directory entry.
-    /// </summary>
-    /// <param name="debugRSDS">The CodeView (RSDS) information if the entry is of type <see cref="PEDebugKnownType.CodeView"/>.</param>
-    /// <returns><c>true</c> if the CodeView (RSDS) information has been successfully retrieved.</returns>
     /// <remarks>
-    /// The entry must be of type <see cref="PEDebugKnownType.CodeView"/> to be able to get the CodeView information. The data behind the <see cref="DataLink"/> must be a CodeView (RSDS) format.
+    /// This is set when the data is located inside a section. Otherwise <see cref="ExtraData"/> might be set.
     /// </remarks>
-    public unsafe bool TryGetDebugRSDS([NotNullWhen(true)] out PEDebugDataRSDS? debugRSDS)
+    public PESectionData? SectionData
     {
-        debugRSDS = null;
-        if (Type.Value != (uint)PEDebugKnownType.CodeView)
-        {
-            return false;
-        }
-
-        var dataLink = DataLink;
-        if (dataLink.Container == null)
-        {
-            return false;
-        }
-
-        var container = dataLink.Container;
-        var buffer = ArrayPool<byte>.Shared.Rent((int)dataLink.Size);
-        var span = buffer.AsSpan(0, (int)dataLink.Size);
-        try
-        {
-            var read = container.ReadAt(DataLink.RVO, span);
-            if (read != span.Length)
-            {
-                return false;
-            }
-
-            var signature = MemoryMarshal.Read<uint>(span);
-            if (signature != 0x53445352)
-            {
-                return false;
-            }
-
-            var pdbPath = span.Slice(sizeof(uint) + sizeof(Guid) + sizeof(uint));
-            var indexOfZero = pdbPath.IndexOf((byte)0);
-            if (indexOfZero < 0)
-            {
-                return false;
-            }
-
-            debugRSDS = new PEDebugDataRSDS
-            {
-                Guid = MemoryMarshal.Read<Guid>(span.Slice(4)),
-                Age = MemoryMarshal.Read<uint>(span.Slice(sizeof(uint) + sizeof(Guid))),
-                PdbPath = System.Text.Encoding.UTF8.GetString(pdbPath.Slice(0, indexOfZero))
-            };
-
-            return true;
-        }
-        finally
-        {
-            ArrayPool<byte>.Shared.Return(buffer);
-        }
+        get => _data as PESectionData;
+        set => _data = value;
     }
 
-    public override string ToString() => $"{nameof(PEDebugDirectoryEntry)} {Type} {DataLink}";
+    /// <summary>
+    /// Gets or sets the associated blob data outside a section (e.g. in <see cref="PEFile.ExtraDataBeforeSections"/> or <see cref="PEFile.ExtraDataAfterSections"/>).
+    /// </summary>
+    /// <remarks>
+    /// This is set when the data is located outside a section. Otherwise <see cref="SectionData"/> might be set.
+    /// </remarks>
+    public PEExtraData? ExtraData
+    {
+        get => _data as PEExtraData;
+        set => _data = value;
+    }
+
+    public override string ToString() => $"{nameof(PEDebugDirectoryEntry)} {Type} {_data}";
 }
