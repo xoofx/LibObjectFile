@@ -52,9 +52,9 @@ public sealed class PEDirectoryTable : IEnumerable<PEDataDirectory>
     public PEExceptionDirectory? Exception => (PEExceptionDirectory?)this[PEDataDirectoryKind.Exception];
 
     /// <summary>
-    /// Gets the security directory information from the PE file.
+    /// Gets the certificate/security directory information from the PE file.
     /// </summary>
-    public PESecurityDirectory? Security => (PESecurityDirectory?)this[PEDataDirectoryKind.Security];
+    public PESecurityCertificateDirectory? Certificate => (PESecurityCertificateDirectory?)this[PEDataDirectoryKind.SecurityCertificate];
 
     /// <summary>
     /// Gets the base relocation directory information from the PE file.
@@ -112,9 +112,9 @@ public sealed class PEDirectoryTable : IEnumerable<PEDataDirectory>
     [EditorBrowsable(EditorBrowsableState.Never)]
     public Enumerator GetEnumerator() => new(this);
 
-    internal void Set(PESecurityDirectory? directory)
+    internal void Set(PESecurityCertificateDirectory? directory)
     {
-        var kind = PEDataDirectoryKind.Security;
+        var kind = PEDataDirectoryKind.SecurityCertificate;
         ref var entry = ref _entries[(int)kind];
         var previousEntry = entry;
         entry = directory;

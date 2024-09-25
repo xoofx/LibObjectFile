@@ -26,9 +26,9 @@ public enum PEDataDirectoryKind : ushort
     /// </summary>
     Exception = 3,
     /// <summary>
-    /// Security Directory
+    /// Security/Certificate Directory
     /// </summary>
-    Security = 4,
+    SecurityCertificate = 4,
     /// <summary>
     /// Base Relocation Table
     /// </summary>

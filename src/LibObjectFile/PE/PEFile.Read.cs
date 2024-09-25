@@ -265,9 +265,9 @@ partial class PEFile
             }
 
             var kind = (PEDataDirectoryKind)i;
-            if (kind == PEDataDirectoryKind.Security)
+            if (kind == PEDataDirectoryKind.SecurityCertificate)
             {
-                var directory = new PESecurityDirectory();
+                var directory = new PESecurityCertificateDirectory();
                 
                 // The PE certificate directory is a special case as it is not a standard directory. It doesn't use RVA but the position in the file
                 directory.Position = (uint)directoryEntry.RVA;
@@ -447,7 +447,7 @@ partial class PEFile
                     reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Invalid virtual address for directory {peDataDirectory.Kind} at {peDataDirectory.RVA} != {directoryEntry.RVA}");
                 }
             }
-            else if (directory is PESecurityDirectory peSecurityDirectory)
+            else if (directory is PESecurityCertificateDirectory peSecurityDirectory)
             {
                 if (peSecurityDirectory.Position != directoryEntry.RVA)
                 {

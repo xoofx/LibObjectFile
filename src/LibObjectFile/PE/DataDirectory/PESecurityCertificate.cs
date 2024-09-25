@@ -8,7 +8,7 @@ using System.IO;
 namespace LibObjectFile.PE;
 
 /// <summary>
-/// Represents a security certificate used in a Portable Executable (PE) file available in <see cref="PESecurityDirectory.Certificates"/>.
+/// Represents a security certificate used in a Portable Executable (PE) file available in <see cref="PECPESecurityCertificateDirectoryrtificates"/>.
 /// </summary>
 public sealed class PESecurityCertificate
 {

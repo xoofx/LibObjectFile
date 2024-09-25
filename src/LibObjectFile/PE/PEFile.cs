@@ -108,7 +108,7 @@ public partial class PEFile : PEObjectBase
     public ObjectList<PESection> Sections => _sections;
     
     /// <summary>
-    /// Gets the data present after the sections in the file (e.g <see cref="PESecurityDirectory"/>)
+    /// Gets the data present after the sections in the file (e.g <see cref="PESecurityCertificateDirectory"/>)
     /// </summary>
     public ObjectList<PEExtraData> ExtraDataAfterSections { get; }
 

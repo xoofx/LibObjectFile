@@ -13,12 +13,12 @@ namespace LibObjectFile.PE;
 /// <summary>
 /// Represents the security directory in a PE file.
 /// </summary>
-public sealed class PESecurityDirectory : PEExtraData
+public sealed class PESecurityCertificateDirectory : PEExtraData
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="PESecurityDirectory"/> class.
+    /// Initializes a new instance of the <see cref="PESecurityCertificateDirectory"/> class.
     /// </summary>
-    public PESecurityDirectory()
+    public PESecurityCertificateDirectory()
     {
         Certificates = new();
     }
