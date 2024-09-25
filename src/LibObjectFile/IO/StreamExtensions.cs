@@ -16,6 +16,25 @@ namespace LibObjectFile.IO;
 
 public static class StreamExtensions
 {
+    /// <summary>
+    /// Resolves the original stream from a <see cref="SubStream"/> and returns the position of the stream.
+    /// </summary>
+    /// <param name="stream">The stream to resolve the underlying stream from.</param>
+    /// <param name="position">The position resolved within the returned stream.</param>
+    /// <returns>The original stream.</returns>
+    public static Stream ResolveOriginalStream(this Stream stream, out long position)
+    {
+        if (stream is SubStream subStream)
+        {
+            var nextStream = ResolveOriginalStream(subStream.BaseStream, out var subPosition);
+            position = subPosition + subStream.BasePosition;
+            return nextStream;
+        }
+
+        position = 0;
+        return stream;
+    }
+    
     public static byte ReadU8(this Stream stream)
     {
         int nextValue = stream.ReadByte();

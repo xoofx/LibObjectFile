@@ -32,6 +32,11 @@ public class SubStream : Stream
         _length = length;
         _basePosition = position;
     }
+
+    public Stream BaseStream => _baseStream;
+
+    public long BasePosition => _basePosition;
+
     public override int Read(byte[] buffer, int offset, int count) => Read(new Span<byte>(buffer, offset, count));
 
     public override int Read(Span<byte> buffer)
