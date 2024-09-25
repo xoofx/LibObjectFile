@@ -177,101 +177,116 @@ public static class PEPrinter
         switch (data)
         {
             case PEBaseRelocationDirectory peBaseRelocationDirectory:
-                Print(file, peBaseRelocationDirectory, ref writer);
+                Print(peBaseRelocationDirectory, ref writer);
                 break;
             case PEBoundImportDirectory peBoundImportDirectory:
-                Print(file, peBoundImportDirectory, ref writer);
+                Print(peBoundImportDirectory, ref writer);
                 break;
             case PEClrMetadata peClrMetadata:
-                Print(file, peClrMetadata, ref writer);
+                Print(peClrMetadata, ref writer);
                 break;
             case PEArchitectureDirectory peArchitectureDirectory:
-                Print(file, peArchitectureDirectory, ref writer);
+                Print(peArchitectureDirectory, ref writer);
                 break;
             case PEDebugDirectory peDebugDirectory:
-                Print(file, peDebugDirectory, ref writer);
+                Print(peDebugDirectory, ref writer);
                 break;
             case PEDelayImportDirectory peDelayImportDirectory:
-                Print(file, peDelayImportDirectory, ref writer);
+                Print(peDelayImportDirectory, ref writer);
                 break;
             case PEExceptionDirectory peExceptionDirectory:
-                Print(file, peExceptionDirectory, ref writer);
+                Print(peExceptionDirectory, ref writer);
                 break;
             case PEExportDirectory peExportDirectory:
-                Print(file, peExportDirectory, ref writer);
+                Print(peExportDirectory, ref writer);
                 break;
             case PEGlobalPointerDirectory peGlobalPointerDirectory:
-                Print(file, peGlobalPointerDirectory, ref writer);
+                Print(peGlobalPointerDirectory, ref writer);
                 break;
             case PEImportAddressTableDirectory peImportAddressTableDirectory:
-                Print(file, peImportAddressTableDirectory, ref writer);
+                Print(peImportAddressTableDirectory, ref writer);
                 break;
             case PEImportDirectory peImportDirectory:
-                Print(file, peImportDirectory, ref writer);
+                Print(peImportDirectory, ref writer);
                 break;
             case PELoadConfigDirectory32 peLoadConfigDirectory:
-                Print(file, peLoadConfigDirectory, ref writer);
+                Print(peLoadConfigDirectory, ref writer);
                 break;
             case PELoadConfigDirectory64 peLoadConfigDirectory:
-                Print(file, peLoadConfigDirectory, ref writer);
+                Print(peLoadConfigDirectory, ref writer);
                 break;
             case PEResourceDirectory peResourceDirectory:
-                Print(file, peResourceDirectory, ref writer);
+                Print(peResourceDirectory, ref writer);
                 break;
             case PETlsDirectory32 peTlsDirectory32:
-                Print(file, peTlsDirectory32, ref writer);
+                Print(peTlsDirectory32, ref writer);
                 break;
             case PETlsDirectory64 peTlsDirectory64:
-                Print(file, peTlsDirectory64, ref writer);
-                break;
-            case PEDataDirectory peDataDirectory:
-                Print(file, peDataDirectory, ref writer);
+                Print(peTlsDirectory64, ref writer);
                 break;
             case PEBoundImportAddressTable32 peBoundImportAddressTable32:
-                Print(file, peBoundImportAddressTable32, ref writer);
+                Print(peBoundImportAddressTable32, ref writer);
                 break;
             case PEBoundImportAddressTable64 peBoundImportAddressTable64:
-                Print(file, peBoundImportAddressTable64, ref writer);
+                Print(peBoundImportAddressTable64, ref writer);
                 break;
             case PEDelayImportAddressTable peDelayImportAddressTable:
-                Print(file, peDelayImportAddressTable, ref writer);
+                Print(peDelayImportAddressTable, ref writer);
                 break;
             case PEExportAddressTable peExportAddressTable:
-                Print(file, peExportAddressTable, ref writer);
+                Print(peExportAddressTable, ref writer);
                 break;
             case PEExportNameTable peExportNameTable:
-                Print(file, peExportNameTable, ref writer);
+                Print(peExportNameTable, ref writer);
                 break;
             case PEExportOrdinalTable peExportOrdinalTable:
-                Print(file, peExportOrdinalTable, ref writer);
+                Print(peExportOrdinalTable, ref writer);
                 break;
             case PEImportAddressTable peImportAddressTable:
-                Print(file, peImportAddressTable, ref writer);
+                Print(peImportAddressTable, ref writer);
                 break;
             case PEImportLookupTable peImportLookupTable:
-                Print(file, peImportLookupTable, ref writer);
+                Print(peImportLookupTable, ref writer);
                 break;
             case PEStreamSectionData peStreamSectionData:
-                Print(file, peStreamSectionData, ref writer);
+                Print(peStreamSectionData, ref writer);
                 break;
             case PEDebugSectionDataRSDS peDebugSectionDataRSDS:
-                Print(file, peDebugSectionDataRSDS, ref writer);
+                Print(peDebugSectionDataRSDS, ref writer);
                 break;
             default:
                 writer.WriteLine($"Unsupported section data {data}");
                 break;
         }
+
+        if (data is PEDataDirectory directory)
+        {
+            foreach (var content in directory.Content)
+            {
+                writer.Indent();
+                PrintSectionData(file, content, ref writer);
+                writer.Unindent();
+            }
+        }
+
         writer.Unindent();
         writer.WriteLine();
     }
 
-    private static void Print(PEFile file, PEDebugSectionDataRSDS data, ref TextWriterIndenter writer)
+    private static void Print(PEDebugSectionDataRSDS data, ref TextWriterIndenter writer)
     {
-
+        const int indent = -26;
+        writer.WriteLine("Debug Section Data (RSDS)");
+        writer.Indent();
+        writer.WriteLine($"{nameof(PEDebugSectionDataRSDS.Guid),indent} = {data.Guid}");
+        writer.WriteLine($"{nameof(PEDebugSectionDataRSDS.Age),indent} = {data.Age}");
+        writer.WriteLine($"{nameof(PEDebugSectionDataRSDS.PdbPath),indent} = {data.PdbPath}");
+        writer.Unindent();
     }
     
-    private static void Print(PEFile file, PEBaseRelocationDirectory data, ref TextWriterIndenter writer)
+    private static void Print(PEBaseRelocationDirectory data, ref TextWriterIndenter writer)
     {
+        var peFile = data.GetPEFile()!;
         foreach (var block in data.Blocks)
         {
             var pageRVA = block.SectionLink.RVA();
@@ -285,18 +300,18 @@ public static class PEPrinter
 
                 if (reloc.Type == PEBaseRelocationType.Dir64)
                 {
-                    writer.WriteLine($"{reloc.Type,6} Offset = 0x{offsetInPage:X4}, RVA = {relocRVA} (0x{reloc.ReadAddress(file):X16}), SectionData = {{ {PEDescribe(reloc.Container)} }}");
+                    writer.WriteLine($"{reloc.Type,6} Offset = 0x{offsetInPage:X4}, RVA = {relocRVA} (0x{reloc.ReadAddress(peFile):X16}), SectionData = {{ {PELink(reloc.Container)} }}");
                 }
                 else
                 {
-                    writer.WriteLine($"{reloc.Type,6} Offset = 0x{offsetInPage:X4}, RVA = {relocRVA}, SectionData = {{ {PEDescribe(reloc.Container)} }}");
+                    writer.WriteLine($"{reloc.Type,6} Offset = 0x{offsetInPage:X4}, RVA = {relocRVA}, SectionData = {{ {PELink(reloc.Container)} }}");
                 }
             }
             writer.Unindent();
         }
     }
 
-    private static void Print(PEFile file, PEBoundImportDirectory data, ref TextWriterIndenter writer)
+    private static void Print(PEBoundImportDirectory data, ref TextWriterIndenter writer)
     {
         foreach (var entry in data.Entries)
         {
@@ -311,52 +326,95 @@ public static class PEPrinter
         }
     }
 
-    private static void Print(PEFile file, PEClrMetadata data, ref TextWriterIndenter writer)
+    private static void Print(PEClrMetadata data, ref TextWriterIndenter writer)
     {
     }
 
-    private static void Print(PEFile file, PEArchitectureDirectory data, ref TextWriterIndenter writer)
+    private static void Print(PEArchitectureDirectory data, ref TextWriterIndenter writer)
     {
     }
 
-    private static void Print(PEFile file, PEDebugDirectory data, ref TextWriterIndenter writer)
+    private static void Print(PEDebugDirectory data, ref TextWriterIndenter writer)
     {
-    }
-
-    private static void Print(PEFile file, PEDelayImportDirectory data, ref TextWriterIndenter writer)
-    {
-        foreach (var dirEntry in data.Entries)
+        for (var i = 0; i < data.Entries.Count; i++)
         {
-            writer.WriteLine($"DllName = {dirEntry.DllName.Resolve()}, RVA = {dirEntry.DllName.RVA()}");
-            writer.WriteLine($"Attributes = {dirEntry.Attributes}");
-            writer.WriteLine($"DelayImportAddressTable RVA = {dirEntry.DelayImportAddressTable.RVA}");
-            writer.WriteLine($"DelayImportNameTable RVA = {dirEntry.DelayImportNameTable.RVA}");
-            writer.WriteLine($"BoundImportAddressTable RVA = {(dirEntry.BoundImportAddressTable?.RVA ?? (RVA)0)}");
-            writer.WriteLine($"UnloadDelayInformationTable RVA = {(dirEntry.UnloadDelayInformationTable?.RVA ?? (RVA)0)}");
+            var entry = data.Entries[i];
+            writer.WriteLine(
+                $"[{i}] Type = {entry.Type}, Characteristics = 0x{entry.Characteristics:X}, Version = {entry.MajorVersion}.{entry.MinorVersion}, TimeStamp = 0x{entry.TimeDateStamp:X}, Data = {PELink((PEObjectBase?)entry.SectionData ?? entry.ExtraData)}");
         }
     }
 
-    private static void Print(PEFile file, PEExceptionDirectory data, ref TextWriterIndenter writer)
+    private static void Print(PEDelayImportDirectory data, ref TextWriterIndenter writer)
+    {
+        for (var i = 0; i < data.Entries.Count; i++)
+        {
+            var dirEntry = data.Entries[i];
+            writer.WriteLine($"[{i}] DllName = {dirEntry.DllName.Resolve()}, RVA = {dirEntry.DllName.RVA()}");
+            writer.WriteLine($"[{i}] Attributes = {dirEntry.Attributes}");
+            writer.WriteLine($"[{i}] DelayImportAddressTable {PELink(dirEntry.DelayImportAddressTable)}");
+            writer.WriteLine($"[{i}] DelayImportNameTable {PELink(dirEntry.DelayImportNameTable)}");
+            writer.WriteLine($"[{i}] BoundImportAddressTable {PELink(dirEntry.BoundImportAddressTable)}");
+            writer.WriteLine($"[{i}] UnloadDelayInformationTable {PELink(dirEntry.UnloadDelayInformationTable)}");
+            writer.WriteLine();
+        }
+    }
+
+    private static void Print(PEExceptionDirectory data, ref TextWriterIndenter writer)
+    {
+        for (var i = 0; i < data.Entries.Count; i++)
+        {
+            var entry = data.Entries[i];
+            switch (entry)
+            {
+                case PEExceptionFunctionEntryArm entryArm:
+                    writer.WriteLine($"[{i}] Begin = {entry.BeginAddress.RVA()}");
+                    writer.WriteLine($"[{i}] UnwindData = 0x{entryArm.UnwindData:X}");
+                    break;
+                case PEExceptionFunctionEntryX86 entryX86:
+                    writer.WriteLine($"[{i}] Begin = {entry.BeginAddress}");
+                    writer.WriteLine($"[{i}] End = {entryX86.EndAddress}");
+                    writer.WriteLine($"[{i}] UnwindInfoAddress = {entryX86.UnwindInfoAddress}");
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(entry));
+            }
+            writer.WriteLine();
+        }
+    }
+
+    private static void Print(PEExportDirectory data, ref TextWriterIndenter writer)
+    {
+        writer.WriteLine($"{nameof(PEExportDirectory.TimeStamp)} = {data.TimeStamp}");
+        writer.WriteLine($"{nameof(PEExportDirectory.MajorVersion)} = {data.MajorVersion}");
+        writer.WriteLine($"{nameof(PEExportDirectory.MinorVersion)} = {data.MinorVersion}");
+        writer.WriteLine($"{nameof(PEExportDirectory.OrdinalBase)} = 0x{data.OrdinalBase:X}");
+        writer.WriteLine($"{nameof(PEExportDirectory.NameLink)} = {data.NameLink.Resolve()} ({data.NameLink})");
+        writer.WriteLine($"{nameof(PEExportDirectory.ExportFunctionAddressTable)} = {PELink(data.ExportFunctionAddressTable)}");
+        writer.WriteLine($"{nameof(PEExportDirectory.ExportNameTable)} = {PELink(data.ExportNameTable)}");
+        writer.WriteLine($"{nameof(PEExportDirectory.ExportOrdinalTable)} = {PELink(data.ExportOrdinalTable)}");
+    }
+
+    private static void Print(PEGlobalPointerDirectory data, ref TextWriterIndenter writer)
     {
     }
 
-    private static void Print(PEFile file, PEExportDirectory data, ref TextWriterIndenter writer)
+    private static void Print(PEImportAddressTableDirectory data, ref TextWriterIndenter writer)
     {
     }
 
-    private static void Print(PEFile file, PEGlobalPointerDirectory data, ref TextWriterIndenter writer)
+    private static void Print(PEImportDirectory data, ref TextWriterIndenter writer)
     {
+        for (var i = 0; i < data.Entries.Count; i++)
+        {
+            var entry = data.Entries[i];
+            writer.WriteLine($"[{i}] ImportDllNameLink = {entry.ImportDllNameLink.Resolve()} ({entry.ImportDllNameLink})");
+            writer.WriteLine($"[{i}] ImportAddressTable = {PELink(entry.ImportAddressTable)}");
+            writer.WriteLine($"[{i}] ImportLookupTable = {PELink(entry.ImportLookupTable)}");
+            writer.WriteLine();
+        }
     }
 
-    private static void Print(PEFile file, PEImportAddressTableDirectory data, ref TextWriterIndenter writer)
-    {
-    }
-
-    private static void Print(PEFile file, PEImportDirectory data, ref TextWriterIndenter writer)
-    {
-    }
-
-    private static void Print(PEFile file, PELoadConfigDirectory32 data, ref TextWriterIndenter writer)
+    private static void Print(PELoadConfigDirectory32 data, ref TextWriterIndenter writer)
     {
         const int indent = -32;
         writer.WriteLine($"{nameof(PELoadConfigDirectoryData32.Size),indent} = 0x{data.Data.Size:X}");
@@ -414,7 +472,7 @@ public static class PEPrinter
         writer.WriteLine($"{nameof(PELoadConfigDirectoryData32.GuardMemcpyFunctionPointer),indent} = {data.Data.GuardMemcpyFunctionPointer}");
     }
 
-    private static void Print(PEFile file, PELoadConfigDirectory64 data, ref TextWriterIndenter writer)
+    private static void Print(PELoadConfigDirectory64 data, ref TextWriterIndenter writer)
     {
         const int indent = -32;
 
@@ -473,56 +531,138 @@ public static class PEPrinter
         writer.WriteLine($"{nameof(PELoadConfigDirectoryData64.GuardMemcpyFunctionPointer),indent} = {data.Data.GuardMemcpyFunctionPointer}");
     }
 
-    private static void Print(PEFile file, PEResourceDirectory data, ref TextWriterIndenter writer)
+    private static void Print(PEResourceDirectory data, ref TextWriterIndenter writer)
     {
-
+        Print(data.Root, ref writer);
     }
 
-    private static void Print(PEFile file, PETlsDirectory32 data, ref TextWriterIndenter writer)
+    private static void Print(PEResourceEntry data, ref TextWriterIndenter writer)
     {
+        switch (data)
+        {
+            case PEResourceDataEntry resourceFile:
+                writer.WriteLine($"> {resourceFile}");
+                break;
+            case PEResourceDirectoryEntry dir:
+                writer.WriteLine($"> {dir}");
+                writer.Indent();
+                foreach (var entry in dir.Entries)
+                {
+                    writer.Indent();
+                    Print(entry, ref writer);
+                    writer.Unindent();
+                }
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(data));
+        }
     }
 
-    private static void Print(PEFile file, PETlsDirectory64 data, ref TextWriterIndenter writer)
+    private static void Print(PETlsDirectory32 data, ref TextWriterIndenter writer)
     {
+        writer.WriteLine($"{nameof(PETlsDirectory32.StartAddressOfRawData)} = {data.StartAddressOfRawData}");
+        writer.WriteLine($"{nameof(PETlsDirectory32.EndAddressOfRawData)} = {data.EndAddressOfRawData}");
+        writer.WriteLine($"{nameof(PETlsDirectory32.AddressOfIndex)} = {data.AddressOfIndex}");
+        writer.WriteLine($"{nameof(PETlsDirectory32.AddressOfCallBacks)} = {data.AddressOfCallBacks}");
+        writer.WriteLine($"{nameof(PETlsDirectory32.SizeOfZeroFill)} = 0x{data.SizeOfZeroFill:X}");
+        writer.WriteLine($"{nameof(PETlsDirectory32.Characteristics)} = {data.Characteristics}");
     }
 
-    private static void Print(PEFile file, PEDataDirectory data, ref TextWriterIndenter writer)
+    private static void Print(PETlsDirectory64 data, ref TextWriterIndenter writer)
     {
+        writer.WriteLine($"{nameof(PETlsDirectory64.StartAddressOfRawData)} = {data.StartAddressOfRawData}");
+        writer.WriteLine($"{nameof(PETlsDirectory64.EndAddressOfRawData)} = {data.EndAddressOfRawData}");
+        writer.WriteLine($"{nameof(PETlsDirectory64.AddressOfIndex)} = {data.AddressOfIndex}");
+        writer.WriteLine($"{nameof(PETlsDirectory64.AddressOfCallBacks)} = {data.AddressOfCallBacks}");
+        writer.WriteLine($"{nameof(PETlsDirectory64.SizeOfZeroFill)} = 0x{data.SizeOfZeroFill:X}");
+        writer.WriteLine($"{nameof(PETlsDirectory64.Characteristics)} = {data.Characteristics}");
     }
 
-    private static void Print(PEFile file, PEBoundImportAddressTable32 data, ref TextWriterIndenter writer)
+    private static void Print(PEBoundImportAddressTable32 data, ref TextWriterIndenter writer)
     {
+        for (var i = 0; i < data.Entries.Count; i++)
+        {
+            var entry = data.Entries[i];
+            writer.WriteLine($"[{i}] VA = {entry}");
+        }
     }
 
-    private static void Print(PEFile file, PEBoundImportAddressTable64 data, ref TextWriterIndenter writer)
+    private static void Print(PEBoundImportAddressTable64 data, ref TextWriterIndenter writer)
     {
+        for (var i = 0; i < data.Entries.Count; i++)
+        {
+            var entry = data.Entries[i];
+            writer.WriteLine($"[{i}] VA = {entry}");
+        }
     }
 
-    private static void Print(PEFile file, PEDelayImportAddressTable data, ref TextWriterIndenter writer)
+    private static void Print(PEExportAddressTable data, ref TextWriterIndenter writer)
     {
+        for (var i = 0; i < data.Values.Count; i++)
+        {
+            var entry = data.Values[i];
+            if (entry.IsForwarderRVA)
+            {
+                writer.WriteLine($"[{i}] Forwarder RVA = {entry.ForwarderRVA}");
+            }
+            else
+            {
+                writer.WriteLine($"[{i}] Exported RVA = {entry.ExportRVA}");
+            }
+        }
     }
 
-    private static void Print(PEFile file, PEExportAddressTable data, ref TextWriterIndenter writer)
+    private static void Print(PEExportNameTable data, ref TextWriterIndenter writer)
     {
+        for (var i = 0; i < data.Values.Count; i++)
+        {
+            var entry = data.Values[i];
+            writer.WriteLine($"[{i}] {entry.Resolve()} ({entry})");
+        }
     }
 
-    private static void Print(PEFile file, PEExportNameTable data, ref TextWriterIndenter writer)
+    private static void Print(PEExportOrdinalTable data, ref TextWriterIndenter writer)
     {
+        for (var i = 0; i < data.Values.Count; i++)
+        {
+            var entry = data.Values[i];
+            writer.WriteLine($"[{i}] Ordinal = {entry}");
+        }
     }
 
-    private static void Print(PEFile file, PEExportOrdinalTable data, ref TextWriterIndenter writer)
+    private static void Print(PEImportAddressTable data, ref TextWriterIndenter writer)
     {
+        for (var i = 0; i < data.Entries.Count; i++)
+        {
+            var entry = data.Entries[i];
+            if (entry.IsImportByOrdinal)
+            {
+                writer.WriteLine($"[{i}] Ordinal = {entry.Ordinal}");
+            }
+            else
+            {
+                writer.WriteLine($"[{i}] {entry.HintName.Resolve()} ({entry.HintName})");
+            }
+        }
     }
 
-    private static void Print(PEFile file, PEImportAddressTable data, ref TextWriterIndenter writer)
+    private static void Print(PEImportLookupTable data, ref TextWriterIndenter writer)
     {
+        for (var i = 0; i < data.Entries.Count; i++)
+        {
+            var entry = data.Entries[i];
+            if (entry.IsImportByOrdinal)
+            {
+                writer.WriteLine($"[{i}] Ordinal = {entry.Ordinal}");
+            }
+            else
+            {
+                writer.WriteLine($"[{i}] {entry.HintName.Resolve()} ({entry.HintName})");
+            }
+        }
     }
 
-    private static void Print(PEFile file, PEImportLookupTable data, ref TextWriterIndenter writer)
-    {
-    }
-
-    private static void Print(PEFile file, PEStreamSectionData data, ref TextWriterIndenter writer)
+    private static void Print(PEStreamSectionData data, ref TextWriterIndenter writer)
     {
     }
 
@@ -540,6 +680,32 @@ public static class PEPrinter
         else
         {
             return "null";
+        }
+    }
+
+    private static string PELink(PEObjectBase? peObjectBase)
+    {
+        if (peObjectBase is PEObject peObject)
+        {
+            return $"RVA = 0x{peObject.RVA.Value:X8} ({peObject.GetType().Name}[{peObject.Index}]{PEParent((PEObjectBase?)peObject.Parent)}";
+        }
+        else if (peObjectBase is not null)
+        {
+            return $"({peObjectBase.GetType().Name}[{peObjectBase.Index}]{PEParent((PEObjectBase?)peObjectBase.Parent)}";
+        }
+        else
+        {
+            return "null";
+        }
+
+        static string PEParent(PEObjectBase? obj)
+        {
+            if (obj is PESection section)
+            {
+                return $" {section.Name}";
+            }
+
+            return "";
         }
     }
 }

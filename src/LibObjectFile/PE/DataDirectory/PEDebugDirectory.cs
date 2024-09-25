@@ -53,6 +53,7 @@ public sealed class PEDebugDirectory : PEDataDirectory
                     Characteristics = rawEntry.Characteristics,
                     MajorVersion = rawEntry.MajorVersion,
                     MinorVersion = rawEntry.MinorVersion,
+                    TimeDateStamp = rawEntry.TimeDateStamp,
                     Type = rawEntry.Type,
                 };
 
