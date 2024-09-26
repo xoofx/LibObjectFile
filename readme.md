@@ -2,10 +2,11 @@
 
 <img align="right" width="200px" height="200px" src="https://raw.githubusercontent.com/xoofx/LibObjectFile/master/img/libobjectfile.png">
 
-LibObjectFile is a .NET library to read, manipulate and write linker and executable object files (e.g ELF, ar, DWARF, COFF...)
+LibObjectFile is a .NET library to read, manipulate and write linker and executable object files (e.g ELF, ar, DWARF, PE...)
 
-> NOTE: Currently LibObjectFile supports only the following file format:
+> NOTE: Currently LibObjectFile supports the following file format:
 >
+> - **PE** image file format (Portable Executable / DLL)
 > - **ELF** object-file format
 > - **DWARF** debugging format (version 4)
 > - **Archive `ar`** file format (Common, GNU and BSD variants)
@@ -31,8 +32,13 @@ elf.Write(outStream);
 ```
 
 ## Features
-- Full support of Archive `ar` file format including Common, GNU and BSD variants.
-- Good support for the ELF file format:
+- Full support of **Archive `ar` file format** including Common, GNU and BSD variants.
+- Full support for the **PE file format**
+  - Read and write from/to a `System.IO.Stream`
+  - All PE Directories are supported
+  - ImageBase relocation is supported with `PEFile.Relocate(ulong)` method
+  - `PEFile.Print` to print the content of a PE file to a textual representation
+- - Good support for the **ELF file format**:
   - Read and write from/to a `System.IO.Stream`
   - Handling of LSB/MSB
   - Support the following sections: 
@@ -43,7 +49,7 @@ elf.Write(outStream);
     - Other sections fallback to `ElfCustomSection`
   - Program headers with or without sections
   - Print with `readelf` similar output
-- Support for DWARF debugging format:
+- Support for **DWARF debugging format**:
   - Partial support of Version 4 (currently still the default for GCC)
   - Support for the sections: `.debug_info`, `.debug_line`, `.debug_aranges`, `.debug_abbrev` and `.debug_str` 
   - Support for Dwarf expressions
@@ -83,7 +89,6 @@ In a future version I would like to implement the following file format:
 
 - [ ] COFF
 - [ ] Mach-O
-- [ ] Portable in Memory file format to easily convert between ELF/COFF/Mach-O file formats.
 
 ## Download
 
