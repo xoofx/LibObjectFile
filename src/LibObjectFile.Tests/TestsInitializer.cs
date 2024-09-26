@@ -15,5 +15,6 @@ internal static class TestsInitializer
         CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
         Verifier.UseProjectRelativeDirectory("Verified");
         DiffEngine.DiffRunner.Disabled = true;
+        VerifierSettings.DontScrubSolutionDirectory();
     }
 }

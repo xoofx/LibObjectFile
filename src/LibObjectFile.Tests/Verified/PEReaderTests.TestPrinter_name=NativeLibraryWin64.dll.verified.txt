@@ -191,7 +191,7 @@ Sections
             Debug Section Data (RSDS)
                 Guid                       = 9e24e83e-5203-490d-b4fe-ac81f739897a
                 Age                        = 2
-                PdbPath                    = {SolutionDirectory}native\Win64\NativeProjects\x64\Release\NativeLibraryWin64.pdb
+                PdbPath                    = C:\code\LibObjectFile\src\native\Win64\NativeProjects\x64\Release\NativeLibraryWin64.pdb
         
         Section Data [06] PEStreamSectionData              Position = 0x00001855, Size = 0x00000003, RVA = 0x00002455, VirtualSize = 0x00000003
         
