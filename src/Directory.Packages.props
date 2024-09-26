@@ -1,0 +1,16 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>false</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="MinVer" Version="6.0.0" />
+    <PackageVersion Include="MSTest" Version="3.6.0" />
+    <PackageVersion Include="Verify.DiffPlex" Version="3.1.0" />
+    <PackageVersion Include="Verify.MSTest" Version="26.6.0" />
+    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
+    <PackageVersion Include="CppAst.CodeGen" Version="0.20.0" />
+    <PackageVersion Include="Iced" Version="1.21.0" />
+    <PackageVersion Include="Mono.Options" Version="6.12.0.148" />
+  </ItemGroup>
+</Project>

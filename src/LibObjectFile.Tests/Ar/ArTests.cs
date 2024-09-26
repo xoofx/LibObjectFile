@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -11,15 +11,16 @@ using LibObjectFile.Diagnostics;
 
 namespace LibObjectFile.Tests.Ar;
 
+[TestClass]
 public class ArTests : ArTestBase
 {
-    [Test]
+    [TestMethod]
     public void CheckInvalidHeader()
     {
         // Incorrect magic length
         {
             var stream = new MemoryStream(new byte[] { 1, 2, 3, 4 });
-            Assert.False(ArArchiveFile.IsAr(stream, out var diagnostics));
+            Assert.IsFalse(ArArchiveFile.IsAr(stream, out var diagnostics));
             ExpectDiagnostics(diagnostics, DiagnosticId.AR_ERR_InvalidMagicLength);
         }
             
@@ -36,7 +37,7 @@ public class ArTests : ArTestBase
                 (byte)'>',
                 (byte)'?',
             });
-            Assert.False(ArArchiveFile.IsAr(stream, out var diagnostics));
+            Assert.IsFalse(ArArchiveFile.IsAr(stream, out var diagnostics));
             ExpectDiagnostics(diagnostics, DiagnosticId.AR_ERR_MagicNotFound);
         }
 
@@ -53,12 +54,12 @@ public class ArTests : ArTestBase
                 (byte)'>',
                 (byte)'\n',
             });
-            Assert.True(ArArchiveFile.IsAr(stream, out var diagnostics));
+            Assert.IsTrue(ArArchiveFile.IsAr(stream, out var diagnostics));
             ExpectNoDiagnostics(diagnostics);
         }
     }
 
-    [Test] 
+    [TestMethod] 
     public void CheckInvalidFileEntry()
     {
         // Incorrect entry length
@@ -68,7 +69,7 @@ public class ArTests : ArTestBase
             stream.Write(new byte[] {(byte)'a', (byte)'b'});
             stream.Position = 0;
 
-            Assert.False(ArArchiveFile.TryRead(stream, ArArchiveKind.GNU, out _, out var diagnostics));
+            Assert.IsFalse(ArArchiveFile.TryRead(stream, ArArchiveKind.GNU, out _, out var diagnostics));
             ExpectDiagnostics(diagnostics, DiagnosticId.AR_ERR_InvalidFileEntryLength);
         }
 
@@ -95,7 +96,7 @@ public class ArTests : ArTestBase
 
                 stream.Position = 0;
 
-                Assert.False(ArArchiveFile.TryRead(stream, ArArchiveKind.GNU, out _, out var diagnostics));
+                Assert.IsFalse(ArArchiveFile.TryRead(stream, ArArchiveKind.GNU, out _, out var diagnostics));
                 ExpectDiagnostics(diagnostics, DiagnosticId.AR_ERR_InvalidCharacterFoundInFileEntry);
             }
         }
@@ -118,7 +119,7 @@ public class ArTests : ArTestBase
 
             stream.Position = 0;
 
-            Assert.False(ArArchiveFile.TryRead(stream, ArArchiveKind.GNU, out _, out var diagnostics));
+            Assert.IsFalse(ArArchiveFile.TryRead(stream, ArArchiveKind.GNU, out _, out var diagnostics));
             ExpectDiagnostics(diagnostics, DiagnosticId.AR_ERR_InvalidCharacterInFileEntryName);
         }
 
@@ -139,7 +140,7 @@ public class ArTests : ArTestBase
 
             stream.Position = 0;
 
-            Assert.False(ArArchiveFile.TryRead(stream, ArArchiveKind.GNU, out _, out var diagnostics));
+            Assert.IsFalse(ArArchiveFile.TryRead(stream, ArArchiveKind.GNU, out _, out var diagnostics));
             ExpectDiagnostics(diagnostics, DiagnosticId.CMN_ERR_UnexpectedEndOfFile, DiagnosticId.CMN_ERR_UnexpectedEndOfFile);
 
             stream.Position = continuePosition;
@@ -153,11 +154,11 @@ public class ArTests : ArTestBase
 
             var result = ArArchiveFile.TryRead(stream, ArArchiveKind.GNU, out var arFile, out diagnostics);
             ExpectNoDiagnostics(diagnostics);
-            Assert.True(result, $"Error while reading file: {diagnostics}");
+            Assert.IsTrue(result, $"Error while reading file: {diagnostics}");
             Assert.AreEqual(1, arFile.Files.Count, "Invalid number of file entries found");
             Assert.AreEqual("a", arFile.Files[0].Name, "Invalid name of file entry[0] found");
-            Assert.AreEqual(2, arFile.Files[0].Size, "Invalid size of file entry[0] found");
-            Assert.IsInstanceOf<ArBinaryFile>(arFile.Files[0], "Invalid instance of of file entry[0] ");
+            Assert.AreEqual(2U, arFile.Files[0].Size, "Invalid size of file entry[0] found");
+            Assert.IsInstanceOfType<ArBinaryFile>(arFile.Files[0], "Invalid instance of of file entry[0] ");
                 
             var fileStream = ((ArBinaryFile) arFile.Files[0]).Stream;
             var read = new byte[]
@@ -165,9 +166,9 @@ public class ArTests : ArTestBase
                 (byte)fileStream.ReadByte(),
                 (byte)fileStream.ReadByte()
             };
-            Assert.AreEqual(new byte[] { 0, 1}, read, "Invalid content of of file entry[0] ");
+            CollectionAssert.AreEqual(new byte[] { 0, 1}, read, "Invalid content of of file entry[0] ");
                 
-            Assert.Null(arFile.SymbolTable, "Invalid non-null symbol table found");
+            Assert.IsNull(arFile.SymbolTable, "Invalid non-null symbol table found");
 
         }
 
@@ -188,26 +189,26 @@ public class ArTests : ArTestBase
             var continuePosition = stream.Position;
             stream.Position = 0;
 
-            Assert.False(ArArchiveFile.TryRead(stream, ArArchiveKind.GNU, out _, out var diagnostics));
+            Assert.IsFalse(ArArchiveFile.TryRead(stream, ArArchiveKind.GNU, out _, out var diagnostics));
             ExpectDiagnostics(diagnostics, DiagnosticId.CMN_ERR_UnexpectedEndOfFile);
 
             stream.Position = continuePosition;
             stream.WriteByte(0);
             stream.Position = 0;
 
-            Assert.False(ArArchiveFile.TryRead(stream, ArArchiveKind.GNU, out _, out diagnostics));
+            Assert.IsFalse(ArArchiveFile.TryRead(stream, ArArchiveKind.GNU, out _, out diagnostics));
             ExpectDiagnostics(diagnostics, DiagnosticId.AR_ERR_ExpectingNewLineCharacter);
 
             stream.Position = continuePosition;
             stream.WriteByte((byte)'\n');
             stream.Position = 0;
 
-            Assert.True(ArArchiveFile.TryRead(stream, ArArchiveKind.GNU, out _, out diagnostics));
+            Assert.IsTrue(ArArchiveFile.TryRead(stream, ArArchiveKind.GNU, out _, out diagnostics));
             ExpectNoDiagnostics(diagnostics);
         }
     }
 
-    [Test]
+    [TestMethod]
     public void CheckInvalidBSDFileEntry()
     {
         // Input invalid BSD Length
@@ -225,7 +226,7 @@ public class ArTests : ArTestBase
 
             stream.Position = 0;
 
-            Assert.False(ArArchiveFile.TryRead(stream, ArArchiveKind.BSD, out _, out var diagnostics));
+            Assert.IsFalse(ArArchiveFile.TryRead(stream, ArArchiveKind.BSD, out _, out var diagnostics));
             ExpectDiagnostics(diagnostics, DiagnosticId.AR_ERR_InvalidCharacterFoundInFileEntry);
         }
 
@@ -249,7 +250,7 @@ public class ArTests : ArTestBase
                 
             stream.Position = 0;
 
-            Assert.False(ArArchiveFile.TryRead(stream, ArArchiveKind.BSD, out _, out var diagnostics));
+            Assert.IsFalse(ArArchiveFile.TryRead(stream, ArArchiveKind.BSD, out _, out var diagnostics));
             ExpectDiagnostics(diagnostics, DiagnosticId.CMN_ERR_UnexpectedEndOfFile);
 
             // Check validity of BSD name
@@ -261,14 +262,14 @@ public class ArTests : ArTestBase
             stream.Position = 0;
 
             var result = ArArchiveFile.TryRead(stream, ArArchiveKind.BSD, out var arFile, out diagnostics);
-            Assert.True(result, $"Error while reading file: {diagnostics}");
+            Assert.IsTrue(result, $"Error while reading file: {diagnostics}");
             Assert.AreEqual(1, arFile.Files.Count, "Invalid number of file entries found");
             Assert.AreEqual("ab", arFile.Files[0].Name, "Invalid name of file entry[0] found");
-            Assert.Null(arFile.SymbolTable, "Invalid non-null symbol table found");
+            Assert.IsNull(arFile.SymbolTable, "Invalid non-null symbol table found");
         }
     }
 
-    [Test]
+    [TestMethod]
     public void CheckLibraryWithELF()
     {
         var cppName = "helloworld";
@@ -281,15 +282,15 @@ public class ArTests : ArTestBase
 
         using (var stream = new FileStream(cppLib, FileMode.Open, FileAccess.Read))
         {
-            Assert.True(ArArchiveFile.IsAr(stream));
+            Assert.IsTrue(ArArchiveFile.IsAr(stream));
 
             var arFile = ArArchiveFile.Read(stream, new ArArchiveFileReaderOptions(ArArchiveKind.GNU) {ProcessObjectFiles = false});
 
             var elfFile = arFile.Files.FirstOrDefault(x => x.Name == cppObj);
 
-            Assert.NotNull(elfFile, $"Unable to find {cppObj} file in {cppLib}");
+            Assert.IsNotNull(elfFile, $"Unable to find {cppObj} file in {cppLib}");
 
-            Assert.NotNull(arFile.SymbolTable, $"Unable to find symbol table in {cppLib}");
+            Assert.IsNotNull(arFile.SymbolTable, $"Unable to find symbol table in {cppLib}");
 
             Assert.AreEqual(1, arFile.SymbolTable.Symbols.Count, "Invalid number of symbols in Symbol table");
             Assert.AreEqual("main", arFile.SymbolTable.Symbols[0].Name, "Invalid symbol found");
@@ -311,11 +312,11 @@ public class ArTests : ArTestBase
             stream.CopyTo(originalStream);
             var originalArray = originalStream.ToArray();
 
-            Assert.AreEqual(originalArray, newArray, $"Non binary matching between file {cppLib} and {cppLibCopy}");
+            CollectionAssert.AreEqual(originalArray, newArray, $"Non binary matching between file {cppLib} and {cppLibCopy}");
         }
     }
 
-    [Test]
+    [TestMethod]
     public void CheckCreateArLibrary()
     {
         var libName = "libcustom.a";
@@ -378,7 +379,7 @@ public class ArTests : ArTestBase
             file2 = ArArchiveFile.Read(stream, ArArchiveKind.GNU);
         }
 
-        Assert.NotNull(file2.SymbolTable);
+        Assert.IsNotNull(file2.SymbolTable);
         CompareArFiles(file, file2);
 
         var libNameBsd = "libcustom_bsd.a";

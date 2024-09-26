@@ -76,7 +76,7 @@ public abstract class ElfTestBase
             newObjectFile.Write(memoryStream);
             var newBuffer = memoryStream.ToArray();
 
-            Assert.AreEqual(originalBuffer, newBuffer, "Invalid binary diff between write -> (original) -> read -> write -> (new)");
+            CollectionAssert.AreEqual(originalBuffer, newBuffer, "Invalid binary diff between write -> (original) -> read -> write -> (new)");
         }
     }
 

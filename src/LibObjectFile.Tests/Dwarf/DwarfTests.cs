@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -10,18 +10,20 @@ using LibObjectFile.Elf;
 
 namespace LibObjectFile.Tests.Dwarf;
 
+[TestClass]
 public class DwarfTests
 {
-    [TestCase(0UL)]
-    [TestCase(1UL)]
-    [TestCase(50UL)]
-    [TestCase(0x7fUL)]
-    [TestCase(0x80UL)]
-    [TestCase(0x81UL)]
-    [TestCase(0x12345UL)]
-    [TestCase(2147483647UL)] // int.MaxValue
-    [TestCase(4294967295UL)] // uint.MaxValue
-    [TestCase(ulong.MaxValue)]
+    [TestMethod]
+    [DataRow(0UL)]
+    [DataRow(1UL)]
+    [DataRow(50UL)]
+    [DataRow(0x7fUL)]
+    [DataRow(0x80UL)]
+    [DataRow(0x81UL)]
+    [DataRow(0x12345UL)]
+    [DataRow(2147483647UL)] // int.MaxValue
+    [DataRow(4294967295UL)] // uint.MaxValue
+    [DataRow(ulong.MaxValue)]
     public void TestLEB128(ulong value)
     {
         var stream = new MemoryStream();
@@ -36,17 +38,18 @@ public class DwarfTests
         Assert.AreEqual(value, readbackValue);
     }
 
-    [TestCase(0L)]
-    [TestCase(1L)]
-    [TestCase(50L)]
-    [TestCase(0x7fL)]
-    [TestCase(0x80L)]
-    [TestCase(0x81L)]
-    [TestCase(0x12345L)]
-    [TestCase(2147483647L)] // int.MaxValue
-    [TestCase(4294967295L)] // uint.MaxValue
-    [TestCase(long.MinValue)]
-    [TestCase(long.MaxValue)]
+    [TestMethod]
+    [DataRow(0L)]
+    [DataRow(1L)]
+    [DataRow(50L)]
+    [DataRow(0x7fL)]
+    [DataRow(0x80L)]
+    [DataRow(0x81L)]
+    [DataRow(0x12345L)]
+    [DataRow(2147483647L)] // int.MaxValue
+    [DataRow(4294967295L)] // uint.MaxValue
+    [DataRow(long.MinValue)]
+    [DataRow(long.MaxValue)]
     public void TestSignedLEB128(long value)
     {
         var stream = new MemoryStream();
@@ -75,7 +78,7 @@ public class DwarfTests
     }
 
 
-    [Test]
+    [TestMethod]
     public void TestDebugLineHelloWorld()
     {
         var cppName = "helloworld";
@@ -131,10 +134,10 @@ public class DwarfTests
 
         var inputDebugLineBuffer = copyInputDebugLineStream.ToArray();
         var outputDebugLineBuffer = ((MemoryStream)reloadContext.DebugLineStream).ToArray();
-        Assert.AreEqual(inputDebugLineBuffer, outputDebugLineBuffer);
+        CollectionAssert.AreEqual(inputDebugLineBuffer, outputDebugLineBuffer);
     }
 
-    [Test]
+    [TestMethod]
     public void TestDebugLineLibMultipleObjs()
     {
         var cppName = "lib";
@@ -190,10 +193,10 @@ public class DwarfTests
 
         var inputDebugLineBuffer = copyInputDebugLineStream.ToArray();
         var outputDebugLineBuffer = ((MemoryStream)reloadContext.DebugLineStream).ToArray();
-        Assert.AreEqual(inputDebugLineBuffer, outputDebugLineBuffer);
+        CollectionAssert.AreEqual(inputDebugLineBuffer, outputDebugLineBuffer);
     }
 
-    [Test]
+    [TestMethod]
     public void TestDebugLineSmall()
     {
         var cppName = "small";
@@ -246,12 +249,12 @@ public class DwarfTests
 
         var inputDebugLineBuffer = copyInputDebugLineStream.ToArray();
         var outputDebugLineBuffer = ((MemoryStream)reloadContext.DebugLineStream).ToArray();
-        Assert.AreEqual(inputDebugLineBuffer, outputDebugLineBuffer);
+        CollectionAssert.AreEqual(inputDebugLineBuffer, outputDebugLineBuffer);
     }
 
 
 
-    [Test]
+    [TestMethod]
     public void TestDebugLineMultipleFunctions()
     {
         var cppName = "multiple_functions";
@@ -305,11 +308,11 @@ public class DwarfTests
 
         var inputDebugLineBuffer = copyInputDebugLineStream.ToArray();
         var outputDebugLineBuffer = ((MemoryStream)reloadContext.DebugLineStream).ToArray();
-        Assert.AreEqual(inputDebugLineBuffer, outputDebugLineBuffer);
+        CollectionAssert.AreEqual(inputDebugLineBuffer, outputDebugLineBuffer);
     }
 
 
-    [Test]
+    [TestMethod]
     public void TestDebugInfoSmall()
     {
         var cppName = "small";
@@ -368,7 +371,7 @@ public class DwarfTests
     }
 
 
-    [Test]
+    [TestMethod]
     public void CreateDwarf()
     {
         // Create ELF object
@@ -383,7 +386,7 @@ public class DwarfTests
 
         var elfDiagnostics = new DiagnosticBag();
         elf.UpdateLayout(elfDiagnostics);
-        Assert.False(elfDiagnostics.HasErrors);
+        Assert.IsFalse(elfDiagnostics.HasErrors);
 
         // Create DWARF Object
         var dwarfFile = new DwarfFile();

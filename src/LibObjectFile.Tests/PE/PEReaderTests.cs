@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -10,11 +10,13 @@ using LibObjectFile.PE;
 
 namespace LibObjectFile.Tests.PE;
 
+[TestClass]
 public class PEReaderTests
 {
-    [TestCase("NativeConsoleWin64.exe")]
-    [TestCase("NativeConsole2Win64.exe")]
-    [TestCase("NativeLibraryWin64.dll")]
+    [TestMethod]
+    [DataRow("NativeConsoleWin64.exe")]
+    [DataRow("NativeConsole2Win64.exe")]
+    [DataRow("NativeLibraryWin64.dll")]
 
     public void TestPrinter(string name)
     {
