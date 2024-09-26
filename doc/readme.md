@@ -240,3 +240,41 @@ symbolTable.Symbols.Add(new ArSymbol("my_symbol", elf));
 ### Links
 
 - [Archive ar file format (Wikipedia)](https://en.wikipedia.org/wiki/Ar_(Unix))
+
+## PE Object File Format
+
+### Overview
+
+The main entry-point for reading/writing PE file is the [`PEFile`](https://github.com/xoofx/LibObjectFile/blob/master/src/LibObjectFile/PE/PEFile.cs) class.
+
+![PE class diagram](PE.png)
+
+## Sections and Directories
+
+In `LibObjectFile` all the section data `PESectionData` - e.g code, data but also including PE directories - are part of either:
+
+- a `PESection`
+- some raw data before the first section via `PEFile.ExtraDataBeforeSections`
+- raw data after the last section via `PEFile.ExtraDataAfterSections`
+
+Most of the conventional data is stored in sections, including PE directories.
+
+A PE Directory itself can contain also a collection of `PESectionData`.
+
+If the size of a section data is modified (e.g adding elements to a directory table or modifying a stream in a `PEStreamSectionData`), it is important to call `PEFile.UpdateLayout` to update the layout of the PE file.
+
+## VA, RVA, RVO
+
+In the PE file format, there are different types of addresses:
+
+- `VA` (Virtual Address) is the address of a section in memory including the base address of the image `PEFile.OptionalHeader.ImageBase`
+- `RVA` (Relative Virtual Address) is the address of a section relative to the base address of the image
+  - A `RVA` can be converted to a `VA` by adding the `PEFile.OptionalHeader.ImageBase`.
+- `RVO` (Relative Virtual Offset) is an offset relative to an RVA provided by section data or a section.
+  - A `RVO` can be converted to a `RVA` by adding the RVA of the section data or the section.
+
+In `LibObjectFile` links to RVA between section and section datas are done through a `IPELink` that is combining a reference to a `PEObjectBase` and a `RVO`. It means that RVA are always up to date and linked to the right section data.
+
+### Links
+
+- [PE and COFF Specification](https://docs.microsoft.com/en-us/windows/win32/debug/pe-format)
