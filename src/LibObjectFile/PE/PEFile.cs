@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -17,7 +17,7 @@ namespace LibObjectFile.PE;
 /// <summary>
 /// A Portable Executable file that can be read, modified and written.
 /// </summary>
-public partial class PEFile : PEObjectBase
+public sealed partial class PEFile : PEObjectBase
 {
     private byte[] _dosStub = [];
     private Stream? _dosStubExtra;
