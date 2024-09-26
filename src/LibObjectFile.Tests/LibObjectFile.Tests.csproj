@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <IsPackable>false</IsPackable>
+    <EnableMSTestRunner>true</EnableMSTestRunner>
   </PropertyGroup>
 
   <ItemGroup>
@@ -61,6 +62,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LibObjectFile\LibObjectFile.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Verified\" />
   </ItemGroup>
 
 </Project>

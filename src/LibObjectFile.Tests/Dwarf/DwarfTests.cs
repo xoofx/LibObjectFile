@@ -13,7 +13,7 @@ namespace LibObjectFile.Tests.Dwarf;
 [TestClass]
 public class DwarfTests
 {
-    [TestMethod]
+    [DataTestMethod]
     [DataRow(0UL)]
     [DataRow(1UL)]
     [DataRow(50UL)]
@@ -38,7 +38,7 @@ public class DwarfTests
         Assert.AreEqual(value, readbackValue);
     }
 
-    [TestMethod]
+    [DataTestMethod]
     [DataRow(0L)]
     [DataRow(1L)]
     [DataRow(50L)]

@@ -6,22 +6,27 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using LibObjectFile.PE;
+using VerifyMSTest;
 
 namespace LibObjectFile.Tests.PE;
 
 [TestClass]
-public class PEReaderTests
+[UsesVerify]
+public partial class PEReaderTests
 {
-    [TestMethod]
+    [DataTestMethod]
     [DataRow("NativeConsoleWin64.exe")]
     [DataRow("NativeConsole2Win64.exe")]
     [DataRow("NativeLibraryWin64.dll")]
 
-    public void TestPrinter(string name)
+    public async Task TestPrinter(string name)
     {
         var stream = File.OpenRead(Path.Combine(AppContext.BaseDirectory, "PE", name));
         var peImage = PEFile.Read(stream);
-        peImage.Print(Console.Out);
+        var text = new StringWriter();
+        peImage.Print(text);
+        await Verifier.Verify(text).UseParameters(name);
     }
 }
