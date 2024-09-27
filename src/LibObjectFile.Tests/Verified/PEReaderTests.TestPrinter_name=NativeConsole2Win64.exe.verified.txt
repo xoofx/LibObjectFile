@@ -80,12 +80,21 @@ Data Directories
     [13] = PEDelayImportDirectory           Position = 0x000029A8, Size = 0x00000040, RVA = 0x00003BA8, VirtualSize = 0x00000040
     [14] = null
 
+Section Headers
+    [00]    .text PESection                        Position = 0x00000400, Size = 0x00001A00, RVA = 0x00001000, VirtualSize = 0x000019E9, Characteristics = 0x60000020 (ContainsCode, MemExecute, MemRead)
+    [01]   .rdata PESection                        Position = 0x00001E00, Size = 0x00001A00, RVA = 0x00003000, VirtualSize = 0x0000183C, Characteristics = 0x40000040 (ContainsInitializedData, MemRead)
+    [02]    .data PESection                        Position = 0x00003800, Size = 0x00000200, RVA = 0x00005000, VirtualSize = 0x000006D0, Characteristics = 0xC0000040 (ContainsInitializedData, MemRead, MemWrite)
+    [03]   .pdata PESection                        Position = 0x00003A00, Size = 0x00000400, RVA = 0x00006000, VirtualSize = 0x00000210, Characteristics = 0x40000040 (ContainsInitializedData, MemRead)
+    [04]    .rsrc PESection                        Position = 0x00003E00, Size = 0x00000200, RVA = 0x00007000, VirtualSize = 0x000001E0, Characteristics = 0x40000040 (ContainsInitializedData, MemRead)
+    [05]   .reloc PESection                        Position = 0x00004000, Size = 0x00000200, RVA = 0x00008000, VirtualSize = 0x0000003C, Characteristics = 0x42000040 (ContainsInitializedData, MemDiscardable, MemRead)
+
 Sections
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     [00]    .text PESection                        Position = 0x00000400, Size = 0x00001A00, RVA = 0x00001000, VirtualSize = 0x000019E9, Characteristics = 0x60000020 (ContainsCode, MemExecute, MemRead)
     
         [00] PEStreamSectionData              Position = 0x00000400, Size = 0x000019E9, RVA = 0x00001000, VirtualSize = 0x000019E9
         
-
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     [01]   .rdata PESection                        Position = 0x00001E00, Size = 0x00001A00, RVA = 0x00003000, VirtualSize = 0x0000183C, Characteristics = 0x40000040 (ContainsInitializedData, MemRead)
     
         [00] PEImportAddressTableDirectory    Position = 0x00001E00, Size = 0x00000250, RVA = 0x00003000, VirtualSize = 0x00000250
@@ -400,7 +409,7 @@ Sections
         
         [27] PEStreamSectionData              Position = 0x00002E58, Size = 0x000007E4, RVA = 0x00004058, VirtualSize = 0x000007E4
         
-
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     [02]    .data PESection                        Position = 0x00003800, Size = 0x00000200, RVA = 0x00005000, VirtualSize = 0x000006D0, Characteristics = 0xC0000040 (ContainsInitializedData, MemRead, MemWrite)
     
         [00] PEStreamSectionData              Position = 0x00003800, Size = 0x00000078, RVA = 0x00005000, VirtualSize = 0x00000078
@@ -411,7 +420,7 @@ Sections
         
         [02] PEStreamSectionData              Position = 0x00003890, Size = 0x00000170, RVA = 0x00005090, VirtualSize = 0x00000170
         
-
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     [03]   .pdata PESection                        Position = 0x00003A00, Size = 0x00000400, RVA = 0x00006000, VirtualSize = 0x00000210, Characteristics = 0x40000040 (ContainsInitializedData, MemRead)
     
         [00] PEExceptionDirectory             Position = 0x00003A00, Size = 0x00000210, RVA = 0x00006000, VirtualSize = 0x00000210
@@ -592,7 +601,7 @@ Sections
             [43] UnwindInfoAddress = RVA = 0x3AF0, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x154
             
         
-
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     [04]    .rsrc PESection                        Position = 0x00003E00, Size = 0x00000200, RVA = 0x00007000, VirtualSize = 0x000001E0, Characteristics = 0x40000040 (ContainsInitializedData, MemRead)
     
         [00] PEResourceDirectory              Position = 0x00003E00, Size = 0x000001E0, RVA = 0x00007000, VirtualSize = 0x000001E0
@@ -603,7 +612,7 @@ Sections
             [00] PEStreamSectionData              Position = 0x00003FD8, Size = 0x00000008, RVA = 0x000071D8, VirtualSize = 0x00000008
             
         
-
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     [05]   .reloc PESection                        Position = 0x00004000, Size = 0x00000200, RVA = 0x00008000, VirtualSize = 0x0000003C, Characteristics = 0x42000040 (ContainsInitializedData, MemDiscardable, MemRead)
     
         [00] PEBaseRelocationDirectory        Position = 0x00004000, Size = 0x0000003C, RVA = 0x00008000, VirtualSize = 0x0000003C
@@ -632,4 +641,3 @@ Sections
                 [000] Dir64 Offset = 0x0078, RVA = 0x5078 (0x000000014000133E), SectionData = { RVA = 0x00005078 (PEBoundImportAddressTable64[1] -> .data) }
                 [001] Dir64 Offset = 0x0080, RVA = 0x5080 (0x0000000140001332), SectionData = { RVA = 0x00005078 (PEBoundImportAddressTable64[1] -> .data) }
         
-

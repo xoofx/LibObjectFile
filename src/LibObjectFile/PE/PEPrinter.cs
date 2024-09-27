@@ -151,25 +151,40 @@ public static class PEPrinter
 
     private static void PrintSections(PEFile file, ref TextWriterIndenter writer)
     {
-        writer.WriteLine("Sections");
+        writer.WriteLine("Section Headers");
+        writer.Indent();
         for (var i = 0; i < file.Sections.Count; i++)
         {
             var section = file.Sections[i];
-            writer.Indent();
+            writer.WriteLine($"[{i:00}] {section.Name,8} {PEDescribe(section)}, Characteristics = 0x{(uint)section.Characteristics:X8} ({section.Characteristics})");
+        }
+        writer.Unindent();
+        writer.WriteLine();
+
+        writer.WriteLine("Sections");
+
+        string heading = new string('-', 224);
+        writer.Indent();
+        for (var i = 0; i < file.Sections.Count; i++)
+        {
+            var section = file.Sections[i];
+
+            writer.WriteLine(heading);
             writer.WriteLine($"[{i:00}] {section.Name,8} {PEDescribe(section)}, Characteristics = 0x{(uint)section.Characteristics:X8} ({section.Characteristics})");
             writer.WriteLine();
-            foreach (var data in section.Content)
+            if (section.Content.Count > 0)
             {
-                writer.Indent();
-                PrintSectionData(file, data, ref writer);
-                writer.Unindent();
+                foreach (var data in section.Content)
+                {
+                    writer.Indent();
+                    PrintSectionData(file, data, ref writer);
+                    writer.Unindent();
+                }
             }
-
-            writer.Unindent();
-            writer.WriteLine();
         }
+        writer.Unindent();
     }
-    
+
     private static void PrintSectionData(PEFile file, PESectionData data, ref TextWriterIndenter writer)
     {
         writer.WriteLine($"[{data.Index:00}] {PEDescribe(data)}");
