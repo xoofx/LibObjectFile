@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -43,22 +43,22 @@ public abstract class PEDataDirectory : PESectionData
 
         // A directory could have a content in addition to the header
         // So we update the VirtualAddress of each content and update the layout
-        var position = Position;
-        foreach (var table in Content)
+        var position = Position + headerSize;
+        foreach (var subData in Content)
         {
-            table.RVA = va;
+            subData.RVA = va;
 
             // Update layout will update virtual address
             if (!context.UpdateSizeOnly)
             {
-                table.Position = position;
+                subData.Position = position;
             }
 
-            table.UpdateLayout(context);
+            subData.UpdateLayout(context);
             
-            va += (uint)table.Size;
-            size += table.Size;
-            position += table.Size;
+            va += (uint)subData.Size;
+            size += subData.Size;
+            position += subData.Size;
         }
 
         Size = size;

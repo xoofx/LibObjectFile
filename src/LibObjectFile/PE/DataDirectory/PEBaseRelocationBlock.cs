@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -53,7 +53,15 @@ public sealed class PEBaseRelocationBlock
             return (uint)BlockBuffer.Length;
         }
 
-        return (uint)(Relocations.Count * sizeof(ushort));
+        var count = Relocations.Count;
+
+        // If we have an odd number of relocations, we need to add an extra 0x0
+        if (count > 0 && (count & 1) != 0)
+        {
+            count++;
+        }
+
+        return (uint)(count * sizeof(ushort));
     }
 
     internal void ReadAndBind(PEImageReader reader)
@@ -62,35 +70,33 @@ public sealed class PEBaseRelocationBlock
 
         var relocSpan = MemoryMarshal.Cast<byte, RawImageBaseRelocation>(buffer.Span);
 
-        // Remove padding zeros at the end of the block
-        if (relocSpan.Length > 0 && relocSpan[^1].IsZero)
-        {
-            relocSpan = relocSpan.Slice(0, relocSpan.Length - 1);
-        }
-
         var section = SectionLink.Container!;
         var blockBaseAddress = SectionLink.RVA();
 
         // Iterate on all relocations
-        foreach (var relocation in relocSpan)
+        foreach (var rawReloc in relocSpan)
         {
-            if (relocation.IsZero)
+            PEBaseRelocation reloc;
+            if (rawReloc.IsZero)
             {
-                continue;
+                reloc = new PEBaseRelocation();
             }
-
-            var va = blockBaseAddress + relocation.OffsetInBlockPart;
-
-            // Find the section data containing the virtual address
-            if (!section.TryFindSectionData(va, out var sectionData))
+            else
             {
-                reader.Diagnostics.Error(DiagnosticId.PE_ERR_BaseRelocationDirectoryInvalidVirtualAddress, $"Unable to find the section data containing the virtual address 0x{va:X4}");
-                continue;
-            }
+                var va = blockBaseAddress + rawReloc.OffsetInBlockPart;
 
-            var offsetInSectionData = va - sectionData.RVA;
-            var newRelocation = new PEBaseRelocation(relocation.Type, sectionData, offsetInSectionData);
-            Relocations.Add(newRelocation);
+                // Find the section data containing the virtual address
+                if (!section.TryFindSectionData(va, out var sectionData))
+                {
+                    reader.Diagnostics.Error(DiagnosticId.PE_ERR_BaseRelocationDirectoryInvalidVirtualAddress, $"Unable to find the section data containing the virtual address 0x{va:X4}");
+                    continue;
+                }
+
+                var offsetInSectionData = va - sectionData.RVA;
+                reloc = new PEBaseRelocation(rawReloc.Type, sectionData, offsetInSectionData);
+
+            }
+            Relocations.Add(reloc);
         }
 
         // Clear the buffer, as we don't need it anymore

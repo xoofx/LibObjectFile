@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -10,6 +10,8 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using LibObjectFile.Collections;
+using LibObjectFile.Diagnostics;
+using LibObjectFile.Utils;
 
 namespace LibObjectFile.PE;
 
@@ -69,20 +71,39 @@ public sealed class PESection : PEObject
     /// <inheritdoc />
     public override void UpdateLayout(PELayoutContext context)
     {
+        var peFile = context.File;
+
+        var sectionAlignment = peFile.OptionalHeader.SectionAlignment;
+        var fileAlignment = peFile.OptionalHeader.FileAlignment;
+
         var va = RVA;
         var position = Position;
+        var size = 0U;
         foreach (var data in Content)
         {
             data.RVA = va;
+
             if (!context.UpdateSizeOnly)
             {
                 data.Position = position;
             }
 
             data.UpdateLayout(context);
-            va += (uint)data.Size;
-            position += data.Size;
+
+            var dataSize = (uint)data.Size;
+            va += dataSize;
+            position += dataSize;
+            size += dataSize;
         }
+
+        // The size of a section is the size of the content aligned on the file alignment
+        Size = (Characteristics & SectionCharacteristics.ContainsUninitializedData) == 0 ? AlignHelper.AlignUp(size, fileAlignment) : (ulong)0;
+
+        //if (Size > VirtualSize)
+        //{
+        //    // Log diagnostics error
+        //    context.Diagnostics.Error(DiagnosticId.PE_ERR_SectionSizeLargerThanVirtualSize, $"Section {Name} size {Size} is greater than the virtual size {VirtualSize}");
+        //}
     }
 
     public override void Read(PEImageReader reader)

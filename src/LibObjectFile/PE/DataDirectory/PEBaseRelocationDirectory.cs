@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -19,12 +19,12 @@ public sealed class PEBaseRelocationDirectory : PEDataDirectory
     
     public List<PEBaseRelocationBlock> Blocks { get; } = new();
 
-    protected override uint ComputeHeaderSize(PEVisitorContext context)
+    protected override unsafe uint ComputeHeaderSize(PEVisitorContext context)
     {
         var size = 0U;
         foreach (var block in Blocks)
         {
-            size += block.CalculateSizeOf();
+            size += (uint)(block.CalculateSizeOf() + sizeof(ImageBaseRelocation));
         }
 
         return size;

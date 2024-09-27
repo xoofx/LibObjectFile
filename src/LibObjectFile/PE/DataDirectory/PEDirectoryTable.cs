@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -145,6 +145,21 @@ public sealed class PEDirectoryTable : IEnumerable<PEDataDirectory>
         {
             _count++;
         }
+    }
+
+    internal int CalculateNumberOfEntries()
+    {
+        int count = 0;
+        ReadOnlySpan<PEObjectBase?> span = _entries;
+        for(int i = 0; i < span.Length; i++) 
+        {
+            if (_entries[i] is not null)
+            {
+                count = i + 1;
+            }
+        }
+
+        return count;
     }
     
     [InlineArray(15)]

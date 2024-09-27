@@ -1,13 +1,17 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
 using System;
 using System.Buffers;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
+using System.Xml.Linq;
 using LibObjectFile.Diagnostics;
+using static System.Collections.Specialized.BitVector32;
 
 namespace LibObjectFile.PE;
 
@@ -49,24 +53,17 @@ public sealed class PEExportAddressTable : PESectionData
             for (int i = 0; i < Values.Count; i++)
             {
                 var rva = spanRva[i];
-                if (!reader.File.TryFindContainerByRVA(rva, out var container))
+                if (!reader.File.TryFindSection(rva, out var section))
                 {
                     reader.Diagnostics.Error(DiagnosticId.PE_ERR_ExportAddressTableInvalidRVA, $"Unable to find the section data for RVA {rva}");
                     return;
                 }
 
-                ObjectElement? parent = container;
-                while (parent != null && parent is not PESection)
-                {
-                    parent = parent.Parent;
-                }
-
-                Debug.Assert(parent is not null);
-                var section = (PESection)parent!;
+                var found = section.TryFindSectionData(rva, out var sectionData);
 
                 if (section.Name == PESectionName.EData)
                 {
-                    var streamSectionData = container as PEStreamSectionData;
+                    var streamSectionData = sectionData as PEStreamSectionData;
                     if (streamSectionData is null)
                     {
                         reader.Diagnostics.Error(DiagnosticId.PE_ERR_ExportAddressTableInvalidRVA, $"Invalid forwarder RVA {rva} for Export Address Table");
@@ -74,11 +71,17 @@ public sealed class PEExportAddressTable : PESectionData
                     }
 
                     Values[i] = new PEExportFunctionEntry(new PEAsciiStringLink(streamSectionData, rva - streamSectionData.RVA));
-
                 }
                 else
                 {
-                    Values[i] = new PEExportFunctionEntry(new PEFunctionAddressLink(container, rva - container.RVA));
+                    if (found)
+                    {
+                        Values[i] = new PEExportFunctionEntry(new PEFunctionAddressLink(sectionData, rva - sectionData!.RVA));
+                    }
+                    else
+                    {
+                        Values[i] = new PEExportFunctionEntry(new PEFunctionAddressLink(section, rva - section.RVA));
+                    }
                 }
             }
         }

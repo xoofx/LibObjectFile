@@ -83,99 +83,99 @@ Data Directories
 Sections
     [00]    .text PESection                        Position = 0x00000400, Size = 0x00001A00, RVA = 0x00001000, VirtualSize = 0x000019E9, Characteristics = 0x60000020 (ContainsCode, MemExecute, MemRead)
     
-        Section Data [00] PEStreamSectionData              Position = 0x00000400, Size = 0x00001A00, RVA = 0x00001000, VirtualSize = 0x00001A00
+        [00] PEStreamSectionData              Position = 0x00000400, Size = 0x000019E9, RVA = 0x00001000, VirtualSize = 0x000019E9
         
 
     [01]   .rdata PESection                        Position = 0x00001E00, Size = 0x00001A00, RVA = 0x00003000, VirtualSize = 0x0000183C, Characteristics = 0x40000040 (ContainsInitializedData, MemRead)
     
-        Section Data [00] PEImportAddressTableDirectory    Position = 0x00001E00, Size = 0x00000250, RVA = 0x00003000, VirtualSize = 0x00000250
-                Section Data [00] PEImportAddressTable             Position = 0x00001EC0, Size = 0x00000068, RVA = 0x00003000, VirtualSize = 0x00000068
-                    [0] PEImportHintName { Hint = 255, Name = ??6?$basic_ostream@DU?$char_traits@D@std@@@std@@QEAAAEAV01@H@Z } (RVA = 0x42D6, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x27E)
-                    [1] PEImportHintName { Hint = 262, Name = ??6?$basic_ostream@DU?$char_traits@D@std@@@std@@QEAAAEAV01@P6AAEAV01@AEAV01@@Z@Z } (RVA = 0x4282, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x22A)
-                    [2] PEImportHintName { Hint = 1221, Name = ?setstate@?$basic_ios@DU?$char_traits@D@std@@@std@@QEAAXH_N@Z } (RVA = 0x4242, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x1EA)
-                    [3] PEImportHintName { Hint = 872, Name = ?flush@?$basic_ostream@DU?$char_traits@D@std@@@std@@QEAAAEAV12@XZ } (RVA = 0x41FE, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x1A6)
-                    [4] PEImportHintName { Hint = 580, Name = ?_Osfx@?$basic_ostream@DU?$char_traits@D@std@@@std@@QEAAXXZ } (RVA = 0x41C0, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x168)
-                    [5] PEImportHintName { Hint = 1246, Name = ?sputc@?$basic_streambuf@DU?$char_traits@D@std@@@std@@QEAAHD@Z } (RVA = 0x417E, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x126)
-                    [6] PEImportHintName { Hint = 1121, Name = ?put@?$basic_ostream@DU?$char_traits@D@std@@@std@@QEAAAEAV12@D@Z } (RVA = 0x413A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0xE2)
-                    [7] PEImportHintName { Hint = 1332, Name = ?widen@?$basic_ios@DU?$char_traits@D@std@@@std@@QEBADD@Z } (RVA = 0x40FE, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0xA6)
-                    [8] PEImportHintName { Hint = 1249, Name = ?sputn@?$basic_streambuf@DU?$char_traits@D@std@@@std@@QEAA_JPEBD_J@Z } (RVA = 0x40B6, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x5E)
-                    [9] PEImportHintName { Hint = 1310, Name = ?uncaught_exception@std@@YA_NXZ } (RVA = 0x4094, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x3C)
-                    [10] PEImportHintName { Hint = 965, Name = ?good@ios_base@std@@QEBA_NXZ } (RVA = 0x4318, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x2C0)
-                    [11] PEImportHintName { Hint = 692, Name = ?cout@std@@3V?$basic_ostream@DU?$char_traits@D@std@@@1@A } (RVA = 0x4058, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x0)
-                
-                Section Data [01] PEImportAddressTable             Position = 0x00001F60, Size = 0x00000010, RVA = 0x00003068, VirtualSize = 0x00000010
-                    [0] PEImportHintName { Hint = 0, Name = __CxxFrameHandler4 } (RVA = 0x4346, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x2EE)
-                
-                Section Data [02] PEImportAddressTable             Position = 0x00001F28, Size = 0x00000038, RVA = 0x00003078, VirtualSize = 0x00000038
-                    [0] PEImportHintName { Hint = 60, Name = memcpy } (RVA = 0x47AC, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x754)
-                    [1] PEImportHintName { Hint = 28, Name = __current_exception_context } (RVA = 0x439C, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x344)
-                    [2] PEImportHintName { Hint = 62, Name = memset } (RVA = 0x43BA, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x362)
-                    [3] PEImportHintName { Hint = 8, Name = __C_specific_handler } (RVA = 0x436E, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x316)
-                    [4] PEImportHintName { Hint = 27, Name = __current_exception } (RVA = 0x4386, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x32E)
-                    [5] PEImportHintName { Hint = 35, Name = __std_terminate } (RVA = 0x435C, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x304)
-                
-                Section Data [03] PEImportAddressTable             Position = 0x00001FA0, Size = 0x00000098, RVA = 0x000030B0, VirtualSize = 0x00000098
-                    [0] PEImportHintName { Hint = 5, Name = __p___argv } (RVA = 0x44C4, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x46C)
-                    [1] PEImportHintName { Hint = 60, Name = _register_onexit_function } (RVA = 0x4566, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x50E)
-                    [2] PEImportHintName { Hint = 52, Name = _initialize_onexit_table } (RVA = 0x454A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x4F2)
-                    [3] PEImportHintName { Hint = 35, Name = _exit } (RVA = 0x44A0, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x448)
-                    [4] PEImportHintName { Hint = 55, Name = _initterm_e } (RVA = 0x448A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x432)
-                    [5] PEImportHintName { Hint = 54, Name = _initterm } (RVA = 0x447E, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x426)
-                    [6] PEImportHintName { Hint = 40, Name = _get_initial_narrow_environment } (RVA = 0x445C, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x404)
-                    [7] PEImportHintName { Hint = 51, Name = _initialize_narrow_environment } (RVA = 0x443A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x3E2)
-                    [8] PEImportHintName { Hint = 24, Name = _configure_narrow_argv } (RVA = 0x4420, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x3C8)
-                    [9] PEImportHintName { Hint = 22, Name = _cexit } (RVA = 0x44D2, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x47A)
-                    [10] PEImportHintName { Hint = 66, Name = _set_app_type } (RVA = 0x43FC, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x3A4)
-                    [11] PEImportHintName { Hint = 64, Name = _seh_filter_exe } (RVA = 0x43EA, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x392)
-                    [12] PEImportHintName { Hint = 103, Name = terminate } (RVA = 0x4590, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x538)
-                    [13] PEImportHintName { Hint = 85, Name = exit } (RVA = 0x4498, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x440)
-                    [14] PEImportHintName { Hint = 30, Name = _crt_atexit } (RVA = 0x4582, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x52A)
-                    [15] PEImportHintName { Hint = 4, Name = __p___argc } (RVA = 0x44B6, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x45E)
-                    [16] PEImportHintName { Hint = 61, Name = _register_thread_local_exe_atexit_callback } (RVA = 0x44E6, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x48E)
-                    [17] PEImportHintName { Hint = 21, Name = _c_exit } (RVA = 0x44DC, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x484)
-                
-                Section Data [04] PEImportAddressTable             Position = 0x00001F90, Size = 0x00000010, RVA = 0x00003148, VirtualSize = 0x00000010
-                    [0] PEImportHintName { Hint = 9, Name = __setusermatherr } (RVA = 0x440C, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x3B4)
-                
-                Section Data [05] PEImportAddressTable             Position = 0x00002038, Size = 0x00000018, RVA = 0x00003158, VirtualSize = 0x00000018
-                    [0] PEImportHintName { Hint = 1, Name = __p__commode } (RVA = 0x453A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x4E2)
-                    [1] PEImportHintName { Hint = 84, Name = _set_fmode } (RVA = 0x44A8, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x450)
-                
-                Section Data [06] PEImportAddressTable             Position = 0x00001F80, Size = 0x00000010, RVA = 0x00003170, VirtualSize = 0x00000010
-                    [0] PEImportHintName { Hint = 8, Name = _configthreadlocale } (RVA = 0x4514, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x4BC)
-                
-                Section Data [07] PEImportAddressTable             Position = 0x00001F70, Size = 0x00000010, RVA = 0x00003180, VirtualSize = 0x00000010
-                    [0] PEImportHintName { Hint = 22, Name = _set_new_mode } (RVA = 0x452A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x4D2)
-                
-                Section Data [08] PEImportAddressTable             Position = 0x00001E00, Size = 0x000000C0, RVA = 0x00003190, VirtualSize = 0x000000C0
-                    [0] PEImportHintName { Hint = 997, Name = LoadLibraryExA } (RVA = 0x482A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x7D2)
-                    [1] PEImportHintName { Hint = 1277, Name = RtlLookupFunctionEntry } (RVA = 0x4654, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x5FC)
-                    [2] PEImportHintName { Hint = 1284, Name = RtlVirtualUnwind } (RVA = 0x466E, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x616)
-                    [3] PEImportHintName { Hint = 1510, Name = UnhandledExceptionFilter } (RVA = 0x4682, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x62A)
-                    [4] PEImportHintName { Hint = 1444, Name = SetUnhandledExceptionFilter } (RVA = 0x469E, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x646)
-                    [5] PEImportHintName { Hint = 562, Name = GetCurrentProcess } (RVA = 0x46BC, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x664)
-                    [6] PEImportHintName { Hint = 1476, Name = TerminateProcess } (RVA = 0x46D0, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x678)
-                    [7] PEImportHintName { Hint = 936, Name = IsProcessorFeaturePresent } (RVA = 0x46E4, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x68C)
-                    [8] PEImportHintName { Hint = 1136, Name = QueryPerformanceCounter } (RVA = 0x4700, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x6A8)
-                    [9] PEImportHintName { Hint = 563, Name = GetCurrentProcessId } (RVA = 0x471A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x6C2)
-                    [10] PEImportHintName { Hint = 567, Name = GetCurrentThreadId } (RVA = 0x4730, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x6D8)
-                    [11] PEImportHintName { Hint = 778, Name = GetSystemTimeAsFileTime } (RVA = 0x4746, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x6EE)
-                    [12] PEImportHintName { Hint = 906, Name = InitializeSListHead } (RVA = 0x4760, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x708)
-                    [13] PEImportHintName { Hint = 928, Name = IsDebuggerPresent } (RVA = 0x4776, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x71E)
-                    [14] PEImportHintName { Hint = 661, Name = GetModuleHandleW } (RVA = 0x478A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x732)
-                    [15] PEImportHintName { Hint = 1159, Name = RaiseException } (RVA = 0x47B6, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x75E)
-                    [16] PEImportHintName { Hint = 637, Name = GetLastError } (RVA = 0x47C8, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x770)
-                    [17] PEImportHintName { Hint = 717, Name = GetProcAddress } (RVA = 0x4818, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x7C0)
-                    [18] PEImportHintName { Hint = 453, Name = FreeLibrary } (RVA = 0x480A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x7B2)
-                    [19] PEImportHintName { Hint = 1543, Name = VirtualQuery } (RVA = 0x47FA, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x7A2)
-                    [20] PEImportHintName { Hint = 1541, Name = VirtualProtect } (RVA = 0x47E8, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x790)
-                    [21] PEImportHintName { Hint = 772, Name = GetSystemInfo } (RVA = 0x47D8, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x780)
-                    [22] PEImportHintName { Hint = 1269, Name = RtlCaptureContext } (RVA = 0x4640, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x5E8)
-                
+        [00] PEImportAddressTableDirectory    Position = 0x00001E00, Size = 0x00000250, RVA = 0x00003000, VirtualSize = 0x00000250
+            [00] PEImportAddressTable             Position = 0x00001E00, Size = 0x000000C0, RVA = 0x00003000, VirtualSize = 0x000000C0
+                [0] PEImportHintName { Hint = 997, Name = LoadLibraryExA } (RVA = 0x482A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x7D2)
+                [1] PEImportHintName { Hint = 1277, Name = RtlLookupFunctionEntry } (RVA = 0x4654, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x5FC)
+                [2] PEImportHintName { Hint = 1284, Name = RtlVirtualUnwind } (RVA = 0x466E, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x616)
+                [3] PEImportHintName { Hint = 1510, Name = UnhandledExceptionFilter } (RVA = 0x4682, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x62A)
+                [4] PEImportHintName { Hint = 1444, Name = SetUnhandledExceptionFilter } (RVA = 0x469E, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x646)
+                [5] PEImportHintName { Hint = 562, Name = GetCurrentProcess } (RVA = 0x46BC, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x664)
+                [6] PEImportHintName { Hint = 1476, Name = TerminateProcess } (RVA = 0x46D0, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x678)
+                [7] PEImportHintName { Hint = 936, Name = IsProcessorFeaturePresent } (RVA = 0x46E4, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x68C)
+                [8] PEImportHintName { Hint = 1136, Name = QueryPerformanceCounter } (RVA = 0x4700, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x6A8)
+                [9] PEImportHintName { Hint = 563, Name = GetCurrentProcessId } (RVA = 0x471A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x6C2)
+                [10] PEImportHintName { Hint = 567, Name = GetCurrentThreadId } (RVA = 0x4730, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x6D8)
+                [11] PEImportHintName { Hint = 778, Name = GetSystemTimeAsFileTime } (RVA = 0x4746, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x6EE)
+                [12] PEImportHintName { Hint = 906, Name = InitializeSListHead } (RVA = 0x4760, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x708)
+                [13] PEImportHintName { Hint = 928, Name = IsDebuggerPresent } (RVA = 0x4776, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x71E)
+                [14] PEImportHintName { Hint = 661, Name = GetModuleHandleW } (RVA = 0x478A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x732)
+                [15] PEImportHintName { Hint = 1159, Name = RaiseException } (RVA = 0x47B6, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x75E)
+                [16] PEImportHintName { Hint = 637, Name = GetLastError } (RVA = 0x47C8, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x770)
+                [17] PEImportHintName { Hint = 717, Name = GetProcAddress } (RVA = 0x4818, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x7C0)
+                [18] PEImportHintName { Hint = 453, Name = FreeLibrary } (RVA = 0x480A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x7B2)
+                [19] PEImportHintName { Hint = 1543, Name = VirtualQuery } (RVA = 0x47FA, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x7A2)
+                [20] PEImportHintName { Hint = 1541, Name = VirtualProtect } (RVA = 0x47E8, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x790)
+                [21] PEImportHintName { Hint = 772, Name = GetSystemInfo } (RVA = 0x47D8, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x780)
+                [22] PEImportHintName { Hint = 1269, Name = RtlCaptureContext } (RVA = 0x4640, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x5E8)
+            
+            [01] PEImportAddressTable             Position = 0x00001EC0, Size = 0x00000068, RVA = 0x000030C0, VirtualSize = 0x00000068
+                [0] PEImportHintName { Hint = 255, Name = ??6?$basic_ostream@DU?$char_traits@D@std@@@std@@QEAAAEAV01@H@Z } (RVA = 0x42D6, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x27E)
+                [1] PEImportHintName { Hint = 262, Name = ??6?$basic_ostream@DU?$char_traits@D@std@@@std@@QEAAAEAV01@P6AAEAV01@AEAV01@@Z@Z } (RVA = 0x4282, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x22A)
+                [2] PEImportHintName { Hint = 1221, Name = ?setstate@?$basic_ios@DU?$char_traits@D@std@@@std@@QEAAXH_N@Z } (RVA = 0x4242, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x1EA)
+                [3] PEImportHintName { Hint = 872, Name = ?flush@?$basic_ostream@DU?$char_traits@D@std@@@std@@QEAAAEAV12@XZ } (RVA = 0x41FE, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x1A6)
+                [4] PEImportHintName { Hint = 580, Name = ?_Osfx@?$basic_ostream@DU?$char_traits@D@std@@@std@@QEAAXXZ } (RVA = 0x41C0, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x168)
+                [5] PEImportHintName { Hint = 1246, Name = ?sputc@?$basic_streambuf@DU?$char_traits@D@std@@@std@@QEAAHD@Z } (RVA = 0x417E, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x126)
+                [6] PEImportHintName { Hint = 1121, Name = ?put@?$basic_ostream@DU?$char_traits@D@std@@@std@@QEAAAEAV12@D@Z } (RVA = 0x413A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0xE2)
+                [7] PEImportHintName { Hint = 1332, Name = ?widen@?$basic_ios@DU?$char_traits@D@std@@@std@@QEBADD@Z } (RVA = 0x40FE, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0xA6)
+                [8] PEImportHintName { Hint = 1249, Name = ?sputn@?$basic_streambuf@DU?$char_traits@D@std@@@std@@QEAA_JPEBD_J@Z } (RVA = 0x40B6, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x5E)
+                [9] PEImportHintName { Hint = 1310, Name = ?uncaught_exception@std@@YA_NXZ } (RVA = 0x4094, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x3C)
+                [10] PEImportHintName { Hint = 965, Name = ?good@ios_base@std@@QEBA_NXZ } (RVA = 0x4318, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x2C0)
+                [11] PEImportHintName { Hint = 692, Name = ?cout@std@@3V?$basic_ostream@DU?$char_traits@D@std@@@1@A } (RVA = 0x4058, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x0)
+            
+            [02] PEImportAddressTable             Position = 0x00001F28, Size = 0x00000038, RVA = 0x00003128, VirtualSize = 0x00000038
+                [0] PEImportHintName { Hint = 60, Name = memcpy } (RVA = 0x47AC, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x754)
+                [1] PEImportHintName { Hint = 28, Name = __current_exception_context } (RVA = 0x439C, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x344)
+                [2] PEImportHintName { Hint = 62, Name = memset } (RVA = 0x43BA, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x362)
+                [3] PEImportHintName { Hint = 8, Name = __C_specific_handler } (RVA = 0x436E, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x316)
+                [4] PEImportHintName { Hint = 27, Name = __current_exception } (RVA = 0x4386, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x32E)
+                [5] PEImportHintName { Hint = 35, Name = __std_terminate } (RVA = 0x435C, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x304)
+            
+            [03] PEImportAddressTable             Position = 0x00001F60, Size = 0x00000010, RVA = 0x00003160, VirtualSize = 0x00000010
+                [0] PEImportHintName { Hint = 0, Name = __CxxFrameHandler4 } (RVA = 0x4346, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x2EE)
+            
+            [04] PEImportAddressTable             Position = 0x00001F70, Size = 0x00000010, RVA = 0x00003170, VirtualSize = 0x00000010
+                [0] PEImportHintName { Hint = 22, Name = _set_new_mode } (RVA = 0x452A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x4D2)
+            
+            [05] PEImportAddressTable             Position = 0x00001F80, Size = 0x00000010, RVA = 0x00003180, VirtualSize = 0x00000010
+                [0] PEImportHintName { Hint = 8, Name = _configthreadlocale } (RVA = 0x4514, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x4BC)
+            
+            [06] PEImportAddressTable             Position = 0x00001F90, Size = 0x00000010, RVA = 0x00003190, VirtualSize = 0x00000010
+                [0] PEImportHintName { Hint = 9, Name = __setusermatherr } (RVA = 0x440C, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x3B4)
+            
+            [07] PEImportAddressTable             Position = 0x00001FA0, Size = 0x00000098, RVA = 0x000031A0, VirtualSize = 0x00000098
+                [0] PEImportHintName { Hint = 5, Name = __p___argv } (RVA = 0x44C4, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x46C)
+                [1] PEImportHintName { Hint = 60, Name = _register_onexit_function } (RVA = 0x4566, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x50E)
+                [2] PEImportHintName { Hint = 52, Name = _initialize_onexit_table } (RVA = 0x454A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x4F2)
+                [3] PEImportHintName { Hint = 35, Name = _exit } (RVA = 0x44A0, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x448)
+                [4] PEImportHintName { Hint = 55, Name = _initterm_e } (RVA = 0x448A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x432)
+                [5] PEImportHintName { Hint = 54, Name = _initterm } (RVA = 0x447E, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x426)
+                [6] PEImportHintName { Hint = 40, Name = _get_initial_narrow_environment } (RVA = 0x445C, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x404)
+                [7] PEImportHintName { Hint = 51, Name = _initialize_narrow_environment } (RVA = 0x443A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x3E2)
+                [8] PEImportHintName { Hint = 24, Name = _configure_narrow_argv } (RVA = 0x4420, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x3C8)
+                [9] PEImportHintName { Hint = 22, Name = _cexit } (RVA = 0x44D2, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x47A)
+                [10] PEImportHintName { Hint = 66, Name = _set_app_type } (RVA = 0x43FC, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x3A4)
+                [11] PEImportHintName { Hint = 64, Name = _seh_filter_exe } (RVA = 0x43EA, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x392)
+                [12] PEImportHintName { Hint = 103, Name = terminate } (RVA = 0x4590, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x538)
+                [13] PEImportHintName { Hint = 85, Name = exit } (RVA = 0x4498, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x440)
+                [14] PEImportHintName { Hint = 30, Name = _crt_atexit } (RVA = 0x4582, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x52A)
+                [15] PEImportHintName { Hint = 4, Name = __p___argc } (RVA = 0x44B6, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x45E)
+                [16] PEImportHintName { Hint = 61, Name = _register_thread_local_exe_atexit_callback } (RVA = 0x44E6, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x48E)
+                [17] PEImportHintName { Hint = 21, Name = _c_exit } (RVA = 0x44DC, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x484)
+            
+            [08] PEImportAddressTable             Position = 0x00002038, Size = 0x00000018, RVA = 0x00003238, VirtualSize = 0x00000018
+                [0] PEImportHintName { Hint = 1, Name = __p__commode } (RVA = 0x453A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x4E2)
+                [1] PEImportHintName { Hint = 84, Name = _set_fmode } (RVA = 0x44A8, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x450)
+            
         
-        Section Data [01] PEStreamSectionData              Position = 0x00002050, Size = 0x00000140, RVA = 0x00003250, VirtualSize = 0x00000140
+        [01] PEStreamSectionData              Position = 0x00002050, Size = 0x00000140, RVA = 0x00003250, VirtualSize = 0x00000140
         
-        Section Data [02] PELoadConfigDirectory64          Position = 0x00002190, Size = 0x00000140, RVA = 0x00003390, VirtualSize = 0x00000140
+        [02] PELoadConfigDirectory64          Position = 0x00002190, Size = 0x00000140, RVA = 0x00003390, VirtualSize = 0x00000140
             Size                             = 0x140
             TimeDateStamp                    = 0x0
             MajorVersion                     = 0
@@ -230,414 +230,406 @@ Sections
             CastGuardOsDeterminedFailureMode = 0x140003278
             GuardMemcpyFunctionPointer       = 0x140003280
         
-        Section Data [03] PEStreamSectionData              Position = 0x000022D0, Size = 0x00000010, RVA = 0x000034D0, VirtualSize = 0x00000010
+        [03] PEStreamSectionData              Position = 0x000022D0, Size = 0x00000010, RVA = 0x000034D0, VirtualSize = 0x00000010
         
-        Section Data [04] PEDebugDirectory                 Position = 0x000022E0, Size = 0x00000070, RVA = 0x000034E0, VirtualSize = 0x00000070
-            [0] Type = CodeView, Characteristics = 0x0, Version = 0.0, TimeStamp = 0x66F19D2F, Data = RVA = 0x00003618 (PEDebugSectionDataRSDS[6] .rdata
-            [1] Type = VCFeature, Characteristics = 0x0, Version = 0.0, TimeStamp = 0x66F19D2F, Data = RVA = 0x0000368C (PEDebugStreamSectionData[8] .rdata
-            [2] Type = POGO, Characteristics = 0x0, Version = 0.0, TimeStamp = 0x66F19D2F, Data = RVA = 0x000036A0 (PEDebugStreamSectionData[9] .rdata
+        [04] PEDebugDirectory                 Position = 0x000022E0, Size = 0x00000070, RVA = 0x000034E0, VirtualSize = 0x00000070
+            [0] Type = CodeView, Characteristics = 0x0, Version = 0.0, TimeStamp = 0x66F19D2F, Data = RVA = 0x00003618 (PEDebugSectionDataRSDS[6] -> .rdata)
+            [1] Type = VCFeature, Characteristics = 0x0, Version = 0.0, TimeStamp = 0x66F19D2F, Data = RVA = 0x0000368C (PEDebugStreamSectionData[8] -> .rdata)
+            [2] Type = POGO, Characteristics = 0x0, Version = 0.0, TimeStamp = 0x66F19D2F, Data = RVA = 0x000036A0 (PEDebugStreamSectionData[9] -> .rdata)
             [3] Type = ILTCG, Characteristics = 0x0, Version = 0.0, TimeStamp = 0x66F19D2F, Data = null
         
-        Section Data [05] PEStreamSectionData              Position = 0x00002350, Size = 0x000000C8, RVA = 0x00003550, VirtualSize = 0x000000C8
+        [05] PEStreamSectionData              Position = 0x00002350, Size = 0x000000C8, RVA = 0x00003550, VirtualSize = 0x000000C8
         
-        Section Data [06] PEDebugSectionDataRSDS           Position = 0x00002418, Size = 0x00000072, RVA = 0x00003618, VirtualSize = 0x00000072
+        [06] PEDebugSectionDataRSDS           Position = 0x00002418, Size = 0x00000072, RVA = 0x00003618, VirtualSize = 0x00000072
             Debug Section Data (RSDS)
                 Guid                       = ffed6f99-5708-452c-a889-ff343b6ce898
                 Age                        = 6
                 PdbPath                    = C:\code\LibObjectFile\src\native\Win64\NativeProjects\x64\Release\NativeConsole2Win64.pdb
         
-        Section Data [07] PEStreamSectionData              Position = 0x0000248A, Size = 0x00000002, RVA = 0x0000368A, VirtualSize = 0x00000002
+        [07] PEStreamSectionData              Position = 0x0000248A, Size = 0x00000002, RVA = 0x0000368A, VirtualSize = 0x00000002
         
-        Section Data [08] PEDebugStreamSectionData         Position = 0x0000248C, Size = 0x00000014, RVA = 0x0000368C, VirtualSize = 0x00000014
+        [08] PEDebugStreamSectionData         Position = 0x0000248C, Size = 0x00000014, RVA = 0x0000368C, VirtualSize = 0x00000014
         
-        Section Data [09] PEDebugStreamSectionData         Position = 0x000024A0, Size = 0x000002FC, RVA = 0x000036A0, VirtualSize = 0x000002FC
+        [09] PEDebugStreamSectionData         Position = 0x000024A0, Size = 0x000002FC, RVA = 0x000036A0, VirtualSize = 0x000002FC
         
-        Section Data [10] PEStreamSectionData              Position = 0x0000279C, Size = 0x0000020C, RVA = 0x0000399C, VirtualSize = 0x0000020C
+        [10] PEStreamSectionData              Position = 0x0000279C, Size = 0x0000020C, RVA = 0x0000399C, VirtualSize = 0x0000020C
         
-        Section Data [11] PEDelayImportDirectory           Position = 0x000029A8, Size = 0x00000040, RVA = 0x00003BA8, VirtualSize = 0x00000040
+        [11] PEDelayImportDirectory           Position = 0x000029A8, Size = 0x00000040, RVA = 0x00003BA8, VirtualSize = 0x00000040
             [0] DllName = NativeLibraryWin64.dll, RVA = 0x32E0
             [0] Attributes = 1
-            [0] DelayImportAddressTable RVA = 0x00005078 (PEBoundImportAddressTable64[1] .data
-            [0] DelayImportNameTable RVA = 0x00003BE8 (PEImportLookupTable[12] .rdata
-            [0] BoundImportAddressTable RVA = 0x00003C20 (PEBoundImportAddressTable64[14] .rdata
+            [0] DelayImportAddressTable RVA = 0x00005078 (PEBoundImportAddressTable64[1] -> .data)
+            [0] DelayImportNameTable RVA = 0x00003BE8 (PEImportLookupTable[12] -> .rdata)
+            [0] BoundImportAddressTable RVA = 0x00003C20 (PEBoundImportAddressTable64[14] -> .rdata)
             [0] UnloadDelayInformationTable null
             
         
-        Section Data [12] PEImportLookupTable              Position = 0x000029E8, Size = 0x00000018, RVA = 0x00003BE8, VirtualSize = 0x00000018
+        [12] PEImportLookupTable              Position = 0x000029E8, Size = 0x00000018, RVA = 0x00003BE8, VirtualSize = 0x00000018
             [0] PEImportHintName { Hint = 0, Name = AnotherFunction } (RVA = 0x3C0E, PEStreamSectionData { RVA = 0x3C00, VirtualSize = 0x20, Position = 0x2A00, Size = 0x20 }, Offset = 0xE)
             [1] PEImportHintName { Hint = 1, Name = HelloWorld } (RVA = 0x3C00, PEStreamSectionData { RVA = 0x3C00, VirtualSize = 0x20, Position = 0x2A00, Size = 0x20 }, Offset = 0x0)
         
-        Section Data [13] PEStreamSectionData              Position = 0x00002A00, Size = 0x00000020, RVA = 0x00003C00, VirtualSize = 0x00000020
+        [13] PEStreamSectionData              Position = 0x00002A00, Size = 0x00000020, RVA = 0x00003C00, VirtualSize = 0x00000020
         
-        Section Data [14] PEBoundImportAddressTable64      Position = 0x00002A20, Size = 0x00000018, RVA = 0x00003C20, VirtualSize = 0x00000018
+        [14] PEBoundImportAddressTable64      Position = 0x00002A20, Size = 0x00000018, RVA = 0x00003C20, VirtualSize = 0x00000018
             [0] VA = 0x0
             [1] VA = 0x0
         
-        Section Data [15] PEStreamSectionData              Position = 0x00002A38, Size = 0x00000104, RVA = 0x00003C38, VirtualSize = 0x00000104
+        [15] PEStreamSectionData              Position = 0x00002A38, Size = 0x00000104, RVA = 0x00003C38, VirtualSize = 0x00000104
         
-        Section Data [16] PEImportDirectory                Position = 0x00002B3C, Size = 0x000000C8, RVA = 0x00003D3C, VirtualSize = 0x000000C8
-            [0] ImportDllNameLink = MSVCP140.dll (RVA = 0x4338, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x2E0)
-            [0] ImportAddressTable = RVA = 0x00003000 (PEImportAddressTable[0]
-            [0] ImportLookupTable = RVA = 0x00003EC8 (PEImportLookupTable[19] .rdata
+        [16] PEImportDirectory                Position = 0x00002B3C, Size = 0x000000C8, RVA = 0x00003D3C, VirtualSize = 0x000000C8
+            [0] ImportDllNameLink = MSVCP140.dll (RVA = 0x4338, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x2E0)
+            [0] ImportAddressTable = RVA = 0x000030C0 (PEImportAddressTable[1] -> PEImportAddressTableDirectory[0] -> .rdata)
+            [0] ImportLookupTable = RVA = 0x00003EC8 (PEImportLookupTable[19] -> .rdata)
             
-            [1] ImportDllNameLink = VCRUNTIME140_1.dll (RVA = 0x43C4, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x36C)
-            [1] ImportAddressTable = RVA = 0x00003068 (PEImportAddressTable[1]
-            [1] ImportLookupTable = RVA = 0x00003F68 (PEImportLookupTable[21] .rdata
+            [1] ImportDllNameLink = VCRUNTIME140_1.dll (RVA = 0x43C4, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x36C)
+            [1] ImportAddressTable = RVA = 0x00003160 (PEImportAddressTable[3] -> PEImportAddressTableDirectory[0] -> .rdata)
+            [1] ImportLookupTable = RVA = 0x00003F68 (PEImportLookupTable[21] -> .rdata)
             
-            [2] ImportDllNameLink = VCRUNTIME140.dll (RVA = 0x43D8, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x380)
-            [2] ImportAddressTable = RVA = 0x00003078 (PEImportAddressTable[2]
-            [2] ImportLookupTable = RVA = 0x00003F30 (PEImportLookupTable[20] .rdata
+            [2] ImportDllNameLink = VCRUNTIME140.dll (RVA = 0x43D8, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x380)
+            [2] ImportAddressTable = RVA = 0x00003128 (PEImportAddressTable[2] -> PEImportAddressTableDirectory[0] -> .rdata)
+            [2] ImportLookupTable = RVA = 0x00003F30 (PEImportLookupTable[20] -> .rdata)
             
-            [3] ImportDllNameLink = api-ms-win-crt-runtime-l1-1-0.dll (RVA = 0x459C, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x544)
-            [3] ImportAddressTable = RVA = 0x000030B0 (PEImportAddressTable[3]
-            [3] ImportLookupTable = RVA = 0x00003FA8 (PEImportLookupTable[25] .rdata
+            [3] ImportDllNameLink = api-ms-win-crt-runtime-l1-1-0.dll (RVA = 0x459C, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x544)
+            [3] ImportAddressTable = RVA = 0x000031A0 (PEImportAddressTable[7] -> PEImportAddressTableDirectory[0] -> .rdata)
+            [3] ImportLookupTable = RVA = 0x00003FA8 (PEImportLookupTable[25] -> .rdata)
             
-            [4] ImportDllNameLink = api-ms-win-crt-math-l1-1-0.dll (RVA = 0x45BE, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x566)
-            [4] ImportAddressTable = RVA = 0x00003148 (PEImportAddressTable[4]
-            [4] ImportLookupTable = RVA = 0x00003F98 (PEImportLookupTable[24] .rdata
+            [4] ImportDllNameLink = api-ms-win-crt-math-l1-1-0.dll (RVA = 0x45BE, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x566)
+            [4] ImportAddressTable = RVA = 0x00003190 (PEImportAddressTable[6] -> PEImportAddressTableDirectory[0] -> .rdata)
+            [4] ImportLookupTable = RVA = 0x00003F98 (PEImportLookupTable[24] -> .rdata)
             
-            [5] ImportDllNameLink = api-ms-win-crt-stdio-l1-1-0.dll (RVA = 0x45DE, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x586)
-            [5] ImportAddressTable = RVA = 0x00003158 (PEImportAddressTable[5]
-            [5] ImportLookupTable = RVA = 0x00004040 (PEImportLookupTable[26] .rdata
+            [5] ImportDllNameLink = api-ms-win-crt-stdio-l1-1-0.dll (RVA = 0x45DE, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x586)
+            [5] ImportAddressTable = RVA = 0x00003238 (PEImportAddressTable[8] -> PEImportAddressTableDirectory[0] -> .rdata)
+            [5] ImportLookupTable = RVA = 0x00004040 (PEImportLookupTable[26] -> .rdata)
             
-            [6] ImportDllNameLink = api-ms-win-crt-locale-l1-1-0.dll (RVA = 0x45FE, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x5A6)
-            [6] ImportAddressTable = RVA = 0x00003170 (PEImportAddressTable[6]
-            [6] ImportLookupTable = RVA = 0x00003F88 (PEImportLookupTable[23] .rdata
+            [6] ImportDllNameLink = api-ms-win-crt-locale-l1-1-0.dll (RVA = 0x45FE, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x5A6)
+            [6] ImportAddressTable = RVA = 0x00003180 (PEImportAddressTable[5] -> PEImportAddressTableDirectory[0] -> .rdata)
+            [6] ImportLookupTable = RVA = 0x00003F88 (PEImportLookupTable[23] -> .rdata)
             
-            [7] ImportDllNameLink = api-ms-win-crt-heap-l1-1-0.dll (RVA = 0x4620, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x5C8)
-            [7] ImportAddressTable = RVA = 0x00003180 (PEImportAddressTable[7]
-            [7] ImportLookupTable = RVA = 0x00003F78 (PEImportLookupTable[22] .rdata
+            [7] ImportDllNameLink = api-ms-win-crt-heap-l1-1-0.dll (RVA = 0x4620, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x5C8)
+            [7] ImportAddressTable = RVA = 0x00003170 (PEImportAddressTable[4] -> PEImportAddressTableDirectory[0] -> .rdata)
+            [7] ImportLookupTable = RVA = 0x00003F78 (PEImportLookupTable[22] -> .rdata)
             
-            [8] ImportDllNameLink = KERNEL32.dll (RVA = 0x479E, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x746)
-            [8] ImportAddressTable = RVA = 0x00003190 (PEImportAddressTable[8]
-            [8] ImportLookupTable = RVA = 0x00003E08 (PEImportLookupTable[18] .rdata
+            [8] ImportDllNameLink = KERNEL32.dll (RVA = 0x479E, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x746)
+            [8] ImportAddressTable = RVA = 0x00003000 (PEImportAddressTable[0] -> PEImportAddressTableDirectory[0] -> .rdata)
+            [8] ImportLookupTable = RVA = 0x00003E08 (PEImportLookupTable[18] -> .rdata)
             
         
-        Section Data [17] PEStreamSectionData              Position = 0x00002C04, Size = 0x00000004, RVA = 0x00003E04, VirtualSize = 0x00000004
+        [17] PEStreamSectionData              Position = 0x00002C04, Size = 0x00000004, RVA = 0x00003E04, VirtualSize = 0x00000004
         
-        Section Data [18] PEImportLookupTable              Position = 0x00002C08, Size = 0x000000C0, RVA = 0x00003E08, VirtualSize = 0x000000C0
-            [0] PEImportHintName { Hint = 997, Name = LoadLibraryExA } (RVA = 0x482A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x7D2)
-            [1] PEImportHintName { Hint = 1277, Name = RtlLookupFunctionEntry } (RVA = 0x4654, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x5FC)
-            [2] PEImportHintName { Hint = 1284, Name = RtlVirtualUnwind } (RVA = 0x466E, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x616)
-            [3] PEImportHintName { Hint = 1510, Name = UnhandledExceptionFilter } (RVA = 0x4682, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x62A)
-            [4] PEImportHintName { Hint = 1444, Name = SetUnhandledExceptionFilter } (RVA = 0x469E, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x646)
-            [5] PEImportHintName { Hint = 562, Name = GetCurrentProcess } (RVA = 0x46BC, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x664)
-            [6] PEImportHintName { Hint = 1476, Name = TerminateProcess } (RVA = 0x46D0, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x678)
-            [7] PEImportHintName { Hint = 936, Name = IsProcessorFeaturePresent } (RVA = 0x46E4, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x68C)
-            [8] PEImportHintName { Hint = 1136, Name = QueryPerformanceCounter } (RVA = 0x4700, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x6A8)
-            [9] PEImportHintName { Hint = 563, Name = GetCurrentProcessId } (RVA = 0x471A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x6C2)
-            [10] PEImportHintName { Hint = 567, Name = GetCurrentThreadId } (RVA = 0x4730, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x6D8)
-            [11] PEImportHintName { Hint = 778, Name = GetSystemTimeAsFileTime } (RVA = 0x4746, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x6EE)
-            [12] PEImportHintName { Hint = 906, Name = InitializeSListHead } (RVA = 0x4760, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x708)
-            [13] PEImportHintName { Hint = 928, Name = IsDebuggerPresent } (RVA = 0x4776, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x71E)
-            [14] PEImportHintName { Hint = 661, Name = GetModuleHandleW } (RVA = 0x478A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x732)
-            [15] PEImportHintName { Hint = 1159, Name = RaiseException } (RVA = 0x47B6, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x75E)
-            [16] PEImportHintName { Hint = 637, Name = GetLastError } (RVA = 0x47C8, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x770)
-            [17] PEImportHintName { Hint = 717, Name = GetProcAddress } (RVA = 0x4818, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x7C0)
-            [18] PEImportHintName { Hint = 453, Name = FreeLibrary } (RVA = 0x480A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x7B2)
-            [19] PEImportHintName { Hint = 1543, Name = VirtualQuery } (RVA = 0x47FA, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x7A2)
-            [20] PEImportHintName { Hint = 1541, Name = VirtualProtect } (RVA = 0x47E8, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x790)
-            [21] PEImportHintName { Hint = 772, Name = GetSystemInfo } (RVA = 0x47D8, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x780)
-            [22] PEImportHintName { Hint = 1269, Name = RtlCaptureContext } (RVA = 0x4640, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x5E8)
+        [18] PEImportLookupTable              Position = 0x00002C08, Size = 0x000000C0, RVA = 0x00003E08, VirtualSize = 0x000000C0
+            [0] PEImportHintName { Hint = 997, Name = LoadLibraryExA } (RVA = 0x482A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x7D2)
+            [1] PEImportHintName { Hint = 1277, Name = RtlLookupFunctionEntry } (RVA = 0x4654, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x5FC)
+            [2] PEImportHintName { Hint = 1284, Name = RtlVirtualUnwind } (RVA = 0x466E, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x616)
+            [3] PEImportHintName { Hint = 1510, Name = UnhandledExceptionFilter } (RVA = 0x4682, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x62A)
+            [4] PEImportHintName { Hint = 1444, Name = SetUnhandledExceptionFilter } (RVA = 0x469E, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x646)
+            [5] PEImportHintName { Hint = 562, Name = GetCurrentProcess } (RVA = 0x46BC, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x664)
+            [6] PEImportHintName { Hint = 1476, Name = TerminateProcess } (RVA = 0x46D0, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x678)
+            [7] PEImportHintName { Hint = 936, Name = IsProcessorFeaturePresent } (RVA = 0x46E4, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x68C)
+            [8] PEImportHintName { Hint = 1136, Name = QueryPerformanceCounter } (RVA = 0x4700, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x6A8)
+            [9] PEImportHintName { Hint = 563, Name = GetCurrentProcessId } (RVA = 0x471A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x6C2)
+            [10] PEImportHintName { Hint = 567, Name = GetCurrentThreadId } (RVA = 0x4730, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x6D8)
+            [11] PEImportHintName { Hint = 778, Name = GetSystemTimeAsFileTime } (RVA = 0x4746, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x6EE)
+            [12] PEImportHintName { Hint = 906, Name = InitializeSListHead } (RVA = 0x4760, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x708)
+            [13] PEImportHintName { Hint = 928, Name = IsDebuggerPresent } (RVA = 0x4776, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x71E)
+            [14] PEImportHintName { Hint = 661, Name = GetModuleHandleW } (RVA = 0x478A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x732)
+            [15] PEImportHintName { Hint = 1159, Name = RaiseException } (RVA = 0x47B6, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x75E)
+            [16] PEImportHintName { Hint = 637, Name = GetLastError } (RVA = 0x47C8, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x770)
+            [17] PEImportHintName { Hint = 717, Name = GetProcAddress } (RVA = 0x4818, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x7C0)
+            [18] PEImportHintName { Hint = 453, Name = FreeLibrary } (RVA = 0x480A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x7B2)
+            [19] PEImportHintName { Hint = 1543, Name = VirtualQuery } (RVA = 0x47FA, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x7A2)
+            [20] PEImportHintName { Hint = 1541, Name = VirtualProtect } (RVA = 0x47E8, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x790)
+            [21] PEImportHintName { Hint = 772, Name = GetSystemInfo } (RVA = 0x47D8, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x780)
+            [22] PEImportHintName { Hint = 1269, Name = RtlCaptureContext } (RVA = 0x4640, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x5E8)
         
-        Section Data [19] PEImportLookupTable              Position = 0x00002CC8, Size = 0x00000068, RVA = 0x00003EC8, VirtualSize = 0x00000068
-            [0] PEImportHintName { Hint = 255, Name = ??6?$basic_ostream@DU?$char_traits@D@std@@@std@@QEAAAEAV01@H@Z } (RVA = 0x42D6, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x27E)
-            [1] PEImportHintName { Hint = 262, Name = ??6?$basic_ostream@DU?$char_traits@D@std@@@std@@QEAAAEAV01@P6AAEAV01@AEAV01@@Z@Z } (RVA = 0x4282, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x22A)
-            [2] PEImportHintName { Hint = 1221, Name = ?setstate@?$basic_ios@DU?$char_traits@D@std@@@std@@QEAAXH_N@Z } (RVA = 0x4242, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x1EA)
-            [3] PEImportHintName { Hint = 872, Name = ?flush@?$basic_ostream@DU?$char_traits@D@std@@@std@@QEAAAEAV12@XZ } (RVA = 0x41FE, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x1A6)
-            [4] PEImportHintName { Hint = 580, Name = ?_Osfx@?$basic_ostream@DU?$char_traits@D@std@@@std@@QEAAXXZ } (RVA = 0x41C0, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x168)
-            [5] PEImportHintName { Hint = 1246, Name = ?sputc@?$basic_streambuf@DU?$char_traits@D@std@@@std@@QEAAHD@Z } (RVA = 0x417E, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x126)
-            [6] PEImportHintName { Hint = 1121, Name = ?put@?$basic_ostream@DU?$char_traits@D@std@@@std@@QEAAAEAV12@D@Z } (RVA = 0x413A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0xE2)
-            [7] PEImportHintName { Hint = 1332, Name = ?widen@?$basic_ios@DU?$char_traits@D@std@@@std@@QEBADD@Z } (RVA = 0x40FE, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0xA6)
-            [8] PEImportHintName { Hint = 1249, Name = ?sputn@?$basic_streambuf@DU?$char_traits@D@std@@@std@@QEAA_JPEBD_J@Z } (RVA = 0x40B6, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x5E)
-            [9] PEImportHintName { Hint = 1310, Name = ?uncaught_exception@std@@YA_NXZ } (RVA = 0x4094, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x3C)
-            [10] PEImportHintName { Hint = 965, Name = ?good@ios_base@std@@QEBA_NXZ } (RVA = 0x4318, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x2C0)
-            [11] PEImportHintName { Hint = 692, Name = ?cout@std@@3V?$basic_ostream@DU?$char_traits@D@std@@@1@A } (RVA = 0x4058, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x0)
+        [19] PEImportLookupTable              Position = 0x00002CC8, Size = 0x00000068, RVA = 0x00003EC8, VirtualSize = 0x00000068
+            [0] PEImportHintName { Hint = 255, Name = ??6?$basic_ostream@DU?$char_traits@D@std@@@std@@QEAAAEAV01@H@Z } (RVA = 0x42D6, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x27E)
+            [1] PEImportHintName { Hint = 262, Name = ??6?$basic_ostream@DU?$char_traits@D@std@@@std@@QEAAAEAV01@P6AAEAV01@AEAV01@@Z@Z } (RVA = 0x4282, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x22A)
+            [2] PEImportHintName { Hint = 1221, Name = ?setstate@?$basic_ios@DU?$char_traits@D@std@@@std@@QEAAXH_N@Z } (RVA = 0x4242, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x1EA)
+            [3] PEImportHintName { Hint = 872, Name = ?flush@?$basic_ostream@DU?$char_traits@D@std@@@std@@QEAAAEAV12@XZ } (RVA = 0x41FE, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x1A6)
+            [4] PEImportHintName { Hint = 580, Name = ?_Osfx@?$basic_ostream@DU?$char_traits@D@std@@@std@@QEAAXXZ } (RVA = 0x41C0, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x168)
+            [5] PEImportHintName { Hint = 1246, Name = ?sputc@?$basic_streambuf@DU?$char_traits@D@std@@@std@@QEAAHD@Z } (RVA = 0x417E, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x126)
+            [6] PEImportHintName { Hint = 1121, Name = ?put@?$basic_ostream@DU?$char_traits@D@std@@@std@@QEAAAEAV12@D@Z } (RVA = 0x413A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0xE2)
+            [7] PEImportHintName { Hint = 1332, Name = ?widen@?$basic_ios@DU?$char_traits@D@std@@@std@@QEBADD@Z } (RVA = 0x40FE, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0xA6)
+            [8] PEImportHintName { Hint = 1249, Name = ?sputn@?$basic_streambuf@DU?$char_traits@D@std@@@std@@QEAA_JPEBD_J@Z } (RVA = 0x40B6, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x5E)
+            [9] PEImportHintName { Hint = 1310, Name = ?uncaught_exception@std@@YA_NXZ } (RVA = 0x4094, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x3C)
+            [10] PEImportHintName { Hint = 965, Name = ?good@ios_base@std@@QEBA_NXZ } (RVA = 0x4318, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x2C0)
+            [11] PEImportHintName { Hint = 692, Name = ?cout@std@@3V?$basic_ostream@DU?$char_traits@D@std@@@1@A } (RVA = 0x4058, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x0)
         
-        Section Data [20] PEImportLookupTable              Position = 0x00002D30, Size = 0x00000038, RVA = 0x00003F30, VirtualSize = 0x00000038
-            [0] PEImportHintName { Hint = 60, Name = memcpy } (RVA = 0x47AC, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x754)
-            [1] PEImportHintName { Hint = 28, Name = __current_exception_context } (RVA = 0x439C, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x344)
-            [2] PEImportHintName { Hint = 62, Name = memset } (RVA = 0x43BA, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x362)
-            [3] PEImportHintName { Hint = 8, Name = __C_specific_handler } (RVA = 0x436E, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x316)
-            [4] PEImportHintName { Hint = 27, Name = __current_exception } (RVA = 0x4386, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x32E)
-            [5] PEImportHintName { Hint = 35, Name = __std_terminate } (RVA = 0x435C, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x304)
+        [20] PEImportLookupTable              Position = 0x00002D30, Size = 0x00000038, RVA = 0x00003F30, VirtualSize = 0x00000038
+            [0] PEImportHintName { Hint = 60, Name = memcpy } (RVA = 0x47AC, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x754)
+            [1] PEImportHintName { Hint = 28, Name = __current_exception_context } (RVA = 0x439C, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x344)
+            [2] PEImportHintName { Hint = 62, Name = memset } (RVA = 0x43BA, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x362)
+            [3] PEImportHintName { Hint = 8, Name = __C_specific_handler } (RVA = 0x436E, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x316)
+            [4] PEImportHintName { Hint = 27, Name = __current_exception } (RVA = 0x4386, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x32E)
+            [5] PEImportHintName { Hint = 35, Name = __std_terminate } (RVA = 0x435C, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x304)
         
-        Section Data [21] PEImportLookupTable              Position = 0x00002D68, Size = 0x00000010, RVA = 0x00003F68, VirtualSize = 0x00000010
-            [0] PEImportHintName { Hint = 0, Name = __CxxFrameHandler4 } (RVA = 0x4346, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x2EE)
+        [21] PEImportLookupTable              Position = 0x00002D68, Size = 0x00000010, RVA = 0x00003F68, VirtualSize = 0x00000010
+            [0] PEImportHintName { Hint = 0, Name = __CxxFrameHandler4 } (RVA = 0x4346, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x2EE)
         
-        Section Data [22] PEImportLookupTable              Position = 0x00002D78, Size = 0x00000010, RVA = 0x00003F78, VirtualSize = 0x00000010
-            [0] PEImportHintName { Hint = 22, Name = _set_new_mode } (RVA = 0x452A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x4D2)
+        [22] PEImportLookupTable              Position = 0x00002D78, Size = 0x00000010, RVA = 0x00003F78, VirtualSize = 0x00000010
+            [0] PEImportHintName { Hint = 22, Name = _set_new_mode } (RVA = 0x452A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x4D2)
         
-        Section Data [23] PEImportLookupTable              Position = 0x00002D88, Size = 0x00000010, RVA = 0x00003F88, VirtualSize = 0x00000010
-            [0] PEImportHintName { Hint = 8, Name = _configthreadlocale } (RVA = 0x4514, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x4BC)
+        [23] PEImportLookupTable              Position = 0x00002D88, Size = 0x00000010, RVA = 0x00003F88, VirtualSize = 0x00000010
+            [0] PEImportHintName { Hint = 8, Name = _configthreadlocale } (RVA = 0x4514, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x4BC)
         
-        Section Data [24] PEImportLookupTable              Position = 0x00002D98, Size = 0x00000010, RVA = 0x00003F98, VirtualSize = 0x00000010
-            [0] PEImportHintName { Hint = 9, Name = __setusermatherr } (RVA = 0x440C, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x3B4)
+        [24] PEImportLookupTable              Position = 0x00002D98, Size = 0x00000010, RVA = 0x00003F98, VirtualSize = 0x00000010
+            [0] PEImportHintName { Hint = 9, Name = __setusermatherr } (RVA = 0x440C, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x3B4)
         
-        Section Data [25] PEImportLookupTable              Position = 0x00002DA8, Size = 0x00000098, RVA = 0x00003FA8, VirtualSize = 0x00000098
-            [0] PEImportHintName { Hint = 5, Name = __p___argv } (RVA = 0x44C4, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x46C)
-            [1] PEImportHintName { Hint = 60, Name = _register_onexit_function } (RVA = 0x4566, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x50E)
-            [2] PEImportHintName { Hint = 52, Name = _initialize_onexit_table } (RVA = 0x454A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x4F2)
-            [3] PEImportHintName { Hint = 35, Name = _exit } (RVA = 0x44A0, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x448)
-            [4] PEImportHintName { Hint = 55, Name = _initterm_e } (RVA = 0x448A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x432)
-            [5] PEImportHintName { Hint = 54, Name = _initterm } (RVA = 0x447E, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x426)
-            [6] PEImportHintName { Hint = 40, Name = _get_initial_narrow_environment } (RVA = 0x445C, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x404)
-            [7] PEImportHintName { Hint = 51, Name = _initialize_narrow_environment } (RVA = 0x443A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x3E2)
-            [8] PEImportHintName { Hint = 24, Name = _configure_narrow_argv } (RVA = 0x4420, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x3C8)
-            [9] PEImportHintName { Hint = 22, Name = _cexit } (RVA = 0x44D2, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x47A)
-            [10] PEImportHintName { Hint = 66, Name = _set_app_type } (RVA = 0x43FC, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x3A4)
-            [11] PEImportHintName { Hint = 64, Name = _seh_filter_exe } (RVA = 0x43EA, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x392)
-            [12] PEImportHintName { Hint = 103, Name = terminate } (RVA = 0x4590, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x538)
-            [13] PEImportHintName { Hint = 85, Name = exit } (RVA = 0x4498, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x440)
-            [14] PEImportHintName { Hint = 30, Name = _crt_atexit } (RVA = 0x4582, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x52A)
-            [15] PEImportHintName { Hint = 4, Name = __p___argc } (RVA = 0x44B6, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x45E)
-            [16] PEImportHintName { Hint = 61, Name = _register_thread_local_exe_atexit_callback } (RVA = 0x44E6, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x48E)
-            [17] PEImportHintName { Hint = 21, Name = _c_exit } (RVA = 0x44DC, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x484)
+        [25] PEImportLookupTable              Position = 0x00002DA8, Size = 0x00000098, RVA = 0x00003FA8, VirtualSize = 0x00000098
+            [0] PEImportHintName { Hint = 5, Name = __p___argv } (RVA = 0x44C4, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x46C)
+            [1] PEImportHintName { Hint = 60, Name = _register_onexit_function } (RVA = 0x4566, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x50E)
+            [2] PEImportHintName { Hint = 52, Name = _initialize_onexit_table } (RVA = 0x454A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x4F2)
+            [3] PEImportHintName { Hint = 35, Name = _exit } (RVA = 0x44A0, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x448)
+            [4] PEImportHintName { Hint = 55, Name = _initterm_e } (RVA = 0x448A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x432)
+            [5] PEImportHintName { Hint = 54, Name = _initterm } (RVA = 0x447E, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x426)
+            [6] PEImportHintName { Hint = 40, Name = _get_initial_narrow_environment } (RVA = 0x445C, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x404)
+            [7] PEImportHintName { Hint = 51, Name = _initialize_narrow_environment } (RVA = 0x443A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x3E2)
+            [8] PEImportHintName { Hint = 24, Name = _configure_narrow_argv } (RVA = 0x4420, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x3C8)
+            [9] PEImportHintName { Hint = 22, Name = _cexit } (RVA = 0x44D2, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x47A)
+            [10] PEImportHintName { Hint = 66, Name = _set_app_type } (RVA = 0x43FC, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x3A4)
+            [11] PEImportHintName { Hint = 64, Name = _seh_filter_exe } (RVA = 0x43EA, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x392)
+            [12] PEImportHintName { Hint = 103, Name = terminate } (RVA = 0x4590, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x538)
+            [13] PEImportHintName { Hint = 85, Name = exit } (RVA = 0x4498, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x440)
+            [14] PEImportHintName { Hint = 30, Name = _crt_atexit } (RVA = 0x4582, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x52A)
+            [15] PEImportHintName { Hint = 4, Name = __p___argc } (RVA = 0x44B6, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x45E)
+            [16] PEImportHintName { Hint = 61, Name = _register_thread_local_exe_atexit_callback } (RVA = 0x44E6, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x48E)
+            [17] PEImportHintName { Hint = 21, Name = _c_exit } (RVA = 0x44DC, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x484)
         
-        Section Data [26] PEImportLookupTable              Position = 0x00002E40, Size = 0x00000018, RVA = 0x00004040, VirtualSize = 0x00000018
-            [0] PEImportHintName { Hint = 1, Name = __p__commode } (RVA = 0x453A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x4E2)
-            [1] PEImportHintName { Hint = 84, Name = _set_fmode } (RVA = 0x44A8, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x9A8, Position = 0x2E58, Size = 0x9A8 }, Offset = 0x450)
+        [26] PEImportLookupTable              Position = 0x00002E40, Size = 0x00000018, RVA = 0x00004040, VirtualSize = 0x00000018
+            [0] PEImportHintName { Hint = 1, Name = __p__commode } (RVA = 0x453A, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x4E2)
+            [1] PEImportHintName { Hint = 84, Name = _set_fmode } (RVA = 0x44A8, PEStreamSectionData { RVA = 0x4058, VirtualSize = 0x7E4, Position = 0x2E58, Size = 0x7E4 }, Offset = 0x450)
         
-        Section Data [27] PEStreamSectionData              Position = 0x00002E58, Size = 0x000009A8, RVA = 0x00004058, VirtualSize = 0x000009A8
+        [27] PEStreamSectionData              Position = 0x00002E58, Size = 0x000007E4, RVA = 0x00004058, VirtualSize = 0x000007E4
         
 
     [02]    .data PESection                        Position = 0x00003800, Size = 0x00000200, RVA = 0x00005000, VirtualSize = 0x000006D0, Characteristics = 0xC0000040 (ContainsInitializedData, MemRead, MemWrite)
     
-        Section Data [00] PEStreamSectionData              Position = 0x00003800, Size = 0x00000078, RVA = 0x00005000, VirtualSize = 0x00000078
+        [00] PEStreamSectionData              Position = 0x00003800, Size = 0x00000078, RVA = 0x00005000, VirtualSize = 0x00000078
         
-        Section Data [01] PEBoundImportAddressTable64      Position = 0x00003878, Size = 0x00000018, RVA = 0x00005078, VirtualSize = 0x00000018
+        [01] PEBoundImportAddressTable64      Position = 0x00003878, Size = 0x00000018, RVA = 0x00005078, VirtualSize = 0x00000018
             [0] VA = 0x14000133E
             [1] VA = 0x140001332
         
-        Section Data [02] PEStreamSectionData              Position = 0x00003890, Size = 0x00000170, RVA = 0x00005090, VirtualSize = 0x00000170
+        [02] PEStreamSectionData              Position = 0x00003890, Size = 0x00000170, RVA = 0x00005090, VirtualSize = 0x00000170
         
 
     [03]   .pdata PESection                        Position = 0x00003A00, Size = 0x00000400, RVA = 0x00006000, VirtualSize = 0x00000210, Characteristics = 0x40000040 (ContainsInitializedData, MemRead)
     
-        Section Data [00] PEExceptionDirectory             Position = 0x00003A00, Size = 0x00000210, RVA = 0x00006000, VirtualSize = 0x00000210
-            [0] Begin = RVA = 0x1000, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x0
-            [0] End = RVA = 0x104B, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x4B
+        [00] PEExceptionDirectory             Position = 0x00003A00, Size = 0x00000210, RVA = 0x00006000, VirtualSize = 0x00000210
+            [0] Begin = RVA = 0x1000, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x0
+            [0] End = RVA = 0x104B, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x4B
             [0] UnwindInfoAddress = RVA = 0x39C0, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x24
             
-            [1] Begin = RVA = 0x1050, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x50
-            [1] End = RVA = 0x108E, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x8E
+            [1] Begin = RVA = 0x1050, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x50
+            [1] End = RVA = 0x108E, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x8E
             [1] UnwindInfoAddress = RVA = 0x39C8, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x2C
             
-            [2] Begin = RVA = 0x1090, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x90
-            [2] End = RVA = 0x10B4, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0xB4
+            [2] Begin = RVA = 0x1090, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x90
+            [2] End = RVA = 0x10B4, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0xB4
             [2] UnwindInfoAddress = RVA = 0x39EC, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x50
             
-            [3] Begin = RVA = 0x10C0, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0xC0
-            [3] End = RVA = 0x1272, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x272
+            [3] Begin = RVA = 0x10C0, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0xC0
+            [3] End = RVA = 0x1272, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x272
             [3] UnwindInfoAddress = RVA = 0x3A04, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x68
             
-            [4] Begin = RVA = 0x1280, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x280
-            [4] End = RVA = 0x12B9, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x2B9
+            [4] Begin = RVA = 0x1280, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x280
+            [4] End = RVA = 0x12B9, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x2B9
             [4] UnwindInfoAddress = RVA = 0x39C0, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x24
             
-            [5] Begin = RVA = 0x12B9, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x2B9
-            [5] End = RVA = 0x1330, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x330
+            [5] Begin = RVA = 0x12B9, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x2B9
+            [5] End = RVA = 0x1330, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x330
             [5] UnwindInfoAddress = RVA = 0x3A64, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0xC8
             
-            [6] Begin = RVA = 0x1360, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x360
-            [6] End = RVA = 0x137E, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x37E
+            [6] Begin = RVA = 0x1360, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x360
+            [6] End = RVA = 0x137E, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x37E
             [6] UnwindInfoAddress = RVA = 0x3A70, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0xD4
             
-            [7] Begin = RVA = 0x1380, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x380
-            [7] End = RVA = 0x1436, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x436
+            [7] Begin = RVA = 0x1380, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x380
+            [7] End = RVA = 0x1436, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x436
             [7] UnwindInfoAddress = RVA = 0x39C0, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x24
             
-            [8] Begin = RVA = 0x1438, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x438
-            [8] End = RVA = 0x1448, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x448
+            [8] Begin = RVA = 0x1438, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x438
+            [8] End = RVA = 0x1448, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x448
             [8] UnwindInfoAddress = RVA = 0x3A74, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0xD8
             
-            [9] Begin = RVA = 0x1448, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x448
-            [9] End = RVA = 0x1461, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x461
+            [9] Begin = RVA = 0x1448, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x448
+            [9] End = RVA = 0x1461, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x461
             [9] UnwindInfoAddress = RVA = 0x3A74, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0xD8
             
-            [10] Begin = RVA = 0x1464, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x464
-            [10] End = RVA = 0x15E0, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x5E0
+            [10] Begin = RVA = 0x1464, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x464
+            [10] End = RVA = 0x15E0, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x5E0
             [10] UnwindInfoAddress = RVA = 0x3A7C, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0xE0
             
-            [11] Begin = RVA = 0x15E0, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x5E0
-            [11] End = RVA = 0x15F2, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x5F2
+            [11] Begin = RVA = 0x15E0, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x5E0
+            [11] End = RVA = 0x15F2, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x5F2
             [11] UnwindInfoAddress = RVA = 0x3A74, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0xD8
             
-            [12] Begin = RVA = 0x15F4, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x5F4
-            [12] End = RVA = 0x1628, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x628
+            [12] Begin = RVA = 0x15F4, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x5F4
+            [12] End = RVA = 0x1628, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x628
             [12] UnwindInfoAddress = RVA = 0x39C0, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x24
             
-            [13] Begin = RVA = 0x1628, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x628
-            [13] End = RVA = 0x16FB, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x6FB
+            [13] Begin = RVA = 0x1628, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x628
+            [13] End = RVA = 0x16FB, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x6FB
             [13] UnwindInfoAddress = RVA = 0x3ABC, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x120
             
-            [14] Begin = RVA = 0x16FC, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x6FC
-            [14] End = RVA = 0x176D, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x76D
+            [14] Begin = RVA = 0x16FC, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x6FC
+            [14] End = RVA = 0x176D, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x76D
             [14] UnwindInfoAddress = RVA = 0x3AC4, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x128
             
-            [15] Begin = RVA = 0x1770, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x770
-            [15] End = RVA = 0x17A9, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x7A9
+            [15] Begin = RVA = 0x1770, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x770
+            [15] End = RVA = 0x17A9, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x7A9
             [15] UnwindInfoAddress = RVA = 0x3A74, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0xD8
             
-            [16] Begin = RVA = 0x17AC, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x7AC
-            [16] End = RVA = 0x17E6, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x7E6
+            [16] Begin = RVA = 0x17AC, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x7AC
+            [16] End = RVA = 0x17E6, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x7E6
             [16] UnwindInfoAddress = RVA = 0x3A74, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0xD8
             
-            [17] Begin = RVA = 0x17E8, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x7E8
-            [17] End = RVA = 0x1873, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x873
+            [17] Begin = RVA = 0x17E8, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x7E8
+            [17] End = RVA = 0x1873, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x873
             [17] UnwindInfoAddress = RVA = 0x39C0, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x24
             
-            [18] Begin = RVA = 0x1874, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x874
-            [18] End = RVA = 0x190C, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x90C
+            [18] Begin = RVA = 0x1874, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x874
+            [18] End = RVA = 0x190C, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x90C
             [18] UnwindInfoAddress = RVA = 0x3AD0, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x134
             
-            [19] Begin = RVA = 0x190C, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x90C
-            [19] End = RVA = 0x1930, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x930
+            [19] Begin = RVA = 0x190C, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x90C
+            [19] End = RVA = 0x1930, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x930
             [19] UnwindInfoAddress = RVA = 0x39C0, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x24
             
-            [20] Begin = RVA = 0x1930, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x930
-            [20] End = RVA = 0x1959, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x959
+            [20] Begin = RVA = 0x1930, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x930
+            [20] End = RVA = 0x1959, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x959
             [20] UnwindInfoAddress = RVA = 0x39C0, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x24
             
-            [21] Begin = RVA = 0x195C, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x95C
-            [21] End = RVA = 0x1996, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x996
+            [21] Begin = RVA = 0x195C, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x95C
+            [21] End = RVA = 0x1996, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x996
             [21] UnwindInfoAddress = RVA = 0x39C0, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x24
             
-            [22] Begin = RVA = 0x1998, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x998
-            [22] End = RVA = 0x19AF, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x9AF
+            [22] Begin = RVA = 0x1998, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x998
+            [22] End = RVA = 0x19AF, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x9AF
             [22] UnwindInfoAddress = RVA = 0x3A74, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0xD8
             
-            [23] Begin = RVA = 0x19B0, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x9B0
-            [23] End = RVA = 0x1A5C, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0xA5C
+            [23] Begin = RVA = 0x19B0, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x9B0
+            [23] End = RVA = 0x1A5C, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0xA5C
             [23] UnwindInfoAddress = RVA = 0x3AF8, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x15C
             
-            [24] Begin = RVA = 0x1A98, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0xA98
-            [24] End = RVA = 0x1AB3, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0xAB3
+            [24] Begin = RVA = 0x1A98, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0xA98
+            [24] End = RVA = 0x1AB3, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0xAB3
             [24] UnwindInfoAddress = RVA = 0x3A74, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0xD8
             
-            [25] Begin = RVA = 0x1AD8, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0xAD8
-            [25] End = RVA = 0x1C20, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0xC20
+            [25] Begin = RVA = 0x1AD8, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0xAD8
+            [25] End = RVA = 0x1C20, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0xC20
             [25] UnwindInfoAddress = RVA = 0x3B04, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x168
             
-            [26] Begin = RVA = 0x1C28, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0xC28
-            [26] End = RVA = 0x1C79, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0xC79
+            [26] Begin = RVA = 0x1C28, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0xC28
+            [26] End = RVA = 0x1C79, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0xC79
             [26] UnwindInfoAddress = RVA = 0x3A74, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0xD8
             
-            [27] Begin = RVA = 0x1C8C, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0xC8C
-            [27] End = RVA = 0x1CE7, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0xCE7
+            [27] Begin = RVA = 0x1C8C, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0xC8C
+            [27] End = RVA = 0x1CE7, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0xCE7
             [27] UnwindInfoAddress = RVA = 0x3B14, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x178
             
-            [28] Begin = RVA = 0x1CE8, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0xCE8
-            [28] End = RVA = 0x1D24, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0xD24
+            [28] Begin = RVA = 0x1CE8, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0xCE8
+            [28] End = RVA = 0x1D24, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0xD24
             [28] UnwindInfoAddress = RVA = 0x3B14, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x178
             
-            [29] Begin = RVA = 0x1D24, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0xD24
-            [29] End = RVA = 0x1D60, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0xD60
+            [29] Begin = RVA = 0x1D24, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0xD24
+            [29] End = RVA = 0x1D60, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0xD60
             [29] UnwindInfoAddress = RVA = 0x3B14, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x178
             
-            [30] Begin = RVA = 0x1D60, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0xD60
-            [30] End = RVA = 0x202A, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x102A
+            [30] Begin = RVA = 0x1D60, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0xD60
+            [30] End = RVA = 0x202A, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x102A
             [30] UnwindInfoAddress = RVA = 0x3B20, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x184
             
-            [31] Begin = RVA = 0x20F0, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x10F0
-            [31] End = RVA = 0x21DB, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x11DB
+            [31] Begin = RVA = 0x20F0, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x10F0
+            [31] End = RVA = 0x21DB, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x11DB
             [31] UnwindInfoAddress = RVA = 0x3B94, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x1F8
             
-            [32] Begin = RVA = 0x21DC, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x11DC
-            [32] End = RVA = 0x2296, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x1296
+            [32] Begin = RVA = 0x21DC, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x11DC
+            [32] End = RVA = 0x2296, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x1296
             [32] UnwindInfoAddress = RVA = 0x39C0, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x24
             
-            [33] Begin = RVA = 0x2298, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x1298
-            [33] End = RVA = 0x2336, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x1336
+            [33] Begin = RVA = 0x2298, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x1298
+            [33] End = RVA = 0x2336, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x1336
             [33] UnwindInfoAddress = RVA = 0x3B14, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x178
             
-            [34] Begin = RVA = 0x2338, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x1338
-            [34] End = RVA = 0x23D0, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x13D0
+            [34] Begin = RVA = 0x2338, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x1338
+            [34] End = RVA = 0x23D0, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x13D0
             [34] UnwindInfoAddress = RVA = 0x3B54, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x1B8
             
-            [35] Begin = RVA = 0x23D0, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x13D0
-            [35] End = RVA = 0x246A, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x146A
+            [35] Begin = RVA = 0x23D0, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x13D0
+            [35] End = RVA = 0x246A, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x146A
             [35] UnwindInfoAddress = RVA = 0x3B44, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x1A8
             
-            [36] Begin = RVA = 0x246C, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x146C
-            [36] End = RVA = 0x2563, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x1563
+            [36] Begin = RVA = 0x246C, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x146C
+            [36] End = RVA = 0x2563, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x1563
             [36] UnwindInfoAddress = RVA = 0x3B60, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x1C4
             
-            [37] Begin = RVA = 0x2564, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x1564
-            [37] End = RVA = 0x260D, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x160D
+            [37] Begin = RVA = 0x2564, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x1564
+            [37] End = RVA = 0x260D, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x160D
             [37] UnwindInfoAddress = RVA = 0x3A74, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0xD8
             
-            [38] Begin = RVA = 0x2610, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x1610
-            [38] End = RVA = 0x290C, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x190C
+            [38] Begin = RVA = 0x2610, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x1610
+            [38] End = RVA = 0x290C, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x190C
             [38] UnwindInfoAddress = RVA = 0x3B78, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x1DC
             
-            [39] Begin = RVA = 0x2930, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x1930
-            [39] End = RVA = 0x2932, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x1932
+            [39] Begin = RVA = 0x2930, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x1930
+            [39] End = RVA = 0x2932, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x1932
             [39] UnwindInfoAddress = RVA = 0x3B38, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x19C
             
-            [40] Begin = RVA = 0x2950, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x1950
-            [40] End = RVA = 0x2956, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x1956
+            [40] Begin = RVA = 0x2950, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x1950
+            [40] End = RVA = 0x2956, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x1956
             [40] UnwindInfoAddress = RVA = 0x3B40, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x1A4
             
-            [41] Begin = RVA = 0x2978, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x1978
-            [41] End = RVA = 0x29B3, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x19B3
+            [41] Begin = RVA = 0x2978, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x1978
+            [41] End = RVA = 0x29B3, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x19B3
             [41] UnwindInfoAddress = RVA = 0x3A5C, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0xC0
             
-            [42] Begin = RVA = 0x29B3, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x19B3
-            [42] End = RVA = 0x29D1, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x19D1
+            [42] Begin = RVA = 0x29B3, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x19B3
+            [42] End = RVA = 0x29D1, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x19D1
             [42] UnwindInfoAddress = RVA = 0x3AB4, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x118
             
-            [43] Begin = RVA = 0x29D1, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x19D1
-            [43] End = RVA = 0x29E9, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x1A00, Position = 0x400, Size = 0x1A00 }, Offset = 0x19E9
+            [43] Begin = RVA = 0x29D1, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x19D1
+            [43] End = RVA = 0x29E9, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x19E9, Position = 0x400, Size = 0x19E9 }, Offset = 0x19E9
             [43] UnwindInfoAddress = RVA = 0x3AF0, PEStreamSectionData { RVA = 0x399C, VirtualSize = 0x20C, Position = 0x279C, Size = 0x20C }, Offset = 0x154
             
-        
-        Section Data [01] PEStreamSectionData              Position = 0x00003C10, Size = 0x000001F0, RVA = 0x00006210, VirtualSize = 0x000001F0
         
 
     [04]    .rsrc PESection                        Position = 0x00003E00, Size = 0x00000200, RVA = 0x00007000, VirtualSize = 0x000001E0, Characteristics = 0x40000040 (ContainsInitializedData, MemRead)
     
-        Section Data [00] PEResourceDirectory              Position = 0x00003E00, Size = 0x000001E0, RVA = 0x00007000, VirtualSize = 0x000001E0
-            > PEResourceDirectoryEntry { Entries[1] , TimeDateStamp = 01/01/1970 00:00:00, MajorVersion = 0, MinorVersion = 0}
+        [00] PEResourceDirectory              Position = 0x00003E00, Size = 0x000001E0, RVA = 0x00007000, VirtualSize = 0x000001E0
+                > PEResourceDirectoryEntry { Entries[1] , TimeDateStamp = 01/01/1970 00:00:00, MajorVersion = 0, MinorVersion = 0}
                     > PEResourceDirectoryEntry { Id = 0x18 (RT_MANIFEST), Entries[1] , TimeDateStamp = 01/01/1970 00:00:00, MajorVersion = 0, MinorVersion = 0}
-                            > PEResourceDirectoryEntry { Id = 0x1, Entries[1] , TimeDateStamp = 01/01/1970 00:00:00, MajorVersion = 0, MinorVersion = 0}
-                                    > PEResourceDataEntry { Id = 0x409 (en-US), Data = Stream (381 bytes) }
-                            Section Data [00] PEStreamSectionData              Position = 0x00003FD8, Size = 0x00000008, RVA = 0x000071D8, VirtualSize = 0x00000008
-                            
-                    
-                    Section Data [01] PEStreamSectionData              Position = 0x00003FE0, Size = 0x00000020, RVA = 0x000071E0, VirtualSize = 0x00000020
-                    
+                        > PEResourceDirectoryEntry { Id = 0x1, Entries[1] , TimeDateStamp = 01/01/1970 00:00:00, MajorVersion = 0, MinorVersion = 0}
+                            > PEResourceDataEntry { Id = 0x409 (en-US), Data = Stream (381 bytes) }
+            [00] PEStreamSectionData              Position = 0x00003FD8, Size = 0x00000008, RVA = 0x000071D8, VirtualSize = 0x00000008
             
-                [05]   .reloc PESection                        Position = 0x00004000, Size = 0x00000200, RVA = 0x00008000, VirtualSize = 0x0000003C, Characteristics = 0x42000040 (ContainsInitializedData, MemDiscardable, MemRead)
-                
-                    Section Data [00] PEBaseRelocationDirectory        Position = 0x00004000, Size = 0x0000003C, RVA = 0x00008000, VirtualSize = 0x0000003C
-                        Block 0x3000 Relocations[20]
-                             Dir64 Offset = 0x0250, RVA = 0x3250 (0x0000000140001A84), SectionData = { RVA = 0x00003250 (PEStreamSectionData[1] .rdata }
-                             Dir64 Offset = 0x0258, RVA = 0x3258 (0x0000000140001A84), SectionData = { RVA = 0x00003250 (PEStreamSectionData[1] .rdata }
-                             Dir64 Offset = 0x0260, RVA = 0x3260 (0x0000000140002930), SectionData = { RVA = 0x00003250 (PEStreamSectionData[1] .rdata }
-                             Dir64 Offset = 0x0268, RVA = 0x3268 (0x0000000140002950), SectionData = { RVA = 0x00003250 (PEStreamSectionData[1] .rdata }
-                             Dir64 Offset = 0x0270, RVA = 0x3270 (0x0000000140002950), SectionData = { RVA = 0x00003250 (PEStreamSectionData[1] .rdata }
-                             Dir64 Offset = 0x0280, RVA = 0x3280 (0x000000014000290C), SectionData = { RVA = 0x00003250 (PEStreamSectionData[1] .rdata }
-                             Dir64 Offset = 0x0290, RVA = 0x3290 (0x0000000140001448), SectionData = { RVA = 0x00003250 (PEStreamSectionData[1] .rdata }
-                             Dir64 Offset = 0x02A8, RVA = 0x32A8 (0x0000000140001380), SectionData = { RVA = 0x00003250 (PEStreamSectionData[1] .rdata }
-                             Dir64 Offset = 0x02B0, RVA = 0x32B0 (0x0000000140001438), SectionData = { RVA = 0x00003250 (PEStreamSectionData[1] .rdata }
-                             Dir64 Offset = 0x02F8, RVA = 0x32F8 (0x00000001400050A0), SectionData = { RVA = 0x00003250 (PEStreamSectionData[1] .rdata }
-                             Dir64 Offset = 0x0300, RVA = 0x3300 (0x0000000140005140), SectionData = { RVA = 0x00003250 (PEStreamSectionData[1] .rdata }
-                             Dir64 Offset = 0x03E8, RVA = 0x33E8 (0x0000000140005000), SectionData = { RVA = 0x00003390 (PELoadConfigDirectory64[2] .rdata }
-                             Dir64 Offset = 0x0400, RVA = 0x3400 (0x0000000140003250), SectionData = { RVA = 0x00003390 (PELoadConfigDirectory64[2] .rdata }
-                             Dir64 Offset = 0x0408, RVA = 0x3408 (0x0000000140003260), SectionData = { RVA = 0x00003390 (PELoadConfigDirectory64[2] .rdata }
-                             Dir64 Offset = 0x0490, RVA = 0x3490 (0x0000000140003580), SectionData = { RVA = 0x00003390 (PELoadConfigDirectory64[2] .rdata }
-                             Dir64 Offset = 0x04A8, RVA = 0x34A8 (0x0000000140003258), SectionData = { RVA = 0x00003390 (PELoadConfigDirectory64[2] .rdata }
-                             Dir64 Offset = 0x04B0, RVA = 0x34B0 (0x0000000140003268), SectionData = { RVA = 0x00003390 (PELoadConfigDirectory64[2] .rdata }
-                             Dir64 Offset = 0x04B8, RVA = 0x34B8 (0x0000000140003270), SectionData = { RVA = 0x00003390 (PELoadConfigDirectory64[2] .rdata }
-                             Dir64 Offset = 0x04C0, RVA = 0x34C0 (0x0000000140003278), SectionData = { RVA = 0x00003390 (PELoadConfigDirectory64[2] .rdata }
-                             Dir64 Offset = 0x04C8, RVA = 0x34C8 (0x0000000140003280), SectionData = { RVA = 0x00003390 (PELoadConfigDirectory64[2] .rdata }
-                        Block 0x5000 Relocations[2]
-                             Dir64 Offset = 0x0078, RVA = 0x5078 (0x000000014000133E), SectionData = { RVA = 0x00005078 (PEBoundImportAddressTable64[1] .data }
-                             Dir64 Offset = 0x0080, RVA = 0x5080 (0x0000000140001332), SectionData = { RVA = 0x00005078 (PEBoundImportAddressTable64[1] .data }
-                            Section Data [00] PEStreamSectionData              Position = 0x0000402C, Size = 0x00000010, RVA = 0x0000802C, VirtualSize = 0x00000010
-                            
-                    
-                    Section Data [01] PEStreamSectionData              Position = 0x0000403C, Size = 0x000001C4, RVA = 0x0000803C, VirtualSize = 0x000001C4
-                    
-            
+        
+
+    [05]   .reloc PESection                        Position = 0x00004000, Size = 0x00000200, RVA = 0x00008000, VirtualSize = 0x0000003C, Characteristics = 0x42000040 (ContainsInitializedData, MemDiscardable, MemRead)
+    
+        [00] PEBaseRelocationDirectory        Position = 0x00004000, Size = 0x0000003C, RVA = 0x00008000, VirtualSize = 0x0000003C
+            Block 0x3000 Relocations[20]
+                [000] Dir64 Offset = 0x0250, RVA = 0x3250 (0x0000000140001A84), SectionData = { RVA = 0x00003250 (PEStreamSectionData[1] -> .rdata) }
+                [001] Dir64 Offset = 0x0258, RVA = 0x3258 (0x0000000140001A84), SectionData = { RVA = 0x00003250 (PEStreamSectionData[1] -> .rdata) }
+                [002] Dir64 Offset = 0x0260, RVA = 0x3260 (0x0000000140002930), SectionData = { RVA = 0x00003250 (PEStreamSectionData[1] -> .rdata) }
+                [003] Dir64 Offset = 0x0268, RVA = 0x3268 (0x0000000140002950), SectionData = { RVA = 0x00003250 (PEStreamSectionData[1] -> .rdata) }
+                [004] Dir64 Offset = 0x0270, RVA = 0x3270 (0x0000000140002950), SectionData = { RVA = 0x00003250 (PEStreamSectionData[1] -> .rdata) }
+                [005] Dir64 Offset = 0x0280, RVA = 0x3280 (0x000000014000290C), SectionData = { RVA = 0x00003250 (PEStreamSectionData[1] -> .rdata) }
+                [006] Dir64 Offset = 0x0290, RVA = 0x3290 (0x0000000140001448), SectionData = { RVA = 0x00003250 (PEStreamSectionData[1] -> .rdata) }
+                [007] Dir64 Offset = 0x02A8, RVA = 0x32A8 (0x0000000140001380), SectionData = { RVA = 0x00003250 (PEStreamSectionData[1] -> .rdata) }
+                [008] Dir64 Offset = 0x02B0, RVA = 0x32B0 (0x0000000140001438), SectionData = { RVA = 0x00003250 (PEStreamSectionData[1] -> .rdata) }
+                [009] Dir64 Offset = 0x02F8, RVA = 0x32F8 (0x00000001400050A0), SectionData = { RVA = 0x00003250 (PEStreamSectionData[1] -> .rdata) }
+                [010] Dir64 Offset = 0x0300, RVA = 0x3300 (0x0000000140005140), SectionData = { RVA = 0x00003250 (PEStreamSectionData[1] -> .rdata) }
+                [011] Dir64 Offset = 0x03E8, RVA = 0x33E8 (0x0000000140005000), SectionData = { RVA = 0x00003390 (PELoadConfigDirectory64[2] -> .rdata) }
+                [012] Dir64 Offset = 0x0400, RVA = 0x3400 (0x0000000140003250), SectionData = { RVA = 0x00003390 (PELoadConfigDirectory64[2] -> .rdata) }
+                [013] Dir64 Offset = 0x0408, RVA = 0x3408 (0x0000000140003260), SectionData = { RVA = 0x00003390 (PELoadConfigDirectory64[2] -> .rdata) }
+                [014] Dir64 Offset = 0x0490, RVA = 0x3490 (0x0000000140003580), SectionData = { RVA = 0x00003390 (PELoadConfigDirectory64[2] -> .rdata) }
+                [015] Dir64 Offset = 0x04A8, RVA = 0x34A8 (0x0000000140003258), SectionData = { RVA = 0x00003390 (PELoadConfigDirectory64[2] -> .rdata) }
+                [016] Dir64 Offset = 0x04B0, RVA = 0x34B0 (0x0000000140003268), SectionData = { RVA = 0x00003390 (PELoadConfigDirectory64[2] -> .rdata) }
+                [017] Dir64 Offset = 0x04B8, RVA = 0x34B8 (0x0000000140003270), SectionData = { RVA = 0x00003390 (PELoadConfigDirectory64[2] -> .rdata) }
+                [018] Dir64 Offset = 0x04C0, RVA = 0x34C0 (0x0000000140003278), SectionData = { RVA = 0x00003390 (PELoadConfigDirectory64[2] -> .rdata) }
+                [019] Dir64 Offset = 0x04C8, RVA = 0x34C8 (0x0000000140003280), SectionData = { RVA = 0x00003390 (PELoadConfigDirectory64[2] -> .rdata) }
+            Block 0x5000 Relocations[2]
+                [000] Dir64 Offset = 0x0078, RVA = 0x5078 (0x000000014000133E), SectionData = { RVA = 0x00005078 (PEBoundImportAddressTable64[1] -> .data) }
+                [001] Dir64 Offset = 0x0080, RVA = 0x5080 (0x0000000140001332), SectionData = { RVA = 0x00005078 (PEBoundImportAddressTable64[1] -> .data) }
+        
+

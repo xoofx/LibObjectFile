@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -172,7 +172,7 @@ public static class PEPrinter
     
     private static void PrintSectionData(PEFile file, PESectionData data, ref TextWriterIndenter writer)
     {
-        writer.WriteLine($"Section Data [{data.Index:00}] {PEDescribe(data)}");
+        writer.WriteLine($"[{data.Index:00}] {PEDescribe(data)}");
         writer.Indent();
         switch (data)
         {
@@ -259,13 +259,11 @@ public static class PEPrinter
                 break;
         }
 
-        if (data is PEDataDirectory directory)
+        if (data is PEDataDirectory directory && directory.Content.Count > 0)
         {
             foreach (var content in directory.Content)
             {
-                writer.Indent();
                 PrintSectionData(file, content, ref writer);
-                writer.Unindent();
             }
         }
 
@@ -293,20 +291,26 @@ public static class PEPrinter
             writer.WriteLine($"Block {pageRVA} Relocations[{block.Relocations.Count}]");
 
             writer.Indent();
-            foreach (var reloc in block.Relocations)
+            for (var i = 0; i < block.Relocations.Count; i++)
             {
+                var reloc = block.Relocations[i];
                 var relocRVA = reloc.RVA();
                 var offsetInPage = relocRVA - pageRVA;
 
                 if (reloc.Type == PEBaseRelocationType.Dir64)
                 {
-                    writer.WriteLine($"{reloc.Type,6} Offset = 0x{offsetInPage:X4}, RVA = {relocRVA} (0x{reloc.ReadAddress(peFile):X16}), SectionData = {{ {PELink(reloc.Container)} }}");
+                    writer.WriteLine($"[{i:000}] {reloc.Type} Offset = 0x{offsetInPage:X4}, RVA = {relocRVA} (0x{reloc.ReadAddress(peFile):X16}), SectionData = {{ {PELink(reloc.Container)} }}");
+                }
+                else if (reloc.Type == PEBaseRelocationType.Absolute)
+                {
+                    writer.WriteLine($"[{i:000}] {reloc.Type} Zero padding");
                 }
                 else
                 {
-                    writer.WriteLine($"{reloc.Type,6} Offset = 0x{offsetInPage:X4}, RVA = {relocRVA}, SectionData = {{ {PELink(reloc.Container)} }}");
+                    writer.WriteLine($"[{i:000}] {reloc.Type} Offset = 0x{offsetInPage:X4}, RVA = {relocRVA}, SectionData = {{ {PELink(reloc.Container)} }}");
                 }
             }
+
             writer.Unindent();
         }
     }
@@ -533,7 +537,9 @@ public static class PEPrinter
 
     private static void Print(PEResourceDirectory data, ref TextWriterIndenter writer)
     {
+        writer.Indent();
         Print(data.Root, ref writer);
+        writer.Unindent();
     }
 
     private static void Print(PEResourceEntry data, ref TextWriterIndenter writer)
@@ -548,10 +554,9 @@ public static class PEPrinter
                 writer.Indent();
                 foreach (var entry in dir.Entries)
                 {
-                    writer.Indent();
                     Print(entry, ref writer);
-                    writer.Unindent();
                 }
+                writer.Unindent();
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(data));
@@ -687,7 +692,7 @@ public static class PEPrinter
     {
         if (peObjectBase is PEObject peObject)
         {
-            return $"RVA = 0x{peObject.RVA.Value:X8} ({peObject.GetType().Name}[{peObject.Index}]{PEParent((PEObjectBase?)peObject.Parent)}";
+            return $"RVA = 0x{peObject.RVA.Value:X8} ({peObject.GetType().Name}[{peObject.Index}]{PEParent((PEObjectBase?)peObject.Parent)})";
         }
         else if (peObjectBase is not null)
         {
@@ -702,7 +707,16 @@ public static class PEPrinter
         {
             if (obj is PESection section)
             {
-                return $" {section.Name}";
+                return $" -> {section.Name}";
+            }
+            else if (obj is PESectionData sectionData)
+            {
+                return $" -> {sectionData.GetType().Name}[{sectionData.Index}]{PEParent((PEObjectBase?)sectionData.Parent)}";
+            }
+
+            if (obj is not null)
+            {
+                return $" -> {obj.GetType().Name}";
             }
 
             return "";

@@ -6,11 +6,15 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Numerics;
 using System.Reflection.PortableExecutable;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using LibObjectFile.Collections;
+using LibObjectFile.Diagnostics;
+using LibObjectFile.PE.Internal;
+using LibObjectFile.Utils;
 
 namespace LibObjectFile.PE;
 
@@ -250,8 +254,141 @@ public sealed partial class PEFile : PEObjectBase
         return false;
     }
 
-    public override void UpdateLayout(PELayoutContext layoutContext)
+    /// <summary>
+    /// Updates the layout of this PE file.
+    /// </summary>
+    /// <param name="diagnostics">The diagnostics to output errors.</param>
+    public void UpdateLayout(DiagnosticBag diagnostics)
     {
+        var context = new PELayoutContext(this, diagnostics);
+        UpdateLayout(context);
+    }
+
+    /// <inheritdoc />
+    public override unsafe void UpdateLayout(PELayoutContext context)
+    {
+        var position = 0U;
+
+        // Update DOS header
+        position += (uint)sizeof(ImageDosHeader);
+        position += (uint)_dosStub.Length;
+        position += (uint)(_dosStubExtra?.Length ?? 0U);
+
+        // Update optional header
+        position = AlignHelper.AlignUp(position, 8); // PE header is aligned on 8 bytes
+
+        // Update offset to PE header
+        DosHeader.FileAddressPEHeader = position;
+
+        position += sizeof(ImagePESignature); // PE00 header
+
+        // COFF header
+        position += (uint)sizeof(ImageCoffHeader);
+        
+        // TODO: update other DosHeader fields
+
+        position += (uint)(IsPE32 ? sizeof(RawImageOptionalHeader32) : sizeof(RawImageOptionalHeader64));
+
+        // Update directories
+        position += (uint)(Directories.CalculateNumberOfEntries() * sizeof(ImageDataDirectory));
+
+        // TODO: Additional optional header size?
+
+        // Data before sections
+        foreach (var extraData in ExtraDataBeforeSections)
+        {
+            extraData.Position = position;
+            extraData.UpdateLayout(context);
+            var dataSize = (uint)extraData.Size;
+            position += dataSize;
+        }
+
+        if (_sections.Count > 96)
+        {
+            context.Diagnostics.Error(DiagnosticId.PE_ERR_TooManySections, $"Too many sections {_sections.Count} (max 96)");
+        }
+
+
+        // Update COFF header
+        CoffHeader.NumberOfSections = (ushort)_sections.Count;
+        CoffHeader.PointerToSymbolTable = 0;
+        CoffHeader.NumberOfSymbols = 0;
+
+        OptionalHeader.SizeOfCode = 0;
+        OptionalHeader.SizeOfInitializedData = 0;
+        OptionalHeader.SizeOfUninitializedData = 0;
+
+        if (!BitOperations.IsPow2(OptionalHeader.FileAlignment) || OptionalHeader.FileAlignment == 0)
+        {
+            context.Diagnostics.Error(DiagnosticId.PE_ERR_FileAlignmentNotPowerOfTwo, $"File alignment {OptionalHeader.FileAlignment} is not a power of two");
+            return;
+        }
+
+        if (!BitOperations.IsPow2(OptionalHeader.SectionAlignment) || OptionalHeader.SectionAlignment == 0)
+        {
+            context.Diagnostics.Error(DiagnosticId.PE_ERR_SectionAlignmentNotPowerOfTwo, $"Section alignment {OptionalHeader.SectionAlignment} is not a power of two");
+            return;
+        }
+
+        // Ensure that SectionAlignment is greater or equal to FileAlignment
+        if (OptionalHeader.SectionAlignment < OptionalHeader.FileAlignment)
+        {
+            context.Diagnostics.Error(DiagnosticId.PE_ERR_SectionAlignmentLessThanFileAlignment, $"Section alignment {OptionalHeader.SectionAlignment} is less than file alignment {OptionalHeader.FileAlignment}");
+            return;
+
+        }
+
+        // Ensure that SectionAlignment is a multiple of FileAlignment
+        position = AlignHelper.AlignUp(position, OptionalHeader.FileAlignment);
+        OptionalHeader.SizeOfHeaders = position;
+
+        // Update sections
+        RVA previousEndOfRVA = 0U;
+        foreach (var section in _sections)
+        {
+            section.Position = position;
+            section.UpdateLayout(context);
+            if (section.RVA < previousEndOfRVA)
+            {
+                context.Diagnostics.Error(DiagnosticId.PE_ERR_SectionRVALessThanPrevious, $"Section {section.Name} RVA {section.RVA} is less than the previous section end RVA {previousEndOfRVA}");
+            }
+
+            var sectionSize = (uint)section.Size;
+            position += sectionSize;
+
+            var virtualSizeDiskAligned = AlignHelper.AlignUp(section.VirtualSize, OptionalHeader.FileAlignment);
+
+            if ((section.Characteristics & SectionCharacteristics.ContainsCode) != 0)
+            {
+                OptionalHeader.SizeOfCode += virtualSizeDiskAligned;
+            }
+            else if ((section.Characteristics & SectionCharacteristics.ContainsInitializedData) != 0)
+            {
+                OptionalHeader.SizeOfInitializedData += virtualSizeDiskAligned;
+            }
+            else if ((section.Characteristics & SectionCharacteristics.ContainsUninitializedData) != 0)
+            {
+                OptionalHeader.SizeOfUninitializedData += virtualSizeDiskAligned;
+            }
+
+            // Update the end of the RVA
+            previousEndOfRVA = section.RVA + AlignHelper.AlignUp(section.VirtualSize, OptionalHeader.SectionAlignment);
+        }
+
+        // Update the (virtual) size of the image
+        OptionalHeader.SizeOfImage = previousEndOfRVA;
+
+        // Data after sections
+        foreach (var extraData in ExtraDataAfterSections)
+        {
+            extraData.Position = position;
+            extraData.UpdateLayout(context);
+            var dataSize = (uint)extraData.Size;
+            position += dataSize;
+        }
+
+        // Update the size of the file
+        Size = position;
     }
 
     protected override bool PrintMembers(StringBuilder builder)

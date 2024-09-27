@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -14,6 +14,11 @@ namespace LibObjectFile.PE;
 [DebuggerDisplay("{ToString(),nq}")]
 public readonly record struct PEBaseRelocation(PEBaseRelocationType Type, PESectionData? Container, RVO RVO) : IPELink<PESectionData>
 {
+    /// <summary>
+    /// Gets a value indicating whether the base relocation is zero padding.
+    /// </summary>
+    public bool IsZero => Type == PEBaseRelocationType.Absolute;
+
     /// <summary>
     /// Reads the address from the section data.
     /// </summary>
@@ -60,5 +65,5 @@ public readonly record struct PEBaseRelocation(PEBaseRelocationType Type, PESect
         }
     }
 
-    public override string ToString() => $"{Type} {this.ToDisplayTextWithRVA()}";
+    public override string ToString() => Type == PEBaseRelocationType.Absolute ? $"{Type} Zero Padding" : $"{Type} {this.ToDisplayTextWithRVA()}";
 }

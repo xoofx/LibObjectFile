@@ -7,8 +7,10 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using LibObjectFile.Diagnostics;
 using LibObjectFile.PE;
 using VerifyMSTest;
+using VerifyTests;
 
 namespace LibObjectFile.Tests.PE;
 
@@ -23,10 +25,28 @@ public partial class PEReaderTests
 
     public async Task TestPrinter(string name)
     {
-        var stream = File.OpenRead(Path.Combine(AppContext.BaseDirectory, "PE", name));
+
+        await using var stream = File.OpenRead(Path.Combine(AppContext.BaseDirectory, "PE", name));
         var peImage = PEFile.Read(stream);
-        var text = new StringWriter();
-        peImage.Print(text);
-        await Verifier.Verify(text).UseParameters(name);
+        var afterReadWriter = new StringWriter();
+        peImage.Print(afterReadWriter);
+
+        var afterReadText = afterReadWriter.ToString();
+
+        await Verifier.Verify(afterReadText).UseParameters(name);
+
+        // Update the layout
+        var diagnostics = new DiagnosticBag();
+        peImage.UpdateLayout(diagnostics);
+
+        var afterUpdateWriter = new StringWriter();
+        peImage.Print(afterUpdateWriter);
+        var afterUpdateText = afterUpdateWriter.ToString();
+
+        if (!string.Equals(afterReadText, afterUpdateText, StringComparison.Ordinal))
+        {
+            TestContext.WriteLine("Error while verifying UpdateLayout");
+            await Verifier.Verify(afterUpdateText).UseParameters(name).DisableRequireUniquePrefix();
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -106,5 +106,5 @@ public unsafe struct ImageDosHeader
     /// <summary>
     /// File address of new exe header. (Original DOS field is `e_lfanew`)
     /// </summary>
-    public int FileAddressPEHeader;
+    public uint FileAddressPEHeader;
 }

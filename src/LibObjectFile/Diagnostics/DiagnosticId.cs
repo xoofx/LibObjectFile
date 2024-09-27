@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -125,37 +125,12 @@ public enum DiagnosticId
     PE_ERR_InvalidSectionHeadersSize = 3007,
     PE_ERR_InvalidParent = 3008,
     PE_ERR_InvalidExtraData = 3009,
-    
-    // PE BaseRelocation
-    PE_ERR_BaseRelocationDirectoryInvalidEndOfStream = 3020,
-    PE_ERR_BaseRelocationDirectoryInvalidSection = 3021,
-    PE_ERR_BaseRelocationDirectoryInvalidSectionData = 3022,
-    PE_ERR_InvalidDataDirectorySection = 3023,
-    PE_ERR_BaseRelocationDirectoryInvalidVirtualAddress = 3024,
-
-    // PE Import
-    PE_ERR_ImportDirectoryInvalidEndOfStream = 3040,
-    PE_ERR_ImportLookupTableInvalidEndOfStream = 3041,
-    PE_ERR_ImportLookupTableInvalidHintNameTableRVA = 3042,
-    PE_ERR_ImportLookupTableInvalidParent = 3043,
-    PE_ERR_ImportDirectoryInvalidImportAddressTableRVA = 3044,
-    PE_ERR_ImportDirectoryInvalidImportLookupTableRVA = 3045,
-    PE_ERR_ImportAddressTableNotFound = 3046,
-    PE_ERR_InvalidInternalState = 3047,
-
-    // PE Export
-    PE_ERR_ExportAddressTableInvalidRVA = 3060,
-    PE_ERR_ExportDirectoryInvalidAddressOfNames = 3061,
-    PE_ERR_ExportDirectoryInvalidAddressOfFunctions = 3062,
-    PE_ERR_ExportDirectoryInvalidAddressOfNameOrdinals = 3063,
-    PE_ERR_ExportDirectoryInvalidName = 3064,
-    PE_ERR_ExportNameTableInvalidRVA = 3065,
-
-    // PE Resource directory
-    PE_ERR_InvalidResourceDirectory = 3080,
-    PE_ERR_InvalidResourceDirectoryEntry = 3081,
-    PE_ERR_InvalidResourceDirectoryEntryRVAOffsetToData = 3082,
-
+    PE_ERR_SectionSizeLargerThanVirtualSize = 3010,
+    PE_ERR_SectionRVALessThanPrevious = 3011,
+    PE_ERR_TooManySections = 3012,
+    PE_ERR_FileAlignmentNotPowerOfTwo = 3013,
+    PE_ERR_SectionAlignmentNotPowerOfTwo = 3014,
+    PE_ERR_SectionAlignmentLessThanFileAlignment = 315,
 
     // PE Exception directory
     PE_ERR_InvalidExceptionDirectory_Entries = 3100,
@@ -164,12 +139,6 @@ public enum DiagnosticId
 
     // PE Certificate directory
     PE_ERR_InvalidCertificateEntry = 3200,
-
-    // PE TLS directory
-    PE_ERR_InvalidTlsStartAddressOfRawData = 3300,
-    PE_ERR_InvalidTlsEndAddressOfRawData = 3301,
-    PE_ERR_InvalidTlsAddressOfIndex = 3302,
-    PE_ERR_InvalidTlsAddressOfCallBacks = 3303,
 
     // PE BoundImport directory
     PE_ERR_BoundImportDirectoryInvalidEndOfStream = 3400,
@@ -193,4 +162,34 @@ public enum DiagnosticId
     PE_ERR_InvalidDebugDataRSDSSignature = 3603,
     PE_ERR_InvalidDebugDataRSDSPdbPath = 3604,
     PE_ERR_DebugDirectoryExtraData = 3605,
+    
+    // PE BaseRelocation
+    PE_ERR_BaseRelocationDirectoryInvalidEndOfStream = 3700,
+    PE_ERR_BaseRelocationDirectoryInvalidSection = 3701,
+    PE_ERR_BaseRelocationDirectoryInvalidSectionData = 3702,
+    PE_ERR_InvalidDataDirectorySection = 3703,
+    PE_ERR_BaseRelocationDirectoryInvalidVirtualAddress = 3704,
+    
+    // PE Import
+    PE_ERR_ImportDirectoryInvalidEndOfStream = 3800,
+    PE_ERR_ImportLookupTableInvalidEndOfStream = 3801,
+    PE_ERR_ImportLookupTableInvalidHintNameTableRVA = 3802,
+    PE_ERR_ImportLookupTableInvalidParent = 3803,
+    PE_ERR_ImportDirectoryInvalidImportAddressTableRVA = 3804,
+    PE_ERR_ImportDirectoryInvalidImportLookupTableRVA = 3805,
+    PE_ERR_ImportAddressTableNotFound = 3806,
+    PE_ERR_InvalidInternalState = 3807,
+
+    // PE Export
+    PE_ERR_ExportAddressTableInvalidRVA = 3900,
+    PE_ERR_ExportDirectoryInvalidAddressOfNames = 3901,
+    PE_ERR_ExportDirectoryInvalidAddressOfFunctions = 3902,
+    PE_ERR_ExportDirectoryInvalidAddressOfNameOrdinals = 3903,
+    PE_ERR_ExportDirectoryInvalidName = 3904,
+    PE_ERR_ExportNameTableInvalidRVA = 3905,
+
+    // PE Resource directory
+    PE_ERR_InvalidResourceDirectory = 4000,
+    PE_ERR_InvalidResourceDirectoryEntry = 4001,
+    PE_ERR_InvalidResourceDirectoryEntryRVAOffsetToData = 4002,
 }
