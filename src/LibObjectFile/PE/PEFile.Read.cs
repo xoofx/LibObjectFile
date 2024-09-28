@@ -57,7 +57,7 @@ partial class PEFile
         return !reader.Diagnostics.HasErrors;
     }
 
-    public override void Read(PEImageReader reader)
+    public override unsafe void Read(PEImageReader reader)
     {
         Debug.Assert(Unsafe.SizeOf<ImageDosHeader>() == 64);
 
@@ -75,36 +75,57 @@ partial class PEFile
             return;
         }
 
-        // Read the DOS stub
-        var dosStubSize = DosHeader.SizeOfParagraphsHeader * 16;
-        if (dosStubSize > 0)
+        var pePosition = DosHeader.FileAddressPEHeader;
+
+        if (pePosition < sizeof(ImageDosHeader))
         {
-            var dosStub = new byte[dosStubSize];
-            read = reader.Read(dosStub);
-            if (read != dosStubSize)
+            if (pePosition < 4)
             {
-                diagnostics.Error(DiagnosticId.PE_ERR_InvalidDosStubSize, "Invalid DOS stub");
+                diagnostics.Error(DiagnosticId.PE_ERR_InvalidPEHeaderPosition, "Invalid PE header position");
+                return;
             }
 
-            _dosStub = dosStub;
+            _unsafeNegativePEHeaderOffset = (int)pePosition - sizeof(ImageDosHeader);
         }
         else
         {
-            _dosStub = [];
+            // Read the DOS stub
+            var dosStubSize = DosHeader.SizeOfParagraphsHeader * 16;
+
+            if (dosStubSize + sizeof(ImageDosHeader) > pePosition)
+            {
+                diagnostics.Error(DiagnosticId.PE_ERR_InvalidDosStubSize, $"Invalid DOS stub size {dosStubSize} going beyond the PE header");
+                return;
+            }
+            
+            if (dosStubSize > 0)
+            {
+                var dosStub = new byte[dosStubSize];
+                read = reader.Read(dosStub);
+                if (read != dosStubSize)
+                {
+                    diagnostics.Error(DiagnosticId.PE_ERR_InvalidDosStubSize, "Invalid DOS stub");
+                    return;
+                }
+
+                _dosStub = dosStub;
+            }
+            else
+            {
+                _dosStub = [];
+            }
+
+            var dosHeaderAndStubSize = sizeof(ImageDosHeader) + dosStubSize;
+
+            // Read any DOS stub extra data (e.g Rich)
+            if (dosHeaderAndStubSize < DosHeader.FileAddressPEHeader)
+            {
+                _dosStubExtra = reader.ReadAsStream((ulong)(DosHeader.FileAddressPEHeader - dosHeaderAndStubSize));
+            }
         }
 
-        read = (int)reader.Position;
-        // Read any DOS stub extra data (e.g Rich)
-        if (DosHeader.FileAddressPEHeader > read)
-        {
-            _dosStubExtra = reader.ReadAsStream((ulong)(DosHeader.FileAddressPEHeader - read));
-        }
-
-        // Read the PE signature
-        if (reader.Position != DosHeader.FileAddressPEHeader)
-        {
-            reader.Position = DosHeader.FileAddressPEHeader;
-        }
+        // Read the PE header
+        reader.Position = DosHeader.FileAddressPEHeader;
 
         var signature = default(ImagePESignature);
         read = reader.Read(MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref signature, 1)));
@@ -131,19 +152,49 @@ partial class PEFile
         }
         CoffHeader = coffHeader;
 
-        var tempArray = ArrayPool<byte>.Shared.Rent(CoffHeader.SizeOfOptionalHeader);
+        var positionAfterCoffHeader = reader.Position;
+
+        // Cannot be smaller than the magic
+        if (CoffHeader.SizeOfOptionalHeader < sizeof(ImageOptionalHeaderMagic))
+        {
+            diagnostics.Error(DiagnosticId.PE_ERR_InvalidOptionalHeaderSize, $"Invalid optional header size {CoffHeader.SizeOfOptionalHeader}");
+            return;
+        }
+
+        var magic = (ImageOptionalHeaderMagic)reader.ReadU16();
+
+        int minimumSizeOfOptionalHeaderToRead = 0;
+        
+        // Process known PE32/PE32+ headers
+        if (magic == ImageOptionalHeaderMagic.PE32)
+        {
+            minimumSizeOfOptionalHeaderToRead = RawImageOptionalHeader32.MinimumSize;
+        }
+        else if (magic == ImageOptionalHeaderMagic.PE32Plus)
+        {
+            minimumSizeOfOptionalHeaderToRead = RawImageOptionalHeader64.MinimumSize;
+        }
+        else
+        {
+            diagnostics.Error(DiagnosticId.PE_ERR_InvalidOptionalHeaderMagic, $"Invalid optional header PE magic 0x{(uint)magic:X8}");
+            return;
+        }
+
+        minimumSizeOfOptionalHeaderToRead = Math.Max(CoffHeader.SizeOfOptionalHeader, minimumSizeOfOptionalHeaderToRead);
+
+        var tempArray = ArrayPool<byte>.Shared.Rent(minimumSizeOfOptionalHeaderToRead);
         try
         {
-            var optionalHeader = new Span<byte>(tempArray, 0, CoffHeader.SizeOfOptionalHeader);
-            read = reader.Read(optionalHeader);
-            if (read != CoffHeader.SizeOfOptionalHeader)
-            {
-                diagnostics.Error(DiagnosticId.PE_ERR_InvalidOptionalHeaderSize, "Invalid optional header");
-                return;
-            }
+            var optionalHeader = new Span<byte>(tempArray, 0, minimumSizeOfOptionalHeaderToRead);
+            MemoryMarshal.Write(optionalHeader, (ushort)magic);
 
-            var magic = MemoryMarshal.Cast<byte, ImageOptionalHeaderMagic>(optionalHeader.Slice(0, 2))[0];
+            // We have already read the magic number
+            var minimumSpan = optionalHeader.Slice(sizeof(ImageOptionalHeaderMagic));
+            read = reader.Read(minimumSpan);
 
+            // The real size read (in case of tricked Tiny PE)
+            optionalHeader = optionalHeader.Slice(0, read + sizeof(ImageOptionalHeaderMagic));
+            
             Debug.Assert(Unsafe.SizeOf<RawImageOptionalHeader32>() == 224);
             Debug.Assert(Unsafe.SizeOf<RawImageOptionalHeader64>() == 240);
 
@@ -152,9 +203,9 @@ partial class PEFile
             {
                 var optionalHeader32 = new RawImageOptionalHeader32();
                 var span = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref optionalHeader32, 1));
-                if (span.Length > CoffHeader.SizeOfOptionalHeader)
+                if (span.Length > optionalHeader.Length)
                 {
-                    span = span.Slice(0, CoffHeader.SizeOfOptionalHeader);
+                    span = span.Slice(0, optionalHeader.Length);
                 }
 
                 optionalHeader.CopyTo(span);
@@ -165,14 +216,14 @@ partial class PEFile
                 OptionalHeader.OptionalHeaderSize32 = optionalHeader32.Size32;
                 OptionalHeader.OptionalHeaderCommonPart3 = optionalHeader32.Common3;
             }
-            else if (magic == ImageOptionalHeaderMagic.PE32Plus)
+            else
             {
                 var optionalHeader64 = new RawImageOptionalHeader64();
                 // Skip 2 bytes as we read already the magic number
                 var span = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref optionalHeader64, 1));
-                if (span.Length > CoffHeader.SizeOfOptionalHeader)
+                if (span.Length > optionalHeader.Length)
                 {
-                    span = span.Slice(0, CoffHeader.SizeOfOptionalHeader);
+                    span = span.Slice(0, optionalHeader.Length);
                 }
 
                 optionalHeader.CopyTo(span);
@@ -183,13 +234,13 @@ partial class PEFile
                 OptionalHeader.OptionalHeaderSize64 = optionalHeader64.Size64;
                 OptionalHeader.OptionalHeaderCommonPart3 = optionalHeader64.Common3;
             }
-            else
-            {
-                diagnostics.Error(DiagnosticId.PE_ERR_InvalidOptionalHeaderMagic, $"Invalid optional header PE magic 0x{(uint)magic:X8}");
-                return;
-            }
+
+            // Sets the number of entries in the data directory
+            Directories.Count = (int)OptionalHeader.NumberOfRvaAndSizes;
 
             // Read sections
+            reader.Position = positionAfterCoffHeader + CoffHeader.SizeOfOptionalHeader;
+            
             ArrayPool<byte>.Shared.Return(tempArray);
             Debug.Assert(Unsafe.SizeOf<RawImageSectionHeader>() == 40);
             var sizeOfSections = CoffHeader.NumberOfSections * Unsafe.SizeOf<RawImageSectionHeader>();
@@ -205,6 +256,9 @@ partial class PEFile
 
             // Read all sections and directories
             ReadSectionsAndDirectories(reader, sectionHeaders);
+
+            // Set the size to the full size of the file
+            Size = reader.Length;
         }
         finally
         {
@@ -273,11 +327,12 @@ partial class PEFile
             var kind = (PEDataDirectoryKind)i;
             if (kind == PEDataDirectoryKind.SecurityCertificate)
             {
-                var directory = new PESecurityCertificateDirectory();
-                
-                // The PE certificate directory is a special case as it is not a standard directory. It doesn't use RVA but the position in the file
-                directory.Position = (uint)directoryEntry.RVA;
-                directory.Size = directoryEntry.Size;
+                var directory = new PESecurityCertificateDirectory
+                {
+                    // The PE certificate directory is a special case as it is not a standard directory. It doesn't use RVA but the position in the file
+                    Position = (uint)directoryEntry.RVA,
+                    Size = directoryEntry.Size
+                };
 
                 Directories.Set(directory);
 
@@ -408,9 +463,13 @@ partial class PEFile
         }
 
         // Create all remaining extra data section data (before and after sections)
-        FillExtraDataWithMissingStreams(reader, this, ExtraDataBeforeSections, positionAfterHeaders, positionFirstSection - positionAfterHeaders);
-        FillExtraDataWithMissingStreams(reader, this, ExtraDataAfterSections, positionAfterLastSection, reader.Length - positionAfterLastSection);
+        if (positionFirstSection > positionAfterHeaders)
+        {
+            FillExtraDataWithMissingStreams(reader, this, ExtraDataBeforeSections, positionAfterHeaders, positionFirstSection - positionAfterHeaders);
+        }
 
+        FillExtraDataWithMissingStreams(reader, this, ExtraDataAfterSections, positionAfterLastSection, reader.Length - positionAfterLastSection);
+        
         // Create Stream data sections for remaining data per section based on directories already loaded
         for (var i = 0; i < _sections.Count; i++)
         {

@@ -103,8 +103,11 @@ public unsafe struct ImageDosHeader
     /// </summary>
     public fixed ushort Reserved2[10];
 
+    internal uint _FileAddressPEHeader;
+
     /// <summary>
     /// File address of new exe header. (Original DOS field is `e_lfanew`)
     /// </summary>
-    public uint FileAddressPEHeader;
+    /// <remarks>This property is automatically calculated but can be slightly adjusted with  </remarks>
+    public uint FileAddressPEHeader => _FileAddressPEHeader;
 }

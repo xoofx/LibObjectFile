@@ -1,0 +1,74 @@
+﻿DOS Header
+    Magic                      = DOS
+    ByteCountOnLastPage        = 0x0
+    PageCount                  = 0x4550
+    RelocationCount            = 0x0
+    SizeOfParagraphsHeader     = 0x14C
+    MinExtraParagraphs         = 0x1
+    MaxExtraParagraphs         = 0x2A6A
+    InitialSSValue             = 0xC358
+    InitialSPValue             = 0x0
+    Checksum                   = 0x0
+    InitialIPValue             = 0x0
+    InitialCSValue             = 0x0
+    FileAddressRelocationTable = 0x4
+    OverlayNumber              = 0x103
+    Reserved                   = 0x10B, 0x8, 0x4, 0x0
+    OEMIdentifier              = 0x0
+    OEMInformation             = 0x0
+    Reserved2                  = 0x4, 0x0, 0xC, 0x0, 0x4, 0x0, 0xC, 0x0, 0x0, 0x40
+    FileAddressPEHeader        = 0x4
+
+DOS Stub
+    DosStub                    = 0 bytes
+
+COFF Header
+    Machine                    = I386
+    NumberOfSections           = 1
+    TimeDateStamp              = 3277335146
+    PointerToSymbolTable       = 0x0
+    NumberOfSymbols            = 0
+    SizeOfOptionalHeader       = 4
+    Characteristics            = RelocsStripped, ExecutableImage, Bit32Machine
+
+Optional Header
+    Magic                      = PE32
+    MajorLinkerVersion         = 8
+    MinorLinkerVersion         = 0
+    SizeOfCode                 = 0x4
+    SizeOfInitializedData      = 0x0
+    SizeOfUninitializedData    = 0x4
+    AddressOfEntryPoint        = 0xC
+    BaseOfCode                 = 0x4
+    BaseOfData                 = 0xC
+    ImageBase                  = 0x0
+    SectionAlignment           = 0x4
+    FileAlignment              = 0x4
+    MajorOperatingSystemVersion = 4
+    MinorOperatingSystemVersion = 0
+    MajorImageVersion          = 0
+    MinorImageVersion          = 0
+    MajorSubsystemVersion      = 4
+    MinorSubsystemVersion      = 0
+    Win32VersionValue          = 0x0
+    SizeOfImage                = 0x68
+    SizeOfHeaders              = 0x64
+    CheckSum                   = 0x0
+    Subsystem                  = WindowsGui
+    DllCharacteristics         = 0
+    SizeOfStackReserve         = 0x0
+    SizeOfStackCommit          = 0x0
+    SizeOfHeapReserve          = 0x0
+    SizeOfHeapCommit           = 0x0
+    LoaderFlags                = 0x0
+    NumberOfRvaAndSizes        = 0x0
+
+Section Headers
+    [00]         PESection                        Position = 0x0000000C, Size = 0x00000004, RVA = 0x0000000C, VirtualSize = 0x00000004, Characteristics = 0x00000004 (TypeGroup)
+
+Sections
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    [00]         PESection                        Position = 0x0000000C, Size = 0x00000004, RVA = 0x0000000C, VirtualSize = 0x00000004, Characteristics = 0x00000004 (TypeGroup)
+    
+        [00] PEStreamSectionData              Position = 0x0000000C, Size = 0x00000004, RVA = 0x0000000C, VirtualSize = 0x00000004
+        

@@ -79,6 +79,7 @@ Data Directories
     [12] = PEImportAddressTableDirectory    Position = 0x00001600, Size = 0x000001F0, RVA = 0x00003000, VirtualSize = 0x000001F0
     [13] = null
     [14] = null
+    [15] = null
 
 Section Headers
     [00]    .text PESection                        Position = 0x00000400, Size = 0x00001200, RVA = 0x00001000, VirtualSize = 0x000010C9, Characteristics = 0x60000020 (ContainsCode, MemExecute, MemRead)

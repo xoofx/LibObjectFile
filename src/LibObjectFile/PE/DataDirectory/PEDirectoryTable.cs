@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace LibObjectFile.PE;
@@ -17,20 +18,81 @@ namespace LibObjectFile.PE;
 [DebuggerDisplay($"{nameof(PEDirectoryTable)} {nameof(Count)} = {{{nameof(Count)}}}")]
 public sealed class PEDirectoryTable : IEnumerable<PEDataDirectory>
 {
-    private InternalArray _entries;
+    private PEObjectBase?[] _entries;
     private int _count;
 
     internal PEDirectoryTable()
     {
+        _entries = [];
     }
 
-    public PEObjectBase? this[PEDataDirectoryKind kind] => _entries[(int)kind];
+    /// <summary>
+    /// Gets the directory entry at the specified index.
+    /// </summary>
+    /// <param name="index">The index of the directory entry to get.</param>
+    /// <returns>The directory entry at the specified index.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if the index is out of range.</exception>
+    public PEObjectBase? this[int index]
+    {
+        get
+        {
+            if (index < 0 || index >= _count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+            return _entries[index];
+        }
+    }
 
     /// <summary>
-    /// Gets the number of directory entries in the array.
+    /// Gets the directory entry of the specified kind. Must be within the bounds of <see cref="Count"/>.
     /// </summary>
-    public int Count => _count;
-    
+    /// <param name="kind">The kind of directory entry to get.</param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if the kind is out of range.</exception>
+    public PEObjectBase? this[PEDataDirectoryKind kind]
+    {
+        get
+        {
+            int index = (int)(ushort)kind;
+            if (index < 0 || index >= _count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(kind));
+            }
+            return _entries[(int)kind];
+        }
+    }
+
+    /// <summary>
+    /// Gets the maximum number of directory entries in the array.
+    /// </summary>
+    public int Count
+    {
+        get => _count;
+
+        set
+        {
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, 0);
+
+            var previousCount = _count;
+            // If the count is reduced, we need to check that all entries are null after
+            for (int i = value; i < previousCount; i++)
+            {
+                if (_entries[i] is not null)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), $"A non null directory entry was found at index {i}. This directory entry must be removed before setting a count of {value}");
+                }
+            }
+
+            if (_entries.Length < value)
+            {
+                Array.Resize(ref _entries, value);
+            }
+            
+            _count = value;
+        }
+    }
+
     /// <summary>
     /// Gets the export directory information from the PE file.
     /// </summary>
@@ -112,60 +174,23 @@ public sealed class PEDirectoryTable : IEnumerable<PEDataDirectory>
     [EditorBrowsable(EditorBrowsableState.Never)]
     public Enumerator GetEnumerator() => new(this);
 
-    internal void Set(PESecurityCertificateDirectory? directory)
+    internal void Set(PESecurityCertificateDirectory? directory) => Set(PEDataDirectoryKind.SecurityCertificate, directory);
+
+    internal void Set(PEDataDirectoryKind kind, PEObjectBase? directory) => Set((int)kind, directory);
+
+    internal void Set(int index, PEObjectBase? directory)
     {
-        var kind = PEDataDirectoryKind.SecurityCertificate;
-        ref var entry = ref _entries[(int)kind];
-        var previousEntry = entry;
-        entry = directory;
-
-        if (previousEntry is not null)
+        if (index >= Count)
         {
-            _count--;
+            throw new ArgumentOutOfRangeException(nameof(index), $"The directory entry only accepts {Count} entries. Set the count explicitly to allow more entries.");
         }
 
-        if (directory is not null)
-        {
-            _count++;
-        }
+        _entries[index] = directory;
     }
     
-    internal void Set(PEDataDirectoryKind kind, PEDataDirectory? directory)
-    {
-        ref var entry = ref _entries[(int)kind];
-        var previousEntry = entry;
-        entry = directory;
-        
-        if (previousEntry is not null)
-        {
-            _count--;
-        }
-
-        if (directory is not null)
-        {
-            _count++;
-        }
-    }
-
-    internal int CalculateNumberOfEntries()
-    {
-        int count = 0;
-        ReadOnlySpan<PEObjectBase?> span = _entries;
-        for(int i = 0; i < span.Length; i++) 
-        {
-            if (_entries[i] is not null)
-            {
-                count = i + 1;
-            }
-        }
-
-        return count;
-    }
-
     internal unsafe void Write(PEImageWriter writer, ref uint position)
     {
-        var numberOfEntries = CalculateNumberOfEntries();
-        for (int i = 0; i < numberOfEntries; i++)
+        for (int i = 0; i < Count; i++)
         {
             ImageDataDirectory rawDataDirectory = default;
             var entry = _entries[i];
@@ -176,13 +201,7 @@ public sealed class PEDirectoryTable : IEnumerable<PEDataDirectory>
             }
         }
 
-        position += (uint)(numberOfEntries * sizeof(ImageDataDirectory));
-    }
-    
-    [InlineArray(15)]
-    private struct InternalArray
-    {
-        private PEObjectBase? _element;
+        position += (uint)(Count * sizeof(ImageDataDirectory));
     }
 
     /// <summary>

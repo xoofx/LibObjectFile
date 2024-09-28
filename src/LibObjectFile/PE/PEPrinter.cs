@@ -136,9 +136,11 @@ public static class PEPrinter
 
     private static void PrintDataDirectories(PEFile file, ref TextWriterIndenter writer)
     {
+        if (file.Directories.Count == 0) return;
+
         writer.WriteLine("Data Directories");
         writer.Indent();
-        for(int i = (int)PEDataDirectoryKind.Export; i <= (int)PEDataDirectoryKind.ClrMetadata; i++)
+        for(int i = 0; i < file.Directories.Count; i++)
         {
             var kind = (PEDataDirectoryKind)i;
             var directory = file.Directories[kind];

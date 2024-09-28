@@ -130,8 +130,10 @@ public enum DiagnosticId
     PE_ERR_TooManySections = 3012,
     PE_ERR_FileAlignmentNotPowerOfTwo = 3013,
     PE_ERR_SectionAlignmentNotPowerOfTwo = 3014,
-    PE_ERR_SectionAlignmentLessThanFileAlignment = 315,
-
+    PE_ERR_SectionAlignmentLessThanFileAlignment = 3015,
+    PE_ERR_InvalidPEHeaderPosition = 3016,
+    PE_ERR_InvalidNumberOfDataDirectories = 3017,
+    
     // PE Exception directory
     PE_ERR_InvalidExceptionDirectory_Entries = 3100,
     PE_ERR_InvalidExceptionDirectory_Entry = 3101,

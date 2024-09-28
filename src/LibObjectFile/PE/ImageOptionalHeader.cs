@@ -1,8 +1,10 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
+using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 using LibObjectFile.PE.Internal;
 
 namespace LibObjectFile.PE;
@@ -20,10 +22,12 @@ public struct ImageOptionalHeader
     /// <summary>
     /// The magic number, which identifies the file format. Expected to be 0x10b for PE32.
     /// </summary>
+    /// <remarks>
+    /// This value cannot be changed and must be set at construction time.
+    /// </remarks>
     public ImageOptionalHeaderMagic Magic
     {
         get => OptionalHeaderCommonPart1.Magic;
-        set => OptionalHeaderCommonPart1.Magic = value;
     }
 
     /// <summary>
@@ -50,7 +54,6 @@ public struct ImageOptionalHeader
     public uint SizeOfCode
     {
         get => OptionalHeaderCommonPart1.SizeOfCode;
-        set => OptionalHeaderCommonPart1.SizeOfCode = value;
     }
 
     /// <summary>
@@ -59,7 +62,6 @@ public struct ImageOptionalHeader
     public uint SizeOfInitializedData
     {
         get => OptionalHeaderCommonPart1.SizeOfInitializedData;
-        set => OptionalHeaderCommonPart1.SizeOfInitializedData = value;
     }
 
     /// <summary>
@@ -68,7 +70,6 @@ public struct ImageOptionalHeader
     public uint SizeOfUninitializedData
     {
         get => OptionalHeaderCommonPart1.SizeOfUninitializedData;
-        set => OptionalHeaderCommonPart1.SizeOfUninitializedData = value;
     }
 
     /// <summary>
@@ -86,7 +87,6 @@ public struct ImageOptionalHeader
     public uint BaseOfCode
     {
         get => OptionalHeaderCommonPart1.BaseOfCode;
-        set => OptionalHeaderCommonPart1.BaseOfCode = value;
     }
 
     /// <summary>
@@ -98,7 +98,6 @@ public struct ImageOptionalHeader
     public uint BaseOfData
     {
         get => OptionalHeaderBase32.BaseOfData;
-        set => OptionalHeaderBase32.BaseOfData = value;
     }
     
     // NT additional fields.
@@ -106,10 +105,12 @@ public struct ImageOptionalHeader
     /// <summary>
     /// The preferred address of the first byte of the image when loaded into memory.
     /// </summary>
+    /// <remarks>
+    /// In order to change the ImageBase use <see cref="PEFile.Relocate"/>
+    /// </remarks>
     public ulong ImageBase
     {
         get => OptionalHeaderBase64.ImageBase;
-        set => OptionalHeaderBase64.ImageBase = value;
     }
 
     /// <summary>
@@ -118,7 +119,20 @@ public struct ImageOptionalHeader
     public uint SectionAlignment
     {
         get => OptionalHeaderCommonPart2.SectionAlignment;
-        set => OptionalHeaderCommonPart2.SectionAlignment = value;
+        set
+        {
+            if (value == 0 || !BitOperations.IsPow2(value))
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), "SectionAlignment must be a power of 2 and not zero");
+            }
+
+            if (SectionAlignment < FileAlignment)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), "SectionAlignment must be greater than or equal to FileAlignment");
+            }
+            
+            OptionalHeaderCommonPart2.SectionAlignment = value;
+        }
     }
 
     /// <summary>
@@ -127,7 +141,15 @@ public struct ImageOptionalHeader
     public uint FileAlignment
     {
         get => OptionalHeaderCommonPart2.FileAlignment;
-        set => OptionalHeaderCommonPart2.FileAlignment = value;
+        set
+        {
+            if (value == 0 || !BitOperations.IsPow2(value))
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), "FileAlignment must be a power of 2 and not zero");
+            }
+            
+            OptionalHeaderCommonPart2.FileAlignment = value;
+        }
     }
 
     /// <summary>
@@ -199,7 +221,6 @@ public struct ImageOptionalHeader
     public uint SizeOfImage
     {
         get => OptionalHeaderCommonPart2.SizeOfImage;
-        set => OptionalHeaderCommonPart2.SizeOfImage = value;
     }
 
     /// <summary>
@@ -208,7 +229,6 @@ public struct ImageOptionalHeader
     public uint SizeOfHeaders
     {
         get => OptionalHeaderCommonPart2.SizeOfHeaders;
-        set => OptionalHeaderCommonPart2.SizeOfHeaders = value;
     }
 
     /// <summary>
@@ -289,7 +309,6 @@ public struct ImageOptionalHeader
     public uint NumberOfRvaAndSizes
     {
         get => OptionalHeaderCommonPart3.NumberOfRvaAndSizes;
-        set => OptionalHeaderCommonPart3.NumberOfRvaAndSizes = value;
     }
 
     /// <summary>

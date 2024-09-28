@@ -46,7 +46,7 @@ public abstract class PEDataDirectory : PECompositeSectionData
             PEDataDirectoryKind.DelayImport => new PEDelayImportDirectory(),
             PEDataDirectoryKind.ImportAddressTable => new PEImportAddressTableDirectory(),
             PEDataDirectoryKind.ClrMetadata => new PEClrMetadata(),
-            _ => throw new ArgumentOutOfRangeException(nameof(kind))
+            _ => new PEUnknownDirectory((int)kind)
         };
     }
 }

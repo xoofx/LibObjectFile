@@ -26,16 +26,20 @@ public sealed partial class PEFile : PEObjectBase
     private byte[] _dosStub = [];
     private Stream? _dosStubExtra;
     private readonly ObjectList<PESection> _sections;
+    private int _unsafeNegativePEHeaderOffset;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PEFile"/> class.
     /// </summary>
-    public PEFile()
+    public PEFile(ImageOptionalHeaderMagic magic = ImageOptionalHeaderMagic.PE32Plus)
     {
         _sections = new(this);
         ExtraDataBeforeSections = new(this);
         ExtraDataAfterSections = new(this);
+
         // TODO: Add default initialization
+
+        OptionalHeader.OptionalHeaderCommonPart1.Magic = magic;
     }
 
     /// <summary>
@@ -54,13 +58,45 @@ public sealed partial class PEFile : PEObjectBase
     public ImageDosHeader DosHeader;
 
     /// <summary>
+    /// Gets or sets an unsafe negative offset relative to the end of the DOS header.
+    /// </summary>
+    public unsafe int UnsafeNegativePEHeaderOffset
+    {
+        get => _unsafeNegativePEHeaderOffset;
+        set
+        {
+            // Should support Tiny PE layout http://www.phreedom.org/research/tinype/
+            // Value must be >= sizeof(ImageDosHeader) - 4 and <= 0
+            if (value < sizeof(ImageDosHeader) - 4 || value > 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), $"PEHeaderOffset must be greater than {sizeof(ImageDosHeader)}");
+            }
+
+            if (value < 0 && (_dosStub.Length != 0 || (DosStubExtra is not null && DosStubExtra.Length > 0)))
+            {
+                throw new InvalidOperationException("Setting a negative PEHeader offset is not compatible with having a DOS Stub and DosStubExtra");
+            }
+            
+            _unsafeNegativePEHeaderOffset = value;
+        }
+    }
+
+    /// <summary>
     /// Gets or sets the DOS stub.
     /// </summary>
     public byte[] DosStub
     {
         get => _dosStub;
 
-        set => _dosStub = value ?? throw new ArgumentNullException(nameof(value));
+        set
+        {
+            if (_unsafeNegativePEHeaderOffset < 0)
+            {
+                throw new InvalidOperationException("Cannot set a DosStub when UnsafeNegativePEHeaderOffset is negative");
+            }
+
+            _dosStub = value ?? throw new ArgumentNullException(nameof(value));
+        }
     }
 
     /// <summary>
@@ -70,7 +106,15 @@ public sealed partial class PEFile : PEObjectBase
     {
         get => _dosStubExtra;
 
-        set => _dosStubExtra = value;
+        set
+        {
+            if (_unsafeNegativePEHeaderOffset < 0)
+            {
+                throw new InvalidOperationException("Cannot set a DosStubExtra when UnsafeNegativePEHeaderOffset is negative");
+            }
+
+            _dosStubExtra = value;
+        }
     }
 
     /// <summary>
@@ -278,7 +322,7 @@ public sealed partial class PEFile : PEObjectBase
         position = AlignHelper.AlignUp(position, 8); // PE header is aligned on 8 bytes
 
         // Update offset to PE header
-        DosHeader.FileAddressPEHeader = position;
+        DosHeader._FileAddressPEHeader = position;
 
         position += sizeof(ImagePESignature); // PE00 header
 
@@ -290,7 +334,7 @@ public sealed partial class PEFile : PEObjectBase
         position += (uint)(IsPE32 ? sizeof(RawImageOptionalHeader32) : sizeof(RawImageOptionalHeader64));
 
         // Update directories
-        position += (uint)(Directories.CalculateNumberOfEntries() * sizeof(ImageDataDirectory));
+        position += (uint)(Directories.Count * sizeof(ImageDataDirectory));
 
         // TODO: Additional optional header size?
 
@@ -310,13 +354,13 @@ public sealed partial class PEFile : PEObjectBase
 
 
         // Update COFF header
-        CoffHeader.NumberOfSections = (ushort)_sections.Count;
-        CoffHeader.PointerToSymbolTable = 0;
-        CoffHeader.NumberOfSymbols = 0;
+        CoffHeader._NumberOfSections = (ushort)_sections.Count;
+        CoffHeader._PointerToSymbolTable = 0;
+        CoffHeader._NumberOfSymbols = 0;
 
-        OptionalHeader.SizeOfCode = 0;
-        OptionalHeader.SizeOfInitializedData = 0;
-        OptionalHeader.SizeOfUninitializedData = 0;
+        OptionalHeader.OptionalHeaderCommonPart1.SizeOfCode = 0;
+        OptionalHeader.OptionalHeaderCommonPart1.SizeOfInitializedData = 0;
+        OptionalHeader.OptionalHeaderCommonPart1.SizeOfUninitializedData = 0;
 
         if (!BitOperations.IsPow2(OptionalHeader.FileAlignment) || OptionalHeader.FileAlignment == 0)
         {
@@ -340,7 +384,7 @@ public sealed partial class PEFile : PEObjectBase
 
         // Ensure that SectionAlignment is a multiple of FileAlignment
         position = AlignHelper.AlignUp(position, OptionalHeader.FileAlignment);
-        OptionalHeader.SizeOfHeaders = position;
+        OptionalHeader.OptionalHeaderCommonPart2.SizeOfHeaders = position;
 
         // Update sections
         RVA previousEndOfRVA = 0U;
@@ -360,15 +404,15 @@ public sealed partial class PEFile : PEObjectBase
 
             if ((section.Characteristics & SectionCharacteristics.ContainsCode) != 0)
             {
-                OptionalHeader.SizeOfCode += virtualSizeDiskAligned;
+                OptionalHeader.OptionalHeaderCommonPart1.SizeOfCode += virtualSizeDiskAligned;
             }
             else if ((section.Characteristics & SectionCharacteristics.ContainsInitializedData) != 0)
             {
-                OptionalHeader.SizeOfInitializedData += virtualSizeDiskAligned;
+                OptionalHeader.OptionalHeaderCommonPart1.SizeOfInitializedData += virtualSizeDiskAligned;
             }
             else if ((section.Characteristics & SectionCharacteristics.ContainsUninitializedData) != 0)
             {
-                OptionalHeader.SizeOfUninitializedData += virtualSizeDiskAligned;
+                OptionalHeader.OptionalHeaderCommonPart1.SizeOfUninitializedData += virtualSizeDiskAligned;
             }
 
             // Update the end of the RVA
@@ -376,7 +420,7 @@ public sealed partial class PEFile : PEObjectBase
         }
 
         // Update the (virtual) size of the image
-        OptionalHeader.SizeOfImage = previousEndOfRVA;
+        OptionalHeader.OptionalHeaderCommonPart2.SizeOfImage = previousEndOfRVA;
 
         // Data after sections
         foreach (var extraData in ExtraDataAfterSections)
