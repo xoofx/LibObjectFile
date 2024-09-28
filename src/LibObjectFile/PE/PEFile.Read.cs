@@ -370,7 +370,7 @@ partial class PEFile
             int sectionDataIndex = 0;
             var dataParts = peSection.Content;
 
-            bool addedToDirectory = false;
+            bool addedToSectionData = false;
 
             for (; sectionDataIndex < dataParts.Count; sectionDataIndex++)
             {
@@ -381,10 +381,10 @@ partial class PEFile
                 }
                 else if (sectionData.Contains(vObj.Position, (uint)vObj.Size))
                 {
-                    if (sectionData is PEDataDirectory dataDirectory)
+                    if (sectionData is PECompositeSectionData compositeSectionData)
                     {
-                        addedToDirectory = true;
-                        dataDirectory.Content.Add(vObj);
+                        addedToSectionData = true;
+                        compositeSectionData.Content.Add(vObj);
                         break;
                     }
                     else
@@ -395,7 +395,7 @@ partial class PEFile
                 }
             }
 
-            if (!addedToDirectory)
+            if (!addedToSectionData)
             {
                 dataParts.Insert(sectionDataIndex, vObj);
             }
@@ -470,47 +470,76 @@ partial class PEFile
     private static void FillSectionDataWithMissingStreams(PEImageReader imageReader, PEObjectBase container, ObjectList<PESectionData> dataParts, ulong startPosition, ulong totalSize)
     {
         var currentPosition = startPosition;
+        var endPosition = startPosition + totalSize;
 
         // We are working on position, while the list is ordered by VirtualAddress
 
         var listOrderedByPosition = dataParts.UnsafeList;
 
+        // Early exit if we don't have any data
+        if (totalSize == 0 && listOrderedByPosition.Count == 0)
+        {
+            return;
+        }
+        
         listOrderedByPosition.Sort((a, b) => a.Position.CompareTo(b.Position));
         for (var i = 0; i < listOrderedByPosition.Count; i++)
         {
             var data = listOrderedByPosition[i];
             data.Index = i;
         }
-        for (var i = 0; i < listOrderedByPosition.Count; i++)
+
+        if (listOrderedByPosition.Count == 0)
         {
-            var data = listOrderedByPosition[i];
-            if (currentPosition < data.Position)
+            var size = endPosition - currentPosition;
+            imageReader.Position = currentPosition;
+            var sectionData = new PEStreamSectionData(imageReader.ReadAsStream(size))
             {
-                var size = data.Position - currentPosition;
-                imageReader.Position = currentPosition;
+                Position = currentPosition,
+                Parent = container,
+            };
 
-                var sectionData = new PEStreamSectionData(imageReader.ReadAsStream(size))
+            listOrderedByPosition.Add(sectionData);
+            currentPosition = endPosition;
+        }
+        else
+        {
+            for (var i = 0; i < listOrderedByPosition.Count; i++)
+            {
+                var data = listOrderedByPosition[i];
+
+                // Make sure we align the position to the required alignment of the next data
+                currentPosition = AlignHelper.AlignUp(currentPosition, data.GetRequiredPositionAlignment(imageReader.File));
+
+                if (currentPosition < data.Position)
                 {
-                    Position = currentPosition,
-                    Parent = container,
-                };
+                    var size = data.Position - currentPosition;
+                    imageReader.Position = currentPosition;
 
-                listOrderedByPosition.Insert(i, sectionData);
-                currentPosition = data.Position;
-                i++;
-            }
-            else if (currentPosition > data.Position)
-            {
-                imageReader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Invalid section data position {currentPosition} > {data.Position} in {container}");
-                return;
-            }
+                    var sectionData = new PEStreamSectionData(imageReader.ReadAsStream(size))
+                    {
+                        Position = currentPosition,
+                        Parent = container,
+                    };
 
-            currentPosition += data.Size;
+                    listOrderedByPosition.Insert(i, sectionData);
+                    currentPosition = data.Position;
+                    i++;
+                }
+                else if (currentPosition > data.Position)
+                {
+                    imageReader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Invalid section data position {currentPosition} > {data.Position} in {container}");
+                    return;
+                }
+
+                var dataSize = AlignHelper.AlignUp(data.Size, data.GetRequiredSizeAlignment(imageReader.File));
+                currentPosition += dataSize;
+            }
         }
 
-        if (currentPosition < startPosition + totalSize)
+        if (currentPosition < endPosition)
         {
-            var size = startPosition + totalSize - currentPosition;
+            var size = endPosition - currentPosition;
             imageReader.Position = currentPosition;
             var sectionData = new PEStreamSectionData(imageReader.ReadAsStream(size))
             {
@@ -520,9 +549,9 @@ partial class PEFile
 
             listOrderedByPosition.Add(sectionData);
         }
-        else if (currentPosition > startPosition + totalSize)
+        else if (currentPosition > endPosition)
         {
-            imageReader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Invalid section data position {currentPosition} > {startPosition + totalSize} in {container}");
+            imageReader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Invalid section data position {currentPosition} > {endPosition} in {container}");
         }
 
         // Make sure to update the indices after inserting the missing streams

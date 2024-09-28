@@ -1,10 +1,15 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
 using System;
 using System.IO;
+using System.Numerics;
+using System.Reflection.PortableExecutable;
+using System.Runtime.InteropServices;
 using LibObjectFile.Diagnostics;
+using LibObjectFile.PE.Internal;
+using LibObjectFile.Utils;
 
 namespace LibObjectFile.PE;
 
@@ -54,8 +59,139 @@ partial class PEFile
         return !diagnostics.HasErrors;
     }
 
-    public override void Write(PEImageWriter writer)
+    public override unsafe void Write(PEImageWriter writer)
     {
-        throw new NotImplementedException();
+        var context = new PELayoutContext(this, writer.Diagnostics);
+        UpdateLayout(context);
+
+        var position = 0U;
+
+        // Update DOS header
+        writer.Write(DosHeader);
+        position += (uint)sizeof(ImageDosHeader);
+
+        // Write DOS stub
+        writer.Write(_dosStub);
+        position += (uint)_dosStub.Length;
+
+        // Write extra DOS stub
+        if (_dosStubExtra != null)
+        {
+            _dosStubExtra.CopyTo(writer.Stream);
+            position += (uint)_dosStubExtra.Length;
+        }
+
+        var zeroSize = (int)((int)AlignHelper.AlignUp(position, 8) - (int)position);
+        writer.WriteZero((int)zeroSize);
+        position += (uint)zeroSize;
+
+        // PE00 header
+        writer.Write(ImagePESignature.PE);
+        position += sizeof(ImagePESignature); // PE00 header
+
+        // COFF header
+        writer.Write(CoffHeader);
+        position += (uint)sizeof(ImageCoffHeader);
+
+
+        if (IsPE32)
+        {
+            RawImageOptionalHeader32 header32;
+            header32.Common = OptionalHeader.OptionalHeaderCommonPart1;
+            header32.Base32 = OptionalHeader.OptionalHeaderBase32;
+            header32.Common2 = OptionalHeader.OptionalHeaderCommonPart2;
+            header32.Size32 = OptionalHeader.OptionalHeaderSize32;
+            header32.Common3 = OptionalHeader.OptionalHeaderCommonPart3;
+            writer.Write(header32);
+            position += (uint)sizeof(RawImageOptionalHeader32);
+        }
+        else
+        {
+            RawImageOptionalHeader64 header64;
+            header64.Common = OptionalHeader.OptionalHeaderCommonPart1;
+            header64.Base64 = OptionalHeader.OptionalHeaderBase64;
+            header64.Common2 = OptionalHeader.OptionalHeaderCommonPart2;
+            header64.Size64 = OptionalHeader.OptionalHeaderSize64;
+            header64.Common3 = OptionalHeader.OptionalHeaderCommonPart3;
+            writer.Write(header64);
+            position += (uint)sizeof(RawImageOptionalHeader64);
+        }
+
+
+        // Update directories
+        Directories.Write(writer, ref position);
+
+        // Write Section Headers
+        RawImageSectionHeader sectionHeader = default;
+        foreach (var section in _sections)
+        {
+            section.Name.CopyTo(new Span<byte>(sectionHeader.Name, 8));
+            sectionHeader.VirtualSize = section.VirtualSize;
+            sectionHeader.RVA = section.RVA;
+            sectionHeader.SizeOfRawData = (uint)section.Size;
+            sectionHeader.PointerToRawData = (uint)section.Position;
+            sectionHeader.Characteristics = section.Characteristics;
+            writer.Write(sectionHeader);
+            position += (uint)sizeof(RawImageSectionHeader);
+        }
+
+        // Data before sections
+        foreach (var extraData in ExtraDataBeforeSections)
+        {
+            extraData.Write(writer);
+            position += (uint)extraData.Size;
+        }
+        
+        // Ensure that SectionAlignment is a multiple of FileAlignment
+        zeroSize = (int)(AlignHelper.AlignUp(position, OptionalHeader.FileAlignment) - position);
+        writer.WriteZero(zeroSize);
+        position += (uint)zeroSize;
+
+        // Write sections
+        foreach (var section in _sections)
+        {
+            var span = CollectionsMarshal.AsSpan(section.Content.UnsafeList);
+            for (var i = 0; i < span.Length; i++)
+            {
+                var data = span[i];
+                if (data.Position != position)
+                {
+                    writer.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Current position {position} for data Section[{i}] in {section} does not match expecting position {data.Position}");
+                    return;
+                }
+
+                if (data is PEDataDirectory directory)
+                {
+                    directory.WriteHeaderAndContent(writer);
+                }
+                else
+                {
+                    data.Write(writer);
+                }
+
+                position += (uint)data.Size;
+            }
+
+            zeroSize = (int)(AlignHelper.AlignUp(position, writer.PEFile.OptionalHeader.FileAlignment) - position);
+            writer.WriteZero(zeroSize);
+        }
+
+        // Data after sections
+        foreach (var extraData in ExtraDataAfterSections)
+        {
+            if (extraData.Position != position)
+            {
+                writer.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Current position {position} doest not match expecting position {extraData.Position}");
+                return;
+            }
+
+            extraData.Write(writer);
+            position += (uint)extraData.Size;
+        }
+
+        if (position != Size)
+        {
+            writer.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Generated size {position} does not match expecting size {Size}");
+        }
     }
 }

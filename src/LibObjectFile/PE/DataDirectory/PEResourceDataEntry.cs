@@ -1,12 +1,11 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
-using System;
-using System.Diagnostics;
-using System.IO;
 using System.Text;
+using LibObjectFile.Diagnostics;
 using LibObjectFile.PE.Internal;
+using LibObjectFile.Utils;
 
 namespace LibObjectFile.PE;
 
@@ -15,27 +14,28 @@ namespace LibObjectFile.PE;
 /// </summary>
 public sealed class PEResourceDataEntry : PEResourceEntry
 {
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private object? _data;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="PEResourceDataEntry"/> class with the specified name.
-    /// </summary>
-    /// <param name="name">The name of the resource data entry.</param>
-    public PEResourceDataEntry(string name) : base(name)
+    internal PEResourceDataEntry()
     {
-        Data = Stream.Null;
+        Data = null!;
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="PEResourceDataEntry"/> class with the specified ID.
+    /// Initializes a new instance of the <see cref="PEResourceDataEntry"/> class.
     /// </summary>
-    /// <param name="id">The ID of the resource data entry.</param>
-    public PEResourceDataEntry(PEResourceId id) : base(id)
+    public PEResourceDataEntry(PEResourceData data)
     {
-        Data = Stream.Null;
+        Data = data;
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PEResourceDataEntry"/> class.
+    /// </summary>
+    public PEResourceDataEntry(Encoding? codePage, PEResourceData data)
+    {
+        CodePage = codePage;
+        Data = data;
+    }
+    
     /// <summary>
     /// Gets or sets the code page used for encoding the data.
     /// </summary>
@@ -50,39 +50,7 @@ public sealed class PEResourceDataEntry : PEResourceEntry
     /// <remarks>
     /// The data can be a string, a stream, or a byte array.
     /// </remarks>
-    public object? Data
-    {
-        get => _data;
-        set
-        {
-            if (value is not string && value is not Stream && value is not byte[])
-            {
-                throw new ArgumentException("Invalid data type. Expecting a string, a Stream or a byte[]");
-            }
-
-            _data = value;
-        }
-    }
-
-    private protected override unsafe uint ComputeSize()
-    {
-        uint dataSize = 0;
-
-        if (Data is string text)
-        {
-            dataSize = (uint)(CodePage?.GetByteCount(text) ?? text.Length * 2);
-        }
-        else if (Data is Stream stream)
-        {
-            dataSize = (uint)stream.Length;
-        }
-        else if (Data is byte[] buffer)
-        {
-            dataSize = (uint)buffer.Length;
-        }
-
-        return (uint)(sizeof(RawImageResourceDataEntry) + dataSize);
-    }
+    public PEResourceData Data { get; set; }
 
     protected override bool PrintMembers(StringBuilder builder)
     {
@@ -91,19 +59,60 @@ public sealed class PEResourceDataEntry : PEResourceEntry
             builder.Append(", ");
         }
 
-        switch (Data)
+        builder.Append($"{nameof(CodePage)} = {CodePage?.EncodingName}, {nameof(Data)} = {Data}");
+        return true;
+    }
+
+    public override unsafe void UpdateLayout(PELayoutContext layoutContext)
+    {
+        Size = (uint)sizeof(RawImageResourceDataEntry);
+    }
+
+    internal override unsafe void Read(in ReaderContext context)
+    {
+        var reader = context.Reader;
+
+        reader.Position = Position;
+        Size = (uint)sizeof(RawImageResourceDataEntry);
+
+        RawImageResourceDataEntry rawDataEntry;
+        if (!reader.TryReadData(sizeof(RawImageResourceDataEntry), out rawDataEntry))
         {
-            case string text:
-                builder.Append($"Data = {text}");
-                break;
-            case Stream stream:
-                builder.Append($"Data = Stream ({stream.Length} bytes)");
-                break;
-            case byte[] buffer:
-                builder.Append($"Data = byte[{buffer.Length}]");
-                break;
+            reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidResourceDirectoryEntry, $"Invalid resource data entry at position {reader.Position}");
+            return;
+        }
+        
+        CodePage = rawDataEntry.CodePage != 0 ? Encoding.GetEncoding((int)rawDataEntry.CodePage) : null;
+
+        var peFile = context.Reader.File;
+        if (!peFile.TryFindSection(rawDataEntry.OffsetToData, out var section))
+        {
+            reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidResourceDirectoryEntryRVAOffsetToData, $"Invalid resource data entry RVA OffsetToData {rawDataEntry.OffsetToData} at position {reader.Position}");
+            return;
         }
 
-        return true;
+        Data = new PEResourceData
+        {
+            Position = section.Position + rawDataEntry.OffsetToData - section.RVA,
+            Size = rawDataEntry.Size,
+        };
+
+        // If we find that the position is not aligned on 4 bytes as we expect, reset it to 1 byte alignment
+        var checkPosition = AlignHelper.AlignUp(Data.Position, Data.RequiredPositionAlignment);
+        if (checkPosition != Data.Position)
+        {
+            Data.RequiredPositionAlignment = 1;
+        }
+        else if (context.ResourceDataList.Count == 0 && (Data.Position & 0xF) == 0)
+        {
+            // If we are the first resource data entry and the position is aligned on 16 bytes, we can assume this alignment
+            Data.RequiredPositionAlignment = 16;
+        }
+        
+        // Read the data
+        Data.Read(reader);
+
+        // Register the list of data being loaded
+        context.ResourceDataList.Add(Data);
     }
 }

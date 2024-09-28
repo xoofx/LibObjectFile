@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -101,7 +101,7 @@ public sealed class PEImportDirectory : PEDataDirectory
         }
     }
 
-    protected override unsafe uint ComputeHeaderSize(PEVisitorContext context) => CalculateSize();
+    protected override unsafe uint ComputeHeaderSize(PELayoutContext context) => CalculateSize();
 
     internal override IEnumerable<PEObjectBase> CollectImplicitSectionDataList()
     {
@@ -151,17 +151,22 @@ public sealed class PEImportDirectory : PEDataDirectory
 
     private unsafe uint CalculateSize()
     {
-        return _entries.Count == 0 ? 0 : (uint)(((_entries.Count + 1) * sizeof(RawImportDirectoryEntry)));
+        return (uint)(((_entries.Count + 1) * sizeof(RawImportDirectoryEntry)));
     }
 
     public override void Write(PEImageWriter writer)
     {
-        throw new NotImplementedException();
-    }
+        RawImportDirectoryEntry rawEntry = default;
+        foreach (var entry in Entries)
+        {
+            rawEntry.NameRVA = (uint)entry.ImportDllNameLink.RVA();
+            rawEntry.ImportLookupTableRVA = (uint)entry.ImportLookupTable.RVA;
+            rawEntry.ImportAddressTableRVA = (uint)entry.ImportAddressTable.RVA;
+            writer.Write(rawEntry);
+        }
 
-    //private struct HintNameTableEntry
-    //{
-    //    public ushort Hint;
-    //    public byte Name1stByte;
-    //}
+        // Null entry
+        rawEntry = default;
+        writer.Write(rawEntry);
+    }
 }

@@ -19,7 +19,7 @@ public sealed class PEBaseRelocationDirectory : PEDataDirectory
     
     public List<PEBaseRelocationBlock> Blocks { get; } = new();
 
-    protected override unsafe uint ComputeHeaderSize(PEVisitorContext context)
+    protected override unsafe uint ComputeHeaderSize(PELayoutContext context)
     {
         var size = 0U;
         foreach (var block in Blocks)
@@ -44,8 +44,6 @@ public sealed class PEBaseRelocationDirectory : PEDataDirectory
             return;
         }
 
-        var allSectionData = reader.File.GetAllSectionData();
-
         int blockIndex = 0;
         while (buffer.Length > 0)
         {
@@ -59,7 +57,6 @@ public sealed class PEBaseRelocationDirectory : PEDataDirectory
             }
 
             var sizeOfRelocations = (int)location.SizeOfBlock - sizeof(ImageBaseRelocation);
-
             
             // Create a block
             var block = new PEBaseRelocationBlock(new PESectionLink(section, (uint)(location.PageRVA - section.RVA)))
@@ -89,7 +86,12 @@ public sealed class PEBaseRelocationDirectory : PEDataDirectory
 
     public override void Write(PEImageWriter writer)
     {
-        throw new NotImplementedException();
+        ImageBaseRelocation rawBlock = default;
+        foreach (var block in Blocks)
+        {
+            rawBlock.PageRVA = block.SectionLink.RVA();
+            rawBlock.SizeOfBlock = block.CalculateSizeOf();
+        }
     }
 
     protected override bool PrintMembers(StringBuilder builder)

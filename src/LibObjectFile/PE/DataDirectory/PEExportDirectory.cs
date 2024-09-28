@@ -32,7 +32,7 @@ public sealed class PEExportDirectory : PEDataDirectory
 
     public PEExportOrdinalTable? ExportOrdinalTable { get; set; }
 
-    protected override unsafe uint ComputeHeaderSize(PEVisitorContext context)
+    protected override unsafe uint ComputeHeaderSize(PELayoutContext context)
     {
         return (uint)sizeof(RawImageExportDirectory);
     }
@@ -157,7 +157,21 @@ public sealed class PEExportDirectory : PEDataDirectory
 
     public override void Write(PEImageWriter writer)
     {
-        throw new NotImplementedException();
+        var exportDirectory = new RawImageExportDirectory
+        {
+            TimeDateStamp = (uint)(TimeStamp - DateTime.UnixEpoch).TotalSeconds,
+            MajorVersion = MajorVersion,
+            MinorVersion = MinorVersion,
+            Base = OrdinalBase,
+            Name = NameLink.RVA(),
+            NumberOfFunctions = (uint)ExportFunctionAddressTable!.Values.Count,
+            NumberOfNames = (uint)ExportNameTable!.Values.Count,
+            AddressOfFunctions = (RVA)(uint)(ExportFunctionAddressTable?.RVA ?? (RVA)0),
+            AddressOfNames = (RVA)(uint)(ExportNameTable?.RVA ?? 0),
+            AddressOfNameOrdinals = (RVA)(uint)(ExportOrdinalTable?.RVA ?? 0)
+        };
+
+        writer.Write(exportDirectory);
     }
 
     private struct RawImageExportDirectory

@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -18,6 +18,7 @@ namespace LibObjectFile;
 public abstract class ObjectFileReaderWriter : VisitorContextBase
 {
     private Stream _stream;
+    private readonly byte[] _zeroBuffer = new byte[1024];
 
     internal ObjectFileReaderWriter(ObjectFileElement file, Stream stream) : this(file, stream, new DiagnosticBag())
     {
@@ -190,6 +191,20 @@ public abstract class ObjectFileReaderWriter : VisitorContextBase
     public void Write(byte[] buffer, int offset, int count)
     {
         Stream.Write(buffer, offset, count);
+    }
+
+    /// <summary>
+    /// Writes count bytes with zero.
+    /// </summary>
+    /// <param name="count">The number of bytes to write with zero.</param>
+    public void WriteZero(int count)
+    {
+        while (count > 0)
+        {
+            var size = Math.Min(count, _zeroBuffer.Length);
+            Stream.Write(_zeroBuffer, 0, size);
+            count -= size;
+        }
     }
 
     /// <summary>

@@ -6,11 +6,8 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Reflection.PortableExecutable;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Text;
 using LibObjectFile.Collections;
-using LibObjectFile.Diagnostics;
 using LibObjectFile.Utils;
 
 namespace LibObjectFile.PE;
@@ -54,6 +51,12 @@ public sealed class PESection : PEObject
     /// Gets the list of data associated with this section.
     /// </summary>
     public ObjectList<PESectionData> Content => _content;
+    
+    /// <inheritdoc />
+    public override uint GetRequiredPositionAlignment(PEFile file) => file.OptionalHeader.FileAlignment;
+
+    /// <inheritdoc />
+    public override uint GetRequiredSizeAlignment(PEFile file) => file.OptionalHeader.FileAlignment;
 
     /// <summary>
     /// Tries to find the section data that contains the specified virtual address.
@@ -73,14 +76,22 @@ public sealed class PESection : PEObject
     {
         var peFile = context.File;
 
-        var sectionAlignment = peFile.OptionalHeader.SectionAlignment;
-        var fileAlignment = peFile.OptionalHeader.FileAlignment;
-
         var va = RVA;
-        var position = Position;
+        var position = (uint)Position;
         var size = 0U;
         foreach (var data in Content)
         {
+            // Make sure we align the position and the virtual address
+            var alignment = data.GetRequiredPositionAlignment(context.File);
+
+            if (alignment > 1)
+            {
+                var newPosition = AlignHelper.AlignUp(position, alignment);
+                size += newPosition - position;
+                position = newPosition;
+                va = AlignHelper.AlignUp(va, alignment);
+            }
+
             data.RVA = va;
 
             if (!context.UpdateSizeOnly)
@@ -90,13 +101,14 @@ public sealed class PESection : PEObject
 
             data.UpdateLayout(context);
 
-            var dataSize = (uint)data.Size;
+            var dataSize = AlignHelper.AlignUp((uint)data.Size, data.GetRequiredSizeAlignment(peFile));
             va += dataSize;
             position += dataSize;
             size += dataSize;
         }
 
         // The size of a section is the size of the content aligned on the file alignment
+        var fileAlignment = peFile.OptionalHeader.FileAlignment;
         Size = (Characteristics & SectionCharacteristics.ContainsUninitializedData) == 0 ? AlignHelper.AlignUp(size, fileAlignment) : (ulong)0;
 
         //if (Size > VirtualSize)
@@ -116,6 +128,8 @@ public sealed class PESection : PEObject
     {
         throw new NotImplementedException();
     }
+
+
 
     /// <inheritdoc />
     protected override bool PrintMembers(StringBuilder builder)

@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -18,7 +18,9 @@ public sealed class PEImportAddressTableDirectory : PEDataDirectory
     {
     }
 
-    public override void Write(PEImageWriter writer) => throw new NotSupportedException(); // Not called directly for this object, we are calling on tables directly
+    public override void Write(PEImageWriter writer)
+    {
+    }
 
-    protected override uint ComputeHeaderSize(PEVisitorContext context) => 0;
+    protected override uint ComputeHeaderSize(PELayoutContext context) => 0;
 }

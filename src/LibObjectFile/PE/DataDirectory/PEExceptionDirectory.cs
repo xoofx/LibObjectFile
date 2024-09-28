@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -32,7 +32,7 @@ public sealed class PEExceptionDirectory : PEDataDirectory
     public List<PEExceptionFunctionEntry> Entries { get; }
 
     /// <inheritdoc />
-    protected override unsafe uint ComputeHeaderSize(PEVisitorContext context)
+    protected override unsafe uint ComputeHeaderSize(PELayoutContext context)
     {
         var machine = context.File.CoffHeader.Machine;
         uint entrySize;
@@ -227,7 +227,48 @@ public sealed class PEExceptionDirectory : PEDataDirectory
     /// <inheritdoc />
     public override void Write(PEImageWriter writer)
     {
-        throw new NotImplementedException();
+        var machine = writer.PEFile.CoffHeader.Machine;
+        switch (machine)
+        {
+            case Machine.Amd64:
+            case Machine.I386:
+                WriteX86(writer);
+                break;
+            case Machine.Arm:
+            case Machine.Arm64:
+                WriteArm(writer);
+                break;
+            default:
+                // We don't write the exception directory for other architectures
+                return;
+        }
+    }
+
+    private void WriteX86(PEImageWriter writer)
+    {
+        foreach (var entry in Entries)
+        {
+            var entryX86 = (PEExceptionFunctionEntryX86)entry;
+            writer.Write(new RawExceptionFunctionEntryX86
+            {
+                BeginAddress = (uint)entryX86.BeginAddress.RVA(),
+                EndAddress = (uint)entryX86.EndAddress.RVA(),
+                UnwindInfoAddress = (uint)entryX86.UnwindInfoAddress.RVA()
+            });
+        }
+    }
+
+    private void WriteArm(PEImageWriter writer)
+    {
+        foreach (var entry in Entries)
+        {
+            var entryARM = (PEExceptionFunctionEntryArm)entry;
+            writer.Write(new RawExceptionFunctionEntryARM
+            {
+                BeginAddress = (uint)entryARM.BeginAddress.RVA(),
+                UnwindData = entryARM.UnwindData
+            });
+        }
     }
 
     private void ReadEntriesArm(Span<RawExceptionFunctionEntryARM> rawEntries)

@@ -1,10 +1,11 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
 using LibObjectFile.Diagnostics;
 using LibObjectFile.PE.Internal;
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
@@ -203,7 +204,7 @@ public sealed class PEDelayImportDirectory : PEDataDirectory
         }
     }
 
-    protected override uint ComputeHeaderSize(PEVisitorContext context) => CalculateSize();
+    protected override uint ComputeHeaderSize(PELayoutContext context) => CalculateSize();
 
 
     private unsafe uint CalculateSize()
@@ -212,8 +213,40 @@ public sealed class PEDelayImportDirectory : PEDataDirectory
     }
 
 
-    public override void Write(PEImageWriter writer)
+    public override unsafe void Write(PEImageWriter writer)
     {
-        throw new NotImplementedException();
+        var entries = CollectionsMarshal.AsSpan(Entries);
+        var rawBufferSize = sizeof(RawDelayLoadDescriptor) * (entries.Length + 1);
+        var rawBuffer = ArrayPool<byte>.Shared.Rent((int)rawBufferSize);
+        try
+        {
+            var buffer = new Span<byte>(rawBuffer, 0, (int)rawBufferSize);
+            var rawEntries = MemoryMarshal.Cast<byte, RawDelayLoadDescriptor>(buffer);
+
+            RawDelayLoadDescriptor rawEntry = default;
+            for (var i = 0; i < entries.Length; i++)
+            {
+                var entry = entries[i];
+                rawEntry.Attributes = entry.Attributes;
+                rawEntry.NameRVA = (uint)entry.DllName.RVA();
+                rawEntry.ModuleHandleRVA = (uint)entry.ModuleHandle.RVA();
+                rawEntry.DelayLoadImportAddressTableRVA = (uint)entry.DelayImportAddressTable.RVA;
+                rawEntry.DelayLoadImportNameTableRVA = (uint)entry.DelayImportNameTable.RVA;
+                rawEntry.BoundDelayLoadImportAddressTableRVA = entry.BoundImportAddressTable?.RVA ?? 0;
+                rawEntry.UnloadDelayLoadImportAddressTableRVA = entry.UnloadDelayInformationTable?.RVA ?? 0;
+                rawEntry.TimeDateStamp = 0;
+
+                rawEntries[i] = rawEntry;
+            }
+
+            // Write the null entry
+            rawEntries[entries.Length] = default;
+
+            writer.Write(rawBuffer);
+        }
+        finally
+        {
+            ArrayPool<byte>.Shared.Return(rawBuffer);
+        }
     }
 }

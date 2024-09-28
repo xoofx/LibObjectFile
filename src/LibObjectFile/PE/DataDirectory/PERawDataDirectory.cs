@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -96,7 +96,7 @@ public abstract class PERawDataDirectory : PEDataDirectory
     public override void WriteAt(uint offset, ReadOnlySpan<byte> source) => DataUtils.WriteAt(_rawData, offset, source);
 
 
-    protected override uint ComputeHeaderSize(PEVisitorContext context)
+    protected override uint ComputeHeaderSize(PELayoutContext context)
         // Size if the first field of the Load Configuration Directory
         => (uint)RawDataSize;
 }

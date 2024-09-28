@@ -436,11 +436,22 @@ Sections
     [04]    .rsrc PESection                        Position = 0x00002600, Size = 0x00000200, RVA = 0x00005000, VirtualSize = 0x000000F8, Characteristics = 0x40000040 (ContainsInitializedData, MemRead)
     
         [00] PEResourceDirectory              Position = 0x00002600, Size = 0x000000F8, RVA = 0x00005000, VirtualSize = 0x000000F8
-                > PEResourceDirectoryEntry { Entries[1] , TimeDateStamp = 01/01/1970 00:00:00, MajorVersion = 0, MinorVersion = 0}
-                    > PEResourceDirectoryEntry { Id = 0x18 (RT_MANIFEST), Entries[1] , TimeDateStamp = 01/01/1970 00:00:00, MajorVersion = 0, MinorVersion = 0}
-                        > PEResourceDirectoryEntry { Id = 0x2, Entries[1] , TimeDateStamp = 01/01/1970 00:00:00, MajorVersion = 0, MinorVersion = 0}
-                            > PEResourceDataEntry { Id = 0x409 (en-US), Data = Stream (145 bytes) }
-            [00] PEStreamSectionData              Position = 0x000026EC, Size = 0x0000000C, RVA = 0x000050EC, VirtualSize = 0x0000000C
+                > ByNames[0], ByIds[1] , TimeDateStamp = 01/01/1970 00:00:00, Version = 0.0
+                    [0] Id = 0x18, Entry = PEResourceDirectoryEntry { RVA = 0x5018, VirtualSize = 0x18, Position = 0x2618, Size = 0x18, ByNames[0], ByIds[1] , TimeDateStamp = 01/01/1970 00:00:00, MajorVersion = 0, MinorVersion = 0 }
+            [00] PEResourceDirectoryEntry         Position = 0x00002618, Size = 0x00000018, RVA = 0x00005018, VirtualSize = 0x00000018
+                > ByNames[0], ByIds[1] , TimeDateStamp = 01/01/1970 00:00:00, Version = 0.0
+                    [0] Id = 0x2, Entry = PEResourceDirectoryEntry { RVA = 0x5030, VirtualSize = 0x18, Position = 0x2630, Size = 0x18, ByNames[0], ByIds[1] , TimeDateStamp = 01/01/1970 00:00:00, MajorVersion = 0, MinorVersion = 0 }
+            
+            [01] PEResourceDirectoryEntry         Position = 0x00002630, Size = 0x00000018, RVA = 0x00005030, VirtualSize = 0x00000018
+                > ByNames[0], ByIds[1] , TimeDateStamp = 01/01/1970 00:00:00, Version = 0.0
+                    [0] Id = 0x409, Entry = PEResourceDataEntry { RVA = 0x5048, VirtualSize = 0x10, Position = 0x2648, Size = 0x10, CodePage = , Data = PEResourceData { RVA = 0x5060, VirtualSize = 0x91, Position = 0x2660, Size = 0x91 } }
+            
+            [02] PEResourceDataEntry              Position = 0x00002648, Size = 0x00000010, RVA = 0x00005048, VirtualSize = 0x00000010
+                > CodePage = null, Data = PEResourceData { RVA = 0x5060, VirtualSize = 0x91, Position = 0x2660, Size = 0x91 }
+            
+            [03] PEResourceData                   Position = 0x00002660, Size = 0x00000091, RVA = 0x00005060, VirtualSize = 0x00000091
+            
+            [04] PEStreamSectionData              Position = 0x000026F4, Size = 0x00000004, RVA = 0x000050F4, VirtualSize = 0x00000004
             
         
     --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

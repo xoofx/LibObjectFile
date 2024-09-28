@@ -1,9 +1,10 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
 using System;
 using System.Text;
+using System.Xml.Linq;
 
 namespace LibObjectFile.PE;
 
@@ -39,6 +40,12 @@ public readonly partial record struct PESectionName
 
     /// <inheritdoc />
     public override string ToString() => Name;
+
+    internal void CopyTo(Span<byte> buffer)
+    {
+        var total = Encoding.ASCII.GetBytes(Name, buffer);
+        buffer.Slice(total).Fill(0);
+    }
 
     /// <summary>
     /// Checks if the specified section name is a valid section name.

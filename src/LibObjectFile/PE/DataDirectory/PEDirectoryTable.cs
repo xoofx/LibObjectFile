@@ -161,6 +161,23 @@ public sealed class PEDirectoryTable : IEnumerable<PEDataDirectory>
 
         return count;
     }
+
+    internal unsafe void Write(PEImageWriter writer, ref uint position)
+    {
+        var numberOfEntries = CalculateNumberOfEntries();
+        for (int i = 0; i < numberOfEntries; i++)
+        {
+            ImageDataDirectory rawDataDirectory = default;
+            var entry = _entries[i];
+            if (entry is not null)
+            {
+                rawDataDirectory.RVA = entry is PEDataDirectory dataDirectory ? dataDirectory.RVA : (uint)entry.Position;
+                rawDataDirectory.Size = (uint)entry.Size;
+            }
+        }
+
+        position += (uint)(numberOfEntries * sizeof(ImageDataDirectory));
+    }
     
     [InlineArray(15)]
     private struct InternalArray

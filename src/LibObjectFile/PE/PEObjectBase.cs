@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -31,4 +31,20 @@ public abstract class PEObjectBase : ObjectFileElement<PELayoutContext, PEVisito
     {
         throw new NotSupportedException($"The write operation is not supported for {this.GetType().FullName}");
     }
+
+    /// <summary>
+    /// Gets the required alignment for this object.
+    /// </summary>
+    /// <param name="file">The PE file containing this object.</param>
+    /// <returns>The required alignment for this object.</returns>
+    /// <remarks>By default, this method returns 1.</remarks>
+    public virtual uint GetRequiredPositionAlignment(PEFile file) => 1;
+    
+    /// <summary>
+    /// Gets the required size alignment for this object.
+    /// </summary>
+    /// <param name="file">The PE file containing this object.</param>
+    /// <returns>The required size alignment for this object.</returns>
+    /// <remarks>By default, this method returns 1.</remarks>
+    public virtual uint GetRequiredSizeAlignment(PEFile file) => 1;
 }

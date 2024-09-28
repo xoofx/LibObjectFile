@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -26,10 +26,6 @@ public sealed class PEDebugDirectory : PEDataDirectory
         var size = (int)Size;
 
         var entryCount = size / sizeof(RawImageDebugDirectory);
-
-        var positionBeforeFirstSection = reader.File.Sections.Count > 0 ? reader.File.Sections[0].Position : 0;
-        var positionAfterLastSection = reader.File.Sections.Count > 0 ? reader.File.Sections[^1].Position + reader.File.Sections[^1].Size : 0;
-
 
         var buffer = ArrayPool<byte>.Shared.Rent(size);
         try
@@ -137,12 +133,51 @@ public sealed class PEDebugDirectory : PEDataDirectory
         }
     }
     
-    public override void Write(PEImageWriter writer)
+    public override unsafe void Write(PEImageWriter writer)
     {
-        throw new NotImplementedException();
+        var entries = CollectionsMarshal.AsSpan(Entries);
+        var rawBufferSize = sizeof(RawImageDebugDirectory) * entries.Length;
+        var rawBuffer = ArrayPool<byte>.Shared.Rent(rawBufferSize);
+        try
+        {
+            var buffer = new Span<byte>(rawBuffer, 0, rawBufferSize);
+            var rawEntries = MemoryMarshal.Cast<byte, RawImageDebugDirectory>(buffer);
+
+            RawImageDebugDirectory rawEntry = default;
+            for (var i = 0; i < entries.Length; i++)
+            {
+                var entry = entries[i];
+                rawEntry.Characteristics = entry.Characteristics;
+                rawEntry.MajorVersion = entry.MajorVersion;
+                rawEntry.MinorVersion = entry.MinorVersion;
+                rawEntry.TimeDateStamp = entry.TimeDateStamp;
+                rawEntry.Type = entry.Type;
+
+                if (entry.SectionData is not null)
+                {
+                    rawEntry.SizeOfData = (uint)entry.SectionData.Size;
+                    rawEntry.AddressOfRawData = (uint)entry.SectionData.RVA;
+                    rawEntry.PointerToRawData = 0;
+                }
+                else if (entry.ExtraData is not null)
+                {
+                    rawEntry.SizeOfData = (uint)entry.ExtraData.Size;
+                    rawEntry.AddressOfRawData = 0;
+                    rawEntry.PointerToRawData = (uint)entry.ExtraData.Position;
+                }
+
+                rawEntries[i] = rawEntry;
+            }
+
+            writer.Write(rawBuffer);
+        }
+        finally
+        {
+            ArrayPool<byte>.Shared.Return(rawBuffer);
+        }
     }
 
-    protected override unsafe uint ComputeHeaderSize(PEVisitorContext context)
+    protected override unsafe uint ComputeHeaderSize(PELayoutContext context)
     {
         return (uint)(Entries.Count * sizeof(RawImageDebugDirectory));
     }

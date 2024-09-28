@@ -1,9 +1,10 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
 using System;
 using System.IO;
+using LibObjectFile.Utils;
 
 namespace LibObjectFile.PE;
 
@@ -13,16 +14,16 @@ namespace LibObjectFile.PE;
 public class PEStreamSectionData : PESectionData
 {
     private Stream _stream;
+    private uint _requiredPositionAlignment;
+    private uint _requiredSizeAlignment;
 
     internal static PEStreamSectionData Empty = new();
     
     /// <summary>
     /// Initializes a new instance of the <see cref="PEStreamSectionData"/> class.
     /// </summary>
-    public PEStreamSectionData()
+    public PEStreamSectionData() : this(System.IO.Stream.Null)
     {
-        _stream = Stream.Null;
-        Size = 0;
     }
 
     /// <summary>
@@ -34,6 +35,8 @@ public class PEStreamSectionData : PESectionData
         ArgumentNullException.ThrowIfNull(stream);
         _stream = stream;
         Size = (ulong)stream.Length;
+        _requiredPositionAlignment = 1;
+        _requiredSizeAlignment = 1;
     }
 
     public override bool HasChildren => false;
@@ -52,6 +55,32 @@ public class PEStreamSectionData : PESectionData
         }
     }
 
+    /// <summary>
+    /// Gets or sets the preferred position alignment for this section data.
+    /// </summary>
+    public uint RequiredPositionAlignment
+    {
+        get => _requiredPositionAlignment;
+        set
+        {
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, 1U);
+            _requiredPositionAlignment = value;
+        }
+    }
+
+    /// <summary>
+    /// Gets or sets the preferred size alignment for this section data.
+    /// </summary>
+    public uint RequiredSizeAlignment
+    {
+        get => _requiredSizeAlignment;
+        set
+        {
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, 1U);
+            _requiredSizeAlignment = value;
+        }
+    }
+    
     public override void UpdateLayout(PELayoutContext layoutContext)
     {
         Size = (ulong)Stream.Length;
@@ -80,4 +109,8 @@ public class PEStreamSectionData : PESectionData
         Stream.Position = offset;
         Stream.Write(source);
     }
+
+    public override uint GetRequiredPositionAlignment(PEFile file) => _requiredPositionAlignment;
+
+    public override uint GetRequiredSizeAlignment(PEFile file) => _requiredSizeAlignment;
 }

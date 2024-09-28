@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -30,9 +30,10 @@ public sealed class PEBoundImportDirectory : PEDataDirectory
     public List<PEBoundImportDirectoryEntry> Entries { get; }
 
     /// <inheritdoc/>
-    protected override uint ComputeHeaderSize(PEVisitorContext context)
+    protected override unsafe uint ComputeHeaderSize(PELayoutContext context)
     {
-        var size = 0u;
+        // Last raw entry is zero
+        var size = (uint)sizeof(RawPEBoundImportDirectory);
         var entries = CollectionsMarshal.AsSpan(Entries);
         foreach (var entry in entries)
         {
@@ -156,6 +157,23 @@ public sealed class PEBoundImportDirectory : PEDataDirectory
     /// <inheritdoc/>
     public override void Write(PEImageWriter writer)
     {
-        throw new NotImplementedException();
+        RawPEBoundImportDirectory rawEntry = default;
+        RawPEBoundImportForwarderRef rawForwarderRef = default;
+        foreach (var entry in Entries)
+        {
+            rawEntry.OffsetModuleName = (ushort)entry.ModuleName.RVO;
+            rawEntry.NumberOfModuleForwarderRefs = (ushort)entry.ForwarderRefs.Count;
+            writer.Write(rawEntry);
+
+            foreach (var forwarderRef in entry.ForwarderRefs)
+            {
+                rawForwarderRef.OffsetModuleName = (ushort)forwarderRef.ModuleName.RVO;
+                writer.Write(rawForwarderRef);
+            }
+        }
+
+        // Last entry is null
+        rawEntry = default;
+        writer.Write(rawEntry);
     }
 }

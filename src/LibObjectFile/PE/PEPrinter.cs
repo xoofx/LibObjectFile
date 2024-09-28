@@ -5,6 +5,7 @@
 using System;
 using System.IO;
 using LibObjectFile.IO;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LibObjectFile.PE;
 
@@ -268,6 +269,9 @@ public static class PEPrinter
                 break;
             case PEDebugSectionDataRSDS peDebugSectionDataRSDS:
                 Print(peDebugSectionDataRSDS, ref writer);
+                break;
+            case PEResourceEntry peResourceEntry:
+                Print(peResourceEntry, ref writer);
                 break;
             default:
                 writer.WriteLine($"Unsupported section data {data}");
@@ -562,15 +566,24 @@ public static class PEPrinter
         switch (data)
         {
             case PEResourceDataEntry resourceFile:
-                writer.WriteLine($"> {resourceFile}");
+                writer.WriteLine($"> CodePage = {resourceFile.CodePage?.EncodingName ?? "null"}, Data = {resourceFile.Data}");
                 break;
             case PEResourceDirectoryEntry dir:
-                writer.WriteLine($"> {dir}");
+                writer.WriteLine($"> ByNames[{dir.ByNames.Count}], ByIds[{dir.ByIds.Count}] , TimeDateStamp = {dir.TimeDateStamp}, Version = {dir.MajorVersion}.{dir.MinorVersion}");
                 writer.Indent();
-                foreach (var entry in dir.Entries)
+
+                for (var i = 0; i < dir.ByNames.Count; i++)
                 {
-                    Print(entry, ref writer);
+                    var entry = dir.ByNames[i];
+                    writer.WriteLine($"[{i}] Name = {entry.Name}, Entry = {entry.Entry}");
                 }
+
+                for (var i = 0; i < dir.ByIds.Count; i++)
+                {
+                    var entry = dir.ByIds[i];
+                    writer.WriteLine($"[{i}] Id = {entry.Id}, Entry = {entry.Entry}");
+                }
+
                 writer.Unindent();
                 break;
             default:

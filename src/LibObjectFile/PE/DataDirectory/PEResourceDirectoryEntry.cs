@@ -1,16 +1,14 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
+using LibObjectFile.Diagnostics;
+using LibObjectFile.PE.Internal;
 using System;
-using System.Collections;
+using System.Buffers;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
-using LibObjectFile.Collections;
-using LibObjectFile.PE.Internal;
 
 namespace LibObjectFile.PE;
 
@@ -21,39 +19,15 @@ namespace LibObjectFile.PE;
 /// This class provides functionality to manage a directory entry in the  <see cref="PEResourceDirectory"/>.
 /// It allows adding, removing, and updating resource entries within the directory.
 /// </remarks>
-public sealed class PEResourceDirectoryEntry : PEResourceEntry, IEnumerable<PEResourceEntry>
+public sealed class PEResourceDirectoryEntry : PEResourceEntry
 {
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private readonly Dictionary<string, int> _nameToIndex = new();
-
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private readonly Dictionary<PEResourceId, int> _idToIndex = new();
-
     /// <summary>
     /// Initializes a new instance of the <see cref="PEResourceDirectoryEntry"/> class.
     /// </summary>
-    internal PEResourceDirectoryEntry()
+    public PEResourceDirectoryEntry()
     {
-        Entries = new ObjectList<PEResourceEntry>(this, adding: AddingEntry, removing: RemovingEntry, updating: UpdatingEntry);
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="PEResourceDirectoryEntry"/> class with the specified name.
-    /// </summary>
-    /// <param name="name">The name of the resource directory entry.</param>
-    public PEResourceDirectoryEntry(string name) : base(name)
-    {
-        ArgumentNullException.ThrowIfNull(name);
-        Entries = new ObjectList<PEResourceEntry>(this, adding: AddingEntry, removing: RemovingEntry, updating: UpdatingEntry);
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="PEResourceDirectoryEntry"/> class with the specified ID.
-    /// </summary>
-    /// <param name="id">The ID of the resource directory entry.</param>
-    public PEResourceDirectoryEntry(PEResourceId id) : base(id)
-    {
-        Entries = new ObjectList<PEResourceEntry>(this);
+        ByNames = new();
+        ByIds = new();
     }
 
     /// <summary>
@@ -74,120 +48,142 @@ public sealed class PEResourceDirectoryEntry : PEResourceEntry, IEnumerable<PERe
     /// <summary>
     /// Gets the list of resource entries within the directory.
     /// </summary>
-    public ObjectList<PEResourceEntry> Entries { get; }
+    public List<PEResourceDirectoryEntryByName> ByNames { get; }
 
     /// <summary>
-    /// Determines whether the directory contains a resource entry with the specified name.
+    /// Gets the list of resource entries within the directory.
     /// </summary>
-    /// <param name="name">The name of the resource entry.</param>
-    /// <returns><c>true</c> if the directory contains a resource entry with the specified name; otherwise, <c>false</c>.</returns>
-    public bool Contains(string name) => _nameToIndex.ContainsKey(name);
-
-    /// <summary>
-    /// Determines whether the directory contains a resource entry with the specified ID.
-    /// </summary>
-    /// <param name="id">The ID of the resource entry.</param>
-    /// <returns><c>true</c> if the directory contains a resource entry with the specified ID; otherwise, <c>false</c>.</returns>
-    public bool Contains(PEResourceId id) => _idToIndex.ContainsKey(id);
-
-    /// <summary>
-    /// Tries to get the resource entry with the specified name from the directory.
-    /// </summary>
-    /// <param name="name">The name of the resource entry.</param>
-    /// <param name="entry">When this method returns, contains the resource entry with the specified name, if found; otherwise, <c>null</c>.</param>
-    /// <returns><c>true</c> if the resource entry with the specified name is found; otherwise, <c>false</c>.</returns>
-    public bool TryGetEntry(string name, out PEResourceEntry? entry)
+    public List<PEResourceDirectoryEntryById> ByIds { get; }
+    
+    internal override unsafe void Read(in ReaderContext context)
     {
-        if (_nameToIndex.TryGetValue(name, out var index))
+        var reader = context.Reader;
+        var directory = context.Directory;
+        
+        reader.Position = Position;
+        if (!reader.TryReadData<RawImageResourceDirectory>(sizeof(RawImageResourceDirectory), out var data))
         {
-            entry = Entries[index];
-            return true;
+            reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidResourceDirectoryEntry, $"Invalid resource directory at position {reader.Position}");
+            return;
         }
 
-        entry = null;
-        return false;
-    }
+        TimeDateStamp = DateTime.UnixEpoch.AddSeconds(data.TimeDateStamp);
+        MajorVersion = data.MajorVersion;
+        MinorVersion = data.MinorVersion;
 
-    /// <summary>
-    /// Tries to get the resource entry with the specified ID from the directory.
-    /// </summary>
-    /// <param name="id">The ID of the resource entry.</param>
-    /// <param name="entry">When this method returns, contains the resource entry with the specified ID, if found; otherwise, <c>null</c>.</param>
-    /// <returns><c>true</c> if the resource entry with the specified ID is found; otherwise, <c>false</c>.</returns>
-    public bool TryGetEntry(PEResourceId id, out PEResourceEntry? entry)
-    {
-        if (_idToIndex.TryGetValue(id, out var index))
+        var buffer = new byte[(data.NumberOfNamedEntries + data.NumberOfIdEntries) * sizeof(RawImageResourceDirectoryEntry)];
+        var spanEntries = MemoryMarshal.Cast<byte, RawImageResourceDirectoryEntry>(buffer);
+
+        int read = reader.Read(buffer);
+        if (read != buffer.Length)
         {
-            entry = Entries[index];
-            return true;
+            reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidResourceDirectoryEntry, $"Invalid resource directory at position {reader.Position}");
+            return;
         }
 
-        entry = null;
-        return false;
-    }
-
-    /// <summary>
-    /// Adds the specified resource entry to the directory.
-    /// </summary>
-    /// <param name="entry">The resource entry to add.</param>
-    public void Add(PEResourceEntry entry) => Entries.Add(entry);
-
-    /// <summary>
-    /// Gets an enumerator that iterates through the resource entries in the directory.
-    /// </summary>
-    /// <returns></returns>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public List<PEResourceEntry>.Enumerator GetEnumerator() => Entries.GetEnumerator();
-
-    IEnumerator<PEResourceEntry> IEnumerable<PEResourceEntry>.GetEnumerator()
-    {
-        return Entries.GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return ((IEnumerable)Entries).GetEnumerator();
-    }
-
-    private static void AddingEntry(ObjectElement parent, int index, PEResourceEntry entry)
-    {
-        var directory = (PEResourceDirectoryEntry)parent;
-        if (entry.Name != null)
+        // Read all entries
+        for (int i = 0; i < data.NumberOfNamedEntries + data.NumberOfIdEntries; i++)
         {
-            directory._nameToIndex.Add(entry.Name, index);
+            var entry = spanEntries[i];
+            ReadEntry(reader, directory, entry);
+
+            if (reader.Diagnostics.HasErrors)
+            {
+                return;
+            }
+        }
+
+        // Update the size
+        Size = reader.Position - Position;
+
+        var size = CalculateSize();
+        if (Size != size)
+        {
+
+        }
+
+
+        // Process all the entries recursively
+        var byNames = CollectionsMarshal.AsSpan(ByNames);
+        foreach (ref var entry in byNames)
+        {
+            entry.Entry.Read(context);
+        }
+
+        var byIds = CollectionsMarshal.AsSpan(ByIds);
+        foreach (ref var entry in byIds)
+        {
+            entry.Entry.Read(context);
+        }
+    }
+
+    private void ReadEntry(PEImageReader reader, PEResourceDirectory directory, RawImageResourceDirectoryEntry rawEntry)
+    {
+        string? name = null;
+        int id = 0;
+
+        if ((rawEntry.NameOrId & IMAGE_RESOURCE_NAME_IS_STRING) != 0)
+        {
+            // Read the string
+            var length = reader.ReadU16() * 2;
+            var buffer = ArrayPool<byte>.Shared.Rent(length);
+            try
+            {
+                int readLength = reader.Read(buffer, 0, length);
+                if (readLength != length)
+                {
+                    reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidResourceDirectoryEntry, $"Invalid resource directory string at position {reader.Position}");
+                    return;
+                }
+                name = Encoding.Unicode.GetString(buffer, 0, readLength);
+            }
+            finally
+            {
+                ArrayPool<byte>.Shared.Return(buffer);
+            }
         }
         else
         {
-            directory._idToIndex.Add(entry.Id, index);
+            id = (int)(rawEntry.NameOrId & ~IMAGE_RESOURCE_NAME_IS_STRING);
         }
-    }
+        
+        bool isDirectory = (rawEntry.OffsetToDataOrDirectoryEntry & IMAGE_RESOURCE_DATA_IS_DIRECTORY) != 0;
+        var offset = rawEntry.OffsetToDataOrDirectoryEntry & ~IMAGE_RESOURCE_DATA_IS_DIRECTORY;
 
-    private static void RemovingEntry(ObjectElement parent, PEResourceEntry entry)
-    {
-        var directory = (PEResourceDirectoryEntry)parent;
-        if (entry.Name != null)
+        PEResourceEntry entry = isDirectory ? new PEResourceDirectoryEntry() : new PEResourceDataEntry();
+        entry.Position = directory.Position + offset;
+
+        if (name is not null)
         {
-            directory._nameToIndex.Remove(entry.Name);
+            ByNames.Add(new(name, entry));
         }
         else
         {
-            directory._idToIndex.Remove(entry.Id);
+            ByIds.Add(new(new(id), entry));
         }
+
+        // Add the content to the directory (as we have the guarantee that the content belongs to the resource directory)
+        directory.Content.Add(entry);
     }
 
-    private static void UpdatingEntry(ObjectElement parent, int index, PEResourceEntry previousEntry, PEResourceEntry entry)
+    public override unsafe void UpdateLayout(PELayoutContext layoutContext)
     {
-        RemovingEntry(parent, previousEntry);
-        AddingEntry(parent, index, entry);
+        Size = CalculateSize();
     }
 
-    private protected override unsafe uint ComputeSize()
+    private unsafe uint CalculateSize()
     {
-        var entries = CollectionsMarshal.AsSpan(Entries.UnsafeList);
-        uint size = (uint)sizeof(RawImageResourceDirectory);
-        foreach (var entry in entries)
+        var size = 0U;
+        size += (uint)sizeof(RawImageResourceDirectory);
+        size += (uint)(ByNames.Count + ByIds.Count) * (uint)sizeof(RawImageResourceDirectoryEntry);
+
+        if (ByNames.Count > 0)
         {
-            size += entry.ComputeFullSize();
+            var byNames = CollectionsMarshal.AsSpan(ByNames);
+            foreach (ref readonly var entry in byNames)
+            {
+                size += sizeof(ushort) + (uint)entry.Name.Length * 2;
+            }
         }
 
         return size;
@@ -200,8 +196,11 @@ public sealed class PEResourceDirectoryEntry : PEResourceEntry, IEnumerable<PERe
             builder.Append(", ");
         }
 
-        builder.Append($"Entries[{Entries.Count}] , TimeDateStamp = {TimeDateStamp}, MajorVersion = {MajorVersion}, MinorVersion = {MinorVersion}");
+        builder.Append($"ByNames[{ByNames.Count}], ByIds[{ByIds.Count}] , TimeDateStamp = {TimeDateStamp}, MajorVersion = {MajorVersion}, MinorVersion = {MinorVersion}");
 
-        return false;
+        return true;
     }
+    
+    private const uint IMAGE_RESOURCE_NAME_IS_STRING = 0x80000000;
+    private const uint IMAGE_RESOURCE_DATA_IS_DIRECTORY = 0x80000000;
 }
