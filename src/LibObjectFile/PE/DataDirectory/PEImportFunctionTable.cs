@@ -134,7 +134,7 @@ internal readonly struct PEImportFunctionTable()
 
     private unsafe void Write32(PEImageWriter writer)
     {
-        using var pooledSpan = PooledSpan<RawImportFunctionEntry32>.Create(Entries.Count, out var span);
+        using var tempSpan = TempSpan<RawImportFunctionEntry32>.Create(Entries.Count, out var span);
         
         for (var i = 0; i < Entries.Count; i++)
         {
@@ -146,7 +146,7 @@ internal readonly struct PEImportFunctionTable()
         // Last entry is null terminator
         span[^1] = default;
 
-        writer.Write(pooledSpan);
+        writer.Write(tempSpan);
     }
 
     private unsafe void Write64(PEImageWriter writer)

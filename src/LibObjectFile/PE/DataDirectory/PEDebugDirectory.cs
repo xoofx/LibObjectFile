@@ -30,8 +30,8 @@ public sealed class PEDebugDirectory : PEDataDirectory
 
         // Scope the pooled span to ensure it is returned to the pool as soon as possible
         {
-            using var pooledSpan = PooledSpan<RawImageDebugDirectory>.Create(entryCount, out var entries);
-            Span<byte> span = pooledSpan;
+            using var tempSpan = TempSpan<RawImageDebugDirectory>.Create(entryCount, out var entries);
+            Span<byte> span = tempSpan;
 
             reader.Position = Position;
             int read = reader.Read(span);
@@ -132,7 +132,7 @@ public sealed class PEDebugDirectory : PEDataDirectory
     public override void Write(PEImageWriter writer)
     {
         var entries = CollectionsMarshal.AsSpan(Entries);
-        using var pooledSpan = PooledSpan<RawImageDebugDirectory>.Create(entries.Length, out var rawEntries);
+        using var tempSpan = TempSpan<RawImageDebugDirectory>.Create(entries.Length, out var rawEntries);
         
         RawImageDebugDirectory rawEntry = default;
         for (var i = 0; i < entries.Length; i++)
@@ -160,7 +160,7 @@ public sealed class PEDebugDirectory : PEDataDirectory
             rawEntries[i] = rawEntry;
         }
 
-        writer.Write(pooledSpan);
+        writer.Write(tempSpan);
     }
 
     protected override unsafe uint ComputeHeaderSize(PELayoutContext context)

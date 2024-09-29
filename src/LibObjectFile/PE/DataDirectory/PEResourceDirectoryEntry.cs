@@ -127,7 +127,7 @@ public sealed class PEResourceDirectoryEntry : PEResourceEntry
         {
             // Read the string
             var length = reader.ReadU16() * 2;
-            using var pooledSpan = PooledSpan<byte>.Create(length, out var span);
+            using var tempSpan = TempSpan<byte>.Create(length, out var span);
 
             int readLength = reader.Read(span);
             if (readLength != length)

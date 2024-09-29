@@ -34,8 +34,8 @@ public sealed class PEExportNameTable : PESectionData
     public override unsafe void Read(PEImageReader reader)
     {
         reader.Position = Position;
-        using var pooledSpan = PooledSpan<RVA>.Create(Values.Count, out var spanRva);
-        var span = pooledSpan.AsBytes;
+        using var tempSpan = TempSpan<RVA>.Create(Values.Count, out var spanRva);
+        var span = tempSpan.AsBytes;
 
         int read = reader.Read(span);
         if (read != span.Length)

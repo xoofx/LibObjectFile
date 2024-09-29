@@ -46,7 +46,7 @@ public sealed class PEDebugSectionDataRSDS : PEDebugSectionData
     public override unsafe void Read(PEImageReader reader)
     {
         var size = (int)Size;
-        using var pooledSpan = PooledSpan<byte>.Create(size, out var span);
+        using var tempSpan = TempSpan<byte>.Create(size, out var span);
 
         reader.Position = Position;
         var read = reader.Read(span);

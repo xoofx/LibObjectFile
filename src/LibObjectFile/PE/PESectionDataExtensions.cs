@@ -85,7 +85,7 @@ public static class PESectionDataExtensions
             maxLength++;
         }
 
-        using var pooledSpan = PooledSpan<byte>.Create(maxLength + (isHint ? 2 : 0), out var span);
+        using var tempSpan = TempSpan<byte>.Create(maxLength + (isHint ? 2 : 0), out var span);
 
         var text = span;
 

@@ -217,7 +217,7 @@ public sealed class PEDelayImportDirectory : PEDataDirectory
     public override unsafe void Write(PEImageWriter writer)
     {
         var entries = CollectionsMarshal.AsSpan(Entries);
-        using var pooledSpan = PooledSpan<RawDelayLoadDescriptor>.Create(entries.Length + 1, out var rawEntries);
+        using var tempSpan = TempSpan<RawDelayLoadDescriptor>.Create(entries.Length + 1, out var rawEntries);
 
         RawDelayLoadDescriptor rawEntry = default;
         for (var i = 0; i < entries.Length; i++)
@@ -238,6 +238,6 @@ public sealed class PEDelayImportDirectory : PEDataDirectory
         // Write the null entry
         rawEntries[entries.Length] = default;
 
-        writer.Write(pooledSpan.AsBytes);
+        writer.Write(tempSpan.AsBytes);
     }
 }

@@ -79,8 +79,8 @@ public sealed class PEBoundImportDirectory : PEDataDirectory
 
             if (rawEntry.NumberOfModuleForwarderRefs > 0)
             {
-                using var pooledSpan = PooledSpan<RawPEBoundImportForwarderRef>.Create(rawEntry.NumberOfModuleForwarderRefs, out var spanForwarderRef);
-                var span = pooledSpan.AsBytes;
+                using var tempSpan = TempSpan<RawPEBoundImportForwarderRef>.Create(rawEntry.NumberOfModuleForwarderRefs, out var spanForwarderRef);
+                var span = tempSpan.AsBytes;
 
                 read = reader.Read(span);
                 if (read != span.Length)

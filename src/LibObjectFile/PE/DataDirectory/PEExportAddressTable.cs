@@ -38,8 +38,8 @@ public sealed class PEExportAddressTable : PESectionData
 
     public override unsafe void Read(PEImageReader reader)
     {
-        using var pooledSpan = PooledSpan<RVA>.Create(Values.Count, out var spanRva);
-        var span = pooledSpan.AsBytes;
+        using var tempSpan = TempSpan<RVA>.Create(Values.Count, out var spanRva);
+        var span = tempSpan.AsBytes;
 
         reader.Position = Position;
         int read = reader.Read(span);

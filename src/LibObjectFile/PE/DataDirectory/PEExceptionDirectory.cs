@@ -118,7 +118,7 @@ public sealed class PEExceptionDirectory : PEDataDirectory
 
         reader.Position = Position;
         {
-            using var pooledSpan = PooledSpan<byte>.Create((int)size, out var span);
+            using var tempSpan = TempSpan<byte>.Create((int)size, out var span);
             int read = reader.Read(span);
             if (read != size)
             {

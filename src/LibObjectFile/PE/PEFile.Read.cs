@@ -231,7 +231,7 @@ partial class PEFile
         }
 
         // Read Directory headers
-        using var pooledSpanDirectories = PooledSpan<RawImageDataDirectory>.Create(stackalloc byte[16 * sizeof(RawImageDataDirectory)], (int)OptionalHeader.NumberOfRvaAndSizes, out var rawDirectories);
+        using var pooledSpanDirectories = TempSpan<RawImageDataDirectory>.Create(stackalloc byte[16 * sizeof(RawImageDataDirectory)], (int)OptionalHeader.NumberOfRvaAndSizes, out var rawDirectories);
 
         // Sets the number of entries in the data directory
         Directories.Count = (int)OptionalHeader.NumberOfRvaAndSizes;
@@ -252,7 +252,7 @@ partial class PEFile
         
         Debug.Assert(Unsafe.SizeOf<RawImageSectionHeader>() == 40);
 
-        using var pooledSpanSections = PooledSpan<RawImageSectionHeader>.Create((int)CoffHeader.NumberOfSections, out var rawSections);
+        using var pooledSpanSections = TempSpan<RawImageSectionHeader>.Create((int)CoffHeader.NumberOfSections, out var rawSections);
         read = reader.Read(pooledSpanSections.AsBytes);
 
         if (read != pooledSpanSections.AsBytes.Length)
