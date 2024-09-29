@@ -96,23 +96,19 @@ public sealed class PEResourceDataEntry : PEResourceEntry
             Position = section.Position + rawDataEntry.OffsetToData - section.RVA,
             Size = rawDataEntry.Size,
         };
+    }
 
-        // If we find that the position is not aligned on 4 bytes as we expect, reset it to 1 byte alignment
-        var checkPosition = AlignHelper.AlignUp(Data.Position, Data.RequiredPositionAlignment);
-        if (checkPosition != Data.Position)
+    internal override void Write(in WriterContext context) => Write(context.Writer);
+    
+    public override void Write(PEImageWriter writer)
+    {
+        var rawDataEntry = new RawImageResourceDataEntry
         {
-            Data.RequiredPositionAlignment = 1;
-        }
-        else if (context.ResourceDataList.Count == 0 && (Data.Position & 0xF) == 0)
-        {
-            // If we are the first resource data entry and the position is aligned on 16 bytes, we can assume this alignment
-            Data.RequiredPositionAlignment = 16;
-        }
-        
-        // Read the data
-        Data.Read(reader);
+            CodePage = (uint)(CodePage?.CodePage ?? 0),
+            OffsetToData = Data.RVA,
+            Size = (uint)Data.Size,
+        };
 
-        // Register the list of data being loaded
-        context.ResourceDataList.Add(Data);
+        writer.Write(rawDataEntry);
     }
 }

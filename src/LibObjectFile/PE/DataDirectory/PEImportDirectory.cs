@@ -101,6 +101,22 @@ public sealed class PEImportDirectory : PEDataDirectory
         }
     }
 
+    public override void Write(PEImageWriter writer)
+    {
+        RawImportDirectoryEntry rawEntry = default;
+        foreach (var entry in Entries)
+        {
+            rawEntry.NameRVA = (uint)entry.ImportDllNameLink.RVA();
+            rawEntry.ImportLookupTableRVA = (uint)entry.ImportLookupTable.RVA;
+            rawEntry.ImportAddressTableRVA = (uint)entry.ImportAddressTable.RVA;
+            writer.Write(rawEntry);
+        }
+
+        // Null entry
+        rawEntry = default;
+        writer.Write(rawEntry);
+    }
+
     protected override unsafe uint ComputeHeaderSize(PELayoutContext context) => CalculateSize();
 
     internal override IEnumerable<PEObjectBase> CollectImplicitSectionDataList()
@@ -152,21 +168,5 @@ public sealed class PEImportDirectory : PEDataDirectory
     private unsafe uint CalculateSize()
     {
         return (uint)(((_entries.Count + 1) * sizeof(RawImportDirectoryEntry)));
-    }
-
-    public override void Write(PEImageWriter writer)
-    {
-        RawImportDirectoryEntry rawEntry = default;
-        foreach (var entry in Entries)
-        {
-            rawEntry.NameRVA = (uint)entry.ImportDllNameLink.RVA();
-            rawEntry.ImportLookupTableRVA = (uint)entry.ImportLookupTable.RVA;
-            rawEntry.ImportAddressTableRVA = (uint)entry.ImportAddressTable.RVA;
-            writer.Write(rawEntry);
-        }
-
-        // Null entry
-        rawEntry = default;
-        writer.Write(rawEntry);
     }
 }

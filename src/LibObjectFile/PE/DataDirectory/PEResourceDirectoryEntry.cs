@@ -5,8 +5,9 @@
 using LibObjectFile.Diagnostics;
 using LibObjectFile.PE.Internal;
 using System;
-using System.Buffers;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using LibObjectFile.Collections;
@@ -32,6 +33,11 @@ public sealed class PEResourceDirectoryEntry : PEResourceEntry
     }
 
     /// <summary>
+    /// Gets or sets the characteristics of the resource directory entry.
+    /// </summary>
+    public uint Characteristics { get; set; }
+
+    /// <summary>
     /// Gets or sets the time stamp of the resource directory entry.
     /// </summary>
     public DateTime TimeDateStamp { get; set; }
@@ -39,12 +45,12 @@ public sealed class PEResourceDirectoryEntry : PEResourceEntry
     /// <summary>
     /// Gets or sets the major version of the resource directory entry.
     /// </summary>
-    public uint MajorVersion { get; set; }
+    public ushort MajorVersion { get; set; }
 
     /// <summary>
     /// Gets or sets the minor version of the resource directory entry.
     /// </summary>
-    public uint MinorVersion { get; set; }
+    public ushort MinorVersion { get; set; }
 
     /// <summary>
     /// Gets the list of resource entries within the directory.
@@ -59,7 +65,6 @@ public sealed class PEResourceDirectoryEntry : PEResourceEntry
     internal override unsafe void Read(in ReaderContext context)
     {
         var reader = context.Reader;
-        var directory = context.Directory;
         
         reader.Position = Position;
         if (!reader.TryReadData<RawImageResourceDirectory>(sizeof(RawImageResourceDirectory), out var data))
@@ -68,6 +73,7 @@ public sealed class PEResourceDirectoryEntry : PEResourceEntry
             return;
         }
 
+        Characteristics = data.Characteristics;
         TimeDateStamp = DateTime.UnixEpoch.AddSeconds(data.TimeDateStamp);
         MajorVersion = data.MajorVersion;
         MinorVersion = data.MinorVersion;
@@ -86,7 +92,7 @@ public sealed class PEResourceDirectoryEntry : PEResourceEntry
         for (int i = 0; i < data.NumberOfNamedEntries + data.NumberOfIdEntries; i++)
         {
             var entry = spanEntries[i];
-            ReadEntry(reader, directory, entry);
+            ReadEntry(context, entry);
 
             if (reader.Diagnostics.HasErrors)
             {
@@ -97,50 +103,71 @@ public sealed class PEResourceDirectoryEntry : PEResourceEntry
         // Update the size
         Size = reader.Position - Position;
 
-        var size = CalculateSize();
-        if (Size != size)
-        {
+        Debug.Assert(Size == CalculateSize());
 
-        }
-
-
-        // Process all the entries recursively
+        // Read all strings (they should follow the directory)
         var byNames = CollectionsMarshal.AsSpan(ByNames);
-        foreach (ref var entry in byNames)
+        foreach (ref var item in byNames)
         {
-            entry.Entry.Read(context);
+            context.Strings.Add(item.Name);
+            context.Entries.Add(item.Entry);
+            item.Entry.Read(context);
         }
 
+        // Read the entry content 
         var byIds = CollectionsMarshal.AsSpan(ByIds);
-        foreach (ref var entry in byIds)
+        foreach (ref var item in byIds)
         {
-            entry.Entry.Read(context);
+            context.Entries.Add(item.Entry);
+            item.Entry.Read(context);
         }
     }
 
-    private void ReadEntry(PEImageReader reader, PEResourceDirectory directory, RawImageResourceDirectoryEntry rawEntry)
+    internal override unsafe void Write(in WriterContext context)
     {
-        string? name = null;
-        int id = 0;
+        var size = Size;
+        Debug.Assert(size == CalculateSize());
 
-        if ((rawEntry.NameOrId & IMAGE_RESOURCE_NAME_IS_STRING) != 0)
-        {
-            // Read the string
-            var length = reader.ReadU16() * 2;
-            using var tempSpan = TempSpan<byte>.Create(length, out var span);
+        using var tempSpan = TempSpan<byte>.Create((int)size, out var span);
 
-            int readLength = reader.Read(span);
-            if (readLength != length)
-            {
-                reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidResourceDirectoryEntry, $"Invalid resource directory string at position {reader.Position}");
-                return;
-            }
-            name = Encoding.Unicode.GetString(span);
-        }
-        else
+
+        ref var rawResourceDirectory = ref Unsafe.As<byte, RawImageResourceDirectory>(ref MemoryMarshal.GetReference(span));
+
+        rawResourceDirectory.Characteristics = Characteristics;
+        rawResourceDirectory.TimeDateStamp = (uint)(TimeDateStamp - DateTime.UnixEpoch).TotalSeconds;
+        rawResourceDirectory.MajorVersion = MajorVersion;
+        rawResourceDirectory.MinorVersion = MinorVersion;
+        rawResourceDirectory.NumberOfNamedEntries = (ushort)ByNames.Count;
+        rawResourceDirectory.NumberOfIdEntries = (ushort)ByIds.Count;
+
+        var rawEntries = MemoryMarshal.Cast<byte, RawImageResourceDirectoryEntry>(span.Slice(sizeof(RawImageResourceDirectory), (ByNames.Count + ByIds.Count) * sizeof(RawImageResourceDirectoryEntry)));
+
+        var directoryPosition = context.Directory.Position;
+
+        var byNames = CollectionsMarshal.AsSpan(ByNames);
+        for (int i = 0; i < byNames.Length; i++)
         {
-            id = (int)(rawEntry.NameOrId & ~IMAGE_RESOURCE_NAME_IS_STRING);
+            ref var rawEntry = ref rawEntries[i];
+            var entry = byNames[i];
+
+            rawEntry.NameOrId = IMAGE_RESOURCE_NAME_IS_STRING | (uint)(entry.Name.Position - directoryPosition);
+            rawEntry.OffsetToDataOrDirectoryEntry = (uint)(entry.Entry.Position - directoryPosition);
         }
+        
+        var byIds = CollectionsMarshal.AsSpan(ByIds);
+        for (int i = 0; i < byIds.Length; i++)
+        {
+            ref var rawEntry = ref rawEntries[byNames.Length + i];
+            var entry = byIds[i];
+
+            rawEntry.NameOrId = (uint)entry.Id.Value;
+            rawEntry.OffsetToDataOrDirectoryEntry = IMAGE_RESOURCE_DATA_IS_DIRECTORY | (uint)(entry.Entry.Position - directoryPosition);
+        }
+    }
+    
+    private void ReadEntry(in ReaderContext context, RawImageResourceDirectoryEntry rawEntry)
+    {
+        var directory = context.Directory;
         
         bool isDirectory = (rawEntry.OffsetToDataOrDirectoryEntry & IMAGE_RESOURCE_DATA_IS_DIRECTORY) != 0;
         var offset = rawEntry.OffsetToDataOrDirectoryEntry & ~IMAGE_RESOURCE_DATA_IS_DIRECTORY;
@@ -148,17 +175,20 @@ public sealed class PEResourceDirectoryEntry : PEResourceEntry
         PEResourceEntry entry = isDirectory ? new PEResourceDirectoryEntry() : new PEResourceDataEntry();
         entry.Position = directory.Position + offset;
 
-        if (name is not null)
+        if ((rawEntry.NameOrId & IMAGE_RESOURCE_NAME_IS_STRING) != 0)
         {
-            ByNames.Add(new(name, entry));
+            var resourceString = new PEResourceString()
+            {
+                Position = context.Directory.Position + (rawEntry.NameOrId & ~IMAGE_RESOURCE_NAME_IS_STRING)
+            };
+            
+            ByNames.Add(new(resourceString, entry));
         }
         else
         {
+            var id = (int)rawEntry.NameOrId;
             ByIds.Add(new(new(id), entry));
         }
-
-        // Add the content to the directory (as we have the guarantee that the content belongs to the resource directory)
-        directory.Content.Add(entry);
     }
 
     public override unsafe void UpdateLayout(PELayoutContext layoutContext)
@@ -171,15 +201,6 @@ public sealed class PEResourceDirectoryEntry : PEResourceEntry
         var size = 0U;
         size += (uint)sizeof(RawImageResourceDirectory);
         size += (uint)(ByNames.Count + ByIds.Count) * (uint)sizeof(RawImageResourceDirectoryEntry);
-
-        if (ByNames.Count > 0)
-        {
-            var byNames = CollectionsMarshal.AsSpan(ByNames);
-            foreach (ref readonly var entry in byNames)
-            {
-                size += sizeof(ushort) + (uint)entry.Name.Length * 2;
-            }
-        }
 
         return size;
     }

@@ -15,5 +15,9 @@ public abstract class PEResourceEntry : PESectionData
     
     internal abstract void Read(in ReaderContext context);
 
-    internal readonly record struct ReaderContext(PEImageReader Reader, PEResourceDirectory Directory, List<PEResourceData> ResourceDataList);
+    internal abstract void Write(in WriterContext context);
+
+    internal readonly record struct ReaderContext(PEImageReader Reader, PEResourceDirectory Directory, List<PEResourceString> Strings, List<PEResourceEntry> Entries);
+
+    internal readonly record struct WriterContext(PEImageWriter Writer, PEResourceDirectory Directory);
 }

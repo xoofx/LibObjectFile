@@ -32,29 +32,6 @@ public sealed class PEExportDirectory : PEDataDirectory
 
     public PEExportOrdinalTable? ExportOrdinalTable { get; set; }
 
-    protected override unsafe uint ComputeHeaderSize(PELayoutContext context)
-    {
-        return (uint)sizeof(RawImageExportDirectory);
-    }
-
-    internal override IEnumerable<PEObjectBase> CollectImplicitSectionDataList()
-    {
-        if (ExportFunctionAddressTable is not null)
-        {
-            yield return ExportFunctionAddressTable;
-        }
-
-        if (ExportNameTable is not null)
-        {
-            yield return ExportNameTable;
-        }
-
-        if (ExportOrdinalTable is not null)
-        {
-            yield return ExportOrdinalTable;
-        }
-    }
-
     public override unsafe void Read(PEImageReader reader)
     {
         reader.Position = Position;
@@ -164,8 +141,8 @@ public sealed class PEExportDirectory : PEDataDirectory
             MinorVersion = MinorVersion,
             Base = OrdinalBase,
             Name = NameLink.RVA(),
-            NumberOfFunctions = (uint)ExportFunctionAddressTable!.Values.Count,
-            NumberOfNames = (uint)ExportNameTable!.Values.Count,
+            NumberOfFunctions = (uint)(ExportFunctionAddressTable?.Values.Count ?? 0),
+            NumberOfNames = (uint)(ExportNameTable?.Values.Count ?? 0),
             AddressOfFunctions = (RVA)(uint)(ExportFunctionAddressTable?.RVA ?? (RVA)0),
             AddressOfNames = (RVA)(uint)(ExportNameTable?.RVA ?? 0),
             AddressOfNameOrdinals = (RVA)(uint)(ExportOrdinalTable?.RVA ?? 0)
@@ -173,6 +150,30 @@ public sealed class PEExportDirectory : PEDataDirectory
 
         writer.Write(exportDirectory);
     }
+
+    protected override unsafe uint ComputeHeaderSize(PELayoutContext context)
+    {
+        return (uint)sizeof(RawImageExportDirectory);
+    }
+
+    internal override IEnumerable<PEObjectBase> CollectImplicitSectionDataList()
+    {
+        if (ExportFunctionAddressTable is not null)
+        {
+            yield return ExportFunctionAddressTable;
+        }
+
+        if (ExportNameTable is not null)
+        {
+            yield return ExportNameTable;
+        }
+
+        if (ExportOrdinalTable is not null)
+        {
+            yield return ExportOrdinalTable;
+        }
+    }
+
 
     private struct RawImageExportDirectory
     {

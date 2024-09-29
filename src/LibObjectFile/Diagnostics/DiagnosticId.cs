@@ -194,4 +194,5 @@ public enum DiagnosticId
     PE_ERR_InvalidResourceDirectory = 4000,
     PE_ERR_InvalidResourceDirectoryEntry = 4001,
     PE_ERR_InvalidResourceDirectoryEntryRVAOffsetToData = 4002,
+    PE_ERR_InvalidResourceString = 4003,
 }

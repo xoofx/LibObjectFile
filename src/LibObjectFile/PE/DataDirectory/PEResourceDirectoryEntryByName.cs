@@ -9,4 +9,4 @@ namespace LibObjectFile.PE;
 /// </summary>
 /// <param name="Name">The name of the resource directory entry.</param>
 /// <param name="Entry">The resource entry associated with the name.</param>
-public readonly record struct PEResourceDirectoryEntryByName(string Name, PEResourceEntry Entry);
+public readonly record struct PEResourceDirectoryEntryByName(PEResourceString Name, PEResourceEntry Entry);
