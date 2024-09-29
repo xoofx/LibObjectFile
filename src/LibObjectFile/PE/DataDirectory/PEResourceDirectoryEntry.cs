@@ -9,6 +9,7 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
+using LibObjectFile.Collections;
 
 namespace LibObjectFile.PE;
 
@@ -126,21 +127,15 @@ public sealed class PEResourceDirectoryEntry : PEResourceEntry
         {
             // Read the string
             var length = reader.ReadU16() * 2;
-            var buffer = ArrayPool<byte>.Shared.Rent(length);
-            try
+            using var pooledSpan = PooledSpan<byte>.Create(length, out var span);
+
+            int readLength = reader.Read(span);
+            if (readLength != length)
             {
-                int readLength = reader.Read(buffer, 0, length);
-                if (readLength != length)
-                {
-                    reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidResourceDirectoryEntry, $"Invalid resource directory string at position {reader.Position}");
-                    return;
-                }
-                name = Encoding.Unicode.GetString(buffer, 0, readLength);
+                reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidResourceDirectoryEntry, $"Invalid resource directory string at position {reader.Position}");
+                return;
             }
-            finally
-            {
-                ArrayPool<byte>.Shared.Return(buffer);
-            }
+            name = Encoding.Unicode.GetString(span);
         }
         else
         {

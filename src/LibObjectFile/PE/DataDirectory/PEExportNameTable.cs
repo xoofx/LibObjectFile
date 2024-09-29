@@ -6,6 +6,7 @@ using System;
 using System.Buffers;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using LibObjectFile.Collections;
 using LibObjectFile.Diagnostics;
 
 namespace LibObjectFile.PE;
@@ -33,40 +34,33 @@ public sealed class PEExportNameTable : PESectionData
     public override unsafe void Read(PEImageReader reader)
     {
         reader.Position = Position;
-        var buffer = ArrayPool<byte>.Shared.Rent(sizeof(RVA) * Values.Count);
-        var span = buffer.AsSpan(0, sizeof(RVA) * Values.Count);
-        var spanRva = MemoryMarshal.Cast<byte, RVA>(span);
-        try
+        using var pooledSpan = PooledSpan<RVA>.Create(Values.Count, out var spanRva);
+        var span = pooledSpan.AsBytes;
+
+        int read = reader.Read(span);
+        if (read != span.Length)
         {
-            int read = reader.Read(buffer.AsSpan(0, sizeof(RVA) * Values.Count));
-            if (read != sizeof(RVA) * Values.Count)
+            reader.Diagnostics.Error(DiagnosticId.CMN_ERR_UnexpectedEndOfFile, $"Unable to read Export Name Table");
+            return;
+        }
+
+        for (int i = 0; i < Values.Count; i++)
+        {
+            var rva = spanRva[i];
+            if (!reader.File.TryFindContainerByRVA(rva, out var sectionData))
             {
-                reader.Diagnostics.Error(DiagnosticId.CMN_ERR_UnexpectedEndOfFile, $"Unable to read Export Name Table");
+                reader.Diagnostics.Error(DiagnosticId.PE_ERR_ExportNameTableInvalidRVA, $"Unable to find the section data for RVA {rva}");
                 return;
             }
 
-            for (int i = 0; i < Values.Count; i++)
+            var streamSectionData = sectionData as PEStreamSectionData;
+            if (streamSectionData is null)
             {
-                var rva = spanRva[i];
-                if (!reader.File.TryFindContainerByRVA(rva, out var sectionData))
-                {
-                    reader.Diagnostics.Error(DiagnosticId.PE_ERR_ExportNameTableInvalidRVA, $"Unable to find the section data for RVA {rva}");
-                    return;
-                }
-
-                var streamSectionData = sectionData as PEStreamSectionData;
-                if (streamSectionData is null)
-                {
-                    reader.Diagnostics.Error(DiagnosticId.PE_ERR_ExportNameTableInvalidRVA, $"The section data for RVA {rva} is not a stream section data");
-                    return;
-                }
-
-                Values[i] = new PEAsciiStringLink(streamSectionData, rva - streamSectionData.RVA);
+                reader.Diagnostics.Error(DiagnosticId.PE_ERR_ExportNameTableInvalidRVA, $"The section data for RVA {rva} is not a stream section data");
+                return;
             }
-        }
-        finally
-        {
-            ArrayPool<byte>.Shared.Return(buffer);
+
+            Values[i] = new PEAsciiStringLink(streamSectionData, rva - streamSectionData.RVA);
         }
     }
 

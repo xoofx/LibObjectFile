@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -6,6 +6,7 @@ using System;
 using System.Buffers;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using LibObjectFile.Collections;
 using LibObjectFile.Diagnostics;
 using LibObjectFile.PE.Internal;
 
@@ -133,26 +134,19 @@ internal readonly struct PEImportFunctionTable()
 
     private unsafe void Write32(PEImageWriter writer)
     {
-        var buffer = ArrayPool<byte>.Shared.Rent(Entries.Count * sizeof(RawImportFunctionEntry32));
-        try
+        using var pooledSpan = PooledSpan<RawImportFunctionEntry32>.Create(Entries.Count, out var span);
+        
+        for (var i = 0; i < Entries.Count; i++)
         {
-            var span = MemoryMarshal.Cast<byte, RawImportFunctionEntry32>(buffer.AsSpan(0, (Entries.Count + 1) * sizeof(RawImportFunctionEntry32)));
-            for (var i = 0; i < Entries.Count; i++)
-            {
-                var entry = Entries[i];
-                var va = entry.HintName.RVA();
-                span[i] = new RawImportFunctionEntry32(entry.IsImportByOrdinal ? 0x8000_0000U | entry.Ordinal : va);
-            }
-
-            // Last entry is null terminator
-            span[^1] = default;
-
-            writer.Write(MemoryMarshal.AsBytes(span));
+            var entry = Entries[i];
+            var va = entry.HintName.RVA();
+            span[i] = new RawImportFunctionEntry32(entry.IsImportByOrdinal ? 0x8000_0000U | entry.Ordinal : va);
         }
-        finally
-        {
-            ArrayPool<byte>.Shared.Return(buffer);
-        }
+
+        // Last entry is null terminator
+        span[^1] = default;
+
+        writer.Write(pooledSpan);
     }
 
     private unsafe void Write64(PEImageWriter writer)

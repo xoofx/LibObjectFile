@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -8,6 +8,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
+using LibObjectFile.Collections;
 
 namespace LibObjectFile.PE;
 
@@ -83,49 +84,30 @@ public static class PESectionDataExtensions
         {
             maxLength++;
         }
-        
-        if (maxLength > 256)
+
+        using var pooledSpan = PooledSpan<byte>.Create(maxLength + (isHint ? 2 : 0), out var span);
+
+        var text = span;
+
+        if (isHint)
         {
-            var array = ArrayPool<byte>.Shared.Rent(maxLength + (isHint ? 2 : 0));
-            try
-            {
-                WriteString(stream, array, isHint, hint, value);
-            }
-            finally
-            {
-                ArrayPool<byte>.Shared.Return(array);
-            }
-        }
-        else
-        {
-            Span<byte> buffer = stackalloc byte[258];
-            WriteString(stream, buffer, isHint, hint, value);
+            MemoryMarshal.Write(span, hint);
+            text = span.Slice(2);
         }
 
-        static void WriteString(Stream stream, Span<byte> buffer, bool isHint, ushort hint, string value)
+        int actualLength = Encoding.ASCII.GetBytes(value, text);
+        text[actualLength] = 0;
+        if ((actualLength & 1) != 0)
         {
-            var text = buffer;
-
-            if (isHint)
-            {
-                MemoryMarshal.Write(buffer, hint);
-                text = buffer.Slice(2);
-            }
-
-            int actualLength = Encoding.ASCII.GetBytes(value, text);
-            text[actualLength] = 0;
-            if ((actualLength & 1) != 0)
-            {
-                actualLength++;
-            }
-
-            if (isHint)
-            {
-                actualLength += 2;
-            }
-
-            stream.Write(buffer.Slice(0, actualLength));
+            actualLength++;
         }
+
+        if (isHint)
+        {
+            actualLength += 2;
+        }
+
+        stream.Write(span.Slice(0, actualLength));
     }
 
     private static string ReadAsciiStringInternal(Stream stream, bool isHint, out ushort hint)

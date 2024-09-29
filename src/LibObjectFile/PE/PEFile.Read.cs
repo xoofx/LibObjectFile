@@ -231,15 +231,14 @@ partial class PEFile
         }
 
         // Read Directory headers
-        using var pooledSpanDirectories = PooledSpan<RawImageDataDirectory>.Create(stackalloc byte[16 * sizeof(RawImageDataDirectory)], (int)OptionalHeader.NumberOfRvaAndSizes);
-        var directories = pooledSpanDirectories.Span;
+        using var pooledSpanDirectories = PooledSpan<RawImageDataDirectory>.Create(stackalloc byte[16 * sizeof(RawImageDataDirectory)], (int)OptionalHeader.NumberOfRvaAndSizes, out var rawDirectories);
 
         // Sets the number of entries in the data directory
         Directories.Count = (int)OptionalHeader.NumberOfRvaAndSizes;
 
         if (OptionalHeader.NumberOfRvaAndSizes > 0)
         {
-            var span = MemoryMarshal.AsBytes(directories);
+            var span = MemoryMarshal.AsBytes(rawDirectories);
             read = reader.Read(span);
             if (read != span.Length)
             {
@@ -253,17 +252,17 @@ partial class PEFile
         
         Debug.Assert(Unsafe.SizeOf<RawImageSectionHeader>() == 40);
 
-        using var pooledSpanSections = PooledSpan<RawImageSectionHeader>.Create((int)CoffHeader.NumberOfSections);
-        read = reader.Read(pooledSpanSections.SpanAsBytes);
+        using var pooledSpanSections = PooledSpan<RawImageSectionHeader>.Create((int)CoffHeader.NumberOfSections, out var rawSections);
+        read = reader.Read(pooledSpanSections.AsBytes);
 
-        if (read != pooledSpanSections.SpanAsBytes.Length)
+        if (read != pooledSpanSections.AsBytes.Length)
         {
             diagnostics.Error(DiagnosticId.PE_ERR_InvalidSectionHeadersSize, "Invalid section headers");
             return;
         }
 
         // Read all sections and directories
-        ReadSectionsAndDirectories(reader, pooledSpanSections.Span, pooledSpanDirectories.Span);
+        ReadSectionsAndDirectories(reader, rawSections, rawDirectories);
 
         // Set the size to the full size of the file
         Size = reader.Length;

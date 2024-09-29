@@ -7,6 +7,7 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using LibObjectFile.Collections;
 using LibObjectFile.Diagnostics;
 using LibObjectFile.PE.Internal;
 
@@ -27,11 +28,10 @@ public sealed class PEDebugDirectory : PEDataDirectory
 
         var entryCount = size / sizeof(RawImageDebugDirectory);
 
-        var buffer = ArrayPool<byte>.Shared.Rent(size);
-        try
+        // Scope the pooled span to ensure it is returned to the pool as soon as possible
         {
-            var span = buffer.AsSpan(0, size);
-            var entries = MemoryMarshal.Cast<byte, RawImageDebugDirectory>(span);
+            using var pooledSpan = PooledSpan<RawImageDebugDirectory>.Create(entryCount, out var entries);
+            Span<byte> span = pooledSpan;
 
             reader.Position = Position;
             int read = reader.Read(span);
@@ -97,10 +97,6 @@ public sealed class PEDebugDirectory : PEDataDirectory
                 Entries.Add(entry);
             }
         }
-        finally
-        {
-            ArrayPool<byte>.Shared.Return(buffer);
-        }
 
         // Read the data associated with the debug directory entries
         foreach (var entry in Entries)
@@ -133,48 +129,38 @@ public sealed class PEDebugDirectory : PEDataDirectory
         }
     }
     
-    public override unsafe void Write(PEImageWriter writer)
+    public override void Write(PEImageWriter writer)
     {
         var entries = CollectionsMarshal.AsSpan(Entries);
-        var rawBufferSize = sizeof(RawImageDebugDirectory) * entries.Length;
-        var rawBuffer = ArrayPool<byte>.Shared.Rent(rawBufferSize);
-        try
+        using var pooledSpan = PooledSpan<RawImageDebugDirectory>.Create(entries.Length, out var rawEntries);
+        
+        RawImageDebugDirectory rawEntry = default;
+        for (var i = 0; i < entries.Length; i++)
         {
-            var buffer = new Span<byte>(rawBuffer, 0, rawBufferSize);
-            var rawEntries = MemoryMarshal.Cast<byte, RawImageDebugDirectory>(buffer);
+            var entry = entries[i];
+            rawEntry.Characteristics = entry.Characteristics;
+            rawEntry.MajorVersion = entry.MajorVersion;
+            rawEntry.MinorVersion = entry.MinorVersion;
+            rawEntry.TimeDateStamp = entry.TimeDateStamp;
+            rawEntry.Type = entry.Type;
 
-            RawImageDebugDirectory rawEntry = default;
-            for (var i = 0; i < entries.Length; i++)
+            if (entry.SectionData is not null)
             {
-                var entry = entries[i];
-                rawEntry.Characteristics = entry.Characteristics;
-                rawEntry.MajorVersion = entry.MajorVersion;
-                rawEntry.MinorVersion = entry.MinorVersion;
-                rawEntry.TimeDateStamp = entry.TimeDateStamp;
-                rawEntry.Type = entry.Type;
-
-                if (entry.SectionData is not null)
-                {
-                    rawEntry.SizeOfData = (uint)entry.SectionData.Size;
-                    rawEntry.AddressOfRawData = (uint)entry.SectionData.RVA;
-                    rawEntry.PointerToRawData = 0;
-                }
-                else if (entry.ExtraData is not null)
-                {
-                    rawEntry.SizeOfData = (uint)entry.ExtraData.Size;
-                    rawEntry.AddressOfRawData = 0;
-                    rawEntry.PointerToRawData = (uint)entry.ExtraData.Position;
-                }
-
-                rawEntries[i] = rawEntry;
+                rawEntry.SizeOfData = (uint)entry.SectionData.Size;
+                rawEntry.AddressOfRawData = (uint)entry.SectionData.RVA;
+                rawEntry.PointerToRawData = 0;
+            }
+            else if (entry.ExtraData is not null)
+            {
+                rawEntry.SizeOfData = (uint)entry.ExtraData.Size;
+                rawEntry.AddressOfRawData = 0;
+                rawEntry.PointerToRawData = (uint)entry.ExtraData.Position;
             }
 
-            writer.Write(rawBuffer);
+            rawEntries[i] = rawEntry;
         }
-        finally
-        {
-            ArrayPool<byte>.Shared.Return(rawBuffer);
-        }
+
+        writer.Write(pooledSpan);
     }
 
     protected override unsafe uint ComputeHeaderSize(PELayoutContext context)

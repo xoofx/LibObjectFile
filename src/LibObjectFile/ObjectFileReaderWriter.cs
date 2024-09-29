@@ -212,7 +212,13 @@ public abstract class ObjectFileReaderWriter : VisitorContextBase
     /// </summary>
     /// <param name="buffer">The buffer to write</param>
     public void Write(ReadOnlySpan<byte> buffer) => Stream.Write(buffer);
-
+    
+    /// <summary>
+    /// Writes to the <see cref="Stream"/> and current position from the specified buffer.
+    /// </summary>
+    /// <param name="buffer">The buffer to write</param>
+    public void Write(Span<byte> buffer) => Stream.Write(buffer);
+    
     /// <summary>
     /// Writes an element of type <paramref name="{T}"/> to the stream.
     /// </summary>

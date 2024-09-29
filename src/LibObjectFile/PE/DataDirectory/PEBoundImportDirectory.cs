@@ -8,6 +8,7 @@ using System;
 using System.Buffers;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using LibObjectFile.Collections;
 
 namespace LibObjectFile.PE;
 
@@ -78,15 +79,13 @@ public sealed class PEBoundImportDirectory : PEDataDirectory
 
             if (rawEntry.NumberOfModuleForwarderRefs > 0)
             {
-                var size = sizeof(RawPEBoundImportForwarderRef) * rawEntry.NumberOfModuleForwarderRefs;
-                var buffer = ArrayPool<byte>.Shared.Rent(size);
-                var span = buffer.AsSpan(0, size);
-                var spanForwarderRef = MemoryMarshal.Cast<byte, RawPEBoundImportForwarderRef>(span);
+                using var pooledSpan = PooledSpan<RawPEBoundImportForwarderRef>.Create(rawEntry.NumberOfModuleForwarderRefs, out var spanForwarderRef);
+                var span = pooledSpan.AsBytes;
 
                 read = reader.Read(span);
-                if (read != size)
+                if (read != span.Length)
                 {
-                    diagnostics.Error(DiagnosticId.PE_ERR_BoundImportDirectoryInvalidEndOfStream, $"Unable to read the full content of the Bound Import Directory. Expected {size} bytes, but read {read} bytes");
+                    diagnostics.Error(DiagnosticId.PE_ERR_BoundImportDirectoryInvalidEndOfStream, $"Unable to read the full content of the Bound Import Directory. Expected {span.Length} bytes, but read {read} bytes");
                     return;
                 }
 

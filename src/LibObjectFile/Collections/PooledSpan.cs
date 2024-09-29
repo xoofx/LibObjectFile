@@ -44,12 +44,14 @@ public readonly ref struct PooledSpan<T> where T : unmanaged
     /// </summary>
     /// <param name="count">The number of elements in the span.</param>
     /// <returns>A new instance of the <see cref="PooledSpan{T}"/> struct.</returns>
-    public static unsafe PooledSpan<T> Create(int count)
+    public static unsafe PooledSpan<T> Create(int count, out Span<T> span)
     {
         ArgumentOutOfRangeException.ThrowIfLessThan(count, 0);
         var size = count * sizeof(T);
         var buffer = ArrayPool<byte>.Shared.Rent(size);
-        return new PooledSpan<T>(buffer, size);
+        var pooledSpan = new PooledSpan<T>(buffer, size);
+        span = pooledSpan.Span;
+        return pooledSpan;
     }
 
     /// <summary>
@@ -58,11 +60,18 @@ public readonly ref struct PooledSpan<T> where T : unmanaged
     /// <param name="stackSpan">The stack memory span.</param>
     /// <param name="count">The number of elements in the span.</param>
     /// <returns>A new instance of the <see cref="PooledSpan{T}"/> struct.</returns>
-    public static unsafe PooledSpan<T> Create(Span<byte> stackSpan, int count)
+    public static unsafe PooledSpan<T> Create(Span<byte> stackSpan, int count, out Span<T> span)
     {
         ArgumentOutOfRangeException.ThrowIfLessThan(count, 0);
         var size = count * sizeof(T);
-        return size <= stackSpan.Length ? new PooledSpan<T>(stackSpan, size) : Create(count);
+        if (size <= stackSpan.Length)
+        {
+            var pooledSpan = new PooledSpan<T>(stackSpan, size);
+            span = pooledSpan.Span;
+            return pooledSpan;
+        }
+
+        return Create(count, out span);
     }
 
     /// <summary>
@@ -73,7 +82,7 @@ public readonly ref struct PooledSpan<T> where T : unmanaged
     /// <summary>
     /// Gets the span of elements as bytes.
     /// </summary>
-    public Span<byte> SpanAsBytes => MemoryMarshal.AsBytes(_span);
+    public Span<byte> AsBytes => MemoryMarshal.AsBytes(_span);
 
     /// <summary>
     /// Releases the underlying memory buffer if it was allocated on the heap.
@@ -86,4 +95,16 @@ public readonly ref struct PooledSpan<T> where T : unmanaged
             ArrayPool<byte>.Shared.Return(buffer);
         }
     }
+
+    /// <summary>
+    /// Gets the span of elements.
+    /// </summary>
+    /// <param name="pooledSpan">The pooled span to convert.</param>
+    public static implicit operator Span<T>(PooledSpan<T> pooledSpan) => pooledSpan.Span;
+    
+    /// <summary>
+    /// Gets the span of elements as a span of bytes.
+    /// </summary>
+    /// <param name="pooledSpan">The pooled span to convert.</param>
+    public static implicit operator Span<byte>(PooledSpan<T> pooledSpan) => pooledSpan.AsBytes;
 }

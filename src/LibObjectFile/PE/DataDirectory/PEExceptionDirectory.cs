@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection.PortableExecutable;
 using System.Runtime.InteropServices;
+using LibObjectFile.Collections;
 using LibObjectFile.Diagnostics;
 using LibObjectFile.PE.Internal;
 
@@ -116,11 +117,8 @@ public sealed class PEExceptionDirectory : PEDataDirectory
 
 
         reader.Position = Position;
-
-        var buffer = ArrayPool<byte>.Shared.Rent((int)size);
-        try
         {
-            var span = buffer.AsSpan().Slice(0, (int)size);
+            using var pooledSpan = PooledSpan<byte>.Create((int)size, out var span);
             int read = reader.Read(span);
             if (read != size)
             {
@@ -139,10 +137,6 @@ public sealed class PEExceptionDirectory : PEDataDirectory
                     ReadEntriesArm(MemoryMarshal.Cast<byte, RawExceptionFunctionEntryARM>(span));
                     break;
             }
-        }
-        finally
-        {
-            ArrayPool<byte>.Shared.Return(buffer);
         }
 
         var headerSize = ComputeHeaderSize(reader);
