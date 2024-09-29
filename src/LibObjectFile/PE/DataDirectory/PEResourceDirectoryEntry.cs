@@ -123,45 +123,50 @@ public sealed class PEResourceDirectoryEntry : PEResourceEntry
         }
     }
 
-    internal override unsafe void Write(in WriterContext context)
+    public override unsafe void Write(PEImageWriter writer)
     {
         var size = Size;
         Debug.Assert(size == CalculateSize());
+        var directory = (PEResourceDirectory)Parent!;
 
-        using var tempSpan = TempSpan<byte>.Create((int)size, out var span);
-
-
-        ref var rawResourceDirectory = ref Unsafe.As<byte, RawImageResourceDirectory>(ref MemoryMarshal.GetReference(span));
-
-        rawResourceDirectory.Characteristics = Characteristics;
-        rawResourceDirectory.TimeDateStamp = (uint)(TimeDateStamp - DateTime.UnixEpoch).TotalSeconds;
-        rawResourceDirectory.MajorVersion = MajorVersion;
-        rawResourceDirectory.MinorVersion = MinorVersion;
-        rawResourceDirectory.NumberOfNamedEntries = (ushort)ByNames.Count;
-        rawResourceDirectory.NumberOfIdEntries = (ushort)ByIds.Count;
-
-        var rawEntries = MemoryMarshal.Cast<byte, RawImageResourceDirectoryEntry>(span.Slice(sizeof(RawImageResourceDirectory), (ByNames.Count + ByIds.Count) * sizeof(RawImageResourceDirectoryEntry)));
-
-        var directoryPosition = context.Directory.Position;
-
+        // Write the content directory
         var byNames = CollectionsMarshal.AsSpan(ByNames);
-        for (int i = 0; i < byNames.Length; i++)
-        {
-            ref var rawEntry = ref rawEntries[i];
-            var entry = byNames[i];
-
-            rawEntry.NameOrId = IMAGE_RESOURCE_NAME_IS_STRING | (uint)(entry.Name.Position - directoryPosition);
-            rawEntry.OffsetToDataOrDirectoryEntry = (uint)(entry.Entry.Position - directoryPosition);
-        }
-        
         var byIds = CollectionsMarshal.AsSpan(ByIds);
-        for (int i = 0; i < byIds.Length; i++)
         {
-            ref var rawEntry = ref rawEntries[byNames.Length + i];
-            var entry = byIds[i];
+            using var tempSpan = TempSpan<byte>.Create((int)size, out var span);
 
-            rawEntry.NameOrId = (uint)entry.Id.Value;
-            rawEntry.OffsetToDataOrDirectoryEntry = IMAGE_RESOURCE_DATA_IS_DIRECTORY | (uint)(entry.Entry.Position - directoryPosition);
+            ref var rawResourceDirectory = ref Unsafe.As<byte, RawImageResourceDirectory>(ref MemoryMarshal.GetReference(span));
+
+            rawResourceDirectory.Characteristics = Characteristics;
+            rawResourceDirectory.TimeDateStamp = (uint)(TimeDateStamp - DateTime.UnixEpoch).TotalSeconds;
+            rawResourceDirectory.MajorVersion = MajorVersion;
+            rawResourceDirectory.MinorVersion = MinorVersion;
+            rawResourceDirectory.NumberOfNamedEntries = (ushort)ByNames.Count;
+            rawResourceDirectory.NumberOfIdEntries = (ushort)ByIds.Count;
+
+            var rawEntries = MemoryMarshal.Cast<byte, RawImageResourceDirectoryEntry>(span.Slice(sizeof(RawImageResourceDirectory), (ByNames.Count + ByIds.Count) * sizeof(RawImageResourceDirectoryEntry)));
+
+            var directoryPosition = directory.Position;
+
+            for (int i = 0; i < byNames.Length; i++)
+            {
+                ref var rawEntry = ref rawEntries[i];
+                var entry = byNames[i];
+
+                rawEntry.NameOrId = IMAGE_RESOURCE_NAME_IS_STRING | (uint)(entry.Name.Position - directoryPosition);
+                rawEntry.OffsetToDataOrDirectoryEntry = (uint)(entry.Entry.Position - directoryPosition);
+            }
+
+            for (int i = 0; i < byIds.Length; i++)
+            {
+                ref var rawEntry = ref rawEntries[byNames.Length + i];
+                var entry = byIds[i];
+
+                rawEntry.NameOrId = (uint)entry.Id.Value;
+                rawEntry.OffsetToDataOrDirectoryEntry = IMAGE_RESOURCE_DATA_IS_DIRECTORY | (uint)(entry.Entry.Position - directoryPosition);
+            }
+
+            writer.Write(span);
         }
     }
     

@@ -52,6 +52,11 @@ public sealed class PEResourceDataEntry : PEResourceEntry
     /// </remarks>
     public PEResourceData Data { get; set; }
 
+    /// <summary>
+    /// Gets or sets the reserved field.
+    /// </summary>
+    public uint Reserved { get; set; }
+
     protected override bool PrintMembers(StringBuilder builder)
     {
         if (base.PrintMembers(builder))
@@ -83,6 +88,7 @@ public sealed class PEResourceDataEntry : PEResourceEntry
         }
         
         CodePage = rawDataEntry.CodePage != 0 ? Encoding.GetEncoding((int)rawDataEntry.CodePage) : null;
+        Reserved = rawDataEntry.Reserved;
 
         var peFile = context.Reader.File;
         if (!peFile.TryFindSection(rawDataEntry.OffsetToData, out var section))
@@ -98,15 +104,14 @@ public sealed class PEResourceDataEntry : PEResourceEntry
         };
     }
 
-    internal override void Write(in WriterContext context) => Write(context.Writer);
-    
     public override void Write(PEImageWriter writer)
     {
         var rawDataEntry = new RawImageResourceDataEntry
         {
-            CodePage = (uint)(CodePage?.CodePage ?? 0),
             OffsetToData = Data.RVA,
             Size = (uint)Data.Size,
+            CodePage = (uint)(CodePage?.CodePage ?? 0),
+            Reserved = Reserved,
         };
 
         writer.Write(rawDataEntry);

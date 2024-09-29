@@ -12,58 +12,38 @@ namespace LibObjectFile.PE;
 /// A base relocation in a Portable Executable (PE) image.
 /// </summary>
 [DebuggerDisplay("{ToString(),nq}")]
-public readonly record struct PEBaseRelocation(PEBaseRelocationType Type, PESectionData? Container, RVO RVO) : IPELink<PESectionData>
+public readonly struct PEBaseRelocation
 {
-    /// <summary>
-    /// Gets a value indicating whether the base relocation is zero padding.
-    /// </summary>
-    public bool IsZero => Type == PEBaseRelocationType.Absolute;
+    public const ushort MaxVirtualOffset = (1 << 12) - 1;
+    private const ushort TypeMask = unchecked((ushort)~MaxVirtualOffset);
+    private const ushort VirtualOffsetMask = MaxVirtualOffset;
 
-    /// <summary>
-    /// Reads the address from the section data.
-    /// </summary>
-    /// <param name="file">The PE file.</param>
-    /// <returns>The address read from the section data.</returns>
-    /// <exception cref="InvalidOperationException">The section data link is not set or the type is not supported.</exception>
-    public ulong ReadAddress(PEFile file)
+    private readonly ushort _value;
+
+    public PEBaseRelocation(ushort value)
     {
-        if (Container is null)
-        {
-            throw new InvalidOperationException("The section data link is not set");
-        }
-
-        if (Type != PEBaseRelocationType.Dir64)
-        {
-            throw new InvalidOperationException($"The base relocation type {Type} not supported. Only Dir64 is supported for this method.");
-        }
-        
-        if (file.IsPE32)
-        {
-            VA32 va = default;
-            var span = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref va, 1));
-
-            int read = Container!.ReadAt(RVO, span);
-            if (read != 4)
-            {
-                throw new InvalidOperationException($"Unable to read the VA32 from the section data type: {Container.GetType().FullName}");
-            }
-
-            return va;
-        }
-        else
-        {
-            VA64 va = default;
-            var span = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref va, 1));
-
-            int read = Container!.ReadAt(RVO, span);
-            if (read != 8)
-            {
-                throw new InvalidOperationException($"Unable to read the VA64 from the section data type: {Container.GetType().FullName}");
-            }
-
-            return va;
-        }
+        _value = value;
     }
 
-    public override string ToString() => Type == PEBaseRelocationType.Absolute ? $"{Type} Zero Padding" : $"{Type} {this.ToDisplayTextWithRVA()}";
+    public PEBaseRelocation(PEBaseRelocationType type, ushort offsetInBlock)
+    {
+        _value = (ushort)((ushort)type | (offsetInBlock & VirtualOffsetMask));
+    }
+    
+    /// <summary>
+    /// Gets a value indicating whether the base relocation is zero (used for padding).
+    /// </summary>
+    public bool IsZero => _value == 0;
+
+    /// <summary>
+    /// Gets the type of the base relocation.
+    /// </summary>
+    public PEBaseRelocationType Type => (PEBaseRelocationType)(_value & TypeMask);
+
+    /// <summary>
+    /// Gets the virtual offset of the base relocation relative to the offset of the associated <see cref="PEBaseRelocationBlock"/>.
+    /// </summary>
+    public ushort OffsetInBlock => (ushort)(_value & VirtualOffsetMask);
+
+    public override string ToString() => Type == PEBaseRelocationType.Absolute ? $"{Type} Zero Padding" : $"{Type} OffsetInBlock = 0x{OffsetInBlock:X}";
 }

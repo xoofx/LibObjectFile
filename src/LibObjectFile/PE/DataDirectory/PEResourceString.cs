@@ -81,4 +81,13 @@ public sealed class PEResourceString : PESectionData
         builder.Append($"Text = {Text}");
         return true;
     }
+    
+    /// <inheritdoc/>
+    protected override void ValidateParent(ObjectElement parent)
+    {
+        if (parent is not PEResourceDirectory)
+        {
+            throw new ArgumentException($"Invalid parent type {parent.GetType().FullName}. Expecting a parent of type {typeof(PEResourceDirectory).FullName}");
+        }
+    }
 }

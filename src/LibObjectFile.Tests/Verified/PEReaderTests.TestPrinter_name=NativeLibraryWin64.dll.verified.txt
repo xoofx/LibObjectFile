@@ -459,23 +459,25 @@ Sections
     [05]   .reloc PESection                        Position = 0x00002800, Size = 0x00000200, RVA = 0x00006000, VirtualSize = 0x0000002C, Characteristics = 0x42000040 (ContainsInitializedData, MemDiscardable, MemRead)
     
         [00] PEBaseRelocationDirectory        Position = 0x00002800, Size = 0x0000002C, RVA = 0x00006000, VirtualSize = 0x0000002C
-            Block 0x2000 Relocations[18]
-                [000] Dir64 Offset = 0x00E8, RVA = 0x20E8 (0x0000000180001B0C), SectionData = { RVA = 0x000020E8 (PEStreamSectionData[1] -> .rdata) }
-                [001] Dir64 Offset = 0x00F0, RVA = 0x20F0 (0x0000000180001B0C), SectionData = { RVA = 0x000020E8 (PEStreamSectionData[1] -> .rdata) }
-                [002] Dir64 Offset = 0x00F8, RVA = 0x20F8 (0x0000000180001E60), SectionData = { RVA = 0x000020E8 (PEStreamSectionData[1] -> .rdata) }
-                [003] Dir64 Offset = 0x0100, RVA = 0x2100 (0x0000000180001E80), SectionData = { RVA = 0x000020E8 (PEStreamSectionData[1] -> .rdata) }
-                [004] Dir64 Offset = 0x0108, RVA = 0x2108 (0x0000000180001E80), SectionData = { RVA = 0x000020E8 (PEStreamSectionData[1] -> .rdata) }
-                [005] Dir64 Offset = 0x0118, RVA = 0x2118 (0x0000000180001E3B), SectionData = { RVA = 0x000020E8 (PEStreamSectionData[1] -> .rdata) }
-                [006] Dir64 Offset = 0x0168, RVA = 0x2168 (0x0000000180003090), SectionData = { RVA = 0x000020E8 (PEStreamSectionData[1] -> .rdata) }
-                [007] Dir64 Offset = 0x0170, RVA = 0x2170 (0x0000000180003130), SectionData = { RVA = 0x000020E8 (PEStreamSectionData[1] -> .rdata) }
-                [008] Dir64 Offset = 0x01E8, RVA = 0x21E8 (0x0000000180003000), SectionData = { RVA = 0x00002190 (PELoadConfigDirectory64[2] -> .rdata) }
-                [009] Dir64 Offset = 0x0200, RVA = 0x2200 (0x00000001800020E8), SectionData = { RVA = 0x00002190 (PELoadConfigDirectory64[2] -> .rdata) }
-                [010] Dir64 Offset = 0x0208, RVA = 0x2208 (0x00000001800020F8), SectionData = { RVA = 0x00002190 (PELoadConfigDirectory64[2] -> .rdata) }
-                [011] Dir64 Offset = 0x0290, RVA = 0x2290 (0x0000000180002380), SectionData = { RVA = 0x00002190 (PELoadConfigDirectory64[2] -> .rdata) }
-                [012] Dir64 Offset = 0x02A8, RVA = 0x22A8 (0x00000001800020F0), SectionData = { RVA = 0x00002190 (PELoadConfigDirectory64[2] -> .rdata) }
-                [013] Dir64 Offset = 0x02B0, RVA = 0x22B0 (0x0000000180002100), SectionData = { RVA = 0x00002190 (PELoadConfigDirectory64[2] -> .rdata) }
-                [014] Dir64 Offset = 0x02B8, RVA = 0x22B8 (0x0000000180002108), SectionData = { RVA = 0x00002190 (PELoadConfigDirectory64[2] -> .rdata) }
-                [015] Dir64 Offset = 0x02C0, RVA = 0x22C0 (0x0000000180002110), SectionData = { RVA = 0x00002190 (PELoadConfigDirectory64[2] -> .rdata) }
-                [016] Dir64 Offset = 0x02C8, RVA = 0x22C8 (0x0000000180002118), SectionData = { RVA = 0x00002190 (PELoadConfigDirectory64[2] -> .rdata) }
-                [017] Absolute Zero padding
+            [00] PEBaseRelocationBlock            Position = 0x00002800, Size = 0x0000002C, RVA = 0x00006000, VirtualSize = 0x0000002C
+                Block 0x2000 Relocations[18]
+                    [000] Dir64 Offset = 0x00E8, RVA = 0x20E8 (0x0000000180001B0C), SectionData = { RVA = 0x000020E8 (PEStreamSectionData[1] -> .rdata) }
+                    [001] Dir64 Offset = 0x00F0, RVA = 0x20F0 (0x0000000180001B0C), SectionData = { RVA = 0x000020E8 (PEStreamSectionData[1] -> .rdata) }
+                    [002] Dir64 Offset = 0x00F8, RVA = 0x20F8 (0x0000000180001E60), SectionData = { RVA = 0x000020E8 (PEStreamSectionData[1] -> .rdata) }
+                    [003] Dir64 Offset = 0x0100, RVA = 0x2100 (0x0000000180001E80), SectionData = { RVA = 0x000020E8 (PEStreamSectionData[1] -> .rdata) }
+                    [004] Dir64 Offset = 0x0108, RVA = 0x2108 (0x0000000180001E80), SectionData = { RVA = 0x000020E8 (PEStreamSectionData[1] -> .rdata) }
+                    [005] Dir64 Offset = 0x0118, RVA = 0x2118 (0x0000000180001E3B), SectionData = { RVA = 0x000020E8 (PEStreamSectionData[1] -> .rdata) }
+                    [006] Dir64 Offset = 0x0168, RVA = 0x2168 (0x0000000180003090), SectionData = { RVA = 0x000020E8 (PEStreamSectionData[1] -> .rdata) }
+                    [007] Dir64 Offset = 0x0170, RVA = 0x2170 (0x0000000180003130), SectionData = { RVA = 0x000020E8 (PEStreamSectionData[1] -> .rdata) }
+                    [008] Dir64 Offset = 0x01E8, RVA = 0x21E8 (0x0000000180003000), SectionData = { RVA = 0x00002190 (PELoadConfigDirectory64[2] -> .rdata) }
+                    [009] Dir64 Offset = 0x0200, RVA = 0x2200 (0x00000001800020E8), SectionData = { RVA = 0x00002190 (PELoadConfigDirectory64[2] -> .rdata) }
+                    [010] Dir64 Offset = 0x0208, RVA = 0x2208 (0x00000001800020F8), SectionData = { RVA = 0x00002190 (PELoadConfigDirectory64[2] -> .rdata) }
+                    [011] Dir64 Offset = 0x0290, RVA = 0x2290 (0x0000000180002380), SectionData = { RVA = 0x00002190 (PELoadConfigDirectory64[2] -> .rdata) }
+                    [012] Dir64 Offset = 0x02A8, RVA = 0x22A8 (0x00000001800020F0), SectionData = { RVA = 0x00002190 (PELoadConfigDirectory64[2] -> .rdata) }
+                    [013] Dir64 Offset = 0x02B0, RVA = 0x22B0 (0x0000000180002100), SectionData = { RVA = 0x00002190 (PELoadConfigDirectory64[2] -> .rdata) }
+                    [014] Dir64 Offset = 0x02B8, RVA = 0x22B8 (0x0000000180002108), SectionData = { RVA = 0x00002190 (PELoadConfigDirectory64[2] -> .rdata) }
+                    [015] Dir64 Offset = 0x02C0, RVA = 0x22C0 (0x0000000180002110), SectionData = { RVA = 0x00002190 (PELoadConfigDirectory64[2] -> .rdata) }
+                    [016] Dir64 Offset = 0x02C8, RVA = 0x22C8 (0x0000000180002118), SectionData = { RVA = 0x00002190 (PELoadConfigDirectory64[2] -> .rdata) }
+                    [017] Absolute Zero padding
+            
         

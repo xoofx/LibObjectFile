@@ -134,7 +134,7 @@ public sealed class PEExceptionDirectory : PEDataDirectory
                     break;
                 case Machine.Arm:
                 case Machine.Arm64:
-                    ReadEntriesArm(MemoryMarshal.Cast<byte, RawExceptionFunctionEntryARM>(span));
+                    ReadEntriesARM(MemoryMarshal.Cast<byte, RawExceptionFunctionEntryARM>(span));
                     break;
             }
         }
@@ -197,7 +197,7 @@ public sealed class PEExceptionDirectory : PEDataDirectory
                 entryX86.EndAddress = new PESectionDataLink(endAddressSectionData, (uint)entryX86.EndAddress.RVO - endAddressSectionData.RVA);
                 entryX86.UnwindInfoAddress = new PESectionDataLink(unwindInfoAddressSectionData, (uint)entryX86.UnwindInfoAddress.RVO - unwindInfoAddressSectionData.RVA);
             }
-            else if (entry is PEExceptionFunctionEntryArm entryARM)
+            else if (entry is PEExceptionFunctionEntryARM entryARM)
             {
                 if (!peFile.TryFindContainerByRVA((RVA)(uint)entryARM.BeginAddress.RVO, out var beginAddressContainer))
                 {
@@ -230,7 +230,7 @@ public sealed class PEExceptionDirectory : PEDataDirectory
                 break;
             case Machine.Arm:
             case Machine.Arm64:
-                WriteArm(writer);
+                WriteARM(writer);
                 break;
             default:
                 // We don't write the exception directory for other architectures
@@ -240,37 +240,43 @@ public sealed class PEExceptionDirectory : PEDataDirectory
 
     private void WriteX86(PEImageWriter writer)
     {
-        foreach (var entry in Entries)
+        using var tempSpan = TempSpan<RawExceptionFunctionEntryX86>.Create(Entries.Count, out var span);
+        
+        for (var i = 0; i < Entries.Count; i++)
         {
+            var entry = Entries[i];
             var entryX86 = (PEExceptionFunctionEntryX86)entry;
-            writer.Write(new RawExceptionFunctionEntryX86
-            {
-                BeginAddress = (uint)entryX86.BeginAddress.RVA(),
-                EndAddress = (uint)entryX86.EndAddress.RVA(),
-                UnwindInfoAddress = (uint)entryX86.UnwindInfoAddress.RVA()
-            });
+            ref var rawEntry = ref span[i];
+            rawEntry.BeginAddress = (uint)entryX86.BeginAddress.RVA();
+            rawEntry.EndAddress = (uint)entryX86.EndAddress.RVA();
+            rawEntry.UnwindInfoAddress = (uint)entryX86.UnwindInfoAddress.RVA();
         }
+
+        writer.Write(tempSpan);
     }
 
-    private void WriteArm(PEImageWriter writer)
+    private void WriteARM(PEImageWriter writer)
     {
-        foreach (var entry in Entries)
+        using var tempSpan = TempSpan<RawExceptionFunctionEntryARM>.Create(Entries.Count, out var span);
+
+        for (var i = 0; i < Entries.Count; i++)
         {
-            var entryARM = (PEExceptionFunctionEntryArm)entry;
-            writer.Write(new RawExceptionFunctionEntryARM
-            {
-                BeginAddress = (uint)entryARM.BeginAddress.RVA(),
-                UnwindData = entryARM.UnwindData
-            });
+            var entry = Entries[i];
+            var entryArm = (PEExceptionFunctionEntryARM)entry;
+            ref var rawEntry = ref span[i];
+            rawEntry.BeginAddress = (uint)entryArm.BeginAddress.RVA();
+            rawEntry.UnwindData = entryArm.UnwindData;
         }
+
+        writer.Write(tempSpan);
     }
 
-    private void ReadEntriesArm(Span<RawExceptionFunctionEntryARM> rawEntries)
+    private void ReadEntriesARM(Span<RawExceptionFunctionEntryARM> rawEntries)
     {
         foreach (ref var rawEntry in rawEntries)
         {
             // Create entries with links to data but encode the RVO as the RVA until we bind it to the actual section data
-            var entry = new PEExceptionFunctionEntryArm(
+            var entry = new PEExceptionFunctionEntryARM(
                 new PESectionDataLink(PEStreamSectionData.Empty, (RVO)(uint)rawEntry.BeginAddress),
                 rawEntry.UnwindData
             );

@@ -125,8 +125,5 @@ public sealed class PEResourceDirectory : PEDataDirectory
     }
     
     /// <inheritdoc/>
-    public override void Write(PEImageWriter writer)
-    {
-        Root.Write(writer);
-    }
+    public override void Write(PEImageWriter writer) => Root.Write(writer);
 }

@@ -171,6 +171,7 @@ public enum DiagnosticId
     PE_ERR_BaseRelocationDirectoryInvalidSectionData = 3702,
     PE_ERR_InvalidDataDirectorySection = 3703,
     PE_ERR_BaseRelocationDirectoryInvalidVirtualAddress = 3704,
+    PE_ERR_BaseRelocationDirectoryInvalidSizeOfBlock = 3705,
     
     // PE Import
     PE_ERR_ImportDirectoryInvalidEndOfStream = 3800,

@@ -197,6 +197,9 @@ public static class PEPrinter
             case PEBaseRelocationDirectory peBaseRelocationDirectory:
                 Print(peBaseRelocationDirectory, ref writer);
                 break;
+            case PEBaseRelocationBlock baseRelocationBlock:
+                Print(baseRelocationBlock, ref writer);
+                break;
             case PEBoundImportDirectory peBoundImportDirectory:
                 Print(peBoundImportDirectory, ref writer);
                 break;
@@ -305,35 +308,42 @@ public static class PEPrinter
     
     private static void Print(PEBaseRelocationDirectory data, ref TextWriterIndenter writer)
     {
-        var peFile = data.GetPEFile()!;
-        foreach (var block in data.Blocks)
+    }
+
+    private static void Print(PEBaseRelocationBlock block, ref TextWriterIndenter writer)
+    {
+        var pageRVA = block.SectionLink.RVA();
+        writer.WriteLine($"Block {pageRVA} Relocations[{block.Relocations.Count}]");
+
+        var peFile = block.GetPEFile()!;
+
+        writer.Indent();
+        for (var i = 0; i < block.Relocations.Count; i++)
         {
-            var pageRVA = block.SectionLink.RVA();
-            writer.WriteLine($"Block {pageRVA} Relocations[{block.Relocations.Count}]");
+            var reloc = block.Relocations[i];
+            var relocRVA = block.GetRVA(reloc);
+            var offsetInPage = relocRVA - pageRVA;
 
-            writer.Indent();
-            for (var i = 0; i < block.Relocations.Count; i++)
+
+            var section = block.SectionLink.Container!;
+            section.TryFindSectionData(relocRVA, out var sectionData);
+            
+
+            if (reloc.Type == PEBaseRelocationType.Dir64)
             {
-                var reloc = block.Relocations[i];
-                var relocRVA = reloc.RVA();
-                var offsetInPage = relocRVA - pageRVA;
-
-                if (reloc.Type == PEBaseRelocationType.Dir64)
-                {
-                    writer.WriteLine($"[{i:000}] {reloc.Type} Offset = 0x{offsetInPage:X4}, RVA = {relocRVA} (0x{reloc.ReadAddress(peFile):X16}), SectionData = {{ {PELink(reloc.Container)} }}");
-                }
-                else if (reloc.Type == PEBaseRelocationType.Absolute)
-                {
-                    writer.WriteLine($"[{i:000}] {reloc.Type} Zero padding");
-                }
-                else
-                {
-                    writer.WriteLine($"[{i:000}] {reloc.Type} Offset = 0x{offsetInPage:X4}, RVA = {relocRVA}, SectionData = {{ {PELink(reloc.Container)} }}");
-                }
+                writer.WriteLine($"[{i:000}] {reloc.Type} Offset = 0x{offsetInPage:X4}, RVA = {relocRVA} (0x{block.ReadAddress(peFile, reloc):X16}), SectionData = {{ {PELink(sectionData)} }}");
             }
-
-            writer.Unindent();
+            else if (reloc.Type == PEBaseRelocationType.Absolute)
+            {
+                writer.WriteLine($"[{i:000}] {reloc.Type} Zero padding");
+            }
+            else
+            {
+                writer.WriteLine($"[{i:000}] {reloc.Type} Offset = 0x{offsetInPage:X4}, RVA = {relocRVA}, SectionData = {{ {PELink(sectionData)} }}");
+            }
         }
+
+        writer.Unindent();
     }
 
     private static void Print(PEBoundImportDirectory data, ref TextWriterIndenter writer)
@@ -391,7 +401,7 @@ public static class PEPrinter
             var entry = data.Entries[i];
             switch (entry)
             {
-                case PEExceptionFunctionEntryArm entryArm:
+                case PEExceptionFunctionEntryARM entryArm:
                     writer.WriteLine($"[{i}] Begin = {entry.BeginAddress.RVA()}");
                     writer.WriteLine($"[{i}] UnwindData = 0x{entryArm.UnwindData:X}");
                     break;

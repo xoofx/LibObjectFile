@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -7,14 +7,14 @@ namespace LibObjectFile.PE;
 /// <summary>
 /// Represents an ARM exception function entry in a Portable Executable (PE) file.
 /// </summary>
-public sealed class PEExceptionFunctionEntryArm : PEExceptionFunctionEntry
+public sealed class PEExceptionFunctionEntryARM : PEExceptionFunctionEntry
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="PEExceptionFunctionEntryArm"/> class with the specified begin address and unwind data.
+    /// Initializes a new instance of the <see cref="PEExceptionFunctionEntryARM"/> class with the specified begin address and unwind data.
     /// </summary>
     /// <param name="beginAddress">The begin address of the exception function entry.</param>
     /// <param name="unwindData">The unwind data.</param>
-    public PEExceptionFunctionEntryArm(PESectionDataLink beginAddress, uint unwindData) : base(beginAddress)
+    public PEExceptionFunctionEntryARM(PESectionDataLink beginAddress, uint unwindData) : base(beginAddress)
     {
         UnwindData = unwindData;
     }
