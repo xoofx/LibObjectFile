@@ -152,6 +152,26 @@ public sealed class PEBaseRelocationBlock : PESectionData
         Debug.Assert(Size == block.SizeOfBlock);
     }
 
+    public override unsafe void Write(PEImageWriter writer)
+    {
+        var block = new ImageBaseRelocation
+        {
+            PageRVA = SectionLink.RVA(),
+            SizeOfBlock = (uint)Size
+        };
+
+        writer.Write(block);
+
+        var span = CollectionsMarshal.AsSpan(Relocations);
+        var spanBytes = MemoryMarshal.AsBytes(span);
+        writer.Write(spanBytes);
+
+        if ((Relocations.Count & 1) != 0)
+        {
+            writer.WriteZero((int)sizeof(PEBaseRelocation));
+        }
+    }
+
     protected override bool PrintMembers(StringBuilder builder)
     {
         if (base.PrintMembers(builder))

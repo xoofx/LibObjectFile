@@ -86,7 +86,7 @@ public sealed class PEResourceDirectory : PEDataDirectory
             // Read the data
             resourceData.Read(reader);
 
-            isFirstDataEntry = true;
+            isFirstDataEntry = false;
         }
 
         HeaderSize = ComputeHeaderSize(reader);

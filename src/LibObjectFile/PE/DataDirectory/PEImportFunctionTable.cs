@@ -134,7 +134,7 @@ internal readonly struct PEImportFunctionTable()
 
     private unsafe void Write32(PEImageWriter writer)
     {
-        using var tempSpan = TempSpan<RawImportFunctionEntry32>.Create(Entries.Count, out var span);
+        using var tempSpan = TempSpan<RawImportFunctionEntry32>.Create(Entries.Count + 1, out var span);
         
         for (var i = 0; i < Entries.Count; i++)
         {
@@ -151,24 +151,16 @@ internal readonly struct PEImportFunctionTable()
 
     private unsafe void Write64(PEImageWriter writer)
     {
-        var buffer = ArrayPool<byte>.Shared.Rent(Entries.Count * sizeof(RawImportFunctionEntry64));
-        try
+        using var tempSpan = TempSpan<RawImportFunctionEntry64>.Create(Entries.Count + 1, out var span);
+        for (var i = 0; i < Entries.Count; i++)
         {
-            var span = MemoryMarshal.Cast<byte, RawImportFunctionEntry64>(buffer.AsSpan(0, (Entries.Count + 1) * sizeof(RawImportFunctionEntry64)));
-            for (var i = 0; i < Entries.Count; i++)
-            {
-                var entry = Entries[i];
-                var va = entry.HintName.RVA();
-                span[i] = new RawImportFunctionEntry64(entry.IsImportByOrdinal ? 0x8000_0000_0000_0000UL | entry.Ordinal : va);
-            }
-            // Last entry is null terminator
-            span[^1] = default;
+            var entry = Entries[i];
+            var va = entry.HintName.RVA();
+            span[i] = new RawImportFunctionEntry64(entry.IsImportByOrdinal ? 0x8000_0000_0000_0000UL | entry.Ordinal : va);
+        }
+        // Last entry is null terminator
+        span[^1] = default;
 
-            writer.Write(MemoryMarshal.AsBytes(span));
-        }
-        finally
-        {
-            ArrayPool<byte>.Shared.Return(buffer);
-        }
+        writer.Write(MemoryMarshal.AsBytes(span));
     }
 }

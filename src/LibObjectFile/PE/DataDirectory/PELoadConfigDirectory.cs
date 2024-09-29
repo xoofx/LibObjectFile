@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -21,12 +21,8 @@ public abstract class PELoadConfigDirectory : PERawDataDirectory
     {
     }
 
-    /// <summary>
-    /// Gets the config size.
-    /// </summary>
-    /// <remarks>
-    /// Use <see cref="SetConfigSize"/> to set the config size.
-    /// </remarks>
+
+    /// <inheritdoc />
     public sealed override int RawDataSize => (int)MemoryMarshal.Read<uint>(RawData);
     
     /// <summary>

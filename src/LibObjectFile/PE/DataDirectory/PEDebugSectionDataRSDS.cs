@@ -5,6 +5,7 @@
 using System;
 using System.Buffers;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using LibObjectFile.Collections;
@@ -18,6 +19,8 @@ namespace LibObjectFile.PE;
 [DebuggerDisplay("{ToString(),nq}")]
 public sealed class PEDebugSectionDataRSDS : PEDebugSectionData
 {
+    private const uint Signature = 0x53445352;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="PEDebugSectionDataRSDS"/> class.
     /// </summary>
@@ -57,7 +60,7 @@ public sealed class PEDebugSectionDataRSDS : PEDebugSectionData
         }
 
         var signature = MemoryMarshal.Read<uint>(span);
-        if (signature != 0x53445352)
+        if (signature != Signature)
         {
             reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidDebugDataRSDSSignature, $"Invalid signature for PEDebugDataRSDS");
             return;
@@ -74,7 +77,35 @@ public sealed class PEDebugSectionDataRSDS : PEDebugSectionData
         Guid = MemoryMarshal.Read<Guid>(span.Slice(4));
         Age = MemoryMarshal.Read<uint>(span.Slice(sizeof(uint) + sizeof(Guid)));
         PdbPath = System.Text.Encoding.UTF8.GetString(pdbPath.Slice(0, indexOfZero));
+
+        Debug.Assert(size == CalculateSize());
     }
+
+    public override unsafe void Write(PEImageWriter writer)
+    {
+        var size = (int)Size;
+        using var tempSpan = TempSpan<byte>.Create(size, out var span);
+
+        MemoryMarshal.Write(span, Signature);
+        span = span.Slice(sizeof(uint));
+        MemoryMarshal.Write(span, Guid);
+        span = span.Slice(sizeof(Guid));
+        MemoryMarshal.Write(span, Age);
+        span = span.Slice(sizeof(uint));
+        int written = Encoding.UTF8.GetBytes(PdbPath, span);
+        span[written] = 0;
+        span.Slice(written + 1);
+
+        writer.Write(tempSpan.AsBytes);
+    }
+
+    public override void UpdateLayout(PELayoutContext layoutContext)
+    {
+        Size = CalculateSize();
+    }
+
+    private unsafe uint CalculateSize()
+        => (uint)(sizeof(uint) + sizeof(Guid) + sizeof(uint) + Encoding.UTF8.GetByteCount(PdbPath) + 1);
 
     /// <inheritdoc />
     protected override bool PrintMembers(StringBuilder builder)

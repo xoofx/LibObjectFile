@@ -3,6 +3,7 @@
 // See the license.txt file in the project root for more information.
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Numerics;
 using System.Reflection.PortableExecutable;
@@ -10,6 +11,7 @@ using System.Runtime.InteropServices;
 using LibObjectFile.Diagnostics;
 using LibObjectFile.PE.Internal;
 using LibObjectFile.Utils;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LibObjectFile.PE;
 
@@ -64,6 +66,11 @@ partial class PEFile
         var context = new PELayoutContext(this, writer.Diagnostics);
         UpdateLayout(context);
 
+        // Set the size of the stream before writing to it.
+        // It will help to avoid resizing the stream
+        writer.Stream.SetLength((uint)Size);
+        writer.Stream.Position = 0;
+
         var position = 0U;
 
         // Update DOS header
@@ -93,7 +100,6 @@ partial class PEFile
         writer.Write(CoffHeader);
         position += (uint)sizeof(PECoffHeader);
 
-
         if (IsPE32)
         {
             RawImageOptionalHeader32 header32;
@@ -102,8 +108,9 @@ partial class PEFile
             header32.Common2 = OptionalHeader.OptionalHeaderCommonPart2;
             header32.Size32 = OptionalHeader.OptionalHeaderSize32;
             header32.Common3 = OptionalHeader.OptionalHeaderCommonPart3;
-            writer.Write(header32);
-            position += (uint)sizeof(RawImageOptionalHeader32);
+            var span = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref header32, 1)).Slice(0, RawImageOptionalHeader32.MinimumSize);
+            writer.Write(span);
+            position += (uint)span.Length;
         }
         else
         {
@@ -113,11 +120,11 @@ partial class PEFile
             header64.Common2 = OptionalHeader.OptionalHeaderCommonPart2;
             header64.Size64 = OptionalHeader.OptionalHeaderSize64;
             header64.Common3 = OptionalHeader.OptionalHeaderCommonPart3;
-            writer.Write(header64);
-            position += (uint)sizeof(RawImageOptionalHeader64);
+            var span = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref header64, 1)).Slice(0, RawImageOptionalHeader64.MinimumSize);
+            writer.Write(span);
+            position += (uint)span.Length;
         }
-
-
+        
         // Update directories
         Directories.Write(writer, ref position);
 
@@ -154,6 +161,9 @@ partial class PEFile
             for (var i = 0; i < span.Length; i++)
             {
                 var data = span[i];
+
+                Debug.Assert(data.Position == writer.Position);
+
                 if (data.Position != position)
                 {
                     writer.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Current position {position} for data Section[{i}] in {section} does not match expecting position {data.Position}");
@@ -174,6 +184,9 @@ partial class PEFile
 
             zeroSize = (int)(AlignHelper.AlignUp(position, writer.PEFile.OptionalHeader.FileAlignment) - position);
             writer.WriteZero(zeroSize);
+            position += (uint)zeroSize;
+
+            Debug.Assert(position == writer.Position);
         }
 
         // Data after sections

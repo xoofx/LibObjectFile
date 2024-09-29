@@ -6,21 +6,27 @@ using System;
 
 namespace LibObjectFile.PE;
 
+/// <summary>
+/// Represents the CLR metadata directory in a PE file.
+/// </summary>
 public sealed class PEClrMetadata : PEDataDirectory
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PEClrMetadata"/> class.
+    /// </summary>
     public PEClrMetadata() : base(PEDataDirectoryKind.ClrMetadata)
     {
     }
 
-    protected override uint ComputeHeaderSize(PELayoutContext context)
-    {
-        return 0;
-    }
+    /// <inheritdoc/>
+    protected override uint ComputeHeaderSize(PELayoutContext context) => 0;
 
+    /// <inheritdoc/>
     public override void Read(PEImageReader reader)
     {
     }
 
+    /// <inheritdoc/>
     public override void Write(PEImageWriter writer)
     {
     }

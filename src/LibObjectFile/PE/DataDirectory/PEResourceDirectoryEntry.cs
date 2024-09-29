@@ -155,6 +155,10 @@ public sealed class PEResourceDirectoryEntry : PEResourceEntry
 
                 rawEntry.NameOrId = IMAGE_RESOURCE_NAME_IS_STRING | (uint)(entry.Name.Position - directoryPosition);
                 rawEntry.OffsetToDataOrDirectoryEntry = (uint)(entry.Entry.Position - directoryPosition);
+                if (entry.Entry is PEResourceDirectoryEntry)
+                {
+                    rawEntry.OffsetToDataOrDirectoryEntry |= IMAGE_RESOURCE_DATA_IS_DIRECTORY;
+                }
             }
 
             for (int i = 0; i < byIds.Length; i++)
@@ -163,7 +167,11 @@ public sealed class PEResourceDirectoryEntry : PEResourceEntry
                 var entry = byIds[i];
 
                 rawEntry.NameOrId = (uint)entry.Id.Value;
-                rawEntry.OffsetToDataOrDirectoryEntry = IMAGE_RESOURCE_DATA_IS_DIRECTORY | (uint)(entry.Entry.Position - directoryPosition);
+                rawEntry.OffsetToDataOrDirectoryEntry = (uint)(entry.Entry.Position - directoryPosition);
+                if (entry.Entry is PEResourceDirectoryEntry)
+                {
+                    rawEntry.OffsetToDataOrDirectoryEntry |= IMAGE_RESOURCE_DATA_IS_DIRECTORY;
+                }
             }
 
             writer.Write(span);

@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using LibObjectFile.Collections;
 using LibObjectFile.PE.Internal;
 
 namespace LibObjectFile.PE;
@@ -191,17 +192,22 @@ public sealed class PEDirectoryTable : IEnumerable<PEDataDirectory>
     
     internal unsafe void Write(PEImageWriter writer, ref uint position)
     {
+        using var tempSpan = TempSpan<RawImageDataDirectory>.Create(stackalloc byte[16 * sizeof(RawImageDataDirectory)], Count, out var span);
+        span.Clear();
+
         for (int i = 0; i < Count; i++)
         {
-            RawImageDataDirectory rawDataDirectory = default;
             var entry = _entries[i];
             if (entry is not null)
             {
-                rawDataDirectory.RVA = entry is PEDataDirectory dataDirectory ? dataDirectory.RVA : (uint)entry.Position;
-                rawDataDirectory.Size = (uint)entry.Size;
+                ref var rawEntry = ref span[i];
+                rawEntry.RVA = entry is PEDataDirectory dataDirectory ? dataDirectory.RVA : (uint)entry.Position;
+                rawEntry.Size = (uint)entry.Size;
             }
         }
 
+        writer.Write(tempSpan);
+        
         position += (uint)(Count * sizeof(RawImageDataDirectory));
     }
 

@@ -3,6 +3,7 @@
 // See the license.txt file in the project root for more information.
 
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using LibObjectFile.Collections;
 using LibObjectFile.Utils;
@@ -86,7 +87,24 @@ public abstract class PECompositeSectionData : PESectionData
 
         foreach (var table in Content)
         {
+            var position = writer.Position;
+            var alignment = table.GetRequiredPositionAlignment(writer.PEFile);
+            if (alignment > 1)
+            {
+                var zeroSize = AlignHelper.AlignUp(position, alignment) - (uint)position;
+                writer.WriteZero((int)zeroSize);
+            }
+
+            Debug.Assert(table.Position == writer.Position);
+
             table.Write(writer);
+
+            alignment = table.GetRequiredSizeAlignment(writer.PEFile);
+            if (alignment > 1)
+            {
+                var zeroSize = AlignHelper.AlignUp((uint)table.Size, alignment) - table.Size;
+                writer.WriteZero((int)zeroSize);
+            }
         }
     }
     

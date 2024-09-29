@@ -134,10 +134,11 @@ public sealed class PEDebugDirectory : PEDataDirectory
         var entries = CollectionsMarshal.AsSpan(Entries);
         using var tempSpan = TempSpan<RawImageDebugDirectory>.Create(entries.Length, out var rawEntries);
         
-        RawImageDebugDirectory rawEntry = default;
         for (var i = 0; i < entries.Length; i++)
         {
             var entry = entries[i];
+            ref var rawEntry = ref rawEntries[i];
+
             rawEntry.Characteristics = entry.Characteristics;
             rawEntry.MajorVersion = entry.MajorVersion;
             rawEntry.MinorVersion = entry.MinorVersion;
@@ -147,14 +148,20 @@ public sealed class PEDebugDirectory : PEDataDirectory
             if (entry.SectionData is not null)
             {
                 rawEntry.SizeOfData = (uint)entry.SectionData.Size;
-                rawEntry.AddressOfRawData = (uint)entry.SectionData.RVA;
-                rawEntry.PointerToRawData = 0;
+                rawEntry.AddressOfRawData = entry.SectionData.RVA;
+                rawEntry.PointerToRawData = (uint)entry.SectionData.Position;
             }
             else if (entry.ExtraData is not null)
             {
                 rawEntry.SizeOfData = (uint)entry.ExtraData.Size;
                 rawEntry.AddressOfRawData = 0;
                 rawEntry.PointerToRawData = (uint)entry.ExtraData.Position;
+            }
+            else
+            {
+                rawEntry.SizeOfData = 0;
+                rawEntry.AddressOfRawData = 0;
+                rawEntry.PointerToRawData = 0;
             }
 
             rawEntries[i] = rawEntry;

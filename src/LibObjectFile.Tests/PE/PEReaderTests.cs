@@ -23,7 +23,8 @@ public partial class PEReaderTests
     public async Task TestPrinter(string name)
     {
 
-        await using var stream = File.OpenRead(Path.Combine(AppContext.BaseDirectory, "PE", name));
+        var sourceFile = Path.Combine(AppContext.BaseDirectory, "PE", name);
+        await using var stream = File.OpenRead(sourceFile);
         var peImage = PEFile.Read(stream);
         var afterReadWriter = new StringWriter();
         peImage.Print(afterReadWriter);
@@ -45,6 +46,23 @@ public partial class PEReaderTests
             TestContext.WriteLine("Error while verifying UpdateLayout");
             await Verifier.Verify(afterUpdateText).UseParameters(name).DisableRequireUniquePrefix();
         }
+
+        // Read in input as raw bytes
+        stream.Position = 0;
+        var inputBuffer = new byte[stream.Length];
+        stream.ReadExactly(inputBuffer);
+
+        // Write the PE back to a byte buffer
+        var output = new MemoryStream();
+        peImage.Write(output);
+        output.Position = 0;
+        var outputBuffer = output.ToArray();
+
+        //await Verifier.Verify(outputBuffer, sourceFile  sourceFile).
+        await File.WriteAllBytesAsync($"{sourceFile}.bak", outputBuffer);
+
+        // Compare the input and output buffer
+        CollectionAssert.AreEqual(inputBuffer, outputBuffer);
     }
 
     [TestMethod]

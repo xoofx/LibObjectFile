@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -92,8 +92,6 @@ public abstract class PEThunkAddressTable : PESectionData
 
     private protected void Write32(PEImageWriter writer, List<VA32> entries)
     {
-        writer.Position = Position;
-
         var span = CollectionsMarshal.AsSpan(entries);
         var bytes = MemoryMarshal.AsBytes(span);
         writer.Write(bytes);
@@ -102,8 +100,6 @@ public abstract class PEThunkAddressTable : PESectionData
 
     private protected void Write64(PEImageWriter writer, List<VA64> entries)
     {
-        writer.Position = Position;
-
         var span = CollectionsMarshal.AsSpan(entries);
         var bytes = MemoryMarshal.AsBytes(span);
         writer.Write(bytes);

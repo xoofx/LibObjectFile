@@ -2,17 +2,10 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
-using System;
-using System.Buffers;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Security.Cryptography;
-using System.Xml.Linq;
 using LibObjectFile.Collections;
 using LibObjectFile.Diagnostics;
-using static System.Collections.Specialized.BitVector32;
 
 namespace LibObjectFile.PE;
 
@@ -87,6 +80,14 @@ public sealed class PEExportAddressTable : PESectionData
 
     public override void Write(PEImageWriter writer)
     {
-        throw new NotImplementedException();
+        using var tempSpan = TempSpan<RVA>.Create(Values.Count, out var spanRva);
+
+        for (int i = 0; i < Values.Count; i++)
+        {
+            var value = Values[i];
+            spanRva[i] = value.IsForwarderRVA ? value.ForwarderRVA.RVA() : value.ExportRVA.RVA();
+        }
+
+        writer.Write(tempSpan);
     }
 }
