@@ -334,7 +334,7 @@ public sealed partial class PEFile : PEObjectBase
         position += (uint)(IsPE32 ? sizeof(RawImageOptionalHeader32) : sizeof(RawImageOptionalHeader64));
 
         // Update directories
-        position += (uint)(Directories.Count * sizeof(ImageDataDirectory));
+        position += (uint)(Directories.Count * sizeof(RawImageDataDirectory));
 
         // TODO: Additional optional header size?
 

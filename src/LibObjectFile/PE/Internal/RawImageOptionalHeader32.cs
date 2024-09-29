@@ -18,6 +18,6 @@ internal struct RawImageOptionalHeader32
     public RawImageOptionalHeaderCommonPart3 Common3;
     
     // In case of a PE Header with zero directories
-    public static unsafe int MinimumSize => sizeof(RawImageOptionalHeader32) - sizeof(ImageDataDirectoryArray);
+    public static unsafe int MinimumSize => sizeof(RawImageOptionalHeader32) - sizeof(RawImageDataDirectoryArray);
 }
 

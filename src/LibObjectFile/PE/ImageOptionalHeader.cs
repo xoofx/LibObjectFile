@@ -310,12 +310,6 @@ public struct ImageOptionalHeader
     {
         get => OptionalHeaderCommonPart3.NumberOfRvaAndSizes;
     }
-
-    /// <summary>
-    /// The data directories array, which contains the location and size of special tables in the file.
-    /// </summary>
-    [UnscopedRef]
-    public ref ImageDataDirectoryArray DataDirectory => ref OptionalHeaderCommonPart3.DataDirectory;
     
     internal void SyncPE32PlusToPE32()
     {

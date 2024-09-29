@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using LibObjectFile.PE.Internal;
 
 namespace LibObjectFile.PE;
 
@@ -192,7 +193,7 @@ public sealed class PEDirectoryTable : IEnumerable<PEDataDirectory>
     {
         for (int i = 0; i < Count; i++)
         {
-            ImageDataDirectory rawDataDirectory = default;
+            RawImageDataDirectory rawDataDirectory = default;
             var entry = _entries[i];
             if (entry is not null)
             {
@@ -201,7 +202,7 @@ public sealed class PEDirectoryTable : IEnumerable<PEDataDirectory>
             }
         }
 
-        position += (uint)(Count * sizeof(ImageDataDirectory));
+        position += (uint)(Count * sizeof(RawImageDataDirectory));
     }
 
     /// <summary>

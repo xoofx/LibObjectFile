@@ -180,93 +180,96 @@ partial class PEFile
             return;
         }
 
-        minimumSizeOfOptionalHeaderToRead = Math.Max(CoffHeader.SizeOfOptionalHeader, minimumSizeOfOptionalHeaderToRead);
+        Span<byte> optionalHeader =  stackalloc byte[minimumSizeOfOptionalHeaderToRead];
+        MemoryMarshal.Write(optionalHeader, (ushort)magic);
 
-        var tempArray = ArrayPool<byte>.Shared.Rent(minimumSizeOfOptionalHeaderToRead);
-        try
+        // We have already read the magic number
+        var minimumSpan = optionalHeader.Slice(sizeof(ImageOptionalHeaderMagic));
+        read = reader.Read(minimumSpan);
+
+        // The real size read (in case of tricked Tiny PE)
+        optionalHeader = optionalHeader.Slice(0, read + sizeof(ImageOptionalHeaderMagic));
+        
+        Debug.Assert(Unsafe.SizeOf<RawImageOptionalHeader32>() == 224);
+        Debug.Assert(Unsafe.SizeOf<RawImageOptionalHeader64>() == 240);
+
+        // Process known PE32/PE32+ headers
+        if (magic == ImageOptionalHeaderMagic.PE32)
         {
-            var optionalHeader = new Span<byte>(tempArray, 0, minimumSizeOfOptionalHeaderToRead);
-            MemoryMarshal.Write(optionalHeader, (ushort)magic);
-
-            // We have already read the magic number
-            var minimumSpan = optionalHeader.Slice(sizeof(ImageOptionalHeaderMagic));
-            read = reader.Read(minimumSpan);
-
-            // The real size read (in case of tricked Tiny PE)
-            optionalHeader = optionalHeader.Slice(0, read + sizeof(ImageOptionalHeaderMagic));
-            
-            Debug.Assert(Unsafe.SizeOf<RawImageOptionalHeader32>() == 224);
-            Debug.Assert(Unsafe.SizeOf<RawImageOptionalHeader64>() == 240);
-
-            // Process known PE32/PE32+ headers
-            if (magic == ImageOptionalHeaderMagic.PE32)
+            var optionalHeader32 = new RawImageOptionalHeader32();
+            var span = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref optionalHeader32, 1));
+            if (span.Length > optionalHeader.Length)
             {
-                var optionalHeader32 = new RawImageOptionalHeader32();
-                var span = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref optionalHeader32, 1));
-                if (span.Length > optionalHeader.Length)
-                {
-                    span = span.Slice(0, optionalHeader.Length);
-                }
-
-                optionalHeader.CopyTo(span);
-
-                OptionalHeader.OptionalHeaderCommonPart1 = optionalHeader32.Common;
-                OptionalHeader.OptionalHeaderBase32 = optionalHeader32.Base32;
-                OptionalHeader.OptionalHeaderCommonPart2 = optionalHeader32.Common2;
-                OptionalHeader.OptionalHeaderSize32 = optionalHeader32.Size32;
-                OptionalHeader.OptionalHeaderCommonPart3 = optionalHeader32.Common3;
-            }
-            else
-            {
-                var optionalHeader64 = new RawImageOptionalHeader64();
-                // Skip 2 bytes as we read already the magic number
-                var span = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref optionalHeader64, 1));
-                if (span.Length > optionalHeader.Length)
-                {
-                    span = span.Slice(0, optionalHeader.Length);
-                }
-
-                optionalHeader.CopyTo(span);
-
-                OptionalHeader.OptionalHeaderCommonPart1 = optionalHeader64.Common;
-                OptionalHeader.OptionalHeaderBase64 = optionalHeader64.Base64;
-                OptionalHeader.OptionalHeaderCommonPart2 = optionalHeader64.Common2;
-                OptionalHeader.OptionalHeaderSize64 = optionalHeader64.Size64;
-                OptionalHeader.OptionalHeaderCommonPart3 = optionalHeader64.Common3;
+                span = span.Slice(0, optionalHeader.Length);
             }
 
-            // Sets the number of entries in the data directory
-            Directories.Count = (int)OptionalHeader.NumberOfRvaAndSizes;
+            optionalHeader.CopyTo(span);
 
-            // Read sections
-            reader.Position = positionAfterCoffHeader + CoffHeader.SizeOfOptionalHeader;
-            
-            ArrayPool<byte>.Shared.Return(tempArray);
-            Debug.Assert(Unsafe.SizeOf<RawImageSectionHeader>() == 40);
-            var sizeOfSections = CoffHeader.NumberOfSections * Unsafe.SizeOf<RawImageSectionHeader>();
-            tempArray = ArrayPool<byte>.Shared.Rent(sizeOfSections);
-            var spanSections = new Span<byte>(tempArray, 0, sizeOfSections);
-            read = reader.Read(spanSections);
-
-            var sectionHeaders = MemoryMarshal.Cast<byte, RawImageSectionHeader>(spanSections);
-            if (read != spanSections.Length)
-            {
-                diagnostics.Error(DiagnosticId.PE_ERR_InvalidSectionHeadersSize, "Invalid section headers");
-            }
-
-            // Read all sections and directories
-            ReadSectionsAndDirectories(reader, sectionHeaders);
-
-            // Set the size to the full size of the file
-            Size = reader.Length;
+            OptionalHeader.OptionalHeaderCommonPart1 = optionalHeader32.Common;
+            OptionalHeader.OptionalHeaderBase32 = optionalHeader32.Base32;
+            OptionalHeader.OptionalHeaderCommonPart2 = optionalHeader32.Common2;
+            OptionalHeader.OptionalHeaderSize32 = optionalHeader32.Size32;
+            OptionalHeader.OptionalHeaderCommonPart3 = optionalHeader32.Common3;
         }
-        finally
+        else
         {
-            ArrayPool<byte>.Shared.Return(tempArray);
+            var optionalHeader64 = new RawImageOptionalHeader64();
+            // Skip 2 bytes as we read already the magic number
+            var span = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref optionalHeader64, 1));
+            if (span.Length > optionalHeader.Length)
+            {
+                span = span.Slice(0, optionalHeader.Length);
+            }
+
+            optionalHeader.CopyTo(span);
+
+            OptionalHeader.OptionalHeaderCommonPart1 = optionalHeader64.Common;
+            OptionalHeader.OptionalHeaderBase64 = optionalHeader64.Base64;
+            OptionalHeader.OptionalHeaderCommonPart2 = optionalHeader64.Common2;
+            OptionalHeader.OptionalHeaderSize64 = optionalHeader64.Size64;
+            OptionalHeader.OptionalHeaderCommonPart3 = optionalHeader64.Common3;
         }
+
+        // Read Directory headers
+        using var pooledSpanDirectories = PooledSpan<RawImageDataDirectory>.Create(stackalloc byte[16 * sizeof(RawImageDataDirectory)], (int)OptionalHeader.NumberOfRvaAndSizes);
+        var directories = pooledSpanDirectories.Span;
+
+        // Sets the number of entries in the data directory
+        Directories.Count = (int)OptionalHeader.NumberOfRvaAndSizes;
+
+        if (OptionalHeader.NumberOfRvaAndSizes > 0)
+        {
+            var span = MemoryMarshal.AsBytes(directories);
+            read = reader.Read(span);
+            if (read != span.Length)
+            {
+                diagnostics.Error(DiagnosticId.PE_ERR_InvalidNumberOfDataDirectories, $"Invalid number of data directory {OptionalHeader.NumberOfRvaAndSizes} at position {reader.Position}");
+                return;
+            }
+        }
+        
+        // Read sections
+        reader.Position = positionAfterCoffHeader + CoffHeader.SizeOfOptionalHeader;
+        
+        Debug.Assert(Unsafe.SizeOf<RawImageSectionHeader>() == 40);
+
+        using var pooledSpanSections = PooledSpan<RawImageSectionHeader>.Create((int)CoffHeader.NumberOfSections);
+        read = reader.Read(pooledSpanSections.SpanAsBytes);
+
+        if (read != pooledSpanSections.SpanAsBytes.Length)
+        {
+            diagnostics.Error(DiagnosticId.PE_ERR_InvalidSectionHeadersSize, "Invalid section headers");
+            return;
+        }
+
+        // Read all sections and directories
+        ReadSectionsAndDirectories(reader, pooledSpanSections.Span, pooledSpanDirectories.Span);
+
+        // Set the size to the full size of the file
+        Size = reader.Length;
     }
 
-    private void ReadSectionsAndDirectories(PEImageReader reader, ReadOnlySpan<RawImageSectionHeader> sectionHeaders)
+    private void ReadSectionsAndDirectories(PEImageReader reader, ReadOnlySpan<RawImageSectionHeader> sectionHeaders, ReadOnlySpan<RawImageDataDirectory> dataDirectories)
     {
         _sections.Clear();
 
@@ -309,7 +312,6 @@ partial class PEFile
 
         // Create directories and find the section for each directory
         var maxNumberOfDirectory = (int)Math.Min(OptionalHeader.NumberOfRvaAndSizes, 15);
-        Span<ImageDataDirectory> dataDirectories = OptionalHeader.DataDirectory;
         for (int i = 0; i < maxNumberOfDirectory && i < dataDirectories.Length; i++)
         {
             var directoryEntry = dataDirectories[i];
