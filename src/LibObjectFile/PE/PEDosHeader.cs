@@ -11,12 +11,12 @@ namespace LibObjectFile.PE;
 /// Represents the DOS header of a PE file.
 /// </summary>
 [StructLayout(LayoutKind.Sequential, Pack = 2)]
-public unsafe struct ImageDosHeader
+public unsafe struct PEDosHeader
 {
     /// <summary>
     /// Magic number. (Original DOS field is `e_magic`)
     /// </summary>
-    public ImageDosMagic Magic;
+    public PEDosMagic Magic;
 
     /// <summary>
     /// Bytes on last page of file. (Original DOS field is `e_cblp`)

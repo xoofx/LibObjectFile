@@ -68,7 +68,7 @@ partial class PEFile
 
         // Update DOS header
         writer.Write(DosHeader);
-        position += (uint)sizeof(ImageDosHeader);
+        position += (uint)sizeof(PEDosHeader);
 
         // Write DOS stub
         writer.Write(_dosStub);
@@ -86,12 +86,12 @@ partial class PEFile
         position += (uint)zeroSize;
 
         // PE00 header
-        writer.Write(ImagePESignature.PE);
-        position += sizeof(ImagePESignature); // PE00 header
+        writer.Write(PESignature.PE);
+        position += sizeof(PESignature); // PE00 header
 
         // COFF header
         writer.Write(CoffHeader);
-        position += (uint)sizeof(ImageCoffHeader);
+        position += (uint)sizeof(PECoffHeader);
 
 
         if (IsPE32)

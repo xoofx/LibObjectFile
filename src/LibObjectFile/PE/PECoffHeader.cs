@@ -12,7 +12,7 @@ namespace LibObjectFile.PE;
 /// Represents the COFF (Common Object File Format) header in a Portable Executable (PE) file.
 /// </summary>
 [StructLayout(LayoutKind.Sequential, Pack = 4)]
-public struct ImageCoffHeader
+public struct PECoffHeader
 {
     /// <summary>
     /// The machine type that the file is intended for.

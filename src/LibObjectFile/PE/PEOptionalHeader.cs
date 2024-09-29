@@ -9,7 +9,7 @@ using LibObjectFile.PE.Internal;
 
 namespace LibObjectFile.PE;
 
-public struct ImageOptionalHeader
+public struct PEOptionalHeader
 {
     internal RawImageOptionalHeaderCommonPart1 OptionalHeaderCommonPart1;
     internal RawImageOptionalHeaderBase32 OptionalHeaderBase32;
@@ -25,7 +25,7 @@ public struct ImageOptionalHeader
     /// <remarks>
     /// This value cannot be changed and must be set at construction time.
     /// </remarks>
-    public ImageOptionalHeaderMagic Magic
+    public PEOptionalHeaderMagic Magic
     {
         get => OptionalHeaderCommonPart1.Magic;
     }

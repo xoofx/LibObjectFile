@@ -59,17 +59,17 @@ partial class PEFile
 
     public override unsafe void Read(PEImageReader reader)
     {
-        Debug.Assert(Unsafe.SizeOf<ImageDosHeader>() == 64);
+        Debug.Assert(Unsafe.SizeOf<PEDosHeader>() == 64);
 
         var diagnostics = reader.Diagnostics;
         int read = reader.Read(MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref DosHeader, 1)));
-        if (read != Unsafe.SizeOf<ImageDosHeader>())
+        if (read != Unsafe.SizeOf<PEDosHeader>())
         {
             diagnostics.Error(DiagnosticId.PE_ERR_InvalidDosHeaderSize, "Invalid DOS header");
             return;
         }
 
-        if (DosHeader.Magic != ImageDosMagic.DOS)
+        if (DosHeader.Magic != PEDosMagic.DOS)
         {
             diagnostics.Error(DiagnosticId.PE_ERR_InvalidDosHeaderMagic, "Invalid DOS header");
             return;
@@ -77,7 +77,7 @@ partial class PEFile
 
         var pePosition = DosHeader.FileAddressPEHeader;
 
-        if (pePosition < sizeof(ImageDosHeader))
+        if (pePosition < sizeof(PEDosHeader))
         {
             if (pePosition < 4)
             {
@@ -85,14 +85,14 @@ partial class PEFile
                 return;
             }
 
-            _unsafeNegativePEHeaderOffset = (int)pePosition - sizeof(ImageDosHeader);
+            _unsafeNegativePEHeaderOffset = (int)pePosition - sizeof(PEDosHeader);
         }
         else
         {
             // Read the DOS stub
             var dosStubSize = DosHeader.SizeOfParagraphsHeader * 16;
 
-            if (dosStubSize + sizeof(ImageDosHeader) > pePosition)
+            if (dosStubSize + sizeof(PEDosHeader) > pePosition)
             {
                 diagnostics.Error(DiagnosticId.PE_ERR_InvalidDosStubSize, $"Invalid DOS stub size {dosStubSize} going beyond the PE header");
                 return;
@@ -115,7 +115,7 @@ partial class PEFile
                 _dosStub = [];
             }
 
-            var dosHeaderAndStubSize = sizeof(ImageDosHeader) + dosStubSize;
+            var dosHeaderAndStubSize = sizeof(PEDosHeader) + dosStubSize;
 
             // Read any DOS stub extra data (e.g Rich)
             if (dosHeaderAndStubSize < DosHeader.FileAddressPEHeader)
@@ -127,25 +127,25 @@ partial class PEFile
         // Read the PE header
         reader.Position = DosHeader.FileAddressPEHeader;
 
-        var signature = default(ImagePESignature);
+        var signature = default(PESignature);
         read = reader.Read(MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref signature, 1)));
-        if (read != sizeof(ImagePESignature))
+        if (read != sizeof(PESignature))
         {
             diagnostics.Error(DiagnosticId.PE_ERR_InvalidPESignature, "Invalid PE signature");
             return;
         }
 
-        if (signature != ImagePESignature.PE)
+        if (signature != PESignature.PE)
         {
             diagnostics.Error(DiagnosticId.PE_ERR_InvalidPESignature, $"Invalid PE signature 0x{(uint)signature:X8}");
             return;
         }
 
         // Read the COFF header
-        Debug.Assert(Unsafe.SizeOf<ImageCoffHeader>() == 20);
-        var coffHeader = default(ImageCoffHeader);
+        Debug.Assert(Unsafe.SizeOf<PECoffHeader>() == 20);
+        var coffHeader = default(PECoffHeader);
         read = reader.Read(MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref coffHeader, 1)));
-        if (read != Unsafe.SizeOf<ImageCoffHeader>())
+        if (read != Unsafe.SizeOf<PECoffHeader>())
         {
             diagnostics.Error(DiagnosticId.PE_ERR_InvalidCoffHeaderSize, "Invalid COFF header");
             return;
@@ -155,22 +155,22 @@ partial class PEFile
         var positionAfterCoffHeader = reader.Position;
 
         // Cannot be smaller than the magic
-        if (CoffHeader.SizeOfOptionalHeader < sizeof(ImageOptionalHeaderMagic))
+        if (CoffHeader.SizeOfOptionalHeader < sizeof(PEOptionalHeaderMagic))
         {
             diagnostics.Error(DiagnosticId.PE_ERR_InvalidOptionalHeaderSize, $"Invalid optional header size {CoffHeader.SizeOfOptionalHeader}");
             return;
         }
 
-        var magic = (ImageOptionalHeaderMagic)reader.ReadU16();
+        var magic = (PEOptionalHeaderMagic)reader.ReadU16();
 
         int minimumSizeOfOptionalHeaderToRead = 0;
         
         // Process known PE32/PE32+ headers
-        if (magic == ImageOptionalHeaderMagic.PE32)
+        if (magic == PEOptionalHeaderMagic.PE32)
         {
             minimumSizeOfOptionalHeaderToRead = RawImageOptionalHeader32.MinimumSize;
         }
-        else if (magic == ImageOptionalHeaderMagic.PE32Plus)
+        else if (magic == PEOptionalHeaderMagic.PE32Plus)
         {
             minimumSizeOfOptionalHeaderToRead = RawImageOptionalHeader64.MinimumSize;
         }
@@ -184,17 +184,17 @@ partial class PEFile
         MemoryMarshal.Write(optionalHeader, (ushort)magic);
 
         // We have already read the magic number
-        var minimumSpan = optionalHeader.Slice(sizeof(ImageOptionalHeaderMagic));
+        var minimumSpan = optionalHeader.Slice(sizeof(PEOptionalHeaderMagic));
         read = reader.Read(minimumSpan);
 
         // The real size read (in case of tricked Tiny PE)
-        optionalHeader = optionalHeader.Slice(0, read + sizeof(ImageOptionalHeaderMagic));
+        optionalHeader = optionalHeader.Slice(0, read + sizeof(PEOptionalHeaderMagic));
         
         Debug.Assert(Unsafe.SizeOf<RawImageOptionalHeader32>() == 224);
         Debug.Assert(Unsafe.SizeOf<RawImageOptionalHeader64>() == 240);
 
         // Process known PE32/PE32+ headers
-        if (magic == ImageOptionalHeaderMagic.PE32)
+        if (magic == PEOptionalHeaderMagic.PE32)
         {
             var optionalHeader32 = new RawImageOptionalHeader32();
             var span = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref optionalHeader32, 1));

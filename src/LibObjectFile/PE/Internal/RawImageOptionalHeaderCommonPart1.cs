@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -17,7 +17,7 @@ internal struct RawImageOptionalHeaderCommonPart1
     /// <summary>
     /// The magic number, which identifies the file format. Expected to be 0x10b for PE32.
     /// </summary>
-    public ImageOptionalHeaderMagic Magic;
+    public PEOptionalHeaderMagic Magic;
 
     /// <summary>
     /// The major version number of the linker.

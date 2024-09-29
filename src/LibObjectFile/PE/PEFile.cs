@@ -31,7 +31,7 @@ public sealed partial class PEFile : PEObjectBase
     /// <summary>
     /// Initializes a new instance of the <see cref="PEFile"/> class.
     /// </summary>
-    public PEFile(ImageOptionalHeaderMagic magic = ImageOptionalHeaderMagic.PE32Plus)
+    public PEFile(PEOptionalHeaderMagic magic = PEOptionalHeaderMagic.PE32Plus)
     {
         _sections = new(this);
         ExtraDataBeforeSections = new(this);
@@ -55,7 +55,7 @@ public sealed partial class PEFile : PEObjectBase
     /// <summary>
     /// Gets the DOS header.
     /// </summary>
-    public ImageDosHeader DosHeader;
+    public PEDosHeader DosHeader;
 
     /// <summary>
     /// Gets or sets an unsafe negative offset relative to the end of the DOS header.
@@ -67,9 +67,9 @@ public sealed partial class PEFile : PEObjectBase
         {
             // Should support Tiny PE layout http://www.phreedom.org/research/tinype/
             // Value must be >= sizeof(ImageDosHeader) - 4 and <= 0
-            if (value < sizeof(ImageDosHeader) - 4 || value > 0)
+            if (value < sizeof(PEDosHeader) - 4 || value > 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(value), $"PEHeaderOffset must be greater than {sizeof(ImageDosHeader)}");
+                throw new ArgumentOutOfRangeException(nameof(value), $"PEHeaderOffset must be greater than {sizeof(PEDosHeader)}");
             }
 
             if (value < 0 && (_dosStub.Length != 0 || (DosStubExtra is not null && DosStubExtra.Length > 0)))
@@ -120,22 +120,22 @@ public sealed partial class PEFile : PEObjectBase
     /// <summary>
     /// Gets the COFF header.
     /// </summary>
-    public ImageCoffHeader CoffHeader;
+    public PECoffHeader CoffHeader;
 
     /// <summary>
     /// Gets the optional header.
     /// </summary>
-    public ImageOptionalHeader OptionalHeader;
+    public PEOptionalHeader OptionalHeader;
 
     /// <summary>
     /// Gets a boolean indicating whether this instance is a PE32 image.
     /// </summary>
-    public bool IsPE32 => OptionalHeader.Magic == ImageOptionalHeaderMagic.PE32;
+    public bool IsPE32 => OptionalHeader.Magic == PEOptionalHeaderMagic.PE32;
 
     /// <summary>
     /// Gets a boolean indicating whether this instance is a PE32+ image.
     /// </summary>
-    public bool IsPE32Plus => OptionalHeader.Magic == ImageOptionalHeaderMagic.PE32Plus;
+    public bool IsPE32Plus => OptionalHeader.Magic == PEOptionalHeaderMagic.PE32Plus;
 
     /// <summary>
     /// Gets the directories.
@@ -314,7 +314,7 @@ public sealed partial class PEFile : PEObjectBase
         var position = 0U;
 
         // Update DOS header
-        position += (uint)sizeof(ImageDosHeader);
+        position += (uint)sizeof(PEDosHeader);
         position += (uint)_dosStub.Length;
         position += (uint)(_dosStubExtra?.Length ?? 0U);
 
@@ -324,10 +324,10 @@ public sealed partial class PEFile : PEObjectBase
         // Update offset to PE header
         DosHeader._FileAddressPEHeader = position;
 
-        position += sizeof(ImagePESignature); // PE00 header
+        position += sizeof(PESignature); // PE00 header
 
         // COFF header
-        position += (uint)sizeof(ImageCoffHeader);
+        position += (uint)sizeof(PECoffHeader);
         
         // TODO: update other DosHeader fields
 
@@ -452,10 +452,10 @@ public sealed partial class PEFile : PEObjectBase
 
         switch (OptionalHeader.Magic)
         {
-            case ImageOptionalHeaderMagic.PE32:
+            case PEOptionalHeaderMagic.PE32:
                 builder.Append("PE32");
                 break;
-            case ImageOptionalHeaderMagic.PE32Plus:
+            case PEOptionalHeaderMagic.PE32Plus:
                 builder.Append("PE32+");
                 break;
         }
