@@ -74,8 +74,10 @@ public partial class PEReaderTests
     public void TestCreatePE()
     {
         var pe = new PEFile();
-
-        // Add a sections
+        
+        // ***************************************************************************
+        // Code section
+        // ***************************************************************************
         var codeSection = pe.AddSection(PESectionName.Text, 0x1000);
         var streamCode = new PEStreamSectionData();
         
@@ -91,13 +93,17 @@ public partial class PEReaderTests
         ]);
 
         codeSection.Content.Add(streamCode);
-
+        
+        // ***************************************************************************
+        // Data section
+        // ***************************************************************************
         var dataSection = pe.AddSection(PESectionName.RData, 0x2000);
 
         var streamData = new PEStreamSectionData();
         var kernelName = streamData.WriteAsciiString("KERNEL32.DLL");
         var exitProcessFunction = streamData.WriteHintName(new(0x178, "ExitProcess"));
 
+        // PEImportAddressTableDirectory comes first, it is referenced by the RIP + 0xFF1, first address being ExitProcess
         var peImportAddressTable = new PEImportAddressTable()
         {
             exitProcessFunction
@@ -106,26 +112,36 @@ public partial class PEReaderTests
         {
             peImportAddressTable
         };
-        dataSection.Content.Add(iatDirectory);
         
         var peImportLookupTable = new PEImportLookupTable()
         {
             exitProcessFunction
         };
-        dataSection.Content.Add(peImportLookupTable);
 
         var importDirectory = new PEImportDirectory();
         importDirectory.Entries.Add(new PEImportDirectoryEntry(kernelName, peImportAddressTable, peImportLookupTable));
+
+        // Layout of the data section
+        dataSection.Content.Add(iatDirectory);
+        dataSection.Content.Add(peImportLookupTable);
         dataSection.Content.Add(importDirectory);
-        
         dataSection.Content.Add(streamData);
-        
+
+        // ***************************************************************************
+        // Directories
+        // ***************************************************************************
         pe.Directories[PEDataDirectoryKind.Import] = importDirectory;
         pe.Directories[PEDataDirectoryKind.ImportAddressTable] = iatDirectory;
 
+        // ***************************************************************************
+        // Optional Header
+        // ***************************************************************************
         pe.OptionalHeader.AddressOfEntryPoint = 0x1000;
         pe.OptionalHeader.BaseOfCode = 0x1000;
 
+        // ***************************************************************************
+        // Write the PE to a file
+        // ***************************************************************************
         var output = new MemoryStream();
         pe.Write(output);
         output.Position = 0;
