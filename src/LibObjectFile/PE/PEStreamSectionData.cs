@@ -16,12 +16,12 @@ public class PEStreamSectionData : PESectionData
     private uint _requiredPositionAlignment;
     private uint _requiredSizeAlignment;
 
-    internal static PEStreamSectionData Empty = new();
+    internal static PEStreamSectionData Empty = new(System.IO.Stream.Null);
     
     /// <summary>
     /// Initializes a new instance of the <see cref="PEStreamSectionData"/> class.
     /// </summary>
-    public PEStreamSectionData() : this(System.IO.Stream.Null)
+    public PEStreamSectionData() : this(new MemoryStream())
     {
     }
 

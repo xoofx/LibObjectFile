@@ -4,8 +4,10 @@
 
 using System;
 using System.Diagnostics;
+using System.Reflection.PortableExecutable;
 using System.Runtime.InteropServices;
 using System.Text;
+using static System.Collections.Specialized.BitVector32;
 
 namespace LibObjectFile.PE.Internal;
 
@@ -38,6 +40,19 @@ internal unsafe struct RawImageSectionHeader
             }
 
             return Encoding.ASCII.GetString(span);
+        }
+    }
+
+    public void SetName(PESectionName sectionName)
+    {
+        var spanName = MemoryMarshal.CreateSpan(ref Name[0], 8);
+        int count = Encoding.ASCII.GetBytes(sectionName.Name.AsSpan(), spanName);
+        if (count < 8)
+        {
+            for (int i = count; i < 8; i++)
+            {
+                spanName[i] = 0;
+            }
         }
     }
 

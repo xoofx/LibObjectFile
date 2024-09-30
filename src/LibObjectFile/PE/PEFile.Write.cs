@@ -6,6 +6,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using LibObjectFile.Diagnostics;
 using LibObjectFile.PE.Internal;
 using LibObjectFile.Utils;
@@ -60,9 +61,6 @@ partial class PEFile
 
     public override unsafe void Write(PEImageWriter writer)
     {
-        var context = new PELayoutContext(this, writer.Diagnostics);
-        UpdateLayout(context);
-
         // Set the size of the stream before writing to it.
         // It will help to avoid resizing the stream
         writer.Stream.SetLength((uint)Size);
@@ -129,7 +127,7 @@ partial class PEFile
         RawImageSectionHeader sectionHeader = default;
         foreach (var section in _sections)
         {
-            section.Name.CopyTo(new Span<byte>(sectionHeader.Name, 8));
+            sectionHeader.SetName(section.Name);
             sectionHeader.VirtualSize = section.VirtualSize;
             sectionHeader.RVA = section.RVA;
             sectionHeader.SizeOfRawData = (uint)section.Size;

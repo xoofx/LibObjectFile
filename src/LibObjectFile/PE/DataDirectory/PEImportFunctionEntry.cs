@@ -19,7 +19,7 @@ public readonly struct PEImportFunctionEntry
     /// Initializes a new instance of the <see cref="PEImportFunctionEntry"/> class by name.
     /// </summary>
     /// <param name="name">The name of the import.</param>
-    public PEImportFunctionEntry(PEAsciiStringLink name)
+    public PEImportFunctionEntry(PEImportHintNameLink name)
     {
         _peSectionData = name.Container;
         _offset = name.RVO;
@@ -76,4 +76,10 @@ public readonly struct PEImportFunctionEntry
     /// Gets the ordinal of the import if by ordinal.
     /// </summary>
     public ushort Ordinal => _peSectionData is null && !IsLongOffset ? (ushort)(_offset) : (ushort)0;
+    
+    /// <summary>
+    /// Converts a PE Import Hint Name to a PE Import Function Entry.
+    /// </summary>
+    /// <param name="name">The PE Import Hint Name to convert.</param>
+    public static implicit operator PEImportFunctionEntry(PEImportHintNameLink name) => new(name);
 }

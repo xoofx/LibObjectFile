@@ -21,10 +21,10 @@ public partial class PEReaderTests
     [DataRow("NativeConsoleWin64.exe")]
     [DataRow("NativeConsole2Win64.exe")]
     [DataRow("NativeLibraryWin64.dll")]
+    [DataRow("RawNativeConsoleWin64.exe")]
 
     public async Task TestPrinter(string name)
     {
-
         var sourceFile = Path.Combine(AppContext.BaseDirectory, "PE", name);
         await using var stream = File.OpenRead(sourceFile);
         var peImage = PEFile.Read(stream, new() { EnableStackTrace = true });
@@ -69,7 +69,71 @@ public partial class PEReaderTests
         // Compare the input and output buffer
         ByteArrayAssert.AreEqual(inputBuffer, outputBuffer, $"Invalid roundtrip for `{name}`");
     }
-    
+
+    [TestMethod]
+    public void TestCreatePE()
+    {
+        var pe = new PEFile();
+
+        // Add a sections
+        var codeSection = pe.AddSection(PESectionName.Text, 0x1000);
+        var streamCode = new PEStreamSectionData();
+        
+        streamCode.Stream.Write([
+            // SUB RSP, 0x28
+            0x48, 0x83, 0xEC, 0x28,
+            // MOV ECX, 0x9C
+            0xB9, 0x9C, 0x00, 0x00, 0x00,
+            // CALL ExitProcess (CALL [RIP + 0xFF1])  
+            0xFF, 0x15, 0xF1, 0x0F, 0x00, 0x00,
+            // INT3
+            0xCC
+        ]);
+
+        codeSection.Content.Add(streamCode);
+
+        var dataSection = pe.AddSection(PESectionName.RData, 0x2000);
+
+        var streamData = new PEStreamSectionData();
+        var kernelName = streamData.WriteAsciiString("KERNEL32.DLL");
+        var exitProcessFunction = streamData.WriteHintName(new(0x178, "ExitProcess"));
+
+        var peImportAddressTable = new PEImportAddressTable()
+        {
+            exitProcessFunction
+        };
+        var iatDirectory = new PEImportAddressTableDirectory()
+        {
+            peImportAddressTable
+        };
+        dataSection.Content.Add(iatDirectory);
+        
+        var peImportLookupTable = new PEImportLookupTable()
+        {
+            exitProcessFunction
+        };
+        dataSection.Content.Add(peImportLookupTable);
+
+        var importDirectory = new PEImportDirectory();
+        importDirectory.Entries.Add(new PEImportDirectoryEntry(kernelName, peImportAddressTable, peImportLookupTable));
+        dataSection.Content.Add(importDirectory);
+        
+        dataSection.Content.Add(streamData);
+        
+        pe.Directories[PEDataDirectoryKind.Import] = importDirectory;
+        pe.Directories[PEDataDirectoryKind.ImportAddressTable] = iatDirectory;
+
+        pe.OptionalHeader.AddressOfEntryPoint = 0x1000;
+        pe.OptionalHeader.BaseOfCode = 0x1000;
+
+        var output = new MemoryStream();
+        pe.Write(output);
+        output.Position = 0;
+
+        var sourceFile = Path.Combine(AppContext.BaseDirectory, "PE", "generated_win64.exe");
+        File.WriteAllBytes(sourceFile, output.ToArray());
+    }
+
     [DataTestMethod]
     [DynamicData(nameof(GetWindowsExeAndDlls), DynamicDataSourceType.Method)]
     public async Task TestWindows(string sourceFile)

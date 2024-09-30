@@ -17,6 +17,7 @@
     <None Remove="PE\NativeConsole2Win64.exe" />
     <None Remove="PE\NativeConsoleWin64.exe" />
     <None Remove="PE\NativeLibraryWin64.dll" />
+    <None Remove="PE\RawNativeConsoleWin64.exe" />
     <None Remove="small.cpp" />
   </ItemGroup>
 
@@ -40,6 +41,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="PE\NativeLibraryWin64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PE\RawNativeConsoleWin64.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="small.cpp">

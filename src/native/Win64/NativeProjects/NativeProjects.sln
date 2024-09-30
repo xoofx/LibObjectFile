@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NativeConsole2Win64", "Nati
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NativeLibraryWin64", "NativeLibraryWin64\NativeLibraryWin64.vcxproj", "{6FCDB0A8-ED32-4F64-91AF-6A41FE4C30C5}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RawNativeConsoleWin64", "RawNativeConsoleWin64\RawNativeConsoleWin64.vcxproj", "{269227A8-1C63-4EB1-88CF-5C80B7C61F0F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -41,6 +43,14 @@ Global
 		{6FCDB0A8-ED32-4F64-91AF-6A41FE4C30C5}.Release|x64.Build.0 = Release|x64
 		{6FCDB0A8-ED32-4F64-91AF-6A41FE4C30C5}.Release|x86.ActiveCfg = Release|Win32
 		{6FCDB0A8-ED32-4F64-91AF-6A41FE4C30C5}.Release|x86.Build.0 = Release|Win32
+		{269227A8-1C63-4EB1-88CF-5C80B7C61F0F}.Debug|x64.ActiveCfg = Debug|x64
+		{269227A8-1C63-4EB1-88CF-5C80B7C61F0F}.Debug|x64.Build.0 = Debug|x64
+		{269227A8-1C63-4EB1-88CF-5C80B7C61F0F}.Debug|x86.ActiveCfg = Debug|Win32
+		{269227A8-1C63-4EB1-88CF-5C80B7C61F0F}.Debug|x86.Build.0 = Debug|Win32
+		{269227A8-1C63-4EB1-88CF-5C80B7C61F0F}.Release|x64.ActiveCfg = Release|x64
+		{269227A8-1C63-4EB1-88CF-5C80B7C61F0F}.Release|x64.Build.0 = Release|x64
+		{269227A8-1C63-4EB1-88CF-5C80B7C61F0F}.Release|x86.ActiveCfg = Release|Win32
+		{269227A8-1C63-4EB1-88CF-5C80B7C61F0F}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

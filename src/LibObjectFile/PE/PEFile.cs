@@ -35,17 +35,38 @@ public sealed partial class PEFile : PEObjectBase
     }
 
     /// <summary>
+    /// Initializes a new instance of the <see cref="PEFile"/> class PE32+.
+    /// </summary>
+    public PEFile() : this(PEOptionalHeaderMagic.PE32Plus)
+    {
+    }
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="PEFile"/> class.
     /// </summary>
-    public PEFile(PEOptionalHeaderMagic magic = PEOptionalHeaderMagic.PE32Plus)
+    public PEFile(PEOptionalHeaderMagic magic)
     {
         _sections = new(this);
+        Directories = new();
         ExtraDataBeforeSections = new(this);
         ExtraDataAfterSections = new(this);
 
-        // TODO: Add default initialization
+        DosHeader = PEDosHeader.Default;
+        DosStub = PEDosHeader.DefaultDosStub.ToArray();
 
+        CoffHeader = new()
+        {
+            Machine = Machine.Amd64,
+            TimeDateStamp = 0,
+            Characteristics = Characteristics.ExecutableImage | Characteristics.LargeAddressAware
+        };
+
+        OptionalHeader = new();
         OptionalHeader.OptionalHeaderCommonPart1.Magic = magic;
+        Directories.Count = (int)OptionalHeader.NumberOfRvaAndSizes;
+
+        // Update the layout which is only going to calculate the size.
+        UpdateLayout(new());
     }
 
     /// <summary>
@@ -54,6 +75,7 @@ public sealed partial class PEFile : PEObjectBase
     internal PEFile(bool unused)
     {
         _sections = new(this);
+        Directories = new();
         ExtraDataBeforeSections = new(this);
         ExtraDataAfterSections = new(this);
     }
@@ -149,7 +171,7 @@ public sealed partial class PEFile : PEObjectBase
     /// <returns>
     /// Directories must be added/removed from <see cref="PESection.AddData"/> or <see cref="PESection.RemoveData"/>.
     /// </returns>
-    public PEDirectoryTable Directories { get; } = new();
+    public PEDirectoryTable Directories { get; }
 
     /// <summary>
     /// Gets the data present before the sections in the file.
@@ -256,31 +278,6 @@ public sealed partial class PEFile : PEObjectBase
         return false;
     }
 
-    public List<PESectionData> GetAllSectionData()
-    {
-        var dataList = new List<PESectionData>();
-
-        // Precalculate the capacity
-        int count = 0;
-        var sections = _sections;
-        foreach (var section in sections)
-        {
-            count += section.Content.Count;
-        }
-
-        dataList.Capacity = count;
-
-        foreach (var section in sections)
-        {
-            foreach (var data in section.Content)
-            {
-                dataList.Add(data);
-            }
-        }
-
-        return dataList;
-    }
-
     /// <summary>
     /// Tries to find the section data that contains the specified virtual address.
     /// </summary>
@@ -364,12 +361,17 @@ public sealed partial class PEFile : PEObjectBase
 
         // TODO: update other DosHeader fields
 
+        var startPositionHeader = position;
+
         position += (uint)(IsPE32 ? RawImageOptionalHeader32.MinimumSize : RawImageOptionalHeader64.MinimumSize);
 
         // Update directories
         position += (uint)(Directories.Count * sizeof(RawImageDataDirectory));
 
+        CoffHeader._SizeOfOptionalHeader = (ushort)(position - startPositionHeader);
+
         position += (uint)(sizeof(RawImageSectionHeader) * _sections.Count);
+        
         // TODO: Additional optional header size?
 
         // Data before sections
@@ -385,6 +387,7 @@ public sealed partial class PEFile : PEObjectBase
         {
             context.Diagnostics.Error(DiagnosticId.PE_ERR_TooManySections, $"Too many sections {_sections.Count} (max 96)");
         }
+
 
 
         // Update COFF header
@@ -424,8 +427,13 @@ public sealed partial class PEFile : PEObjectBase
         RVA previousEndOfRVA = 0U;
         foreach (var section in _sections)
         {
-            section.Position = section.Size > 0 ? position : (ulong)0;
+            section.Position = position;
             section.UpdateLayout(context);
+            if (section.Size == 0)
+            {
+                section.Position = 0;
+            }
+
             if (section.RVA < previousEndOfRVA)
             {
                 context.Diagnostics.Error(DiagnosticId.PE_ERR_SectionRVALessThanPrevious, $"Section {section.Name} RVA {section.RVA} is less than the previous section end RVA {previousEndOfRVA}");

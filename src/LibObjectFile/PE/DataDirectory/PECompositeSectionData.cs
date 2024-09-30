@@ -2,6 +2,7 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -15,7 +16,7 @@ namespace LibObjectFile.PE;
 /// <summary>
 /// A section data that contains a list of <see cref="PESectionData"/> and an optional header of data.
 /// </summary>
-public abstract class PECompositeSectionData : PESectionData
+public abstract class PECompositeSectionData : PESectionData, IEnumerable<PESectionData>
 {
     protected PECompositeSectionData()
     {
@@ -133,4 +134,12 @@ public abstract class PECompositeSectionData : PESectionData
             va += (uint)table.Size;
         }
     }
+
+    public void Add(PESectionData data) => Content.Add(data);
+
+    public List<PESectionData>.Enumerator GetEnumerator() => Content.GetEnumerator();
+
+    IEnumerator<PESectionData> IEnumerable<PESectionData>.GetEnumerator() => Content.GetEnumerator();
+
+    IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)Content).GetEnumerator();
 }

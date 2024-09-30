@@ -85,7 +85,8 @@ public static class PESectionDataExtensions
             maxLength++;
         }
 
-        using var tempSpan = TempSpan<byte>.Create(maxLength + (isHint ? 2 : 0), out var span);
+        using var tempSpan = TempSpan<byte>.Create(maxLength + 1 + (isHint ? 2 : 0), out var span);
+        span.Clear();
 
         var text = span;
 
@@ -107,7 +108,7 @@ public static class PESectionDataExtensions
             actualLength += 2;
         }
 
-        stream.Write(span.Slice(0, actualLength));
+        stream.Write(span.Slice(0, actualLength + 1));
     }
 
     private static string ReadAsciiStringInternal(Stream stream, bool isHint, out ushort hint)

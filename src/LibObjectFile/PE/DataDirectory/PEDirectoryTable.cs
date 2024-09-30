@@ -44,6 +44,15 @@ public sealed class PEDirectoryTable
             }
             return _entries[index];
         }
+
+        set
+        {
+            if (index < 0 || index >= _count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+            _entries[index] = value;
+        }
     }
 
     /// <summary>
@@ -62,6 +71,16 @@ public sealed class PEDirectoryTable
                 throw new ArgumentOutOfRangeException(nameof(kind));
             }
             return _entries[(int)kind];
+        }
+
+        set
+        {
+            int index = (int)(ushort)kind;
+            if (index < 0 || index >= _count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(kind));
+            }
+            _entries[(int)kind] = value;
         }
     }
 
@@ -98,77 +117,137 @@ public sealed class PEDirectoryTable
     /// <summary>
     /// Gets the export directory information from the PE file.
     /// </summary>
-    public PEExportDirectory? Export => (PEExportDirectory?)this[PEDataDirectoryKind.Export];
+    public PEExportDirectory? Export
+    {
+        get => (PEExportDirectory?)this[PEDataDirectoryKind.Export];
+        set => this[PEDataDirectoryKind.Export] = value;
+    }
 
     /// <summary>
     /// Gets the import directory information from the PE file.
     /// </summary>
-    public PEImportDirectory? Import => (PEImportDirectory?)this[PEDataDirectoryKind.Import];
+    public PEImportDirectory? Import
+    {
+        get => (PEImportDirectory?)this[PEDataDirectoryKind.Import];
+        set => this[PEDataDirectoryKind.Import] = value;
+    }
 
     /// <summary>
     /// Gets the resource directory information from the PE file.
     /// </summary>
-    public PEResourceDirectory? Resource => (PEResourceDirectory?)this[PEDataDirectoryKind.Resource];
+    public PEResourceDirectory? Resource
+    {
+        get => (PEResourceDirectory?)this[PEDataDirectoryKind.Resource];
+        set => this[PEDataDirectoryKind.Resource] = value;
+    }
 
     /// <summary>
     /// Gets the exception directory information from the PE file.
     /// </summary>
-    public PEExceptionDirectory? Exception => (PEExceptionDirectory?)this[PEDataDirectoryKind.Exception];
+    public PEExceptionDirectory? Exception
+    {
+        get => (PEExceptionDirectory?)this[PEDataDirectoryKind.Exception];
+        set => this[PEDataDirectoryKind.Exception] = value;
+    }
 
     /// <summary>
     /// Gets the certificate/security directory information from the PE file.
     /// </summary>
-    public PESecurityCertificateDirectory? Certificate => (PESecurityCertificateDirectory?)this[PEDataDirectoryKind.SecurityCertificate];
+    public PESecurityCertificateDirectory? Certificate
+    {
+        get => (PESecurityCertificateDirectory?)this[PEDataDirectoryKind.SecurityCertificate];
+        set => this[PEDataDirectoryKind.SecurityCertificate] = value;
+    }
 
     /// <summary>
     /// Gets the base relocation directory information from the PE file.
     /// </summary>
-    public PEBaseRelocationDirectory? BaseRelocation => (PEBaseRelocationDirectory?)this[PEDataDirectoryKind.BaseRelocation];
+    public PEBaseRelocationDirectory? BaseRelocation
+    {
+        get => (PEBaseRelocationDirectory?)this[PEDataDirectoryKind.BaseRelocation];
+        set => this[PEDataDirectoryKind.BaseRelocation] = value;
+    }
 
     /// <summary>
     /// Gets the debug directory information from the PE file.
     /// </summary>
-    public PEDebugDirectory? Debug => (PEDebugDirectory?)this[PEDataDirectoryKind.Debug];
+    public PEDebugDirectory? Debug
+    {
+        get => (PEDebugDirectory?)this[PEDataDirectoryKind.Debug];
+        set => this[PEDataDirectoryKind.Debug] = value;
+    }
 
     /// <summary>
     /// Gets the architecture-specific directory information from the PE file.
     /// </summary>
-    public PEArchitectureDirectory? Architecture => (PEArchitectureDirectory?)this[PEDataDirectoryKind.Architecture];
+    public PEArchitectureDirectory? Architecture
+    {
+        get => (PEArchitectureDirectory?)this[PEDataDirectoryKind.Architecture];
+        set => this[PEDataDirectoryKind.Architecture] = value;
+    }
 
     /// <summary>
     /// Gets the global pointer directory information from the PE file.
     /// </summary>
-    public PEGlobalPointerDirectory? GlobalPointer => (PEGlobalPointerDirectory?)this[PEDataDirectoryKind.GlobalPointer];
+    public PEGlobalPointerDirectory? GlobalPointer
+    {
+        get => (PEGlobalPointerDirectory?)this[PEDataDirectoryKind.GlobalPointer];
+        set => this[PEDataDirectoryKind.GlobalPointer] = value;
+    }
 
     /// <summary>
     /// Gets the TLS (Thread Local Storage) directory information from the PE file.
     /// </summary>
-    public PETlsDirectory? Tls => (PETlsDirectory?)this[PEDataDirectoryKind.Tls];
+    public PETlsDirectory? Tls
+    {
+        get => (PETlsDirectory?)this[PEDataDirectoryKind.Tls];
+        set => this[PEDataDirectoryKind.Tls] = value;
+    }
 
     /// <summary>
     /// Gets the load configuration directory information from the PE file.
     /// </summary>
-    public PELoadConfigDirectory? LoadConfig => (PELoadConfigDirectory?)this[PEDataDirectoryKind.LoadConfig];
+    public PELoadConfigDirectory? LoadConfig
+    {
+        get => (PELoadConfigDirectory?)this[PEDataDirectoryKind.LoadConfig];
+        set => this[PEDataDirectoryKind.LoadConfig] = value;
+    }
 
     /// <summary>
     /// Gets the bound import directory information from the PE file.
     /// </summary>
-    public PEBoundImportDirectory? BoundImport => (PEBoundImportDirectory?)this[PEDataDirectoryKind.BoundImport];
+    public PEBoundImportDirectory? BoundImport
+    {
+        get => (PEBoundImportDirectory?)this[PEDataDirectoryKind.BoundImport];
+        set => this[PEDataDirectoryKind.BoundImport] = value;
+    }
 
     /// <summary>
     /// Gets the delay import directory information from the PE file.
     /// </summary>
-    public PEDelayImportDirectory? DelayImport => (PEDelayImportDirectory?)this[PEDataDirectoryKind.DelayImport];
+    public PEDelayImportDirectory? DelayImport
+    {
+        get => (PEDelayImportDirectory?)this[PEDataDirectoryKind.DelayImport];
+        set => this[PEDataDirectoryKind.DelayImport] = value;
+    }
 
     /// <summary>
     /// Gets the import address table directory information from the PE file.
     /// </summary>
-    public PEImportAddressTableDirectory? ImportAddressTableDirectory => (PEImportAddressTableDirectory?)this[PEDataDirectoryKind.ImportAddressTable];
+    public PEImportAddressTableDirectory? ImportAddressTableDirectory
+    {
+        get => (PEImportAddressTableDirectory?)this[PEDataDirectoryKind.ImportAddressTable];
+        set => this[PEDataDirectoryKind.ImportAddressTable] = value;
+    }
 
     /// <summary>
     /// Gets the CLR metadata directory information from the PE file, if present.
     /// </summary>
-    public PEClrMetadata? ClrMetadata => (PEClrMetadata?)this[PEDataDirectoryKind.ClrMetadata];
+    public PEClrMetadata? ClrMetadata
+    {
+        get => (PEClrMetadata?)this[PEDataDirectoryKind.ClrMetadata];
+        set => this[PEDataDirectoryKind.ClrMetadata] = value;
+    }
 
     internal void Set(PESecurityCertificateDirectory? directory) => Set(PEDataDirectoryKind.SecurityCertificate, directory);
 

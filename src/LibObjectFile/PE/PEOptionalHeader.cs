@@ -5,6 +5,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using System.Reflection.PortableExecutable;
 using LibObjectFile.PE.Internal;
 
 namespace LibObjectFile.PE;
@@ -18,6 +19,41 @@ public struct PEOptionalHeader
     internal RawImageOptionalHeaderSize32 OptionalHeaderSize32;
     internal RawImageOptionalHeaderSize64 OptionalHeaderSize64;
     internal RawImageOptionalHeaderCommonPart3 OptionalHeaderCommonPart3;
+
+    public PEOptionalHeader()
+    {
+        // Clear all fields
+        OptionalHeaderCommonPart1 = default;
+        OptionalHeaderBase32 = default;
+        OptionalHeaderBase64 = default;
+        OptionalHeaderCommonPart2 = default;
+        OptionalHeaderSize32 = default;
+        OptionalHeaderSize64 = default;
+        OptionalHeaderCommonPart3 = default;
+
+        // Setup some fields to some default values
+        OptionalHeaderCommonPart1.Magic = PEOptionalHeaderMagic.PE32Plus;
+        OptionalHeaderCommonPart1.MajorLinkerVersion = 1;
+
+        OptionalHeaderBase64.ImageBase = 0x400000;
+
+        OptionalHeaderCommonPart2.SectionAlignment = 0x1000;
+        OptionalHeaderCommonPart2.FileAlignment = 0x200;
+        OptionalHeaderCommonPart2.MajorOperatingSystemVersion = 6;
+        OptionalHeaderCommonPart2.MajorSubsystemVersion = 6;
+        OptionalHeaderCommonPart2.Subsystem = Subsystem.WindowsCui;
+        OptionalHeaderCommonPart2.DllCharacteristics = DllCharacteristics.HighEntropyVirtualAddressSpace
+                                                       | DllCharacteristics.DynamicBase
+                                                       | DllCharacteristics.NxCompatible
+                                                       | DllCharacteristics.TerminalServerAware;
+
+        OptionalHeaderSize64.SizeOfStackReserve = 0x100_000;
+        OptionalHeaderSize64.SizeOfStackCommit = 0x1000;
+        OptionalHeaderSize64.SizeOfHeapReserve = 0x100_000;
+        OptionalHeaderSize64.SizeOfHeapCommit = 0x1000;
+
+        OptionalHeaderCommonPart3.NumberOfRvaAndSizes = 16;
+    }
 
     /// <summary>
     /// The magic number, which identifies the file format. Expected to be 0x10b for PE32.
@@ -87,6 +123,7 @@ public struct PEOptionalHeader
     public uint BaseOfCode
     {
         get => OptionalHeaderCommonPart1.BaseOfCode;
+        set => OptionalHeaderCommonPart1.BaseOfCode = value;
     }
 
     /// <summary>

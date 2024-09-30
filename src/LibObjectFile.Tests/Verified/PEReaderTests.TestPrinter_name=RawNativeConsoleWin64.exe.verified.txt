@@ -1,0 +1,134 @@
+﻿DOS Header
+    Magic                      = DOS
+    ByteCountOnLastPage        = 0x90
+    PageCount                  = 0x3
+    RelocationCount            = 0x0
+    SizeOfParagraphsHeader     = 0x4
+    MinExtraParagraphs         = 0x0
+    MaxExtraParagraphs         = 0xFFFF
+    InitialSSValue             = 0x0
+    InitialSPValue             = 0xB8
+    Checksum                   = 0x0
+    InitialIPValue             = 0x0
+    InitialCSValue             = 0x0
+    FileAddressRelocationTable = 0x40
+    OverlayNumber              = 0x0
+    Reserved                   = 0x0, 0x0, 0x0, 0x0
+    OEMIdentifier              = 0x0
+    OEMInformation             = 0x0
+    Reserved2                  = 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0
+    FileAddressPEHeader        = 0xC8
+
+DOS Stub
+    DosStub                    = 64 bytes
+
+COFF Header
+    Machine                    = Amd64
+    NumberOfSections           = 3
+    TimeDateStamp              = 1727726362
+    PointerToSymbolTable       = 0x0
+    NumberOfSymbols            = 0
+    SizeOfOptionalHeader       = 240
+    Characteristics            = ExecutableImage, LargeAddressAware
+
+Optional Header
+    Magic                      = PE32Plus
+    MajorLinkerVersion         = 14
+    MinorLinkerVersion         = 41
+    SizeOfCode                 = 0x200
+    SizeOfInitializedData      = 0x400
+    SizeOfUninitializedData    = 0x0
+    AddressOfEntryPoint        = 0x1000
+    BaseOfCode                 = 0x1000
+    BaseOfData                 = 0x0
+    ImageBase                  = 0x140000000
+    SectionAlignment           = 0x1000
+    FileAlignment              = 0x200
+    MajorOperatingSystemVersion = 6
+    MinorOperatingSystemVersion = 0
+    MajorImageVersion          = 0
+    MinorImageVersion          = 0
+    MajorSubsystemVersion      = 6
+    MinorSubsystemVersion      = 0
+    Win32VersionValue          = 0x0
+    SizeOfImage                = 0x4000
+    SizeOfHeaders              = 0x400
+    CheckSum                   = 0x0
+    Subsystem                  = WindowsCui
+    DllCharacteristics         = HighEntropyVirtualAddressSpace, DynamicBase, TerminalServerAware
+    SizeOfStackReserve         = 0x100000
+    SizeOfStackCommit          = 0x1000
+    SizeOfHeapReserve          = 0x100000
+    SizeOfHeapCommit           = 0x1000
+    LoaderFlags                = 0x0
+    NumberOfRvaAndSizes        = 0x10
+
+Data Directories
+    [00] = null
+    [01] = PEImportDirectory                Position = 0x00000744, Size = 0x00000028, RVA = 0x00002144, VirtualSize = 0x00000028
+    [02] = null
+    [03] = PEExceptionDirectory             Position = 0x00000800, Size = 0x0000000C, RVA = 0x00003000, VirtualSize = 0x0000000C
+    [04] = null
+    [05] = null
+    [06] = PEDebugDirectory                 Position = 0x00000610, Size = 0x00000038, RVA = 0x00002010, VirtualSize = 0x00000038
+    [07] = null
+    [08] = null
+    [09] = null
+    [10] = null
+    [11] = null
+    [12] = PEImportAddressTableDirectory    Position = 0x00000600, Size = 0x00000010, RVA = 0x00002000, VirtualSize = 0x00000010
+    [13] = null
+    [14] = null
+    [15] = null
+
+Section Headers
+    [00]    .text PESection                        Position = 0x00000400, Size = 0x00000200, RVA = 0x00001000, VirtualSize = 0x00000010, Characteristics = 0x60000020 (ContainsCode, MemExecute, MemRead)
+    [01]   .rdata PESection                        Position = 0x00000600, Size = 0x00000200, RVA = 0x00002000, VirtualSize = 0x0000019C, Characteristics = 0x40000040 (ContainsInitializedData, MemRead)
+    [02]   .pdata PESection                        Position = 0x00000800, Size = 0x00000200, RVA = 0x00003000, VirtualSize = 0x0000000C, Characteristics = 0x40000040 (ContainsInitializedData, MemRead)
+
+Sections
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    [00]    .text PESection                        Position = 0x00000400, Size = 0x00000200, RVA = 0x00001000, VirtualSize = 0x00000010, Characteristics = 0x60000020 (ContainsCode, MemExecute, MemRead)
+    
+        [00] PEStreamSectionData              Position = 0x00000400, Size = 0x00000010, RVA = 0x00001000, VirtualSize = 0x00000010
+        
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    [01]   .rdata PESection                        Position = 0x00000600, Size = 0x00000200, RVA = 0x00002000, VirtualSize = 0x0000019C, Characteristics = 0x40000040 (ContainsInitializedData, MemRead)
+    
+        [00] PEImportAddressTableDirectory    Position = 0x00000600, Size = 0x00000010, RVA = 0x00002000, VirtualSize = 0x00000010
+            [00] PEImportAddressTable             Position = 0x00000600, Size = 0x00000010, RVA = 0x00002000, VirtualSize = 0x00000010
+                [0] PEImportHintName { Hint = 376, Name = ExitProcess } (RVA = 0x2180, PEStreamSectionData { RVA = 0x2180, VirtualSize = 0x1C, Position = 0x780, Size = 0x1C }, Offset = 0x0)
+            
+        
+        [01] PEDebugDirectory                 Position = 0x00000610, Size = 0x00000038, RVA = 0x00002010, VirtualSize = 0x00000038
+            [0] Type = POGO, Characteristics = 0x0, Version = 0.0, TimeStamp = 0x66FB031A, Data = RVA = 0x00002060 (PEDebugStreamSectionData[3] -> .rdata)
+            [1] Type = ILTCG, Characteristics = 0x0, Version = 0.0, TimeStamp = 0x66FB031A, Data = null
+        
+        [02] PEStreamSectionData              Position = 0x00000648, Size = 0x00000018, RVA = 0x00002048, VirtualSize = 0x00000018
+        
+        [03] PEDebugStreamSectionData         Position = 0x00000660, Size = 0x000000DC, RVA = 0x00002060, VirtualSize = 0x000000DC
+        
+        [04] PEStreamSectionData              Position = 0x0000073C, Size = 0x00000008, RVA = 0x0000213C, VirtualSize = 0x00000008
+        
+        [05] PEImportDirectory                Position = 0x00000744, Size = 0x00000028, RVA = 0x00002144, VirtualSize = 0x00000028
+            [0] ImportDllNameLink = KERNEL32.dll (RVA = 0x218E, PEStreamSectionData { RVA = 0x2180, VirtualSize = 0x1C, Position = 0x780, Size = 0x1C }, Offset = 0xE)
+            [0] ImportAddressTable = RVA = 0x00002000 (PEImportAddressTable[0] -> PEImportAddressTableDirectory[0] -> .rdata)
+            [0] ImportLookupTable = RVA = 0x00002170 (PEImportLookupTable[7] -> .rdata)
+            
+        
+        [06] PEStreamSectionData              Position = 0x0000076C, Size = 0x00000004, RVA = 0x0000216C, VirtualSize = 0x00000004
+        
+        [07] PEImportLookupTable              Position = 0x00000770, Size = 0x00000010, RVA = 0x00002170, VirtualSize = 0x00000010
+            [0] PEImportHintName { Hint = 376, Name = ExitProcess } (RVA = 0x2180, PEStreamSectionData { RVA = 0x2180, VirtualSize = 0x1C, Position = 0x780, Size = 0x1C }, Offset = 0x0)
+        
+        [08] PEStreamSectionData              Position = 0x00000780, Size = 0x0000001C, RVA = 0x00002180, VirtualSize = 0x0000001C
+        
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    [02]   .pdata PESection                        Position = 0x00000800, Size = 0x00000200, RVA = 0x00003000, VirtualSize = 0x0000000C, Characteristics = 0x40000040 (ContainsInitializedData, MemRead)
+    
+        [00] PEExceptionDirectory             Position = 0x00000800, Size = 0x0000000C, RVA = 0x00003000, VirtualSize = 0x0000000C
+            [0] Begin = RVA = 0x1000, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x10, Position = 0x400, Size = 0x10 }, Offset = 0x0
+            [0] End = RVA = 0x1010, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x10, Position = 0x400, Size = 0x10 }, Offset = 0x10
+            [0] UnwindInfoAddress = RVA = 0x213C, PEStreamSectionData { RVA = 0x213C, VirtualSize = 0x8, Position = 0x73C, Size = 0x8 }, Offset = 0x0
+            
+        

@@ -74,7 +74,7 @@ internal readonly struct PEImportFunctionTable()
                     return;
                 }
 
-                entry = new PEImportFunctionEntry(new PEAsciiStringLink(streamSectionData, va - container.RVA));
+                entry = new PEImportFunctionEntry(new PEImportHintNameLink(streamSectionData, va - container.RVA));
             }
         }
     }
@@ -100,7 +100,7 @@ internal readonly struct PEImportFunctionTable()
             Entries.Add(
                 entry.IsImportByOrdinal
                     ? new PEImportFunctionEntry(entry.Ordinal)
-                    : new PEImportFunctionEntry(new PEAsciiStringLink(PEStreamSectionData.Empty, entry.HintNameTableRVA))
+                    : new PEImportFunctionEntry(new PEImportHintNameLink(PEStreamSectionData.Empty, entry.HintNameTableRVA))
             );
         }
     }
@@ -126,7 +126,7 @@ internal readonly struct PEImportFunctionTable()
             Entries.Add(
                 entry.IsImportByOrdinal
                     ? new PEImportFunctionEntry(entry.Ordinal)
-                    : entry.HintNameTableRVA > uint.MaxValue ? new PEImportFunctionEntry(entry.HintNameTableRVA) : new PEImportFunctionEntry(new PEAsciiStringLink(PEStreamSectionData.Empty, (uint)entry.HintNameTableRVA))
+                    : entry.HintNameTableRVA > uint.MaxValue ? new PEImportFunctionEntry(entry.HintNameTableRVA) : new PEImportFunctionEntry(new PEImportHintNameLink(PEStreamSectionData.Empty, (uint)entry.HintNameTableRVA))
             );
         }
     }
