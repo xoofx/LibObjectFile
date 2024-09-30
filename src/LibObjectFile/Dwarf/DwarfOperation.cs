@@ -426,7 +426,7 @@ public class DwarfOperation : DwarfObject<DwarfExpression>
         Size = reader.Position - Position;
     }
 
-    public override void UpdateLayout(DwarfLayoutContext layoutContext)
+    protected override void UpdateLayoutCore(DwarfLayoutContext layoutContext)
     {
         var endOffset = Position;
         // 1 byte per opcode

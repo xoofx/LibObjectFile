@@ -29,7 +29,7 @@ public sealed class ArBinaryFile : ArFile
         }
     }
 
-    public override void UpdateLayout(ArVisitorContext context)
+    protected override void UpdateLayoutCore(ArVisitorContext context)
     {
         Size = Stream != null ? (ulong) Stream.Length : 0;
     }

@@ -18,7 +18,7 @@ namespace LibObjectFile.PE;
 /// Contains the array of directory entries in a Portable Executable (PE) file.
 /// </summary>
 [DebuggerDisplay($"{nameof(PEDirectoryTable)} {nameof(Count)} = {{{nameof(Count)}}}")]
-public sealed class PEDirectoryTable : IEnumerable<PEDataDirectory>
+public sealed class PEDirectoryTable
 {
     private PEObjectBase?[] _entries;
     private int _count;
@@ -170,12 +170,6 @@ public sealed class PEDirectoryTable : IEnumerable<PEDataDirectory>
     /// </summary>
     public PEClrMetadata? ClrMetadata => (PEClrMetadata?)this[PEDataDirectoryKind.ClrMetadata];
 
-    /// <summary>
-    /// Gets the enumerator for the directory entries.
-    /// </summary>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public Enumerator GetEnumerator() => new(this);
-
     internal void Set(PESecurityCertificateDirectory? directory) => Set(PEDataDirectoryKind.SecurityCertificate, directory);
 
     internal void Set(PEDataDirectoryKind kind, PEObjectBase? directory) => Set((int)kind, directory);
@@ -209,58 +203,5 @@ public sealed class PEDirectoryTable : IEnumerable<PEDataDirectory>
         writer.Write(tempSpan);
         
         position += (uint)(Count * sizeof(RawImageDataDirectory));
-    }
-
-    /// <summary>
-    /// Enumerator for the directory entries.
-    /// </summary>
-    public struct Enumerator : IEnumerator<PEDataDirectory>
-    {
-        private readonly PEDirectoryTable _table;
-        private int _index;
-
-        internal Enumerator(PEDirectoryTable table)
-        {
-            _table = table;
-            _index = -1;
-        }
-
-        public PEDataDirectory Current => _index >= 0 ? (PEDataDirectory)_table._entries[_index]! : null!;
-
-        object? IEnumerator.Current => Current;
-
-
-        public void Dispose()
-        {
-        }
-
-        public bool MoveNext()
-        {
-            Span<PEObjectBase?> entries = _table._entries;
-            while (++_index < entries.Length)
-            {
-                if (_table._entries[_index] is PEDataDirectory)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        public void Reset()
-        {
-            _index = -1;
-        }
-    }
-
-    IEnumerator<PEDataDirectory> IEnumerable<PEDataDirectory>.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
     }
 }

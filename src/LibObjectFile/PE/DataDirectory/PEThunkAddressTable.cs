@@ -106,7 +106,7 @@ public abstract class PEThunkAddressTable : PESectionData
         writer.WriteU64(0);
     }
 
-    public sealed override unsafe void UpdateLayout(PELayoutContext context)
+    protected sealed override unsafe void UpdateLayoutCore(PELayoutContext context)
     {
         Size = (uint)((Count + 1) * (Is32Bits ? sizeof(VA32) : sizeof(VA64)));
     }

@@ -42,7 +42,7 @@ public class DwarfLocationListEntry : DwarfObject<DwarfLocationList>
         Expression.ReadInternal(reader, inLocationSection: true);
     }
 
-    public override void UpdateLayout(DwarfLayoutContext layoutContext)
+    protected override void UpdateLayoutCore(DwarfLayoutContext layoutContext)
     {
         var endOffset = Position;
 

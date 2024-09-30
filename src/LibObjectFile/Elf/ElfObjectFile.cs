@@ -792,7 +792,7 @@ public sealed class ElfObjectFile : ElfObjectBase
         return left.Index.CompareTo(right.Index);
     }
 
-    public override void UpdateLayout(ElfVisitorContext layoutContext)
+    protected override void UpdateLayoutCore(ElfVisitorContext layoutContext)
     {
     }
 }

@@ -4,7 +4,6 @@
 
 using System;
 using System.IO;
-using LibObjectFile.Utils;
 
 namespace LibObjectFile.PE;
 
@@ -81,7 +80,7 @@ public class PEStreamSectionData : PESectionData
         }
     }
     
-    public override void UpdateLayout(PELayoutContext layoutContext)
+    protected override void UpdateLayoutCore(PELayoutContext layoutContext)
     {
         Size = (ulong)Stream.Length;
     }

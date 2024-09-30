@@ -448,7 +448,7 @@ public class DwarfFile : DwarfContainer
         }
     }
 
-    public override void UpdateLayout(DwarfLayoutContext layoutContext)
+    protected override void UpdateLayoutCore(DwarfLayoutContext layoutContext)
     {
     }
 

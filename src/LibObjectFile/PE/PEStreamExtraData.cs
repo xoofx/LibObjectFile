@@ -47,7 +47,7 @@ public class PEStreamExtraData : PEExtraData
         }
     }
 
-    public override void UpdateLayout(PELayoutContext layoutContext)
+    protected override void UpdateLayoutCore(PELayoutContext layoutContext)
     {
         Size = (uint)Stream.Length;
     }

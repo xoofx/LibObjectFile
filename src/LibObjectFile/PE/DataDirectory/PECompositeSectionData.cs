@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using LibObjectFile.Collections;
 using LibObjectFile.Utils;
@@ -30,7 +31,7 @@ public abstract class PECompositeSectionData : PESectionData
     /// </summary>
     public ObjectList<PESectionData> Content { get; }
 
-    public sealed override void UpdateLayout(PELayoutContext context)
+    protected sealed override void UpdateLayoutCore(PELayoutContext context)
     {
         var va = RVA;
 
@@ -97,7 +98,14 @@ public abstract class PECompositeSectionData : PESectionData
 
             Debug.Assert(table.Position == writer.Position);
 
-            table.Write(writer);
+            if (table is PECompositeSectionData compositeSectionData)
+            {
+                compositeSectionData.WriteHeaderAndContent(writer);
+            }
+            else
+            {
+                table.Write(writer);
+            }
 
             alignment = table.GetRequiredSizeAlignment(writer.PEFile);
             if (alignment > 1)
@@ -110,8 +118,11 @@ public abstract class PECompositeSectionData : PESectionData
     
     protected abstract uint ComputeHeaderSize(PELayoutContext context);
 
-    protected sealed override bool TryFindByRVAInChildren(RVA rva, out PEObject? result)
+    protected sealed override bool TryFindByRVAInChildren(RVA rva, [NotNullWhen(true)] out PEObject? result)
         => Content.TryFindByRVA(rva, true, out result);
+
+    protected sealed override bool TryFindByPositionInChildren(uint position, [NotNullWhen(true)] out PEObjectBase? result)
+        => Content.TryFindByPosition(position, true, out result);
 
     protected sealed override void UpdateRVAInChildren()
     {

@@ -325,7 +325,7 @@ public sealed class ArArchiveFile : ArObjectBase
         writer.Write();
     }
 
-    public override void UpdateLayout(ArVisitorContext context)
+    protected override void UpdateLayoutCore(ArVisitorContext context)
     {
 
     }

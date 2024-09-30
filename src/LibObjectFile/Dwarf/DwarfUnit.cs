@@ -86,7 +86,7 @@ public abstract class DwarfUnit : DwarfContainer
         }
     }
 
-    public override void UpdateLayout(DwarfLayoutContext layoutContext)
+    protected override void UpdateLayoutCore(DwarfLayoutContext layoutContext)
     {
         var offset = this.Position;
 

@@ -28,7 +28,7 @@ public class DwarfAbbreviationTable : DwarfSection
         _abbreviations.Clear();
     }
 
-    public override void UpdateLayout(DwarfLayoutContext layoutContext)
+    protected override void UpdateLayoutCore(DwarfLayoutContext layoutContext)
     {
         ulong endOffset = Position;
         foreach (var abbreviation in _abbreviations)

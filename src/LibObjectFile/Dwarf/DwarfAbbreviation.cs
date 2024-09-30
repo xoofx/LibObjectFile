@@ -206,7 +206,7 @@ public sealed class DwarfAbbreviation : DwarfObject<DwarfAbbreviationTable>
         Debug.Assert(writer.Position - startOffset == Size);
     }
 
-    public override void UpdateLayout(DwarfLayoutContext layoutContext)
+    protected override void UpdateLayoutCore(DwarfLayoutContext layoutContext)
     {
         var endOffset = Position;
 

@@ -71,7 +71,7 @@ public sealed class PESecurityCertificateDirectory : PEExtraData
             {
                 Revision = header.Revision,
                 Type = header.Type,
-                Data = reader.ReadAsStream(header.Length - 8)
+                Data = reader.ReadAsStream(header.Length - (uint)sizeof(RawCertificateHeader))
             };
 
             Certificates.Add(certificate);
@@ -87,26 +87,52 @@ public sealed class PESecurityCertificateDirectory : PEExtraData
             reader.Position = AlignHelper.AlignUp(reader.Position, 8);
         }
 
-        var computedSize = ComputeHeaderSize(reader);
+        var computedSize = CalculateSize();
         Debug.Assert(computedSize == Size);
     }
     
-    private uint ComputeHeaderSize(PEVisitorContext context)
+    private unsafe uint CalculateSize()
     {
         var size = 0u;
         foreach (var certificate in Certificates)
         {
-            size += 8; // CertificateSize + Version + Type
+            size += (uint)sizeof(RawCertificateHeader); // CertificateSize + Version + Type
             size += (uint)certificate.Data.Length;
             size = AlignHelper.AlignUp(size, 8U);
         }
 
         return size;
     }
-    
-    public override void Write(PEImageWriter writer)
+
+    protected override void UpdateLayoutCore(PELayoutContext layoutContext)
     {
-        throw new NotImplementedException();
+        Size = CalculateSize();
+    }
+    
+    public override unsafe void Write(PEImageWriter writer)
+    {
+        var position = 0U;
+        foreach (var certificate in Certificates)
+        {
+            var header = new RawCertificateHeader
+            {
+                Length = (uint)((uint)sizeof(RawCertificateHeader) + certificate.Data.Length),
+                Revision = certificate.Revision,
+                Type = certificate.Type
+            };
+
+            writer.Write(header);
+            writer.Write(certificate.Data);
+
+            position += header.Length;
+            var zeroSize = AlignHelper.AlignUp(position, 8U) - position;
+            if (zeroSize > 0)
+            {
+                writer.WriteZero((int)zeroSize);
+                position += zeroSize;
+            }
+        }
+
     }
     
     private struct RawCertificateHeader

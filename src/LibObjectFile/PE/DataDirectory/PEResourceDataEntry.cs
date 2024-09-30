@@ -68,7 +68,7 @@ public sealed class PEResourceDataEntry : PEResourceEntry
         return true;
     }
 
-    public override unsafe void UpdateLayout(PELayoutContext layoutContext)
+    protected override unsafe void UpdateLayoutCore(PELayoutContext layoutContext)
     {
         Size = (uint)sizeof(RawImageResourceDataEntry);
     }
@@ -97,11 +97,23 @@ public sealed class PEResourceDataEntry : PEResourceEntry
             return;
         }
 
-        Data = new PEResourceData
+        var resourceDataPosition = (uint)(section.Position + rawDataEntry.OffsetToData - section.RVA);
+
+        if (!context.TryFindResourceDataByPosition(resourceDataPosition, out var resourceData))
         {
-            Position = section.Position + rawDataEntry.OffsetToData - section.RVA,
-            Size = rawDataEntry.Size,
-        };
+            resourceData = new PEResourceData
+            {
+                Position = section.Position + rawDataEntry.OffsetToData - section.RVA,
+                Size = rawDataEntry.Size,
+                // Force required alignment to 1 byte when reading from disk
+                RequiredPositionAlignment = 1,
+                RequiredSizeAlignment = 1,
+            };
+
+            context.AddResourceDataByPosition(resourceDataPosition, resourceData);
+        }
+
+        Data = resourceData;
     }
 
     public override void Write(PEImageWriter writer)

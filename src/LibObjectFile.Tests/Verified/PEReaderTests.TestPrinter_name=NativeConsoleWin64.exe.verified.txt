@@ -526,7 +526,11 @@ Sections
             [02] PEResourceDataEntry              Position = 0x00002E48, Size = 0x00000010, RVA = 0x00007048, VirtualSize = 0x00000010
                 > CodePage = null, Data = PEResourceData { RVA = 0x7060, VirtualSize = 0x17D, Position = 0x2E60, Size = 0x17D }
             
-            [03] PEResourceData                   Position = 0x00002E60, Size = 0x0000017D, RVA = 0x00007060, VirtualSize = 0x0000017D
+            [03] PEStreamSectionData              Position = 0x00002E58, Size = 0x00000008, RVA = 0x00007058, VirtualSize = 0x00000008
+            
+            [04] PEResourceData                   Position = 0x00002E60, Size = 0x0000017D, RVA = 0x00007060, VirtualSize = 0x0000017D
+            
+            [05] PEStreamSectionData              Position = 0x00002FDD, Size = 0x00000003, RVA = 0x000071DD, VirtualSize = 0x00000003
             
         
     --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

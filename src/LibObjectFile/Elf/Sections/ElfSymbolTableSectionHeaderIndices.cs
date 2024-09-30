@@ -91,7 +91,7 @@ public sealed class ElfSymbolTableSectionHeaderIndices : ElfSection
         }
     }
 
-    public override void UpdateLayout(ElfVisitorContext context)
+    protected override void UpdateLayoutCore(ElfVisitorContext context)
     {
         // Verify that the link is safe and configured as expected
         Link.TryGetSectionSafe<ElfSymbolTable>(nameof(ElfSymbolTableSectionHeaderIndices), nameof(Link), this, context.Diagnostics, out var symbolTable, ElfSectionType.SymbolTable, ElfSectionType.DynamicLinkerSymbolTable);

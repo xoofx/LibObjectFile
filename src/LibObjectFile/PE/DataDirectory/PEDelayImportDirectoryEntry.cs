@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -24,7 +24,7 @@ public class PEDelayImportDirectoryEntry
 
     public PEImportLookupTable DelayImportNameTable { get; set; }
 
-    public PEBoundImportAddressTable? BoundImportAddressTable { get; set; }
+    public PESectionDataLink BoundImportAddressTableLink { get; set; }
 
-    public PEBoundImportAddressTable? UnloadDelayInformationTable { get; set; }
+    public PESectionDataLink UnloadDelayInformationTableLink { get; set; }
 }

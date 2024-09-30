@@ -86,6 +86,10 @@ public sealed class PEImportDirectory : PEDataDirectory
                         Position = importLookupTablePositionInFile
                     }
                 )
+                {
+                    TimeDateStamp = rawEntry.TimeDateStamp,
+                    ForwarderChain = rawEntry.ForwarderChain
+                }
             );
         }
 
@@ -109,6 +113,8 @@ public sealed class PEImportDirectory : PEDataDirectory
             rawEntry.NameRVA = (uint)entry.ImportDllNameLink.RVA();
             rawEntry.ImportLookupTableRVA = (uint)entry.ImportLookupTable.RVA;
             rawEntry.ImportAddressTableRVA = (uint)entry.ImportAddressTable.RVA;
+            rawEntry.TimeDateStamp = entry.TimeDateStamp;
+            rawEntry.ForwarderChain = entry.ForwarderChain;
             writer.Write(rawEntry);
         }
 
@@ -154,14 +160,18 @@ public sealed class PEImportDirectory : PEDataDirectory
             entry = new PEImportDirectoryEntry(
                 new PEAsciiStringLink(streamSectionData, va - container.RVA),
                 entry.ImportAddressTable,
-                entry.ImportLookupTable);
+                entry.ImportLookupTable)
+            {
+                TimeDateStamp = entry.TimeDateStamp,
+                ForwarderChain = entry.ForwarderChain
+            };
         }
 
 
         foreach (var entry in Entries)
         {
-            entry.ImportAddressTable.FunctionTable.Bind(reader);
-            entry.ImportLookupTable.FunctionTable.Bind(reader);
+            entry.ImportAddressTable.FunctionTable.Bind(reader, true);
+            entry.ImportLookupTable.FunctionTable.Bind(reader, false);
         }
     }
 

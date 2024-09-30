@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -20,7 +20,7 @@ public class PELoadConfigDirectory64 : PELoadConfigDirectory
     public unsafe PELoadConfigDirectory64() : base(sizeof(PELoadConfigDirectoryData64))
     {
         // ReSharper disable once VirtualMemberCallInConstructor
-        SetRawDataSize(sizeof(PELoadConfigDirectoryData64));
+        SetConfigSize((uint)sizeof(PELoadConfigDirectoryData64));
     }
 
     public uint ConfigSize => Data.Size;

@@ -4,7 +4,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
+using System.IO;
 using System.Reflection.PortableExecutable;
 using System.Text;
 using LibObjectFile.Collections;
@@ -18,15 +18,18 @@ namespace LibObjectFile.PE;
 public sealed class PESection : PEObject
 {
     private readonly ObjectList<PESectionData> _content;
+    private PESectionVirtualSizeMode _virtualSizeMode;
 
-    public PESection(PESectionName name, RVA rva, RVA virtualSize)
+    public PESection(PESectionName name, RVA rva)
     {
         Name = name;
         RVA = rva;
-        VirtualSize = virtualSize;
         _content = PEObject.CreateObjectList<PESectionData>(this);
         // Most of the time readable
         Characteristics = SectionCharacteristics.MemRead;
+
+        // A PESection always has a custom virtual size calculated from its content
+        SetCustomVirtualSize(0);
     }
 
     /// <summary>
@@ -37,12 +40,6 @@ public sealed class PESection : PEObject
     public override bool HasChildren => true;
 
     /// <summary>
-    /// The total size of the section when loaded into memory.
-    /// If this value is greater than <see cref="Size"/>, the section is zero-padded.
-    /// </summary>
-    public override uint VirtualSize { get; }
-    
-    /// <summary>
     /// Flags that describe the characteristics of the section.
     /// </summary>
     public System.Reflection.PortableExecutable.SectionCharacteristics Characteristics { get; set; }
@@ -51,6 +48,39 @@ public sealed class PESection : PEObject
     /// Gets the list of data associated with this section.
     /// </summary>
     public ObjectList<PESectionData> Content => _content;
+
+    /// <summary>
+    /// Gets the mode of the virtual size of this section.
+    /// </summary>
+    public PESectionVirtualSizeMode VirtualSizeMode => _virtualSizeMode;
+
+    /// <summary>
+    /// Gets or sets the stream added to the end of the section to pad it to a specific size and fill it with specific padding data.
+    /// </summary>
+    public Stream? PaddingStream { get; set; }
+
+    /// <summary>
+    /// Sets the virtual size of this section to be automatically computed from its raw size.
+    /// </summary>
+    /// <remarks>
+    /// The layout of the PEFile should be updated after calling this method via <see cref="PEFile.UpdateLayout"/>.
+    /// </remarks>
+    public void SetVirtualSizeModeToAuto() => SetVirtualSizeMode(PESectionVirtualSizeMode.Auto, 0);
+
+    /// <summary>
+    /// Sets the virtual size of this section to a fixed size.
+    /// </summary>
+    /// <param name="virtualSize">The virtual size of the section.</param>
+    /// <remarks>
+    /// The layout of the PEFile should be updated after calling this method via <see cref="PEFile.UpdateLayout"/>.
+    /// </remarks>
+    public void SetVirtualSizeModeToFixed(uint virtualSize) => SetVirtualSizeMode(PESectionVirtualSizeMode.Fixed, virtualSize);
+
+    internal void SetVirtualSizeMode(PESectionVirtualSizeMode mode, uint initialSize)
+    {
+        _virtualSizeMode = mode;
+        SetCustomVirtualSize(initialSize);
+    }
     
     /// <inheritdoc />
     public override uint GetRequiredPositionAlignment(PEFile file) => file.OptionalHeader.FileAlignment;
@@ -64,7 +94,7 @@ public sealed class PESection : PEObject
     /// <param name="virtualAddress">The virtual address to search for.</param>
     /// <param name="sectionData">The section data that contains the virtual address, if found.</param>
     /// <returns><c>true</c> if the section data was found; otherwise, <c>false</c>.</returns>
-    public bool TryFindSectionData(RVA virtualAddress, [NotNullWhen(true)] out PESectionData? sectionData)
+    public bool TryFindSectionDataByRVA(RVA virtualAddress, [NotNullWhen(true)] out PESectionData? sectionData)
     {
         var result = _content.TryFindByRVA(virtualAddress, true, out var sectionObj);
         sectionData = sectionObj as PESectionData;
@@ -72,50 +102,65 @@ public sealed class PESection : PEObject
     }
 
     /// <inheritdoc />
-    public override void UpdateLayout(PELayoutContext context)
+    protected override void UpdateLayoutCore(PELayoutContext context)
     {
-        var peFile = context.File;
-
-        var va = RVA;
-        var position = (uint)Position;
-        var size = 0U;
-        foreach (var data in Content)
+        context.CurrentSection = this;
+        try
         {
-            // Make sure we align the position and the virtual address
-            var alignment = data.GetRequiredPositionAlignment(context.File);
+            var peFile = context.File;
 
-            if (alignment > 1)
+            var va = RVA;
+            var position = (uint)Position;
+            var size = 0U;
+            foreach (var data in Content)
             {
-                var newPosition = AlignHelper.AlignUp(position, alignment);
-                size += newPosition - position;
-                position = newPosition;
-                va = AlignHelper.AlignUp(va, alignment);
+                // Make sure we align the position and the virtual address
+                var alignment = data.GetRequiredPositionAlignment(context.File);
+
+                if (alignment > 1)
+                {
+                    var newPosition = AlignHelper.AlignUp(position, alignment);
+                    size += newPosition - position;
+                    position = newPosition;
+                    va = AlignHelper.AlignUp(va, alignment);
+                }
+
+                data.RVA = va;
+
+                if (!context.UpdateSizeOnly)
+                {
+                    data.Position = position;
+                }
+
+                data.UpdateLayout(context);
+
+                var dataSize = AlignHelper.AlignUp((uint)data.Size, data.GetRequiredSizeAlignment(peFile));
+                va += dataSize;
+                position += dataSize;
+                size += dataSize;
             }
 
-            data.RVA = va;
-
-            if (!context.UpdateSizeOnly)
+            if (_virtualSizeMode == PESectionVirtualSizeMode.Auto)
             {
-                data.Position = position;
+                SetCustomVirtualSize(size);
             }
 
-            data.UpdateLayout(context);
-
-            var dataSize = AlignHelper.AlignUp((uint)data.Size, data.GetRequiredSizeAlignment(peFile));
-            va += dataSize;
-            position += dataSize;
-            size += dataSize;
+            if ((Characteristics & SectionCharacteristics.ContainsUninitializedData) == 0)
+            {
+                // The size of a section is the size of the content aligned on the file alignment
+                var fileAlignment = peFile.OptionalHeader.FileAlignment;
+                var sizeWithAlignment = AlignHelper.AlignUp(size, fileAlignment);
+                Size = sizeWithAlignment;
+            }
+            else
+            {
+                Size = 0;
+            }
         }
-
-        // The size of a section is the size of the content aligned on the file alignment
-        var fileAlignment = peFile.OptionalHeader.FileAlignment;
-        Size = (Characteristics & SectionCharacteristics.ContainsUninitializedData) == 0 ? AlignHelper.AlignUp(size, fileAlignment) : (ulong)0;
-
-        //if (Size > VirtualSize)
-        //{
-        //    // Log diagnostics error
-        //    context.Diagnostics.Error(DiagnosticId.PE_ERR_SectionSizeLargerThanVirtualSize, $"Section {Name} size {Size} is greater than the virtual size {VirtualSize}");
-        //}
+        finally
+        {
+            context.CurrentSection = null;
+        }
     }
 
     public override void Read(PEImageReader reader)
@@ -140,8 +185,11 @@ public sealed class PESection : PEObject
         return true;
     }
     
-    protected override bool TryFindByRVAInChildren(RVA rva, out PEObject? result) 
+    protected override bool TryFindByRVAInChildren(RVA rva, [NotNullWhen(true)] out PEObject? result) 
         => _content.TryFindByRVA(rva, true, out result);
+
+    protected override bool TryFindByPositionInChildren(uint position, [NotNullWhen(true)] out PEObjectBase? result)
+        => _content.TryFindByPosition(position, true, out result);
 
     protected override void UpdateRVAInChildren()
     {

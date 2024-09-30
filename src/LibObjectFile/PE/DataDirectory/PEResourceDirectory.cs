@@ -44,7 +44,6 @@ public sealed class PEResourceDirectory : PEDataDirectory
     public override void Read(PEImageReader reader)
     {
         reader.Position = Position;
-
         Root.Position = Position;
 
         _tempResourceStrings = new();
@@ -61,7 +60,6 @@ public sealed class PEResourceDirectory : PEDataDirectory
         }
 
         // Read the content of the resource data (that should usually be stored after the resource strings)
-        bool isFirstDataEntry = true;
         foreach (var resourceEntry in _tempResourceEntries)
         {
             if (resourceEntry is not PEResourceDataEntry dataEntry)
@@ -71,22 +69,12 @@ public sealed class PEResourceDirectory : PEDataDirectory
 
             var resourceData = dataEntry.Data;
 
-            // If we find that the position is not aligned on 4 bytes as we expect, reset it to 1 byte alignment
-            var checkPosition = AlignHelper.AlignUp(resourceData.Position, resourceData.RequiredPositionAlignment);
-            if (checkPosition != resourceData.Position)
-            {
-                resourceData.RequiredPositionAlignment = 1;
-            }
-            else if (isFirstDataEntry && (resourceData.Position & 0xF) == 0)
-            {
-                // If we are the first resource data entry and the position is aligned on 16 bytes, we can assume this alignment
-                resourceData.RequiredPositionAlignment = 16;
-            }
+            // Force alignment to 1 when reading as we want always to recover intermediate data
+            resourceData.RequiredPositionAlignment = 1;
+            resourceData.RequiredSizeAlignment = 1;
 
             // Read the data
             resourceData.Read(reader);
-
-            isFirstDataEntry = false;
         }
 
         HeaderSize = ComputeHeaderSize(reader);
@@ -108,11 +96,14 @@ public sealed class PEResourceDirectory : PEDataDirectory
 
         if (_tempResourceEntries is not null)
         {
+            var resourceData = new HashSet<PEResourceData>();
+
             foreach (var data in _tempResourceEntries)
             {
                 yield return data;
 
-                if (data is PEResourceDataEntry dataEntry)
+                // If a resource data is not already in the set, we add it and return it
+                if (data is PEResourceDataEntry dataEntry && resourceData.Add(dataEntry.Data))
                 {
                     yield return dataEntry.Data;
                 }

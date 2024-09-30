@@ -130,7 +130,7 @@ public sealed class DwarfAttribute : DwarfObject<DwarfDIE>, IComparable<DwarfAtt
         return true;
     }
 
-    public override void UpdateLayout(DwarfLayoutContext layoutContext)
+    protected override void UpdateLayoutCore(DwarfLayoutContext layoutContext)
     {
         var addressSize = layoutContext.CurrentUnit!.AddressSize;
         var is64BitEncoding = layoutContext.CurrentUnit.Is64BitEncoding;

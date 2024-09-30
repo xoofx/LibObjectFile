@@ -43,7 +43,7 @@ public sealed class ArElfFile : ArFile
         }
     }
 
-    public override void UpdateLayout(ArVisitorContext context)
+    protected override void UpdateLayoutCore(ArVisitorContext context)
     {
         Size = 0;
             

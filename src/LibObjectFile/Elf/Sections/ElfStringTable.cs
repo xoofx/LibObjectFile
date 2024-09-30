@@ -55,7 +55,7 @@ public class ElfStringTable : ElfSection
         }
     }
 
-    public override void UpdateLayout(ElfVisitorContext context)
+    protected override void UpdateLayoutCore(ElfVisitorContext context)
     {
         if (_reservedStrings.Count > 0) FlushReservedStrings();
         Size = (ulong)_table.Length;

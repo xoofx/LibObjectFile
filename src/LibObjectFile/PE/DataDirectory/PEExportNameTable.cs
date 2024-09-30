@@ -24,7 +24,7 @@ public sealed class PEExportNameTable : PESectionData
 
     public List<PEAsciiStringLink> Values { get; } = new();
 
-    public override unsafe void UpdateLayout(PELayoutContext context)
+    protected override unsafe void UpdateLayoutCore(PELayoutContext context)
     {
         Size = (ulong)(Values.Count * sizeof(RVA));
     }

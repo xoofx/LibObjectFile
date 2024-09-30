@@ -68,42 +68,14 @@ public sealed class PEDelayImportDirectory : PEDataDirectory
             // Calculate its position within the original stream
             var importDelayLoadImportNameTablePositionInFile = section.Position + rawEntry.DelayLoadImportNameTableRVA - section.RVA;
 
-            PEBoundImportAddressTable? boundImportAddressTable = null;
-            if (rawEntry.BoundDelayLoadImportAddressTableRVA != 0)
-            {
-                // BoundDelayLoadImportAddressTableRVA
-                if (!reader.File.TryFindSection(rawEntry.BoundDelayLoadImportAddressTableRVA, out section))
-                {
-                    diagnostics.Error(DiagnosticId.PE_ERR_ImportDirectoryInvalidBoundDelayLoadImportAddressTableRVA, $"Unable to find the section for BoundDelayLoadImportAddressTableRVA {rawEntry.BoundDelayLoadImportAddressTableRVA}");
-                    return;
-                }
-
-                boundImportAddressTable = is32Bits ? new PEBoundImportAddressTable32() : new PEBoundImportAddressTable64();
-                boundImportAddressTable.Position = (uint)section.Position + rawEntry.BoundDelayLoadImportAddressTableRVA - section.RVA;
-            }
-
-            PEBoundImportAddressTable? unloadDelayInformationTable = null;
-            if (rawEntry.UnloadDelayLoadImportAddressTableRVA != 0)
-            {
-                // UnloadDelayLoadImportAddressTableRVA
-                if (!reader.File.TryFindSection(rawEntry.UnloadDelayLoadImportAddressTableRVA, out section))
-                {
-                    diagnostics.Error(DiagnosticId.PE_ERR_ImportDirectoryInvalidUnloadDelayLoadImportAddressTableRVA, $"Unable to find the section for UnloadDelayLoadImportAddressTableRVA {rawEntry.UnloadDelayLoadImportAddressTableRVA}");
-                    return;
-                }
-
-                unloadDelayInformationTable = is32Bits ? new PEBoundImportAddressTable32() : new PEBoundImportAddressTable64();
-                unloadDelayInformationTable.Position = (uint)section.Position + rawEntry.UnloadDelayLoadImportAddressTableRVA - section.RVA;
-            }
-
             PEBoundImportAddressTable delayImportAddressTable = is32Bits ? new PEBoundImportAddressTable32() : new PEBoundImportAddressTable64();
             delayImportAddressTable.Position = (uint)importDelayLoadImportAddressTablePositionInFile;
 
             Entries.Add(
 
                 new PEDelayImportDirectoryEntry(
-                    new PEAsciiStringLink(PEStreamSectionData.Empty, (RVO)(uint)rawEntry.NameRVA),
-                    new PEModuleHandleLink(PEStreamSectionData.Empty, (RVO)(uint)rawEntry.ModuleHandleRVA),
+                    new PEAsciiStringLink(null, (RVO)(uint)rawEntry.NameRVA),
+                    new PEModuleHandleLink(null, (RVO)(uint)rawEntry.ModuleHandleRVA),
                     delayImportAddressTable,
                     new PEImportLookupTable()
                     {
@@ -112,8 +84,8 @@ public sealed class PEDelayImportDirectory : PEDataDirectory
                     )
                 {
                     Attributes = rawEntry.Attributes,
-                    BoundImportAddressTable = boundImportAddressTable,
-                    UnloadDelayInformationTable = unloadDelayInformationTable
+                    BoundImportAddressTableLink = new PESectionDataLink(null, (RVO)(uint)rawEntry.BoundDelayLoadImportAddressTableRVA),
+                    UnloadDelayInformationTableLink = new PESectionDataLink(null, (RVO)(uint)rawEntry.UnloadDelayLoadImportAddressTableRVA)
                 }
             );
         }
@@ -127,18 +99,6 @@ public sealed class PEDelayImportDirectory : PEDataDirectory
         {
             entry.DelayImportAddressTable.Read(reader);
             entry.DelayImportNameTable.Read(reader);
-
-            if (entry.BoundImportAddressTable != null)
-            {
-                entry.BoundImportAddressTable.SetCount(entry.DelayImportAddressTable.Count);
-                entry.BoundImportAddressTable.Read(reader);
-            }
-
-            if (entry.UnloadDelayInformationTable != null)
-            {
-                entry.UnloadDelayInformationTable.SetCount(entry.DelayImportAddressTable.Count);
-                entry.UnloadDelayInformationTable.Read(reader);
-            }
         }
     }
     internal override IEnumerable<PEObjectBase> CollectImplicitSectionDataList()
@@ -147,16 +107,6 @@ public sealed class PEDelayImportDirectory : PEDataDirectory
         {
             yield return entry.DelayImportAddressTable;
             yield return entry.DelayImportNameTable;
-
-            if (entry.BoundImportAddressTable != null)
-            {
-                yield return entry.BoundImportAddressTable;
-            }
-
-            if (entry.UnloadDelayInformationTable != null)
-            {
-                yield return entry.UnloadDelayInformationTable;
-            }
         }
     }
 
@@ -185,23 +135,56 @@ public sealed class PEDelayImportDirectory : PEDataDirectory
 
             entry.DllName = new PEAsciiStringLink(streamSectionData, rva - container.RVA);
 
+            // The ModuleHandle could be in Virtual memory and not bound, so we link to a section and not a particular data on the disk
             rva = (RVA)(uint)entry.ModuleHandle.RVO;
-            if (!peFile.TryFindContainerByRVA(rva, out container))
+            if (!peFile.TryFindSection(rva, out var moduleSection))
             {
                 diagnostics.Error(DiagnosticId.PE_ERR_DelayImportDirectoryInvalidModuleHandleRVA, $"Unable to find the section data for ModuleHandleRVA {rva}");
                 return;
             }
 
-            streamSectionData = container as PEStreamSectionData;
-            if (streamSectionData is null)
+            entry.ModuleHandle = new PEModuleHandleLink(moduleSection, rva - moduleSection.RVA);
+            
+            entry.DelayImportNameTable.FunctionTable.Bind(reader, false);
+
+
+            if (entry.BoundImportAddressTableLink.RVO != 0)
             {
-                diagnostics.Error(DiagnosticId.PE_ERR_DelayImportDirectoryInvalidModuleHandleRVA, $"The section data for ModuleHandleRVA {rva} is not a stream section data");
-                return;
+                rva = (RVA)(uint)entry.BoundImportAddressTableLink.RVO;
+                if (!peFile.TryFindContainerByRVA(rva, out container))
+                {
+                    diagnostics.Error(DiagnosticId.PE_ERR_ImportDirectoryInvalidBoundDelayLoadImportAddressTableRVA, $"Unable to find the section data for BoundImportAddressTableRVA {rva}");
+                    return;
+                }
+
+                streamSectionData = container as PEStreamSectionData;
+                if (streamSectionData is null)
+                {
+                    diagnostics.Error(DiagnosticId.PE_ERR_ImportDirectoryInvalidBoundDelayLoadImportAddressTableRVA, $"The section data for BoundImportAddressTableRVA {rva} is not a stream section data");
+                    return;
+                }
+
+                entry.BoundImportAddressTableLink = new PESectionDataLink(streamSectionData, rva - container.RVA);
             }
 
-            entry.ModuleHandle = new PEModuleHandleLink(streamSectionData, rva - container.RVA);
-            
-            entry.DelayImportNameTable.FunctionTable.Bind(reader);
+            if (entry.UnloadDelayInformationTableLink.RVO != 0)
+            {
+                rva = (RVA)(uint)entry.UnloadDelayInformationTableLink.RVO;
+                if (!peFile.TryFindContainerByRVA(rva, out container))
+                {
+                    diagnostics.Error(DiagnosticId.PE_ERR_ImportDirectoryInvalidUnloadDelayLoadImportAddressTableRVA, $"Unable to find the section data for UnloadDelayInformationTableRVA {rva}");
+                    return;
+                }
+
+                streamSectionData = container as PEStreamSectionData;
+                if (streamSectionData is null)
+                {
+                    diagnostics.Error(DiagnosticId.PE_ERR_ImportDirectoryInvalidUnloadDelayLoadImportAddressTableRVA, $"The section data for UnloadDelayInformationTableRVA {rva} is not a stream section data");
+                    return;
+                }
+
+                entry.UnloadDelayInformationTableLink = new PESectionDataLink(streamSectionData, rva - container.RVA);
+            }
         }
     }
 
@@ -228,8 +211,8 @@ public sealed class PEDelayImportDirectory : PEDataDirectory
             rawEntry.ModuleHandleRVA = (uint)entry.ModuleHandle.RVA();
             rawEntry.DelayLoadImportAddressTableRVA = (uint)entry.DelayImportAddressTable.RVA;
             rawEntry.DelayLoadImportNameTableRVA = (uint)entry.DelayImportNameTable.RVA;
-            rawEntry.BoundDelayLoadImportAddressTableRVA = entry.BoundImportAddressTable?.RVA ?? 0;
-            rawEntry.UnloadDelayLoadImportAddressTableRVA = entry.UnloadDelayInformationTable?.RVA ?? 0;
+            rawEntry.BoundDelayLoadImportAddressTableRVA = entry.BoundImportAddressTableLink.RVA();
+            rawEntry.UnloadDelayLoadImportAddressTableRVA = entry.UnloadDelayInformationTableLink.RVA();
             rawEntry.TimeDateStamp = 0;
 
             rawEntries[i] = rawEntry;

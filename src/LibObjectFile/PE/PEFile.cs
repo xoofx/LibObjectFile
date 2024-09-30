@@ -28,6 +28,12 @@ public sealed partial class PEFile : PEObjectBase
     private readonly ObjectList<PESection> _sections;
     private int _unsafeNegativePEHeaderOffset;
 
+    static PEFile()
+    {
+        // Required for resolving code pages
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+    }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="PEFile"/> class.
     /// </summary>
@@ -76,7 +82,7 @@ public sealed partial class PEFile : PEObjectBase
             {
                 throw new InvalidOperationException("Setting a negative PEHeader offset is not compatible with having a DOS Stub and DosStubExtra");
             }
-            
+
             _unsafeNegativePEHeaderOffset = value;
         }
     }
@@ -154,18 +160,38 @@ public sealed partial class PEFile : PEObjectBase
     /// Gets the sections.
     /// </summary>
     public ObjectList<PESection> Sections => _sections;
-    
+
     /// <summary>
     /// Gets the data present after the sections in the file (e.g <see cref="PESecurityCertificateDirectory"/>)
     /// </summary>
     public ObjectList<PEExtraData> ExtraDataAfterSections { get; }
 
-    public PESection AddSection(PESectionName name, uint virtualAddress, uint virtualSize)
+    /// <summary>
+    /// Used for testing when the size of initialized data is not correctly computed because an existing PE is using a different algorithm for computing the size.
+    /// </summary>
+    internal uint ForceSizeOfInitializedData { get; set; }
+
+    public override bool HasChildren => true;
+
+
+    public PESection AddSection(PESectionName name, RVA rva)
     {
-        var section = new PESection(name, virtualAddress, virtualSize)
+        var section = new PESection(name, rva)
         {
             Characteristics = PESection.GetDefaultSectionCharacteristics(name)
         };
+        section.SetVirtualSizeModeToAuto();
+        _sections.Add(section);
+        return section;
+    }
+
+    public PESection AddSection(PESectionName name, RVA rva, uint virtualSize)
+    {
+        var section = new PESection(name, rva)
+        {
+            Characteristics = PESection.GetDefaultSectionCharacteristics(name)
+        };
+        section.SetVirtualSizeModeToFixed(virtualSize);
         _sections.Add(section);
         return section;
     }
@@ -182,7 +208,13 @@ public sealed partial class PEFile : PEObjectBase
 
     public bool TryFindContainerByRVA(RVA rva, [NotNullWhen(true)] out PEObject? container)
         => _sections.TryFindByRVA(rva, true, out container);
-    
+
+
+    protected override bool TryFindByPositionInChildren(uint position, [NotNullWhen(true)] out PEObjectBase? result)
+        => _sections.TryFindByPosition(position, true, out result) ||
+               ExtraDataBeforeSections.TryFindByPosition(position, true, out result) ||
+               ExtraDataAfterSections.TryFindByPosition(position, true, out result);
+
     public void RemoveSection(PESectionName name)
     {
         ArgumentNullException.ThrowIfNull(name);
@@ -193,7 +225,7 @@ public sealed partial class PEFile : PEObjectBase
 
         _sections.Remove(section);
     }
-    
+
     public void ClearSections() => _sections.Clear();
 
     public PESection GetSection(PESectionName name)
@@ -235,6 +267,7 @@ public sealed partial class PEFile : PEObjectBase
         {
             count += section.Content.Count;
         }
+
         dataList.Capacity = count;
 
         foreach (var section in sections)
@@ -259,7 +292,7 @@ public sealed partial class PEFile : PEObjectBase
     public bool TryFindByVA(VA32 va, [NotNullWhen(true)] out PEObject? result, out RVO offset)
     {
         if (!IsPE32) throw new InvalidOperationException("PEFile is not a PE32 image");
-        
+
         var rawRva = va - (uint)OptionalHeader.ImageBase;
         var rva = (RVA)(uint)rawRva;
         if (rawRva <= int.MaxValue && TryFindContainerByRVA(rva, out result))
@@ -309,7 +342,7 @@ public sealed partial class PEFile : PEObjectBase
     }
 
     /// <inheritdoc />
-    public override unsafe void UpdateLayout(PELayoutContext context)
+    protected override unsafe void UpdateLayoutCore(PELayoutContext context)
     {
         var position = 0U;
 
@@ -328,14 +361,15 @@ public sealed partial class PEFile : PEObjectBase
 
         // COFF header
         position += (uint)sizeof(PECoffHeader);
-        
+
         // TODO: update other DosHeader fields
 
-        position += (uint)(IsPE32 ? sizeof(RawImageOptionalHeader32) : sizeof(RawImageOptionalHeader64));
+        position += (uint)(IsPE32 ? RawImageOptionalHeader32.MinimumSize : RawImageOptionalHeader64.MinimumSize);
 
         // Update directories
         position += (uint)(Directories.Count * sizeof(RawImageDataDirectory));
 
+        position += (uint)(sizeof(RawImageSectionHeader) * _sections.Count);
         // TODO: Additional optional header size?
 
         // Data before sections
@@ -390,7 +424,7 @@ public sealed partial class PEFile : PEObjectBase
         RVA previousEndOfRVA = 0U;
         foreach (var section in _sections)
         {
-            section.Position = position;
+            section.Position = section.Size > 0 ? position : (ulong)0;
             section.UpdateLayout(context);
             if (section.RVA < previousEndOfRVA)
             {
@@ -400,23 +434,31 @@ public sealed partial class PEFile : PEObjectBase
             var sectionSize = (uint)section.Size;
             position += sectionSize;
 
-            var virtualSizeDiskAligned = AlignHelper.AlignUp(section.VirtualSize, OptionalHeader.FileAlignment);
+            var minDataSize = AlignHelper.AlignUp((uint)section.VirtualSize, OptionalHeader.FileAlignment);
+            //minDataSize = section.Size > minDataSize ? (uint)section.Size : minDataSize;
+            //var minDataSize = (uint)section.Size;
 
             if ((section.Characteristics & SectionCharacteristics.ContainsCode) != 0)
             {
-                OptionalHeader.OptionalHeaderCommonPart1.SizeOfCode += virtualSizeDiskAligned;
+                OptionalHeader.OptionalHeaderCommonPart1.SizeOfCode += minDataSize;
             }
             else if ((section.Characteristics & SectionCharacteristics.ContainsInitializedData) != 0)
             {
-                OptionalHeader.OptionalHeaderCommonPart1.SizeOfInitializedData += virtualSizeDiskAligned;
+                OptionalHeader.OptionalHeaderCommonPart1.SizeOfInitializedData += minDataSize;
             }
             else if ((section.Characteristics & SectionCharacteristics.ContainsUninitializedData) != 0)
             {
-                OptionalHeader.OptionalHeaderCommonPart1.SizeOfUninitializedData += virtualSizeDiskAligned;
+                OptionalHeader.OptionalHeaderCommonPart1.SizeOfUninitializedData += minDataSize;
             }
 
             // Update the end of the RVA
             previousEndOfRVA = section.RVA + AlignHelper.AlignUp(section.VirtualSize, OptionalHeader.SectionAlignment);
+        }
+
+        // Used by tests to force the size of initialized data that seems to be calculated differently from the standard way by some linkers
+        if (ForceSizeOfInitializedData != 0)
+        {
+            OptionalHeader.OptionalHeaderCommonPart1.SizeOfInitializedData = ForceSizeOfInitializedData;
         }
 
         // Update the (virtual) size of the image
@@ -463,5 +505,4 @@ public sealed partial class PEFile : PEObjectBase
         builder.Append($"Directories[{Directories.Count}], Sections[{Sections.Count}]");
         return true;
     }
-
 }

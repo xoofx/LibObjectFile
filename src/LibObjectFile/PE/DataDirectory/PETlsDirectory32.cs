@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -19,8 +19,6 @@ public sealed class PETlsDirectory32 : PETlsDirectory
     public unsafe PETlsDirectory32() : base(sizeof(PETlsDirectoryData32))
     {
     }
-    
-    public override unsafe int RawDataSize => sizeof(PETlsDirectoryData32);
 
     /// <summary>
     /// The starting address of the TLS template.
@@ -102,9 +100,9 @@ public sealed class PETlsDirectory32 : PETlsDirectory
         get => ref Unsafe.As<byte, PETlsDirectoryData32>(ref MemoryMarshal.GetArrayDataReference(RawData));
     }
 
-    public override unsafe void SetRawDataSize(int value)
+    public override unsafe void SetRawDataSize(uint value)
     {
-        ArgumentOutOfRangeException.ThrowIfLessThan(value, sizeof(PETlsDirectoryData32));
+        ArgumentOutOfRangeException.ThrowIfLessThan(value, (uint)sizeof(PETlsDirectoryData32));
         base.SetRawDataSize(value);
     }
 }

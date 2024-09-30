@@ -61,7 +61,7 @@ public sealed class DwarfInfoSection : DwarfRelocatableSection
         }
     }
 
-    public override void UpdateLayout(DwarfLayoutContext layoutContext)
+    protected override void UpdateLayoutCore(DwarfLayoutContext layoutContext)
     {
         var offset = Position;
         foreach (var unit in Units)

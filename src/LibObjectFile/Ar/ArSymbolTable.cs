@@ -205,7 +205,7 @@ public sealed class ArSymbolTable : ArFile
     }
 
 
-    public override void UpdateLayout(ArVisitorContext context)
+    protected override void UpdateLayoutCore(ArVisitorContext context)
     {
         if (Parent == null) return;
 

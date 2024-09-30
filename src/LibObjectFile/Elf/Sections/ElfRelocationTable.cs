@@ -300,7 +300,7 @@ public sealed class ElfRelocationTable : ElfSection
         }
     }
 
-    public override unsafe void UpdateLayout(ElfVisitorContext context)
+    protected override unsafe void UpdateLayoutCore(ElfVisitorContext context)
     {
         Size = Parent == null || Parent.FileClass == ElfFileClass.None ? 0 :
             Parent.FileClass == ElfFileClass.Is32

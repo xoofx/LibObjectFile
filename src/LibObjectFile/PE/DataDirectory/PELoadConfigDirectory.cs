@@ -21,22 +21,15 @@ public abstract class PELoadConfigDirectory : PERawDataDirectory
     {
     }
 
-
-    /// <inheritdoc />
-    public sealed override int RawDataSize => (int)MemoryMarshal.Read<uint>(RawData);
-    
     /// <summary>
-    /// Sets the config size.
+    /// Change the recorded size of the Load Configuration Directory.
     /// </summary>
-    /// <param name="value">The new config size.</param>
-    /// <remarks>
-    /// The underlying buffer <see cref="RawData"/> will be resized if necessary.
-    /// </remarks>
-    public sealed override void SetRawDataSize(int value)
+    /// <param name="size"></param>
+    public void SetConfigSize(uint size)
     {
-        base.SetRawDataSize(value);
+        SetRawDataSize(size);
 
         // Write back the configuration size
-        MemoryMarshal.Write(RawData, value);
+        MemoryMarshal.Write(RawData, size);
     }
 }

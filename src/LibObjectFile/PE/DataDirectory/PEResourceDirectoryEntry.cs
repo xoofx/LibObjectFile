@@ -109,7 +109,12 @@ public sealed class PEResourceDirectoryEntry : PEResourceEntry
         var byNames = CollectionsMarshal.AsSpan(ByNames);
         foreach (ref var item in byNames)
         {
-            context.Strings.Add(item.Name);
+            // They can be duplicated, so we need to check if it is already in the context
+            if (!context.Strings.Contains(item.Name))
+            {
+                context.Strings.Add(item.Name);
+            }
+
             context.Entries.Add(item.Entry);
             item.Entry.Read(context);
         }
@@ -190,10 +195,16 @@ public sealed class PEResourceDirectoryEntry : PEResourceEntry
 
         if ((rawEntry.NameOrId & IMAGE_RESOURCE_NAME_IS_STRING) != 0)
         {
-            var resourceString = new PEResourceString()
+            var position = (uint)(context.Directory.Position + (rawEntry.NameOrId & ~IMAGE_RESOURCE_NAME_IS_STRING));
+
+            // ResourceString might be reused, so we need to check if it is already in the context
+            if (!context.TryFindResourceStringByPosition(position,  out var resourceString))
             {
-                Position = context.Directory.Position + (rawEntry.NameOrId & ~IMAGE_RESOURCE_NAME_IS_STRING)
-            };
+                resourceString = new PEResourceString()
+                {
+                    Position = context.Directory.Position + (rawEntry.NameOrId & ~IMAGE_RESOURCE_NAME_IS_STRING)
+                };
+            }
             
             ByNames.Add(new(resourceString, entry));
         }
@@ -204,7 +215,7 @@ public sealed class PEResourceDirectoryEntry : PEResourceEntry
         }
     }
 
-    public override unsafe void UpdateLayout(PELayoutContext layoutContext)
+    protected override unsafe void UpdateLayoutCore(PELayoutContext layoutContext)
     {
         Size = CalculateSize();
     }

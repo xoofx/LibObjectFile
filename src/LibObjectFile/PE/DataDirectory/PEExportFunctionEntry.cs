@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -26,10 +26,12 @@ public readonly struct PEExportFunctionEntry
     }
 
     public bool IsForwarderRVA => _isForwarderRVA;
-    
+
+    public bool IsEmpty => _container is null && _offset == 0;
+
     public PEFunctionAddressLink ExportRVA => IsForwarderRVA ? default : new(_container, _offset);
 
     public PEAsciiStringLink ForwarderRVA => IsForwarderRVA ? new(_container as PEStreamSectionData, _offset) : default;
 
-    public override string ToString() => ForwarderRVA.IsNull() ? $"{ExportRVA}" : $"{ExportRVA}, ForwarderRVA = {ForwarderRVA}";
+    public override string ToString() => IsEmpty ? "null" : ForwarderRVA.IsNull() ? $"{ExportRVA}" : $"{ExportRVA}, ForwarderRVA = {ForwarderRVA}";
 }

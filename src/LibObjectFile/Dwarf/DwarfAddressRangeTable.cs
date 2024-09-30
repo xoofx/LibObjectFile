@@ -139,7 +139,7 @@ public class DwarfAddressRangeTable : DwarfRelocatableSection
         }
     }
 
-    public override void UpdateLayout(DwarfLayoutContext layoutContext)
+    protected override void UpdateLayoutCore(DwarfLayoutContext layoutContext)
     {
         ulong sizeOf = 0;
         // unit_length

@@ -296,7 +296,7 @@ public class DwarfDIE : DwarfContainer
         }
     }
 
-    public override void UpdateLayout(DwarfLayoutContext layoutContext)
+    protected override void UpdateLayoutCore(DwarfLayoutContext layoutContext)
     {
         var abbrev = Abbrev;
 

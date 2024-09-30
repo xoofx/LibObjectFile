@@ -60,7 +60,7 @@ public sealed class ElfBinarySection : ElfSection
         writer.Write(Stream);
     }
 
-    public override void UpdateLayout(ElfVisitorContext context)
+    protected override void UpdateLayoutCore(ElfVisitorContext context)
     {
         if (Type != ElfSectionType.NoBits)
         {

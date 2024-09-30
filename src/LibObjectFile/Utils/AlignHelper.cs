@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -24,7 +24,7 @@ public static class AlignHelper
     {
         if (align == 0) throw new ArgumentOutOfRangeException(nameof(align), "Alignment must be > 0");
         if (!BitOperations.IsPow2(align)) throw new ArgumentOutOfRangeException(nameof(align), "Alignment must be a power of 2");
-
+        
         var nextValue = ((value + align - 1) / align) * align;
         return nextValue;
     }

@@ -41,7 +41,7 @@ public sealed class DwarfLocationSection : DwarfRelocatableSection
         }
     }
 
-    public override void UpdateLayout(DwarfLayoutContext layoutContext)
+    protected override void UpdateLayoutCore(DwarfLayoutContext layoutContext)
     {
         ulong sizeOf = 0;
 

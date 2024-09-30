@@ -1,8 +1,9 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -15,14 +16,12 @@ namespace LibObjectFile.PE;
 /// </summary>
 public abstract class PEObject : PEObjectBase
 {
+    private uint _customVirtualSize;
+    private bool _useCustomVirtualSize;
+
     protected PEObject()
     {
     }
-
-    /// <summary>
-    /// Gets a value indicating whether this object has children.
-    /// </summary>
-    public abstract bool HasChildren { get; }
 
     /// <summary>
     /// The address of the first byte of the section when loaded into memory, relative to the image base.
@@ -32,7 +31,7 @@ public abstract class PEObject : PEObjectBase
     /// <summary>
     /// The size of this object in virtual memory.
     /// </summary>
-    public virtual uint VirtualSize => (uint)Size;
+    public uint VirtualSize => _useCustomVirtualSize ? _customVirtualSize : (uint)Size;
 
     /// <summary>
     /// Checks if the specified virtual address is contained in this object.
@@ -58,7 +57,7 @@ public abstract class PEObject : PEObjectBase
     /// <param name="rva">The virtual address to search for.</param>
     /// <param name="result">The virtual object that contains the virtual address, if found.</param>
     /// <returns><c>true</c> if the virtual object was found; otherwise, <c>false</c>.</returns>
-    public bool TryFindByRVA(RVA rva, out PEObject? result)
+    public bool TryFindByRVA(RVA rva, [NotNullWhen(true)] out PEObject? result)
     {
         if (ContainsVirtual(rva))
         {
@@ -82,7 +81,7 @@ public abstract class PEObject : PEObjectBase
     /// <param name="result">The virtual object that contains the virtual address, if found.</param>
     /// <returns><c>true</c> if the virtual object was found; otherwise, <c>false</c>.</returns>
     /// <exception cref="NotImplementedException"></exception>
-    protected virtual bool TryFindByRVAInChildren(RVA rva, out PEObject? result)
+    protected virtual bool TryFindByRVAInChildren(RVA rva, [NotNullWhen(true)] out PEObject? result)
     {
         throw new NotImplementedException("This method must be implemented by PEVirtualObject with children");
     }
@@ -112,6 +111,58 @@ public abstract class PEObject : PEObjectBase
 
     protected override void ValidateParent(ObjectElement parent)
     {
+    }
+
+    private protected void SetCustomVirtualSize(uint customVirtualSize)
+    {
+        _customVirtualSize = customVirtualSize;
+        _useCustomVirtualSize = true;
+    }
+
+    private protected void ResetCustomVirtualSize()
+    {
+        _useCustomVirtualSize = false;
+    }
+
+    public sealed override void UpdateLayout(PELayoutContext layoutContext)
+    {
+        var section = layoutContext.CurrentSection;
+
+        if (section is null)
+        {
+            // Update the layout normally
+            base.UpdateLayout(layoutContext);
+        }
+        else
+        {
+            // If the section is auto, we reset the custom virtual size to Size
+            if (section.VirtualSizeMode == PESectionVirtualSizeMode.Auto)
+            {
+                ResetCustomVirtualSize();
+            }
+
+            var currentSectionVirtualSize = this.RVA - section.RVA;
+            
+            // Update the layout normally
+            base.UpdateLayout(layoutContext);
+
+            // Accumulate the virtual size of the section
+            currentSectionVirtualSize += (uint)Size;
+
+            // If the section is fixed, we update the virtual size of the current object being visited
+            if (section.VirtualSizeMode == PESectionVirtualSizeMode.Fixed && currentSectionVirtualSize > section.VirtualSize)
+            {
+                var virtualSizeToRemove = currentSectionVirtualSize - section.VirtualSize;
+                if (virtualSizeToRemove >= VirtualSize)
+                {
+                    SetCustomVirtualSize(0);
+                }
+                else
+                {
+                    SetCustomVirtualSize(VirtualSize - virtualSizeToRemove);
+                }
+            }
+        }
     }
 
     public static ObjectList<TPEObject> CreateObjectList<TPEObject>(PEObject parent) where TPEObject : PEObject

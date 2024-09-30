@@ -28,7 +28,7 @@ public sealed class ElfBinaryShadowSection : ElfShadowSection
         writer.Write(Stream);
     }
 
-    public override void UpdateLayout(ElfVisitorContext context)
+    protected override void UpdateLayoutCore(ElfVisitorContext context)
     {
         Size = Stream != null ? (ulong)Stream.Length : 0;
     }

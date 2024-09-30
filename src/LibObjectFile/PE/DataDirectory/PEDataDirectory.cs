@@ -17,10 +17,10 @@ public abstract class PEDataDirectory : PECompositeSectionData
 
     protected override void ValidateParent(ObjectElement parent)
     {
-        if (parent is not PESection)
-        {
-            throw new ArgumentException($"Invalid parent type [{parent?.GetType()}] for [{GetType()}]");
-        }
+        //if (parent is not PESection)
+        //{
+        //    throw new ArgumentException($"Invalid parent type [{parent?.GetType()}] for [{GetType()}]");
+        //}
     }
 
     /// <summary>

@@ -19,7 +19,7 @@ public class DwarfLocationList : DwarfContainer
 
     public ObjectList<DwarfLocationListEntry> LocationListEntries => _locationListEntries;
 
-    public override void UpdateLayout(DwarfLayoutContext layoutContext)
+    protected override void UpdateLayoutCore(DwarfLayoutContext layoutContext)
     {
         var endOffset = Position;
 

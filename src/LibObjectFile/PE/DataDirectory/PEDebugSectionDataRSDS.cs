@@ -29,6 +29,7 @@ public sealed class PEDebugSectionDataRSDS : PEDebugSectionData
         Guid = Guid.Empty;
         Age = 0;
         PdbPath = string.Empty;
+        ExtraData = [];
     }
 
     /// <summary>
@@ -45,6 +46,11 @@ public sealed class PEDebugSectionDataRSDS : PEDebugSectionData
     /// Gets or sets the path of the PDB.
     /// </summary>
     public string PdbPath { get; set; }
+
+    /// <summary>
+    /// Gets or sets the extra data after the PDB path.
+    /// </summary>
+    public byte[] ExtraData { get; set; }
     
     public override unsafe void Read(PEImageReader reader)
     {
@@ -78,6 +84,15 @@ public sealed class PEDebugSectionDataRSDS : PEDebugSectionData
         Age = MemoryMarshal.Read<uint>(span.Slice(sizeof(uint) + sizeof(Guid)));
         PdbPath = System.Text.Encoding.UTF8.GetString(pdbPath.Slice(0, indexOfZero));
 
+        // Remaining
+        pdbPath = pdbPath.Slice(indexOfZero + 1);
+        if (pdbPath.Length > 0)
+        {
+            ExtraData = pdbPath.ToArray();
+        }
+        
+        var newSize = CalculateSize();
+
         Debug.Assert(size == CalculateSize());
     }
 
@@ -94,18 +109,22 @@ public sealed class PEDebugSectionDataRSDS : PEDebugSectionData
         span = span.Slice(sizeof(uint));
         int written = Encoding.UTF8.GetBytes(PdbPath, span);
         span[written] = 0;
-        span.Slice(written + 1);
+        span = span.Slice(written + 1);
+        if (ExtraData.Length > 0)
+        {
+            ExtraData.CopyTo(span);
+        }
 
         writer.Write(tempSpan.AsBytes);
     }
 
-    public override void UpdateLayout(PELayoutContext layoutContext)
+    protected override void UpdateLayoutCore(PELayoutContext layoutContext)
     {
         Size = CalculateSize();
     }
 
     private unsafe uint CalculateSize()
-        => (uint)(sizeof(uint) + sizeof(Guid) + sizeof(uint) + Encoding.UTF8.GetByteCount(PdbPath) + 1);
+        => (uint)(sizeof(uint) + sizeof(Guid) + sizeof(uint) + Encoding.UTF8.GetByteCount(PdbPath) + 1 + ExtraData.Length);
 
     /// <inheritdoc />
     protected override bool PrintMembers(StringBuilder builder)

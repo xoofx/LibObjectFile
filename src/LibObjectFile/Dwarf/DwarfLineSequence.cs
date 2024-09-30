@@ -29,7 +29,7 @@ public class DwarfLineSequence : DwarfObject<DwarfLineProgramTable>, IEnumerable
         _lines.Add(line);
     }
 
-    public override void UpdateLayout(DwarfLayoutContext layoutContext)
+    protected override void UpdateLayoutCore(DwarfLayoutContext layoutContext)
     {
         // This is implemented in DwarfLineSection
     }

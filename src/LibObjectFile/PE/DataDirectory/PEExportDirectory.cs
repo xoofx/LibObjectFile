@@ -55,43 +55,54 @@ public sealed class PEExportDirectory : PEDataDirectory
         // Link to a fake section data until we have recorded the different export tables in the sections
         // Store a fake RVO that is the RVA until we resolve it in the Bind phase
         NameLink = new PEAsciiStringLink(PEStreamSectionData.Empty, (RVO)(uint)exportDirectory.Name);
+
+        // Not sure this one happen
+        if (exportDirectory.AddressOfFunctions != 0)
+        {
+            if (!reader.File.TryFindSection(exportDirectory.AddressOfFunctions, out var sectionAddressOfFunctions))
+            {
+                reader.Diagnostics.Error(DiagnosticId.PE_ERR_ExportDirectoryInvalidAddressOfFunctions, $"Unable to find the section for AddressOfFunctions {exportDirectory.AddressOfFunctions}");
+                return;
+            }
+            ExportFunctionAddressTable = new PEExportAddressTable((int)exportDirectory.NumberOfFunctions)
+            {
+                Position = sectionAddressOfFunctions.Position + exportDirectory.AddressOfFunctions - sectionAddressOfFunctions.RVA,
+                Size = (ulong)(exportDirectory.NumberOfFunctions * sizeof(RVA))
+            };
+        }
+
+        // AddressOfNames can be 0
+        if (exportDirectory.AddressOfNames != 0)
+        {
+            if (!reader.File.TryFindSection(exportDirectory.AddressOfNames, out var sectionAddressOfNames))
+            {
+                reader.Diagnostics.Error(DiagnosticId.PE_ERR_ExportDirectoryInvalidAddressOfNames, $"Unable to find the section for AddressOfNames {exportDirectory.AddressOfNames}");
+                return;
+            }
+
+            ExportNameTable = new PEExportNameTable((int)exportDirectory.NumberOfNames)
+            {
+                Position = sectionAddressOfNames.Position + exportDirectory.AddressOfNames - sectionAddressOfNames.RVA,
+                Size = (ulong)(exportDirectory.NumberOfNames * sizeof(RVA))
+            };
+        }
+
+        // AddressOfNames can be 0
+        if (exportDirectory.AddressOfNameOrdinals != 0)
+        {
+            if (!reader.File.TryFindSection(exportDirectory.AddressOfNameOrdinals, out var sectionAddressOfNameOrdinals))
+            {
+                reader.Diagnostics.Error(DiagnosticId.PE_ERR_ExportDirectoryInvalidAddressOfNameOrdinals, $"Unable to find the section for AddressOfNameOrdinals {exportDirectory.AddressOfNameOrdinals}");
+                return;
+            }
+
+            ExportOrdinalTable = new PEExportOrdinalTable((int)exportDirectory.NumberOfNames)
+            {
+                Position = sectionAddressOfNameOrdinals.Position + exportDirectory.AddressOfNameOrdinals - sectionAddressOfNameOrdinals.RVA,
+                Size = (ulong)(exportDirectory.NumberOfNames * sizeof(ushort))
+            };
+        }
         
-        if (!reader.File.TryFindSection(exportDirectory.AddressOfFunctions, out var sectionAddressOfFunctions))
-        {
-            reader.Diagnostics.Error(DiagnosticId.PE_ERR_ExportDirectoryInvalidAddressOfFunctions, $"Unable to find the section for AddressOfFunctions {exportDirectory.AddressOfFunctions}");
-            return;
-        }
-
-        if (!reader.File.TryFindSection(exportDirectory.AddressOfNames, out var sectionAddressOfNames))
-        {
-            reader.Diagnostics.Error(DiagnosticId.PE_ERR_ExportDirectoryInvalidAddressOfNames, $"Unable to find the section for AddressOfNames {exportDirectory.AddressOfNames}");
-            return;
-        }
-
-        if (!reader.File.TryFindSection(exportDirectory.AddressOfNameOrdinals, out var sectionAddressOfNameOrdinals))
-        {
-            reader.Diagnostics.Error(DiagnosticId.PE_ERR_ExportDirectoryInvalidAddressOfNameOrdinals, $"Unable to find the section for AddressOfNameOrdinals {exportDirectory.AddressOfNameOrdinals}");
-            return;
-        }
-
-        ExportFunctionAddressTable = new PEExportAddressTable((int)exportDirectory.NumberOfFunctions)
-        {
-            Position = sectionAddressOfFunctions.Position + exportDirectory.AddressOfFunctions - sectionAddressOfFunctions.RVA,
-            Size = (ulong)(exportDirectory.NumberOfFunctions * sizeof(RVA))
-        };
-
-        ExportNameTable = new PEExportNameTable((int)exportDirectory.NumberOfNames)
-        {
-            Position = sectionAddressOfNames.Position + exportDirectory.AddressOfNames - sectionAddressOfNames.RVA,
-            Size = (ulong)(exportDirectory.NumberOfNames * sizeof(RVA))
-        };
-
-        ExportOrdinalTable = new PEExportOrdinalTable((int)exportDirectory.NumberOfFunctions)
-        {
-            Position = sectionAddressOfNameOrdinals.Position + exportDirectory.AddressOfNameOrdinals - sectionAddressOfNameOrdinals.RVA,
-            Size = (ulong)(exportDirectory.NumberOfFunctions * sizeof(ushort))
-        };
-
         // Update the header size
         HeaderSize = ComputeHeaderSize(reader);
     }

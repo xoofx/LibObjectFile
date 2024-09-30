@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -14,7 +14,7 @@ internal readonly struct RawImportFunctionEntry64
         _hintNameTableRVA = hintNameTableRVA;
     }
 
-    public uint HintNameTableRVA => IsImportByOrdinal ? 0U : (uint)_hintNameTableRVA;
+    public ulong HintNameTableRVA => IsImportByOrdinal ? 0U : _hintNameTableRVA;
 
     public bool IsNull => _hintNameTableRVA == 0;
 

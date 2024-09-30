@@ -27,7 +27,7 @@ public sealed class ElfNullSection : ElfSection
         }
     }
 
-    public override void UpdateLayout(ElfVisitorContext context)
+    protected override void UpdateLayoutCore(ElfVisitorContext context)
     {
     }
 }

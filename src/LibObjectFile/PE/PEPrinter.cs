@@ -326,7 +326,7 @@ public static class PEPrinter
 
 
             var section = block.SectionLink.Container!;
-            section.TryFindSectionData(relocRVA, out var sectionData);
+            section.TryFindSectionDataByRVA(relocRVA, out var sectionData);
             
 
             if (reloc.Type == PEBaseRelocationType.Dir64)
@@ -388,8 +388,8 @@ public static class PEPrinter
             writer.WriteLine($"[{i}] Attributes = {dirEntry.Attributes}");
             writer.WriteLine($"[{i}] DelayImportAddressTable {PELink(dirEntry.DelayImportAddressTable)}");
             writer.WriteLine($"[{i}] DelayImportNameTable {PELink(dirEntry.DelayImportNameTable)}");
-            writer.WriteLine($"[{i}] BoundImportAddressTable {PELink(dirEntry.BoundImportAddressTable)}");
-            writer.WriteLine($"[{i}] UnloadDelayInformationTable {PELink(dirEntry.UnloadDelayInformationTable)}");
+            writer.WriteLine($"[{i}] BoundImportAddressTable {dirEntry.BoundImportAddressTableLink}");
+            writer.WriteLine($"[{i}] UnloadDelayInformationTable {dirEntry.UnloadDelayInformationTableLink}");
             writer.WriteLine();
         }
     }

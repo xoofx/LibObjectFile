@@ -664,7 +664,7 @@ public sealed class DwarfLineProgramTable : DwarfObject<DwarfLineSection>
         }
     }
 
-    public override void UpdateLayout(DwarfLayoutContext layoutContext)
+    protected override void UpdateLayoutCore(DwarfLayoutContext layoutContext)
     {
         ulong sizeOf = 0;
 

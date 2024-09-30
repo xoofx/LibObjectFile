@@ -94,7 +94,7 @@ public class DwarfExpression : DwarfObject<DwarfObject>
         Size = OperationLengthInBytes + deltaLength;
     }
 
-    public override void UpdateLayout(DwarfLayoutContext layoutContext)
+    protected override void UpdateLayoutCore(DwarfLayoutContext layoutContext)
     {
         UpdateLayout(layoutContext, inLocationSection: false);
     }

@@ -24,7 +24,7 @@ public sealed class PEExportAddressTable : PESectionData
 
     public List<PEExportFunctionEntry> Values { get; } = new();
 
-    public override unsafe void UpdateLayout(PELayoutContext context)
+    protected override unsafe void UpdateLayoutCore(PELayoutContext context)
     {
         Size = (ulong)(Values.Count * sizeof(RVA));
     }
@@ -45,13 +45,19 @@ public sealed class PEExportAddressTable : PESectionData
         for (int i = 0; i < Values.Count; i++)
         {
             var rva = spanRva[i];
+            if (rva == 0)
+            {
+                Values[i] = new PEExportFunctionEntry();
+                continue;
+            }
+
             if (!reader.File.TryFindSection(rva, out var section))
             {
                 reader.Diagnostics.Error(DiagnosticId.PE_ERR_ExportAddressTableInvalidRVA, $"Unable to find the section data for RVA {rva}");
                 return;
             }
 
-            var found = section.TryFindSectionData(rva, out var sectionData);
+            var found = section.TryFindSectionDataByRVA(rva, out var sectionData);
 
             if (section.Name == PESectionName.EData)
             {
@@ -85,7 +91,7 @@ public sealed class PEExportAddressTable : PESectionData
         for (int i = 0; i < Values.Count; i++)
         {
             var value = Values[i];
-            spanRva[i] = value.IsForwarderRVA ? value.ForwarderRVA.RVA() : value.ExportRVA.RVA();
+            spanRva[i] = value.IsEmpty ? default : value.IsForwarderRVA ? value.ForwarderRVA.RVA() : value.ExportRVA.RVA();
         }
 
         writer.Write(tempSpan);

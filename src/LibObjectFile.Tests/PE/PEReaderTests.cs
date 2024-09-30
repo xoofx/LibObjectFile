@@ -3,6 +3,8 @@
 // See the license.txt file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using LibObjectFile.Diagnostics;
@@ -25,7 +27,7 @@ public partial class PEReaderTests
 
         var sourceFile = Path.Combine(AppContext.BaseDirectory, "PE", name);
         await using var stream = File.OpenRead(sourceFile);
-        var peImage = PEFile.Read(stream);
+        var peImage = PEFile.Read(stream, new() { EnableStackTrace = true });
         var afterReadWriter = new StringWriter();
         peImage.Print(afterReadWriter);
 
@@ -64,7 +66,86 @@ public partial class PEReaderTests
         // Compare the input and output buffer
         CollectionAssert.AreEqual(inputBuffer, outputBuffer);
     }
+    
+    [DataTestMethod]
+    [DynamicData(nameof(GetWindowsExeAndDlls), DynamicDataSourceType.Method)]
+    public async Task TestWindows(string sourceFile)
+    {
+        if (!OperatingSystem.IsWindows())
+        {
+            Assert.Inconclusive("This test can only run on Windows");
+            return;
+        }
 
+        TestContext.WriteLine($"Testing {sourceFile}");
+        await using var stream = File.OpenRead(sourceFile);
+        var peImage = PEFile.Read(stream, new() { EnableStackTrace = true });
+
+        if (peImage.CoffHeader.PointerToSymbolTable != 0)
+        {
+            Assert.Inconclusive($"The file {sourceFile} contains a non supported symbol table");
+            return;
+        }
+
+        var sizeOfInitializedData = peImage.OptionalHeader.SizeOfInitializedData;
+
+        // Read in input as raw bytes
+        stream.Position = 0;
+        var inputBuffer = new byte[stream.Length];
+        stream.ReadExactly(inputBuffer);
+
+        peImage.UpdateLayout(new DiagnosticBag());
+
+        var newSizeOfInitializedData = peImage.OptionalHeader.SizeOfInitializedData;
+
+        if (newSizeOfInitializedData != sizeOfInitializedData)
+        {
+            TestContext.WriteLine($"SizeOfInitializedData changed from {sizeOfInitializedData} to {newSizeOfInitializedData}. Trying to reuse old size");
+            peImage.ForceSizeOfInitializedData = sizeOfInitializedData;
+        }
+
+
+        // Write the PE back to a byte buffer
+        var output = new MemoryStream();
+        peImage.Write(output);
+        output.Position = 0;
+        var outputBuffer = output.ToArray();
+
+        if (!inputBuffer.AsSpan().SequenceEqual(outputBuffer))
+        {
+            // Uncomment the following code to save the output file to compare it with the original file
+            //{
+            //    var dir = Path.Combine(AppContext.BaseDirectory, "Errors");
+            //    Directory.CreateDirectory(dir);
+
+            //    var sourceFileName = Path.GetFileName(sourceFile);
+            //    var outputFileName = Path.Combine(dir, $"{sourceFileName}.new");
+
+            //    await File.WriteAllBytesAsync(outputFileName, outputBuffer);
+            //}
+
+            CollectionAssert.AreEqual(inputBuffer, outputBuffer);
+        }
+    }
+
+    public static IEnumerable<object[]> GetWindowsExeAndDlls()
+    {
+        if (!OperatingSystem.IsWindows())
+        {
+            yield break;
+        }
+
+        foreach (var file in Directory.EnumerateFiles(Environment.SystemDirectory, "*.exe", SearchOption.TopDirectoryOnly))
+        {
+            yield return [file];
+        }
+
+        foreach (var file in Directory.EnumerateFiles(Environment.SystemDirectory, "*.dll", SearchOption.TopDirectoryOnly))
+        {
+            yield return [file];
+        }
+    }
+    
     [TestMethod]
     public async Task TestTinyExe97Bytes()
     {

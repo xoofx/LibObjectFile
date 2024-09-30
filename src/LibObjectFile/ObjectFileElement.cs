@@ -86,6 +86,11 @@ public abstract class ObjectFileElement<TLayoutContext, TVerifyContext, TReader,
 {
     public virtual void UpdateLayout(TLayoutContext layoutContext)
     {
+        UpdateLayoutCore(layoutContext);
+    }
+
+    protected virtual void UpdateLayoutCore(TLayoutContext layoutContext)
+    {
     }
 
     public virtual void Verify(TVerifyContext diagnostics)

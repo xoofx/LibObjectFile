@@ -182,6 +182,7 @@ public enum DiagnosticId
     PE_ERR_ImportDirectoryInvalidImportLookupTableRVA = 3805,
     PE_ERR_ImportAddressTableNotFound = 3806,
     PE_ERR_InvalidInternalState = 3807,
+    PE_WRN_ImportLookupTableInvalidRVAOutOfRange = 3808,
 
     // PE Export
     PE_ERR_ExportAddressTableInvalidRVA = 3900,

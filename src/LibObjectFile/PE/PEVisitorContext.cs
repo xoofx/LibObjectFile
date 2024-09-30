@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -21,4 +21,6 @@ public sealed class PELayoutContext : PEVisitorContext
     }
 
     public bool UpdateSizeOnly { get; }
+    
+    internal PESection? CurrentSection { get; set; }
 }

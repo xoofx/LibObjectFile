@@ -5,13 +5,10 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Numerics;
-using System.Reflection.PortableExecutable;
 using System.Runtime.InteropServices;
 using LibObjectFile.Diagnostics;
 using LibObjectFile.PE.Internal;
 using LibObjectFile.Utils;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LibObjectFile.PE;
 
@@ -145,6 +142,7 @@ partial class PEFile
         // Data before sections
         foreach (var extraData in ExtraDataBeforeSections)
         {
+            Debug.Assert(position == extraData.Position);
             extraData.Write(writer);
             position += (uint)extraData.Size;
         }
@@ -182,9 +180,38 @@ partial class PEFile
                 position += (uint)data.Size;
             }
 
-            zeroSize = (int)(AlignHelper.AlignUp(position, writer.PEFile.OptionalHeader.FileAlignment) - position);
-            writer.WriteZero(zeroSize);
-            position += (uint)zeroSize;
+            // Write the padding stream
+            var paddingSize = (uint)(AlignHelper.AlignUp(position, writer.PEFile.OptionalHeader.FileAlignment) - position);
+
+            // Use the padding stream if it is defined
+            if (section.PaddingStream is not null)
+            {
+                var paddingStreamLength = (uint)section.PaddingStream.Length;
+
+                if (paddingSize >= paddingStreamLength)
+                {
+                    section.PaddingStream.Position = 0;
+                    section.PaddingStream.CopyTo(writer.Stream);
+                    position += paddingStreamLength;
+                    paddingSize -= paddingStreamLength;
+                }
+                else if (paddingSize > 0)
+                {
+                    section.PaddingStream.Position = paddingStreamLength - paddingSize;
+                    section.PaddingStream.CopyTo(writer.Stream);
+                    position += paddingSize;
+                    paddingSize = 0;
+                }
+
+                section.PaddingStream.Position = 0;
+            }
+
+            // Otherwise pad with remaining zero (in case the padding stream above is not enough)
+            if (paddingSize > 0)
+            {
+                writer.WriteZero((int)paddingSize);
+                position += paddingSize;
+            }
 
             Debug.Assert(position == writer.Position);
         }

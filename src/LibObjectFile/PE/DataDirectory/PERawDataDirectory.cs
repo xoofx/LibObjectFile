@@ -21,6 +21,7 @@ public abstract class PERawDataDirectory : PEDataDirectory
     private protected PERawDataDirectory(PEDataDirectoryKind kind, int minSize) : base(kind)
     {
         _rawData = new byte[minSize];
+        RawDataSize = (uint)minSize;
     }
 
     /// <summary>
@@ -34,8 +35,8 @@ public abstract class PERawDataDirectory : PEDataDirectory
     /// <remarks>
     /// Use <see cref="SetRawDataSize"/> to set the config size.
     /// </remarks>
-    public abstract int RawDataSize { get; }
-    
+    public uint RawDataSize { get; private set; } 
+
     /// <summary>
     /// Sets the config size.
     /// </summary>
@@ -43,10 +44,8 @@ public abstract class PERawDataDirectory : PEDataDirectory
     /// <remarks>
     /// The underlying buffer <see cref="RawData"/> will be resized if necessary.
     /// </remarks>
-    public virtual void SetRawDataSize(int value)
+    public virtual void SetRawDataSize(uint value)
     {
-        ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(value, 0);
-
         if (value > _rawData.Length)
         {
             var rawData = new byte[value];
@@ -56,13 +55,15 @@ public abstract class PERawDataDirectory : PEDataDirectory
         else if (value < _rawData.Length)
         {
             // Clear the rest of the buffer
-            var span = _rawData.AsSpan().Slice(value);
+            var span = _rawData.AsSpan().Slice((int)value);
             span.Fill(0);
         }
+
+        RawDataSize = value;
     }
     
     /// <inheritdoc/>
-    public override void Read(PEImageReader reader)
+    public sealed override void Read(PEImageReader reader)
     {
         var size = (int)Size;
         if (_rawData.Length < size)
@@ -77,15 +78,17 @@ public abstract class PERawDataDirectory : PEDataDirectory
             reader.Diagnostics.Error(DiagnosticId.CMN_ERR_UnexpectedEndOfFile, $"Unexpected end of file while reading additional data in {nameof(PERawDataDirectory)}");
             return;
         }
-        
+
+        RawDataSize = (uint)size;
+
         HeaderSize = ComputeHeaderSize(reader);
     }
 
     /// <inheritdoc/>
-    public override void Write(PEImageWriter writer)
+    public sealed override void Write(PEImageWriter writer)
     {
         var rawDataSize = RawDataSize;
-        var span = _rawData.AsSpan().Slice(0, rawDataSize);
+        var span = _rawData.AsSpan().Slice(0, (int)rawDataSize);
         writer.Write(span);
     }
     
@@ -96,7 +99,7 @@ public abstract class PERawDataDirectory : PEDataDirectory
     public override void WriteAt(uint offset, ReadOnlySpan<byte> source) => DataUtils.WriteAt(_rawData, offset, source);
 
 
-    protected override uint ComputeHeaderSize(PELayoutContext context)
+    protected sealed override uint ComputeHeaderSize(PELayoutContext context)
         // Size if the first field of the Load Configuration Directory
         => (uint)RawDataSize;
 }

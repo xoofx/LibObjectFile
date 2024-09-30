@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -88,10 +88,11 @@ public static class PEObjectExtensions
                 if (recurse && trySectionData.TryFindByRVA(virtualAddress, out var virtualItem))
                 {
                     item = virtualItem;
-                    return item is not null;
                 }
-
-                item = trySectionData;
+                else
+                {
+                    item = trySectionData;
+                }
                 return true;
             }
 
@@ -102,6 +103,32 @@ public static class PEObjectExtensions
             else
             {
                 high = mid - 1;
+            }
+        }
+
+        item = null;
+        return false;
+    }
+
+
+    public static bool TryFindByPosition<TPEObject>(this ObjectList<TPEObject> list, uint position, bool recurse, [NotNullWhen(true)] out PEObjectBase? item)
+        where TPEObject : PEObjectBase
+    {
+        // Cannot binary search because position/size can be null in the middle of a list (e.g. for uninitialized sections)
+        var dataParts = CollectionsMarshal.AsSpan(list.UnsafeList);
+        foreach (var trySectionData in dataParts)
+        {
+            if (trySectionData.Contains(position))
+            {
+                if (recurse && trySectionData.TryFindByPosition(position, out var virtualItem))
+                {
+                    item = virtualItem;
+                }
+                else
+                {
+                    item = trySectionData;
+                }
+                return true;
             }
         }
 

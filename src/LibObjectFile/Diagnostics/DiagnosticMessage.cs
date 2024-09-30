@@ -1,6 +1,8 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
+
+using System.Diagnostics;
 
 namespace LibObjectFile.Diagnostics;
 
@@ -45,8 +47,20 @@ public readonly struct DiagnosticMessage
     /// </summary>
     public string Message { get; }
 
+    /// <summary>
+    /// Gets the associated stack trace of this message.
+    /// </summary>
+    public StackTrace? StackTrace { get; init; }
+
     public override string ToString()
     {
-        return $"{Kind} LB{(uint)Id:0000}: {Message}";
+        if (StackTrace is not null)
+        {
+            return $"{Kind} LB{(uint)Id:0000}: {Message}\n{StackTrace}";
+        }
+        else
+        {
+            return $"{Kind} LB{(uint)Id:0000}: {Message}";
+        }
     }
 }

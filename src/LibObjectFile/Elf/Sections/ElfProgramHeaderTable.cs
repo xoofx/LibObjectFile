@@ -28,7 +28,7 @@ public sealed class ElfProgramHeaderTable : ElfShadowSection
         }
     }
 
-    public override void UpdateLayout(ElfVisitorContext context)
+    protected override void UpdateLayoutCore(ElfVisitorContext context)
     {
         Size = 0;
 

@@ -14,7 +14,7 @@ public sealed class PEExportOrdinalTable : PESectionData
     {
     }
     
-    public PEExportOrdinalTable(int count)
+    internal PEExportOrdinalTable(int count)
     {
         CollectionsMarshal.SetCount(Values, count);
     }
@@ -24,7 +24,7 @@ public sealed class PEExportOrdinalTable : PESectionData
     public List<ushort> Values { get; } = new();
 
     
-    public override void UpdateLayout(PELayoutContext context)
+    protected override void UpdateLayoutCore(PELayoutContext context)
     {
         Size = (ulong)Values.Count * sizeof(ushort);
     }

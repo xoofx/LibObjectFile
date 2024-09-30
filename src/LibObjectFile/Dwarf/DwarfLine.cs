@@ -173,7 +173,7 @@ public class DwarfLine : DwarfObject<DwarfLineSequence>
 
     private static string Bool2Str(bool value) => value.ToString(CultureInfo.InvariantCulture).ToLowerInvariant();
 
-    public override void UpdateLayout(DwarfLayoutContext layoutContext)
+    protected override void UpdateLayoutCore(DwarfLayoutContext layoutContext)
     {
     }
 

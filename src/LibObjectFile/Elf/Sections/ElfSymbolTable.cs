@@ -277,7 +277,7 @@ public sealed class ElfSymbolTable : ElfSection
         }
     }
 
-    public override unsafe void UpdateLayout(ElfVisitorContext context)
+    protected override unsafe void UpdateLayoutCore(ElfVisitorContext context)
     {
         Size = Parent == null || Parent.FileClass == ElfFileClass.None ? 0 :
             Parent.FileClass == ElfFileClass.Is32 ? (ulong)(Entries.Count * sizeof(ElfNative.Elf32_Sym)) : (ulong)(Entries.Count * sizeof(ElfNative.Elf64_Sym));

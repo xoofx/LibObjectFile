@@ -51,7 +51,7 @@ public sealed class ElfSegment : ElfObject
     /// </summary>
     public ulong Alignment { get; set; }
 
-    public override void UpdateLayout(ElfVisitorContext context)
+    protected override void UpdateLayoutCore(ElfVisitorContext context)
     {
         var diagnostics = context.Diagnostics;
 

@@ -33,7 +33,7 @@ public sealed class ElfAlignedShadowSection : ElfShadowSection
     /// </summary>
     public uint UpperAlignment { get; set; }
 
-    public override void UpdateLayout(ElfVisitorContext context)
+    protected override void UpdateLayoutCore(ElfVisitorContext context)
     {
         var nextSectionOffset = AlignHelper.AlignUp(Position, UpperAlignment);
         Size = nextSectionOffset - Position;

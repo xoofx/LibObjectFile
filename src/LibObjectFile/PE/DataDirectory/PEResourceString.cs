@@ -43,18 +43,19 @@ public sealed class PEResourceString : PESectionData
     /// <inheritdoc/>
     public override void Read(PEImageReader reader)
     {
+        reader.Position = Position;
         var length = reader.ReadU16();
         using var tempSpan = TempSpan<char>.Create(length, out var span);
-        reader.Position = Position;
-        var read = reader.Read(tempSpan.AsBytes);
-        if (read != length)
+        var spanBytes = tempSpan.AsBytes;
+        var read = reader.Read(spanBytes);
+        if (read != spanBytes.Length)
         {
             reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidResourceString, $"Invalid resource string length. Expected: {length}, Read: {read}");
         }
         Text = new string(span);
 
         // Update the size after reading the string
-        Size = (uint)(sizeof(ushort) + length);
+        Size = CalculateSize();
     }
 
     /// <inheritdoc/>
@@ -65,10 +66,12 @@ public sealed class PEResourceString : PESectionData
         writer.Write(MemoryMarshal.Cast<char, byte>(Text.AsSpan()));
     }
 
-    public override void UpdateLayout(PELayoutContext layoutContext)
+    protected override void UpdateLayoutCore(PELayoutContext layoutContext)
     {
-        Size = (uint)(sizeof(ushort) + Text.Length * sizeof(char));
+        Size = CalculateSize();
     }
+
+    private uint CalculateSize() => (uint)(sizeof(ushort) + Text.Length * sizeof(char));
 
     /// <inheritdoc/>
     protected override bool PrintMembers(StringBuilder builder)

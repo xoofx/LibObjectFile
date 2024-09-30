@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -32,6 +32,11 @@ public class DiagnosticBag
     /// If this instance contains error messages.
     /// </summary>
     public bool HasErrors { get; private set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether to enable stack trace for each message.
+    /// </summary>
+    public bool EnableStackTrace { get; set; }
 
     /// <summary>
     /// Clear all messages.
@@ -78,7 +83,10 @@ public class DiagnosticBag
     public void Error(DiagnosticId id, string message, object? context = null)
     {
         if (message == null) throw new ArgumentNullException(nameof(message));
-        Log(new DiagnosticMessage(DiagnosticKind.Error, id, message, context));
+        Log(new DiagnosticMessage(DiagnosticKind.Error, id, message, context)
+        {
+            StackTrace = EnableStackTrace ? new StackTrace(1, true) : null
+        });
     }
 
     /// <summary>
@@ -90,7 +98,10 @@ public class DiagnosticBag
     public void Warning(DiagnosticId id, string message, object? context = null)
     {
         if (message == null) throw new ArgumentNullException(nameof(message));
-        Log(new DiagnosticMessage(DiagnosticKind.Warning, id, message, context));
+        Log(new DiagnosticMessage(DiagnosticKind.Warning, id, message, context)
+        {
+            StackTrace = EnableStackTrace ? new StackTrace(1, true) : null
+        });
     }
 
     public override string ToString()

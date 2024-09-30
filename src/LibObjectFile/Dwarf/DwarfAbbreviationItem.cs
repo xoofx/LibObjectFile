@@ -30,7 +30,7 @@ public sealed class DwarfAbbreviationItem : DwarfObject<DwarfAbbreviation>
 
     public DwarfAttributeDescriptors Descriptors { get; private set; }
 
-    public override void UpdateLayout(DwarfLayoutContext layoutContext)
+    protected override void UpdateLayoutCore(DwarfLayoutContext layoutContext)
     {
         var endOffset = Position;
 
