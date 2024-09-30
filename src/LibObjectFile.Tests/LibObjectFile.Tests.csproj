@@ -5,6 +5,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <IsPackable>false</IsPackable>
     <EnableMSTestRunner>true</EnableMSTestRunner>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

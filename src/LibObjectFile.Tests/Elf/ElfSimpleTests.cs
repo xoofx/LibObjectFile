@@ -476,7 +476,7 @@ public class ElfSimpleTests : ElfTestBase
         symbolTable = (ElfSymbolTable)elf.Sections[ushort.MaxValue + 3];
         for (int i = 0; i < ushort.MaxValue; i++)
         {
-            Assert.AreEqual($".section{i}", symbolTable.Entries[i + 1].Section.Section.Name.Value);
+            Assert.AreEqual($".section{i}", symbolTable.Entries[i + 1].Section.Section!.Name.Value);
         }
     }
 

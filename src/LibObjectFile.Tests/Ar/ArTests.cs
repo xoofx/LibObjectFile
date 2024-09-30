@@ -160,13 +160,13 @@ public class ArTests : ArTestBase
             Assert.AreEqual(2U, arFile.Files[0].Size, "Invalid size of file entry[0] found");
             Assert.IsInstanceOfType<ArBinaryFile>(arFile.Files[0], "Invalid instance of of file entry[0] ");
                 
-            var fileStream = ((ArBinaryFile) arFile.Files[0]).Stream;
+            var fileStream = ((ArBinaryFile) arFile.Files[0]).Stream!;
             var read = new byte[]
             {
                 (byte)fileStream.ReadByte(),
                 (byte)fileStream.ReadByte()
             };
-            CollectionAssert.AreEqual(new byte[] { 0, 1}, read, "Invalid content of of file entry[0] ");
+            ByteArrayAssert.AreEqual(new byte[] { 0, 1}, read, "Invalid content of of file entry[0] ");
                 
             Assert.IsNull(arFile.SymbolTable, "Invalid non-null symbol table found");
 
@@ -312,7 +312,7 @@ public class ArTests : ArTestBase
             stream.CopyTo(originalStream);
             var originalArray = originalStream.ToArray();
 
-            CollectionAssert.AreEqual(originalArray, newArray, $"Non binary matching between file {cppLib} and {cppLibCopy}");
+            ByteArrayAssert.AreEqual(originalArray, newArray, $"Non binary matching between file {cppLib} and {cppLibCopy}");
         }
     }
 
@@ -364,7 +364,7 @@ public class ArTests : ArTestBase
             {
                 if (!(fileEntry is ArBinaryFile arBinary)) continue;
 
-                arBinary.Stream.Position = 0;
+                arBinary.Stream!.Position = 0;
                 contentBuilder.Append(Encoding.UTF8.GetString(((MemoryStream) arBinary.Stream).ToArray()));
             }
 

@@ -18,7 +18,7 @@ public abstract class ElfTestBase
         AssertLsbMsb(elf, fileName);
     }
         
-    protected static void AssertReadElfInternal(ElfObjectFile elf, string fileName, bool writeFile = true, string context = null, string readElfParams = null)
+    protected static void AssertReadElfInternal(ElfObjectFile elf, string fileName, bool writeFile = true, string? context = null, string? readElfParams = null)
     {
         if (writeFile)
         {
@@ -76,7 +76,7 @@ public abstract class ElfTestBase
             newObjectFile.Write(memoryStream);
             var newBuffer = memoryStream.ToArray();
 
-            CollectionAssert.AreEqual(originalBuffer, newBuffer, "Invalid binary diff between write -> (original) -> read -> write -> (new)");
+            ByteArrayAssert.AreEqual(originalBuffer, newBuffer, "Invalid binary diff between write -> (original) -> read -> write -> (new)");
         }
     }
 

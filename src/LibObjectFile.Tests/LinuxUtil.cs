@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -33,7 +33,7 @@ public static class LinuxUtil
             exe = "wsl.exe";
         }
 
-        StringBuilder errorBuilder = null;
+        StringBuilder? errorBuilder = null;
         StringBuilder outputBuilder = new StringBuilder();
 
         using (var process = new Process()

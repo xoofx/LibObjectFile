@@ -98,7 +98,7 @@ public class DwarfTests
         inputContext.DebugLinePrinter = Console.Out;
         var dwarf = DwarfFile.Read(inputContext);
 
-        inputContext.DebugLineStream.Position = 0;
+        inputContext.DebugLineStream!.Position = 0;
 
         var copyInputDebugLineStream = new MemoryStream();
         inputContext.DebugLineStream.CopyTo(copyInputDebugLineStream);
@@ -134,7 +134,7 @@ public class DwarfTests
 
         var inputDebugLineBuffer = copyInputDebugLineStream.ToArray();
         var outputDebugLineBuffer = ((MemoryStream)reloadContext.DebugLineStream).ToArray();
-        CollectionAssert.AreEqual(inputDebugLineBuffer, outputDebugLineBuffer);
+        ByteArrayAssert.AreEqual(inputDebugLineBuffer, outputDebugLineBuffer);
     }
 
     [TestMethod]
@@ -157,7 +157,7 @@ public class DwarfTests
         inputContext.DebugLinePrinter = Console.Out;
         var dwarf = DwarfFile.Read(inputContext);
 
-        inputContext.DebugLineStream.Position = 0;
+        inputContext.DebugLineStream!.Position = 0;
 
         var copyInputDebugLineStream = new MemoryStream();
         inputContext.DebugLineStream.CopyTo(copyInputDebugLineStream);
@@ -193,7 +193,7 @@ public class DwarfTests
 
         var inputDebugLineBuffer = copyInputDebugLineStream.ToArray();
         var outputDebugLineBuffer = ((MemoryStream)reloadContext.DebugLineStream).ToArray();
-        CollectionAssert.AreEqual(inputDebugLineBuffer, outputDebugLineBuffer);
+        ByteArrayAssert.AreEqual(inputDebugLineBuffer, outputDebugLineBuffer);
     }
 
     [TestMethod]
@@ -215,7 +215,7 @@ public class DwarfTests
         inputContext.DebugLinePrinter = Console.Out;
         var dwarf = DwarfFile.Read(inputContext);
 
-        inputContext.DebugLineStream.Position = 0;
+        inputContext.DebugLineStream!.Position = 0;
         var copyInputDebugLineStream = new MemoryStream();
         inputContext.DebugLineStream.CopyTo(copyInputDebugLineStream);
         inputContext.DebugLineStream.Position = 0;
@@ -249,7 +249,7 @@ public class DwarfTests
 
         var inputDebugLineBuffer = copyInputDebugLineStream.ToArray();
         var outputDebugLineBuffer = ((MemoryStream)reloadContext.DebugLineStream).ToArray();
-        CollectionAssert.AreEqual(inputDebugLineBuffer, outputDebugLineBuffer);
+        ByteArrayAssert.AreEqual(inputDebugLineBuffer, outputDebugLineBuffer);
     }
 
 
@@ -274,7 +274,7 @@ public class DwarfTests
         inputContext.DebugLinePrinter = Console.Out;
         var dwarf = DwarfFile.Read(inputContext);
 
-        inputContext.DebugLineStream.Position = 0;
+        inputContext.DebugLineStream!.Position = 0;
         var copyInputDebugLineStream = new MemoryStream();
         inputContext.DebugLineStream.CopyTo(copyInputDebugLineStream);
         inputContext.DebugLineStream.Position = 0;
@@ -308,7 +308,7 @@ public class DwarfTests
 
         var inputDebugLineBuffer = copyInputDebugLineStream.ToArray();
         var outputDebugLineBuffer = ((MemoryStream)reloadContext.DebugLineStream).ToArray();
-        CollectionAssert.AreEqual(inputDebugLineBuffer, outputDebugLineBuffer);
+        ByteArrayAssert.AreEqual(inputDebugLineBuffer, outputDebugLineBuffer);
     }
 
 

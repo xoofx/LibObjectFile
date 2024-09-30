@@ -58,13 +58,16 @@ public partial class PEReaderTests
         var output = new MemoryStream();
         peImage.Write(output);
         output.Position = 0;
-        var outputBuffer = output.ToArray();
+        byte[] outputBuffer = output.ToArray();
+
+        // Fake an error
+        //outputBuffer[250] = 0x44;
 
         //await Verifier.Verify(outputBuffer, sourceFile  sourceFile).
         await File.WriteAllBytesAsync($"{sourceFile}.bak", outputBuffer);
 
         // Compare the input and output buffer
-        CollectionAssert.AreEqual(inputBuffer, outputBuffer);
+        ByteArrayAssert.AreEqual(inputBuffer, outputBuffer, $"Invalid roundtrip for `{name}`");
     }
     
     [DataTestMethod]
@@ -103,8 +106,7 @@ public partial class PEReaderTests
             TestContext.WriteLine($"SizeOfInitializedData changed from {sizeOfInitializedData} to {newSizeOfInitializedData}. Trying to reuse old size");
             peImage.ForceSizeOfInitializedData = sizeOfInitializedData;
         }
-
-
+        
         // Write the PE back to a byte buffer
         var output = new MemoryStream();
         peImage.Write(output);
@@ -124,7 +126,7 @@ public partial class PEReaderTests
             //    await File.WriteAllBytesAsync(outputFileName, outputBuffer);
             //}
 
-            CollectionAssert.AreEqual(inputBuffer, outputBuffer);
+            ByteArrayAssert.AreEqual(inputBuffer, outputBuffer, $"Invalid roundtrip for `{sourceFile}`");
         }
     }
 
