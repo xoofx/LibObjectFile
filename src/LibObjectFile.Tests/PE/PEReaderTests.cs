@@ -132,17 +132,20 @@ public partial class PEReaderTests
     {
         if (!OperatingSystem.IsWindows())
         {
-            yield break;
+            yield return [""];
         }
-
-        foreach (var file in Directory.EnumerateFiles(Environment.SystemDirectory, "*.exe", SearchOption.TopDirectoryOnly))
+        else
         {
-            yield return [file];
-        }
 
-        foreach (var file in Directory.EnumerateFiles(Environment.SystemDirectory, "*.dll", SearchOption.TopDirectoryOnly))
-        {
-            yield return [file];
+            foreach (var file in Directory.EnumerateFiles(Environment.SystemDirectory, "*.exe", SearchOption.TopDirectoryOnly))
+            {
+                yield return [file];
+            }
+
+            foreach (var file in Directory.EnumerateFiles(Environment.SystemDirectory, "*.dll", SearchOption.TopDirectoryOnly))
+            {
+                yield return [file];
+            }
         }
     }
     
