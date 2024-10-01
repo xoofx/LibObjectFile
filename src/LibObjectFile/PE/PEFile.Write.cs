@@ -5,11 +5,13 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using LibObjectFile.Diagnostics;
 using LibObjectFile.PE.Internal;
 using LibObjectFile.Utils;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LibObjectFile.PE;
 
@@ -37,12 +39,15 @@ partial class PEFile
     {
         if (stream == null) throw new ArgumentNullException(nameof(stream));
         
-        var peWriter = new PEImageWriter(this, stream);
+        var peWriter = new PEImageWriter(this, stream, options ?? PEImageWriterOptions.Default);
         diagnostics = peWriter.Diagnostics;
 
-        if (options is not null)
+        diagnostics.EnableStackTrace = peWriter.Options.EnableStackTrace;
+
+        if (peWriter.Options.EnableChecksum && stream is not MemoryStream)
         {
-            diagnostics.EnableStackTrace = options.EnableStackTrace;
+            diagnostics.Error(DiagnosticId.PE_ERR_ChecksumNotSupported, "Checksum is only supported for MemoryStream");
+            return false;
         }
 
         // Verify the coherence of the PE file
@@ -105,6 +110,8 @@ partial class PEFile
         // Update OptionalHeader
         OptionalHeader.OptionalHeaderCommonPart1.AddressOfEntryPoint = OptionalHeader.AddressOfEntryPoint.RVA();
         OptionalHeader.OptionalHeaderCommonPart1.BaseOfCode = OptionalHeader.BaseOfCode?.RVA ?? 0;
+
+        var optionalHeaderPosition = position;
         
         if (IsPE32)
         {
@@ -243,6 +250,62 @@ partial class PEFile
         if (position != Size)
         {
             writer.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidInternalState, $"Generated size {position} does not match expecting size {Size}");
+        }
+
+        if (writer.Options.EnableChecksum)
+        {
+            CalculateAndApplyChecksum((MemoryStream)writer.Stream, optionalHeaderPosition);
+        }
+    }
+
+    private void CalculateAndApplyChecksum(MemoryStream stream, uint optionalHeaderPosition)
+    {
+        var data = stream.GetBuffer();
+        var length = (int)stream.Length;
+        var buffer = new Span<byte>(data, 0, length);
+
+        // Zero the checksum before calculating it
+        MemoryMarshal.Write(buffer.Slice((int)optionalHeaderPosition + 64), 0);
+        
+        var checksum = CalculateChecksum(buffer);
+
+        // Update the checksum in the PE header
+        MemoryMarshal.Write(buffer.Slice((int)optionalHeaderPosition + 64), checksum);
+    }
+
+    private static uint CalculateChecksum(Span<byte> peFile)
+    {
+        ulong checksum = 0;
+
+        var shortBuffer = MemoryMarshal.Cast<byte, ushort>(peFile);
+        foreach (var value in shortBuffer)
+        {
+            checksum = AggregateChecksum(checksum, value);
+        }
+
+        if ((peFile.Length & 1) != 0)
+        {
+            checksum = AggregateChecksum(checksum, peFile[peFile.Length - 1]);
+        }
+
+        checksum = ((ushort)checksum) + (checksum >> 16);
+        checksum += checksum >> 16;
+        checksum &= 0xffff;
+        checksum += (ulong)peFile.Length;
+
+        return (uint)checksum;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static ulong AggregateChecksum(ulong checksum, ushort value)
+        {
+            checksum += value;
+            checksum = (uint)checksum + (checksum >> 32);
+            if (checksum > uint.MaxValue)
+            {
+                checksum = unchecked((uint)checksum) + (checksum >> 32);
+            }
+
+            return checksum;
         }
     }
 }

@@ -4,9 +4,11 @@
 
 namespace LibObjectFile.PE;
 
-public class PEImageReaderOptions
+public class PEImageWriterOptions
 {
-    public bool UseSubStream { get; init; }
-
+    public static readonly PEImageWriterOptions Default = new();
+    
     public bool EnableStackTrace { get; init; }
+
+    public bool EnableChecksum { get; init; }
 }

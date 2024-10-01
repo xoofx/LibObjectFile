@@ -137,6 +137,7 @@ public enum DiagnosticId
     PE_ERR_InvalidAddressOfEntryPoint = 3019,
     PE_ERR_DirectoryWithSameKindAlreadyAdded = 3020,
     PE_ERR_VerifyContextInvalidObject = 3021,
+    PE_ERR_ChecksumNotSupported = 3022,
 
     // PE Exception directory
     PE_ERR_InvalidExceptionDirectory_Entries = 3100,

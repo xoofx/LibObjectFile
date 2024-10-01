@@ -8,11 +8,14 @@ namespace LibObjectFile.PE;
 
 public sealed class PEImageWriter : ObjectFileReaderWriter
 {
-    internal PEImageWriter(PEFile file, Stream stream) : base(file, stream)
+    internal PEImageWriter(PEFile file, Stream stream, PEImageWriterOptions options) : base(file, stream)
     {
+        Options = options;
     }
 
     public PEFile PEFile => (PEFile)base.File;
+
+    public PEImageWriterOptions Options { get; }
 
     public override bool KeepOriginalStreamForSubStreams => false;
 }

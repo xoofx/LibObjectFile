@@ -25,7 +25,7 @@ DOS Stub
 COFF Header
     Machine                    = Amd64
     NumberOfSections           = 6
-    TimeDateStamp              = 1727110447
+    TimeDateStamp              = 1727802524
     PointerToSymbolTable       = 0x0
     NumberOfSymbols            = 0
     SizeOfOptionalHeader       = 240
@@ -53,7 +53,7 @@ Optional Header
     Win32VersionValue          = 0x0
     SizeOfImage                = 0x9000
     SizeOfHeaders              = 0x400
-    CheckSum                   = 0x0
+    CheckSum                   = 0x7C57
     Subsystem                  = WindowsCui
     DllCharacteristics         = HighEntropyVirtualAddressSpace, DynamicBase, NxCompatible, TerminalServerAware
     SizeOfStackReserve         = 0x100000
@@ -243,17 +243,17 @@ Sections
         [03] PEStreamSectionData              Position = 0x000022D0, Size = 0x00000010, RVA = 0x000034D0, VirtualSize = 0x00000010
         
         [04] PEDebugDirectory                 Position = 0x000022E0, Size = 0x00000070, RVA = 0x000034E0, VirtualSize = 0x00000070
-            [0] Type = CodeView, Characteristics = 0x0, Version = 0.0, TimeStamp = 0x66F19D2F, Data = RVA = 0x00003618 (PEDebugSectionDataRSDS[6] -> .rdata)
-            [1] Type = VCFeature, Characteristics = 0x0, Version = 0.0, TimeStamp = 0x66F19D2F, Data = RVA = 0x0000368C (PEDebugStreamSectionData[8] -> .rdata)
-            [2] Type = POGO, Characteristics = 0x0, Version = 0.0, TimeStamp = 0x66F19D2F, Data = RVA = 0x000036A0 (PEDebugStreamSectionData[9] -> .rdata)
-            [3] Type = ILTCG, Characteristics = 0x0, Version = 0.0, TimeStamp = 0x66F19D2F, Data = null
+            [0] Type = CodeView, Characteristics = 0x0, Version = 0.0, TimeStamp = 0x66FC2C9C, Data = RVA = 0x00003618 (PEDebugSectionDataRSDS[6] -> .rdata)
+            [1] Type = VCFeature, Characteristics = 0x0, Version = 0.0, TimeStamp = 0x66FC2C9C, Data = RVA = 0x0000368C (PEDebugStreamSectionData[8] -> .rdata)
+            [2] Type = POGO, Characteristics = 0x0, Version = 0.0, TimeStamp = 0x66FC2C9C, Data = RVA = 0x000036A0 (PEDebugStreamSectionData[9] -> .rdata)
+            [3] Type = ILTCG, Characteristics = 0x0, Version = 0.0, TimeStamp = 0x66FC2C9C, Data = null
         
         [05] PEStreamSectionData              Position = 0x00002350, Size = 0x000000C8, RVA = 0x00003550, VirtualSize = 0x000000C8
         
         [06] PEDebugSectionDataRSDS           Position = 0x00002418, Size = 0x00000072, RVA = 0x00003618, VirtualSize = 0x00000072
             Debug Section Data (RSDS)
                 Guid                       = ffed6f99-5708-452c-a889-ff343b6ce898
-                Age                        = 6
+                Age                        = 7
                 PdbPath                    = C:\code\LibObjectFile\src\native\Win64\NativeProjects\x64\Release\NativeConsole2Win64.pdb
         
         [07] PEStreamSectionData              Position = 0x0000248A, Size = 0x00000002, RVA = 0x0000368A, VirtualSize = 0x00000002

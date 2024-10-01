@@ -56,7 +56,11 @@ public partial class PEReaderTests
 
         // Write the PE back to a byte buffer
         var output = new MemoryStream();
-        peImage.Write(output, new PEImageWriterOptions() { EnableStackTrace = true });
+        peImage.Write(output, new PEImageWriterOptions()
+        {
+            EnableStackTrace = true,
+            EnableChecksum = peImage.OptionalHeader.CheckSum != 0 // Recalculate the checksum if it was present
+        });
         output.Position = 0;
         byte[] outputBuffer = output.ToArray();
 
@@ -74,13 +78,13 @@ public partial class PEReaderTests
     public void TestCreatePE()
     {
         var pe = new PEFile();
-        
+
         // ***************************************************************************
         // Code section
         // ***************************************************************************
         var codeSection = pe.AddSection(PESectionName.Text, 0x1000);
         var streamCode = new PEStreamSectionData();
-        
+
         streamCode.Stream.Write([
             // SUB RSP, 0x28
             0x48, 0x83, 0xEC, 0x28,
@@ -93,7 +97,7 @@ public partial class PEReaderTests
         ]);
 
         codeSection.Content.Add(streamCode);
-        
+
         // ***************************************************************************
         // Data section
         // ***************************************************************************
@@ -112,7 +116,7 @@ public partial class PEReaderTests
         {
             peImportAddressTable
         };
-        
+
         var peImportLookupTable = new PEImportLookupTable()
         {
             exitProcessFunction
@@ -145,10 +149,15 @@ public partial class PEReaderTests
         pe.Write(output, new() { EnableStackTrace = true });
         output.Position = 0;
 
-        var sourceFile = Path.Combine(AppContext.BaseDirectory, "PE", "generated_win64.exe");
+        var sourceFile = Path.Combine(AppContext.BaseDirectory, "PE", "RawNativeConsoleWin64_Generated.exe");
         File.WriteAllBytes(sourceFile, output.ToArray());
-    }
 
+        // Check the generated exe
+        var process = Process.Start(sourceFile);
+        process.WaitForExit();
+        Assert.AreEqual(156, process.ExitCode);
+    }
+    
     [DataTestMethod]
     [DynamicData(nameof(GetWindowsExeAndDlls), DynamicDataSourceType.Method)]
     public async Task TestWindows(string sourceFile)
@@ -191,7 +200,11 @@ public partial class PEReaderTests
         
         // Write the PE back to a byte buffer
         var output = new MemoryStream();
-        peImage.Write(output, new PEImageWriterOptions() { EnableStackTrace = true });
+        peImage.Write(output, new PEImageWriterOptions()
+        {
+            EnableStackTrace = true,
+            //EnableChecksum = peImage.OptionalHeader.CheckSum != 0 // Recalculate the checksum if it was present, we cannot enable it because some DLLs have an invalid checksum
+        });
         output.Position = 0;
         var outputBuffer = output.ToArray();
 
