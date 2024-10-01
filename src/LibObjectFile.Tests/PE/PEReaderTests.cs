@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using LibObjectFile.Diagnostics;
 using LibObjectFile.PE;
@@ -152,10 +153,14 @@ public partial class PEReaderTests
         var sourceFile = Path.Combine(AppContext.BaseDirectory, "PE", "RawNativeConsoleWin64_Generated.exe");
         File.WriteAllBytes(sourceFile, output.ToArray());
 
-        // Check the generated exe
-        var process = Process.Start(sourceFile);
-        process.WaitForExit();
-        Assert.AreEqual(156, process.ExitCode);
+        // Only try to run the generated exe on Windows x64
+        if (OperatingSystem.IsWindows() && RuntimeInformation.OSArchitecture == Architecture.X64)
+        {
+            // Check the generated exe
+            var process = Process.Start(sourceFile);
+            process.WaitForExit();
+            Assert.AreEqual(156, process.ExitCode);
+        }
     }
     
     [DataTestMethod]
