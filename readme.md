@@ -36,7 +36,6 @@ elf.Write(outStream);
 - Full support for the **PE file format**
   - Read and write from/to a `System.IO.Stream`
   - All PE Directories are supported
-  - ImageBase relocation is supported with `PEFile.Relocate(ulong)` method
   - `PEFile.Print` to print the content of a PE file to a textual representation
 - - Good support for the **ELF file format**:
   - Read and write from/to a `System.IO.Stream`
@@ -63,32 +62,6 @@ elf.Write(outStream);
 ## Documentation
 
 The [doc/readme.md](doc/readme.md) explains how the library is designed and can be used.
-
-## Known Issues
-
-PR Welcome if you are willing to contribute to one of these issues:
-
-- [ ] Add more unit tests
-
-### ELF
-There are still a few missing implementation of `ElfSection` for completeness:
-
-- [ ] Dynamic Linking Table (`SHT_DYNAMIC`)
-- [ ] Version Symbol Table (`SHT_VERSYM`)
-- [ ] Version Needs Table (`SHT_VERNEED`)
-
-These sections are currently loaded as `ElfCustomSection` but should have their own ElfXXXTable (e.g `ElfDynamicLinkingTable`, `ElfVersionSymbolTable`...)
-
-### DWARF
-
-- [ ] Version 4: support for `.debug_types`, `.debug_frame`, `.debug_loc`, `.debug_ranges`, `.debug_pubnames`, `.debug_pubtypes`, `.debug_macinfo` section
-- [ ] Version 5
-
-### Other file formats
-In a future version I would like to implement the following file format:
-
-- [ ] COFF
-- [ ] Mach-O
 
 ## Download
 
