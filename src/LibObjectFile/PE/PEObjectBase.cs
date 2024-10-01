@@ -12,7 +12,7 @@ namespace LibObjectFile.PE;
 /// Base class for all Portable Executable (PE) objects.
 /// </summary>
 [DebuggerDisplay("{ToString(),nq}")]
-public abstract class PEObjectBase : ObjectFileElement<PELayoutContext, PEVisitorContext, PEImageReader, PEImageWriter>
+public abstract class PEObjectBase : ObjectFileElement<PELayoutContext, PEVerifyContext, PEImageReader, PEImageWriter>
 {
     /// <summary>
     /// Gets the PE file containing this object.

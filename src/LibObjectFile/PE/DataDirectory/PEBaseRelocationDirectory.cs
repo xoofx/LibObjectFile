@@ -2,6 +2,8 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
+using LibObjectFile.Diagnostics;
+
 namespace LibObjectFile.PE;
 
 /// <summary>
@@ -39,5 +41,20 @@ public sealed class PEBaseRelocationDirectory : PEDataDirectory
             // Add the block to the content
             Content.Add(block);
         }
+    }
+
+    public override void Verify(PEVerifyContext context)
+    {
+        foreach (var block in Content)
+        {
+            if (block is not PEBaseRelocationBlock relocationBlock)
+            {
+                context.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidBaseRelocationBlock, $"Invalid block found in BaseRelocationDirectory: {block}. Only PEBaseRelocationBlock are allowed.");
+            }
+
+            block.Verify(context);
+        }
+
+        base.Verify(context);
     }
 }

@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -42,15 +42,15 @@ public class DwarfLocationListEntry : DwarfObject<DwarfLocationList>
         Expression.ReadInternal(reader, inLocationSection: true);
     }
 
-    protected override void UpdateLayoutCore(DwarfLayoutContext layoutContext)
+    protected override void UpdateLayoutCore(DwarfLayoutContext context)
     {
         var endOffset = Position;
 
-        endOffset += 2 * DwarfHelper.SizeOfUInt(layoutContext.CurrentUnit!.AddressSize);
+        endOffset += 2 * DwarfHelper.SizeOfUInt(context.CurrentUnit!.AddressSize);
         if (Expression != null)
         {
             Expression.Position = endOffset;
-            Expression.UpdateLayout(layoutContext, inLocationSection: true);
+            Expression.UpdateLayout(context, inLocationSection: true);
             endOffset += Expression.Size;
         }
 

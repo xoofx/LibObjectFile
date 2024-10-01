@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -61,14 +61,14 @@ public sealed class DwarfInfoSection : DwarfRelocatableSection
         }
     }
 
-    protected override void UpdateLayoutCore(DwarfLayoutContext layoutContext)
+    protected override void UpdateLayoutCore(DwarfLayoutContext context)
     {
         var offset = Position;
         foreach (var unit in Units)
         {
-            layoutContext.CurrentUnit = unit;
+            context.CurrentUnit = unit;
             unit.Position = offset;
-            unit.UpdateLayout(layoutContext);
+            unit.UpdateLayout(context);
             offset += unit.Size;
         }
         Size = offset - Position;

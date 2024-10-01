@@ -82,4 +82,13 @@ public readonly struct PEImportFunctionEntry
     /// </summary>
     /// <param name="name">The PE Import Hint Name to convert.</param>
     public static implicit operator PEImportFunctionEntry(PEImportHintNameLink name) => new(name);
+
+
+    internal void Verify(PEVerifyContext context, PEObject parent, int index)
+    {
+        if (IsLongOffset) return;
+        if (_peSectionData is null) return;
+
+        context.VerifyObject(_peSectionData, parent, $"the {nameof(HintName)} of the {nameof(PEImportFunctionEntry)} at index {index}", false);
+    }
 }

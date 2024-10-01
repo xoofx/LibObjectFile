@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -86,7 +86,7 @@ public abstract class DwarfUnit : DwarfContainer
         }
     }
 
-    protected override void UpdateLayoutCore(DwarfLayoutContext layoutContext)
+    protected override void UpdateLayoutCore(DwarfLayoutContext context)
     {
         var offset = this.Position;
 
@@ -114,14 +114,14 @@ public abstract class DwarfUnit : DwarfContainer
         {
             // Before updating the layout, we need to compute the abbreviation
             Abbreviation = new DwarfAbbreviation();
-            layoutContext.File.AbbreviationTable.Abbreviations.Add(Abbreviation);
+            context.File.AbbreviationTable.Abbreviations.Add(Abbreviation);
                 
-            Root.UpdateAbbreviationItem(layoutContext);
+            Root.UpdateAbbreviationItem(context);
                 
             DebugAbbreviationOffset = Abbreviation.Position;
 
             Root.Position = offset;
-            Root.UpdateLayout(layoutContext);
+            Root.UpdateLayout(context);
             offset += Root.Size;
         }
 

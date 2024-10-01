@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -41,14 +41,14 @@ public sealed class DwarfLocationSection : DwarfRelocatableSection
         }
     }
 
-    protected override void UpdateLayoutCore(DwarfLayoutContext layoutContext)
+    protected override void UpdateLayoutCore(DwarfLayoutContext context)
     {
         ulong sizeOf = 0;
 
         foreach (var locationList in _locationLists)
         {
             locationList.Position = Position + sizeOf;
-            locationList.UpdateLayout(layoutContext);
+            locationList.UpdateLayout(context);
             sizeOf += locationList.Size;
         }
         Size = sizeOf;

@@ -34,4 +34,10 @@ public readonly struct PEExportFunctionEntry
     public PEAsciiStringLink ForwarderRVA => IsForwarderRVA ? new(_container as PEStreamSectionData, _offset) : default;
 
     public override string ToString() => IsEmpty ? "null" : ForwarderRVA.IsNull() ? $"{ExportRVA}" : $"{ExportRVA}, ForwarderRVA = {ForwarderRVA}";
+
+
+    internal void Verify(PEVerifyContext context, PEExportAddressTable parent, int index)
+    {
+        context.VerifyObject(_container, parent, $"the object pointed by the {nameof(PEExportFunctionEntry)} at #{index}", false);
+    }
 }

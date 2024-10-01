@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -35,5 +35,13 @@ public sealed class PEExceptionFunctionEntryX86 : PEExceptionFunctionEntry
     public override string ToString()
     {
         return $"{nameof(BeginAddress)} = {BeginAddress.RVA()}, {nameof(EndAddress)} = {EndAddress.RVA()}, {nameof(UnwindInfoAddress)} = {UnwindInfoAddress.RVA()}";
+    }
+
+    /// <inheritdoc />
+    internal override void Verify(PEVerifyContext context, PEExceptionDirectory exceptionDirectory, int index)
+    {
+        base.Verify(context, exceptionDirectory, index);
+        context.VerifyObject(EndAddress.Container, exceptionDirectory, $"the {nameof(EndAddress)} of the {nameof(PEExceptionFunctionEntryX86)} at #{index}", false);
+        context.VerifyObject(UnwindInfoAddress.Container, exceptionDirectory, $"the {nameof(UnwindInfoAddress)} of the {nameof(PEExceptionFunctionEntryX86)} at #{index}", false);
     }
 }

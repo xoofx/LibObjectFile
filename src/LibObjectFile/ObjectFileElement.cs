@@ -78,29 +78,56 @@ public abstract class ObjectFileElement : ObjectElement
     }
 }
 
+/// <summary>
+/// Base class for an object file element.
+/// </summary>
+/// <typeparam name="TLayoutContext">The type used for the layout context.</typeparam>
+/// <typeparam name="TVerifyContext">The type used for the verify context.</typeparam>
+/// <typeparam name="TReader">The type used for the reader.</typeparam>
+/// <typeparam name="TWriter">The type used for the writer.</typeparam>
 public abstract class ObjectFileElement<TLayoutContext, TVerifyContext, TReader, TWriter> : ObjectFileElement
     where TLayoutContext : VisitorContextBase
     where TVerifyContext : VisitorContextBase
     where TReader : ObjectFileReaderWriter
     where TWriter : ObjectFileReaderWriter
 {
-    public virtual void UpdateLayout(TLayoutContext layoutContext)
+    /// <summary>
+    /// Updates the layout of this element.
+    /// </summary>
+    /// <param name="context">The layout context.</param>
+    public virtual void UpdateLayout(TLayoutContext context)
     {
-        UpdateLayoutCore(layoutContext);
+        UpdateLayoutCore(context);
     }
 
-    protected virtual void UpdateLayoutCore(TLayoutContext layoutContext)
+    /// <summary>
+    /// Updates the layout of this element.
+    /// </summary>
+    /// <param name="context">The layout context.</param>
+    protected virtual void UpdateLayoutCore(TLayoutContext context)
     {
     }
 
-    public virtual void Verify(TVerifyContext diagnostics)
+    /// <summary>
+    /// Verifies this element.
+    /// </summary>
+    /// <param name="context">The verify context.</param>
+    public virtual void Verify(TVerifyContext context)
     {
     }
 
+    /// <summary>
+    /// Reads this element from the specified reader.
+    /// </summary>
+    /// <param name="reader">The reader to read from.</param>
     public virtual void Read(TReader reader)
     {
     }
 
+    /// <summary>
+    /// Writes this element to the specified writer.
+    /// </summary>
+    /// <param name="writer">The writer to write to.</param>
     public virtual void Write(TWriter writer)
     {
     }

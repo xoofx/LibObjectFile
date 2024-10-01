@@ -174,4 +174,26 @@ public sealed class PEDebugDirectory : PEDataDirectory
     {
         return (uint)(Entries.Count * sizeof(RawImageDebugDirectory));
     }
+
+    public override void Verify(PEVerifyContext context)
+    {
+        for (var i = 0; i < Entries.Count; i++)
+        {
+            var entry = Entries[i];
+            if (entry.SectionData is not null)
+            {
+                context.VerifyObject(entry.SectionData, this, $"the {nameof(PEDebugDirectoryEntry.SectionData)} of the {nameof(PEDebugDirectoryEntry)} #{i}", false);
+            }
+            else if (entry.ExtraData is not null)
+            {
+                context.VerifyObject(entry.ExtraData, this, $"the {nameof(PEDebugDirectoryEntry.ExtraData)} of the {nameof(PEDebugDirectoryEntry)} #{i}", false);
+            }
+            //else
+            //{
+            //    context.Diagnostics.Error(DiagnosticId.PE_ERR_VerifyContextInvalidObject, $"Invalid entry found in the Debug directory at index {i}. Either {nameof(PEDebugDirectoryEntry.SectionData)} or {nameof(PEDebugDirectoryEntry.ExtraData)} must be set");
+            //}
+        }
+
+        base.Verify(context);
+    }
 }

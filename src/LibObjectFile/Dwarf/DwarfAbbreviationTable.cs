@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -28,13 +28,13 @@ public class DwarfAbbreviationTable : DwarfSection
         _abbreviations.Clear();
     }
 
-    protected override void UpdateLayoutCore(DwarfLayoutContext layoutContext)
+    protected override void UpdateLayoutCore(DwarfLayoutContext context)
     {
         ulong endOffset = Position;
         foreach (var abbreviation in _abbreviations)
         {
             abbreviation.Position = endOffset;
-            abbreviation.UpdateLayout(layoutContext);
+            abbreviation.UpdateLayout(context);
             endOffset += abbreviation.Size;
         }
 

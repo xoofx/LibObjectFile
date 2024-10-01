@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -173,7 +173,7 @@ public class DwarfLine : DwarfObject<DwarfLineSequence>
 
     private static string Bool2Str(bool value) => value.ToString(CultureInfo.InvariantCulture).ToLowerInvariant();
 
-    protected override void UpdateLayoutCore(DwarfLayoutContext layoutContext)
+    protected override void UpdateLayoutCore(DwarfLayoutContext context)
     {
     }
 

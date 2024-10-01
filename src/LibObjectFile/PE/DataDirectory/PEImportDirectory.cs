@@ -176,6 +176,18 @@ public sealed class PEImportDirectory : PEDataDirectory
         }
     }
 
+    public override void Verify(PEVerifyContext context)
+    {
+        var entries = CollectionsMarshal.AsSpan(_entries);
+        for (var i = 0; i < entries.Length; i++)
+        {
+            var entry = entries[i];
+            entry.Verify(context, this, i);
+        }
+        
+        base.Verify(context);
+    }
+
     private unsafe uint CalculateSize()
     {
         return (uint)(((_entries.Count + 1) * sizeof(RawImportDirectoryEntry)));

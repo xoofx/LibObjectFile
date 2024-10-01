@@ -66,7 +66,7 @@ public sealed class PEResourceString : PESectionData
         writer.Write(MemoryMarshal.Cast<char, byte>(Text.AsSpan()));
     }
 
-    protected override void UpdateLayoutCore(PELayoutContext layoutContext)
+    protected override void UpdateLayoutCore(PELayoutContext context)
     {
         Size = CalculateSize();
     }

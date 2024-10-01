@@ -136,6 +136,7 @@ public enum DiagnosticId
     PE_ERR_InvalidBaseOfCode = 3018,
     PE_ERR_InvalidAddressOfEntryPoint = 3019,
     PE_ERR_DirectoryWithSameKindAlreadyAdded = 3020,
+    PE_ERR_VerifyContextInvalidObject = 3021,
 
     // PE Exception directory
     PE_ERR_InvalidExceptionDirectory_Entries = 3100,
@@ -175,7 +176,9 @@ public enum DiagnosticId
     PE_ERR_InvalidDataDirectorySection = 3703,
     PE_ERR_BaseRelocationDirectoryInvalidVirtualAddress = 3704,
     PE_ERR_BaseRelocationDirectoryInvalidSizeOfBlock = 3705,
-    
+    PE_ERR_InvalidBaseRelocationBlock = 3706,
+    PE_ERR_BaseRelocationDirectoryInvalidSectionLink = 3707,
+
     // PE Import
     PE_ERR_ImportDirectoryInvalidEndOfStream = 3800,
     PE_ERR_ImportLookupTableInvalidEndOfStream = 3801,

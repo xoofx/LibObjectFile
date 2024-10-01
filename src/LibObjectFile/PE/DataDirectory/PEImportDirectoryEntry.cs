@@ -32,4 +32,11 @@ public sealed class PEImportDirectoryEntry
     /// The index of the first forwarder reference. -1 if no forwarders
     /// </summary>
     public uint ForwarderChain { get; set; }
+
+    internal void Verify(PEVerifyContext context, PEObject parent, int index)
+    {
+        context.VerifyObject(ImportDllNameLink.Container, parent, $"the {nameof(ImportDllNameLink)} for {nameof(PEImportDirectoryEntry)} at index #{index}", false);
+        context.VerifyObject(ImportAddressTable, parent, $"the {nameof(ImportAddressTable)} for {nameof(PEImportDirectoryEntry)} at index #{index}", false);
+        context.VerifyObject(ImportLookupTable, parent, $"the {nameof(ImportLookupTable)} for {nameof(PEImportDirectoryEntry)} at index #{index}", false);
+    }
 }

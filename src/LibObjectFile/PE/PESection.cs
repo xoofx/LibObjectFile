@@ -8,6 +8,7 @@ using System.IO;
 using System.Reflection.PortableExecutable;
 using System.Text;
 using LibObjectFile.Collections;
+using LibObjectFile.Diagnostics;
 using LibObjectFile.Utils;
 
 namespace LibObjectFile.PE;
@@ -163,6 +164,14 @@ public sealed class PESection : PEObject
         }
     }
 
+    public override void Verify(PEVerifyContext context)
+    {
+        foreach (var data in Content)
+        {
+            data.Verify(context);
+        }
+    }
+
     public override void Read(PEImageReader reader)
     {
         throw new NotImplementedException();
@@ -173,8 +182,6 @@ public sealed class PESection : PEObject
     {
         throw new NotImplementedException();
     }
-
-
 
     /// <inheritdoc />
     protected override bool PrintMembers(StringBuilder builder)

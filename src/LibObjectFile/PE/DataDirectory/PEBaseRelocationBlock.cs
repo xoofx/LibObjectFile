@@ -37,7 +37,7 @@ public sealed class PEBaseRelocationBlock : PESectionData
     /// </summary>
     public List<PEBaseRelocation> Relocations { get; } = new();
 
-    protected override unsafe void UpdateLayoutCore(PELayoutContext layoutContext)
+    protected override unsafe void UpdateLayoutCore(PELayoutContext context)
     {
         var count = Relocations.Count;
 
@@ -170,6 +170,11 @@ public sealed class PEBaseRelocationBlock : PESectionData
         {
             writer.WriteZero((int)sizeof(PEBaseRelocation));
         }
+    }
+
+    public override void Verify(PEVerifyContext context)
+    {
+        context.VerifyObject(SectionLink.Container, this, nameof(SectionLink), false);
     }
 
     protected override bool PrintMembers(StringBuilder builder)

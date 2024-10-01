@@ -36,7 +36,7 @@ public partial class PEReaderTests
         await Verifier.Verify(afterReadText).UseParameters(name);
 
         // Update the layout
-        var diagnostics = new DiagnosticBag();
+        var diagnostics = new DiagnosticBag() { EnableStackTrace = true };
         peImage.UpdateLayout(diagnostics);
 
         var afterUpdateWriter = new StringWriter();
@@ -56,7 +56,7 @@ public partial class PEReaderTests
 
         // Write the PE back to a byte buffer
         var output = new MemoryStream();
-        peImage.Write(output);
+        peImage.Write(output, new PEImageWriterOptions() { EnableStackTrace = true });
         output.Position = 0;
         byte[] outputBuffer = output.ToArray();
 
@@ -142,7 +142,7 @@ public partial class PEReaderTests
         // Write the PE to a file
         // ***************************************************************************
         var output = new MemoryStream();
-        pe.Write(output);
+        pe.Write(output, new() { EnableStackTrace = true });
         output.Position = 0;
 
         var sourceFile = Path.Combine(AppContext.BaseDirectory, "PE", "generated_win64.exe");
@@ -176,7 +176,10 @@ public partial class PEReaderTests
         var inputBuffer = new byte[stream.Length];
         stream.ReadExactly(inputBuffer);
 
-        peImage.UpdateLayout(new DiagnosticBag());
+        peImage.UpdateLayout(new DiagnosticBag()
+        {
+            EnableStackTrace = true
+        });
 
         var newSizeOfInitializedData = peImage.OptionalHeader.SizeOfInitializedData;
 
@@ -188,7 +191,7 @@ public partial class PEReaderTests
         
         // Write the PE back to a byte buffer
         var output = new MemoryStream();
-        peImage.Write(output);
+        peImage.Write(output, new PEImageWriterOptions() { EnableStackTrace = true });
         output.Position = 0;
         var outputBuffer = output.ToArray();
 

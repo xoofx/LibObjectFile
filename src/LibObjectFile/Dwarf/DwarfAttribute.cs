@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -130,10 +130,10 @@ public sealed class DwarfAttribute : DwarfObject<DwarfDIE>, IComparable<DwarfAtt
         return true;
     }
 
-    protected override void UpdateLayoutCore(DwarfLayoutContext layoutContext)
+    protected override void UpdateLayoutCore(DwarfLayoutContext context)
     {
-        var addressSize = layoutContext.CurrentUnit!.AddressSize;
-        var is64BitEncoding = layoutContext.CurrentUnit.Is64BitEncoding;
+        var addressSize = context.CurrentUnit!.AddressSize;
+        var is64BitEncoding = context.CurrentUnit.Is64BitEncoding;
 
         var endOffset = Position;
         switch (Form.Value)
@@ -214,7 +214,7 @@ public sealed class DwarfAttribute : DwarfObject<DwarfDIE>, IComparable<DwarfAtt
             case DwarfAttributeForm.RefUdata:
             {
                 var dieRef = (DwarfDIE)ValueAsObject!;
-                endOffset += DwarfHelper.SizeOfULEB128(dieRef.Position - layoutContext.CurrentUnit.Position); // WriteULEB128((dieRef.Offset - _currentUnit.Offset));
+                endOffset += DwarfHelper.SizeOfULEB128(dieRef.Position - context.CurrentUnit.Position); // WriteULEB128((dieRef.Offset - _currentUnit.Offset));
                 break;
             }
 
@@ -239,7 +239,7 @@ public sealed class DwarfAttribute : DwarfObject<DwarfDIE>, IComparable<DwarfAtt
             case DwarfAttributeForm.Exprloc:
                 var expr = (DwarfExpression)ValueAsObject!;
                 expr.Position = endOffset;
-                expr.UpdateLayout(layoutContext);
+                expr.UpdateLayout(context);
                 endOffset += expr.Size;
                 break;
 

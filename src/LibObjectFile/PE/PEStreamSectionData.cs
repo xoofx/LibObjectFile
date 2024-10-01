@@ -80,7 +80,7 @@ public class PEStreamSectionData : PESectionData
         }
     }
     
-    protected override void UpdateLayoutCore(PELayoutContext layoutContext)
+    protected override void UpdateLayoutCore(PELayoutContext context)
     {
         Size = (ulong)Stream.Length;
     }

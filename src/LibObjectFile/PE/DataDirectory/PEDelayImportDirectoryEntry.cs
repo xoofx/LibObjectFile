@@ -27,4 +27,15 @@ public class PEDelayImportDirectoryEntry
     public PESectionDataLink BoundImportAddressTableLink { get; set; }
 
     public PESectionDataLink UnloadDelayInformationTableLink { get; set; }
+
+    internal void Verify(PEVerifyContext context, PEDelayImportDirectory parent, int index)
+    {
+        context.VerifyObject(DllName.Container, parent, $"the {nameof(DllName)} of the {nameof(PEDelayImportDirectoryEntry)} at #{index}", false);
+        context.VerifyObject(ModuleHandle.Container, parent, $"the {nameof(ModuleHandle)} of the {nameof(PEDelayImportDirectoryEntry)} at #{index}", false);
+        context.VerifyObject(DelayImportAddressTable, parent, $"the {nameof(DelayImportAddressTable)} of the {nameof(PEDelayImportDirectoryEntry)} at #{index}", false);
+        context.VerifyObject(DelayImportNameTable, parent, $"the {nameof(DelayImportNameTable)} of the {nameof(PEDelayImportDirectoryEntry)} at #{index}", false);
+        // Allow null
+        context.VerifyObject(BoundImportAddressTableLink.Container, parent, $"the {nameof(BoundImportAddressTableLink)} of the {nameof(PEDelayImportDirectoryEntry)} at #{index}", true);
+        context.VerifyObject(UnloadDelayInformationTableLink.Container, parent, $"the {nameof(UnloadDelayInformationTableLink)} of the {nameof(PEDelayImportDirectoryEntry)} at #{index}", true);
+    }
 }

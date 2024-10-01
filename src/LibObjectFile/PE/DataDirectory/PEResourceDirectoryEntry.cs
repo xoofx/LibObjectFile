@@ -215,11 +215,29 @@ public sealed class PEResourceDirectoryEntry : PEResourceEntry
         }
     }
 
-    protected override unsafe void UpdateLayoutCore(PELayoutContext layoutContext)
+    protected override unsafe void UpdateLayoutCore(PELayoutContext context)
     {
         Size = CalculateSize();
     }
 
+    public override void Verify(PEVerifyContext context)
+    {
+        for (var i = 0; i < ByNames.Count; i++)
+        {
+            var entry = ByNames[i];
+            context.VerifyObject(entry.Name, this, $"the {nameof(entry.Name)} in the {nameof(ByNames)} at index #{i}", false);
+            context.VerifyObject(entry.Entry, this, $"the {nameof(entry.Entry)} in the {nameof(ByNames)} at index #{i}", false);
+        }
+
+        for (var i = 0; i < ByIds.Count; i++)
+        {
+            var entry = ByIds[i];
+            context.VerifyObject(entry.Entry, this, $"the {nameof(entry.Entry)} in the {nameof(ByIds)} at index #{i}", false);
+        }
+
+        base.Verify(context);
+    }
+    
     private unsafe uint CalculateSize()
     {
         var size = 0U;

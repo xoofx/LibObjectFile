@@ -6,7 +6,12 @@ namespace LibObjectFile.PE;
 
 public class PEImageReaderOptions
 {
-    public bool IsReadOnly { get; init; }
+    public bool UseSubStream { get; init; }
 
+    public bool EnableStackTrace { get; init; }
+}
+
+public class PEImageWriterOptions
+{
     public bool EnableStackTrace { get; init; }
 }

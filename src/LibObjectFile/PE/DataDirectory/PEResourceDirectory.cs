@@ -80,6 +80,12 @@ public sealed class PEResourceDirectory : PEDataDirectory
         HeaderSize = ComputeHeaderSize(reader);
     }
 
+    public override void Verify(PEVerifyContext context)
+    {
+        Root.Verify(context);
+        base.Verify(context);
+    }
+    
     internal override IEnumerable<PEObjectBase> CollectImplicitSectionDataList()
     {
         if (_tempResourceStrings is not null)

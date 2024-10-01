@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -94,9 +94,9 @@ public class DwarfExpression : DwarfObject<DwarfObject>
         Size = OperationLengthInBytes + deltaLength;
     }
 
-    protected override void UpdateLayoutCore(DwarfLayoutContext layoutContext)
+    protected override void UpdateLayoutCore(DwarfLayoutContext context)
     {
-        UpdateLayout(layoutContext, inLocationSection: false);
+        UpdateLayout(context, inLocationSection: false);
     }
 
     public override void Read(DwarfReader reader)

@@ -223,4 +223,15 @@ public sealed class PEDelayImportDirectory : PEDataDirectory
 
         writer.Write(tempSpan.AsBytes);
     }
+
+    public override void Verify(PEVerifyContext context)
+    {
+        for (var i = 0; i < Entries.Count; i++)
+        {
+            var entry = Entries[i];
+            entry.Verify(context, this, i);
+        }
+
+        base.Verify(context);
+    }
 }

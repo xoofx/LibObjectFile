@@ -180,4 +180,14 @@ internal readonly struct PEImportFunctionTable()
 
         writer.Write(MemoryMarshal.AsBytes(span));
     }
+
+    public void Verify(PEVerifyContext context, PEObject parent)
+    {
+        for (var i = 0; i < Entries.Count; i++)
+        {
+            var entry = Entries[i];
+            entry.Verify(context, parent, i);
+        }
+    }
+
 }

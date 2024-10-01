@@ -118,7 +118,7 @@ public sealed class PEDebugSectionDataRSDS : PEDebugSectionData
         writer.Write(tempSpan.AsBytes);
     }
 
-    protected override void UpdateLayoutCore(PELayoutContext layoutContext)
+    protected override void UpdateLayoutCore(PELayoutContext context)
     {
         Size = CalculateSize();
     }

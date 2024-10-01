@@ -57,6 +57,14 @@ public abstract class PECompositeSectionData : PESectionData, IEnumerable<PESect
         }
     }
 
+    public override void Verify(PEVerifyContext context)
+    {
+        foreach (var data in Content)
+        {
+            data.Verify(context);
+        }
+    }
+
     protected sealed override void UpdateLayoutCore(PELayoutContext context)
     {
         var va = RVA;

@@ -175,4 +175,21 @@ public sealed class PEBoundImportDirectory : PEDataDirectory
         rawEntry = default;
         writer.Write(rawEntry);
     }
+
+    public override void Verify(PEVerifyContext context)
+    {
+        for (var i = 0; i < Entries.Count; i++)
+        {
+            var entry = Entries[i];
+            context.VerifyObject(entry.ModuleName.Container, this, $"the ModuleName in entry #{i}", false);
+
+            for (var j = 0; j < entry.ForwarderRefs.Count; j++)
+            {
+                var forwarderRef = entry.ForwarderRefs[j];
+                context.VerifyObject(forwarderRef.ModuleName.Container, this, $"the ForwarderRef.ModuleName in entry #{i} ForwarderRef #{j}", false);
+            }
+        }
+
+        base.Verify(context);
+    }
 }

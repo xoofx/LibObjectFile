@@ -43,4 +43,8 @@ public sealed class PEImportLookupTable : PESectionData, IEnumerable<PEImportFun
 
     IEnumerator IEnumerable.GetEnumerator() => Entries.GetEnumerator();
 
+    public override void Verify(PEVerifyContext context)
+    {
+        FunctionTable.Verify(context, this);
+    }
 }

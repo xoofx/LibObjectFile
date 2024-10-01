@@ -40,5 +40,9 @@ public class PEImportAddressTable : PESectionData, IEnumerable<PEImportFunctionE
     IEnumerator<PEImportFunctionEntry> IEnumerable<PEImportFunctionEntry>.GetEnumerator() => Entries.GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => Entries.GetEnumerator();
-    
+
+    public override void Verify(PEVerifyContext context)
+    {
+        FunctionTable.Verify(context, this);
+    }
 }

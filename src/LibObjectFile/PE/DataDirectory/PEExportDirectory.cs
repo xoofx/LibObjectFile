@@ -167,6 +167,16 @@ public sealed class PEExportDirectory : PEDataDirectory
         return (uint)sizeof(RawImageExportDirectory);
     }
 
+    public override void Verify(PEVerifyContext context)
+    {
+        context.VerifyObject(NameLink.Container, this, $"the {nameof(NameLink)} of the {nameof(PEExportDirectory)}", false);
+        context.VerifyObject(ExportFunctionAddressTable, this, $"the {nameof(ExportFunctionAddressTable)} of the {nameof(PEExportDirectory)}", true);
+        context.VerifyObject(ExportNameTable, this, $"the {nameof(ExportNameTable)} of the {nameof(PEExportDirectory)}", true);
+        context.VerifyObject(ExportOrdinalTable, this, $"the {nameof(ExportOrdinalTable)} of the {nameof(PEExportDirectory)}", true);
+
+        base.Verify(context);
+    }
+
     internal override IEnumerable<PEObjectBase> CollectImplicitSectionDataList()
     {
         if (ExportFunctionAddressTable is not null)

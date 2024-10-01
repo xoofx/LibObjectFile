@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -426,7 +426,7 @@ public class DwarfOperation : DwarfObject<DwarfExpression>
         Size = reader.Position - Position;
     }
 
-    protected override void UpdateLayoutCore(DwarfLayoutContext layoutContext)
+    protected override void UpdateLayoutCore(DwarfLayoutContext context)
     {
         var endOffset = Position;
         // 1 byte per opcode
@@ -435,7 +435,7 @@ public class DwarfOperation : DwarfObject<DwarfExpression>
         switch (Kind.Value)
         {
             case DwarfOperationKind.Addr:
-                endOffset += DwarfHelper.SizeOfUInt(layoutContext.CurrentUnit!.AddressSize);
+                endOffset += DwarfHelper.SizeOfUInt(context.CurrentUnit!.AddressSize);
                 break;
             case DwarfOperationKind.Const1u:
             case DwarfOperationKind.Const1s:
@@ -618,7 +618,7 @@ public class DwarfOperation : DwarfObject<DwarfExpression>
                 break;
 
             case DwarfOperationKind.CallRef:
-                endOffset += DwarfHelper.SizeOfUInt(layoutContext.CurrentUnit!.AddressSize);
+                endOffset += DwarfHelper.SizeOfUInt(context.CurrentUnit!.AddressSize);
                 break;
 
             case DwarfOperationKind.BitPiece:
@@ -629,7 +629,7 @@ public class DwarfOperation : DwarfObject<DwarfExpression>
             case DwarfOperationKind.ImplicitValue:
                 if (Operand0 == null)
                 {
-                    layoutContext.Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The object operand of implicit value operation {this} from DIE cannot be null.");
+                    context.Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The object operand of implicit value operation {this} from DIE cannot be null.");
                 }
                 else if (Operand0 is Stream stream)
                 {
@@ -639,7 +639,7 @@ public class DwarfOperation : DwarfObject<DwarfExpression>
                 }
                 else
                 {
-                    layoutContext.Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The object operand of implicit value operation {this} must be a System.IO.Stream.");
+                    context.Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The object operand of implicit value operation {this} must be a System.IO.Stream.");
                 }
 
                 break;
@@ -647,13 +647,13 @@ public class DwarfOperation : DwarfObject<DwarfExpression>
             case DwarfOperationKind.ImplicitPointer:
             case DwarfOperationKind.GNUImplicitPointer:
                 //  a reference to a debugging information entry that describes the dereferenced object’s value
-                if (layoutContext.CurrentUnit!.Version == 2)
+                if (context.CurrentUnit!.Version == 2)
                 {
-                    endOffset += DwarfHelper.SizeOfUInt(layoutContext.CurrentUnit.AddressSize);
+                    endOffset += DwarfHelper.SizeOfUInt(context.CurrentUnit.AddressSize);
                 }
                 else
                 {
-                    endOffset += DwarfHelper.SizeOfUInt(layoutContext.CurrentUnit.Is64BitEncoding);
+                    endOffset += DwarfHelper.SizeOfUInt(context.CurrentUnit.Is64BitEncoding);
                 }
 
                 //  a signed number that is treated as a byte offset from the start of that value
@@ -669,12 +669,12 @@ public class DwarfOperation : DwarfObject<DwarfExpression>
                 else if (Operand0 is DwarfExpression expr)
                 {
                     expr.Position = endOffset;
-                    expr.UpdateLayout(layoutContext);
+                    expr.UpdateLayout(context);
                     endOffset += DwarfHelper.SizeOfULEB128(expr.Size);
                 }
                 else
                 {
-                    layoutContext.Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The object operand of EntryValue operation {this} must be a {nameof(DwarfExpression)} instead of {Operand0.GetType()}.");
+                    context.Diagnostics.Error(DiagnosticId.DWARF_ERR_InvalidData, $"The object operand of EntryValue operation {this} must be a {nameof(DwarfExpression)} instead of {Operand0.GetType()}.");
                 }
 
                 break;
@@ -688,8 +688,8 @@ public class DwarfOperation : DwarfObject<DwarfExpression>
                 // of a debugging information entry in the current compilation unit, which
                 // must be a DW_TAG_base_type entry that provides the type of the constant provided
 
-                endOffset += SizeOfDIEReference(layoutContext);
-                endOffset += SizeOfEncodedValue(Kind, Operand1.U64, (byte)Operand2.U64, layoutContext.CurrentUnit!.AddressSize);
+                endOffset += SizeOfDIEReference(context);
+                endOffset += SizeOfEncodedValue(Kind, Operand1.U64, (byte)Operand2.U64, context.CurrentUnit!.AddressSize);
                 break;
             }
 
@@ -705,7 +705,7 @@ public class DwarfOperation : DwarfObject<DwarfExpression>
 
                 // The second operand is an unsigned LEB128 number that represents the offset
                 // of a debugging information entry in the current compilation unit
-                endOffset += SizeOfDIEReference(layoutContext);
+                endOffset += SizeOfDIEReference(context);
                 break;
             }
 
@@ -722,7 +722,7 @@ public class DwarfOperation : DwarfObject<DwarfExpression>
 
                 // The second operand is an unsigned LEB128 number that represents the offset
                 // of a debugging information entry in the current compilation unit
-                endOffset += SizeOfDIEReference(layoutContext);
+                endOffset += SizeOfDIEReference(context);
                 break;
             }
 
@@ -730,11 +730,11 @@ public class DwarfOperation : DwarfObject<DwarfExpression>
             case DwarfOperationKind.GNUConvert:
             case DwarfOperationKind.Reinterpret:
             case DwarfOperationKind.GNUReinterpret:
-                endOffset += SizeOfDIEReference(layoutContext);
+                endOffset += SizeOfDIEReference(context);
                 break;
 
             case DwarfOperationKind.GNUEncodedAddr:
-                endOffset += SizeOfEncodedValue(Kind, Operand1.U64, (byte)Operand2.U64, layoutContext.CurrentUnit!.AddressSize);
+                endOffset += SizeOfEncodedValue(Kind, Operand1.U64, (byte)Operand2.U64, context.CurrentUnit!.AddressSize);
                 break;
 
             case DwarfOperationKind.GNUParameterRef:

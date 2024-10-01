@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -22,4 +22,9 @@ public abstract class PEExceptionFunctionEntry
     /// Gets or sets the begin address of the exception function entry.
     /// </summary>
     public PESectionDataLink BeginAddress { get; set; }
+
+    internal virtual void Verify(PEVerifyContext context, PEExceptionDirectory exceptionDirectory, int index)
+    {
+        context.VerifyObject(BeginAddress.Container, exceptionDirectory, $"the {nameof(BeginAddress)} of the {nameof(PEExceptionFunctionEntry)} at #{index}", false);
+    }
 }

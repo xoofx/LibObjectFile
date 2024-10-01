@@ -238,6 +238,18 @@ public sealed class PEExceptionDirectory : PEDataDirectory
         }
     }
 
+    public override void Verify(PEVerifyContext context)
+    {
+        var entries = CollectionsMarshal.AsSpan(Entries);
+        for (int i = 0; i < entries.Length; i++)
+        {
+            var entry = entries[i];
+            entry.Verify(context, this, i);
+        }
+
+        base.Verify(context);
+    }
+
     private void WriteX86(PEImageWriter writer)
     {
         using var tempSpan = TempSpan<RawExceptionFunctionEntryX86>.Create(Entries.Count, out var span);

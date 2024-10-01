@@ -68,10 +68,16 @@ public sealed class PEResourceDataEntry : PEResourceEntry
         return true;
     }
 
-    protected override unsafe void UpdateLayoutCore(PELayoutContext layoutContext)
+    protected override unsafe void UpdateLayoutCore(PELayoutContext context)
     {
         Size = (uint)sizeof(RawImageResourceDataEntry);
     }
+
+    public override void Verify(PEVerifyContext context)
+    {
+        context.VerifyObject(Data, this, $"the {nameof(Data)}", false);
+    }
+
 
     internal override unsafe void Read(in ReaderContext context)
     {

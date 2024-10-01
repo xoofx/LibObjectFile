@@ -104,7 +104,7 @@ public sealed class PESecurityCertificateDirectory : PEExtraData
         return size;
     }
 
-    protected override void UpdateLayoutCore(PELayoutContext layoutContext)
+    protected override void UpdateLayoutCore(PELayoutContext context)
     {
         Size = CalculateSize();
     }

@@ -19,9 +19,9 @@ partial class PEFile
     /// Writes this PE file to the specified stream.
     /// </summary>
     /// <param name="stream">The stream to write to.</param>
-    public void Write(Stream stream)
+    public void Write(Stream stream, PEImageWriterOptions? options = null)
     {
-        if (!TryWrite(stream, out var diagnostics))
+        if (!TryWrite(stream, out var diagnostics, options))
         {
             throw new ObjectFileException($"Invalid PE File", diagnostics);
         }
@@ -33,27 +33,34 @@ partial class PEFile
     /// <param name="stream">The stream to write to.</param>
     /// <param name="diagnostics">The output diagnostics</param>
     /// <returns><c>true</c> if writing was successful. otherwise <c>false</c></returns>
-    public bool TryWrite(Stream stream, out DiagnosticBag diagnostics)
+    public bool TryWrite(Stream stream, out DiagnosticBag diagnostics, PEImageWriterOptions? options = null)
     {
         if (stream == null) throw new ArgumentNullException(nameof(stream));
         
         var peWriter = new PEImageWriter(this, stream);
         diagnostics = peWriter.Diagnostics;
 
-        var context = new PELayoutContext(this, diagnostics);
+        if (options is not null)
+        {
+            diagnostics.EnableStackTrace = options.EnableStackTrace;
+        }
 
-        Verify(context);
+        // Verify the coherence of the PE file
+        Verify(diagnostics);
         if (diagnostics.HasErrors)
         {
             return false;
         }
 
+        // Layout the PE file
+        var context = new PELayoutContext(this, diagnostics);
         UpdateLayout(context);
         if (diagnostics.HasErrors)
         {
             return false;
         }
 
+        // Write the PE file
         Write(peWriter);
         
         return !diagnostics.HasErrors;

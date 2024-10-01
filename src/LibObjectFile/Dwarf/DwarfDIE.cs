@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -296,7 +296,7 @@ public class DwarfDIE : DwarfContainer
         }
     }
 
-    protected override void UpdateLayoutCore(DwarfLayoutContext layoutContext)
+    protected override void UpdateLayoutCore(DwarfLayoutContext context)
     {
         var abbrev = Abbrev;
 
@@ -310,7 +310,7 @@ public class DwarfDIE : DwarfContainer
         foreach (var attr in _attributes)
         {
             attr.Position = endOffset;
-            attr.UpdateLayout(layoutContext);
+            attr.UpdateLayout(context);
             endOffset += attr.Size;
         }
 
@@ -319,7 +319,7 @@ public class DwarfDIE : DwarfContainer
             foreach (var child in _children)
             {
                 child.Position = endOffset;
-                child.UpdateLayout(layoutContext);
+                child.UpdateLayout(context);
                 endOffset += child.Size;
             }
 

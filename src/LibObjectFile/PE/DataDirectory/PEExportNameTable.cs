@@ -74,4 +74,13 @@ public sealed class PEExportNameTable : PESectionData
 
         writer.Write(tempSpan.AsBytes);
     }
+
+    public override void Verify(PEVerifyContext context)
+    {
+        for (int i = 0; i < Values.Count; i++)
+        {
+            var value = Values[i];
+            context.VerifyObject(value.Container, this, $"the {nameof(PEAsciiStringLink)} of the {nameof(PEExportNameTable)} #{i}", false);
+        }
+    }
 }

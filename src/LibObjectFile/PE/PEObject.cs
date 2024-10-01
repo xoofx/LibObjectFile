@@ -124,14 +124,14 @@ public abstract class PEObject : PEObjectBase
         _useCustomVirtualSize = false;
     }
 
-    public sealed override void UpdateLayout(PELayoutContext layoutContext)
+    public sealed override void UpdateLayout(PELayoutContext context)
     {
-        var section = layoutContext.CurrentSection;
+        var section = context.CurrentSection;
 
         if (section is null)
         {
             // Update the layout normally
-            base.UpdateLayout(layoutContext);
+            base.UpdateLayout(context);
         }
         else
         {
@@ -144,7 +144,7 @@ public abstract class PEObject : PEObjectBase
             var currentSectionVirtualSize = this.RVA - section.RVA;
             
             // Update the layout normally
-            base.UpdateLayout(layoutContext);
+            base.UpdateLayout(context);
 
             // Accumulate the virtual size of the section
             currentSectionVirtualSize += (uint)Size;

@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -19,19 +19,19 @@ public class DwarfLocationList : DwarfContainer
 
     public ObjectList<DwarfLocationListEntry> LocationListEntries => _locationListEntries;
 
-    protected override void UpdateLayoutCore(DwarfLayoutContext layoutContext)
+    protected override void UpdateLayoutCore(DwarfLayoutContext context)
     {
         var endOffset = Position;
 
         foreach (var locationListEntry in _locationListEntries)
         {
             locationListEntry.Position = endOffset;
-            locationListEntry.UpdateLayout(layoutContext);
+            locationListEntry.UpdateLayout(context);
             endOffset += locationListEntry.Size;
         }
 
         // End of list
-        endOffset += 2 * DwarfHelper.SizeOfUInt(layoutContext.CurrentUnit!.AddressSize);
+        endOffset += 2 * DwarfHelper.SizeOfUInt(context.CurrentUnit!.AddressSize);
 
         Size = endOffset - Position;
     }
