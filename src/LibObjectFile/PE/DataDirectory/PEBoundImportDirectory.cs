@@ -113,7 +113,7 @@ public sealed class PEBoundImportDirectory : PEDataDirectory
         {
             // The RVO is actually an RVA until we bind it here
             var va = (RVA)(uint)entry.ModuleName.RVO;
-            if (!peFile.TryFindContainerByRVA(va, out var container))
+            if (!peFile.TryFindByRVA(va, out var container))
             {
                 diagnostics.Error(DiagnosticId.PE_ERR_BoundImportDirectoryInvalidModuleName, $"Unable to find the section data for ModuleName {va}");
                 return;
@@ -134,7 +134,7 @@ public sealed class PEBoundImportDirectory : PEDataDirectory
             {
                 // The RVO is actually an RVA until we bind it here
                 va = (RVA)(uint)forwarderRef.ModuleName.RVO;
-                if (!peFile.TryFindContainerByRVA(va, out container))
+                if (!peFile.TryFindByRVA(va, out container))
                 {
                     diagnostics.Error(DiagnosticId.PE_ERR_BoundImportDirectoryInvalidForwarderRefModuleName, $"Unable to find the section data for ForwarderRef ModuleName {va}");
                     return;

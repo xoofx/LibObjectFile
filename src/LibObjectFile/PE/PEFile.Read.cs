@@ -83,13 +83,8 @@ partial class PEFile
 
         if (pePosition < sizeof(PEDosHeader))
         {
-            if (pePosition < 4)
-            {
-                diagnostics.Error(DiagnosticId.PE_ERR_InvalidPEHeaderPosition, "Invalid PE header position");
-                return;
-            }
-
-            _unsafeNegativePEHeaderOffset = (int)pePosition - sizeof(PEDosHeader);
+            diagnostics.Error(DiagnosticId.PE_ERR_InvalidPEHeaderPosition, $"Invalid PE header position 0x{pePosition:X}. PEFile does not support PE position < 0x{sizeof(PEDosHeader):X}");
+            return;
         }
         else
         {
@@ -214,6 +209,7 @@ partial class PEFile
             OptionalHeader.OptionalHeaderCommonPart2 = optionalHeader32.Common2;
             OptionalHeader.OptionalHeaderSize32 = optionalHeader32.Size32;
             OptionalHeader.OptionalHeaderCommonPart3 = optionalHeader32.Common3;
+            OptionalHeader.SyncPE32ToPE32Plus();
         }
         else
         {
@@ -235,18 +231,18 @@ partial class PEFile
         }
 
         // Read Directory headers
-        using var pooledSpanDirectories = TempSpan<RawImageDataDirectory>.Create(stackalloc byte[16 * sizeof(RawImageDataDirectory)], (int)OptionalHeader.NumberOfRvaAndSizes, out var rawDirectories);
+        using var pooledSpanDirectories = TempSpan<RawImageDataDirectory>.Create(stackalloc byte[16 * sizeof(RawImageDataDirectory)], (int)OptionalHeader.OptionalHeaderCommonPart3.NumberOfRvaAndSizes, out var rawDirectories);
 
         // Sets the number of entries in the data directory
-        Directories.Count = (int)OptionalHeader.NumberOfRvaAndSizes;
+        Directories.Count = (int)OptionalHeader.OptionalHeaderCommonPart3.NumberOfRvaAndSizes;
 
-        if (OptionalHeader.NumberOfRvaAndSizes > 0)
+        if (OptionalHeader.OptionalHeaderCommonPart3.NumberOfRvaAndSizes > 0)
         {
             var span = MemoryMarshal.AsBytes(rawDirectories);
             read = reader.Read(span);
             if (read != span.Length)
             {
-                diagnostics.Error(DiagnosticId.PE_ERR_InvalidNumberOfDataDirectories, $"Invalid number of data directory {OptionalHeader.NumberOfRvaAndSizes} at position {reader.Position}");
+                diagnostics.Error(DiagnosticId.PE_ERR_InvalidNumberOfDataDirectories, $"Invalid number of data directory {OptionalHeader.OptionalHeaderCommonPart3.NumberOfRvaAndSizes} at position {reader.Position}");
                 return;
             }
         }
@@ -286,7 +282,7 @@ partial class PEFile
         }
 
         uint positionAfterLastSection = positionFirstSection;
-        
+
         // Create sections
         foreach (var rawSection in rawSectionHeaders)
         {
@@ -319,7 +315,7 @@ partial class PEFile
         var extraDataList = new List<PEExtraData>();
 
         // Create directories and find the section for each directory
-        var maxNumberOfDirectory = (int)Math.Min(OptionalHeader.NumberOfRvaAndSizes, 15);
+        var maxNumberOfDirectory = (int)Math.Min(OptionalHeader.OptionalHeaderCommonPart3.NumberOfRvaAndSizes, 15);
         for (int i = 0; i < maxNumberOfDirectory && i < rawDirectories.Length; i++)
         {
             var directoryEntry = rawDirectories[i];
@@ -348,7 +344,7 @@ partial class PEFile
             else
             {
 
-                if (!TryFindSection(directoryEntry.RVA, directoryEntry.Size, out var peSection))
+                if (!TryFindSectionByRVA(directoryEntry.RVA, directoryEntry.Size, out var peSection))
                 {
                     reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidDataDirectorySection, $"Unable to find the section for the DataDirectory {(PEDataDirectoryKind)i} at virtual address {directoryEntry.RVA}, size {directoryEntry.Size}");
                     continue;
@@ -499,7 +495,38 @@ partial class PEFile
                 directory.Bind(reader);
             }
         }
-        
+
+        if (OptionalHeader.OptionalHeaderCommonPart1.BaseOfCode != 0)
+        {
+            // Find the section code
+            if (!this.TryFindSectionByRVA(OptionalHeader.OptionalHeaderCommonPart1.BaseOfCode, out var codeSection))
+            {
+                reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidBaseOfCode, $"Unable to find the section for BaseOfCode {OptionalHeader.OptionalHeaderCommonPart1.BaseOfCode}");
+                return;
+            }
+
+            OptionalHeader.BaseOfCode = codeSection;
+        }
+
+
+        // Find the entry address point
+        if (OptionalHeader.OptionalHeaderCommonPart1.AddressOfEntryPoint != 0)
+        {
+            if (!this.TryFindByRVA(OptionalHeader.OptionalHeaderCommonPart1.AddressOfEntryPoint, out var entryPointContainer))
+            {
+                reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidAddressOfEntryPoint, $"Unable to find the section for AddressOfEntryPoint {OptionalHeader.OptionalHeaderCommonPart1.AddressOfEntryPoint}");
+                return;
+            }
+
+            if (entryPointContainer is not PESectionData entryPointSectionData)
+            {
+                reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidAddressOfEntryPoint, $"Invalid section for AddressOfEntryPoint {OptionalHeader.OptionalHeaderCommonPart1.AddressOfEntryPoint}. The object found is not a section data but {entryPointContainer}");
+                return;
+            }
+
+            OptionalHeader.AddressOfEntryPoint = new(entryPointSectionData, OptionalHeader.OptionalHeaderCommonPart1.AddressOfEntryPoint - entryPointSectionData.RVA);
+        }
+
         // Validate the VirtualAddress of the directories
         for (int i = 0; i < maxNumberOfDirectory && i < rawDirectories.Length; i++)
         {

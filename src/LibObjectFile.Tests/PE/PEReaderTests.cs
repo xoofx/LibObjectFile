@@ -118,8 +118,13 @@ public partial class PEReaderTests
             exitProcessFunction
         };
 
-        var importDirectory = new PEImportDirectory();
-        importDirectory.Entries.Add(new PEImportDirectoryEntry(kernelName, peImportAddressTable, peImportLookupTable));
+        var importDirectory = new PEImportDirectory()
+        {
+            Entries =
+            {
+                new PEImportDirectoryEntry(kernelName, peImportAddressTable, peImportLookupTable)
+            }
+        };
 
         // Layout of the data section
         dataSection.Content.Add(iatDirectory);
@@ -128,16 +133,10 @@ public partial class PEReaderTests
         dataSection.Content.Add(streamData);
 
         // ***************************************************************************
-        // Directories
-        // ***************************************************************************
-        pe.Directories[PEDataDirectoryKind.Import] = importDirectory;
-        pe.Directories[PEDataDirectoryKind.ImportAddressTable] = iatDirectory;
-
-        // ***************************************************************************
         // Optional Header
         // ***************************************************************************
-        pe.OptionalHeader.AddressOfEntryPoint = 0x1000;
-        pe.OptionalHeader.BaseOfCode = 0x1000;
+        pe.OptionalHeader.AddressOfEntryPoint = new(streamCode, 0);
+        pe.OptionalHeader.BaseOfCode = codeSection;
 
         // ***************************************************************************
         // Write the PE to a file
@@ -232,6 +231,7 @@ public partial class PEReaderTests
     }
     
     [TestMethod]
+    [Ignore("PEFile does not support PE files that are folding the PE header into the DosHeader")]
     public async Task TestTinyExe97Bytes()
     {
         // http://www.phreedom.org/research/tinype/

@@ -94,10 +94,16 @@ partial class PEFile
         // COFF header
         writer.Write(CoffHeader);
         position += (uint)sizeof(PECoffHeader);
-
+        
+        // Update OptionalHeader
+        OptionalHeader.OptionalHeaderCommonPart1.AddressOfEntryPoint = OptionalHeader.AddressOfEntryPoint.RVA();
+        OptionalHeader.OptionalHeaderCommonPart1.BaseOfCode = OptionalHeader.BaseOfCode?.RVA ?? 0;
+        
         if (IsPE32)
         {
             RawImageOptionalHeader32 header32;
+            // Some properties are only set in PE32Plus so we copy them back in the PE32 header
+            OptionalHeader.SyncPE32PlusToPE32();
             header32.Common = OptionalHeader.OptionalHeaderCommonPart1;
             header32.Base32 = OptionalHeader.OptionalHeaderBase32;
             header32.Common2 = OptionalHeader.OptionalHeaderCommonPart2;

@@ -105,8 +105,8 @@ public static class PEPrinter
             writer.WriteLine($"{nameof(PEOptionalHeader.SizeOfCode),indent} = 0x{file.OptionalHeader.SizeOfCode:X}");
             writer.WriteLine($"{nameof(PEOptionalHeader.SizeOfInitializedData),indent} = 0x{file.OptionalHeader.SizeOfInitializedData:X}");
             writer.WriteLine($"{nameof(PEOptionalHeader.SizeOfUninitializedData),indent} = 0x{file.OptionalHeader.SizeOfUninitializedData:X}");
-            writer.WriteLine($"{nameof(PEOptionalHeader.AddressOfEntryPoint),indent} = 0x{file.OptionalHeader.AddressOfEntryPoint:X}");
-            writer.WriteLine($"{nameof(PEOptionalHeader.BaseOfCode),indent} = 0x{file.OptionalHeader.BaseOfCode:X}");
+            writer.WriteLine($"{nameof(PEOptionalHeader.AddressOfEntryPoint),indent} = {file.OptionalHeader.AddressOfEntryPoint}");
+            writer.WriteLine($"{nameof(PEOptionalHeader.BaseOfCode),indent} = {file.OptionalHeader.BaseOfCode}");
             writer.WriteLine($"{nameof(PEOptionalHeader.BaseOfData),indent} = 0x{file.OptionalHeader.BaseOfData:X}");
             writer.WriteLine($"{nameof(PEOptionalHeader.ImageBase),indent} = 0x{file.OptionalHeader.ImageBase:X}");
             writer.WriteLine($"{nameof(PEOptionalHeader.SectionAlignment),indent} = 0x{file.OptionalHeader.SectionAlignment:X}");

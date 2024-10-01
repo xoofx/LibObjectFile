@@ -51,7 +51,7 @@ public sealed class PEExportAddressTable : PESectionData
                 continue;
             }
 
-            if (!reader.File.TryFindSection(rva, out var section))
+            if (!reader.File.TryFindSectionByRVA(rva, out var section))
             {
                 reader.Diagnostics.Error(DiagnosticId.PE_ERR_ExportAddressTableInvalidRVA, $"Unable to find the section data for RVA {rva}");
                 return;

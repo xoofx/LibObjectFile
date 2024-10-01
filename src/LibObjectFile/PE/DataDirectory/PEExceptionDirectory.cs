@@ -151,7 +151,7 @@ public sealed class PEExceptionDirectory : PEDataDirectory
         {
             if (entry is PEExceptionFunctionEntryX86 entryX86)
             {
-                if (!peFile.TryFindContainerByRVA((RVA)(uint)entryX86.BeginAddress.RVO, out var beginAddressContainer))
+                if (!peFile.TryFindByRVA((RVA)(uint)entryX86.BeginAddress.RVO, out var beginAddressContainer))
                 {
                     reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidExceptionDirectory_Entry, $"Invalid begin address {entryX86.BeginAddress.RVO} in exception directory");
                     return;
@@ -165,7 +165,7 @@ public sealed class PEExceptionDirectory : PEDataDirectory
                 }
 
                 // Need to subtract 1 to get the end address
-                if (!peFile.TryFindContainerByRVA((RVA)(uint)entryX86.EndAddress.RVO - 1, out var endAddressContainer))
+                if (!peFile.TryFindByRVA((RVA)(uint)entryX86.EndAddress.RVO - 1, out var endAddressContainer))
                 {
                     reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidExceptionDirectory_Entry, $"Invalid end address {entryX86.EndAddress.RVO} in exception directory");
                     return;
@@ -179,7 +179,7 @@ public sealed class PEExceptionDirectory : PEDataDirectory
                 }
                 
 
-                if (!peFile.TryFindContainerByRVA((RVA)(uint)entryX86.UnwindInfoAddress.RVO, out var unwindInfoAddressContainer))
+                if (!peFile.TryFindByRVA((RVA)(uint)entryX86.UnwindInfoAddress.RVO, out var unwindInfoAddressContainer))
                 {
                     reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidExceptionDirectory_Entry, $"Invalid unwind info address {entryX86.UnwindInfoAddress.RVO} in exception directory");
                     return;
@@ -199,7 +199,7 @@ public sealed class PEExceptionDirectory : PEDataDirectory
             }
             else if (entry is PEExceptionFunctionEntryARM entryARM)
             {
-                if (!peFile.TryFindContainerByRVA((RVA)(uint)entryARM.BeginAddress.RVO, out var beginAddressContainer))
+                if (!peFile.TryFindByRVA((RVA)(uint)entryARM.BeginAddress.RVO, out var beginAddressContainer))
                 {
                     reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidExceptionDirectory_Entry, $"Invalid begin address {entryARM.BeginAddress.RVO} in exception directory");
                     return;

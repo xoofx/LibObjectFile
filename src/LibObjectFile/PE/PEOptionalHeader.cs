@@ -10,7 +10,7 @@ using LibObjectFile.PE.Internal;
 
 namespace LibObjectFile.PE;
 
-public struct PEOptionalHeader
+public sealed class PEOptionalHeader
 {
     internal RawImageOptionalHeaderCommonPart1 OptionalHeaderCommonPart1;
     internal RawImageOptionalHeaderBase32 OptionalHeaderBase32;
@@ -20,8 +20,19 @@ public struct PEOptionalHeader
     internal RawImageOptionalHeaderSize64 OptionalHeaderSize64;
     internal RawImageOptionalHeaderCommonPart3 OptionalHeaderCommonPart3;
 
-    public PEOptionalHeader()
+    private readonly PEFile _peFile;
+    private PESection? _baseOfCode;
+    private PESectionDataLink _entryPointLink;
+
+    internal PEOptionalHeader(PEFile peFile)
     {
+        _peFile = peFile;
+    }
+
+    internal PEOptionalHeader(PEFile peFile, PEOptionalHeaderMagic magic)
+    {
+        _peFile = peFile;
+
         // Clear all fields
         OptionalHeaderCommonPart1 = default;
         OptionalHeaderBase32 = default;
@@ -32,19 +43,19 @@ public struct PEOptionalHeader
         OptionalHeaderCommonPart3 = default;
 
         // Setup some fields to some default values
-        OptionalHeaderCommonPart1.Magic = PEOptionalHeaderMagic.PE32Plus;
+        OptionalHeaderCommonPart1.Magic = magic;
         OptionalHeaderCommonPart1.MajorLinkerVersion = 1;
 
-        OptionalHeaderBase64.ImageBase = 0x400000;
+        OptionalHeaderBase64.ImageBase = magic == PEOptionalHeaderMagic.PE32 ? 0x1400_0000U :  0x14000_0000UL;
 
         OptionalHeaderCommonPart2.SectionAlignment = 0x1000;
         OptionalHeaderCommonPart2.FileAlignment = 0x200;
         OptionalHeaderCommonPart2.MajorOperatingSystemVersion = 6;
         OptionalHeaderCommonPart2.MajorSubsystemVersion = 6;
+
         OptionalHeaderCommonPart2.Subsystem = Subsystem.WindowsCui;
         OptionalHeaderCommonPart2.DllCharacteristics = DllCharacteristics.HighEntropyVirtualAddressSpace
                                                        | DllCharacteristics.DynamicBase
-                                                       | DllCharacteristics.NxCompatible
                                                        | DllCharacteristics.TerminalServerAware;
 
         OptionalHeaderSize64.SizeOfStackReserve = 0x100_000;
@@ -111,19 +122,26 @@ public struct PEOptionalHeader
     /// <summary>
     /// The address of the entry point relative to the image base when the executable starts.
     /// </summary>
-    public uint AddressOfEntryPoint
+    public PESectionDataLink AddressOfEntryPoint
     {
-        get => OptionalHeaderCommonPart1.AddressOfEntryPoint;
-        set => OptionalHeaderCommonPart1.AddressOfEntryPoint = value;
+        get => _entryPointLink;
+        set => _entryPointLink = value;
     }
 
     /// <summary>
     /// The address relative to the image base of the beginning of the code section.
     /// </summary>
-    public uint BaseOfCode
+    public PESection? BaseOfCode
     {
-        get => OptionalHeaderCommonPart1.BaseOfCode;
-        set => OptionalHeaderCommonPart1.BaseOfCode = value;
+        get
+        {
+            return _baseOfCode;
+        }
+        set
+        {
+            _baseOfCode = value;
+            OptionalHeaderCommonPart1.BaseOfCode = _baseOfCode?.RVA ?? 0;
+        }
     }
 
     /// <summary>
@@ -132,9 +150,10 @@ public struct PEOptionalHeader
     /// <remarks>
     /// Only valid for PE32.
     /// </remarks>
-    public uint BaseOfData
+    public RVA BaseOfData
     {
         get => OptionalHeaderBase32.BaseOfData;
+        set => OptionalHeaderBase32.BaseOfData = value;
     }
     
     // NT additional fields.
@@ -345,7 +364,7 @@ public struct PEOptionalHeader
     /// </summary>
     public uint NumberOfRvaAndSizes
     {
-        get => OptionalHeaderCommonPart3.NumberOfRvaAndSizes;
+        get => (uint)_peFile.Directories.Count;
     }
     
     internal void SyncPE32PlusToPE32()
@@ -355,5 +374,14 @@ public struct PEOptionalHeader
         OptionalHeaderSize32.SizeOfStackCommit = (uint)OptionalHeaderSize64.SizeOfStackCommit;
         OptionalHeaderSize32.SizeOfHeapReserve = (uint)OptionalHeaderSize64.SizeOfHeapReserve;
         OptionalHeaderSize32.SizeOfHeapCommit = (uint)OptionalHeaderSize64.SizeOfHeapCommit;
+    }
+
+    internal void SyncPE32ToPE32Plus()
+    {
+        OptionalHeaderBase64.ImageBase = OptionalHeaderBase32.ImageBase;
+        OptionalHeaderSize64.SizeOfStackReserve = OptionalHeaderSize32.SizeOfStackReserve;
+        OptionalHeaderSize64.SizeOfStackCommit = OptionalHeaderSize32.SizeOfStackCommit;
+        OptionalHeaderSize64.SizeOfHeapReserve = OptionalHeaderSize32.SizeOfHeapReserve;
+        OptionalHeaderSize64.SizeOfHeapCommit = OptionalHeaderSize32.SizeOfHeapCommit;
     }
 }

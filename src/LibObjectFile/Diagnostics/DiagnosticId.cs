@@ -133,7 +133,10 @@ public enum DiagnosticId
     PE_ERR_SectionAlignmentLessThanFileAlignment = 3015,
     PE_ERR_InvalidPEHeaderPosition = 3016,
     PE_ERR_InvalidNumberOfDataDirectories = 3017,
-    
+    PE_ERR_InvalidBaseOfCode = 3018,
+    PE_ERR_InvalidAddressOfEntryPoint = 3019,
+    PE_ERR_DirectoryWithSameKindAlreadyAdded = 3020,
+
     // PE Exception directory
     PE_ERR_InvalidExceptionDirectory_Entries = 3100,
     PE_ERR_InvalidExceptionDirectory_Entry = 3101,

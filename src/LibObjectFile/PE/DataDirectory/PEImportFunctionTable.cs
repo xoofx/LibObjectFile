@@ -51,7 +51,7 @@ internal readonly struct PEImportFunctionTable()
             {
                 // The RVO is an RVA until we bind it to a container below
                 var va = (RVA)(uint)entry.HintName.RVO;
-                if (!peFile.TryFindContainerByRVA(va, out var container))
+                if (!peFile.TryFindByRVA(va, out var container))
                 {
                     if (allowOutOfRange)
                     {

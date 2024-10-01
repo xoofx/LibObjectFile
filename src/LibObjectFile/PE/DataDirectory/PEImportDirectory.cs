@@ -52,7 +52,7 @@ public sealed class PEImportDirectory : PEDataDirectory
             }
 
             // Find the section data for the ImportLookupTableRVA
-            if (!reader.File.TryFindSection(rawEntry.ImportAddressTableRVA, out var section))
+            if (!reader.File.TryFindSectionByRVA(rawEntry.ImportAddressTableRVA, out var section))
             {
                 diagnostics.Error(DiagnosticId.PE_ERR_ImportDirectoryInvalidImportAddressTableRVA, $"Unable to find the section data for ImportAddressTableRVA {rawEntry.ImportAddressTableRVA}");
                 return;
@@ -62,7 +62,7 @@ public sealed class PEImportDirectory : PEDataDirectory
             var importLookupAddressTablePositionInFile = section.Position + rawEntry.ImportAddressTableRVA - section.RVA;
 
             // Find the section data for the ImportLookupTableRVA
-            if (!reader.File.TryFindSection(rawEntry.ImportLookupTableRVA, out section))
+            if (!reader.File.TryFindSectionByRVA(rawEntry.ImportLookupTableRVA, out section))
             {
                 diagnostics.Error(DiagnosticId.PE_ERR_ImportDirectoryInvalidImportLookupTableRVA, $"Unable to find the section data for ImportLookupTableRVA {rawEntry.ImportLookupTableRVA}");
                 return;
@@ -145,7 +145,7 @@ public sealed class PEImportDirectory : PEDataDirectory
         {
             // The RVO is actually an RVA until we bind it here
             var va = (RVA)(uint)entry.ImportDllNameLink.RVO;
-            if (!peFile.TryFindContainerByRVA(va, out var container))
+            if (!peFile.TryFindByRVA(va, out var container))
             {
                 diagnostics.Error(DiagnosticId.PE_ERR_ImportLookupTableInvalidHintNameTableRVA, $"Unable to find the section data for HintNameTableRVA {va}");
                 return;

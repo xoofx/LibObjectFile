@@ -72,7 +72,7 @@ public sealed class PEBaseRelocationBlock : PESectionData
 
         var vaOfReloc = SectionLink.RVA() + relocation.OffsetInBlock;
 
-        if (!file.TryFindContainerByRVA(vaOfReloc, out var container))
+        if (!file.TryFindByRVA(vaOfReloc, out var container))
         {
             throw new InvalidOperationException($"Unable to find the section data containing the virtual address {vaOfReloc}");
         }
@@ -118,7 +118,7 @@ public sealed class PEBaseRelocationBlock : PESectionData
             return;
         }
 
-        if (!reader.File.TryFindSection(block.PageRVA, out var section))
+        if (!reader.File.TryFindSectionByRVA(block.PageRVA, out var section))
         {
             reader.Diagnostics.Error(DiagnosticId.PE_ERR_BaseRelocationDirectoryInvalidVirtualAddress, $"Unable to find the section containing the virtual address {block.PageRVA} at position {position}");
             return;

@@ -47,10 +47,10 @@ internal struct RawImageOptionalHeaderCommonPart1
     /// <summary>
     /// The address of the entry point relative to the image base when the executable starts.
     /// </summary>
-    public uint AddressOfEntryPoint;
+    public RVA AddressOfEntryPoint;
 
     /// <summary>
     /// The address relative to the image base of the beginning of the code section.
     /// </summary>
-    public uint BaseOfCode;
+    public RVA BaseOfCode;
 }

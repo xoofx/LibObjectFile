@@ -3,12 +3,7 @@
 // See the license.txt file in the project root for more information.
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using LibObjectFile.Collections;
 using LibObjectFile.PE.Internal;
 
@@ -17,6 +12,12 @@ namespace LibObjectFile.PE;
 /// <summary>
 /// Contains the array of directory entries in a Portable Executable (PE) file.
 /// </summary>
+/// <remarks>
+/// The list of directory is automatically updated by the content of the sections
+/// when calling <see cref="PEFile.Read"/> or <see cref="PEFile.Write"/>
+/// or <see cref="PEFile.UpdateDirectories"/>
+/// or <see cref="PEFile.UpdateLayout(LibObjectFile.Diagnostics.DiagnosticBag)"/>
+/// </remarks>
 [DebuggerDisplay($"{nameof(PEDirectoryTable)} {nameof(Count)} = {{{nameof(Count)}}}")]
 public sealed class PEDirectoryTable
 {
@@ -26,6 +27,14 @@ public sealed class PEDirectoryTable
     internal PEDirectoryTable()
     {
         _entries = [];
+    }
+
+    /// <summary>
+    /// Clear the directory
+    /// </summary>
+    public void Clear()
+    {
+        Array.Clear(_entries);
     }
 
     /// <summary>
@@ -45,7 +54,7 @@ public sealed class PEDirectoryTable
             return _entries[index];
         }
 
-        set
+        internal set
         {
             if (index < 0 || index >= _count)
             {
@@ -73,7 +82,7 @@ public sealed class PEDirectoryTable
             return _entries[(int)kind];
         }
 
-        set
+        internal set
         {
             int index = (int)(ushort)kind;
             if (index < 0 || index >= _count)
@@ -120,7 +129,6 @@ public sealed class PEDirectoryTable
     public PEExportDirectory? Export
     {
         get => (PEExportDirectory?)this[PEDataDirectoryKind.Export];
-        set => this[PEDataDirectoryKind.Export] = value;
     }
 
     /// <summary>
@@ -129,7 +137,6 @@ public sealed class PEDirectoryTable
     public PEImportDirectory? Import
     {
         get => (PEImportDirectory?)this[PEDataDirectoryKind.Import];
-        set => this[PEDataDirectoryKind.Import] = value;
     }
 
     /// <summary>
@@ -138,7 +145,6 @@ public sealed class PEDirectoryTable
     public PEResourceDirectory? Resource
     {
         get => (PEResourceDirectory?)this[PEDataDirectoryKind.Resource];
-        set => this[PEDataDirectoryKind.Resource] = value;
     }
 
     /// <summary>
@@ -147,7 +153,6 @@ public sealed class PEDirectoryTable
     public PEExceptionDirectory? Exception
     {
         get => (PEExceptionDirectory?)this[PEDataDirectoryKind.Exception];
-        set => this[PEDataDirectoryKind.Exception] = value;
     }
 
     /// <summary>
@@ -156,7 +161,6 @@ public sealed class PEDirectoryTable
     public PESecurityCertificateDirectory? Certificate
     {
         get => (PESecurityCertificateDirectory?)this[PEDataDirectoryKind.SecurityCertificate];
-        set => this[PEDataDirectoryKind.SecurityCertificate] = value;
     }
 
     /// <summary>
@@ -165,7 +169,6 @@ public sealed class PEDirectoryTable
     public PEBaseRelocationDirectory? BaseRelocation
     {
         get => (PEBaseRelocationDirectory?)this[PEDataDirectoryKind.BaseRelocation];
-        set => this[PEDataDirectoryKind.BaseRelocation] = value;
     }
 
     /// <summary>
@@ -174,7 +177,6 @@ public sealed class PEDirectoryTable
     public PEDebugDirectory? Debug
     {
         get => (PEDebugDirectory?)this[PEDataDirectoryKind.Debug];
-        set => this[PEDataDirectoryKind.Debug] = value;
     }
 
     /// <summary>
@@ -183,7 +185,6 @@ public sealed class PEDirectoryTable
     public PEArchitectureDirectory? Architecture
     {
         get => (PEArchitectureDirectory?)this[PEDataDirectoryKind.Architecture];
-        set => this[PEDataDirectoryKind.Architecture] = value;
     }
 
     /// <summary>
@@ -192,7 +193,6 @@ public sealed class PEDirectoryTable
     public PEGlobalPointerDirectory? GlobalPointer
     {
         get => (PEGlobalPointerDirectory?)this[PEDataDirectoryKind.GlobalPointer];
-        set => this[PEDataDirectoryKind.GlobalPointer] = value;
     }
 
     /// <summary>
@@ -201,7 +201,6 @@ public sealed class PEDirectoryTable
     public PETlsDirectory? Tls
     {
         get => (PETlsDirectory?)this[PEDataDirectoryKind.Tls];
-        set => this[PEDataDirectoryKind.Tls] = value;
     }
 
     /// <summary>
@@ -210,7 +209,6 @@ public sealed class PEDirectoryTable
     public PELoadConfigDirectory? LoadConfig
     {
         get => (PELoadConfigDirectory?)this[PEDataDirectoryKind.LoadConfig];
-        set => this[PEDataDirectoryKind.LoadConfig] = value;
     }
 
     /// <summary>
@@ -219,7 +217,6 @@ public sealed class PEDirectoryTable
     public PEBoundImportDirectory? BoundImport
     {
         get => (PEBoundImportDirectory?)this[PEDataDirectoryKind.BoundImport];
-        set => this[PEDataDirectoryKind.BoundImport] = value;
     }
 
     /// <summary>
@@ -228,7 +225,6 @@ public sealed class PEDirectoryTable
     public PEDelayImportDirectory? DelayImport
     {
         get => (PEDelayImportDirectory?)this[PEDataDirectoryKind.DelayImport];
-        set => this[PEDataDirectoryKind.DelayImport] = value;
     }
 
     /// <summary>
@@ -237,7 +233,6 @@ public sealed class PEDirectoryTable
     public PEImportAddressTableDirectory? ImportAddressTableDirectory
     {
         get => (PEImportAddressTableDirectory?)this[PEDataDirectoryKind.ImportAddressTable];
-        set => this[PEDataDirectoryKind.ImportAddressTable] = value;
     }
 
     /// <summary>
@@ -246,7 +241,6 @@ public sealed class PEDirectoryTable
     public PEClrMetadata? ClrMetadata
     {
         get => (PEClrMetadata?)this[PEDataDirectoryKind.ClrMetadata];
-        set => this[PEDataDirectoryKind.ClrMetadata] = value;
     }
 
     internal void Set(PESecurityCertificateDirectory? directory) => Set(PEDataDirectoryKind.SecurityCertificate, directory);

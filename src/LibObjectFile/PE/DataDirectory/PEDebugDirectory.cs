@@ -56,7 +56,7 @@ public sealed class PEDebugDirectory : PEDataDirectory
 
                 if (rawEntry.AddressOfRawData != 0)
                 {
-                    if (!reader.File.TryFindSection(rawEntry.AddressOfRawData, out var section))
+                    if (!reader.File.TryFindSectionByRVA(rawEntry.AddressOfRawData, out var section))
                     {
                         reader.Diagnostics.Error(DiagnosticId.PE_ERR_DebugDirectorySectionNotFound, $"Unable to find the section for the debug directory entry at {rawEntry.AddressOfRawData}");
                         continue;

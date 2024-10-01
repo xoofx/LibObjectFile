@@ -45,7 +45,7 @@ public sealed class PEExportNameTable : PESectionData
         for (int i = 0; i < Values.Count; i++)
         {
             var rva = spanRva[i];
-            if (!reader.File.TryFindContainerByRVA(rva, out var sectionData))
+            if (!reader.File.TryFindByRVA(rva, out var sectionData))
             {
                 reader.Diagnostics.Error(DiagnosticId.PE_ERR_ExportNameTableInvalidRVA, $"Unable to find the section data for RVA {rva}");
                 return;

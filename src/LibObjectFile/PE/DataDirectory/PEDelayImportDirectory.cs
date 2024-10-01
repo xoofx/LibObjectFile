@@ -49,7 +49,7 @@ public sealed class PEDelayImportDirectory : PEDataDirectory
             }
             
             // DelayLoadImportAddressTableRVA
-            if (!reader.File.TryFindSection(rawEntry.DelayLoadImportAddressTableRVA, out var section))
+            if (!reader.File.TryFindSectionByRVA(rawEntry.DelayLoadImportAddressTableRVA, out var section))
             {
                 diagnostics.Error(DiagnosticId.PE_ERR_ImportDirectoryInvalidDelayLoadImportAddressTableRVA, $"Unable to find the section for DelayLoadImportAddressTableRVA {rawEntry.DelayLoadImportAddressTableRVA}");
                 return;
@@ -59,7 +59,7 @@ public sealed class PEDelayImportDirectory : PEDataDirectory
             var importDelayLoadImportAddressTablePositionInFile = section.Position + rawEntry.DelayLoadImportAddressTableRVA - section.RVA;
 
             // DelayLoadImportNameTableRVA
-            if (!reader.File.TryFindSection(rawEntry.DelayLoadImportNameTableRVA, out section))
+            if (!reader.File.TryFindSectionByRVA(rawEntry.DelayLoadImportNameTableRVA, out section))
             {
                 diagnostics.Error(DiagnosticId.PE_ERR_ImportDirectoryInvalidDelayLoadImportNameTableRVA, $"Unable to find the section for DelayLoadImportNameTableRVA {rawEntry.DelayLoadImportNameTableRVA}");
                 return;
@@ -120,7 +120,7 @@ public sealed class PEDelayImportDirectory : PEDataDirectory
         foreach (ref var entry in entries)
         {
             var rva = (RVA)(uint)entry.DllName.RVO;
-            if (!peFile.TryFindContainerByRVA(rva, out var container))
+            if (!peFile.TryFindByRVA(rva, out var container))
             {
                 diagnostics.Error(DiagnosticId.PE_ERR_DelayImportDirectoryInvalidDllNameRVA, $"Unable to find the section data for DllNameRVA {rva}");
                 return;
@@ -137,7 +137,7 @@ public sealed class PEDelayImportDirectory : PEDataDirectory
 
             // The ModuleHandle could be in Virtual memory and not bound, so we link to a section and not a particular data on the disk
             rva = (RVA)(uint)entry.ModuleHandle.RVO;
-            if (!peFile.TryFindSection(rva, out var moduleSection))
+            if (!peFile.TryFindSectionByRVA(rva, out var moduleSection))
             {
                 diagnostics.Error(DiagnosticId.PE_ERR_DelayImportDirectoryInvalidModuleHandleRVA, $"Unable to find the section data for ModuleHandleRVA {rva}");
                 return;
@@ -151,7 +151,7 @@ public sealed class PEDelayImportDirectory : PEDataDirectory
             if (entry.BoundImportAddressTableLink.RVO != 0)
             {
                 rva = (RVA)(uint)entry.BoundImportAddressTableLink.RVO;
-                if (!peFile.TryFindContainerByRVA(rva, out container))
+                if (!peFile.TryFindByRVA(rva, out container))
                 {
                     diagnostics.Error(DiagnosticId.PE_ERR_ImportDirectoryInvalidBoundDelayLoadImportAddressTableRVA, $"Unable to find the section data for BoundImportAddressTableRVA {rva}");
                     return;
@@ -170,7 +170,7 @@ public sealed class PEDelayImportDirectory : PEDataDirectory
             if (entry.UnloadDelayInformationTableLink.RVO != 0)
             {
                 rva = (RVA)(uint)entry.UnloadDelayInformationTableLink.RVO;
-                if (!peFile.TryFindContainerByRVA(rva, out container))
+                if (!peFile.TryFindByRVA(rva, out container))
                 {
                     diagnostics.Error(DiagnosticId.PE_ERR_ImportDirectoryInvalidUnloadDelayLoadImportAddressTableRVA, $"Unable to find the section data for UnloadDelayInformationTableRVA {rva}");
                     return;

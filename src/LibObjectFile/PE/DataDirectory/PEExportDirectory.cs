@@ -46,7 +46,7 @@ public sealed class PEExportDirectory : PEDataDirectory
         MinorVersion = exportDirectory.MinorVersion;
         OrdinalBase = (ushort)exportDirectory.Base;
 
-        if (!reader.File.TryFindSection(exportDirectory.Name, out _))
+        if (!reader.File.TryFindSectionByRVA(exportDirectory.Name, out _))
         {
             reader.Diagnostics.Error(DiagnosticId.PE_ERR_ExportDirectoryInvalidName, $"Unable to find the section for Name {exportDirectory.Name}");
             return;
@@ -59,7 +59,7 @@ public sealed class PEExportDirectory : PEDataDirectory
         // Not sure this one happen
         if (exportDirectory.AddressOfFunctions != 0)
         {
-            if (!reader.File.TryFindSection(exportDirectory.AddressOfFunctions, out var sectionAddressOfFunctions))
+            if (!reader.File.TryFindSectionByRVA(exportDirectory.AddressOfFunctions, out var sectionAddressOfFunctions))
             {
                 reader.Diagnostics.Error(DiagnosticId.PE_ERR_ExportDirectoryInvalidAddressOfFunctions, $"Unable to find the section for AddressOfFunctions {exportDirectory.AddressOfFunctions}");
                 return;
@@ -74,7 +74,7 @@ public sealed class PEExportDirectory : PEDataDirectory
         // AddressOfNames can be 0
         if (exportDirectory.AddressOfNames != 0)
         {
-            if (!reader.File.TryFindSection(exportDirectory.AddressOfNames, out var sectionAddressOfNames))
+            if (!reader.File.TryFindSectionByRVA(exportDirectory.AddressOfNames, out var sectionAddressOfNames))
             {
                 reader.Diagnostics.Error(DiagnosticId.PE_ERR_ExportDirectoryInvalidAddressOfNames, $"Unable to find the section for AddressOfNames {exportDirectory.AddressOfNames}");
                 return;
@@ -90,7 +90,7 @@ public sealed class PEExportDirectory : PEDataDirectory
         // AddressOfNames can be 0
         if (exportDirectory.AddressOfNameOrdinals != 0)
         {
-            if (!reader.File.TryFindSection(exportDirectory.AddressOfNameOrdinals, out var sectionAddressOfNameOrdinals))
+            if (!reader.File.TryFindSectionByRVA(exportDirectory.AddressOfNameOrdinals, out var sectionAddressOfNameOrdinals))
             {
                 reader.Diagnostics.Error(DiagnosticId.PE_ERR_ExportDirectoryInvalidAddressOfNameOrdinals, $"Unable to find the section for AddressOfNameOrdinals {exportDirectory.AddressOfNameOrdinals}");
                 return;
@@ -112,7 +112,7 @@ public sealed class PEExportDirectory : PEDataDirectory
         var peFile = reader.File;
         var diagnostics = reader.Diagnostics;
 
-        if (!peFile.TryFindContainerByRVA((RVA)(uint)NameLink.RVO, out var container))
+        if (!peFile.TryFindByRVA((RVA)(uint)NameLink.RVO, out var container))
         {
             diagnostics.Error(DiagnosticId.PE_ERR_ExportDirectoryInvalidName, $"Unable to find the section data for Name {(RVA)(uint)NameLink.RVO}");
             return;

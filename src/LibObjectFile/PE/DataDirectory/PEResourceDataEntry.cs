@@ -91,7 +91,7 @@ public sealed class PEResourceDataEntry : PEResourceEntry
         Reserved = rawDataEntry.Reserved;
 
         var peFile = context.Reader.File;
-        if (!peFile.TryFindSection(rawDataEntry.OffsetToData, out var section))
+        if (!peFile.TryFindSectionByRVA(rawDataEntry.OffsetToData, out var section))
         {
             reader.Diagnostics.Error(DiagnosticId.PE_ERR_InvalidResourceDirectoryEntryRVAOffsetToData, $"Invalid resource data entry RVA OffsetToData {rawDataEntry.OffsetToData} at position {reader.Position}");
             return;

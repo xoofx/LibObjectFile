@@ -26,7 +26,6 @@ public sealed partial class PEFile : PEObjectBase
     private byte[] _dosStub = [];
     private Stream? _dosStubExtra;
     private readonly ObjectList<PESection> _sections;
-    private int _unsafeNegativePEHeaderOffset;
 
     static PEFile()
     {
@@ -61,9 +60,10 @@ public sealed partial class PEFile : PEObjectBase
             Characteristics = Characteristics.ExecutableImage | Characteristics.LargeAddressAware
         };
 
-        OptionalHeader = new();
-        OptionalHeader.OptionalHeaderCommonPart1.Magic = magic;
-        Directories.Count = (int)OptionalHeader.NumberOfRvaAndSizes;
+        OptionalHeader = new PEOptionalHeader(this, magic);
+
+        // Support all directories by default
+        Directories.Count = 16;
 
         // Update the layout which is only going to calculate the size.
         UpdateLayout(new());
@@ -78,6 +78,8 @@ public sealed partial class PEFile : PEObjectBase
         Directories = new();
         ExtraDataBeforeSections = new(this);
         ExtraDataAfterSections = new(this);
+
+        OptionalHeader = new PEOptionalHeader(this);
     }
 
     /// <summary>
@@ -86,45 +88,12 @@ public sealed partial class PEFile : PEObjectBase
     public PEDosHeader DosHeader;
 
     /// <summary>
-    /// Gets or sets an unsafe negative offset relative to the end of the DOS header.
-    /// </summary>
-    public unsafe int UnsafeNegativePEHeaderOffset
-    {
-        get => _unsafeNegativePEHeaderOffset;
-        set
-        {
-            // Should support Tiny PE layout http://www.phreedom.org/research/tinype/
-            // Value must be >= sizeof(ImageDosHeader) - 4 and <= 0
-            if (value < sizeof(PEDosHeader) - 4 || value > 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), $"PEHeaderOffset must be greater than {sizeof(PEDosHeader)}");
-            }
-
-            if (value < 0 && (_dosStub.Length != 0 || (DosStubExtra is not null && DosStubExtra.Length > 0)))
-            {
-                throw new InvalidOperationException("Setting a negative PEHeader offset is not compatible with having a DOS Stub and DosStubExtra");
-            }
-
-            _unsafeNegativePEHeaderOffset = value;
-        }
-    }
-
-    /// <summary>
     /// Gets or sets the DOS stub.
     /// </summary>
     public byte[] DosStub
     {
         get => _dosStub;
-
-        set
-        {
-            if (_unsafeNegativePEHeaderOffset < 0)
-            {
-                throw new InvalidOperationException("Cannot set a DosStub when UnsafeNegativePEHeaderOffset is negative");
-            }
-
-            _dosStub = value ?? throw new ArgumentNullException(nameof(value));
-        }
+        set => _dosStub = value ?? throw new ArgumentNullException(nameof(value));
     }
 
     /// <summary>
@@ -133,16 +102,7 @@ public sealed partial class PEFile : PEObjectBase
     public Stream? DosStubExtra
     {
         get => _dosStubExtra;
-
-        set
-        {
-            if (_unsafeNegativePEHeaderOffset < 0)
-            {
-                throw new InvalidOperationException("Cannot set a DosStubExtra when UnsafeNegativePEHeaderOffset is negative");
-            }
-
-            _dosStubExtra = value;
-        }
+        set => _dosStubExtra = value;
     }
 
     /// <summary>
@@ -153,7 +113,7 @@ public sealed partial class PEFile : PEObjectBase
     /// <summary>
     /// Gets the optional header.
     /// </summary>
-    public PEOptionalHeader OptionalHeader;
+    public PEOptionalHeader OptionalHeader { get; }
 
     /// <summary>
     /// Gets a boolean indicating whether this instance is a PE32 image.
@@ -218,17 +178,17 @@ public sealed partial class PEFile : PEObjectBase
         return section;
     }
 
-    public bool TryFindSection(RVA rva, [NotNullWhen(true)] out PESection? section)
+    public bool TryFindSectionByRVA(RVA rva, [NotNullWhen(true)] out PESection? section)
     {
         var result = _sections.TryFindByRVA(rva, false, out var sectionObj);
         section = sectionObj as PESection;
         return result && section is not null;
     }
 
-    public bool TryFindSection(RVA rva, uint size, [NotNullWhen(true)] out PESection? section)
+    public bool TryFindSectionByRVA(RVA rva, uint size, [NotNullWhen(true)] out PESection? section)
         => _sections.TryFindByRVA(rva, size, out section);
 
-    public bool TryFindContainerByRVA(RVA rva, [NotNullWhen(true)] out PEObject? container)
+    public bool TryFindByRVA(RVA rva, [NotNullWhen(true)] out PEObject? container)
         => _sections.TryFindByRVA(rva, true, out container);
 
 
@@ -292,7 +252,7 @@ public sealed partial class PEFile : PEObjectBase
 
         var rawRva = va - (uint)OptionalHeader.ImageBase;
         var rva = (RVA)(uint)rawRva;
-        if (rawRva <= int.MaxValue && TryFindContainerByRVA(rva, out result))
+        if (rawRva <= int.MaxValue && TryFindByRVA(rva, out result))
         {
             offset = rva - result.RVA;
             return true;
@@ -317,7 +277,7 @@ public sealed partial class PEFile : PEObjectBase
 
         var rawRva = va - OptionalHeader.ImageBase;
         var rva = (RVA)rawRva;
-        if (rawRva <= uint.MaxValue && TryFindContainerByRVA(rva, out result))
+        if (rawRva <= uint.MaxValue && TryFindByRVA(rva, out result))
         {
             offset = rva - result.RVA;
             return true;
@@ -328,6 +288,44 @@ public sealed partial class PEFile : PEObjectBase
         return false;
     }
 
+    /// <summary>
+    /// Automatically update directories from the content of the sections.
+    /// </summary>
+    /// <param name="diagnostics">The diagnostics to output errors.</param>
+    public void UpdateDirectories(DiagnosticBag diagnostics)
+    {
+        ArgumentNullException.ThrowIfNull(diagnostics);
+
+        Directories.Clear();
+
+        foreach (var section in _sections)
+        {
+            foreach (var content in section.Content)
+            {
+                if (content is PECompositeSectionData compositeSectionData)
+                {
+                    compositeSectionData.UpdateDirectories(this, diagnostics);
+                }
+            }
+        }
+
+        foreach (var extraData in ExtraDataAfterSections)
+        {
+            if (extraData is PESecurityCertificateDirectory securityCertificate)
+            {
+                var existingSecurityCertificate = Directories[PEDataDirectoryKind.SecurityCertificate];
+                if (existingSecurityCertificate is not null)
+                {
+                    diagnostics.Error(DiagnosticId.PE_ERR_DirectoryWithSameKindAlreadyAdded, $"A directory with the kind {PEDataDirectoryKind.SecurityCertificate} was already found {existingSecurityCertificate} while trying to add new directory {securityCertificate}");
+                }
+                else
+                {
+                    Directories[PEDataDirectoryKind.SecurityCertificate] = securityCertificate;
+                }
+            }
+        }
+    }
+    
     /// <summary>
     /// Updates the layout of this PE file.
     /// </summary>
@@ -341,6 +339,9 @@ public sealed partial class PEFile : PEObjectBase
     /// <inheritdoc />
     protected override unsafe void UpdateLayoutCore(PELayoutContext context)
     {
+        // Update the content of Directories
+        UpdateDirectories(context.Diagnostics);
+        
         var position = 0U;
 
         // Update DOS header
@@ -367,6 +368,8 @@ public sealed partial class PEFile : PEObjectBase
 
         // Update directories
         position += (uint)(Directories.Count * sizeof(RawImageDataDirectory));
+        // Update the internal header
+        OptionalHeader.OptionalHeaderCommonPart3.NumberOfRvaAndSizes = (uint)Directories.Count;
 
         CoffHeader._SizeOfOptionalHeader = (ushort)(position - startPositionHeader);
 
@@ -387,9 +390,7 @@ public sealed partial class PEFile : PEObjectBase
         {
             context.Diagnostics.Error(DiagnosticId.PE_ERR_TooManySections, $"Too many sections {_sections.Count} (max 96)");
         }
-
-
-
+        
         // Update COFF header
         CoffHeader._NumberOfSections = (ushort)_sections.Count;
         CoffHeader._PointerToSymbolTable = 0;

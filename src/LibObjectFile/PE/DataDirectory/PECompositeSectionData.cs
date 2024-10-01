@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using LibObjectFile.Collections;
+using LibObjectFile.Diagnostics;
 using LibObjectFile.Utils;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -31,6 +32,30 @@ public abstract class PECompositeSectionData : PESectionData, IEnumerable<PESect
     /// Gets the content of this directory.
     /// </summary>
     public ObjectList<PESectionData> Content { get; }
+
+    internal void UpdateDirectories(PEFile peFile, DiagnosticBag diagnostics)
+    {
+        if (this is PEDataDirectory directory)
+        {
+            var existingDirectory = peFile.Directories[directory.Kind];
+            if (existingDirectory is not null)
+            {
+                diagnostics.Error(DiagnosticId.PE_ERR_DirectoryWithSameKindAlreadyAdded, $"A directory with the kind {directory.Kind} was already found {existingDirectory} while trying to add new directory {directory}");
+            }
+            else
+            {
+                peFile.Directories[directory.Kind] = directory;
+            }
+        }
+
+        foreach (var data in Content)
+        {
+            if (data is PECompositeSectionData compositeSectionData)
+            {
+                compositeSectionData.UpdateDirectories(peFile, diagnostics);
+            }
+        }
+    }
 
     protected sealed override void UpdateLayoutCore(PELayoutContext context)
     {

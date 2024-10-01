@@ -38,9 +38,9 @@ Optional Header
     SizeOfCode                 = 0x1200
     SizeOfInitializedData      = 0x2200
     SizeOfUninitializedData    = 0x0
-    AddressOfEntryPoint        = 0x14E0
-    BaseOfCode                 = 0x1000
-    BaseOfData                 = 0x0
+    AddressOfEntryPoint        = RVA = 0x14E0, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x10C9, Position = 0x400, Size = 0x10C9 }, Offset = 0x4E0
+    BaseOfCode                 = PESection { .text RVA = 0x1000, VirtualSize = 0x10C9, Position = 0x400, Size = 0x1200, Content[1] }
+    BaseOfData                 = 0x0x0
     ImageBase                  = 0x140000000
     SectionAlignment           = 0x1000
     FileAlignment              = 0x200
