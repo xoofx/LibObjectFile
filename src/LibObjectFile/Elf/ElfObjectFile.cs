@@ -1,12 +1,14 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
 using System;
 using System.Buffers;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using LibObjectFile.Collections;
+using LibObjectFile.Diagnostics;
 using LibObjectFile.Utils;
 
 namespace LibObjectFile.Elf;
@@ -16,10 +18,10 @@ using static ElfNative;
 /// <summary>
 /// Defines an ELF object file that can be manipulated in memory.
 /// </summary>
-public sealed class ElfObjectFile : ObjectFileNode
+public sealed class ElfObjectFile : ElfObjectBase
 {
     private readonly List<ElfSection> _sections;
-    private ElfSectionHeaderStringTable _sectionHeaderStringTable;
+    private ElfSectionHeaderStringTable? _sectionHeaderStringTable;
     private readonly List<ElfSegment> _segments;
 
     public const int IdentSizeInBytes = ElfNative.EI_NIDENT;
@@ -119,12 +121,12 @@ public sealed class ElfObjectFile : ObjectFileNode
     /// <summary>
     /// List of the segments - program headers defined by this instance.
     /// </summary>
-    public IReadOnlyList<ElfSegment> Segments => _segments;
+    public ReadOnlyList<ElfSegment> Segments => _segments;
 
     /// <summary>
     /// List of the sections - program headers defined by this instance.
     /// </summary>
-    public IReadOnlyList<ElfSection> Sections => _sections;
+    public ReadOnlyList<ElfSection> Sections => _sections;
         
     /// <summary>
     /// Number of visible sections excluding <see cref="ElfShadowSection"/> in the <see cref="Sections"/>.
@@ -140,7 +142,7 @@ public sealed class ElfObjectFile : ObjectFileNode
     /// Gets or sets the section header string table used to store the names of the sections.
     /// Must have been added to <see cref="Sections"/>.
     /// </summary>
-    public ElfSectionHeaderStringTable SectionHeaderStringTable
+    public ElfSectionHeaderStringTable? SectionHeaderStringTable
     {
         get => _sectionHeaderStringTable;
         set
@@ -165,14 +167,27 @@ public sealed class ElfObjectFile : ObjectFileNode
     /// Gets the current calculated layout of this instance (e.g offset of the program header table)
     /// </summary>
     public ElfObjectLayout Layout { get; }
+    
+    public DiagnosticBag Verify()
+    {
+        var diagnostics = new DiagnosticBag();
+        Verify(diagnostics);
+        return diagnostics;
+    }
 
     /// <summary>
     /// Verifies the integrity of this ELF object file.
     /// </summary>
     /// <param name="diagnostics">A DiagnosticBag instance to receive the diagnostics.</param>
-    public override void Verify(DiagnosticBag diagnostics)
+    public void Verify(DiagnosticBag diagnostics)
     {
-        if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
+        var context = new ElfVisitorContext(this, diagnostics);
+        Verify(context);
+    }
+
+    public override void Verify(ElfVisitorContext context)
+    {
+        var diagnostics = context.Diagnostics;
 
         if (FileClass == ElfFileClass.None)
         {
@@ -187,13 +202,13 @@ public sealed class ElfObjectFile : ObjectFileNode
 
         foreach (var segment in Segments)
         {
-            segment.Verify(diagnostics);
+            segment.Verify(context);
         }
 
         // Verify all sections before doing anything else
         foreach (var section in Sections)
         {
-            section.Verify(diagnostics);
+            section.Verify(context);
         }
     }
 
@@ -210,11 +225,13 @@ public sealed class ElfObjectFile : ObjectFileNode
     /// </summary>
     /// <param name="diagnostics">A DiagnosticBag instance to receive the diagnostics.</param>
     /// <returns><c>true</c> if the calculation of the layout is successful. otherwise <c>false</c></returns>
-    public override unsafe void UpdateLayout(DiagnosticBag diagnostics)
+    public unsafe void UpdateLayout(DiagnosticBag diagnostics)
     {
         if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
 
         Size = 0;
+
+        var context = new ElfVisitorContext(this, diagnostics);
             
         ulong offset = FileClass == ElfFileClass.Is32 ? (uint)sizeof(ElfNative.Elf32_Ehdr) : (uint)sizeof(ElfNative.Elf64_Ehdr);
         Layout.SizeOfElfHeader = (ushort)offset;
@@ -240,14 +257,14 @@ public sealed class ElfObjectFile : ObjectFileNode
                 }
 
                 var align = section.Alignment == 0 ? 1 : section.Alignment;
-                offset = AlignHelper.AlignToUpper(offset, align);
-                section.Offset = offset;
+                offset = AlignHelper.AlignUp(offset, align);
+                section.Position = offset;
 
                 if (section is ElfProgramHeaderTable programHeaderTable)
                 {
                     if (Segments.Count > 0)
                     {
-                        Layout.OffsetOfProgramHeaderTable = section.Offset;
+                        Layout.OffsetOfProgramHeaderTable = section.Position;
                         Layout.SizeOfProgramHeaderEntry = (ushort) section.TableEntrySize;
                         programHeaderTableFoundAndUpdated = true;
                     }
@@ -279,7 +296,7 @@ public sealed class ElfObjectFile : ObjectFileNode
                     }
                 }
 
-                section.UpdateLayout(diagnostics);
+                section.UpdateLayout(context);
 
                 // Console.WriteLine($"{section.ToString(),-50} Offset: {section.Offset:x4} Size: {section.Size:x4}");
 
@@ -293,7 +310,7 @@ public sealed class ElfObjectFile : ObjectFileNode
             }
 
             // The Section Header Table will be put just after all the sections
-            Layout.OffsetOfSectionHeaderTable = AlignHelper.AlignToUpper(offset, FileClass == ElfFileClass.Is32 ? 4u : 8u);
+            Layout.OffsetOfSectionHeaderTable = AlignHelper.AlignUp(offset, FileClass == ElfFileClass.Is32 ? 4u : 8u);
 
             Layout.TotalSize = Layout.OffsetOfSectionHeaderTable + (ulong)VisibleSectionCount * Layout.SizeOfSectionHeaderEntry;
         }
@@ -310,7 +327,7 @@ public sealed class ElfObjectFile : ObjectFileNode
             for (int i = 0; i < Segments.Count; i++)
             {
                 var programHeader = Segments[i];
-                programHeader.UpdateLayout(diagnostics);
+                programHeader.UpdateLayout(context);
             }
         }
 
@@ -331,7 +348,7 @@ public sealed class ElfObjectFile : ObjectFileNode
         }
 
         segment.Parent = this;
-        segment.Index = (uint)_segments.Count;
+        segment.Index = _segments.Count;
         _segments.Add(segment);
     }
 
@@ -350,7 +367,7 @@ public sealed class ElfObjectFile : ObjectFileNode
             if (segment.Parent != this) throw new InvalidOperationException($"Cannot add the segment as it is already added to another {nameof(ElfObjectFile)} instance");
         }
 
-        segment.Index = (uint)index;
+        segment.Index = index;
         _segments.Insert(index, segment);
         segment.Parent = this;
 
@@ -376,7 +393,7 @@ public sealed class ElfObjectFile : ObjectFileNode
 
         var i = (int)segment.Index;
         _segments.RemoveAt(i);
-        segment.Index = 0;
+        segment.ResetIndex();
 
         // Update indices for other sections
         for (int j = i + 1; j < _segments.Count; j++)
@@ -414,7 +431,7 @@ public sealed class ElfObjectFile : ObjectFileNode
         }
 
         section.Parent = this;
-        section.Index = (uint)_sections.Count;
+        section.Index = _sections.Count;
         _sections.Add(section);
 
         if (section.IsShadow)
@@ -453,7 +470,7 @@ public sealed class ElfObjectFile : ObjectFileNode
         }
 
         section.Parent = this;
-        section.Index = (uint)index;
+        section.Index = index;
         _sections.Insert(index, section);
 
         if (section.IsShadow)
@@ -470,7 +487,7 @@ public sealed class ElfObjectFile : ObjectFileNode
         }
         else
         {
-            ElfSection previousSection = null;
+            ElfSection? previousSection = null;
             for (int j = 0; j < index; j++)
             {
                 var sectionBefore = _sections[j];
@@ -516,7 +533,7 @@ public sealed class ElfObjectFile : ObjectFileNode
 
         var i = (int)section.Index;
         _sections.RemoveAt(i);
-        section.Index = 0;
+        section.ResetIndex();
 
         bool wasShadow = section.IsShadow;
 
@@ -654,7 +671,7 @@ public sealed class ElfObjectFile : ObjectFileNode
         return false;
     }
 
-    private static bool TryReadElfObjectFileHeader(Stream stream, out ElfObjectFile file)
+    private static bool TryReadElfObjectFileHeader(Stream stream, [NotNullWhen(true)] out ElfObjectFile? file)
     {
         if (stream == null) throw new ArgumentNullException(nameof(stream));
 
@@ -687,7 +704,7 @@ public sealed class ElfObjectFile : ObjectFileNode
     /// <param name="stream">The stream to read ELF object file from</param>
     /// <param name="options">The options for the reader</param>
     /// <returns>An instance of <see cref="ElfObjectFile"/> if the read was successful.</returns>
-    public static ElfObjectFile Read(Stream stream, ElfReaderOptions options = null)
+    public static ElfObjectFile Read(Stream stream, ElfReaderOptions? options = null)
     {
         if (!TryRead(stream, out var objectFile, out var diagnostics, options))
         {
@@ -704,7 +721,7 @@ public sealed class ElfObjectFile : ObjectFileNode
     /// <param name="diagnostics">A <see cref="DiagnosticBag"/> instance</param>
     /// <param name="options">The options for the reader</param>
     /// <returns><c>true</c> An instance of <see cref="ElfObjectFile"/> if the read was successful.</returns>
-    public static bool TryRead(Stream stream, out ElfObjectFile objectFile, out DiagnosticBag diagnostics, ElfReaderOptions options = null)
+    public static bool TryRead(Stream stream, [NotNullWhen(true)] out ElfObjectFile? objectFile, [NotNullWhen(false)] out DiagnosticBag? diagnostics, ElfReaderOptions? options = null)
     {
         if (stream == null) throw new ArgumentNullException(nameof(stream));
 
@@ -773,5 +790,9 @@ public sealed class ElfObjectFile : ObjectFileNode
         var delta = left.StreamIndex.CompareTo(right.StreamIndex);
         if (delta != 0) return delta;
         return left.Index.CompareTo(right.Index);
+    }
+
+    protected override void UpdateLayoutCore(ElfVisitorContext context)
+    {
     }
 }

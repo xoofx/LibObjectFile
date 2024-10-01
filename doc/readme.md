@@ -240,3 +240,304 @@ symbolTable.Symbols.Add(new ArSymbol("my_symbol", elf));
 ### Links
 
 - [Archive ar file format (Wikipedia)](https://en.wikipedia.org/wiki/Ar_(Unix))
+
+## PE Object File Format
+
+### Overview
+
+The main entry-point for reading/writing PE file is the [`PEFile`](https://github.com/xoofx/LibObjectFile/blob/master/src/LibObjectFile/PE/PEFile.cs) class.
+
+![PE class diagram](PE.png)
+
+#### Sections and Directories
+
+In `LibObjectFile` all the section data `PESectionData` - e.g code, data but also including PE directories - are part of either:
+
+- a `PESection`
+- some raw data before the first section via `PEFile.ExtraDataBeforeSections`
+- raw data after the last section via `PEFile.ExtraDataAfterSections`
+
+Most of the conventional data is stored in sections, including PE directories.
+
+A PE Directory itself can contain also a collection of `PESectionData`.
+
+If the size of a section data is modified (e.g adding elements to a directory table or modifying a stream in a `PEStreamSectionData`), it is important to call `PEFile.UpdateLayout` to update the layout of the PE file.
+
+#### VA, RVA, RVO
+
+In the PE file format, there are different types of addresses:
+
+- `VA` (Virtual Address) is the address of a section in memory including the base address of the image `PEFile.OptionalHeader.ImageBase`
+- `RVA` (Relative Virtual Address) is the address of a section relative to the base address of the image
+  - A `RVA` can be converted to a `VA` by adding the `PEFile.OptionalHeader.ImageBase`.
+- `RVO` (Relative Virtual Offset) is an offset relative to an RVA provided by section data or a section.
+  - A `RVO` can be converted to a `RVA` by adding the RVA of the section data or the section.
+
+In `LibObjectFile` links to RVA between section and section datas are done through a `IPELink` that is combining a reference to a `PEObjectBase` and a `RVO`. It means that RVA are always up to date and linked to the right section data.
+
+### Reading a PE File
+
+The PE API allows to read from a `System.IO.Stream` via the method `PEFile.Read`:
+
+```csharp
+PEFile pe = PEFile.Read(inputStream);
+foreach(var section in pe.Sections)
+{
+    Console.WriteLine($"{section}");
+}
+```
+
+### Writing a PE File
+
+The PE API allows to write to a `System.IO.Stream` via the method `PEFile.Write`:
+
+```csharp
+PEFile pe = PEFile.Read(inputStream);
+// Modify the PE file
+// ....
+pe.Write(stream);
+```
+
+### Printing a PE File
+
+You can print a PE file to a textual by using the extension method `PEFile.Print(TextWriter)`:
+
+```csharp
+PEFile pe = PEFile.Read(inputStream);
+pe.Print(Console.Out);
+```
+
+It will generate an output like this:
+
+```
+DOS Header
+    Magic                      = DOS
+    ByteCountOnLastPage        = 0x90
+    PageCount                  = 0x3
+    RelocationCount            = 0x0
+    SizeOfParagraphsHeader     = 0x4
+    MinExtraParagraphs         = 0x0
+    MaxExtraParagraphs         = 0xFFFF
+    InitialSSValue             = 0x0
+    InitialSPValue             = 0xB8
+    Checksum                   = 0x0
+    InitialIPValue             = 0x0
+    InitialCSValue             = 0x0
+    FileAddressRelocationTable = 0x40
+    OverlayNumber              = 0x0
+    Reserved                   = 0x0, 0x0, 0x0, 0x0
+    OEMIdentifier              = 0x0
+    OEMInformation             = 0x0
+    Reserved2                  = 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0
+    FileAddressPEHeader        = 0xC8
+
+DOS Stub
+    DosStub                    = 64 bytes
+
+COFF Header
+    Machine                    = Amd64
+    NumberOfSections           = 3
+    TimeDateStamp              = 1727726362
+    PointerToSymbolTable       = 0x0
+    NumberOfSymbols            = 0
+    SizeOfOptionalHeader       = 240
+    Characteristics            = ExecutableImage, LargeAddressAware
+
+Optional Header
+    Magic                      = PE32Plus
+    MajorLinkerVersion         = 14
+    MinorLinkerVersion         = 41
+    SizeOfCode                 = 0x200
+    SizeOfInitializedData      = 0x400
+    SizeOfUninitializedData    = 0x0
+    AddressOfEntryPoint        = RVA = 0x1000, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x10, Position = 0x400, Size = 0x10 }, Offset = 0x0
+    BaseOfCode                 = PESection { .text RVA = 0x1000, VirtualSize = 0x10, Position = 0x400, Size = 0x200, Content[1] }
+    BaseOfData                 = 0x0x0
+    ImageBase                  = 0x140000000
+    SectionAlignment           = 0x1000
+    FileAlignment              = 0x200
+    MajorOperatingSystemVersion = 6
+    MinorOperatingSystemVersion = 0
+    MajorImageVersion          = 0
+    MinorImageVersion          = 0
+    MajorSubsystemVersion      = 6
+    MinorSubsystemVersion      = 0
+    Win32VersionValue          = 0x0
+    SizeOfImage                = 0x4000
+    SizeOfHeaders              = 0x400
+    CheckSum                   = 0x0
+    Subsystem                  = WindowsCui
+    DllCharacteristics         = HighEntropyVirtualAddressSpace, DynamicBase, TerminalServerAware
+    SizeOfStackReserve         = 0x100000
+    SizeOfStackCommit          = 0x1000
+    SizeOfHeapReserve          = 0x100000
+    SizeOfHeapCommit           = 0x1000
+    LoaderFlags                = 0x0
+    NumberOfRvaAndSizes        = 0x10
+
+Data Directories
+    [00] = null
+    [01] = PEImportDirectory                Position = 0x00000744, Size = 0x00000028, RVA = 0x00002144, VirtualSize = 0x00000028
+    [02] = null
+    [03] = PEExceptionDirectory             Position = 0x00000800, Size = 0x0000000C, RVA = 0x00003000, VirtualSize = 0x0000000C
+    [04] = null
+    [05] = null
+    [06] = PEDebugDirectory                 Position = 0x00000610, Size = 0x00000038, RVA = 0x00002010, VirtualSize = 0x00000038
+    [07] = null
+    [08] = null
+    [09] = null
+    [10] = null
+    [11] = null
+    [12] = PEImportAddressTableDirectory    Position = 0x00000600, Size = 0x00000010, RVA = 0x00002000, VirtualSize = 0x00000010
+    [13] = null
+    [14] = null
+    [15] = null
+
+Section Headers
+    [00]    .text PESection                        Position = 0x00000400, Size = 0x00000200, RVA = 0x00001000, VirtualSize = 0x00000010, Characteristics = 0x60000020 (ContainsCode, MemExecute, MemRead)
+    [01]   .rdata PESection                        Position = 0x00000600, Size = 0x00000200, RVA = 0x00002000, VirtualSize = 0x0000019C, Characteristics = 0x40000040 (ContainsInitializedData, MemRead)
+    [02]   .pdata PESection                        Position = 0x00000800, Size = 0x00000200, RVA = 0x00003000, VirtualSize = 0x0000000C, Characteristics = 0x40000040 (ContainsInitializedData, MemRead)
+
+Sections
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    [00]    .text PESection                        Position = 0x00000400, Size = 0x00000200, RVA = 0x00001000, VirtualSize = 0x00000010, Characteristics = 0x60000020 (ContainsCode, MemExecute, MemRead)
+    
+        [00] PEStreamSectionData              Position = 0x00000400, Size = 0x00000010, RVA = 0x00001000, VirtualSize = 0x00000010
+        
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    [01]   .rdata PESection                        Position = 0x00000600, Size = 0x00000200, RVA = 0x00002000, VirtualSize = 0x0000019C, Characteristics = 0x40000040 (ContainsInitializedData, MemRead)
+    
+        [00] PEImportAddressTableDirectory    Position = 0x00000600, Size = 0x00000010, RVA = 0x00002000, VirtualSize = 0x00000010
+            [00] PEImportAddressTable             Position = 0x00000600, Size = 0x00000010, RVA = 0x00002000, VirtualSize = 0x00000010
+                [0] PEImportHintName { Hint = 376, Name = ExitProcess } (RVA = 0x2180, PEStreamSectionData { RVA = 0x2180, VirtualSize = 0x1C, Position = 0x780, Size = 0x1C }, Offset = 0x0)
+            
+        
+        [01] PEDebugDirectory                 Position = 0x00000610, Size = 0x00000038, RVA = 0x00002010, VirtualSize = 0x00000038
+            [0] Type = POGO, Characteristics = 0x0, Version = 0.0, TimeStamp = 0x66FB031A, Data = RVA = 0x00002060 (PEDebugStreamSectionData[3] -> .rdata)
+            [1] Type = ILTCG, Characteristics = 0x0, Version = 0.0, TimeStamp = 0x66FB031A, Data = null
+        
+        [02] PEStreamSectionData              Position = 0x00000648, Size = 0x00000018, RVA = 0x00002048, VirtualSize = 0x00000018
+        
+        [03] PEDebugStreamSectionData         Position = 0x00000660, Size = 0x000000DC, RVA = 0x00002060, VirtualSize = 0x000000DC
+        
+        [04] PEStreamSectionData              Position = 0x0000073C, Size = 0x00000008, RVA = 0x0000213C, VirtualSize = 0x00000008
+        
+        [05] PEImportDirectory                Position = 0x00000744, Size = 0x00000028, RVA = 0x00002144, VirtualSize = 0x00000028
+            [0] ImportDllNameLink = KERNEL32.dll (RVA = 0x218E, PEStreamSectionData { RVA = 0x2180, VirtualSize = 0x1C, Position = 0x780, Size = 0x1C }, Offset = 0xE)
+            [0] ImportAddressTable = RVA = 0x00002000 (PEImportAddressTable[0] -> PEImportAddressTableDirectory[0] -> .rdata)
+            [0] ImportLookupTable = RVA = 0x00002170 (PEImportLookupTable[7] -> .rdata)
+            
+        
+        [06] PEStreamSectionData              Position = 0x0000076C, Size = 0x00000004, RVA = 0x0000216C, VirtualSize = 0x00000004
+        
+        [07] PEImportLookupTable              Position = 0x00000770, Size = 0x00000010, RVA = 0x00002170, VirtualSize = 0x00000010
+            [0] PEImportHintName { Hint = 376, Name = ExitProcess } (RVA = 0x2180, PEStreamSectionData { RVA = 0x2180, VirtualSize = 0x1C, Position = 0x780, Size = 0x1C }, Offset = 0x0)
+        
+        [08] PEStreamSectionData              Position = 0x00000780, Size = 0x0000001C, RVA = 0x00002180, VirtualSize = 0x0000001C
+        
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    [02]   .pdata PESection                        Position = 0x00000800, Size = 0x00000200, RVA = 0x00003000, VirtualSize = 0x0000000C, Characteristics = 0x40000040 (ContainsInitializedData, MemRead)
+    
+        [00] PEExceptionDirectory             Position = 0x00000800, Size = 0x0000000C, RVA = 0x00003000, VirtualSize = 0x0000000C
+            [0] Begin = RVA = 0x1000, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x10, Position = 0x400, Size = 0x10 }, Offset = 0x0
+            [0] End = RVA = 0x1010, PEStreamSectionData { RVA = 0x1000, VirtualSize = 0x10, Position = 0x400, Size = 0x10 }, Offset = 0x10
+            [0] UnwindInfoAddress = RVA = 0x213C, PEStreamSectionData { RVA = 0x213C, VirtualSize = 0x8, Position = 0x73C, Size = 0x8 }, Offset = 0x0     
+```
+
+### Creating a PE File
+
+The PE format is complex and requires a lot of information to be created. 
+
+While LibObjectFile provides a way to create a PE file from scratch, it is not easy to create a working exe/dll file. If you are trying to create a file from scratch, use the `PEFile.Print` on existing exe/dll files to understand the structure and how to create a similar file.
+
+The following example is a complete example that creates a PE file with a code section that calls `ExitProcess` from `KERNEL32.DLL` with the value `156`:
+
+```csharp
+var pe = new PEFile();
+
+// ***************************************************************************
+// Code section
+// ***************************************************************************
+var codeSection = pe.AddSection(PESectionName.Text, 0x1000);
+var streamCode = new PEStreamSectionData();
+
+streamCode.Stream.Write([
+    // SUB RSP, 0x28
+    0x48, 0x83, 0xEC, 0x28,
+    // MOV ECX, 0x9C
+    0xB9, 0x9C, 0x00, 0x00, 0x00,
+    // CALL ExitProcess (CALL [RIP + 0xFF1])  
+    0xFF, 0x15, 0xF1, 0x0F, 0x00, 0x00,
+    // INT3
+    0xCC
+]);
+
+codeSection.Content.Add(streamCode);
+
+// ***************************************************************************
+// Data section
+// ***************************************************************************
+var dataSection = pe.AddSection(PESectionName.RData, 0x2000);
+
+var streamData = new PEStreamSectionData();
+var kernelName = streamData.WriteAsciiString("KERNEL32.DLL");
+var exitProcessFunction = streamData.WriteHintName(new(0x178, "ExitProcess"));
+
+// PEImportAddressTableDirectory comes first, it is referenced by the RIP + 0xFF1, first address being ExitProcess
+var peImportAddressTable = new PEImportAddressTable()
+{
+    exitProcessFunction
+};
+var iatDirectory = new PEImportAddressTableDirectory()
+{
+    peImportAddressTable
+};
+
+var peImportLookupTable = new PEImportLookupTable()
+{
+    exitProcessFunction
+};
+
+var importDirectory = new PEImportDirectory()
+{
+    Entries =
+    {
+        new PEImportDirectoryEntry(kernelName, peImportAddressTable, peImportLookupTable)
+    }
+};
+
+// Layout of the data section
+dataSection.Content.Add(iatDirectory);
+dataSection.Content.Add(peImportLookupTable);
+dataSection.Content.Add(importDirectory);
+dataSection.Content.Add(streamData);
+
+// ***************************************************************************
+// Optional Header
+// ***************************************************************************
+pe.OptionalHeader.AddressOfEntryPoint = new(streamCode, 0);
+pe.OptionalHeader.BaseOfCode = codeSection;
+
+// ***************************************************************************
+// Write the PE to a file
+// ***************************************************************************
+var output = new MemoryStream();
+pe.Write(output, new() { EnableStackTrace = true });
+output.Position = 0;
+
+var sourceFile = Path.Combine(AppContext.BaseDirectory, "PE", "RawNativeConsoleWin64_Generated.exe");
+File.WriteAllBytes(sourceFile, output.ToArray());
+
+// Check the generated exe
+var process = Process.Start(sourceFile);
+process.WaitForExit();
+Assert.AreEqual(156, process.ExitCode);
+```
+
+> Notice that the code above doesn't have to setup the `PEFile.Directories` explicitly.
+>
+> In fact when writing a PE file, the `PEFile.Write` method will automatically populate the directories based on the content of the sections.
+
+### Links
+
+- [PE and COFF Specification](https://docs.microsoft.com/en-us/windows/win32/debug/pe-format)

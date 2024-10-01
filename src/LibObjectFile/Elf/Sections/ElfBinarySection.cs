@@ -4,79 +4,75 @@
 
 using System;
 using System.IO;
+using LibObjectFile.Diagnostics;
 
-namespace LibObjectFile.Elf
+namespace LibObjectFile.Elf;
+
+/// <summary>
+/// A custom section associated with its stream of data to read/write.
+/// </summary>
+public sealed class ElfBinarySection : ElfSection
 {
-    /// <summary>
-    /// A custom section associated with its stream of data to read/write.
-    /// </summary>
-    public sealed class ElfBinarySection : ElfSection
+    public ElfBinarySection()
     {
-        public ElfBinarySection()
-        {
-        }
+    }
 
-        public ElfBinarySection(Stream stream)
-        {
-            Stream = stream ?? throw new ArgumentNullException(nameof(stream));
-        }
+    public ElfBinarySection(Stream stream)
+    {
+        Stream = stream ?? throw new ArgumentNullException(nameof(stream));
+    }
 
-        public override ElfSectionType Type
+    public override ElfSectionType Type
+    {
+        get => base.Type;
+        set
         {
-            get => base.Type;
-            set
+            // Don't allow relocation or symbol table to enforce proper usage
+            if (value == ElfSectionType.Relocation || value == ElfSectionType.RelocationAddends)
             {
-                // Don't allow relocation or symbol table to enforce proper usage
-                if (value == ElfSectionType.Relocation || value == ElfSectionType.RelocationAddends)
-                {
-                    throw new ArgumentException($"Invalid type `{Type}` of the section [{Index}]. Must be used on a `{nameof(ElfRelocationTable)}` instead");
-                }
+                throw new ArgumentException($"Invalid type `{Type}` of the section [{Index}]. Must be used on a `{nameof(ElfRelocationTable)}` instead");
+            }
 
-                if (value == ElfSectionType.SymbolTable || value == ElfSectionType.DynamicLinkerSymbolTable)
-                {
-                    throw new ArgumentException($"Invalid type `{Type}` of the section [{Index}]. Must be used on a `{nameof(ElfSymbolTable)}` instead");
-                }
+            if (value == ElfSectionType.SymbolTable || value == ElfSectionType.DynamicLinkerSymbolTable)
+            {
+                throw new ArgumentException($"Invalid type `{Type}` of the section [{Index}]. Must be used on a `{nameof(ElfSymbolTable)}` instead");
+            }
                 
-                base.Type = value;
-            }
+            base.Type = value;
         }
+    }
 
-        public override ulong TableEntrySize => OriginalTableEntrySize;
+    public override ulong TableEntrySize => OriginalTableEntrySize;
 
-        /// <summary>
-        /// Gets or sets the associated stream to this section.
-        /// </summary>
-        public Stream Stream { get; set; }
+    /// <summary>
+    /// Gets or sets the associated stream to this section.
+    /// </summary>
+    public Stream? Stream { get; set; }
 
-        protected override void Read(ElfReader reader)
+    public override void Read(ElfReader reader)
+    {
+        Stream = reader.ReadAsStream(Size);
+    }
+
+    public override void Write(ElfWriter writer)
+    {
+        if (Stream == null) return;
+        writer.Write(Stream);
+    }
+
+    protected override void UpdateLayoutCore(ElfVisitorContext context)
+    {
+        if (Type != ElfSectionType.NoBits)
         {
-            Stream = reader.ReadAsStream(Size);
+            Size = Stream != null ? (ulong)Stream.Length : 0;
         }
+    }
 
-        protected override void Write(ElfWriter writer)
+    public override void Verify(ElfVisitorContext context)
+    {
+        if (Type == ElfSectionType.NoBits && Stream != null)
         {
-            if (Stream == null) return;
-            writer.Write(Stream);
-        }
-
-        public override void UpdateLayout(DiagnosticBag diagnostics)
-        {
-            if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
-
-            if (Type != ElfSectionType.NoBits)
-            {
-                Size = Stream != null ? (ulong)Stream.Length : 0;
-            }
-        }
-
-        public override void Verify(DiagnosticBag diagnostics)
-        {
-            base.Verify(diagnostics);
-
-            if (Type == ElfSectionType.NoBits && Stream != null)
-            {
-                diagnostics.Error(DiagnosticId.ELF_ERR_InvalidStreamForSectionNoBits, $"The {Type} section {this} must have a null stream");
-            }
+            context.Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidStreamForSectionNoBits, $"The {Type} section {this} must have a null stream");
         }
     }
 }

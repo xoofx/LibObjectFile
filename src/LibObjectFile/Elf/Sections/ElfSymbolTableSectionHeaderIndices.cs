@@ -5,97 +5,101 @@
 using System;
 using System.Collections.Generic;
 
-namespace LibObjectFile.Elf
+namespace LibObjectFile.Elf;
+
+/// <summary>
+/// A section with the type <see cref="ElfSectionType.SymbolTableSectionHeaderIndices"/>
+/// </summary>
+public sealed class ElfSymbolTableSectionHeaderIndices : ElfSection
 {
-    /// <summary>
-    /// A section with the type <see cref="ElfSectionType.SymbolTableSectionHeaderIndices"/>
-    /// </summary>
-    public sealed class ElfSymbolTableSectionHeaderIndices : ElfSection
+    public const string DefaultName = ".symtab_shndx";
+
+    private readonly List<uint> _entries;
+
+    public ElfSymbolTableSectionHeaderIndices() : base(ElfSectionType.SymbolTableSectionHeaderIndices)
     {
-        public const string DefaultName = ".symtab_shndx";
+        Name = DefaultName;
+        _entries = new List<uint>();
+    }
 
-        private readonly List<uint> _entries;
-
-        public ElfSymbolTableSectionHeaderIndices() : base(ElfSectionType.SymbolTableSectionHeaderIndices)
+    public override ElfSectionType Type
+    {
+        get => base.Type;
+        set
         {
-            Name = DefaultName;
-            _entries = new List<uint>();
+            if (value != ElfSectionType.SymbolTableSectionHeaderIndices)
+            {
+                throw new ArgumentException($"Invalid type `{Type}` of the section [{Index}] `{nameof(ElfSymbolTableSectionHeaderIndices)}`. Only `{ElfSectionType.SymbolTableSectionHeaderIndices}` is valid");
+            }
+            base.Type = value;
+        }
+    }
+
+    public override unsafe ulong TableEntrySize => sizeof(uint);
+
+    public override void Read(ElfReader reader)
+    {
+        var numberOfEntries = base.Size / TableEntrySize;
+        _entries.Clear();
+        _entries.Capacity = (int)numberOfEntries;
+        for (ulong i = 0; i < numberOfEntries; i++)
+        {
+            _entries.Add(reader.ReadU32());
+        }
+    }
+
+    public override void Write(ElfWriter writer)
+    {
+        // Write all entries
+        for (int i = 0; i < _entries.Count; i++)
+        {
+            writer.WriteU32(_entries[i]);
+        }
+    }
+
+    protected override void AfterRead(ElfReader reader)
+    {
+        // Verify that the link is safe and configured as expected
+        Link.TryGetSectionSafe<ElfSymbolTable>(nameof(ElfSymbolTableSectionHeaderIndices), nameof(Link), this, reader.Diagnostics, out var symbolTable, ElfSectionType.SymbolTable, ElfSectionType.DynamicLinkerSymbolTable);
+
+        if (symbolTable is null)
+        {
+            return;
         }
 
-        public override ElfSectionType Type
+        for (int i = 0; i < _entries.Count; i++)
         {
-            get => base.Type;
-            set
+            var entry = _entries[i];
+            if (entry != 0)
             {
-                if (value != ElfSectionType.SymbolTableSectionHeaderIndices)
-                {
-                    throw new ArgumentException($"Invalid type `{Type}` of the section [{Index}] `{nameof(ElfSymbolTableSectionHeaderIndices)}`. Only `{ElfSectionType.SymbolTableSectionHeaderIndices}` is valid");
-                }
-                base.Type = value;
+                var resolvedLink = reader.ResolveLink(new ElfSectionLink(entry), $"Invalid link section index {entry} for symbol table entry [{i}] from symbol table section [{this}]");
+
+                // Update the link in symbol table
+                var symbolTableEntry = symbolTable.Entries[i];
+                symbolTableEntry.Section = resolvedLink;
+                symbolTable.Entries[i] = symbolTableEntry;
             }
         }
+    }
 
-        public override unsafe ulong TableEntrySize => sizeof(uint);
-
-        protected override void Read(ElfReader reader)
+    public override void Verify(ElfVisitorContext context)
+    {
+        // Verify that the link is safe and configured as expected
+        if (!Link.TryGetSectionSafe<ElfSymbolTable>(nameof(ElfSymbolTableSectionHeaderIndices), nameof(Link), this, context.Diagnostics, out var symbolTable, ElfSectionType.SymbolTable, ElfSectionType.DynamicLinkerSymbolTable))
         {
-            var numberOfEntries = base.Size / TableEntrySize;
-            _entries.Clear();
-            _entries.Capacity = (int)numberOfEntries;
-            for (ulong i = 0; i < numberOfEntries; i++)
-            {
-                _entries.Add(reader.ReadU32());
-            }
+            return;
         }
+    }
 
-        protected override void Write(ElfWriter writer)
+    protected override void UpdateLayoutCore(ElfVisitorContext context)
+    {
+        // Verify that the link is safe and configured as expected
+        Link.TryGetSectionSafe<ElfSymbolTable>(nameof(ElfSymbolTableSectionHeaderIndices), nameof(Link), this, context.Diagnostics, out var symbolTable, ElfSectionType.SymbolTable, ElfSectionType.DynamicLinkerSymbolTable);
+
+        int numberOfEntries = 0;
+
+        if (symbolTable is not null)
         {
-            // Write all entries
-            for (int i = 0; i < _entries.Count; i++)
-            {
-                writer.WriteU32(_entries[i]);
-            }
-        }
-
-        protected override void AfterRead(ElfReader reader)
-        {
-            // Verify that the link is safe and configured as expected
-            Link.TryGetSectionSafe<ElfSymbolTable>(nameof(ElfSymbolTableSectionHeaderIndices), nameof(Link), this, reader.Diagnostics, out var symbolTable, ElfSectionType.SymbolTable, ElfSectionType.DynamicLinkerSymbolTable);
-
-            for (int i = 0; i < _entries.Count; i++)
-            {
-                var entry = _entries[i];
-                if (entry != 0)
-                {
-                    var resolvedLink = reader.ResolveLink(new ElfSectionLink(entry), $"Invalid link section index {entry} for symbol table entry [{i}] from symbol table section [{this}]");
-
-                    // Update the link in symbol table
-                    var symbolTableEntry = symbolTable.Entries[i];
-                    symbolTableEntry.Section = resolvedLink;
-                    symbolTable.Entries[i] = symbolTableEntry;
-                }
-            }
-        }
-
-        public override void Verify(DiagnosticBag diagnostics)
-        {
-            base.Verify(diagnostics);
-
-            // Verify that the link is safe and configured as expected
-            if (!Link.TryGetSectionSafe<ElfSymbolTable>(nameof(ElfSymbolTableSectionHeaderIndices), nameof(Link), this, diagnostics, out var symbolTable, ElfSectionType.SymbolTable, ElfSectionType.DynamicLinkerSymbolTable))
-            {
-                return;
-            }
-        }
-
-        public override unsafe void UpdateLayout(DiagnosticBag diagnostics)
-        {
-            if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
-
-            // Verify that the link is safe and configured as expected
-            Link.TryGetSectionSafe<ElfSymbolTable>(nameof(ElfSymbolTableSectionHeaderIndices), nameof(Link), this, diagnostics, out var symbolTable, ElfSectionType.SymbolTable, ElfSectionType.DynamicLinkerSymbolTable);
-
-            int numberOfEntries = 0;
             for (int i = 0; i < symbolTable.Entries.Count; i++)
             {
                 if (symbolTable.Entries[i].Section.Section is { SectionIndex: >= ElfNative.SHN_LORESERVE })
@@ -103,10 +107,13 @@ namespace LibObjectFile.Elf
                     numberOfEntries = i + 1;
                 }
             }
+        }
 
-            _entries.Capacity = numberOfEntries;
-            _entries.Clear();
+        _entries.Capacity = numberOfEntries;
+        _entries.Clear();
 
+        if (symbolTable is not null)
+        {
             for (int i = 0; i < numberOfEntries; i++)
             {
                 var section = symbolTable.Entries[i].Section.Section;
@@ -119,8 +126,8 @@ namespace LibObjectFile.Elf
                     _entries.Add(0);
                 }
             }
-
-            Size = Parent == null || Parent.FileClass == ElfFileClass.None ? 0 : (ulong)numberOfEntries * sizeof(uint);
         }
+
+        Size = Parent == null || Parent.FileClass == ElfFileClass.None ? 0 : (ulong)numberOfEntries * sizeof(uint);
     }
 }

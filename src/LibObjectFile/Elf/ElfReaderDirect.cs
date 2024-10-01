@@ -4,15 +4,14 @@
 
 using System.IO;
 
-namespace LibObjectFile.Elf
+namespace LibObjectFile.Elf;
+
+/// <summary>
+/// Internal implementation of <see cref="ElfReader{TDecoder}"/> with a <see cref="ElfDecoderDirect"/>.
+/// </summary>
+internal sealed class ElfReaderDirect : ElfReader<ElfDecoderDirect>
 {
-    /// <summary>
-    /// Internal implementation of <see cref="ElfReader{TDecoder}"/> with a <see cref="ElfDecoderDirect"/>.
-    /// </summary>
-    internal sealed class ElfReaderDirect : ElfReader<ElfDecoderDirect>
+    public ElfReaderDirect(ElfObjectFile elfObjectFile, Stream stream, ElfReaderOptions options) : base(elfObjectFile, stream, options)
     {
-        public ElfReaderDirect(ElfObjectFile elfObjectFile, Stream stream, ElfReaderOptions options) : base(elfObjectFile, stream, options)
-        {
-        }
     }
 }

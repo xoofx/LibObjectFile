@@ -4,108 +4,107 @@
 
 using System;
 
-namespace LibObjectFile.Elf
+namespace LibObjectFile.Elf;
+
+/// <summary>
+/// Defines a string with the associated index in the string table.
+/// </summary>
+public readonly struct ElfString : IEquatable<ElfString>
 {
-    /// <summary>
-    /// Defines a string with the associated index in the string table.
-    /// </summary>
-    public readonly struct ElfString : IEquatable<ElfString>
+    private ElfString(string? value, uint index)
     {
-        private ElfString(string value, uint index)
+        Value = value;
+        Index = index;
+    }
+
+    public ElfString(string? value)
+    {
+        Value = value;
+        Index = 0;
+    }
+
+    public ElfString(uint index)
+    {
+        Value = null;
+        Index = index;
+    }
+
+    public readonly string? Value;
+
+    public readonly uint Index;
+
+    public bool IsEmpty => Value == null && Index == 0;
+
+    public bool Equals(ElfString other)
+    {
+        return (Value ?? string.Empty) == (other.Value ?? string.Empty) && Index == other.Index;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is ElfString other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        unchecked
         {
-            Value = value;
-            Index = index;
+            return ((Value ?? string.Empty).GetHashCode() * 397) ^ (int) Index;
         }
+    }
 
-        public ElfString(string value)
-        {
-            Value = value;
-            Index = 0;
-        }
+    public static bool operator ==(ElfString left, ElfString right)
+    {
+        return left.Equals(right);
+    }
 
-        public ElfString(uint index)
-        {
-            Value = null;
-            Index = index;
-        }
+    public static bool operator !=(ElfString left, ElfString right)
+    {
+        return !left.Equals(right);
+    }
 
-        public readonly string Value;
+    public static bool operator ==(string left, ElfString right)
+    {
+        return string.Equals(left, right.Value);
+    }
 
-        public readonly uint Index;
+    public static bool operator !=(ElfString left, string right)
+    {
+        return !string.Equals(left.Value, right);
+    }
 
-        public bool IsEmpty => Value == null && Index == 0;
+    public static bool operator ==(ElfString right, string left)
+    {
+        return string.Equals(left, right.Value);
+    }
 
-        public bool Equals(ElfString other)
-        {
-            return (Value ?? string.Empty) == (other.Value ?? string.Empty) && Index == other.Index;
-        }
+    public static bool operator !=(string right, ElfString left)
+    {
+        return !string.Equals(left.Value, right);
+    }
 
-        public override bool Equals(object obj)
-        {
-            return obj is ElfString other && Equals(other);
-        }
+    public static implicit operator string?(ElfString elfString)
+    {
+        return elfString.Value;
+    }
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                return ((Value ?? string.Empty).GetHashCode() * 397) ^ (int) Index;
-            }
-        }
+    public static implicit operator ElfString(string text)
+    {
+        return new ElfString(text);
+    }
 
-        public static bool operator ==(ElfString left, ElfString right)
-        {
-            return left.Equals(right);
-        }
+    public ElfString WithName(string name)
+    {
+        return new ElfString(name, Index);
+    }
 
-        public static bool operator !=(ElfString left, ElfString right)
-        {
-            return !left.Equals(right);
-        }
+    public ElfString WithIndex(uint index)
+    {
+        return new ElfString(Value, index);
+    }
 
-        public static bool operator ==(string left, ElfString right)
-        {
-            return string.Equals(left, right.Value);
-        }
-
-        public static bool operator !=(ElfString left, string right)
-        {
-            return !string.Equals(left.Value, right);
-        }
-
-        public static bool operator ==(ElfString right, string left)
-        {
-            return string.Equals(left, right.Value);
-        }
-
-        public static bool operator !=(string right, ElfString left)
-        {
-            return !string.Equals(left.Value, right);
-        }
-
-        public static implicit operator string(ElfString elfString)
-        {
-            return elfString.Value;
-        }
-
-        public static implicit operator ElfString(string text)
-        {
-            return new ElfString(text);
-        }
-
-        public ElfString WithName(string name)
-        {
-            return new ElfString(name, Index);
-        }
-
-        public ElfString WithIndex(uint index)
-        {
-            return new ElfString(Value, index);
-        }
-
-        public override string ToString()
-        {
-            return Value ?? $"0x{Index:x8}";
-        }
+    public override string ToString()
+    {
+        return Value ?? $"0x{Index:x8}";
     }
 }

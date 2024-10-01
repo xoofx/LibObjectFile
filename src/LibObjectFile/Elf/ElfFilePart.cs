@@ -5,89 +5,88 @@
 using System;
 using System.Diagnostics;
 
-namespace LibObjectFile.Elf
+namespace LibObjectFile.Elf;
+
+/// <summary>
+/// Internal struct used to identify which part of the file is attached to a section or not.
+/// It is used while reading back an ELF file from the disk to create <see cref="ElfShadowSection"/>
+/// </summary>
+[DebuggerDisplay("{StartOffset,nq} - {EndOffset,nq} : {Section,nq}")]
+internal readonly struct ElfFilePart : IComparable<ElfFilePart>, IEquatable<ElfFilePart>
 {
     /// <summary>
-    /// Internal struct used to identify which part of the file is attached to a section or not.
-    /// It is used while reading back an ELF file from the disk to create <see cref="ElfShadowSection"/>
+    /// Creates an instance that is not yet bound to a section for which an
+    /// <see cref="ElfShadowSection"/> will be created
     /// </summary>
-    [DebuggerDisplay("{StartOffset,nq} - {EndOffset,nq} : {Section,nq}")]
-    internal readonly struct ElfFilePart : IComparable<ElfFilePart>, IEquatable<ElfFilePart>
+    /// <param name="startOffset">Start of the offset in the file</param>
+    /// <param name="endOffset">End of the offset in the file (inclusive)</param>
+    public ElfFilePart(ulong startOffset, ulong endOffset)
     {
-        /// <summary>
-        /// Creates an instance that is not yet bound to a section for which an
-        /// <see cref="ElfShadowSection"/> will be created
-        /// </summary>
-        /// <param name="startOffset">Start of the offset in the file</param>
-        /// <param name="endOffset">End of the offset in the file (inclusive)</param>
-        public ElfFilePart(ulong startOffset, ulong endOffset)
-        {
-            StartOffset = startOffset;
-            EndOffset = endOffset;
-            Section = null;
-        }
+        StartOffset = startOffset;
+        EndOffset = endOffset;
+        Section = null;
+    }
 
-        /// <summary>
-        /// Creates an instance that is bound to a section 
-        /// </summary>
-        /// <param name="section">A section of the file</param>
-        public ElfFilePart(ElfSection section)
-        {
-            Section = section ?? throw new ArgumentNullException(nameof(section));
-            Debug.Assert(section.Size > 0);
-            StartOffset = section.Offset;
-            EndOffset = StartOffset + Section.Size - 1;
-        }
+    /// <summary>
+    /// Creates an instance that is bound to a section 
+    /// </summary>
+    /// <param name="section">A section of the file</param>
+    public ElfFilePart(ElfSection section)
+    {
+        Section = section ?? throw new ArgumentNullException(nameof(section));
+        Debug.Assert(section.Size > 0);
+        StartOffset = section.Position;
+        EndOffset = StartOffset + Section.Size - 1;
+    }
         
-        public readonly ulong StartOffset;
+    public readonly ulong StartOffset;
 
-        public readonly ulong EndOffset;
+    public readonly ulong EndOffset;
         
-        public readonly ElfSection Section;
+    public readonly ElfSection? Section;
 
-        public int CompareTo(ElfFilePart other)
+    public int CompareTo(ElfFilePart other)
+    {
+        if (EndOffset < other.StartOffset)
         {
-            if (EndOffset < other.StartOffset)
-            {
-                return -1;
-            }
-
-            if (StartOffset > other.EndOffset)
-            {
-                return 1;
-            }
-
-            // May overlap or not
-            return 0;
+            return -1;
         }
 
-
-        public bool Equals(ElfFilePart other)
+        if (StartOffset > other.EndOffset)
         {
-            return StartOffset == other.StartOffset && EndOffset == other.EndOffset;
+            return 1;
         }
 
-        public override bool Equals(object obj)
-        {
-            return obj is ElfFilePart other && Equals(other);
-        }
+        // May overlap or not
+        return 0;
+    }
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                return (StartOffset.GetHashCode() * 397) ^ EndOffset.GetHashCode();
-            }
-        }
 
-        public static bool operator ==(ElfFilePart left, ElfFilePart right)
-        {
-            return left.Equals(right);
-        }
+    public bool Equals(ElfFilePart other)
+    {
+        return StartOffset == other.StartOffset && EndOffset == other.EndOffset;
+    }
 
-        public static bool operator !=(ElfFilePart left, ElfFilePart right)
+    public override bool Equals(object? obj)
+    {
+        return obj is ElfFilePart other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        unchecked
         {
-            return !left.Equals(right);
+            return (StartOffset.GetHashCode() * 397) ^ EndOffset.GetHashCode();
         }
+    }
+
+    public static bool operator ==(ElfFilePart left, ElfFilePart right)
+    {
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(ElfFilePart left, ElfFilePart right)
+    {
+        return !left.Equals(right);
     }
 }

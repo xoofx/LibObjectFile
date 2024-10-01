@@ -11,6 +11,10 @@ using System;
 
 #pragma warning disable 1591
 
+#pragma warning disable CS8765
+
+#nullable enable
+
 namespace LibObjectFile.Elf
 {
     using System.Runtime.InteropServices;
@@ -11830,7 +11834,7 @@ namespace LibObjectFile.Elf
         
         public static readonly ElfArchEx ALPHA = new ElfArchEx(ElfNative.EM_ALPHA);
         
-        private string ToStringInternal()
+        private string? ToStringInternal()
         {
             switch ((ushort)Value)
             {
@@ -12164,7 +12168,7 @@ namespace LibObjectFile.Elf
         /// </summary>
         public static readonly ElfOSABIEx STANDALONE = new ElfOSABIEx(ElfNative.ELFOSABI_STANDALONE);
         
-        private string ToStringInternal()
+        private string? ToStringInternal()
         {
             switch ((byte)Value)
             {
@@ -13859,7 +13863,7 @@ namespace LibObjectFile.Elf
         /// </summary>
         public static readonly ElfRelocationType R_X86_64_RELATIVE64 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_RELATIVE64);
         
-        private string ToStringInternal()
+        private string? ToStringInternal()
         {
             switch (((ulong)Value << 16) | (ulong)Arch.Value)
             {
@@ -14410,7 +14414,7 @@ namespace LibObjectFile.Elf
         
         public static readonly ElfNoteTypeEx GNU_GOLD_VERSION = new ElfNoteTypeEx(ElfNative.NT_GNU_GOLD_VERSION);
         
-        private string ToStringInternal()
+        private string? ToStringInternal()
         {
             switch ((uint)Value)
             {

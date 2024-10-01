@@ -5,21 +5,22 @@
 using System;
 using System.IO;
 using System.Text;
+using LibObjectFile.Diagnostics;
 using LibObjectFile.Elf;
-using NUnit.Framework;
 
 namespace LibObjectFile.Tests.Elf;
 
+[TestClass]
 public class ElfSimpleTests : ElfTestBase
 {
-    [Test]
+    [TestMethod]
     public void TryReadThrows()
     {
         static void CheckInvalidLib(bool isReadOnly)
         { 
             using var stream = File.OpenRead("TestFiles/cmnlib.b00");
-            Assert.False(ElfObjectFile.TryRead(stream, out var elf, out var diagnostics, new ElfReaderOptions() { ReadOnly = isReadOnly }));
-            Assert.NotNull(elf);
+            Assert.IsFalse(ElfObjectFile.TryRead(stream, out var elf, out var diagnostics, new ElfReaderOptions() { ReadOnly = isReadOnly }));
+            Assert.IsNotNull(elf);
             Assert.AreEqual(4, diagnostics.Messages.Count, "Invalid number of error messages found");
             Assert.AreEqual(DiagnosticId.ELF_ERR_IncompleteProgramHeader32Size, diagnostics.Messages[0].Id);
             for (int i = 1; i < diagnostics.Messages.Count; i++)
@@ -32,26 +33,26 @@ public class ElfSimpleTests : ElfTestBase
         CheckInvalidLib(true);
     }
 
-    [Test]
+    [TestMethod]
     public void TryReadFailed()
     {
         using var stream = File.OpenRead(typeof(ElfSimpleTests).Assembly.Location);
 
-        Assert.False(ElfObjectFile.TryRead(stream, out var elfObjectFile, out var diagnostics));
-        Assert.True(diagnostics.HasErrors);    
+        Assert.IsFalse(ElfObjectFile.TryRead(stream, out var elfObjectFile, out var diagnostics));
+        Assert.IsTrue(diagnostics.HasErrors);    
         Assert.AreEqual(1, diagnostics.Messages.Count);
         Assert.AreEqual(DiagnosticId.ELF_ERR_InvalidHeaderMagic, diagnostics.Messages[0].Id);
     }
 
 
-    [Test]
+    [TestMethod]
     public void SimpleEmptyWithDefaultSections()
     {
         var elf = new ElfObjectFile(ElfArch.X86_64);
         AssertReadElf(elf, "empty_default.elf");
     }
 
-    [Test]
+    [TestMethod]
     public void SimpleEmpty()
     {
         var elf = new ElfObjectFile(ElfArch.X86_64);
@@ -62,7 +63,7 @@ public class ElfSimpleTests : ElfTestBase
         AssertReadElf(elf, "empty.elf");
     }
 
-    [Test]
+    [TestMethod]
     public void SimpleCodeSection()
     {
         var elf = new ElfObjectFile(ElfArch.X86_64);
@@ -78,7 +79,7 @@ public class ElfSimpleTests : ElfTestBase
         AssertReadElf(elf, "test.elf");
     }
 
-    [Test]
+    [TestMethod]
     public void TestBss()
     {
         var elf = new ElfObjectFile(ElfArch.X86_64);
@@ -98,14 +99,14 @@ public class ElfSimpleTests : ElfTestBase
 
         var diagnostics = new DiagnosticBag();
         elf.UpdateLayout(diagnostics);
-        Assert.False(diagnostics.HasErrors);
+        Assert.IsFalse(diagnostics.HasErrors);
             
-        Assert.AreEqual(1024, bssSection.Offset);
+        Assert.AreEqual(1024U, bssSection.Position);
 
         AssertReadElf(elf, "test_bss.elf");
     }
 
-    [Test]
+    [TestMethod]
     public void SimpleCodeSectionAndSymbolSection()
     {
         var elf = new ElfObjectFile(ElfArch.X86_64);
@@ -153,7 +154,7 @@ public class ElfSimpleTests : ElfTestBase
         AssertReadElf(elf, "test2.elf");
     }
 
-    [Test]
+    [TestMethod]
     public void SimpleProgramHeaderAndCodeSectionAndSymbolSection()
     {
         var elf = new ElfObjectFile(ElfArch.X86_64);
@@ -241,7 +242,7 @@ public class ElfSimpleTests : ElfTestBase
     }
 
 
-    [Test]
+    [TestMethod]
     public void SimpleProgramHeaderAndCodeSectionAndSymbolSectionAndRelocation()
     {
         var elf = new ElfObjectFile(ElfArch.X86_64);
@@ -359,7 +360,7 @@ public class ElfSimpleTests : ElfTestBase
     }
 
 
-    [Test]
+    [TestMethod]
     public void TestHelloWorld()
     {
         var cppName = "helloworld";
@@ -393,7 +394,7 @@ public class ElfSimpleTests : ElfTestBase
         }
     }
 
-    [Test]
+    [TestMethod]
     public void TestAlignedSection()
     {
         var elf = new ElfObjectFile(ElfArch.X86_64);
@@ -412,17 +413,17 @@ public class ElfSimpleTests : ElfTestBase
         elf.AddSection(new ElfSectionHeaderStringTable());
 
         var diagnostics = elf.Verify();
-        Assert.False(diagnostics.HasErrors);
+        Assert.IsFalse(diagnostics.HasErrors);
 
         elf.UpdateLayout(diagnostics);
-        Assert.False(diagnostics.HasErrors);
+        Assert.IsFalse(diagnostics.HasErrors);
 
         elf.Print(Console.Out);
 
-        Assert.AreEqual(alignedSection.UpperAlignment, codeSection.Offset, "Invalid alignment");
+        Assert.AreEqual(alignedSection.UpperAlignment, codeSection.Position, "Invalid alignment");
     }
 
-    [Test]
+    [TestMethod]
     public void TestManySections()
     {
         var elf = new ElfObjectFile(ElfArch.X86_64);
@@ -441,12 +442,12 @@ public class ElfSimpleTests : ElfTestBase
         elf.AddSection(new ElfSectionHeaderStringTable());
 
         var diagnostics = elf.Verify();
-        Assert.True(diagnostics.HasErrors);
+        Assert.IsTrue(diagnostics.HasErrors);
         Assert.AreEqual(DiagnosticId.ELF_ERR_MissingSectionHeaderIndices, diagnostics.Messages[0].Id);
 
         elf.AddSection(new ElfSymbolTableSectionHeaderIndices { Link = symbolTable });
         diagnostics = elf.Verify();
-        Assert.False(diagnostics.HasErrors);
+        Assert.IsFalse(diagnostics.HasErrors);
 
         uint visibleSectionCount = elf.VisibleSectionCount;
 
@@ -462,24 +463,24 @@ public class ElfSimpleTests : ElfTestBase
         }
 
         Assert.AreEqual(visibleSectionCount, elf.VisibleSectionCount);
-        Assert.True(elf.Sections[0] is ElfNullSection);
-        Assert.True(elf.Sections[1] is ElfProgramHeaderTable);
+        Assert.IsTrue(elf.Sections[0] is ElfNullSection);
+        Assert.IsTrue(elf.Sections[1] is ElfProgramHeaderTable);
 
         for (int i = 0; i < ushort.MaxValue; i++)
         {
-            Assert.True(elf.Sections[i + 2] is ElfBinarySection);
+            Assert.IsTrue(elf.Sections[i + 2] is ElfBinarySection);
             Assert.AreEqual($".section{i}", elf.Sections[i + 2].Name.Value);
         }
 
-        Assert.True(elf.Sections[ushort.MaxValue + 3] is ElfSymbolTable);
+        Assert.IsTrue(elf.Sections[ushort.MaxValue + 3] is ElfSymbolTable);
         symbolTable = (ElfSymbolTable)elf.Sections[ushort.MaxValue + 3];
         for (int i = 0; i < ushort.MaxValue; i++)
         {
-            Assert.AreEqual($".section{i}", symbolTable.Entries[i + 1].Section.Section.Name.Value);
+            Assert.AreEqual($".section{i}", symbolTable.Entries[i + 1].Section.Section!.Name.Value);
         }
     }
 
-    [Test]
+    [TestMethod]
     public void TestReadLibStdc()
     {
         ElfObjectFile elf;

@@ -6,102 +6,107 @@ using System.Buffers;
 using System.IO;
 using System.Text;
 
-namespace LibObjectFile.Elf
+namespace LibObjectFile.Elf;
+
+/// <summary>
+/// A custom note entry in <see cref="ElfNoteTable"/>
+/// </summary>
+public class ElfCustomNote : ElfNote
 {
-    /// <summary>
-    /// A custom note entry in <see cref="ElfNoteTable"/>
-    /// </summary>
-    public class ElfCustomNote : ElfNote
+    public ElfCustomNote(string name, ElfNoteTypeEx type)
     {
-        /// <summary>
-        /// Gets or sets the name of this note.
-        /// </summary>
-        public string Name { get; set; }
+        Name = name;
+        Type = type;
+    }
 
-        /// <summary>
-        /// Gets or sets the associated descriptor data.
-        /// </summary>
-        public Stream Descriptor { get; set; }
+    /// <summary>
+    /// Gets or sets the name of this note.
+    /// </summary>
+    public string Name { get; }
 
-        /// <summary>
-        /// Gets or sets the type of this note.
-        /// </summary>
-        public ElfNoteTypeEx Type { get; set; }
+    /// <summary>
+    /// Gets or sets the associated descriptor data.
+    /// </summary>
+    public Stream? Descriptor { get; set; }
 
-        public override string GetName()
+    /// <summary>
+    /// Gets or sets the type of this note.
+    /// </summary>
+    public ElfNoteTypeEx Type { get; }
+
+    public override string GetName()
+    {
+        return Name;
+    }
+
+    public override ElfNoteTypeEx GetNoteType()
+    {
+        return Type;
+    }
+
+    public override uint GetDescriptorSize()
+    {
+        return Descriptor == null ? 0 : (uint)Descriptor.Length;
+    }
+
+    public override string GetDescriptorAsText()
+    {
+        if (Descriptor == null || Descriptor.Length == 0) return string.Empty;
+
+        Descriptor.Position = 0;
+
+        var length = (int) Descriptor.Length;
+        var buffer = ArrayPool<byte>.Shared.Rent(length);
+        try
         {
-            return Name;
-        }
-
-        public override ElfNoteTypeEx GetNoteType()
-        {
-            return Type;
-        }
-
-        public override uint GetDescriptorSize()
-        {
-            return Descriptor == null ? 0 : (uint)Descriptor.Length;
-        }
-
-        public override string GetDescriptorAsText()
-        {
-            if (Descriptor == null || Descriptor.Length == 0) return string.Empty;
-
+            length = Descriptor.Read(buffer, 0, length);
             Descriptor.Position = 0;
+            var hasBinary = false;
 
-            var length = (int) Descriptor.Length;
-            var buffer = ArrayPool<byte>.Shared.Rent(length);
-            try
+            // If we have any binary data (don't take into account a potential null terminated string)
+            for (int i = 0; i < length - 1; i++)
             {
-                length = Descriptor.Read(buffer, 0, length);
-                Descriptor.Position = 0;
-                var hasBinary = false;
-
-                // If we have any binary data (don't take into account a potential null terminated string)
-                for (int i = 0; i < length - 1; i++)
+                if (buffer[i] < ' ')
                 {
-                    if (buffer[i] < ' ')
-                    {
-                        hasBinary = true;
-                        break;
-                    }
-                }
-
-                if (hasBinary)
-                {
-                    var builder = new StringBuilder();
-                    for (int i = 0; i < length; i++)
-                    {
-                        builder.Append($"{buffer[i]:x2}");
-                    }
-
-                    return builder.ToString();
-                }
-                else
-                {
-                    return Encoding.UTF8.GetString(buffer, 0, length);
+                    hasBinary = true;
+                    break;
                 }
             }
-            finally
+
+            if (hasBinary)
             {
-                ArrayPool<byte>.Shared.Return(buffer);
+                var builder = new StringBuilder();
+                for (int i = 0; i < length; i++)
+                {
+                    builder.Append($"{buffer[i]:x2}");
+                }
+
+                return builder.ToString();
+            }
+            else
+            {
+                return Encoding.UTF8.GetString(buffer, 0, length);
             }
         }
-
-        protected override void ReadDescriptor(ElfReader reader, uint descriptorLength)
+        finally
         {
-            if (descriptorLength > 0)
-            {
-                Descriptor = reader.ReadAsStream(descriptorLength);
-            }
+            ArrayPool<byte>.Shared.Return(buffer);
         }
+    }
 
-        protected override void WriteDescriptor(ElfWriter writer)
+    protected override void ReadDescriptor(ElfReader reader, uint descriptorLength)
+    {
+        if (descriptorLength > 0)
         {
-            if (Descriptor != null)
-            {
-                writer.Write(Descriptor);
-            }
+            Descriptor = reader.ReadAsStream(descriptorLength);
+        }
+    }
+
+    protected override void WriteDescriptor(ElfWriter writer)
+    {
+        if (Descriptor != null)
+        {
+            writer.Write(Descriptor);
         }
     }
 }

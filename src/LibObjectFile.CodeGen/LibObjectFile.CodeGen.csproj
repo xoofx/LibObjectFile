@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
       <TargetFramework>net8.0</TargetFramework>
       <OutputType>Exe</OutputType>
@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="CppAst.CodeGen" Version="0.20.0" />
+      <PackageReference Include="CppAst.CodeGen" />
       <Content Include="dwarf.h">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>

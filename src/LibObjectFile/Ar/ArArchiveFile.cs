@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -6,13 +6,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using LibObjectFile.Collections;
+using LibObjectFile.Diagnostics;
 
 namespace LibObjectFile.Ar;
 
 /// <summary>
 /// An 'ar' archive file.
 /// </summary>
-public sealed class ArArchiveFile : ObjectFileNode
+public sealed class ArArchiveFile : ArObjectBase
 {
     private readonly List<ArFile> _files;
 
@@ -48,17 +50,17 @@ public sealed class ArArchiveFile : ObjectFileNode
     /// <summary>
     /// Gets the <see cref="ArSymbolTable"/> associated to this instance. Must be first entry in <see cref="Files"/>
     /// </summary>
-    public ArSymbolTable SymbolTable { get; private set; }
+    public ArSymbolTable? SymbolTable { get; private set; }
 
     /// <summary>
     /// Internal extended file names used for GNU entries.
     /// </summary>
-    internal ArLongNamesTable LongNamesTable { get; set; }
+    internal ArLongNamesTable? LongNamesTable { get; set; }
         
     /// <summary>
     /// Gets the file entries. Use <see cref="AddFile"/> or <see cref="RemoveFile"/> to manipulate the entries.
     /// </summary>
-    public IReadOnlyList<ArFile> Files => _files;
+    public ReadOnlyList<ArFile> Files => _files;
         
     /// <summary>
     /// Adds a file to <see cref="Files"/>.
@@ -80,7 +82,7 @@ public sealed class ArArchiveFile : ObjectFileNode
         }
 
         file.Parent = this;
-        file.Index = (uint)_files.Count;
+        file.Index = _files.Count;
         _files.Add(file);
     }
 
@@ -122,7 +124,7 @@ public sealed class ArArchiveFile : ObjectFileNode
             }
         }
             
-        file.Index = (uint)index;
+        file.Index = index;
         _files.Insert(index, file);
         file.Parent = this;
 
@@ -154,7 +156,7 @@ public sealed class ArArchiveFile : ObjectFileNode
 
         var i = (int)file.Index;
         _files.RemoveAt(i);
-        file.Index = 0;
+        file.ResetIndex();
 
         // Update indices for other sections
         for (int j = i + 1; j < _files.Count; j++)
@@ -178,9 +180,23 @@ public sealed class ArArchiveFile : ObjectFileNode
         return file;
     }
 
-    public override void Verify(DiagnosticBag diagnostics)
+    public DiagnosticBag Verify()
     {
-        if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
+        var diagnostics = new DiagnosticBag();
+        Verify(diagnostics);
+        return diagnostics;
+    }
+
+    public void Verify(DiagnosticBag diagnostics)
+    {
+        ArgumentNullException.ThrowIfNull(diagnostics);
+        var context = new ArVisitorContext(this, diagnostics);
+        Verify(context);
+    }
+
+    public override void Verify(ArVisitorContext context)
+    {
+        var diagnostics = context.Diagnostics;
 
         for (var i = 0; i < Files.Count; i++)
         {
@@ -198,7 +214,7 @@ public sealed class ArArchiveFile : ObjectFileNode
                 }
             }
 
-            item.Verify(diagnostics);
+            item.Verify(context);
         }
     }
 
@@ -308,10 +324,17 @@ public sealed class ArArchiveFile : ObjectFileNode
         var writer = new ArArchiveFileWriter(this, stream);
         writer.Write();
     }
-        
-    public override void UpdateLayout(DiagnosticBag diagnostics)
+
+    protected override void UpdateLayoutCore(ArVisitorContext context)
     {
-        if (diagnostics == null) throw new ArgumentNullException(nameof(diagnostics));
+
+    }
+
+
+    public void UpdateLayout(DiagnosticBag diagnostics)
+    {
+        ArgumentNullException.ThrowIfNull(diagnostics);
+        var layoutContext = new ArVisitorContext(this, diagnostics);
 
         Size = 0;
 
@@ -352,25 +375,25 @@ public sealed class ArArchiveFile : ObjectFileNode
         {
             var entry = Files[i];
 
-            entry.UpdateLayout(diagnostics);
+            entry.UpdateLayout(layoutContext);
             if (diagnostics.HasErrors) return;
 
             // If we have a GNU headers and they are required, add them to the offset and size
             if (LongNamesTable != null && LongNamesTable.Index == i)
             {
-                LongNamesTable.UpdateLayout(diagnostics);
+                LongNamesTable.UpdateLayout(layoutContext);
                 if (diagnostics.HasErrors) return;
 
                 var headerSize = LongNamesTable.Size;
                 if (headerSize > 0)
                 {
-                    LongNamesTable.Offset = size;
+                    LongNamesTable.Position = size;
                     size += ArFile.FileEntrySizeInBytes + LongNamesTable.Size;
                     if ((size & 1) != 0) size++;
                 }
             }
                 
-            entry.Offset = size;
+            entry.Position = size;
             size += ArFile.FileEntrySizeInBytes + entry.Size;
             if ((size & 1) != 0) size++;
         }

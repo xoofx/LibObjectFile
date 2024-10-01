@@ -4,34 +4,33 @@
 
 using System;
 
-namespace LibObjectFile.Dwarf
+namespace LibObjectFile.Dwarf;
+
+public class DwarfLayoutConfig
 {
-    public class DwarfLayoutConfig
+    private DwarfAttributeForm _defaultAttributeFormForReference;
+
+    public DwarfLayoutConfig()
     {
-        private DwarfAttributeForm _defaultAttributeFormForReference;
+        DefaultAttributeFormForReference = DwarfAttributeForm.Ref4;
+    }
 
-        public DwarfLayoutConfig()
+    public DwarfAttributeFormEx DefaultAttributeFormForReference
+    {
+        get => _defaultAttributeFormForReference;
+        set
         {
-            DefaultAttributeFormForReference = DwarfAttributeForm.Ref4;
-        }
-
-        public DwarfAttributeFormEx DefaultAttributeFormForReference
-        {
-            get => _defaultAttributeFormForReference;
-            set
+            switch (value.Value)
             {
-                switch (value.Value)
-                {
-                    case DwarfAttributeForm.Ref1:
-                    case DwarfAttributeForm.Ref2:
-                    case DwarfAttributeForm.Ref4:
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(value));
-                }
-
-                _defaultAttributeFormForReference = value;
+                case DwarfAttributeForm.Ref1:
+                case DwarfAttributeForm.Ref2:
+                case DwarfAttributeForm.Ref4:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(value));
             }
+
+            _defaultAttributeFormForReference = value;
         }
     }
 }

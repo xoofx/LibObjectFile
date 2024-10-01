@@ -7,11 +7,11 @@ using System.Diagnostics;
 
 namespace LibObjectFile.Dwarf;
 
-public abstract class DwarfObject : ObjectFileNodeBase
+public abstract class DwarfObject : ObjectFileElement<DwarfLayoutContext, DwarfVerifyContext, DwarfReader, DwarfWriter>
 {
-    public DwarfFile GetParentFile()
+    public DwarfFile? GetParentFile()
     {
-        var check = (ObjectFileNodeBase)this;
+        var check = (ObjectElement?)this;
         while (check != null)
         {
             if (check is DwarfFile dwarfFile) return dwarfFile;
@@ -20,9 +20,9 @@ public abstract class DwarfObject : ObjectFileNodeBase
         return null;
     }
 
-    public DwarfUnit GetParentUnit()
+    public DwarfUnit? GetParentUnit()
     {
-        var check = (ObjectFileNodeBase)this;
+        var check = (ObjectElement?)this;
         while (check != null)
         {
             if (check is DwarfUnit dwarfUnit) return dwarfUnit;
@@ -31,9 +31,9 @@ public abstract class DwarfObject : ObjectFileNodeBase
         return null;
     }
 
-    public DwarfSection GetParentSection()
+    public DwarfSection? GetParentSection()
     {
-        var check = (ObjectFileNodeBase)this;
+        var check = (ObjectElement?)this;
         while (check != null)
         {
             if (check is DwarfSection dwarfSection) return dwarfSection;
@@ -43,9 +43,9 @@ public abstract class DwarfObject : ObjectFileNodeBase
     }
 }
 
-public abstract class DwarfObject<TContainer> : DwarfObject where TContainer : ObjectFileNodeBase
+public abstract class DwarfObject<TContainer> : DwarfObject where TContainer : ObjectFileElement
 {
-    protected override void ValidateParent(ObjectFileNodeBase parent)
+    protected override void ValidateParent(ObjectElement parent)
     {
         if (!(parent is TContainer))
         {
@@ -53,38 +53,14 @@ public abstract class DwarfObject<TContainer> : DwarfObject where TContainer : O
         }
     }
 
-
     /// <summary>
     /// Gets the containing <see cref="ElfObjectFile"/>. Might be null if this section or segment
     /// does not belong to an existing <see cref="ElfObjectFile"/>.
     /// </summary>
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    public new TContainer Parent
+    public new TContainer? Parent
     {
-        get => (TContainer)base.Parent;
+        get => (TContainer?)base.Parent;
         internal set => base.Parent = value;
     }
-
-    internal void UpdateLayoutInternal(DwarfLayoutContext layoutContext)
-    {
-        UpdateLayout(layoutContext);
-    }
-
-    protected abstract void UpdateLayout(DwarfLayoutContext layoutContext);
-
-
-    internal void ReadInternal(DwarfReader reader)
-    {
-        Read(reader);
-    }
-
-    protected abstract void Read(DwarfReader reader);
-        
-
-    internal void WriteInternal(DwarfWriter writer)
-    {
-        Write(writer);
-    }
-
-    protected abstract void Write(DwarfWriter writer);
 }

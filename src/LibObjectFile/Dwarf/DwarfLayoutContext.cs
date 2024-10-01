@@ -2,25 +2,35 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
-namespace LibObjectFile.Dwarf
+using LibObjectFile.Diagnostics;
+
+namespace LibObjectFile.Dwarf;
+
+
+
+public abstract class DwarfVisitorContext : VisitorContextBase<DwarfFile>
 {
-    public sealed class DwarfLayoutContext
+    internal DwarfVisitorContext(DwarfFile file, DiagnosticBag diagnostics) : base(file, diagnostics)
     {
-        internal DwarfLayoutContext(DwarfFile file, DwarfLayoutConfig config, DiagnosticBag diagnostics)
-        {
-            File = file;
-            Config = config;
-            Diagnostics = diagnostics;
-        }
+    }
+}
 
-        public DwarfFile File { get; }
 
-        public DiagnosticBag Diagnostics { get; }
+public sealed class DwarfLayoutContext : DwarfVisitorContext
+{
+    internal DwarfLayoutContext(DwarfFile file, DwarfLayoutConfig config, DiagnosticBag diagnostics) : base(file, diagnostics)
+    {
+        Config = config;
+    }
 
-        public DwarfLayoutConfig Config { get; }
+    public DwarfLayoutConfig Config { get; }
+       
+    public DwarfUnit? CurrentUnit { get; internal set; }
+}
 
-        public bool HasErrors => Diagnostics.HasErrors;
-        
-        public DwarfUnit CurrentUnit { get; internal set; }
+public sealed class DwarfVerifyContext : DwarfVisitorContext
+{
+    internal DwarfVerifyContext(DwarfFile file, DiagnosticBag diagnostics) : base(file, diagnostics)
+    {
     }
 }

@@ -11,6 +11,10 @@ using System;
 
 #pragma warning disable 1591
 
+#pragma warning disable CS8765
+
+#nullable enable
+
 namespace LibObjectFile.Dwarf
 {
     public static unsafe partial class DwarfNative
@@ -3858,7 +3862,7 @@ namespace LibObjectFile.Dwarf
         /// </summary>
         public static readonly DwarfAttributeKindEx APPLEClosure = new DwarfAttributeKindEx(DwarfNative.DW_AT_APPLE_closure);
         
-        private string ToStringInternal()
+        private string? ToStringInternal()
         {
             switch ((ushort)Value)
             {
@@ -4815,7 +4819,7 @@ namespace LibObjectFile.Dwarf
         /// </summary>
         public static readonly DwarfAttributeFormEx GNUStrpAlt = new DwarfAttributeFormEx(DwarfNative.DW_FORM_GNU_strp_alt);
         
-        private string ToStringInternal()
+        private string? ToStringInternal()
         {
             switch ((ushort)Value)
             {
@@ -5375,7 +5379,7 @@ namespace LibObjectFile.Dwarf
         /// </summary>
         public static readonly DwarfTagEx SUNHi = new DwarfTagEx(DwarfNative.DW_TAG_SUN_hi);
         
-        private string ToStringInternal()
+        private string? ToStringInternal()
         {
             switch ((ushort)Value)
             {
@@ -6209,7 +6213,7 @@ namespace LibObjectFile.Dwarf
         /// </summary>
         public static readonly DwarfOperationKindEx PGIOmpThreadNum = new DwarfOperationKindEx(DwarfNative.DW_OP_PGI_omp_thread_num);
         
-        private string ToStringInternal()
+        private string? ToStringInternal()
         {
             switch ((byte)Value)
             {
@@ -6958,7 +6962,7 @@ namespace LibObjectFile.Dwarf
         /// </summary>
         public static readonly DwarfLanguageKindEx SUNAssembler = new DwarfLanguageKindEx(DwarfNative.DW_LANG_SUN_Assembler);
         
-        private string ToStringInternal()
+        private string? ToStringInternal()
         {
             switch ((ushort)Value)
             {
@@ -7141,7 +7145,7 @@ namespace LibObjectFile.Dwarf
         /// </summary>
         public static readonly DwarfCallingConventionEx ALTIUMHugeUserStack = new DwarfCallingConventionEx(DwarfNative.DW_CC_ALTIUM_huge_user_stack);
         
-        private string ToStringInternal()
+        private string? ToStringInternal()
         {
             switch ((byte)Value)
             {
@@ -7218,7 +7222,7 @@ namespace LibObjectFile.Dwarf
         /// </summary>
         public static readonly DwarfUnitKindEx SplitType = new DwarfUnitKindEx(DwarfNative.DW_UT_split_type);
         
-        private string ToStringInternal()
+        private string? ToStringInternal()
         {
             switch ((byte)Value)
             {
@@ -7452,7 +7456,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -7464,7 +7468,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -7568,7 +7572,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfExpression DataLocation
+        public DwarfExpression? DataLocation
         {
             get
             {
@@ -7592,7 +7596,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -7604,7 +7608,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -7640,7 +7644,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Specification
+        public DwarfDIE? Specification
         {
             get
             {
@@ -7664,7 +7668,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -7708,7 +7712,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -7720,7 +7724,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -7732,7 +7736,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -7836,7 +7840,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfExpression DataLocation
+        public DwarfExpression? DataLocation
         {
             get
             {
@@ -7908,7 +7912,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -7920,7 +7924,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -7932,7 +7936,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string PictureString
+        public string? PictureString
         {
             get
             {
@@ -7944,7 +7948,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Small
+        public DwarfDIE? Small
         {
             get
             {
@@ -8000,7 +8004,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfExpression CallOrigin
+        public DwarfExpression? CallOrigin
         {
             get
             {
@@ -8048,7 +8052,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfExpression CallTarget
+        public DwarfExpression? CallTarget
         {
             get
             {
@@ -8060,7 +8064,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfExpression CallTargetClobbered
+        public DwarfExpression? CallTargetClobbered
         {
             get
             {
@@ -8072,7 +8076,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -8092,7 +8096,7 @@ namespace LibObjectFile.Dwarf
             this.Tag = (DwarfTag)DwarfNative.DW_TAG_call_site_parameter;
         }
         
-        public DwarfExpression CallDataLocation
+        public DwarfExpression? CallDataLocation
         {
             get
             {
@@ -8104,7 +8108,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfExpression CallDataValue
+        public DwarfExpression? CallDataValue
         {
             get
             {
@@ -8116,7 +8120,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE CallParameter
+        public DwarfDIE? CallParameter
         {
             get
             {
@@ -8128,7 +8132,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfExpression CallValue
+        public DwarfExpression? CallValue
         {
             get
             {
@@ -8152,7 +8156,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -8164,7 +8168,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -8176,7 +8180,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -8348,7 +8352,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfExpression DataLocation
+        public DwarfExpression? DataLocation
         {
             get
             {
@@ -8384,7 +8388,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -8396,7 +8400,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -8408,7 +8412,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Signature
+        public DwarfDIE? Signature
         {
             get
             {
@@ -8420,7 +8424,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Specification
+        public DwarfDIE? Specification
         {
             get
             {
@@ -8500,7 +8504,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -8512,7 +8516,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -8524,7 +8528,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -8556,7 +8560,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string LinkageName
+        public string? LinkageName
         {
             get
             {
@@ -8580,7 +8584,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -8592,7 +8596,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -8636,7 +8640,7 @@ namespace LibObjectFile.Dwarf
             this.Tag = (DwarfTag)DwarfNative.DW_TAG_common_inclusion;
         }
         
-        public DwarfDIE CommonReference
+        public DwarfDIE? CommonReference
         {
             get
             {
@@ -8692,7 +8696,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE BaseTypes
+        public DwarfDIE? BaseTypes
         {
             get
             {
@@ -8704,7 +8708,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string CompDir
+        public string? CompDir
         {
             get
             {
@@ -8800,7 +8804,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -8812,7 +8816,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -8824,7 +8828,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Producer
+        public string? Producer
         {
             get
             {
@@ -8872,7 +8876,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfLineProgramTable StmtList
+        public DwarfLineProgramTable? StmtList
         {
             get
             {
@@ -8916,7 +8920,7 @@ namespace LibObjectFile.Dwarf
             this.Tag = (DwarfTag)DwarfNative.DW_TAG_condition;
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -8928,7 +8932,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -8960,7 +8964,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -8972,7 +8976,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -8984,7 +8988,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -9064,7 +9068,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string LinkageName
+        public string? LinkageName
         {
             get
             {
@@ -9076,7 +9080,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -9088,7 +9092,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -9112,7 +9116,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -9200,7 +9204,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfExpression DataLocation
+        public DwarfExpression? DataLocation
         {
             get
             {
@@ -9212,7 +9216,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -9224,7 +9228,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -9236,7 +9240,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -9280,7 +9284,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string LinkageName
+        public string? LinkageName
         {
             get
             {
@@ -9304,7 +9308,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -9316,7 +9320,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -9364,7 +9368,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -9480,7 +9484,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfExpression DataLocation
+        public DwarfExpression? DataLocation
         {
             get
             {
@@ -9516,7 +9520,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -9528,7 +9532,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -9540,7 +9544,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Signature
+        public DwarfDIE? Signature
         {
             get
             {
@@ -9552,7 +9556,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Specification
+        public DwarfDIE? Specification
         {
             get
             {
@@ -9576,7 +9580,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -9620,7 +9624,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -9632,7 +9636,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -9712,7 +9716,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfExpression DataLocation
+        public DwarfExpression? DataLocation
         {
             get
             {
@@ -9724,7 +9728,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -9736,7 +9740,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -9760,7 +9764,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -9816,7 +9820,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE DefaultValue
+        public DwarfDIE? DefaultValue
         {
             get
             {
@@ -9864,7 +9868,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -9876,7 +9880,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -9900,7 +9904,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -9932,7 +9936,7 @@ namespace LibObjectFile.Dwarf
             this.Tag = (DwarfTag)DwarfNative.DW_TAG_friend;
         }
         
-        public DwarfDIE Friend
+        public DwarfDIE? Friend
         {
             get
             {
@@ -10060,7 +10064,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfExpression DataLocation
+        public DwarfExpression? DataLocation
         {
             get
             {
@@ -10096,7 +10100,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -10108,7 +10112,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -10132,7 +10136,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -10176,7 +10180,7 @@ namespace LibObjectFile.Dwarf
             this.Tag = (DwarfTag)DwarfNative.DW_TAG_immutable_type;
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -10188,7 +10192,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -10200,7 +10204,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -10232,7 +10236,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Import
+        public DwarfDIE? Import
         {
             get
             {
@@ -10244,7 +10248,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -10256,7 +10260,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -10288,7 +10292,7 @@ namespace LibObjectFile.Dwarf
             this.Tag = (DwarfTag)DwarfNative.DW_TAG_imported_module;
         }
         
-        public DwarfDIE Import
+        public DwarfDIE? Import
         {
             get
             {
@@ -10320,7 +10324,7 @@ namespace LibObjectFile.Dwarf
             this.Tag = (DwarfTag)DwarfNative.DW_TAG_imported_unit;
         }
         
-        public DwarfDIE Import
+        public DwarfDIE? Import
         {
             get
             {
@@ -10364,7 +10368,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -10528,7 +10532,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public object Trampoline
+        public object? Trampoline
         {
             get
             {
@@ -10572,7 +10576,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -10584,7 +10588,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -10596,7 +10600,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Signature
+        public DwarfDIE? Signature
         {
             get
             {
@@ -10640,7 +10644,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -10652,7 +10656,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -10732,7 +10736,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -10744,7 +10748,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -10884,7 +10888,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -10896,7 +10900,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -10908,7 +10912,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -11000,7 +11004,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -11012,7 +11016,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -11024,7 +11028,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Priority
+        public DwarfDIE? Priority
         {
             get
             {
@@ -11060,7 +11064,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Specification
+        public DwarfDIE? Specification
         {
             get
             {
@@ -11116,7 +11120,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -11128,7 +11132,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -11160,7 +11164,7 @@ namespace LibObjectFile.Dwarf
             this.Tag = (DwarfTag)DwarfNative.DW_TAG_namelist_item;
         }
         
-        public DwarfDIE NamelistItem
+        public DwarfDIE? NamelistItem
         {
             get
             {
@@ -11192,7 +11196,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Extension
+        public DwarfDIE? Extension
         {
             get
             {
@@ -11204,7 +11208,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -11216,7 +11220,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -11260,7 +11264,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -11272,7 +11276,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -11284,7 +11288,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -11316,7 +11320,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE BaseTypes
+        public DwarfDIE? BaseTypes
         {
             get
             {
@@ -11328,7 +11332,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string CompDir
+        public string? CompDir
         {
             get
             {
@@ -11340,7 +11344,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string DwoName
+        public string? DwoName
         {
             get
             {
@@ -11436,7 +11440,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -11448,7 +11452,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -11460,7 +11464,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Producer
+        public string? Producer
         {
             get
             {
@@ -11508,7 +11512,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfLineProgramTable StmtList
+        public DwarfLineProgramTable? StmtList
         {
             get
             {
@@ -11600,7 +11604,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -11612,7 +11616,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -11624,7 +11628,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -11692,7 +11696,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE ContainingType
+        public DwarfDIE? ContainingType
         {
             get
             {
@@ -11704,7 +11708,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfExpression DataLocation
+        public DwarfExpression? DataLocation
         {
             get
             {
@@ -11728,7 +11732,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -11740,7 +11744,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -11752,7 +11756,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -11844,7 +11848,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -11856,7 +11860,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -11868,7 +11872,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -11900,7 +11904,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -11912,7 +11916,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -11924,7 +11928,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -11992,7 +11996,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -12004,7 +12008,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -12016,7 +12020,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -12108,7 +12112,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfExpression DataLocation
+        public DwarfExpression? DataLocation
         {
             get
             {
@@ -12132,7 +12136,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -12144,7 +12148,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -12168,7 +12172,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -12224,7 +12228,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -12236,7 +12240,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -12248,7 +12252,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -12280,7 +12284,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string CompDir
+        public string? CompDir
         {
             get
             {
@@ -12292,7 +12296,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string DwoName
+        public string? DwoName
         {
             get
             {
@@ -12352,7 +12356,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfLineProgramTable StmtList
+        public DwarfLineProgramTable? StmtList
         {
             get
             {
@@ -12468,7 +12472,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfExpression DataLocation
+        public DwarfExpression? DataLocation
         {
             get
             {
@@ -12492,7 +12496,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -12504,7 +12508,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -12668,7 +12672,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfExpression DataLocation
+        public DwarfExpression? DataLocation
         {
             get
             {
@@ -12704,7 +12708,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -12716,7 +12720,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -12728,7 +12732,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Signature
+        public DwarfDIE? Signature
         {
             get
             {
@@ -12740,7 +12744,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Specification
+        public DwarfDIE? Specification
         {
             get
             {
@@ -12964,7 +12968,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string LinkageName
+        public string? LinkageName
         {
             get
             {
@@ -13000,7 +13004,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -13012,7 +13016,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -13036,7 +13040,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE ObjectPointer
+        public DwarfDIE? ObjectPointer
         {
             get
             {
@@ -13144,7 +13148,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Specification
+        public DwarfDIE? Specification
         {
             get
             {
@@ -13180,7 +13184,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public object Trampoline
+        public object? Trampoline
         {
             get
             {
@@ -13192,7 +13196,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -13356,7 +13360,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfExpression DataLocation
+        public DwarfExpression? DataLocation
         {
             get
             {
@@ -13392,7 +13396,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -13404,7 +13408,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -13428,7 +13432,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -13532,7 +13536,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfExpression DataLocation
+        public DwarfExpression? DataLocation
         {
             get
             {
@@ -13556,7 +13560,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -13568,7 +13572,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -13628,7 +13632,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -13696,7 +13700,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfExpression DataLocation
+        public DwarfExpression? DataLocation
         {
             get
             {
@@ -13720,7 +13724,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -13732,7 +13736,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -13744,7 +13748,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Signature
+        public DwarfDIE? Signature
         {
             get
             {
@@ -13768,7 +13772,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -13800,7 +13804,7 @@ namespace LibObjectFile.Dwarf
             this.Tag = (DwarfTag)DwarfNative.DW_TAG_template_type_parameter;
         }
         
-        public DwarfDIE DefaultValue
+        public DwarfDIE? DefaultValue
         {
             get
             {
@@ -13812,7 +13816,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -13824,7 +13828,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -13836,7 +13840,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -13868,7 +13872,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE DefaultValue
+        public DwarfDIE? DefaultValue
         {
             get
             {
@@ -13880,7 +13884,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -13892,7 +13896,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -13904,7 +13908,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -13960,7 +13964,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfExpression DataLocation
+        public DwarfExpression? DataLocation
         {
             get
             {
@@ -13972,7 +13976,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -13984,7 +13988,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -13996,7 +14000,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -14132,7 +14136,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfExpression DataLocation
+        public DwarfExpression? DataLocation
         {
             get
             {
@@ -14156,7 +14160,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -14168,7 +14172,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -14192,7 +14196,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -14236,7 +14240,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfLineProgramTable StmtList
+        public DwarfLineProgramTable? StmtList
         {
             get
             {
@@ -14364,7 +14368,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfExpression DataLocation
+        public DwarfExpression? DataLocation
         {
             get
             {
@@ -14400,7 +14404,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -14412,7 +14416,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -14424,7 +14428,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Signature
+        public DwarfDIE? Signature
         {
             get
             {
@@ -14436,7 +14440,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Specification
+        public DwarfDIE? Specification
         {
             get
             {
@@ -14500,7 +14504,7 @@ namespace LibObjectFile.Dwarf
             this.Tag = (DwarfTag)DwarfNative.DW_TAG_unspecified_type;
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -14512,7 +14516,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -14628,7 +14632,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string LinkageName
+        public string? LinkageName
         {
             get
             {
@@ -14652,7 +14656,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -14664,7 +14668,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -14688,7 +14692,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Specification
+        public DwarfDIE? Specification
         {
             get
             {
@@ -14712,7 +14716,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -14824,7 +14828,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Discr
+        public DwarfDIE? Discr
         {
             get
             {
@@ -14836,7 +14840,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -14856,7 +14860,7 @@ namespace LibObjectFile.Dwarf
             this.Tag = (DwarfTag)DwarfNative.DW_TAG_volatile_type;
         }
         
-        public string Name
+        public string? Name
         {
             get
             {
@@ -14868,7 +14872,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public string Description
+        public string? Description
         {
             get
             {
@@ -14880,7 +14884,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {
@@ -15008,7 +15012,7 @@ namespace LibObjectFile.Dwarf
             }
         }
         
-        public DwarfDIE Type
+        public DwarfDIE? Type
         {
             get
             {

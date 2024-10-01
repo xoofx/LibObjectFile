@@ -2,13 +2,12 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
-namespace LibObjectFile.Elf
+namespace LibObjectFile.Elf;
+
+public abstract class ElfGnuNote : ElfNote
 {
-    public abstract class ElfGnuNote : ElfNote
+    public override string GetName()
     {
-        public override string GetName()
-        {
-            return "GNU";
-        }
+        return "GNU";
     }
 }

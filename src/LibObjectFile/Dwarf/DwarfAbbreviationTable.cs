@@ -1,86 +1,71 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using LibObjectFile.Collections;
 
-namespace LibObjectFile.Dwarf
+namespace LibObjectFile.Dwarf;
+
+public class DwarfAbbreviationTable : DwarfSection
 {
-    public class DwarfAbbreviationTable : DwarfSection
+    private readonly ObjectList<DwarfAbbreviation> _abbreviations;
+
+    public DwarfAbbreviationTable()
     {
-        private readonly List<DwarfAbbreviation> _abbreviations;
+        _abbreviations = new ObjectList<DwarfAbbreviation>(this);
+    }
 
-        public DwarfAbbreviationTable()
+    public ObjectList<DwarfAbbreviation> Abbreviations => _abbreviations;
+
+    internal void Reset()
+    {
+        foreach(var abbreviation in _abbreviations)
         {
-            _abbreviations = new List<DwarfAbbreviation>();
+            abbreviation.Reset();
+        }
+        _abbreviations.Clear();
+    }
+
+    protected override void UpdateLayoutCore(DwarfLayoutContext context)
+    {
+        ulong endOffset = Position;
+        foreach (var abbreviation in _abbreviations)
+        {
+            abbreviation.Position = endOffset;
+            abbreviation.UpdateLayout(context);
+            endOffset += abbreviation.Size;
         }
 
-        public IReadOnlyList<DwarfAbbreviation> Abbreviations => _abbreviations;
+        Size = endOffset - Position;
+    }
 
-        internal void AddAbbreviation(DwarfAbbreviation abbreviation)
+    public override void Read(DwarfReader reader)
+    {
+        var endOffset = reader.Position;
+        while (reader.Position < reader.Length)
         {
-            _abbreviations.Add(this, abbreviation);
-        }
-
-        internal void RemoveAbbreviation(DwarfAbbreviation abbreviation)
-        {
-            _abbreviations.Remove(this, abbreviation);
-        }
-
-        internal DwarfAbbreviation RemoveAbbreviationAt(int index)
-        {
-            return _abbreviations.RemoveAt(this, index);
-        }
-
-        internal void Reset()
-        {
-            foreach(var abbreviation in _abbreviations)
+            var abbreviation = new DwarfAbbreviation
             {
-                abbreviation.Reset();
-            }
-            _abbreviations.Clear();
+                Position = endOffset
+            };
+            abbreviation.Read(reader);
+            endOffset += abbreviation.Size;
+            _abbreviations.Add(abbreviation);
         }
-        
-        protected override void UpdateLayout(DwarfLayoutContext layoutContext)
+
+        Size = endOffset - Position;
+    }
+
+    public override void Write(DwarfWriter writer)
+    {
+        var startOffset = writer.Position;
+        foreach (var abbreviation in _abbreviations)
         {
-            ulong endOffset = Offset;
-            foreach (var abbreviation in _abbreviations)
-            {
-                abbreviation.Offset = endOffset;
-                abbreviation.UpdateLayoutInternal(layoutContext);
-                endOffset += abbreviation.Size;
-            }
-
-            Size = endOffset - Offset;
+            abbreviation.Write(writer);
         }
 
-        protected override void Read(DwarfReader reader)
-        {
-            var endOffset = reader.Offset;
-            while (reader.Offset < reader.Length)
-            {
-                var abbreviation = new DwarfAbbreviation
-                {
-                    Offset = endOffset
-                };
-                abbreviation.ReadInternal(reader);
-                endOffset += abbreviation.Size;
-                AddAbbreviation(abbreviation);
-            }
-
-            Size = endOffset - Offset;
-        }
-
-        protected override void Write(DwarfWriter writer)
-        {
-            var startOffset = writer.Offset;
-            foreach (var abbreviation in _abbreviations)
-            {
-                abbreviation.WriteInternal(writer);
-            }
-
-            Debug.Assert(writer.Offset - startOffset == Size);
-        }
+        Debug.Assert(writer.Position - startOffset == Size);
     }
 }

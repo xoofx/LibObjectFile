@@ -4,26 +4,25 @@
 
 using System.IO;
 
-namespace LibObjectFile.Dwarf
+namespace LibObjectFile.Dwarf;
+
+public abstract class DwarfReaderWriterContext
 {
-    public abstract class DwarfReaderWriterContext
-    {
-        public bool IsLittleEndian { get; set; }
+    public bool IsLittleEndian { get; set; }
 
-        public DwarfAddressSize AddressSize { get; set; }
+    public DwarfAddressSize AddressSize { get; set; }
         
-        public Stream DebugAbbrevStream { get; set; }
+    public Stream? DebugAbbrevStream { get; set; }
 
-        public Stream DebugStringStream { get; set; }
+    public Stream? DebugStringStream { get; set; }
 
-        public Stream DebugAddressRangeStream { get; set; }
+    public Stream? DebugAddressRangeStream { get; set; }
 
-        public Stream DebugLineStream { get; set; }
+    public Stream? DebugLineStream { get; set; }
 
-        public TextWriter DebugLinePrinter { get; set; }
+    public TextWriter? DebugLinePrinter { get; set; }
 
-        public Stream DebugInfoStream { get; set; }
+    public Stream? DebugInfoStream { get; set; }
 
-        public Stream DebugLocationStream { get; set; }
-    }
+    public Stream? DebugLocationStream { get; set; }
 }

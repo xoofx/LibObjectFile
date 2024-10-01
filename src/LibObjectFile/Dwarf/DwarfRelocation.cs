@@ -4,30 +4,29 @@
 
 using System.Diagnostics;
 
-namespace LibObjectFile.Dwarf
+namespace LibObjectFile.Dwarf;
+
+[DebuggerDisplay("{" + nameof(ToString) + "(),nq}")]
+public struct DwarfRelocation
 {
-    [DebuggerDisplay("{" + nameof(ToString) + "(),nq}")]
-    public struct DwarfRelocation
+    public DwarfRelocation(ulong offset, DwarfRelocationTarget target, DwarfAddressSize size, ulong addend)
     {
-        public DwarfRelocation(ulong offset, DwarfRelocationTarget target, DwarfAddressSize size, ulong addend)
-        {
-            Offset = offset;
-            Target = target;
-            Size = size;
-            Addend = addend;
-        }
+        Offset = offset;
+        Target = target;
+        Size = size;
+        Addend = addend;
+    }
 
-        public ulong Offset { get; set; }
+    public ulong Offset { get; set; }
 
-        public DwarfRelocationTarget Target { get; set; }
+    public DwarfRelocationTarget Target { get; set; }
 
-        public DwarfAddressSize Size { get; set; }
+    public DwarfAddressSize Size { get; set; }
 
-        public ulong Addend { get; set; }
+    public ulong Addend { get; set; }
 
-        public override string ToString()
-        {
-            return $"{nameof(Offset)}: {Offset}, {nameof(Target)}: {Target}, {nameof(Size)}: {Size}, {nameof(Addend)}: {Addend}";
-        }
+    public override string ToString()
+    {
+        return $"{nameof(Offset)}: {Offset}, {nameof(Target)}: {Target}, {nameof(Size)}: {Size}, {nameof(Addend)}: {Addend}";
     }
 }
