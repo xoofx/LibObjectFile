@@ -7,11 +7,12 @@ using LibObjectFile.Diagnostics;
 
 namespace LibObjectFile.PE;
 
-/// <summary>
-/// A Portable Executable file that can be read, modified and written.
-/// </summary>
 partial class PEFile
 {
+    /// <summary>
+    /// Relocates the PE file to a new image base.
+    /// </summary>
+    /// <param name="newImageBase">The new image base.</param>
     public void Relocate(ulong newImageBase)
     {
         var diagnostics = new DiagnosticBag();
@@ -22,6 +23,11 @@ partial class PEFile
         }
     }
 
+    /// <summary>
+    /// Relocates the PE file to a new image base.
+    /// </summary>
+    /// <param name="newImageBase">The new image base.</param>
+    /// <param name="diagnostics">The diagnostic bag to collect errors and warnings.</param>
     public void Relocate(ulong newImageBase, DiagnosticBag diagnostics)
     {
         if (IsPE32 && newImageBase > uint.MaxValue)
@@ -36,7 +42,7 @@ partial class PEFile
             // Nothing to do
             return;
         }
-        
+
         // If we don't have a base relocation directory, we can just update the ImageBase
         var baseRelocationDirectory = Directories.BaseRelocation;
         if (baseRelocationDirectory is null)
@@ -59,12 +65,13 @@ partial class PEFile
             var section = baseRelocationBlock.PageLink.Container;
             if (section is null)
             {
-                diagnostics.Error(DiagnosticId.PE_ERR_VerifyContextInvalidObject, $"The {nameof(PEBaseRelocationBlock.PageLink)} in the base relocation block {baseRelocationBlock} at index #{i} in the {nameof(PEBaseRelocationDirectory)} is null and missing a link to an actual section");
+                diagnostics.Error(DiagnosticId.PE_ERR_VerifyContextInvalidObject,
+                    $"The {nameof(PEBaseRelocationBlock.PageLink)} in the base relocation block {baseRelocationBlock} at index #{i} in the {nameof(PEBaseRelocationDirectory)} is null and missing a link to an actual section");
                 return;
             }
 
             var pageBaseRva = baseRelocationBlock.PageLink.RVA();
-            
+
             var relocations = CollectionsMarshal.AsSpan(baseRelocationBlock.Relocations);
             try
             {
@@ -77,11 +84,13 @@ partial class PEFile
                     {
                         if (sectionData is null)
                         {
-                            diagnostics.Error(DiagnosticId.PE_ERR_BaseRelocationInvalid, $"Unable to find the section data for the rva {rva} in the base relocation block {baseRelocationBlock} at index #{i} in the {nameof(PEBaseRelocationDirectory)}");
+                            diagnostics.Error(DiagnosticId.PE_ERR_BaseRelocationInvalid,
+                                $"Unable to find the section data for the rva {rva} in the base relocation block {baseRelocationBlock} at index #{i} in the {nameof(PEBaseRelocationDirectory)}");
                             return;
                         }
 
-                        diagnostics.Warning(DiagnosticId.PE_WRN_BaseRelocationInVirtualMemory, $"Invalid RVA {rva} found in virtual memory from base relocation block {baseRelocationBlock} at index #{i} in the {nameof(PEBaseRelocationDirectory)}");
+                        diagnostics.Warning(DiagnosticId.PE_WRN_BaseRelocationInVirtualMemory,
+                            $"Invalid RVA {rva} found in virtual memory from base relocation block {baseRelocationBlock} at index #{i} in the {nameof(PEBaseRelocationDirectory)}");
                         continue;
                     }
 
@@ -102,6 +111,7 @@ partial class PEFile
                             {
                                 goto WarningOutOfBound;
                             }
+
                             break;
                         case PEBaseRelocationType.Low:
                             if (sectionData.CanReadWriteAt(offsetInSectionData, sizeof(ushort)))
@@ -112,6 +122,7 @@ partial class PEFile
                             {
                                 goto WarningOutOfBound;
                             }
+
                             break;
                         case PEBaseRelocationType.HighLow:
                             if (sectionData.CanReadWriteAt(offsetInSectionData, sizeof(uint)))
@@ -122,6 +133,7 @@ partial class PEFile
                             {
                                 goto WarningOutOfBound;
                             }
+
                             break;
                         case PEBaseRelocationType.HighAdj:
 
@@ -142,6 +154,7 @@ partial class PEFile
                             {
                                 goto WarningOutOfBound;
                             }
+
                             break;
                         case PEBaseRelocationType.Dir64:
                             if (sectionData.CanReadWriteAt(offsetInSectionData, sizeof(ulong)))
@@ -152,6 +165,7 @@ partial class PEFile
                             {
                                 goto WarningOutOfBound;
                             }
+
                             break;
                         default:
                             diagnostics.Error(DiagnosticId.PE_ERR_BaseRelocationInvalid, $"Unsupported relocation type {relocation.Type} #{j} in {nameof(PEBaseRelocationBlock)} {baseRelocationBlock}.");
@@ -160,7 +174,8 @@ partial class PEFile
 
                     continue;
                     WarningOutOfBound:
-                    diagnostics.Warning(DiagnosticId.PE_WRN_BaseRelocationInVirtualMemory, $"Cannot process base relocation block {baseRelocationBlock} at index #{i} in the {nameof(PEBaseRelocationDirectory)}. The linked address is out of bound.");
+                    diagnostics.Warning(DiagnosticId.PE_WRN_BaseRelocationInVirtualMemory,
+                        $"Cannot process base relocation block {baseRelocationBlock} at index #{i} in the {nameof(PEBaseRelocationDirectory)}. The linked address is out of bound.");
                     continue;
 
                 }
@@ -174,5 +189,4 @@ partial class PEFile
 
         OptionalHeader.ImageBase = newImageBase;
     }
-    
 }
