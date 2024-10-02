@@ -112,4 +112,6 @@ public class PEStreamSectionData : PESectionData
     public override uint GetRequiredPositionAlignment(PEFile file) => _requiredPositionAlignment;
 
     public override uint GetRequiredSizeAlignment(PEFile file) => _requiredSizeAlignment;
+
+    public override bool CanReadWriteAt(uint offset, uint size) => offset + size <= (uint)Stream.Length;
 }

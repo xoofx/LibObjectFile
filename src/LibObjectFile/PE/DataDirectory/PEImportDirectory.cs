@@ -70,22 +70,21 @@ public sealed class PEImportDirectory : PEDataDirectory
 
             // Calculate its position within the original stream
             var importLookupTablePositionInFile = section.Position + rawEntry.ImportLookupTableRVA - section.RVA;
-            
+
+            PEImportAddressTable addressTable = reader.File.IsPE32 ? new PEImportAddressTable32() : new PEImportAddressTable64();
+            addressTable.Position = importLookupAddressTablePositionInFile;
+            PEImportLookupTable lookupTable = reader.File.IsPE32 ? new PEImportLookupTable32() : new PEImportLookupTable64();
+            lookupTable.Position = importLookupTablePositionInFile;
+
             // Store a fake entry for post-processing section data to allow to recreate PEImportLookupTable from existing PESectionStreamData
             _entries.Add(
                 new PEImportDirectoryEntry(
                     // Name
                     new(PEStreamSectionData.Empty, (RVO)(uint)rawEntry.NameRVA), // Store the RVA as a fake RVO until we bind it in the Bind phase
                     // ImportAddressTable
-                    new PEImportAddressTable()
-                    {
-                        Position = importLookupAddressTablePositionInFile
-                    },
+                    addressTable,
                     // ImportLookupTable
-                    new PEImportLookupTable()
-                    {
-                        Position = importLookupTablePositionInFile
-                    }
+                    lookupTable
                 )
                 {
                     TimeDateStamp = rawEntry.TimeDateStamp,
@@ -171,8 +170,8 @@ public sealed class PEImportDirectory : PEDataDirectory
 
         foreach (var entry in Entries)
         {
-            entry.ImportAddressTable.FunctionTable.Bind(reader, true);
-            entry.ImportLookupTable.FunctionTable.Bind(reader, false);
+            entry.ImportAddressTable.Bind(reader, true);
+            entry.ImportLookupTable.Bind(reader, false);
         }
     }
 

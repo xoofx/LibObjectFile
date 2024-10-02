@@ -30,7 +30,7 @@ public sealed class PEBaseRelocationBlock : PESectionData
     /// <summary>
     /// Gets or sets the linked <see cref="PESection"/> and its virtual offset within it.
     /// </summary>
-    public PESectionLink SectionLink { get; set; }
+    public PESectionLink PageLink { get; set; }
     
     /// <summary>
     /// Gets the list of relocations for this block.
@@ -55,7 +55,7 @@ public sealed class PEBaseRelocationBlock : PESectionData
     /// </summary>
     /// <param name="relocation">The relocation.</param>
     /// <returns>The RVA of the relocation.</returns>
-    public RVA GetRVA(PEBaseRelocation relocation) => SectionLink.RVA() + relocation.OffsetInBlock;
+    public RVA GetRVA(PEBaseRelocation relocation) => PageLink.RVA() + relocation.OffsetInPage;
 
     /// <summary>
     /// Reads the address from the section data.
@@ -70,7 +70,7 @@ public sealed class PEBaseRelocationBlock : PESectionData
             throw new InvalidOperationException($"The base relocation type {relocation.Type} not supported. Only Dir64 is supported for this method.");
         }
 
-        var vaOfReloc = SectionLink.RVA() + relocation.OffsetInBlock;
+        var vaOfReloc = PageLink.RVA() + relocation.OffsetInPage;
 
         if (!file.TryFindByRVA(vaOfReloc, out var container))
         {
@@ -125,7 +125,7 @@ public sealed class PEBaseRelocationBlock : PESectionData
         }
 
 
-        SectionLink = new PESectionLink(section, (uint)(block.PageRVA - section.RVA));
+        PageLink = new PESectionLink(section, (uint)(block.PageRVA - section.RVA));
 
         var sizeOfRelocations = block.SizeOfBlock - sizeof(ImageBaseRelocation);
         
@@ -156,7 +156,7 @@ public sealed class PEBaseRelocationBlock : PESectionData
     {
         var block = new ImageBaseRelocation
         {
-            PageRVA = SectionLink.RVA(),
+            PageRVA = PageLink.RVA(),
             SizeOfBlock = (uint)Size
         };
 
@@ -174,7 +174,7 @@ public sealed class PEBaseRelocationBlock : PESectionData
 
     public override void Verify(PEVerifyContext context)
     {
-        context.VerifyObject(SectionLink.Container, this, nameof(SectionLink), false);
+        context.VerifyObject(PageLink.Container, this, nameof(PageLink), false);
     }
 
     protected override bool PrintMembers(StringBuilder builder)
@@ -184,7 +184,7 @@ public sealed class PEBaseRelocationBlock : PESectionData
             builder.Append(", ");
         }
 
-        builder.Append($"Section = {SectionLink.Container?.Name}, Block RVA = {SectionLink.RVA()}, Relocations[{Relocations.Count}]");
+        builder.Append($"Section = {PageLink.Container?.Name}, Block RVA = {PageLink.RVA()}, Relocations[{Relocations.Count}]");
         return true;
     }
 

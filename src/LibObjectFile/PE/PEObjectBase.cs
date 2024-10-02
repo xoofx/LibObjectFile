@@ -28,16 +28,17 @@ public abstract class PEObjectBase : ObjectFileElement<PELayoutContext, PEVerify
     /// </summary>
     public abstract bool HasChildren { get; }
 
+    public virtual bool CanReadWriteAt(uint offset, uint size) => true;
+
     public virtual int ReadAt(uint offset, Span<byte> destination)
     {
-        throw new NotSupportedException($"The read operation is not supported for {this.GetType().FullName}");
+        throw new BaseRelocationNotSupportedException($"The read operation is not supported for {this.GetType().FullName}");
     }
 
     public virtual void WriteAt(uint offset, ReadOnlySpan<byte> source)
     {
-        throw new NotSupportedException($"The write operation is not supported for {this.GetType().FullName}");
+        throw new BaseRelocationNotSupportedException($"The write operation is not supported for {this.GetType().FullName}");
     }
-
 
     public bool TryFindByPosition(uint position, [NotNullWhen(true)] out PEObjectBase? result)
     {
@@ -77,4 +78,6 @@ public abstract class PEObjectBase : ObjectFileElement<PELayoutContext, PEVerify
     /// <returns>The required size alignment for this object.</returns>
     /// <remarks>By default, this method returns 1.</remarks>
     public virtual uint GetRequiredSizeAlignment(PEFile file) => 1;
+
+    internal sealed class BaseRelocationNotSupportedException(string message) : NotSupportedException(message);
 }

@@ -98,6 +98,7 @@ public abstract class PERawDataDirectory : PEDataDirectory
     /// <inheritdoc/>
     public override void WriteAt(uint offset, ReadOnlySpan<byte> source) => DataUtils.WriteAt(_rawData, offset, source);
 
+    public override bool CanReadWriteAt(uint offset, uint size) => offset + size <= RawDataSize;
 
     protected sealed override uint ComputeHeaderSize(PELayoutContext context)
         // Size if the first field of the Load Configuration Directory

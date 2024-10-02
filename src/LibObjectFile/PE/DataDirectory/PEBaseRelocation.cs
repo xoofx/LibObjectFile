@@ -43,7 +43,7 @@ public readonly struct PEBaseRelocation
     /// <summary>
     /// Gets the virtual offset of the base relocation relative to the offset of the associated <see cref="PEBaseRelocationBlock"/>.
     /// </summary>
-    public ushort OffsetInBlock => (ushort)(_value & VirtualOffsetMask);
+    public ushort OffsetInPage => (ushort)(_value & VirtualOffsetMask);
 
-    public override string ToString() => Type == PEBaseRelocationType.Absolute ? $"{Type} Zero Padding" : $"{Type} OffsetInBlock = 0x{OffsetInBlock:X}";
+    public override string ToString() => Type == PEBaseRelocationType.Absolute ? $"{Type} Zero Padding" : $"{Type} OffsetInBlock = 0x{OffsetInPage:X}";
 }

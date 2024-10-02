@@ -71,16 +71,16 @@ public sealed class PEDelayImportDirectory : PEDataDirectory
             PEBoundImportAddressTable delayImportAddressTable = is32Bits ? new PEBoundImportAddressTable32() : new PEBoundImportAddressTable64();
             delayImportAddressTable.Position = (uint)importDelayLoadImportAddressTablePositionInFile;
 
+            PEImportLookupTable lookupTable = is32Bits ? new PEImportLookupTable32() : new PEImportLookupTable64();
+            lookupTable.Position = (uint)importDelayLoadImportNameTablePositionInFile;
+
             Entries.Add(
 
                 new PEDelayImportDirectoryEntry(
                     new PEAsciiStringLink(null, (RVO)(uint)rawEntry.NameRVA),
                     new PEModuleHandleLink(null, (RVO)(uint)rawEntry.ModuleHandleRVA),
                     delayImportAddressTable,
-                    new PEImportLookupTable()
-                    {
-                        Position = (uint)importDelayLoadImportNameTablePositionInFile,
-                    }
+                    lookupTable
                     )
                 {
                     Attributes = rawEntry.Attributes,
@@ -145,7 +145,7 @@ public sealed class PEDelayImportDirectory : PEDataDirectory
 
             entry.ModuleHandle = new PEModuleHandleLink(moduleSection, rva - moduleSection.RVA);
             
-            entry.DelayImportNameTable.FunctionTable.Bind(reader, false);
+            entry.DelayImportNameTable.Bind(reader, false);
 
 
             if (entry.BoundImportAddressTableLink.RVO != 0)

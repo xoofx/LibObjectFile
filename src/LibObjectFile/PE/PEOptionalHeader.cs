@@ -167,6 +167,7 @@ public sealed class PEOptionalHeader
     public ulong ImageBase
     {
         get => OptionalHeaderBase64.ImageBase;
+        internal set => OptionalHeaderBase64.ImageBase = value;
     }
 
     /// <summary>

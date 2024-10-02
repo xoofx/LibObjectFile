@@ -4,9 +4,4 @@
 
 namespace LibObjectFile.PE;
 
-public abstract class PEImportAddressTable : PEImportFunctionTable
-{
-    private protected PEImportAddressTable(bool is32Bit) : base(is32Bit)
-    {
-    }
-}
+public sealed class PEImportLookupTable32() : PEImportLookupTable(true);

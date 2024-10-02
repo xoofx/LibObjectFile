@@ -251,9 +251,6 @@ public static class PEPrinter
             case PEBoundImportAddressTable64 peBoundImportAddressTable64:
                 Print(peBoundImportAddressTable64, ref writer);
                 break;
-            case PEDelayImportAddressTable peDelayImportAddressTable:
-                Print(peDelayImportAddressTable, ref writer);
-                break;
             case PEExportAddressTable peExportAddressTable:
                 Print(peExportAddressTable, ref writer);
                 break;
@@ -263,11 +260,8 @@ public static class PEPrinter
             case PEExportOrdinalTable peExportOrdinalTable:
                 Print(peExportOrdinalTable, ref writer);
                 break;
-            case PEImportAddressTable peImportAddressTable:
-                Print(peImportAddressTable, ref writer);
-                break;
-            case PEImportLookupTable peImportLookupTable:
-                Print(peImportLookupTable, ref writer);
+            case PEImportFunctionTable peImportFunctionTable:
+                Print(peImportFunctionTable, ref writer);
                 break;
             case PEStreamSectionData peStreamSectionData:
                 Print(peStreamSectionData, ref writer);
@@ -312,7 +306,7 @@ public static class PEPrinter
 
     private static void Print(PEBaseRelocationBlock block, ref TextWriterIndenter writer)
     {
-        var pageRVA = block.SectionLink.RVA();
+        var pageRVA = block.PageLink.RVA();
         writer.WriteLine($"Block {pageRVA} Relocations[{block.Relocations.Count}]");
 
         var peFile = block.GetPEFile()!;
@@ -325,7 +319,7 @@ public static class PEPrinter
             var offsetInPage = relocRVA - pageRVA;
 
 
-            var section = block.SectionLink.Container!;
+            var section = block.PageLink.Container!;
             section.TryFindSectionDataByRVA(relocRVA, out var sectionData);
             
 
@@ -675,23 +669,7 @@ public static class PEPrinter
         }
     }
 
-    private static void Print(PEImportAddressTable data, ref TextWriterIndenter writer)
-    {
-        for (var i = 0; i < data.Entries.Count; i++)
-        {
-            var entry = data.Entries[i];
-            if (entry.IsImportByOrdinal)
-            {
-                writer.WriteLine($"[{i}] Ordinal = {entry.Ordinal}");
-            }
-            else
-            {
-                writer.WriteLine($"[{i}] {entry.HintName.Resolve()} ({entry.HintName})");
-            }
-        }
-    }
-
-    private static void Print(PEImportLookupTable data, ref TextWriterIndenter writer)
+    private static void Print(PEImportFunctionTable data, ref TextWriterIndenter writer)
     {
         for (var i = 0; i < data.Entries.Count; i++)
         {

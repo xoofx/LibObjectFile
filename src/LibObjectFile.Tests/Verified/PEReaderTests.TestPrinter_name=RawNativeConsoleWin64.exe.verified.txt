@@ -96,7 +96,7 @@ Sections
     [01]   .rdata PESection                        Position = 0x00000600, Size = 0x00000200, RVA = 0x00002000, VirtualSize = 0x0000019C, Characteristics = 0x40000040 (ContainsInitializedData, MemRead)
     
         [00] PEImportAddressTableDirectory    Position = 0x00000600, Size = 0x00000010, RVA = 0x00002000, VirtualSize = 0x00000010
-            [00] PEImportAddressTable             Position = 0x00000600, Size = 0x00000010, RVA = 0x00002000, VirtualSize = 0x00000010
+            [00] PEImportAddressTable64           Position = 0x00000600, Size = 0x00000010, RVA = 0x00002000, VirtualSize = 0x00000010
                 [0] PEImportHintName { Hint = 376, Name = ExitProcess } (RVA = 0x2180, PEStreamSectionData { RVA = 0x2180, VirtualSize = 0x1C, Position = 0x780, Size = 0x1C }, Offset = 0x0)
             
         
@@ -112,13 +112,13 @@ Sections
         
         [05] PEImportDirectory                Position = 0x00000744, Size = 0x00000028, RVA = 0x00002144, VirtualSize = 0x00000028
             [0] ImportDllNameLink = KERNEL32.dll (RVA = 0x218E, PEStreamSectionData { RVA = 0x2180, VirtualSize = 0x1C, Position = 0x780, Size = 0x1C }, Offset = 0xE)
-            [0] ImportAddressTable = RVA = 0x00002000 (PEImportAddressTable[0] -> PEImportAddressTableDirectory[0] -> .rdata)
-            [0] ImportLookupTable = RVA = 0x00002170 (PEImportLookupTable[7] -> .rdata)
+            [0] ImportAddressTable = RVA = 0x00002000 (PEImportAddressTable64[0] -> PEImportAddressTableDirectory[0] -> .rdata)
+            [0] ImportLookupTable = RVA = 0x00002170 (PEImportLookupTable64[7] -> .rdata)
             
         
         [06] PEStreamSectionData              Position = 0x0000076C, Size = 0x00000004, RVA = 0x0000216C, VirtualSize = 0x00000004
         
-        [07] PEImportLookupTable              Position = 0x00000770, Size = 0x00000010, RVA = 0x00002170, VirtualSize = 0x00000010
+        [07] PEImportLookupTable64            Position = 0x00000770, Size = 0x00000010, RVA = 0x00002170, VirtualSize = 0x00000010
             [0] PEImportHintName { Hint = 376, Name = ExitProcess } (RVA = 0x2180, PEStreamSectionData { RVA = 0x2180, VirtualSize = 0x1C, Position = 0x780, Size = 0x1C }, Offset = 0x0)
         
         [08] PEStreamSectionData              Position = 0x00000780, Size = 0x0000001C, RVA = 0x00002180, VirtualSize = 0x0000001C

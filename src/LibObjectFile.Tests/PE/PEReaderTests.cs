@@ -109,7 +109,7 @@ public partial class PEReaderTests
         var exitProcessFunction = streamData.WriteHintName(new(0x178, "ExitProcess"));
 
         // PEImportAddressTableDirectory comes first, it is referenced by the RIP + 0xFF1, first address being ExitProcess
-        var peImportAddressTable = new PEImportAddressTable()
+        var peImportAddressTable = new PEImportAddressTable64()
         {
             exitProcessFunction
         };
@@ -118,7 +118,7 @@ public partial class PEReaderTests
             peImportAddressTable
         };
 
-        var peImportLookupTable = new PEImportLookupTable()
+        var peImportLookupTable = new PEImportLookupTable64()
         {
             exitProcessFunction
         };
@@ -228,6 +228,11 @@ public partial class PEReaderTests
 
             ByteArrayAssert.AreEqual(inputBuffer, outputBuffer, $"Invalid roundtrip for `{sourceFile}`");
         }
+
+        // Try to relocate the image
+        var relocationDiagnostics = new DiagnosticBag();
+        peImage.Relocate(0x4000, relocationDiagnostics);
+        Assert.IsFalse(relocationDiagnostics.HasErrors, $"Relocation failed - {relocationDiagnostics}");
     }
 
     public static IEnumerable<object[]> GetWindowsExeAndDlls()
