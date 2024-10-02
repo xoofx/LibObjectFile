@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -53,7 +53,7 @@ internal struct ElfFilePartList
     public void CreateParts(ulong startOffset, ulong endOffset)
     {
         var offset = startOffset;
-        for (int i = 0; i < _parts.Count && offset < endOffset; i++)
+        for (int i = 0; i < _parts.Count && offset <= endOffset; i++)
         {
             var part = _parts[i];
             if (offset < part.StartOffset)
