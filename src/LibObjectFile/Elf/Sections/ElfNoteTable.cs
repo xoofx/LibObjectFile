@@ -25,19 +25,6 @@ public sealed class ElfNoteTable : ElfSection
     /// Gets a list of <see cref="ElfNote"/> entries.
     /// </summary>
     public List<ElfNote> Entries { get; }
-        
-    public override ElfSectionType Type
-    {
-        get => base.Type;
-        set
-        {
-            if (value != ElfSectionType.Note)
-            {
-                throw new ArgumentException($"Invalid type `{Type}` of the section [{Index}] `{nameof(ElfNoteTable)}` while `{ElfSectionType.Note}` is expected");
-            }
-            base.Type = value;
-        }
-    }
 
     protected override unsafe void UpdateLayoutCore(ElfVisitorContext context)
     {
@@ -60,6 +47,7 @@ public sealed class ElfNoteTable : ElfSection
 
     public override unsafe void Read(ElfReader reader)
     {
+        reader.Position = Position;
         var sizeToRead = (long)base.Size;
 
         var entrySize = (long)sizeof(ElfNative.Elf32_Nhdr);

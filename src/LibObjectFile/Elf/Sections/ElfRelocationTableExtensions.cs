@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -19,9 +19,9 @@ public static class ElfRelocationTableExtensions
     public static void Relocate(this ElfRelocationTable relocTable, in ElfRelocationContext context)
     {
         var relocTarget = relocTable.Info.Section;
-        if (!(relocTarget is ElfBinarySection relocTargetBinarySection))
+        if (!(relocTarget is ElfStreamSection relocTargetBinarySection))
         {
-            throw new InvalidOperationException($"Invalid ElfRelocationTable.Info section. Can only relocate a section that inherits from {nameof(ElfBinarySection)}.");
+            throw new InvalidOperationException($"Invalid ElfRelocationTable.Info section. Can only relocate a section that inherits from {nameof(ElfStreamSection)}.");
         }
 
         Relocate(relocTable, relocTargetBinarySection.Stream!, context);

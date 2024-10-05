@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -13,6 +13,11 @@ namespace LibObjectFile.Elf;
 /// </summary>
 public sealed class ElfSegment : ElfObject
 {
+    public ElfSegment()
+    {
+        AdditionalData = [];
+    }
+
     public ElfOffsetCalculationMode OffsetCalculationMode { get; set; }
         
     /// <summary>
@@ -22,7 +27,7 @@ public sealed class ElfSegment : ElfObject
 
     /// <summary>
     /// Gets or sets the range of section this segment applies to.
-    /// It can applies to <see cref="ElfShadowSection"/>.
+    /// It can applies to <see cref="ElfContentData"/>.
     /// </summary>
     public ElfSegmentRange Range { get; set; }
 
@@ -51,6 +56,11 @@ public sealed class ElfSegment : ElfObject
     /// </summary>
     public ulong Alignment { get; set; }
 
+    /// <summary>
+    /// Gets or sets the additional data stored in the header.
+    /// </summary>
+    public byte[] AdditionalData { get; set; }
+
     protected override void UpdateLayoutCore(ElfVisitorContext context)
     {
         var diagnostics = context.Diagnostics;
@@ -77,12 +87,12 @@ public sealed class ElfSegment : ElfObject
 
             if (Range.BeginSection?.Parent == null)
             {
-                diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeBeginSectionParent, $"Invalid null parent {nameof(Range)}.{nameof(Range.BeginSection)} in {this}. The section must be attached to the same {nameof(ElfObjectFile)} than this instance");
+                diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeBeginSectionParent, $"Invalid null parent {nameof(Range)}.{nameof(Range.BeginSection)} in {this}. The section must be attached to the same {nameof(ElfFile)} than this instance");
             }
 
             if (Range.EndSection?.Parent == null)
             {
-                diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeEndSectionParent, $"Invalid null parent {nameof(Range)}.{nameof(Range.EndSection)} in {this}. The section must be attached to the same {nameof(ElfObjectFile)} than this instance");
+                diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeEndSectionParent, $"Invalid null parent {nameof(Range)}.{nameof(Range.EndSection)} in {this}. The section must be attached to the same {nameof(ElfFile)} than this instance");
             }
 
             if (Type == ElfSegmentTypeCore.Load)
@@ -107,7 +117,7 @@ public sealed class ElfSegment : ElfObject
                 var range = Range;
                 if (range.BeginSection is null)
                 {
-                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeBeginSectionParent, $"Invalid null {nameof(Range)}.{nameof(Range.BeginSection)} in {this}. The section must be attached to the same {nameof(ElfObjectFile)} than this instance");
+                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeBeginSectionParent, $"Invalid null {nameof(Range)}.{nameof(Range.BeginSection)} in {this}. The section must be attached to the same {nameof(ElfFile)} than this instance");
                 }
                 else if (range.BeginOffset >= range.BeginSection.Size)
                 {
@@ -116,7 +126,7 @@ public sealed class ElfSegment : ElfObject
 
                 if (range.EndSection is null)
                 {
-                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeEndSectionParent, $"Invalid null {nameof(Range)}.{nameof(Range.EndSection)} in {this}. The section must be attached to the same {nameof(ElfObjectFile)} than this instance");
+                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeEndSectionParent, $"Invalid null {nameof(Range)}.{nameof(Range.EndSection)} in {this}. The section must be attached to the same {nameof(ElfFile)} than this instance");
                 }
                 else if ((Range.EndOffset >= 0 && (ulong)Range.EndOffset >= range.EndSection.Size))
                 {

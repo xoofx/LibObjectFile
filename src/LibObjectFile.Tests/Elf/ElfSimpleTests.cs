@@ -3,6 +3,7 @@
 // See the license.txt file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using LibObjectFile.Diagnostics;
@@ -13,16 +14,38 @@ namespace LibObjectFile.Tests.Elf;
 [TestClass]
 public class ElfSimpleTests : ElfTestBase
 {
+    [DataTestMethod]
+    [DynamicData(nameof(GetLinuxBins), DynamicDataSourceType.Method)]
+    public void TestLinuxFile(string file)
+    {
+        using var stream = File.OpenRead(file);
+        if (!ElfFile.IsElf(stream)) return;
+        var elf = ElfFile.Read(stream);
+        var writer = new StringWriter();
+        writer.WriteLine("---------------------------------------------------------------------------------------");
+        writer.WriteLine($"{file}");
+        elf.Print(writer);
+        writer.WriteLine();
+    }
+
+    public static IEnumerable<object[]> GetLinuxBins()
+    {
+        foreach (var file in Directory.EnumerateFiles(@"C:\code\LibObjectFile\tmp\linux_bins"))
+        {
+            yield return new object[] { file };
+        }
+    }
+
     [TestMethod]
     public void TryReadThrows()
     {
         static void CheckInvalidLib(bool isReadOnly)
         { 
             using var stream = File.OpenRead("TestFiles/cmnlib.b00");
-            Assert.IsFalse(ElfObjectFile.TryRead(stream, out var elf, out var diagnostics, new ElfReaderOptions() { ReadOnly = isReadOnly }));
+            Assert.IsFalse(ElfFile.TryRead(stream, out var elf, out var diagnostics, new ElfReaderOptions() { ReadOnly = isReadOnly }));
             Assert.IsNotNull(elf);
             Assert.AreEqual(4, diagnostics.Messages.Count, "Invalid number of error messages found");
-            Assert.AreEqual(DiagnosticId.ELF_ERR_IncompleteProgramHeader32Size, diagnostics.Messages[0].Id);
+            Assert.AreEqual(DiagnosticId.ELF_ERR_IncompleteProgramHeaderSize, diagnostics.Messages[0].Id);
             for (int i = 1; i < diagnostics.Messages.Count; i++)
             {
                 Assert.AreEqual(DiagnosticId.CMN_ERR_UnexpectedEndOfFile, diagnostics.Messages[i].Id);
@@ -38,7 +61,7 @@ public class ElfSimpleTests : ElfTestBase
     {
         using var stream = File.OpenRead(typeof(ElfSimpleTests).Assembly.Location);
 
-        Assert.IsFalse(ElfObjectFile.TryRead(stream, out var elfObjectFile, out var diagnostics));
+        Assert.IsFalse(ElfFile.TryRead(stream, out var elfObjectFile, out var diagnostics));
         Assert.IsTrue(diagnostics.HasErrors);    
         Assert.AreEqual(1, diagnostics.Messages.Count);
         Assert.AreEqual(DiagnosticId.ELF_ERR_InvalidHeaderMagic, diagnostics.Messages[0].Id);
@@ -48,14 +71,14 @@ public class ElfSimpleTests : ElfTestBase
     [TestMethod]
     public void SimpleEmptyWithDefaultSections()
     {
-        var elf = new ElfObjectFile(ElfArch.X86_64);
+        var elf = new ElfFile(ElfArch.X86_64);
         AssertReadElf(elf, "empty_default.elf");
     }
 
     [TestMethod]
     public void SimpleEmpty()
     {
-        var elf = new ElfObjectFile(ElfArch.X86_64);
+        var elf = new ElfFile(ElfArch.X86_64);
         for (int i = elf.Sections.Count - 1; i >= 0; i--)
         {
             elf.RemoveSectionAt(i);
@@ -66,13 +89,13 @@ public class ElfSimpleTests : ElfTestBase
     [TestMethod]
     public void SimpleCodeSection()
     {
-        var elf = new ElfObjectFile(ElfArch.X86_64);
+        var elf = new ElfFile(ElfArch.X86_64);
 
         var codeStream = new MemoryStream();
         codeStream.Write(Encoding.UTF8.GetBytes("This is a text"));
         codeStream.Position = 0;
 
-        var codeSection = new ElfBinarySection(codeStream).ConfigureAs(ElfSectionSpecialType.Text);
+        var codeSection = new ElfStreamSection(codeStream).ConfigureAs(ElfSectionSpecialType.Text);
         elf.AddSection(codeSection);
         elf.AddSection(new ElfSectionHeaderStringTable());
 
@@ -82,17 +105,17 @@ public class ElfSimpleTests : ElfTestBase
     [TestMethod]
     public void TestBss()
     {
-        var elf = new ElfObjectFile(ElfArch.X86_64);
+        var elf = new ElfFile(ElfArch.X86_64);
 
         var stream = new MemoryStream();
         stream.Write(new byte[] { 1, 2, 3, 4 });
         stream.Position = 0;
-        var codeSection = new ElfBinarySection(stream).ConfigureAs(ElfSectionSpecialType.Text);
+        var codeSection = new ElfStreamSection(stream).ConfigureAs(ElfSectionSpecialType.Text);
         elf.AddSection(codeSection);
 
-        elf.AddSection(new ElfAlignedShadowSection(1024));
+        elf.AddSection(new ElfAlignedData(1024));
 
-        var bssSection = new ElfBinarySection().ConfigureAs(ElfSectionSpecialType.Bss);
+        var bssSection = new ElfStreamSection().ConfigureAs(ElfSectionSpecialType.Bss);
         elf.AddSection(bssSection);
 
         elf.AddSection(new ElfSectionHeaderStringTable());
@@ -109,13 +132,13 @@ public class ElfSimpleTests : ElfTestBase
     [TestMethod]
     public void SimpleCodeSectionAndSymbolSection()
     {
-        var elf = new ElfObjectFile(ElfArch.X86_64);
+        var elf = new ElfFile(ElfArch.X86_64);
 
         var codeStream = new MemoryStream();
         codeStream.Write(Encoding.UTF8.GetBytes("This is a text"));
         codeStream.Position = 0;
 
-        var codeSection = new ElfBinarySection(codeStream).ConfigureAs(ElfSectionSpecialType.Text);
+        var codeSection = new ElfStreamSection(codeStream).ConfigureAs(ElfSectionSpecialType.Text);
         elf.AddSection(codeSection);
 
         var stringSection = new ElfStringTable();
@@ -131,7 +154,7 @@ public class ElfSimpleTests : ElfTestBase
                 {
                     Name = "local_symbol",
                     Bind = ElfSymbolBind.Local,
-                    Section = codeSection,
+                    SectionLink = codeSection,
                     Size = 16,
                     Type = ElfSymbolType.Function,
                     Visibility = ElfSymbolVisibility.Protected,
@@ -141,7 +164,7 @@ public class ElfSimpleTests : ElfTestBase
                 {
                     Name = "GlobalSymbol",
                     Bind = ElfSymbolBind.Global,
-                    Section = codeSection,
+                    SectionLink = codeSection,
                     Size = 4,
                     Type = ElfSymbolType.Function,
                     Value = 0x12345
@@ -157,13 +180,13 @@ public class ElfSimpleTests : ElfTestBase
     [TestMethod]
     public void SimpleProgramHeaderAndCodeSectionAndSymbolSection()
     {
-        var elf = new ElfObjectFile(ElfArch.X86_64);
+        var elf = new ElfFile(ElfArch.X86_64);
 
         var codeStream = new MemoryStream();
         codeStream.Write(new byte[4096]);
             
         var codeSection = elf.AddSection(
-            new ElfBinarySection(codeStream)
+            new ElfStreamSection(codeStream)
             {
                 VirtualAddress = 0x1000,
                 Alignment = 4096
@@ -174,7 +197,7 @@ public class ElfSimpleTests : ElfTestBase
         dataStream.Write(new byte[1024]);
 
         var dataSection = elf.AddSection(
-            new ElfBinarySection(dataStream)
+            new ElfStreamSection(dataStream)
             {
                 VirtualAddress = 0x2000,
                 Alignment = 4096
@@ -194,7 +217,7 @@ public class ElfSimpleTests : ElfTestBase
                     {
                         Name = "local_symbol",
                         Bind = ElfSymbolBind.Local,
-                        Section = codeSection,
+                        SectionLink = codeSection,
                         Size = 16,
                         Type = ElfSymbolType.Function,
                         Visibility = ElfSymbolVisibility.Protected,
@@ -204,7 +227,7 @@ public class ElfSimpleTests : ElfTestBase
                     {
                         Name = "GlobalSymbol",
                         Bind = ElfSymbolBind.Global,
-                        Section = codeSection,
+                        SectionLink = codeSection,
                         Size = 4,
                         Type = ElfSymbolType.Function,
                         Value = 0x12345
@@ -245,13 +268,13 @@ public class ElfSimpleTests : ElfTestBase
     [TestMethod]
     public void SimpleProgramHeaderAndCodeSectionAndSymbolSectionAndRelocation()
     {
-        var elf = new ElfObjectFile(ElfArch.X86_64);
+        var elf = new ElfFile(ElfArch.X86_64);
 
         var codeStream = new MemoryStream();
         codeStream.Write(new byte[4096]);
 
         var codeSection = elf.AddSection(
-            new ElfBinarySection(codeStream)
+            new ElfStreamSection(codeStream)
             {
                 VirtualAddress = 0x1000,
                 Alignment = 4096
@@ -263,7 +286,7 @@ public class ElfSimpleTests : ElfTestBase
         dataStream.Write(new byte[1024]);
 
         var dataSection = elf.AddSection(
-            new ElfBinarySection(dataStream)
+            new ElfStreamSection(dataStream)
             {
                 VirtualAddress = 0x2000,
                 Alignment = 4096
@@ -283,7 +306,7 @@ public class ElfSimpleTests : ElfTestBase
                     {
                         Name = "local_symbol",
                         Bind = ElfSymbolBind.Local,
-                        Section = codeSection,
+                        SectionLink = codeSection,
                         Size = 16,
                         Type = ElfSymbolType.Function,
                         Visibility = ElfSymbolVisibility.Protected,
@@ -293,7 +316,7 @@ public class ElfSimpleTests : ElfTestBase
                     {
                         Name = "GlobalSymbol",
                         Bind = ElfSymbolBind.Global,
-                        Section = codeSection,
+                        SectionLink = codeSection,
                         Size = 4,
                         Type = ElfSymbolType.Function,
                         Value = 0x12345
@@ -366,11 +389,11 @@ public class ElfSimpleTests : ElfTestBase
         var cppName = "helloworld";
         LinuxUtil.RunLinuxExe("gcc", $"{cppName}.cpp -o {cppName}");
 
-        ElfObjectFile elf;
+        ElfFile elf;
         using (var inStream = File.OpenRead(cppName))
         {
             Console.WriteLine($"ReadBack from {cppName}");
-            elf = ElfObjectFile.Read(inStream);
+            elf = ElfFile.Read(inStream);
             elf.Print(Console.Out);
         }
 
@@ -397,17 +420,17 @@ public class ElfSimpleTests : ElfTestBase
     [TestMethod]
     public void TestAlignedSection()
     {
-        var elf = new ElfObjectFile(ElfArch.X86_64);
+        var elf = new ElfFile(ElfArch.X86_64);
 
         // By default 0x1000
-        var alignedSection = new ElfAlignedShadowSection();
+        var alignedSection = new ElfAlignedData();
         elf.AddSection(alignedSection);
 
         var codeStream = new MemoryStream();
         codeStream.Write(Encoding.UTF8.GetBytes("This is a text"));
         codeStream.Position = 0;
 
-        var codeSection = new ElfBinarySection(codeStream).ConfigureAs(ElfSectionSpecialType.Text);
+        var codeSection = new ElfStreamSection(codeStream).ConfigureAs(ElfSectionSpecialType.Text);
         elf.AddSection(codeSection);
 
         elf.AddSection(new ElfSectionHeaderStringTable());
@@ -426,15 +449,15 @@ public class ElfSimpleTests : ElfTestBase
     [TestMethod]
     public void TestManySections()
     {
-        var elf = new ElfObjectFile(ElfArch.X86_64);
+        var elf = new ElfFile(ElfArch.X86_64);
         var stringTable = new ElfStringTable();
         var symbolTable = new ElfSymbolTable { Link = stringTable };
 
         for (int i = 0; i < ushort.MaxValue; i++)
         {
-            var section = new ElfBinarySection { Name = $".section{i}" };
+            var section = new ElfStreamSection { Name = $".section{i}" };
             elf.AddSection(section);
-            symbolTable.Entries.Add(new ElfSymbol { Type = ElfSymbolType.Section, Section = section });
+            symbolTable.Entries.Add(new ElfSymbol { Type = ElfSymbolType.Section, SectionLink = section });
         }
 
         elf.AddSection(stringTable);
@@ -459,7 +482,7 @@ public class ElfSimpleTests : ElfTestBase
 
         using (var inStream = File.OpenRead("manysections"))
         {
-            elf = ElfObjectFile.Read(inStream);
+            elf = ElfFile.Read(inStream);
         }
 
         Assert.AreEqual(visibleSectionCount, elf.VisibleSectionCount);
@@ -468,7 +491,7 @@ public class ElfSimpleTests : ElfTestBase
 
         for (int i = 0; i < ushort.MaxValue; i++)
         {
-            Assert.IsTrue(elf.Sections[i + 2] is ElfBinarySection);
+            Assert.IsTrue(elf.Sections[i + 2] is ElfStreamSection);
             Assert.AreEqual($".section{i}", elf.Sections[i + 2].Name.Value);
         }
 
@@ -476,17 +499,17 @@ public class ElfSimpleTests : ElfTestBase
         symbolTable = (ElfSymbolTable)elf.Sections[ushort.MaxValue + 3];
         for (int i = 0; i < ushort.MaxValue; i++)
         {
-            Assert.AreEqual($".section{i}", symbolTable.Entries[i + 1].Section.Section!.Name.Value);
+            Assert.AreEqual($".section{i}", symbolTable.Entries[i + 1].SectionLink.Section!.Name.Value);
         }
     }
 
     [TestMethod]
     public void TestReadLibStdc()
     {
-        ElfObjectFile elf;
+        ElfFile elf;
         {
             using var stream = File.OpenRead("libstdc++.so");
-            elf = ElfObjectFile.Read(stream);
+            elf = ElfFile.Read(stream);
         }
 
         var writer = new StringWriter();

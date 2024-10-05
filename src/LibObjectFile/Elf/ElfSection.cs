@@ -1,8 +1,7 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
-using System;
 using System.Diagnostics;
 using System.Text;
 using LibObjectFile.Diagnostics;
@@ -10,50 +9,22 @@ using LibObjectFile.Diagnostics;
 namespace LibObjectFile.Elf;
 
 /// <summary>
-/// Defines the base class for a section in an <see cref="ElfObjectFile"/>.
+/// Defines the base class for a section in an <see cref="ElfFile"/>.
 /// </summary>
 [DebuggerDisplay("{ToString(),nq}")]
-public abstract class ElfSection : ElfObject
+public abstract class ElfSection : ElfContent
 {
-    private ElfSectionType _type;
-
-    protected ElfSection() : this(ElfSectionType.Null)
-    {
-    }
-
     protected ElfSection(ElfSectionType sectionType)
     {
-        _type = sectionType;
+        Type = sectionType;
+        SectionIndex = -1;
+        AdditionalData = [];
     }
-
-    public virtual ElfSectionType Type
-    {
-        get => _type;
-        set
-        {
-            _type = value;
-        }
-    }
-
-    protected override void ValidateParent(ObjectElement parent)
-    {
-        if (!(parent is ElfObjectFile))
-        {
-            throw new ArgumentException($"Parent must inherit from type {nameof(ElfObjectFile)}");
-        }
-    }
-
 
     /// <summary>
-    /// Gets the containing <see cref="ElfObjectFile"/>. Might be null if this section or segment
-    /// does not belong to an existing <see cref="ElfObjectFile"/>.
+    /// Gets the type of this section
     /// </summary>
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    public new ElfObjectFile? Parent
-    {
-        get => (ElfObjectFile?)base.Parent;
-        internal set => base.Parent = value;
-    }
+    public ElfSectionType Type { get; }
 
     /// <summary>
     /// Gets or sets the <see cref="ElfSectionFlags"/> of this section.
@@ -71,11 +42,6 @@ public abstract class ElfSection : ElfObject
     public ulong VirtualAddress { get; set; }
 
     /// <summary>
-    /// Gets or sets the alignment requirement of this section.
-    /// </summary>
-    public ulong Alignment { get; set; }
-
-    /// <summary>
     /// Gets or sets the link element of this section.
     /// </summary>
     public ElfSectionLink Link { get; set; }
@@ -86,35 +52,35 @@ public abstract class ElfSection : ElfObject
     public ElfSectionLink Info { get; set; }
 
     /// <summary>
-    /// Gets the table entry size of this section.
+    /// Gets the index of the sections in <see cref="ElfFile.Sections"/>
     /// </summary>
-    public virtual ulong TableEntrySize => 0;
+    public int SectionIndex { get; internal set; }
 
     /// <summary>
-    /// Gets the index of the visible sections in <see cref="ElfObjectFile.Sections"/> (visible == not <see cref="ElfShadowSection"/>)
+    /// Gets or sets an order of this section in the header table.
     /// </summary>
-    public uint SectionIndex { get; internal set; }
+    /// <remarks>
+    /// If this index is changed, you need to call <see cref="ElfFile.UpdateLayout(LibObjectFile.Diagnostics.DiagnosticBag)"/> to update the layout of the file.
+    /// </remarks>
+    public uint SectionOrder { get; set; }
 
     /// <summary>
-    /// Gets or sets the ordering index used when writing back this section.
+    /// Gets the size of the table entry size of this section.
     /// </summary>
-    public uint StreamIndex { get; set; }
-
-    /// <summary>
-    /// Gets the size of the original table entry size of this section.
-    /// </summary>
-    public ulong OriginalTableEntrySize { get; internal set; }
-
-    /// <summary>
-    /// Gets a boolean indicating if this section is a <see cref="ElfShadowSection"/>.
-    /// </summary>
-    public bool IsShadow => this is ElfShadowSection;
+    /// <remarks>
+    /// If a section is changing its entry size, you need to call <see cref="ElfFile.UpdateLayout(LibObjectFile.Diagnostics.DiagnosticBag)"/> to update the layout of the file.
+    /// </remarks>
+    public ulong TableEntrySize { get; internal set; }
 
     /// <summary>
     /// Gets a boolean indicating if this section has some content (Size should be taken into account).
     /// </summary>
-    public bool HasContent => Type != ElfSectionType.NoBits && (Type != ElfSectionType.Null || this is ElfShadowSection);
+    public bool HasContent => Type != ElfSectionType.NoBits && (Type != ElfSectionType.Null || this is ElfStreamSection);
 
+    /// <summary>
+    /// Gets or sets the additional data associated with this section.
+    /// </summary>
+    public byte[] AdditionalData { get; set; }
 
     public override void Verify(ElfVisitorContext context)
     {
@@ -125,7 +91,7 @@ public abstract class ElfSection : ElfObject
         {
             if (Link.Section.Parent != this.Parent)
             {
-                diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSectionLinkParent, $"Invalid parent for {nameof(Link)}: `{Link}` used by section `{this}`. The {nameof(Link)}.{nameof(ElfSectionLink.Section)} must have the same parent {nameof(ElfObjectFile)} than this section");
+                diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSectionLinkParent, $"Invalid parent for {nameof(Link)}: `{Link}` used by section `{this}`. The {nameof(Link)}.{nameof(ElfSectionLink.Section)} must have the same parent {nameof(ElfFile)} than this section");
             }
         }
 
@@ -133,7 +99,7 @@ public abstract class ElfSection : ElfObject
         {
             if (Info.Section.Parent != this.Parent)
             {
-                diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSectionInfoParent, $"Invalid parent for {nameof(Info)}: `{Info}` used by section `{this}`. The {nameof(Info)}.{nameof(ElfSectionLink.Section)} must have the same parent {nameof(ElfObjectFile)} than this section");
+                diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSectionInfoParent, $"Invalid parent for {nameof(Info)}: `{Info}` used by section `{this}`. The {nameof(Info)}.{nameof(ElfSectionLink.Section)} must have the same parent {nameof(ElfFile)} than this section");
             }
         }
 
@@ -168,7 +134,12 @@ public abstract class ElfSection : ElfObject
         return true;
     }
 
-
+    public override void UpdateLayout(ElfVisitorContext context)
+    {
+        Name = context.ResolveName(Name);
+        base.UpdateLayout(context);
+    }
+    
     internal void BeforeWriteInternal(ElfWriter writer)
     {
         BeforeWrite(writer);

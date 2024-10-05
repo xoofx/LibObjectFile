@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -20,19 +20,6 @@ public sealed class ElfSymbolTableSectionHeaderIndices : ElfSection
     {
         Name = DefaultName;
         _entries = new List<uint>();
-    }
-
-    public override ElfSectionType Type
-    {
-        get => base.Type;
-        set
-        {
-            if (value != ElfSectionType.SymbolTableSectionHeaderIndices)
-            {
-                throw new ArgumentException($"Invalid type `{Type}` of the section [{Index}] `{nameof(ElfSymbolTableSectionHeaderIndices)}`. Only `{ElfSectionType.SymbolTableSectionHeaderIndices}` is valid");
-            }
-            base.Type = value;
-        }
     }
 
     public override unsafe ulong TableEntrySize => sizeof(uint);
@@ -72,11 +59,11 @@ public sealed class ElfSymbolTableSectionHeaderIndices : ElfSection
             var entry = _entries[i];
             if (entry != 0)
             {
-                var resolvedLink = reader.ResolveLink(new ElfSectionLink(entry), $"Invalid link section index {entry} for symbol table entry [{i}] from symbol table section [{this}]");
+                var resolvedLink = reader.ResolveLink(new ElfSectionLink((int)entry), $"Invalid link section index {entry} for symbol table entry [{i}] from symbol table section [{this}]");
 
                 // Update the link in symbol table
                 var symbolTableEntry = symbolTable.Entries[i];
-                symbolTableEntry.Section = resolvedLink;
+                symbolTableEntry.SectionLink = resolvedLink;
                 symbolTable.Entries[i] = symbolTableEntry;
             }
         }
@@ -102,7 +89,8 @@ public sealed class ElfSymbolTableSectionHeaderIndices : ElfSection
         {
             for (int i = 0; i < symbolTable.Entries.Count; i++)
             {
-                if (symbolTable.Entries[i].Section.Section is { SectionIndex: >= ElfNative.SHN_LORESERVE })
+                var section = symbolTable.Entries[i].SectionLink.Section;
+                if (section is { SectionIndex: >= (int)ElfNative.SHN_LORESERVE })
                 {
                     numberOfEntries = i + 1;
                 }
@@ -116,10 +104,10 @@ public sealed class ElfSymbolTableSectionHeaderIndices : ElfSection
         {
             for (int i = 0; i < numberOfEntries; i++)
             {
-                var section = symbolTable.Entries[i].Section.Section;
-                if (section is { SectionIndex: >= ElfNative.SHN_LORESERVE })
+                var section = symbolTable.Entries[i].SectionLink.Section;
+                if (section is { SectionIndex: >= (int)ElfNative.SHN_LORESERVE })
                 {
-                    _entries.Add(section.SectionIndex);
+                    _entries.Add((uint)section.SectionIndex);
                 }
                 else
                 {

@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -17,7 +17,11 @@ public sealed class ElfRelocationTable : ElfSection
     public const string DefaultName = ".rel";
     public const string DefaultNameWithAddends = ".rela";
 
-    public ElfRelocationTable() : base(ElfSectionType.RelocationAddends)
+    public ElfRelocationTable() : this(true)
+    {
+    }
+
+    public ElfRelocationTable(bool relocationWithAddends) : base(relocationWithAddends ? ElfSectionType.RelocationAddends : ElfSectionType.Relocation)
     {
         Name = DefaultNameWithAddends;
         _entries = new List<ElfRelocation>();
@@ -28,28 +32,11 @@ public sealed class ElfRelocationTable : ElfSection
     /// </summary>
     public List<ElfRelocation> Entries => _entries;
 
-    private static string GetDefaultName(ElfSectionType type)
-    {
-        return type == ElfSectionType.Relocation? DefaultName : DefaultNameWithAddends;
-    }
-
-    public override ElfSectionType Type
-    {
-        get => base.Type;
-        set
-        {
-            if (value != ElfSectionType.Relocation && value != ElfSectionType.RelocationAddends)
-            {
-                throw new ArgumentException($"Invalid type `{Type}` of the section [{Index}] `{nameof(ElfRelocationTable)}` while `{ElfSectionType.Relocation}` or `{ElfSectionType.RelocationAddends}` are expected");
-            }
-            base.Type = value;
-        }
-    }
-
     public bool IsRelocationWithAddends => this.Type == ElfSectionType.RelocationAddends;
 
     public override void Read(ElfReader reader)
     {
+        reader.Position = Position;
         if (Parent!.FileClass == ElfFileClass.Is32)
         {
             Read32(reader);
@@ -78,16 +65,17 @@ public sealed class ElfRelocationTable : ElfSection
 
     private void Read32(ElfReader reader)
     {
-        var numberOfEntries = base.Size / OriginalTableEntrySize;
+        var numberOfEntries = base.Size / base.TableEntrySize;
+        _entries.Capacity = (int)numberOfEntries;
         if (IsRelocationWithAddends)
         {
             for (ulong i = 0; i < numberOfEntries; i++)
             {
                 ElfNative.Elf32_Rela rel;
                 ulong streamOffset = (ulong)reader.Stream.Position;
-                if (!reader.TryReadData((int)OriginalTableEntrySize, out rel))
+                if (!reader.TryReadData((int)base.TableEntrySize, out rel))
                 {
-                    reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteRelocationAddendsEntry32Size, $"Unable to read entirely the relocation entry [{i}] from {Type} section [{Index}]. Not enough data (size: {OriginalTableEntrySize}) read at offset {streamOffset} from the stream");
+                    reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteRelocationAddendsEntry32Size, $"Unable to read entirely the relocation entry [{i}] from {Type} section [{Index}]. Not enough data (size: {base.TableEntrySize}) read at offset {streamOffset} from the stream");
                 }
 
                 var offset = reader.Decode(rel.r_offset);
@@ -106,9 +94,9 @@ public sealed class ElfRelocationTable : ElfSection
             {
                 ElfNative.Elf32_Rel rel;
                 ulong streamOffset = (ulong)reader.Stream.Position;
-                if (!reader.TryReadData((int)OriginalTableEntrySize, out rel))
+                if (!reader.TryReadData((int)base.TableEntrySize, out rel))
                 {
-                    reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteRelocationEntry32Size, $"Unable to read entirely the relocation entry [{i}] from {Type} section [{Index}]. Not enough data (size: {OriginalTableEntrySize}) read at offset {streamOffset} from the stream");
+                    reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteRelocationEntry32Size, $"Unable to read entirely the relocation entry [{i}] from {Type} section [{Index}]. Not enough data (size: {base.TableEntrySize}) read at offset {streamOffset} from the stream");
                 }
 
                 var offset = reader.Decode(rel.r_offset);
@@ -125,16 +113,16 @@ public sealed class ElfRelocationTable : ElfSection
 
     private void Read64(ElfReader reader)
     {
-        var numberOfEntries = base.Size / OriginalTableEntrySize;
+        var numberOfEntries = base.Size / base.TableEntrySize;
         if (IsRelocationWithAddends)
         {
             for (ulong i = 0; i < numberOfEntries; i++)
             {
                 ElfNative.Elf64_Rela rel;
                 ulong streamOffset = (ulong)reader.Stream.Position;
-                if (!reader.TryReadData((int)OriginalTableEntrySize, out rel))
+                if (!reader.TryReadData((int)base.TableEntrySize, out rel))
                 {
-                    reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteRelocationAddendsEntry64Size, $"Unable to read entirely the relocation entry [{i}] from {Type} section [{Index}]. Not enough data (size: {OriginalTableEntrySize}) read at offset {streamOffset} from the stream");
+                    reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteRelocationAddendsEntry64Size, $"Unable to read entirely the relocation entry [{i}] from {Type} section [{Index}]. Not enough data (size: {base.TableEntrySize}) read at offset {streamOffset} from the stream");
                 }
 
                 var offset = reader.Decode(rel.r_offset);
@@ -154,9 +142,9 @@ public sealed class ElfRelocationTable : ElfSection
             {
                 ElfNative.Elf64_Rel rel;
                 ulong streamOffset = (ulong)reader.Stream.Position;
-                if (!reader.TryReadData((int)OriginalTableEntrySize, out rel))
+                if (!reader.TryReadData((int)base.TableEntrySize, out rel))
                 {
-                    reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteRelocationEntry64Size, $"Unable to read entirely the relocation entry [{i}] from {Type} section [{Index}]. Not enough data (size: {OriginalTableEntrySize}) read at offset {streamOffset} from the stream");
+                    reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteRelocationEntry64Size, $"Unable to read entirely the relocation entry [{i}] from {Type} section [{Index}]. Not enough data (size: {base.TableEntrySize}) read at offset {streamOffset} from the stream");
                 }
 
                 var offset = reader.Decode(rel.r_offset);
@@ -240,10 +228,6 @@ public sealed class ElfRelocationTable : ElfSection
     protected override void AfterRead(ElfReader reader)
     {
         var name = Name.Value;
-        if (name == null)
-        {
-            return;
-        }
 
         var defaultName = GetDefaultName(Type);
 
@@ -274,7 +258,7 @@ public sealed class ElfRelocationTable : ElfSection
         //else 
         if (Info.Section != null && Info.Section.Parent != Parent)
         {
-            diagnostics.Error(DiagnosticId.ELF_ERR_InvalidRelocationInfoParent, $"Invalid parent for the {nameof(Info)} of the section [{Index}] `{nameof(ElfRelocationTable)}`. It must point to the same {nameof(ElfObjectFile)} parent instance than this section parent", this);
+            diagnostics.Error(DiagnosticId.ELF_ERR_InvalidRelocationInfoParent, $"Invalid parent for the {nameof(Info)} of the section [{Index}] `{nameof(ElfRelocationTable)}`. It must point to the same {nameof(ElfFile)} parent instance than this section parent", this);
         }
 
         var symbolTable = Link.Section as ElfSymbolTable;
@@ -307,5 +291,10 @@ public sealed class ElfRelocationTable : ElfSection
                 ? (ulong)Entries.Count * (IsRelocationWithAddends ? (ulong)sizeof(ElfNative.Elf32_Rela) : (ulong)sizeof(ElfNative.Elf32_Rel))
                 : (ulong)Entries.Count * (IsRelocationWithAddends ? (ulong)sizeof(ElfNative.Elf64_Rela) : (ulong)sizeof(ElfNative.Elf64_Rel));
 
+    }
+
+    private static string GetDefaultName(ElfSectionType type)
+    {
+        return type == ElfSectionType.Relocation ? DefaultName : DefaultNameWithAddends;
     }
 }

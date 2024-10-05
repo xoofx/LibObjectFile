@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -9,7 +9,7 @@ namespace LibObjectFile.Elf;
 /// <summary>
 /// A null section with the type <see cref="ElfSectionType.Null"/>.
 /// </summary>
-public sealed class ElfNullSection : ElfSection
+public sealed class ElfNullSection() : ElfSection(ElfSectionType.Null)
 {
     public override void Verify(ElfVisitorContext context)
     {

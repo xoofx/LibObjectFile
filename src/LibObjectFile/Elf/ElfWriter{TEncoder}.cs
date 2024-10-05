@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -10,7 +10,7 @@ namespace LibObjectFile.Elf;
 using static ElfNative;
 
 /// <summary>
-/// Internal implementation of <see cref="ElfWriter"/> to write to a stream an <see cref="ElfObjectFile"/> instance.
+/// Internal implementation of <see cref="ElfWriter"/> to write to a stream an <see cref="ElfFile"/> instance.
 /// </summary>
 /// <typeparam name="TEncoder">The encoder used for LSB/MSB conversion</typeparam>
 internal abstract class ElfWriter<TEncoder> : ElfWriter where TEncoder : struct, IElfEncoder 
@@ -18,7 +18,7 @@ internal abstract class ElfWriter<TEncoder> : ElfWriter where TEncoder : struct,
     private TEncoder _encoder;
     private ulong _startOfFile;
 
-    protected ElfWriter(ElfObjectFile objectFile, Stream stream) : base(objectFile, stream)
+    protected ElfWriter(ElfFile file, Stream stream) : base(file, stream)
     {
         _encoder = new TEncoder();
     }
@@ -31,11 +31,11 @@ internal abstract class ElfWriter<TEncoder> : ElfWriter where TEncoder : struct,
         WriteSections();
     }
 
-    private ElfObjectFile.ElfObjectLayout Layout => ObjectFile.Layout;
+    private ElfFile.ElfObjectLayout Layout => File.Layout;
 
     private void WriteHeader()
     {
-        if (ObjectFile.FileClass == ElfFileClass.Is32)
+        if (File.FileClass == ElfFileClass.Is32)
         {
             WriteSectionHeader32();
         }
@@ -138,25 +138,25 @@ internal abstract class ElfWriter<TEncoder> : ElfWriter where TEncoder : struct,
     private unsafe void WriteSectionHeader32()
     {
         var hdr = new Elf32_Ehdr();
-        ObjectFile.CopyIdentTo(new Span<byte>(hdr.e_ident, EI_NIDENT));
+        File.CopyIdentTo(new Span<byte>(hdr.e_ident, EI_NIDENT));
 
-        _encoder.Encode(out hdr.e_type, (ushort)ObjectFile.FileType);
-        _encoder.Encode(out hdr.e_machine, (ushort)ObjectFile.Arch.Value);
+        _encoder.Encode(out hdr.e_type, (ushort)File.FileType);
+        _encoder.Encode(out hdr.e_machine, (ushort)File.Arch.Value);
         _encoder.Encode(out hdr.e_version, EV_CURRENT);
-        _encoder.Encode(out hdr.e_entry, (uint)ObjectFile.EntryPointAddress);
+        _encoder.Encode(out hdr.e_entry, (uint)File.EntryPointAddress);
         _encoder.Encode(out hdr.e_ehsize, Layout.SizeOfElfHeader);
-        _encoder.Encode(out hdr.e_flags, (uint)ObjectFile.Flags);
+        _encoder.Encode(out hdr.e_flags, (uint)File.Flags);
 
         // program headers
         _encoder.Encode(out hdr.e_phoff, (uint)Layout.OffsetOfProgramHeaderTable);
         _encoder.Encode(out hdr.e_phentsize, Layout.SizeOfProgramHeaderEntry);
-        _encoder.Encode(out hdr.e_phnum, (ushort) ObjectFile.Segments.Count);
+        _encoder.Encode(out hdr.e_phnum, (ushort) File.Segments.Count);
 
         // entries for sections
         _encoder.Encode(out hdr.e_shoff, (uint)Layout.OffsetOfSectionHeaderTable);
         _encoder.Encode(out hdr.e_shentsize, Layout.SizeOfSectionHeaderEntry);
-        _encoder.Encode(out hdr.e_shnum, ObjectFile.VisibleSectionCount >= ElfNative.SHN_LORESERVE ? (ushort)0 : (ushort)ObjectFile.VisibleSectionCount);
-        uint shstrSectionIndex = ObjectFile.SectionHeaderStringTable?.SectionIndex ?? 0u;
+        _encoder.Encode(out hdr.e_shnum, File.VisibleSectionCount >= ElfNative.SHN_LORESERVE ? (ushort)0 : (ushort)File.VisibleSectionCount);
+        uint shstrSectionIndex = File.SectionHeaderStringTable?.SectionIndex ?? 0u;
         _encoder.Encode(out hdr.e_shstrndx, shstrSectionIndex >= ElfNative.SHN_LORESERVE ? (ushort)ElfNative.SHN_XINDEX : (ushort)shstrSectionIndex);
 
         Write(hdr);
@@ -165,25 +165,25 @@ internal abstract class ElfWriter<TEncoder> : ElfWriter where TEncoder : struct,
     private unsafe void WriteSectionHeader64()
     {
         var hdr = new Elf64_Ehdr();
-        ObjectFile.CopyIdentTo(new Span<byte>(hdr.e_ident, EI_NIDENT));
+        File.CopyIdentTo(new Span<byte>(hdr.e_ident, EI_NIDENT));
 
-        _encoder.Encode(out hdr.e_type, (ushort)ObjectFile.FileType);
-        _encoder.Encode(out hdr.e_machine, (ushort)ObjectFile.Arch.Value);
+        _encoder.Encode(out hdr.e_type, (ushort)File.FileType);
+        _encoder.Encode(out hdr.e_machine, (ushort)File.Arch.Value);
         _encoder.Encode(out hdr.e_version, EV_CURRENT);
-        _encoder.Encode(out hdr.e_entry, ObjectFile.EntryPointAddress);
+        _encoder.Encode(out hdr.e_entry, File.EntryPointAddress);
         _encoder.Encode(out hdr.e_ehsize, Layout.SizeOfElfHeader);
-        _encoder.Encode(out hdr.e_flags, (uint)ObjectFile.Flags);
+        _encoder.Encode(out hdr.e_flags, (uint)File.Flags);
 
         // program headers
         _encoder.Encode(out hdr.e_phoff, Layout.OffsetOfProgramHeaderTable);
         _encoder.Encode(out hdr.e_phentsize, Layout.SizeOfProgramHeaderEntry);
-        _encoder.Encode(out hdr.e_phnum, (ushort)ObjectFile.Segments.Count);
+        _encoder.Encode(out hdr.e_phnum, (ushort)File.Segments.Count);
 
         // entries for sections
         _encoder.Encode(out hdr.e_shoff, Layout.OffsetOfSectionHeaderTable);
         _encoder.Encode(out hdr.e_shentsize, (ushort)sizeof(Elf64_Shdr));
-        _encoder.Encode(out hdr.e_shnum, ObjectFile.VisibleSectionCount >= ElfNative.SHN_LORESERVE ? (ushort)0 : (ushort)ObjectFile.VisibleSectionCount);
-        uint shstrSectionIndex = ObjectFile.SectionHeaderStringTable?.SectionIndex ?? 0u;
+        _encoder.Encode(out hdr.e_shnum, File.VisibleSectionCount >= ElfNative.SHN_LORESERVE ? (ushort)0 : (ushort)File.VisibleSectionCount);
+        uint shstrSectionIndex = File.SectionHeaderStringTable?.SectionIndex ?? 0u;
         _encoder.Encode(out hdr.e_shstrndx, shstrSectionIndex >= ElfNative.SHN_LORESERVE ? (ushort)ElfNative.SHN_XINDEX : (ushort)shstrSectionIndex);
 
         Write(hdr);
@@ -191,7 +191,7 @@ internal abstract class ElfWriter<TEncoder> : ElfWriter where TEncoder : struct,
 
     private void CheckProgramHeaders()
     {
-        if (ObjectFile.Segments.Count == 0)
+        if (File.Segments.Count == 0)
         {
             return;
         }
@@ -205,10 +205,10 @@ internal abstract class ElfWriter<TEncoder> : ElfWriter where TEncoder : struct,
 
     private void WriteSections()
     {
-        var sections = ObjectFile.Sections;
+        var sections = File.Sections;
         if (sections.Count == 0) return;
 
-        sections = ObjectFile.GetSectionsOrderedByStreamIndex();
+        sections = File.GetSectionsOrderedByStreamIndex();
 
         // We write the content all sections including shadows
         for (var i = 0; i < sections.Count; i++)
@@ -242,7 +242,7 @@ internal abstract class ElfWriter<TEncoder> : ElfWriter where TEncoder : struct,
         }
             
         // Then write all regular sections
-        var sections = ObjectFile.Sections;
+        var sections = File.Sections;
         for (var i = 0; i < sections.Count; i++)
         {
             var section = sections[i];
@@ -253,7 +253,7 @@ internal abstract class ElfWriter<TEncoder> : ElfWriter where TEncoder : struct,
 
     private void WriteSectionTableEntry(ElfSection section)
     {
-        if (ObjectFile.FileClass == ElfFileClass.Is32)
+        if (File.FileClass == ElfFileClass.Is32)
         {
             WriteSectionTableEntry32(section);
         }
@@ -266,15 +266,15 @@ internal abstract class ElfWriter<TEncoder> : ElfWriter where TEncoder : struct,
     private void WriteSectionTableEntry32(ElfSection section)
     {
         var shdr = new Elf32_Shdr();
-        _encoder.Encode(out shdr.sh_name, ObjectFile.SectionHeaderStringTable?.GetOrCreateIndex(section.Name) ?? 0);
+        _encoder.Encode(out shdr.sh_name, File.SectionHeaderStringTable?.Resolve(section.Name) ?? 0);
         _encoder.Encode(out shdr.sh_type, (uint)section.Type);
         _encoder.Encode(out shdr.sh_flags, (uint)section.Flags);
         _encoder.Encode(out shdr.sh_addr, (uint)section.VirtualAddress);
         _encoder.Encode(out shdr.sh_offset, (uint)section.Position);
-        if (section.Index == 0 && ObjectFile.VisibleSectionCount >= ElfNative.SHN_LORESERVE)
+        if (section.Index == 0 && File.VisibleSectionCount >= ElfNative.SHN_LORESERVE)
         {
-            _encoder.Encode(out shdr.sh_size, ObjectFile.VisibleSectionCount);
-            uint shstrSectionIndex = ObjectFile.SectionHeaderStringTable?.SectionIndex ?? 0u;
+            _encoder.Encode(out shdr.sh_size, File.VisibleSectionCount);
+            uint shstrSectionIndex = File.SectionHeaderStringTable?.SectionIndex ?? 0u;
             _encoder.Encode(out shdr.sh_link, shstrSectionIndex >= ElfNative.SHN_LORESERVE ? shstrSectionIndex : 0);
         }
         else
@@ -291,15 +291,15 @@ internal abstract class ElfWriter<TEncoder> : ElfWriter where TEncoder : struct,
     private void WriteSectionTableEntry64(ElfSection section)
     {
         var shdr = new Elf64_Shdr();
-        _encoder.Encode(out shdr.sh_name, ObjectFile.SectionHeaderStringTable?.GetOrCreateIndex(section.Name) ?? 0);
+        _encoder.Encode(out shdr.sh_name, File.SectionHeaderStringTable?.Resolve(section.Name) ?? 0);
         _encoder.Encode(out shdr.sh_type, (uint)section.Type);
         _encoder.Encode(out shdr.sh_flags, (uint)section.Flags);
         _encoder.Encode(out shdr.sh_addr, section.VirtualAddress);
         _encoder.Encode(out shdr.sh_offset, section.Position);
-        if (section.Index == 0 && ObjectFile.VisibleSectionCount >= ElfNative.SHN_LORESERVE)
+        if (section.Index == 0 && File.VisibleSectionCount >= ElfNative.SHN_LORESERVE)
         {
-            _encoder.Encode(out shdr.sh_size, ObjectFile.VisibleSectionCount);
-            uint shstrSectionIndex = ObjectFile.SectionHeaderStringTable?.SectionIndex ?? 0u;
+            _encoder.Encode(out shdr.sh_size, File.VisibleSectionCount);
+            uint shstrSectionIndex = File.SectionHeaderStringTable?.SectionIndex ?? 0u;
             _encoder.Encode(out shdr.sh_link, shstrSectionIndex >= ElfNative.SHN_LORESERVE ? shstrSectionIndex : 0);
         }
         else

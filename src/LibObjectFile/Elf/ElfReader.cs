@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -8,19 +8,22 @@ using System.IO;
 namespace LibObjectFile.Elf;
 
 /// <summary>
-/// Base class for reading and building an <see cref="ElfObjectFile"/> from a <see cref="Stream"/>.
+/// Base class for reading and building an <see cref="ElfFile"/> from a <see cref="Stream"/>.
 /// </summary>
 public abstract class ElfReader : ObjectFileReaderWriter, IElfDecoder
 {
-    private protected ElfReader(ElfObjectFile objectFile, Stream stream, ElfReaderOptions readerOptions) : base(objectFile, stream)
+    private protected ElfReader(ElfFile file, Stream stream, ElfReaderOptions readerOptions) : base(file, stream)
     {
         Options = readerOptions;
+        VisitorContext = new ElfVisitorContext(file, Diagnostics);
     }
         
-    public ElfObjectFile ObjectFile => (ElfObjectFile)base.File;
+    public new ElfFile File => (ElfFile)base.File;
+
+    public ElfVisitorContext VisitorContext { get; }
 
     /// <summary>
-    /// Gets the <see cref="ElfReaderOptions"/> used for reading the <see cref="ElfObjectFile"/>
+    /// Gets the <see cref="ElfReaderOptions"/> used for reading the <see cref="ElfFile"/>
     /// </summary>
     public ElfReaderOptions Options { get; }
 
@@ -30,10 +33,10 @@ public abstract class ElfReader : ObjectFileReaderWriter, IElfDecoder
 
     public abstract ElfSectionLink ResolveLink(ElfSectionLink link, string errorMessageFormat);
 
-    internal static ElfReader Create(ElfObjectFile objectFile, Stream stream, ElfReaderOptions options)
+    internal static ElfReader Create(ElfFile file, Stream stream, ElfReaderOptions options)
     {
         var thisComputerEncoding = BitConverter.IsLittleEndian ? ElfEncoding.Lsb : ElfEncoding.Msb;
-        return objectFile.Encoding == thisComputerEncoding ? (ElfReader) new ElfReaderDirect(objectFile, stream, options) : new ElfReaderSwap(objectFile, stream, options);
+        return file.Encoding == thisComputerEncoding ? (ElfReader) new ElfReaderDirect(file, stream, options) : new ElfReaderSwap(file, stream, options);
     }
 
     public abstract ushort Decode(ElfNative.Elf32_Half src);
@@ -54,4 +57,6 @@ public abstract class ElfReader : ObjectFileReaderWriter, IElfDecoder
     public abstract ushort Decode(ElfNative.Elf64_Section src);
     public abstract ushort Decode(ElfNative.Elf32_Versym src);
     public abstract ushort Decode(ElfNative.Elf64_Versym src);
+
+    public static implicit operator ElfVisitorContext(ElfReader reader) => reader.VisitorContext;
 }

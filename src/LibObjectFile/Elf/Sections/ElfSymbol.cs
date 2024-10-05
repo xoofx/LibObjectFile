@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -42,7 +42,7 @@ public struct ElfSymbol : IEquatable<ElfSymbol>
     /// <summary>
     /// Gets or sets the associated section to this symbol.
     /// </summary>
-    public ElfSectionLink Section { get; set; }
+    public ElfSectionLink SectionLink { get; set; }
 
     /// <summary>
     /// Gets or sets the name of this symbol.
@@ -51,12 +51,12 @@ public struct ElfSymbol : IEquatable<ElfSymbol>
 
     public override string ToString()
     {
-        return $"{nameof(Value)}: 0x{Value:X16}, {nameof(Size)}: {Size:#####}, {nameof(Type)}: {Type}, {nameof(Bind)}: {Bind}, {nameof(Visibility)}: {Visibility}, {nameof(Section)}: {Section}, {nameof(Name)}: {Name}";
+        return $"{nameof(Value)}: 0x{Value:X16}, {nameof(Size)}: {Size:#####}, {nameof(Type)}: {Type}, {nameof(Bind)}: {Bind}, {nameof(Visibility)}: {Visibility}, {nameof(SectionLink)}: {SectionLink}, {nameof(Name)}: {Name}";
     }
 
     public bool Equals(ElfSymbol other)
     {
-        return Value == other.Value && Size == other.Size && Type == other.Type && Bind == other.Bind && Visibility == other.Visibility && Section.Equals(other.Section) && Name == other.Name;
+        return Value == other.Value && Size == other.Size && Type == other.Type && Bind == other.Bind && Visibility == other.Visibility && SectionLink.Equals(other.SectionLink) && Name == other.Name;
     }
 
     public override bool Equals(object? obj)
@@ -73,7 +73,7 @@ public struct ElfSymbol : IEquatable<ElfSymbol>
             hashCode = (hashCode * 397) ^ (int) Type;
             hashCode = (hashCode * 397) ^ (int) Bind;
             hashCode = (hashCode * 397) ^ (int) Visibility;
-            hashCode = (hashCode * 397) ^ Section.GetHashCode();
+            hashCode = (hashCode * 397) ^ SectionLink.GetHashCode();
             hashCode = (hashCode * 397) ^ Name.GetHashCode();
             return hashCode;
         }
