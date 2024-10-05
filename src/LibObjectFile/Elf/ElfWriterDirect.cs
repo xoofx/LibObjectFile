@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -11,7 +11,7 @@ namespace LibObjectFile.Elf;
 /// </summary>
 internal sealed class ElfWriterDirect : ElfWriter<ElfEncoderDirect>
 {
-    public ElfWriterDirect(ElfObjectFile elfObjectFile, Stream stream) : base(elfObjectFile, stream)
+    public ElfWriterDirect(ElfFile elfFile, Stream stream) : base(elfFile, stream)
     {
     }
 }

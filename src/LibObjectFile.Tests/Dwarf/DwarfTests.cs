@@ -29,7 +29,7 @@ public class DwarfTests
         var stream = new MemoryStream();
 
         stream.WriteULEB128(value);
-            
+
         Assert.AreEqual((uint)stream.Position, DwarfHelper.SizeOfULEB128(value));
 
         stream.Position = 0;
@@ -85,11 +85,11 @@ public class DwarfTests
         var cppExe = $"{cppName}_debug";
         LinuxUtil.RunLinuxExe("gcc", $"{cppName}.cpp -gdwarf-4 -o {cppExe}");
 
-        ElfObjectFile elf;
+        ElfFile elf;
         using (var inStream = File.OpenRead(cppExe))
         {
             Console.WriteLine($"ReadBack from {cppExe}");
-            elf = ElfObjectFile.Read(inStream);
+            elf = ElfFile.Read(inStream);
             elf.Print(Console.Out);
         }
 
@@ -144,11 +144,11 @@ public class DwarfTests
         var libShared = $"{cppName}_debug.so";
         LinuxUtil.RunLinuxExe("gcc", $"{cppName}_a.cpp {cppName}_b.cpp -gdwarf-4 -shared -o {libShared}");
 
-        ElfObjectFile elf;
+        ElfFile elf;
         using (var inStream = File.OpenRead(libShared))
         {
             Console.WriteLine($"ReadBack from {libShared}");
-            elf = ElfObjectFile.Read(inStream);
+            elf = ElfFile.Read(inStream);
             elf.Print(Console.Out);
         }
 
@@ -202,11 +202,11 @@ public class DwarfTests
         var cppName = "small";
         var cppObj = $"{cppName}_debug.o";
         LinuxUtil.RunLinuxExe("gcc", $"{cppName}.cpp -gdwarf-4 -c -o {cppObj}");
-        ElfObjectFile elf;
+        ElfFile elf;
         using (var inStream = File.OpenRead(cppObj))
         {
             Console.WriteLine($"ReadBack from {cppObj}");
-            elf = ElfObjectFile.Read(inStream);
+            elf = ElfFile.Read(inStream);
             elf.Print(Console.Out);
         }
 
@@ -261,11 +261,11 @@ public class DwarfTests
         var cppObj = $"{cppName}_debug.o";
         LinuxUtil.RunLinuxExe("gcc", $"{cppName}.cpp -gdwarf-4 -c -o {cppObj}");
 
-        ElfObjectFile elf;
+        ElfFile elf;
         using (var inStream = File.OpenRead(cppObj))
         {
             Console.WriteLine($"ReadBack from {cppObj}");
-            elf = ElfObjectFile.Read(inStream);
+            elf = ElfFile.Read(inStream);
             elf.Print(Console.Out);
         }
 
@@ -319,10 +319,10 @@ public class DwarfTests
         var cppObj = $"{cppName}_debug.o";
         LinuxUtil.RunLinuxExe("gcc", $"{cppName}.cpp -gdwarf-4 -c -o {cppObj}");
 
-        ElfObjectFile elf;
+        ElfFile elf;
         using (var inStream = File.OpenRead(cppObj))
         {
-            elf = ElfObjectFile.Read(inStream);
+            elf = ElfFile.Read(inStream);
             elf.Print(Console.Out);
         }
 
@@ -375,14 +375,15 @@ public class DwarfTests
     public void CreateDwarf()
     {
         // Create ELF object
-        var elf = new ElfObjectFile(ElfArch.X86_64);
+        var elf = new ElfFile(ElfArch.X86_64);
 
-        var codeSection = new ElfBinarySection(new MemoryStream(new byte[0x64])).ConfigureAs(ElfSectionSpecialType.Text);
-        elf.AddSection(codeSection);
+        var codeSection = new ElfStreamSection(ElfSectionSpecialType.Text, new MemoryStream(new byte[0x64]));
+        elf.Content.Add(codeSection);
         var stringSection = new ElfStringTable();
-        elf.AddSection(stringSection);
-        elf.AddSection(new ElfSymbolTable() { Link = stringSection });
-        elf.AddSection(new ElfSectionHeaderStringTable());
+        elf.Content.Add(stringSection);
+        elf.Content.Add(new ElfSymbolTable() { Link = stringSection });
+        elf.Content.Add(new ElfSectionHeaderStringTable());
+        elf.Content.Add(new ElfSectionHeaderTable());
 
         var elfDiagnostics = new DiagnosticBag();
         elf.UpdateLayout(elfDiagnostics);
@@ -390,7 +391,7 @@ public class DwarfTests
 
         // Create DWARF Object
         var dwarfFile = new DwarfFile();
-            
+
         // Create .debug_line information
         var fileName = new DwarfFileName("check1.cpp")
         {
@@ -462,9 +463,9 @@ public class DwarfTests
 
         var locationList = new DwarfLocationList();
         var regExpression = new DwarfExpression();
-        regExpression.Operations.Add(new DwarfOperation { Kind = DwarfOperationKindEx.Reg0 });            
+        regExpression.Operations.Add(new DwarfOperation { Kind = DwarfOperationKindEx.Reg0 });
         var regExpression2 = new DwarfExpression();
-        regExpression2.Operations.Add(new DwarfOperation { Kind = DwarfOperationKindEx.Reg2 });            
+        regExpression2.Operations.Add(new DwarfOperation { Kind = DwarfOperationKindEx.Reg2 });
         locationList.LocationListEntries.Add(new DwarfLocationListEntry
         {
             Start = 0,
@@ -491,12 +492,12 @@ public class DwarfTests
             Root = rootDIE
         };
         dwarfFile.InfoSection.Units.Add(cu);
-            
+
         // AddressRange table
         dwarfFile.AddressRangeTable.AddressSize = DwarfAddressSize.Bit64;
         dwarfFile.AddressRangeTable.Unit = cu;
         dwarfFile.AddressRangeTable.Ranges.Add(new DwarfAddressRange(0, 0, codeSection.Size));
-            
+
         // Transfer DWARF To ELF
         var dwarfElfContext = new DwarfElfContext(elf);
         dwarfFile.WriteToElf(dwarfElfContext);

@@ -8,8 +8,12 @@ namespace LibObjectFile.Elf;
 /// A relocation entry in the <see cref="ElfRelocationTable"/>
 /// This is the value seen in <see cref="ElfNative.Elf32_Rel"/> or <see cref="ElfNative.Elf64_Rel"/>
 /// </summary>
-public struct ElfRelocation
+public sealed class ElfRelocation
 {
+    public ElfRelocation()
+    {
+    }
+
     public ElfRelocation(ulong offset, ElfRelocationType type, uint symbolIndex, long addend)
     {
         Offset = offset;
@@ -49,7 +53,7 @@ public struct ElfRelocation
     /// </summary>
     public ulong Info64 =>
         ((ulong)SymbolIndex << 32) | (Type.Value);
-        
+
     public override string ToString()
     {
         return $"{nameof(Offset)}: 0x{Offset:X16}, {nameof(Type)}: {Type}, {nameof(SymbolIndex)}: {SymbolIndex}, {nameof(Addend)}: 0x{Addend:X16}";

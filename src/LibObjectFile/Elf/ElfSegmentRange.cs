@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -7,108 +7,108 @@ using System;
 namespace LibObjectFile.Elf;
 
 /// <summary>
-/// Defines the range of section a segment is bound to.
+/// Defines the range of content a segment is bound to.
 /// </summary>
 public readonly struct ElfSegmentRange : IEquatable<ElfSegmentRange>
 {
     public static readonly ElfSegmentRange Empty = new ElfSegmentRange();
 
     /// <summary>
-    /// Creates a new instance that is bound to an entire section/
+    /// Creates a new instance that is bound to an entire content/
     /// </summary>
-    /// <param name="section">The section to be bound to</param>
-    public ElfSegmentRange(ElfSection section)
+    /// <param name="content">The content to be bound to</param>
+    public ElfSegmentRange(ElfContent content)
     {
-        BeginSection = section ?? throw new ArgumentNullException(nameof(section));
+        BeginContent = content ?? throw new ArgumentNullException(nameof(content));
         BeginOffset = 0;
-        EndSection = section;
-        EndOffset = -1;
+        EndContent = content;
+        OffsetFromEnd = 0;
     }
 
     /// <summary>
-    /// Creates a new instance that is bound to a range of section.
+    /// Creates a new instance that is bound to a range of content.
     /// </summary>
-    /// <param name="beginSection">The first section.</param>
-    /// <param name="beginOffset">The offset inside the first section.</param>
-    /// <param name="endSection">The last section.</param>
-    /// <param name="endOffset">The offset in the last section</param>
-    public ElfSegmentRange(ElfSection beginSection, ulong beginOffset, ElfSection endSection, long endOffset)
+    /// <param name="beginContent">The first content.</param>
+    /// <param name="beginOffset">The offset inside the first content.</param>
+    /// <param name="endContent">The last content.</param>
+    /// <param name="offsetFromEnd">The offset in the last content</param>
+    public ElfSegmentRange(ElfContent beginContent, ulong beginOffset, ElfContent endContent, ulong offsetFromEnd)
     {
-        BeginSection = beginSection ?? throw new ArgumentNullException(nameof(beginSection));
+        BeginContent = beginContent ?? throw new ArgumentNullException(nameof(beginContent));
         BeginOffset = beginOffset;
-        EndSection = endSection ?? throw new ArgumentNullException(nameof(endSection));
-        EndOffset = endOffset;
-        if (BeginSection.Index > EndSection.Index)
+        EndContent = endContent ?? throw new ArgumentNullException(nameof(endContent));
+        OffsetFromEnd = offsetFromEnd;
+        if (BeginContent.Index > EndContent.Index)
         {
-            throw new ArgumentOutOfRangeException(nameof(beginSection), $"The {nameof(beginSection)}.{nameof(ElfSection.Index)} = {BeginSection.Index} is > {nameof(endSection)}.{nameof(ElfSection.Index)} = {EndSection.Index}, while it must be <=");
+            throw new ArgumentOutOfRangeException(nameof(beginContent), $"The {nameof(beginContent)}.{nameof(ElfSection.Index)} = {BeginContent.Index} is > {nameof(endContent)}.{nameof(ElfSection.Index)} = {EndContent.Index}, while it must be <=");
         }
     }
         
     /// <summary>
-    /// The first section.
+    /// The first content.
     /// </summary>
-    public readonly ElfSection? BeginSection;
+    public readonly ElfContent? BeginContent;
 
     /// <summary>
-    /// The relative offset in <see cref="BeginSection"/>.
+    /// The relative offset in <see cref="BeginContent"/>.
     /// </summary>
     public readonly ulong BeginOffset;
 
     /// <summary>
-    /// The last section.
+    /// The last content.
     /// </summary>
-    public readonly ElfSection? EndSection;
+    public readonly ElfContent? EndContent;
 
     /// <summary>
-    /// The offset in the last section. If the offset is &lt; 0, then the actual offset starts from end of the section where finalEndOffset = section.Size + EndOffset.
+    /// The offset in the last content. If the offset is &lt; 0, then the actual offset starts from end of the content where finalEndOffset = content.Size + EndOffset.
     /// </summary>
-    public readonly long EndOffset;
+    public readonly ulong OffsetFromEnd;
 
     /// <summary>
-    /// Gets a boolean indicating if this section is empty.
+    /// Gets a boolean indicating if this content is empty.
     /// </summary>
     public bool IsEmpty => this == Empty;
 
     /// <summary>
-    /// Returns the absolute offset of this range taking into account the <see cref="BeginSection"/>.<see cref="ObjectFileElement.Position"/>.
+    /// Returns the absolute offset of this range taking into account the <see cref="BeginContent"/>.<see cref="ObjectFileElement.Position"/>.
     /// </summary>
     public ulong Offset
     {
         get
         {
-            // If this Begin/End section are not attached we can't calculate any meaningful size
-            if (BeginSection?.Parent == null || EndSection?.Parent == null || BeginSection?.Parent != EndSection?.Parent)
+            // If this Begin/End content are not attached we can't calculate any meaningful size
+            if (BeginContent?.Parent == null || EndContent?.Parent == null || BeginContent?.Parent != EndContent?.Parent)
             {
                 return 0;
             }
 
-            return BeginSection!.Position + BeginOffset;
+            return BeginContent!.Position + BeginOffset;
         }
     }
 
     /// <summary>
-    /// Returns the size of this range taking into account the size of each section involved in this range.
+    /// Returns the size of this range taking into account the size of each content involved in this range.
     /// </summary>
     public ulong Size
     {
         get
         {
-            // If this Begin/End section are not attached we can't calculate any meaningful size
-            if (BeginSection?.Parent == null || EndSection?.Parent == null || BeginSection.Parent != EndSection.Parent)
+            // If this Begin/End content are not attached we can't calculate any meaningful size
+            if (BeginContent?.Parent == null || EndContent?.Parent == null || BeginContent.Parent != EndContent.Parent)
             {
                 return 0;
             }
 
-            ulong size = EndSection.Position - BeginSection.Position;
+            ulong size = EndContent.Position + EndContent.Size - BeginContent.Position;
             size -= BeginOffset;
-            size += EndOffset < 0 ? (ulong)((long)EndSection.Size + EndOffset + 1) : (ulong)(EndOffset + 1);
+            size -= OffsetFromEnd;
             return size;
         }
     }
         
     public bool Equals(ElfSegmentRange other)
     {
-        return Equals(BeginSection, other.BeginSection) && BeginOffset == other.BeginOffset && Equals(EndSection, other.EndSection) && EndOffset == other.EndOffset;
+        return Equals(BeginContent, other.BeginContent) && BeginOffset == other.BeginOffset && Equals(EndContent, other.EndContent) && OffsetFromEnd == other.OffsetFromEnd;
     }
 
     public override bool Equals(object? obj)
@@ -120,10 +120,10 @@ public readonly struct ElfSegmentRange : IEquatable<ElfSegmentRange>
     {
         unchecked
         {
-            var hashCode = (BeginSection != null ? BeginSection.GetHashCode() : 0);
+            var hashCode = (BeginContent != null ? BeginContent.GetHashCode() : 0);
             hashCode = (hashCode * 397) ^ BeginOffset.GetHashCode();
-            hashCode = (hashCode * 397) ^ (EndSection != null ? EndSection.GetHashCode() : 0);
-            hashCode = (hashCode * 397) ^ EndOffset.GetHashCode();
+            hashCode = (hashCode * 397) ^ (EndContent != null ? EndContent.GetHashCode() : 0);
+            hashCode = (hashCode * 397) ^ OffsetFromEnd.GetHashCode();
             return hashCode;
         }
     }
@@ -138,8 +138,8 @@ public readonly struct ElfSegmentRange : IEquatable<ElfSegmentRange>
         return !left.Equals(right);
     }
 
-    public static implicit operator ElfSegmentRange(ElfSection? section)
+    public static implicit operator ElfSegmentRange(ElfContent? content)
     {
-        return section is null ? Empty : new ElfSegmentRange(section);
+        return content is null ? Empty : new ElfSegmentRange(content);
     }
 }

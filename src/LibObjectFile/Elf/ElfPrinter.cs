@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -9,16 +9,16 @@ using System.Text;
 namespace LibObjectFile.Elf;
 
 /// <summary>
-/// Extensions methods for <see cref="ElfObjectFile"/> to print their layout in text forms, similar to readelf.
+/// Extensions methods for <see cref="ElfFile"/> to print their layout in text forms, similar to readelf.
 /// </summary>
 public static class ElfPrinter
 {
     /// <summary>
-    /// Prints an <see cref="ElfObjectFile"/> to the specified writer.
+    /// Prints an <see cref="ElfFile"/> to the specified writer.
     /// </summary>
     /// <param name="elf">The object file to print.</param>
     /// <param name="writer">The destination text writer.</param>
-    public static void Print(this ElfObjectFile elf, TextWriter writer)
+    public static void Print(this ElfFile elf, TextWriter writer)
     {
         if (elf == null) throw new ArgumentNullException(nameof(elf));
         if (writer == null) throw new ArgumentNullException(nameof(writer));
@@ -34,12 +34,12 @@ public static class ElfPrinter
         PrintNotes(elf, writer);
     }
 
-    public static void PrintElfHeader(ElfObjectFile elf, TextWriter writer)
+    public static void PrintElfHeader(ElfFile elf, TextWriter writer)
     {
         if (elf == null) throw new ArgumentNullException(nameof(elf));
         if (writer == null) throw new ArgumentNullException(nameof(writer));
 
-        Span<byte> ident = stackalloc byte[ElfObjectFile.IdentSizeInBytes];
+        Span<byte> ident = stackalloc byte[ElfFile.IdentSizeInBytes];
         elf.CopyIdentTo(ident);
 
         writer.WriteLine("ELF Header:");
@@ -66,36 +66,35 @@ public static class ElfPrinter
         writer.WriteLine($"  Size of program headers:           {elf.Layout.SizeOfProgramHeaderEntry} (bytes)");
         writer.WriteLine($"  Number of program headers:         {elf.Segments.Count}");
         writer.WriteLine($"  Size of section headers:           {elf.Layout.SizeOfSectionHeaderEntry} (bytes)");
-        if (elf.VisibleSectionCount >= ElfNative.SHN_LORESERVE || elf.VisibleSectionCount == 0)
+        if (elf.Sections.Count >= ElfNative.SHN_LORESERVE)
         {
-            writer.WriteLine($"  Number of section headers:         0 ({elf.VisibleSectionCount})");
+            writer.WriteLine($"  Number of section headers:         0 ({elf.Sections.Count})");
         }
         else
         {
-            writer.WriteLine($"  Number of section headers:         {elf.VisibleSectionCount}");
+            writer.WriteLine($"  Number of section headers:         {elf.Sections.Count}");
         }
         writer.WriteLine($"  Section header string table index: {elf.SectionHeaderStringTable?.SectionIndex ?? 0}");
     }
 
-    public static void PrintSectionHeaders(ElfObjectFile elf, TextWriter writer)
+    public static void PrintSectionHeaders(ElfFile elf, TextWriter writer)
     {
         if (elf == null) throw new ArgumentNullException(nameof(elf));
         if (writer == null) throw new ArgumentNullException(nameof(writer));
 
         writer.WriteLine();
-        if (elf.VisibleSectionCount == 0)
+        if (elf.Sections.Count == 0)
         {
             writer.WriteLine("There are no sections in this file.");
             return;
         }
 
-        writer.WriteLine(elf.VisibleSectionCount > 1 ? "Section Headers:" : "Section Header:");
+        writer.WriteLine(elf.Sections.Count > 1 ? "Section Headers:" : "Section Header:");
 
         writer.WriteLine("  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al");
         for (int i = 0; i < elf.Sections.Count; i++)
         {
             var section = elf.Sections[i];
-            if (section.IsShadow) continue;
             writer.WriteLine($"  [{section.SectionIndex,2:#0}] {GetElfSectionName(section),-17} {GetElfSectionType(section.Type),-15} {section.VirtualAddress:x16} {section.Position:x6} {section.Size:x6} {section.TableEntrySize:x2} {GetElfSectionFlags(section.Flags),3} {section.Link.GetIndex(),2} {section.Info.GetIndex(),3} {section.Alignment,2}");
         }
         writer.WriteLine(@"Key to Flags:
@@ -105,7 +104,7 @@ public static class ElfPrinter
   D (mbind), l (large), p (processor specific)");
     }
 
-    public static void PrintSectionGroups(ElfObjectFile elf, TextWriter writer)
+    public static void PrintSectionGroups(ElfFile elf, TextWriter writer)
     {
         if (elf == null) throw new ArgumentNullException(nameof(elf));
         if (writer == null) throw new ArgumentNullException(nameof(writer));
@@ -120,7 +119,7 @@ public static class ElfPrinter
         return section.Parent?.SectionHeaderStringTable == null ? "<no-strings>" : section.Name.Value!;
     }
 
-    public static void PrintProgramHeaders(ElfObjectFile elf, TextWriter writer)
+    public static void PrintProgramHeaders(ElfFile elf, TextWriter writer)
     {
         if (elf == null) throw new ArgumentNullException(nameof(elf));
         if (writer == null) throw new ArgumentNullException(nameof(writer));
@@ -132,7 +131,7 @@ public static class ElfPrinter
             writer.WriteLine("There are no program headers in this file.");
             return;
         }
-            
+
         writer.WriteLine(elf.Segments.Count > 1 ? "Program Headers:" : "Program Header:");
 
         writer.WriteLine("  Type           Offset   VirtAddr           PhysAddr           FileSiz  MemSiz   Flg Align");
@@ -142,7 +141,7 @@ public static class ElfPrinter
             writer.WriteLine($"  {GetElfSegmentType(phdr.Type),-14} 0x{phdr.Position:x6} 0x{phdr.VirtualAddress:x16} 0x{phdr.PhysicalAddress:x16} 0x{phdr.Size:x6} 0x{phdr.SizeInMemory:x6} {GetElfSegmentFlags(phdr.Flags),3} 0x{phdr.Alignment:x}");
         }
 
-        if (elf.Segments.Count > 0 && elf.VisibleSectionCount > 0 && elf.SectionHeaderStringTable != null)
+        if (elf.Segments.Count > 0 && elf.Sections.Count > 0 && elf.SectionHeaderStringTable != null)
         {
             writer.WriteLine();
             writer.WriteLine(" Section to Segment mapping:");
@@ -166,7 +165,7 @@ public static class ElfPrinter
         }
     }
 
-    public static void PrintRelocations(ElfObjectFile elf, TextWriter writer)
+    public static void PrintRelocations(ElfFile elf, TextWriter writer)
     {
         if (elf == null) throw new ArgumentNullException(nameof(elf));
         if (writer == null) throw new ArgumentNullException(nameof(writer));
@@ -182,7 +181,7 @@ public static class ElfPrinter
 
                 writer.WriteLine();
                 writer.WriteLine($"Relocation section {(elf.SectionHeaderStringTable == null ? "0" : $"'{section.Name}'")} at offset 0x{section.Position:x} contains {relocTable.Entries.Count} {(relocTable.Entries.Count > 1 ? "entries" : "entry")}:");
-                     
+
                 if (elf.FileClass == ElfFileClass.Is32)
                 {
                     // TODO
@@ -201,7 +200,7 @@ public static class ElfPrinter
                     if (entry.SymbolIndex < symbolTable.Entries.Count)
                     {
                         var symbolEntry = symbolTable.Entries[(int) entry.SymbolIndex];
-                        symbolName = symbolEntry.Name!;
+                        symbolName = symbolEntry.Name.Value;
                         symbolValue = symbolEntry.Value;
 
                         if (string.IsNullOrEmpty(symbolName))
@@ -209,9 +208,9 @@ public static class ElfPrinter
                             switch (symbolEntry.Type)
                             {
                                 case ElfSymbolType.Section:
-                                    if (symbolEntry.Section.Section != null)
+                                    if (symbolEntry.SectionLink.Section != null)
                                     {
-                                        symbolName = symbolEntry.Section.Section.Name!;
+                                        symbolName = symbolEntry.SectionLink.Section.Name.Value;
                                     }
                                     break;
                             }
@@ -245,7 +244,7 @@ public static class ElfPrinter
         }
     }
 
-    public static void PrintUnwind(ElfObjectFile elf, TextWriter writer)
+    public static void PrintUnwind(ElfFile elf, TextWriter writer)
     {
         if (elf == null) throw new ArgumentNullException(nameof(elf));
         if (writer == null) throw new ArgumentNullException(nameof(writer));
@@ -262,12 +261,12 @@ public static class ElfPrinter
     }
 
 
-    public static void PrintSymbolTables(ElfObjectFile elf, TextWriter writer)
+    public static void PrintSymbolTables(ElfFile elf, TextWriter writer)
     {
         if (elf == null) throw new ArgumentNullException(nameof(elf));
         if (writer == null) throw new ArgumentNullException(nameof(writer));
 
-        if (elf.VisibleSectionCount == 0)
+        if (elf.Sections.Count == 0)
         {
             writer.WriteLine();
             writer.WriteLine("Dynamic symbol information is not available for displaying symbols.");
@@ -296,7 +295,7 @@ public static class ElfPrinter
             for (var i = 0; i < symbolTable.Entries.Count; i++)
             {
                 var symbol = symbolTable.Entries[i];
-                writer.WriteLine($"{i,6}: {symbol.Value:x16} {symbol.Size,5} {GetElfSymbolType(symbol.Type),-7} {GetElfSymbolBind(symbol.Bind),-6} {GetElfSymbolVisibility(symbol.Visibility),-7} {GetElfSymbolLink(symbol.Section),4} {symbol.Name.Value}");
+                writer.WriteLine($"{i,6}: {symbol.Value:x16} {symbol.Size,5} {GetElfSymbolType(symbol.Type),-7} {GetElfSymbolBind(symbol.Bind),-6} {GetElfSymbolVisibility(symbol.Visibility),-7} {GetElfSymbolLink(symbol.SectionLink),4} {symbol.Name.Value}");
             }
         }
     }
@@ -304,7 +303,7 @@ public static class ElfPrinter
     private static string GetElfSymbolLink(ElfSectionLink link)
     {
         var index = link.GetIndex();
-        switch (index)
+        switch ((uint)index)
         {
             case 0:
                 return "UND";
@@ -316,11 +315,11 @@ public static class ElfPrinter
         return index.ToString();
     }
 
-    public static void PrintNotes(ElfObjectFile elf, TextWriter writer)
+    public static void PrintNotes(ElfFile elf, TextWriter writer)
     {
         if (elf == null) throw new ArgumentNullException(nameof(elf));
         if (writer == null) throw new ArgumentNullException(nameof(writer));
-            
+
         foreach (var section in elf.Sections)
         {
             if (!(section is ElfNoteTable noteTable)) continue;
@@ -379,7 +378,7 @@ public static class ElfPrinter
         return builder.ToString();
     }
 
-    public static void PrintVersionInformation(ElfObjectFile elf, TextWriter writer)
+    public static void PrintVersionInformation(ElfFile elf, TextWriter writer)
     {
         if (elf == null) throw new ArgumentNullException(nameof(elf));
         if (writer == null) throw new ArgumentNullException(nameof(writer));
@@ -537,7 +536,7 @@ public static class ElfPrinter
                                    < segment.SizeInMemory)))));
     }
 
-    public static void PrintDynamicSections(ElfObjectFile elf, TextWriter writer)
+    public static void PrintDynamicSections(ElfFile elf, TextWriter writer)
     {
         writer.WriteLine();
         writer.WriteLine("There is no dynamic section in this file.");

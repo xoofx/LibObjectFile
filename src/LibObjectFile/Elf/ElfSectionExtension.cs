@@ -11,142 +11,99 @@ namespace LibObjectFile.Elf;
 /// </summary>
 public static class ElfSectionExtension
 {
-    /// <summary>
-    /// Configure a section default name, type and flags with <see cref="ElfSectionSpecialType"/>
-    /// </summary>
-    /// <typeparam name="TElfSection">The type of the section to configure</typeparam>
-    /// <param name="section">The section to configure</param>
-    /// <param name="sectionSpecialType">The special type</param>
-    /// <returns>The section configured</returns>
-    public static TElfSection ConfigureAs<TElfSection>(this TElfSection section, ElfSectionSpecialType sectionSpecialType) where TElfSection : ElfSection
+    public static string GetDefaultName(this ElfSectionSpecialType sectionSpecialType)
     {
-        switch (sectionSpecialType)
+        return sectionSpecialType switch
         {
-            case ElfSectionSpecialType.None:
-                break;
-            case ElfSectionSpecialType.Bss:
-                section.Name = ".bss";
-                section.Type = ElfSectionType.NoBits;
-                section.Flags = ElfSectionFlags.Alloc | ElfSectionFlags.Write;
-                break;
-            case ElfSectionSpecialType.Comment:
-                section.Name = ".comment";
-                section.Type = ElfSectionType.ProgBits;
-                section.Flags = ElfSectionFlags.None;
-                break;
-            case ElfSectionSpecialType.Data:
-                section.Name = ".data";
-                section.Type = ElfSectionType.ProgBits;
-                section.Flags = ElfSectionFlags.Alloc | ElfSectionFlags.Write;
-                break;
-            case ElfSectionSpecialType.Data1:
-                section.Name = ".data1";
-                section.Type = ElfSectionType.ProgBits;
-                section.Flags = ElfSectionFlags.Alloc | ElfSectionFlags.Write;
-                break;
-            case ElfSectionSpecialType.Debug:
-                section.Name = ".debug";
-                section.Type = ElfSectionType.ProgBits;
-                section.Flags = ElfSectionFlags.None;
-                break;
-            case ElfSectionSpecialType.Dynamic:
-                section.Name = ".dynamic";
-                section.Type = ElfSectionType.DynamicLinking;
-                section.Flags = ElfSectionFlags.Alloc;
-                break;
-            case ElfSectionSpecialType.DynamicStringTable:
-                section.Name = ".dynstr";
-                section.Type = ElfSectionType.StringTable;
-                section.Flags = ElfSectionFlags.Alloc;
-                break;
-            case ElfSectionSpecialType.DynamicSymbolTable:
-                section.Name = ".dynsym";
-                section.Type = ElfSectionType.DynamicLinkerSymbolTable;
-                section.Flags = ElfSectionFlags.Alloc;
-                break;
-            case ElfSectionSpecialType.Fini:
-                section.Name = ".fini";
-                section.Type = ElfSectionType.ProgBits;
-                section.Flags = ElfSectionFlags.Alloc | ElfSectionFlags.Executable;
-                break;
-            case ElfSectionSpecialType.Got:
-                section.Name = ".got";
-                section.Type = ElfSectionType.ProgBits;
-                section.Flags = ElfSectionFlags.None;
-                break;
-            case ElfSectionSpecialType.Hash:
-                section.Name = ".hash";
-                section.Type = ElfSectionType.SymbolHashTable;
-                section.Flags = ElfSectionFlags.None;
-                break;
-            case ElfSectionSpecialType.Init:
-                section.Name = ".init";
-                section.Type = ElfSectionType.ProgBits;
-                section.Flags = ElfSectionFlags.Alloc | ElfSectionFlags.Executable;
-                break;
-            case ElfSectionSpecialType.Interp:
-                section.Name = ".interp";
-                section.Type = ElfSectionType.ProgBits;
-                section.Flags = ElfSectionFlags.Alloc;
-                break;
-            case ElfSectionSpecialType.Line:
-                section.Name = ".line";
-                section.Type = ElfSectionType.ProgBits;
-                section.Flags = ElfSectionFlags.None;
-                break;
-            case ElfSectionSpecialType.Note:
-                section.Name = ".note";
-                section.Type = ElfSectionType.Note;
-                section.Flags = ElfSectionFlags.None;
-                break;
-            case ElfSectionSpecialType.Plt:
-                section.Name = ".plt";
-                section.Type = ElfSectionType.ProgBits;
-                section.Flags = ElfSectionFlags.None;
-                break;
-            case ElfSectionSpecialType.Relocation:
-                section.Name = ElfRelocationTable.DefaultName;
-                section.Type = ElfSectionType.Relocation;
-                section.Flags = ElfSectionFlags.None;
-                break;
-            case ElfSectionSpecialType.RelocationAddends:
-                section.Name = ElfRelocationTable.DefaultNameWithAddends;
-                section.Type = ElfSectionType.RelocationAddends;
-                section.Flags = ElfSectionFlags.None;
-                break;
-            case ElfSectionSpecialType.ReadOnlyData:
-                section.Name = ".rodata";
-                section.Type = ElfSectionType.ProgBits;
-                section.Flags = ElfSectionFlags.Alloc;
-                break;
-            case ElfSectionSpecialType.ReadOnlyData1:
-                section.Name = ".rodata1";
-                section.Type = ElfSectionType.ProgBits;
-                section.Flags = ElfSectionFlags.Alloc;
-                break;
-            case ElfSectionSpecialType.SectionHeaderStringTable:
-                section.Name = ".shstrtab";
-                section.Type = ElfSectionType.StringTable;
-                section.Flags = ElfSectionFlags.None;
-                break;
-            case ElfSectionSpecialType.StringTable:
-                section.Name = ElfStringTable.DefaultName;
-                section.Type = ElfSectionType.StringTable;
-                section.Flags = ElfSectionFlags.None;
-                break;
-            case ElfSectionSpecialType.SymbolTable:
-                section.Name = ElfSymbolTable.DefaultName;
-                section.Type = ElfSectionType.SymbolTable;
-                section.Flags = ElfSectionFlags.None;
-                break;
-            case ElfSectionSpecialType.Text:
-                section.Name = ".text";
-                section.Type = ElfSectionType.ProgBits;
-                section.Flags = ElfSectionFlags.Alloc | ElfSectionFlags.Executable;
-                break;
-            default:
-                throw new InvalidOperationException($"Invalid Enum {sectionSpecialType.GetType()}.{sectionSpecialType}");
-        }
-        return section;
+            ElfSectionSpecialType.Bss => ".bss",
+            ElfSectionSpecialType.Comment => ".comment",
+            ElfSectionSpecialType.Data => ".data",
+            ElfSectionSpecialType.Data1 => ".data1",
+            ElfSectionSpecialType.Debug => ".debug",
+            ElfSectionSpecialType.Dynamic => ".dynamic",
+            ElfSectionSpecialType.DynamicStringTable => ".dynstr",
+            ElfSectionSpecialType.DynamicSymbolTable => ".dynsym",
+            ElfSectionSpecialType.Fini => ".fini",
+            ElfSectionSpecialType.Got => ".got",
+            ElfSectionSpecialType.Hash => ".hash",
+            ElfSectionSpecialType.Init => ".init",
+            ElfSectionSpecialType.Interp => ".interp",
+            ElfSectionSpecialType.Line => ".line",
+            ElfSectionSpecialType.Note => ".note",
+            ElfSectionSpecialType.Plt => ".plt",
+            ElfSectionSpecialType.Relocation => ElfRelocationTable.DefaultName,
+            ElfSectionSpecialType.RelocationAddends => ElfRelocationTable.DefaultNameWithAddends,
+            ElfSectionSpecialType.ReadOnlyData => ".rodata",
+            ElfSectionSpecialType.ReadOnlyData1 => ".rodata1",
+            ElfSectionSpecialType.SectionHeaderStringTable => ".shstrtab",
+            ElfSectionSpecialType.StringTable => ElfStringTable.DefaultName,
+            ElfSectionSpecialType.SymbolTable => ElfSymbolTable.DefaultName,
+            ElfSectionSpecialType.Text => ".text",
+            _ => throw new InvalidOperationException($"Invalid Enum {sectionSpecialType.GetType()}.{sectionSpecialType}")
+        };
+    }
+
+    public static ElfSectionType GetSectionType(this ElfSectionSpecialType sectionSpecialType)
+    {
+        return sectionSpecialType switch
+        {
+            ElfSectionSpecialType.Bss => ElfSectionType.NoBits,
+            ElfSectionSpecialType.Comment => ElfSectionType.ProgBits,
+            ElfSectionSpecialType.Data => ElfSectionType.ProgBits,
+            ElfSectionSpecialType.Data1 => ElfSectionType.ProgBits,
+            ElfSectionSpecialType.Debug => ElfSectionType.ProgBits,
+            ElfSectionSpecialType.Dynamic => ElfSectionType.DynamicLinking,
+            ElfSectionSpecialType.DynamicStringTable => ElfSectionType.StringTable,
+            ElfSectionSpecialType.DynamicSymbolTable => ElfSectionType.DynamicLinkerSymbolTable,
+            ElfSectionSpecialType.Fini => ElfSectionType.ProgBits,
+            ElfSectionSpecialType.Got => ElfSectionType.ProgBits,
+            ElfSectionSpecialType.Hash => ElfSectionType.SymbolHashTable,
+            ElfSectionSpecialType.Init => ElfSectionType.ProgBits,
+            ElfSectionSpecialType.Interp => ElfSectionType.ProgBits,
+            ElfSectionSpecialType.Line => ElfSectionType.ProgBits,
+            ElfSectionSpecialType.Note => ElfSectionType.Note,
+            ElfSectionSpecialType.Plt => ElfSectionType.ProgBits,
+            ElfSectionSpecialType.Relocation => ElfSectionType.Relocation,
+            ElfSectionSpecialType.RelocationAddends => ElfSectionType.RelocationAddends,
+            ElfSectionSpecialType.ReadOnlyData => ElfSectionType.ProgBits,
+            ElfSectionSpecialType.ReadOnlyData1 => ElfSectionType.ProgBits,
+            ElfSectionSpecialType.SectionHeaderStringTable => ElfSectionType.StringTable,
+            ElfSectionSpecialType.StringTable => ElfSectionType.StringTable,
+            ElfSectionSpecialType.SymbolTable => ElfSectionType.SymbolTable,
+            ElfSectionSpecialType.Text => ElfSectionType.ProgBits,
+            _ => throw new InvalidOperationException($"Invalid Enum {sectionSpecialType.GetType()}.{sectionSpecialType}")
+        };
+    }
+
+    public static ElfSectionFlags GetSectionFlags(this ElfSectionSpecialType sectionSpecialType)
+    {
+        return sectionSpecialType switch
+        {
+            ElfSectionSpecialType.Bss => ElfSectionFlags.Alloc | ElfSectionFlags.Write,
+            ElfSectionSpecialType.Comment => ElfSectionFlags.None,
+            ElfSectionSpecialType.Data => ElfSectionFlags.Alloc | ElfSectionFlags.Write,
+            ElfSectionSpecialType.Data1 => ElfSectionFlags.Alloc | ElfSectionFlags.Write,
+            ElfSectionSpecialType.Debug => ElfSectionFlags.None,
+            ElfSectionSpecialType.Dynamic => ElfSectionFlags.Alloc,
+            ElfSectionSpecialType.DynamicStringTable => ElfSectionFlags.Alloc,
+            ElfSectionSpecialType.DynamicSymbolTable => ElfSectionFlags.Alloc,
+            ElfSectionSpecialType.Fini => ElfSectionFlags.Alloc | ElfSectionFlags.Executable,
+            ElfSectionSpecialType.Got => ElfSectionFlags.None,
+            ElfSectionSpecialType.Hash => ElfSectionFlags.None,
+            ElfSectionSpecialType.Init => ElfSectionFlags.Alloc | ElfSectionFlags.Executable,
+            ElfSectionSpecialType.Interp => ElfSectionFlags.Alloc,
+            ElfSectionSpecialType.Line => ElfSectionFlags.None,
+            ElfSectionSpecialType.Note => ElfSectionFlags.None,
+            ElfSectionSpecialType.Plt => ElfSectionFlags.None,
+            ElfSectionSpecialType.Relocation => ElfSectionFlags.None,
+            ElfSectionSpecialType.RelocationAddends => ElfSectionFlags.None,
+            ElfSectionSpecialType.ReadOnlyData => ElfSectionFlags.Alloc,
+            ElfSectionSpecialType.ReadOnlyData1 => ElfSectionFlags.Alloc,
+            ElfSectionSpecialType.SectionHeaderStringTable => ElfSectionFlags.None,
+            ElfSectionSpecialType.StringTable => ElfSectionFlags.None,
+            ElfSectionSpecialType.SymbolTable => ElfSectionFlags.None,
+            ElfSectionSpecialType.Text => ElfSectionFlags.Alloc | ElfSectionFlags.Executable,
+            _ => throw new InvalidOperationException($"Invalid Enum {sectionSpecialType.GetType()}.{sectionSpecialType}")
+        };
     }
 }

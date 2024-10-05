@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -128,6 +128,7 @@ public readonly struct ObjectList<TObject> : IList<TObject>
         {
             items[i].Index = i;
         }
+        items.Removed(index, item);
     }
 
     public TObject this[int index]

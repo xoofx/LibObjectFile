@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -7,7 +7,7 @@ using System;
 namespace LibObjectFile.Elf;
 
 /// <summary>
-/// Defines the flags of an <see cref="ElfObjectFile"/>.
+/// Defines the flags of an <see cref="ElfFile"/>.
 /// This is the value seen in <see cref="ElfNative.Elf32_Ehdr.e_flags"/> or <see cref="ElfNative.Elf64_Ehdr.e_flags"/>.
 /// This is currently not used.
 /// </summary>

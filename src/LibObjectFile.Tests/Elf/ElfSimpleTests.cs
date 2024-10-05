@@ -3,7 +3,9 @@
 // See the license.txt file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using LibObjectFile.Diagnostics;
 using LibObjectFile.Elf;
@@ -13,24 +15,53 @@ namespace LibObjectFile.Tests.Elf;
 [TestClass]
 public class ElfSimpleTests : ElfTestBase
 {
+    public TestContext TestContext { get; set; }
+
+    [DataTestMethod]
+    [DynamicData(nameof(GetLinuxBins), DynamicDataSourceType.Method)]
+    public void TestLinuxFile(string file)
+    {
+        using var stream = File.OpenRead(file);
+        if (!ElfFile.IsElf(stream)) return;
+        var elf = ElfFile.Read(stream);
+        var writer = new StringWriter();
+        writer.WriteLine("---------------------------------------------------------------------------------------");
+        writer.WriteLine($"{file}");
+        elf.Print(writer);
+        writer.WriteLine();
+    }
+
+    public static IEnumerable<object[]> GetLinuxBins()
+    {
+        foreach (var file in Directory.EnumerateFiles(@"C:\code\LibObjectFile\tmp\linux_bins"))
+        {
+            yield return new object[] { file };
+        }
+    }
+
     [TestMethod]
     public void TryReadThrows()
     {
-        static void CheckInvalidLib(bool isReadOnly)
-        { 
+        static void CheckInvalidLib(TestContext testContext, bool isReadOnly)
+        {
+            testContext.WriteLine($"TestThrows ReadOnly: {isReadOnly}");
             using var stream = File.OpenRead("TestFiles/cmnlib.b00");
-            Assert.IsFalse(ElfObjectFile.TryRead(stream, out var elf, out var diagnostics, new ElfReaderOptions() { ReadOnly = isReadOnly }));
+            Assert.IsFalse(ElfFile.TryRead(stream, out var elf, out var diagnostics, new ElfReaderOptions() { ReadOnly = isReadOnly }));
             Assert.IsNotNull(elf);
-            Assert.AreEqual(4, diagnostics.Messages.Count, "Invalid number of error messages found");
-            Assert.AreEqual(DiagnosticId.ELF_ERR_IncompleteProgramHeader32Size, diagnostics.Messages[0].Id);
-            for (int i = 1; i < diagnostics.Messages.Count; i++)
+            foreach (var message in diagnostics.Messages)
             {
-                Assert.AreEqual(DiagnosticId.CMN_ERR_UnexpectedEndOfFile, diagnostics.Messages[i].Id);
+                testContext.WriteLine(message.ToString());
+            }
+
+            Assert.AreEqual(3, diagnostics.Messages.Count, "Invalid number of error messages found");
+            for (int i = 0; i < diagnostics.Messages.Count; i++)
+            {
+                Assert.AreEqual(DiagnosticId.ELF_ERR_InvalidSegmentRange, diagnostics.Messages[i].Id);
             }
         }
 
-        CheckInvalidLib(false);
-        CheckInvalidLib(true);
+        CheckInvalidLib(this.TestContext, false);
+        CheckInvalidLib(this.TestContext, true);
     }
 
     [TestMethod]
@@ -38,8 +69,8 @@ public class ElfSimpleTests : ElfTestBase
     {
         using var stream = File.OpenRead(typeof(ElfSimpleTests).Assembly.Location);
 
-        Assert.IsFalse(ElfObjectFile.TryRead(stream, out var elfObjectFile, out var diagnostics));
-        Assert.IsTrue(diagnostics.HasErrors);    
+        Assert.IsFalse(ElfFile.TryRead(stream, out var elfObjectFile, out var diagnostics));
+        Assert.IsTrue(diagnostics.HasErrors);
         Assert.AreEqual(1, diagnostics.Messages.Count);
         Assert.AreEqual(DiagnosticId.ELF_ERR_InvalidHeaderMagic, diagnostics.Messages[0].Id);
     }
@@ -48,17 +79,18 @@ public class ElfSimpleTests : ElfTestBase
     [TestMethod]
     public void SimpleEmptyWithDefaultSections()
     {
-        var elf = new ElfObjectFile(ElfArch.X86_64);
+        var elf = new ElfFile(ElfArch.X86_64);
+        elf.Content.Add(new ElfSectionHeaderTable());
         AssertReadElf(elf, "empty_default.elf");
     }
 
     [TestMethod]
     public void SimpleEmpty()
     {
-        var elf = new ElfObjectFile(ElfArch.X86_64);
-        for (int i = elf.Sections.Count - 1; i >= 0; i--)
+        var elf = new ElfFile(ElfArch.X86_64);
+        for (int i = elf.Content.Count - 1; i >= 1; i--)
         {
-            elf.RemoveSectionAt(i);
+            elf.Content.RemoveAt(i);
         }
         AssertReadElf(elf, "empty.elf");
     }
@@ -66,15 +98,16 @@ public class ElfSimpleTests : ElfTestBase
     [TestMethod]
     public void SimpleCodeSection()
     {
-        var elf = new ElfObjectFile(ElfArch.X86_64);
+        var elf = new ElfFile(ElfArch.X86_64);
 
         var codeStream = new MemoryStream();
         codeStream.Write(Encoding.UTF8.GetBytes("This is a text"));
         codeStream.Position = 0;
 
-        var codeSection = new ElfBinarySection(codeStream).ConfigureAs(ElfSectionSpecialType.Text);
-        elf.AddSection(codeSection);
-        elf.AddSection(new ElfSectionHeaderStringTable());
+        var codeSection = new ElfStreamSection(ElfSectionSpecialType.Text, codeStream);
+        elf.Content.Add(codeSection);
+        elf.Content.Add(new ElfSectionHeaderStringTable());
+        elf.Content.Add(new ElfSectionHeaderTable());
 
         AssertReadElf(elf, "test.elf");
     }
@@ -82,25 +115,26 @@ public class ElfSimpleTests : ElfTestBase
     [TestMethod]
     public void TestBss()
     {
-        var elf = new ElfObjectFile(ElfArch.X86_64);
+        var elf = new ElfFile(ElfArch.X86_64);
 
         var stream = new MemoryStream();
         stream.Write(new byte[] { 1, 2, 3, 4 });
         stream.Position = 0;
-        var codeSection = new ElfBinarySection(stream).ConfigureAs(ElfSectionSpecialType.Text);
-        elf.AddSection(codeSection);
+        var codeSection = new ElfStreamSection(ElfSectionSpecialType.Text, stream);
+        elf.Content.Add(codeSection);
+        var bssSection = new ElfStreamSection(ElfSectionSpecialType.Bss)
+        {
+            Alignment = 1024
+        };
+        elf.Content.Add(bssSection);
 
-        elf.AddSection(new ElfAlignedShadowSection(1024));
-
-        var bssSection = new ElfBinarySection().ConfigureAs(ElfSectionSpecialType.Bss);
-        elf.AddSection(bssSection);
-
-        elf.AddSection(new ElfSectionHeaderStringTable());
+        elf.Content.Add(new ElfSectionHeaderStringTable());
+        elf.Content.Add(new ElfSectionHeaderTable());
 
         var diagnostics = new DiagnosticBag();
         elf.UpdateLayout(diagnostics);
         Assert.IsFalse(diagnostics.HasErrors);
-            
+
         Assert.AreEqual(1024U, bssSection.Position);
 
         AssertReadElf(elf, "test_bss.elf");
@@ -109,18 +143,18 @@ public class ElfSimpleTests : ElfTestBase
     [TestMethod]
     public void SimpleCodeSectionAndSymbolSection()
     {
-        var elf = new ElfObjectFile(ElfArch.X86_64);
+        var elf = new ElfFile(ElfArch.X86_64);
 
         var codeStream = new MemoryStream();
         codeStream.Write(Encoding.UTF8.GetBytes("This is a text"));
         codeStream.Position = 0;
 
-        var codeSection = new ElfBinarySection(codeStream).ConfigureAs(ElfSectionSpecialType.Text);
-        elf.AddSection(codeSection);
+        var codeSection = new ElfStreamSection(ElfSectionSpecialType.Text, codeStream);
+        elf.Content.Add(codeSection);
 
         var stringSection = new ElfStringTable();
-        elf.AddSection(stringSection);
-            
+        elf.Content.Add(stringSection);
+
         var symbolSection = new ElfSymbolTable()
         {
             Link = stringSection,
@@ -131,7 +165,7 @@ public class ElfSimpleTests : ElfTestBase
                 {
                     Name = "local_symbol",
                     Bind = ElfSymbolBind.Local,
-                    Section = codeSection,
+                    SectionLink = codeSection,
                     Size = 16,
                     Type = ElfSymbolType.Function,
                     Visibility = ElfSymbolVisibility.Protected,
@@ -141,15 +175,16 @@ public class ElfSimpleTests : ElfTestBase
                 {
                     Name = "GlobalSymbol",
                     Bind = ElfSymbolBind.Global,
-                    Section = codeSection,
+                    SectionLink = codeSection,
                     Size = 4,
                     Type = ElfSymbolType.Function,
                     Value = 0x12345
                 }
             }
         };
-        elf.AddSection(symbolSection);
-        elf.AddSection(new ElfSectionHeaderStringTable());
+        elf.Content.Add(symbolSection);
+        elf.Content.Add(new ElfSectionHeaderStringTable());
+        elf.Content.Add(new ElfSectionHeaderTable());
 
         AssertReadElf(elf, "test2.elf");
     }
@@ -157,76 +192,76 @@ public class ElfSimpleTests : ElfTestBase
     [TestMethod]
     public void SimpleProgramHeaderAndCodeSectionAndSymbolSection()
     {
-        var elf = new ElfObjectFile(ElfArch.X86_64);
+        var elf = new ElfFile(ElfArch.X86_64);
 
         var codeStream = new MemoryStream();
         codeStream.Write(new byte[4096]);
-            
-        var codeSection = elf.AddSection(
-            new ElfBinarySection(codeStream)
-            {
-                VirtualAddress = 0x1000,
-                Alignment = 4096
-            }.ConfigureAs(ElfSectionSpecialType.Text)
-        );
-            
+
+        var codeSection = new ElfStreamSection(ElfSectionSpecialType.Text, codeStream)
+        {
+            VirtualAddress = 0x1000,
+            Alignment = 4096
+        };
+        elf.Content.Add(codeSection);
+
         var dataStream = new MemoryStream();
         dataStream.Write(new byte[1024]);
 
-        var dataSection = elf.AddSection(
-            new ElfBinarySection(dataStream)
+        var dataSection = new ElfStreamSection(ElfSectionSpecialType.ReadOnlyData, dataStream)
+        {
+            VirtualAddress = 0x2000,
+            Alignment = 4096
+        };
+        elf.Content.Add(dataSection);
+
+        var stringSection = new ElfStringTable();
+        elf.Content.Add(stringSection);
+
+        var symbolSection = new ElfSymbolTable()
+        {
+            Link = stringSection,
+
+            Entries =
             {
-                VirtualAddress = 0x2000,
-                Alignment = 4096
-            }.ConfigureAs(ElfSectionSpecialType.ReadOnlyData)
-        );
-
-        var stringSection = elf.AddSection(new ElfStringTable());
-
-        var symbolSection = elf.AddSection(
-            new ElfSymbolTable()
-            {
-                Link = stringSection,
-
-                Entries =
+                new ElfSymbol()
                 {
-                    new ElfSymbol()
-                    {
-                        Name = "local_symbol",
-                        Bind = ElfSymbolBind.Local,
-                        Section = codeSection,
-                        Size = 16,
-                        Type = ElfSymbolType.Function,
-                        Visibility = ElfSymbolVisibility.Protected,
-                        Value = 0x7896
-                    },
-                    new ElfSymbol()
-                    {
-                        Name = "GlobalSymbol",
-                        Bind = ElfSymbolBind.Global,
-                        Section = codeSection,
-                        Size = 4,
-                        Type = ElfSymbolType.Function,
-                        Value = 0x12345
-                    }
+                    Name = "local_symbol",
+                    Bind = ElfSymbolBind.Local,
+                    SectionLink = codeSection,
+                    Size = 16,
+                    Type = ElfSymbolType.Function,
+                    Visibility = ElfSymbolVisibility.Protected,
+                    Value = 0x7896
+                },
+                new ElfSymbol()
+                {
+                    Name = "GlobalSymbol",
+                    Bind = ElfSymbolBind.Global,
+                    SectionLink = codeSection,
+                    Size = 4,
+                    Type = ElfSymbolType.Function,
+                    Value = 0x12345
                 }
             }
-        );
-        elf.AddSection(new ElfSectionHeaderStringTable());
+        };
+        elf.Content.Add(symbolSection);
 
-        elf.AddSegment(new ElfSegment()
+        elf.Content.Add(new ElfSectionHeaderStringTable());
+        elf.Content.Add(new ElfSectionHeaderTable());
+
+        elf.Segments.Add(new ElfSegment()
         {
             Type = ElfSegmentTypeCore.Load,
             Range = codeSection,
-            VirtualAddress = 0x1000, 
-            PhysicalAddress = 0x1000, 
+            VirtualAddress = 0x1000,
+            PhysicalAddress = 0x1000,
             Flags = ElfSegmentFlagsCore.Readable|ElfSegmentFlagsCore.Executable,
             Size = 4096,
             SizeInMemory = 4096,
             Alignment = 4096,
         });
 
-        elf.AddSegment(new ElfSegment()
+        elf.Segments.Add(new ElfSegment()
         {
             Type = ElfSegmentTypeCore.Load,
             Range = dataSection,
@@ -245,64 +280,61 @@ public class ElfSimpleTests : ElfTestBase
     [TestMethod]
     public void SimpleProgramHeaderAndCodeSectionAndSymbolSectionAndRelocation()
     {
-        var elf = new ElfObjectFile(ElfArch.X86_64);
+        var elf = new ElfFile(ElfArch.X86_64);
 
         var codeStream = new MemoryStream();
         codeStream.Write(new byte[4096]);
 
-        var codeSection = elf.AddSection(
-            new ElfBinarySection(codeStream)
-            {
-                VirtualAddress = 0x1000,
-                Alignment = 4096
-            }.ConfigureAs(ElfSectionSpecialType.Text)
-        );
-
+        var codeSection = new ElfStreamSection(ElfSectionSpecialType.Text, codeStream)
+        {
+            VirtualAddress = 0x1000,
+            Alignment = 4096
+        };
+        elf.Content.Add(codeSection);
 
         var dataStream = new MemoryStream();
         dataStream.Write(new byte[1024]);
 
-        var dataSection = elf.AddSection(
-            new ElfBinarySection(dataStream)
+        var dataSection = new ElfStreamSection(ElfSectionSpecialType.ReadOnlyData, dataStream)
+        {
+            VirtualAddress = 0x2000,
+            Alignment = 4096
+        };
+        elf.Content.Add(dataSection);
+
+        var stringSection = new ElfStringTable();
+        elf.Content.Add(stringSection);
+
+        var symbolSection = new ElfSymbolTable()
+        {
+            Link = stringSection,
+
+            Entries =
             {
-                VirtualAddress = 0x2000,
-                Alignment = 4096
-            }.ConfigureAs(ElfSectionSpecialType.ReadOnlyData)
-        );
-
-        var stringSection = elf.AddSection(new ElfStringTable());
-
-        var symbolSection = elf.AddSection(
-            new ElfSymbolTable()
-            {
-                Link = stringSection,
-
-                Entries =
+                new ElfSymbol()
                 {
-                    new ElfSymbol()
-                    {
-                        Name = "local_symbol",
-                        Bind = ElfSymbolBind.Local,
-                        Section = codeSection,
-                        Size = 16,
-                        Type = ElfSymbolType.Function,
-                        Visibility = ElfSymbolVisibility.Protected,
-                        Value = 0x7896
-                    },
-                    new ElfSymbol()
-                    {
-                        Name = "GlobalSymbol",
-                        Bind = ElfSymbolBind.Global,
-                        Section = codeSection,
-                        Size = 4,
-                        Type = ElfSymbolType.Function,
-                        Value = 0x12345
-                    }
+                    Name = "local_symbol",
+                    Bind = ElfSymbolBind.Local,
+                    SectionLink = codeSection,
+                    Size = 16,
+                    Type = ElfSymbolType.Function,
+                    Visibility = ElfSymbolVisibility.Protected,
+                    Value = 0x7896
+                },
+                new ElfSymbol()
+                {
+                    Name = "GlobalSymbol",
+                    Bind = ElfSymbolBind.Global,
+                    SectionLink = codeSection,
+                    Size = 4,
+                    Type = ElfSymbolType.Function,
+                    Value = 0x12345
                 }
             }
-        );
+        };
+        elf.Content.Add(symbolSection);
 
-        elf.AddSegment(
+        elf.Segments.Add(
             new ElfSegment()
             {
                 Type = ElfSegmentTypeCore.Load,
@@ -316,7 +348,7 @@ public class ElfSimpleTests : ElfTestBase
             }
         );
 
-        elf.AddSegment(
+        elf.Segments.Add(
             new ElfSegment()
             {
                 Type = ElfSegmentTypeCore.Load,
@@ -330,31 +362,31 @@ public class ElfSimpleTests : ElfTestBase
             }
         );
 
-        var relocTable = elf.AddSection(
-            new ElfRelocationTable
+        var relocTable = new ElfRelocationTable
+        {
+            Name = ".rela.text",
+            Link = symbolSection,
+            Info = codeSection,
+            Entries =
             {
-                Name = ".rela.text",
-                Link = symbolSection,
-                Info = codeSection,
-                Entries =
+                new ElfRelocation()
                 {
-                    new ElfRelocation()
-                    {
-                        SymbolIndex = 1,
-                        Type = ElfRelocationType.R_X86_64_32,
-                        Offset = 0
-                    },
-                    new ElfRelocation()
-                    {
-                        SymbolIndex = 2,
-                        Type = ElfRelocationType.R_X86_64_8,
-                        Offset = 0
-                    }
+                    SymbolIndex = 1,
+                    Type = ElfRelocationType.R_X86_64_32,
+                    Offset = 0
+                },
+                new ElfRelocation()
+                {
+                    SymbolIndex = 2,
+                    Type = ElfRelocationType.R_X86_64_8,
+                    Offset = 0
                 }
             }
-        );
+        };
+        elf.Content.Add(relocTable);
 
-        elf.AddSection(new ElfSectionHeaderStringTable());
+        elf.Content.Add(new ElfSectionHeaderStringTable());
+        elf.Content.Add(new ElfSectionHeaderTable());
 
         AssertReadElf(elf, "test4.elf");
     }
@@ -366,11 +398,11 @@ public class ElfSimpleTests : ElfTestBase
         var cppName = "helloworld";
         LinuxUtil.RunLinuxExe("gcc", $"{cppName}.cpp -o {cppName}");
 
-        ElfObjectFile elf;
+        ElfFile elf;
         using (var inStream = File.OpenRead(cppName))
         {
             Console.WriteLine($"ReadBack from {cppName}");
-            elf = ElfObjectFile.Read(inStream);
+            elf = ElfFile.Read(inStream);
             elf.Print(Console.Out);
         }
 
@@ -379,7 +411,7 @@ public class ElfSimpleTests : ElfTestBase
             elf.Write(outStream);
             outStream.Flush();
         }
-                
+
         var expected = LinuxUtil.ReadElf(cppName);
         var result = LinuxUtil.ReadElf($"{cppName}_copy");
         if (expected != result)
@@ -397,20 +429,21 @@ public class ElfSimpleTests : ElfTestBase
     [TestMethod]
     public void TestAlignedSection()
     {
-        var elf = new ElfObjectFile(ElfArch.X86_64);
+        var elf = new ElfFile(ElfArch.X86_64);
 
         // By default 0x1000
-        var alignedSection = new ElfAlignedShadowSection();
-        elf.AddSection(alignedSection);
-
         var codeStream = new MemoryStream();
         codeStream.Write(Encoding.UTF8.GetBytes("This is a text"));
         codeStream.Position = 0;
 
-        var codeSection = new ElfBinarySection(codeStream).ConfigureAs(ElfSectionSpecialType.Text);
-        elf.AddSection(codeSection);
+        var codeSection = new ElfStreamSection(ElfSectionSpecialType.Text, codeStream)
+        {
+            Alignment = 0x1000,
+        };
+        elf.Content.Add(codeSection);
 
-        elf.AddSection(new ElfSectionHeaderStringTable());
+        elf.Content.Add(new ElfSectionHeaderStringTable());
+        elf.Content.Add(new ElfSectionHeaderTable());
 
         var diagnostics = elf.Verify();
         Assert.IsFalse(diagnostics.HasErrors);
@@ -420,36 +453,37 @@ public class ElfSimpleTests : ElfTestBase
 
         elf.Print(Console.Out);
 
-        Assert.AreEqual(alignedSection.UpperAlignment, codeSection.Position, "Invalid alignment");
+        Assert.AreEqual(0x1000ul, codeSection.Position, "Invalid alignment");
     }
 
     [TestMethod]
     public void TestManySections()
     {
-        var elf = new ElfObjectFile(ElfArch.X86_64);
+        var elf = new ElfFile(ElfArch.X86_64);
         var stringTable = new ElfStringTable();
         var symbolTable = new ElfSymbolTable { Link = stringTable };
 
         for (int i = 0; i < ushort.MaxValue; i++)
         {
-            var section = new ElfBinarySection { Name = $".section{i}" };
-            elf.AddSection(section);
-            symbolTable.Entries.Add(new ElfSymbol { Type = ElfSymbolType.Section, Section = section });
+            var section = new ElfStreamSection(ElfSectionSpecialType.Data) { Name = $".section{i}" };
+            elf.Content.Add(section);
+            symbolTable.Entries.Add(new ElfSymbol { Type = ElfSymbolType.Section, SectionLink = section });
         }
 
-        elf.AddSection(stringTable);
-        elf.AddSection(symbolTable);
-        elf.AddSection(new ElfSectionHeaderStringTable());
+        elf.Content.Add(stringTable);
+        elf.Content.Add(symbolTable);
+        elf.Content.Add(new ElfSectionHeaderStringTable());
+        elf.Content.Add(new ElfSectionHeaderTable());
 
         var diagnostics = elf.Verify();
         Assert.IsTrue(diagnostics.HasErrors);
         Assert.AreEqual(DiagnosticId.ELF_ERR_MissingSectionHeaderIndices, diagnostics.Messages[0].Id);
 
-        elf.AddSection(new ElfSymbolTableSectionHeaderIndices { Link = symbolTable });
+        elf.Content.Add(new ElfSymbolTableSectionHeaderIndices { Link = symbolTable });
         diagnostics = elf.Verify();
         Assert.IsFalse(diagnostics.HasErrors);
 
-        uint visibleSectionCount = elf.VisibleSectionCount;
+        int visibleSectionCount = elf.Sections.Count;
 
         using (var outStream = File.OpenWrite("manysections"))
         {
@@ -459,39 +493,39 @@ public class ElfSimpleTests : ElfTestBase
 
         using (var inStream = File.OpenRead("manysections"))
         {
-            elf = ElfObjectFile.Read(inStream);
+            elf = ElfFile.Read(inStream);
         }
 
-        Assert.AreEqual(visibleSectionCount, elf.VisibleSectionCount);
-        Assert.IsTrue(elf.Sections[0] is ElfNullSection);
-        Assert.IsTrue(elf.Sections[1] is ElfProgramHeaderTable);
+        Assert.AreEqual(visibleSectionCount, elf.Sections.Count);
+        Assert.IsTrue(elf.Content[1] is ElfNullSection);
 
         for (int i = 0; i < ushort.MaxValue; i++)
         {
-            Assert.IsTrue(elf.Sections[i + 2] is ElfBinarySection);
-            Assert.AreEqual($".section{i}", elf.Sections[i + 2].Name.Value);
+            var section = elf.Sections[i + 1];
+            Assert.IsInstanceOfType<ElfStreamSection>(section, $"Invalid section at index {i}");
+            Assert.AreEqual($".section{i}", section.Name.Value);
         }
 
-        Assert.IsTrue(elf.Sections[ushort.MaxValue + 3] is ElfSymbolTable);
-        symbolTable = (ElfSymbolTable)elf.Sections[ushort.MaxValue + 3];
+        symbolTable = elf.Sections.ToList().OfType<ElfSymbolTable>().FirstOrDefault();
+        Assert.IsNotNull(symbolTable);
         for (int i = 0; i < ushort.MaxValue; i++)
         {
-            Assert.AreEqual($".section{i}", symbolTable.Entries[i + 1].Section.Section!.Name.Value);
+            Assert.AreEqual($".section{i}", symbolTable.Entries[i + 1].SectionLink.Section!.Name.Value);
         }
     }
 
     [TestMethod]
     public void TestReadLibStdc()
     {
-        ElfObjectFile elf;
+        ElfFile elf;
         {
             using var stream = File.OpenRead("libstdc++.so");
-            elf = ElfObjectFile.Read(stream);
+            elf = ElfFile.Read(stream);
         }
 
         var writer = new StringWriter();
 
-        writer.WriteLine($"There are {elf.VisibleSectionCount} section headers, starting at offset 0x{elf.Layout.OffsetOfSectionHeaderTable:x}:");
+        writer.WriteLine($"There are {elf.Sections.Count} section headers, starting at offset 0x{elf.Layout.OffsetOfSectionHeaderTable:x}:");
         ElfPrinter.PrintSectionHeaders(elf, writer);
 
         var result = writer.ToString().Replace("\r\n", "\n").TrimEnd();

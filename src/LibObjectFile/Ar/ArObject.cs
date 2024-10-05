@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -15,8 +15,8 @@ public abstract class ArObjectBase : ObjectFileElement<ArVisitorContext, ArVisit
 public abstract class ArObject : ArObjectBase
 {
     /// <summary>
-    /// Gets the containing <see cref="ElfObjectFile"/>. Might be null if this section or segment
-    /// does not belong to an existing <see cref="ElfObjectFile"/>.
+    /// Gets the containing <see cref="ElfFile"/>. Might be null if this section or segment
+    /// does not belong to an existing <see cref="ElfFile"/>.
     /// </summary>
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     public new ArArchiveFile? Parent

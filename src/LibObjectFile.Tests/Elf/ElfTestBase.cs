@@ -10,7 +10,7 @@ namespace LibObjectFile.Tests.Elf;
 
 public abstract class ElfTestBase
 {
-    protected static void AssertReadElf(ElfObjectFile elf, string fileName)
+    protected static void AssertReadElf(ElfFile elf, string fileName)
     {
         AssertReadElfInternal(elf, fileName);
         AssertReadBack(elf, fileName, readAsReadOnly: false);
@@ -18,7 +18,7 @@ public abstract class ElfTestBase
         AssertLsbMsb(elf, fileName);
     }
         
-    protected static void AssertReadElfInternal(ElfObjectFile elf, string fileName, bool writeFile = true, string? context = null, string? readElfParams = null)
+    protected static void AssertReadElfInternal(ElfFile elf, string fileName, bool writeFile = true, string? context = null, string? readElfParams = null)
     {
         if (writeFile)
         {
@@ -54,14 +54,14 @@ public abstract class ElfTestBase
         }
     }
         
-    protected static void AssertReadBack(ElfObjectFile elf, string fileName, bool readAsReadOnly)
+    protected static void AssertReadBack(ElfFile elf, string fileName, bool readAsReadOnly)
     {
-        ElfObjectFile newObjectFile;
+        ElfFile newFile;
 
         var filePath = Path.Combine(Environment.CurrentDirectory, fileName);
         using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
         {
-            newObjectFile = ElfObjectFile.Read(stream, new ElfReaderOptions() {ReadOnly = readAsReadOnly});
+            newFile = ElfFile.Read(stream, new ElfReaderOptions() {ReadOnly = readAsReadOnly});
 
             Console.WriteLine();
             Console.WriteLine("=============================================================================");
@@ -69,18 +69,18 @@ public abstract class ElfTestBase
             Console.WriteLine("=============================================================================");
             Console.WriteLine();
 
-            AssertReadElfInternal(newObjectFile, fileName, false, $"Unexpected error while reading back {fileName}");
+            AssertReadElfInternal(newFile, fileName, false, $"Unexpected error while reading back {fileName}");
 
             var originalBuffer = File.ReadAllBytes(filePath);
             var memoryStream = new MemoryStream();
-            newObjectFile.Write(memoryStream);
+            newFile.Write(memoryStream);
             var newBuffer = memoryStream.ToArray();
 
             ByteArrayAssert.AreEqual(originalBuffer, newBuffer, "Invalid binary diff between write -> (original) -> read -> write -> (new)");
         }
     }
 
-    private static void AssertLsbMsb(ElfObjectFile elf, string fileName)
+    private static void AssertLsbMsb(ElfFile elf, string fileName)
     {
         Console.WriteLine();
         Console.WriteLine("*****************************************************************************");

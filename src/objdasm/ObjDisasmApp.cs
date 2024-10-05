@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -25,7 +25,7 @@ public class ObjDisasmApp
     }
 
     public List<Regex> FunctionRegexFilters { get; }
-        
+
     public List<string> Files { get; }
 
     public bool Verbose { get; set; }
@@ -50,21 +50,21 @@ public class ObjDisasmApp
                 {
                     if (objFile is ArElfFile elfFile)
                     {
-                        ProcessElf(objFile.Name, elfFile.ElfObjectFile);
+                        ProcessElf(objFile.Name, elfFile.ElfFile);
                     }
                 }
             }
-            else if (ElfObjectFile.IsElf(stream))
+            else if (ElfFile.IsElf(stream))
             {
-                var elfObjectFile = ElfObjectFile.Read(stream, new ElfReaderOptions() {ReadOnly = true});
+                var elfObjectFile = ElfFile.Read(stream, new ElfReaderOptions() {ReadOnly = true});
                 ProcessElf(Path.GetFileName(file), elfObjectFile);
             }
         }
     }
 
-    private void ProcessElf(string name, ElfObjectFile elfObjectFile)
+    private void ProcessElf(string name, ElfFile elfFile)
     {
-        foreach(var symbolTable in elfObjectFile.Sections.OfType<ElfSymbolTable>())
+        foreach(var symbolTable in elfFile.Sections.OfType<ElfSymbolTable>())
         {
             foreach(var symbol in symbolTable.Entries)
             {
@@ -75,7 +75,7 @@ public class ObjDisasmApp
                 {
                     foreach (var functionRegexFilter in FunctionRegexFilters)
                     {
-                        if (functionRegexFilter.Match(symbol.Name).Success)
+                        if (functionRegexFilter.Match(symbol.Name.Value).Success)
                         {
                             DumpFunction(symbol);
                             break;
@@ -93,10 +93,10 @@ public class ObjDisasmApp
     private void DumpFunction(ElfSymbol symbol)
     {
         var functionSize = symbol.Size;
-        var section = symbol.Section.Section;
+        var section = symbol.SectionLink.Section;
         Output.WriteLine($"Function: {symbol.Name}");
 
-        if (section is ElfBinarySection binarySection)
+        if (section is ElfStreamSection binarySection)
         {
             binarySection.Stream.Position = (long)symbol.Value;
 
@@ -111,7 +111,7 @@ public class ObjDisasmApp
         var startPosition = stream.Position;
         stream.Read(buffer, 0, (int) size);
         stream.Position = startPosition;
-            
+
         // You can also pass in a hex string, eg. "90 91 929394", or you can use your own CodeReader
         // reading data from a file or memory etc
         var codeReader = new StreamCodeReader(stream, size);

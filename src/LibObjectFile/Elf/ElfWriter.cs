@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -8,24 +8,22 @@ using System.IO;
 namespace LibObjectFile.Elf;
 
 /// <summary>
-/// Base class for writing an <see cref="ElfObjectFile"/> to a <see cref="Stream"/>.
+/// Base class for writing an <see cref="ElfFile"/> to a <see cref="Stream"/>.
 /// </summary>
 public abstract class ElfWriter : ObjectFileReaderWriter, IElfEncoder
 {
-    private protected ElfWriter(ElfObjectFile objectFile, Stream stream) : base(objectFile, stream)
+    private protected ElfWriter(ElfFile file, Stream stream) : base(file, stream)
     {
     }
 
-    public ElfObjectFile ObjectFile => (ElfObjectFile)base.File;
+    public new ElfFile File => (ElfFile)base.File;
 
-    internal abstract void Write();
-        
     public override bool KeepOriginalStreamForSubStreams => false;
-        
-    internal static ElfWriter Create(ElfObjectFile objectFile, Stream stream)
+
+    internal static ElfWriter Create(ElfFile file, Stream stream)
     {
         var thisComputerEncoding = BitConverter.IsLittleEndian ? ElfEncoding.Lsb : ElfEncoding.Msb;
-        return objectFile.Encoding == thisComputerEncoding ? (ElfWriter) new ElfWriterDirect(objectFile, stream) : new ElfWriterSwap(objectFile, stream);
+        return file.Encoding == thisComputerEncoding ? (ElfWriter) new ElfWriterDirect(file, stream) : new ElfWriterSwap(file, stream);
     }
 
     public abstract void Encode(out ElfNative.Elf32_Half dest, ushort value);

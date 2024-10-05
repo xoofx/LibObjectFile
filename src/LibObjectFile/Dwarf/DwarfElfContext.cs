@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -11,7 +11,7 @@ using LibObjectFile.Elf;
 
 namespace LibObjectFile.Dwarf;
 
-public class DwarfElfContext : VisitorContextBase<ElfObjectFile>
+public class DwarfElfContext : VisitorContextBase<ElfFile>
 {
     private readonly int _codeSectionSymbolIndex;
     private int _infoSectionSymbolIndex;
@@ -21,14 +21,14 @@ public class DwarfElfContext : VisitorContextBase<ElfObjectFile>
     private int _locationSectionSymbolIndex;
     private readonly ElfSymbolTable? _symbolTable;
 
-    public DwarfElfContext(ElfObjectFile elf) : base(elf, new DiagnosticBag())
+    public DwarfElfContext(ElfFile elf) : base(elf, new DiagnosticBag())
     {
         Elf = elf ?? throw new ArgumentNullException(nameof(elf));
 
         var relocContext = new ElfRelocationContext();
 
-        var codeSection = elf.Sections.OfType<ElfBinarySection>().FirstOrDefault(s => s.Name == ".text");
-            
+        var codeSection = elf.Sections.OfType<ElfStreamSection>().FirstOrDefault(s => s.Name == ".text");
+
         _symbolTable = elf.Sections.OfType<ElfSymbolTable>().FirstOrDefault();
         var mapSectionToSymbolIndex = new Dictionary<ElfSection, int>();
         if (_symbolTable != null)
@@ -37,9 +37,9 @@ public class DwarfElfContext : VisitorContextBase<ElfObjectFile>
             {
                 var entry = _symbolTable.Entries[i];
 
-                if (entry.Type == ElfSymbolType.Section && entry.Section.Section != null)
+                if (entry.Type == ElfSymbolType.Section && entry.SectionLink.Section != null)
                 {
-                    mapSectionToSymbolIndex[entry.Section.Section] = i;
+                    mapSectionToSymbolIndex[entry.SectionLink.Section] = i;
                 }
             }
 
@@ -51,7 +51,7 @@ public class DwarfElfContext : VisitorContextBase<ElfObjectFile>
                     _symbolTable.Entries.Add(new ElfSymbol()
                     {
                         Type = ElfSymbolType.Section,
-                        Section = codeSection,
+                        SectionLink = codeSection,
                     });
                 }
             }
@@ -62,26 +62,26 @@ public class DwarfElfContext : VisitorContextBase<ElfObjectFile>
             switch (section.Name.Value)
             {
                 case ".debug_info":
-                    InfoSection = ((ElfBinarySection)section);
+                    InfoSection = ((ElfStreamSection)section);
                     mapSectionToSymbolIndex.TryGetValue(InfoSection, out _infoSectionSymbolIndex);
                     break;
                 case ".debug_abbrev":
-                    AbbreviationTable = ((ElfBinarySection)section);
+                    AbbreviationTable = ((ElfStreamSection)section);
                     mapSectionToSymbolIndex.TryGetValue(AbbreviationTable, out _abbreviationTableSymbolIndex);
                     break;
                 case ".debug_aranges":
-                    AddressRangeTable = ((ElfBinarySection)section);
+                    AddressRangeTable = ((ElfStreamSection)section);
                     break;
                 case ".debug_str":
-                    StringTable = ((ElfBinarySection)section);
+                    StringTable = ((ElfStreamSection)section);
                     mapSectionToSymbolIndex.TryGetValue(StringTable, out _stringTableSymbolIndex);
                     break;
                 case ".debug_line":
-                    LineTable = ((ElfBinarySection)section);
+                    LineTable = ((ElfStreamSection)section);
                     mapSectionToSymbolIndex.TryGetValue(LineTable, out _lineTableSymbolIndex);
                     break;
                 case ".debug_loc":
-                    LocationSection = ((ElfBinarySection)section);
+                    LocationSection = ((ElfStreamSection)section);
                     mapSectionToSymbolIndex.TryGetValue(LocationSection, out _locationSectionSymbolIndex);
                     break;
 
@@ -111,30 +111,30 @@ public class DwarfElfContext : VisitorContextBase<ElfObjectFile>
             }
         }
     }
-        
-    public ElfObjectFile Elf { get; }
+
+    public ElfFile Elf { get; }
 
     public bool IsLittleEndian => Elf.Encoding == ElfEncoding.Lsb;
 
     public DwarfAddressSize AddressSize => Elf.FileClass == ElfFileClass.Is64 ? DwarfAddressSize.Bit64 : DwarfAddressSize.Bit32;
 
-    public ElfBinarySection? InfoSection { get; private set; }
+    public ElfStreamSection? InfoSection { get; private set; }
 
     public ElfRelocationTable? RelocInfoSection { get; set; }
 
-    public ElfBinarySection? AbbreviationTable { get; set; }
+    public ElfStreamSection? AbbreviationTable { get; set; }
 
-    public ElfBinarySection? AddressRangeTable { get; private set; }
+    public ElfStreamSection? AddressRangeTable { get; private set; }
 
     public ElfRelocationTable? RelocAddressRangeTable { get; set; }
 
-    public ElfBinarySection? StringTable { get; set; }
+    public ElfStreamSection? StringTable { get; set; }
 
-    public ElfBinarySection? LineTable { get; set; }
+    public ElfStreamSection? LineTable { get; set; }
 
     public ElfRelocationTable? RelocLineTable { get; set; }
 
-    public ElfBinarySection? LocationSection { get; private set; }
+    public ElfStreamSection? LocationSection { get; private set; }
 
     public ElfRelocationTable? RelocLocationSection { get; set; }
 
@@ -150,7 +150,7 @@ public class DwarfElfContext : VisitorContextBase<ElfObjectFile>
 
     public int LocationSectionSymbolIndex => _locationSectionSymbolIndex;
 
-    public ElfBinarySection GetOrCreateInfoSection()
+    public ElfStreamSection GetOrCreateInfoSection()
     {
         return InfoSection ??= GetOrCreateDebugSection(".debug_info", true, out _infoSectionSymbolIndex);
     }
@@ -160,12 +160,12 @@ public class DwarfElfContext : VisitorContextBase<ElfObjectFile>
         return RelocInfoSection ??= GetOrCreateRelocationTable(InfoSection!);
     }
 
-    public ElfBinarySection GetOrCreateAbbreviationTable()
+    public ElfStreamSection GetOrCreateAbbreviationTable()
     {
         return AbbreviationTable ??= GetOrCreateDebugSection(".debug_abbrev", true, out _abbreviationTableSymbolIndex);
     }
-        
-    public ElfBinarySection GetOrCreateAddressRangeTable()
+
+    public ElfStreamSection GetOrCreateAddressRangeTable()
     {
         return AddressRangeTable ??= GetOrCreateDebugSection(".debug_aranges", false, out _);
     }
@@ -175,7 +175,7 @@ public class DwarfElfContext : VisitorContextBase<ElfObjectFile>
         return RelocAddressRangeTable ??= GetOrCreateRelocationTable(AddressRangeTable!);
     }
 
-    public ElfBinarySection GetOrCreateLineSection()
+    public ElfStreamSection GetOrCreateLineSection()
     {
         return LineTable ??= GetOrCreateDebugSection(".debug_line", true, out _lineTableSymbolIndex);
     }
@@ -185,12 +185,12 @@ public class DwarfElfContext : VisitorContextBase<ElfObjectFile>
         return RelocLineTable ??= GetOrCreateRelocationTable(LineTable!);
     }
 
-    public ElfBinarySection GetOrCreateStringTable()
+    public ElfStreamSection GetOrCreateStringTable()
     {
         return StringTable ??= GetOrCreateDebugSection(".debug_str", true, out _stringTableSymbolIndex);
     }
 
-    public ElfBinarySection GetOrCreateLocationSection()
+    public ElfStreamSection GetOrCreateLocationSection()
     {
         return LocationSection ??= GetOrCreateDebugSection(".debug_loc", true, out _locationSectionSymbolIndex);
     }
@@ -204,7 +204,7 @@ public class DwarfElfContext : VisitorContextBase<ElfObjectFile>
     {
         if (StringTable != null)
         {
-            Elf.RemoveSection(StringTable);
+            Elf.Content.Remove(StringTable);
             StringTable = null;
         }
     }
@@ -213,7 +213,7 @@ public class DwarfElfContext : VisitorContextBase<ElfObjectFile>
     {
         if (AbbreviationTable != null)
         {
-            Elf.RemoveSection(AbbreviationTable);
+            Elf.Content.Remove(AbbreviationTable);
             AbbreviationTable = null;
         }
     }
@@ -222,7 +222,7 @@ public class DwarfElfContext : VisitorContextBase<ElfObjectFile>
     {
         if (LineTable != null)
         {
-            Elf.RemoveSection(LineTable);
+            Elf.Content.Remove(LineTable);
             LineTable = null;
         }
 
@@ -233,7 +233,7 @@ public class DwarfElfContext : VisitorContextBase<ElfObjectFile>
     {
         if (RelocLineTable != null)
         {
-            Elf.RemoveSection(RelocLineTable);
+            Elf.Content.Remove(RelocLineTable);
             RelocLineTable = null;
         }
     }
@@ -242,7 +242,7 @@ public class DwarfElfContext : VisitorContextBase<ElfObjectFile>
     {
         if (AddressRangeTable != null)
         {
-            Elf.RemoveSection(AddressRangeTable);
+            Elf.Content.Remove(AddressRangeTable);
             AddressRangeTable = null;
         }
 
@@ -253,7 +253,7 @@ public class DwarfElfContext : VisitorContextBase<ElfObjectFile>
     {
         if (RelocAddressRangeTable != null)
         {
-            Elf.RemoveSection(RelocAddressRangeTable);
+            Elf.Content.Remove(RelocAddressRangeTable);
             RelocAddressRangeTable = null;
         }
     }
@@ -262,7 +262,7 @@ public class DwarfElfContext : VisitorContextBase<ElfObjectFile>
     {
         if (InfoSection != null)
         {
-            Elf.RemoveSection(InfoSection);
+            Elf.Content.Remove(InfoSection);
             InfoSection = null;
         }
 
@@ -273,7 +273,7 @@ public class DwarfElfContext : VisitorContextBase<ElfObjectFile>
     {
         if (RelocInfoSection != null)
         {
-            Elf.RemoveSection(RelocInfoSection);
+            Elf.Content.Remove(RelocInfoSection);
             RelocInfoSection = null;
         }
     }
@@ -282,7 +282,7 @@ public class DwarfElfContext : VisitorContextBase<ElfObjectFile>
     {
         if (LocationSection != null)
         {
-            Elf.RemoveSection(LocationSection);
+            Elf.Content.Remove(LocationSection);
             LocationSection = null;
         }
 
@@ -293,22 +293,21 @@ public class DwarfElfContext : VisitorContextBase<ElfObjectFile>
     {
         if (RelocLocationSection != null)
         {
-            Elf.RemoveSection(RelocLocationSection);
+            Elf.Content.Remove(RelocLocationSection);
             RelocLocationSection = null;
         }
     }
 
-    private ElfBinarySection GetOrCreateDebugSection(string name, bool createSymbol, out int symbolIndex)
+    private ElfStreamSection GetOrCreateDebugSection(string name, bool createSymbol, out int symbolIndex)
     {
-        var newSection = new ElfBinarySection()
+        var newSection = new ElfStreamSection(ElfSectionType.ProgBits)
         {
-            Name = name, 
-            Alignment = 1, 
-            Type = ElfSectionType.ProgBits,
+            Name = name,
+            Alignment = 1,
             Stream = new MemoryStream(),
         };
 
-        Elf.AddSection(newSection);
+        Elf.Content.Add(newSection);
         symbolIndex = 0;
 
         if (createSymbol && _symbolTable != null)
@@ -317,25 +316,24 @@ public class DwarfElfContext : VisitorContextBase<ElfObjectFile>
             _symbolTable.Entries.Add(new ElfSymbol()
             {
                 Type = ElfSymbolType.Section,
-                Section = newSection,
+                SectionLink = newSection,
             });
         }
 
         return newSection;
     }
 
-    private ElfRelocationTable GetOrCreateRelocationTable(ElfBinarySection section)
+    private ElfRelocationTable GetOrCreateRelocationTable(ElfStreamSection section)
     {
-        var newSection = new ElfRelocationTable()
+        var newSection = new ElfRelocationTable(true)
         {
-            Name = $".rela{section.Name}", 
-            Alignment = (ulong)AddressSize, 
-            Flags = ElfSectionFlags.InfoLink, 
-            Type = ElfSectionType.RelocationAddends,
+            Name = $".rela{section.Name}",
+            Alignment = (ulong)AddressSize,
+            Flags = ElfSectionFlags.InfoLink,
             Info = section,
             Link = _symbolTable,
         };
-        Elf.AddSection(newSection);
+        Elf.Content.Add(newSection);
         return newSection;
     }
 }
