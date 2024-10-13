@@ -18,7 +18,6 @@ public class ElfSimpleTests : ElfTestBase
     public TestContext TestContext { get; set; }
 
     [DataTestMethod]
-    [Ignore]
     [DynamicData(nameof(GetLinuxBins), DynamicDataSourceType.Method)]
     public void TestLinuxFile(string file)
     {
