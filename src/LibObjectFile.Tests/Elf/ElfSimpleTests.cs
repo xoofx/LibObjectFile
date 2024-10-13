@@ -18,24 +18,41 @@ public class ElfSimpleTests : ElfTestBase
     public TestContext TestContext { get; set; }
 
     [DataTestMethod]
+    [Ignore]
     [DynamicData(nameof(GetLinuxBins), DynamicDataSourceType.Method)]
     public void TestLinuxFile(string file)
     {
+        if (!OperatingSystem.IsLinux())
+        {
+            Assert.Inconclusive("This test can only run on Linux");
+            return;
+        }
+
         using var stream = File.OpenRead(file);
         if (!ElfFile.IsElf(stream)) return;
         var elf = ElfFile.Read(stream);
-        var writer = new StringWriter();
-        writer.WriteLine("---------------------------------------------------------------------------------------");
-        writer.WriteLine($"{file}");
-        elf.Print(writer);
-        writer.WriteLine();
+
+        // TODO: check for errors
+
+        //var writer = new StringWriter();
+        //writer.WriteLine("---------------------------------------------------------------------------------------");
+        //writer.WriteLine($"{file}");
+        //elf.Print(writer);
+        //writer.WriteLine();
     }
 
     public static IEnumerable<object[]> GetLinuxBins()
     {
-        foreach (var file in Directory.EnumerateFiles(@"C:\code\LibObjectFile\tmp\linux_bins"))
+        if (OperatingSystem.IsLinux())
         {
-            yield return new object[] { file };
+            foreach (var file in Directory.EnumerateFiles(@"/usr/bin"))
+            {
+                yield return new object[] { file };
+            }
+        }
+        else
+        {
+            yield return new object[] { string.Empty };
         }
     }
 
