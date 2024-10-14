@@ -129,6 +129,15 @@ partial class ElfFile
         for (int i = 0; i < contentList.Count; i++)
         {
             var part = contentList[i];
+            if (part is ElfSection section && !section.HasContent)
+            {
+                if (section is ElfNoBitsSection noBitsSection)
+                {
+                    noBitsSection.PositionOffsetFromPreviousContent = part.Position - contentList[i - 1].Position;
+                }
+                continue;
+            }
+
             if (part.Position > currentPosition)
             {
                 var streamContent = new ElfStreamContentData(true)
@@ -141,16 +150,7 @@ partial class ElfFile
                 currentPosition = part.Position;
                 i++;
             }
-            else if (part.Position < currentPosition && part is ElfNoBitsSection notBitsSection)
-            {
-                notBitsSection.PositionOffsetIntoPreviousSection = part.Position - contentList[i-1].Position;
-            }
-
-            if (part is ElfSection section && !section.HasContent)
-            {
-                continue;
-            }
-
+            
             currentPosition += part.Size;
         }
 

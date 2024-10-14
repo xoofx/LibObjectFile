@@ -21,6 +21,11 @@ partial class ElfFile
         for (var i = 0; i < contentList.Count; i++)
         {
             var content = contentList[i];
+            if (content is ElfSection section && section.Type == ElfSectionType.NoBits)
+            {
+                continue;
+            }
+
             if (content.Position > writer.Position)
             {
                 writer.WriteZero((int)(content.Position - writer.Position));
