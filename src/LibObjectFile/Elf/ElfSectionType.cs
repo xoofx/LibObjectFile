@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -93,6 +93,11 @@ public enum ElfSectionType : uint
     /// Extended section indices
     /// </summary>
     SymbolTableSectionHeaderIndices = ElfNative.SHT_SYMTAB_SHNDX,
+
+    /// <summary>
+    /// RELR relative relocations
+    /// </summary>
+    RelativeRelocation = ElfNative.SHT_RELR,
 
     /// <summary>
     /// Object attributes.

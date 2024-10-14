@@ -633,6 +633,8 @@ public static class ElfPrinter
                 return "GROUP";
             case ElfSectionType.SymbolTableSectionHeaderIndices:
                 return "SYMTAB SECTION INDICIES";
+            case ElfSectionType.RelativeRelocation:
+                return "RELR";
             case ElfSectionType.GnuHash:
                 return "GNU_HASH";
             case ElfSectionType.GnuLibList:
