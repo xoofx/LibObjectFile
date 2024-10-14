@@ -10,7 +10,9 @@
 
   <ItemGroup>
     <None Remove="Elf\helloworld" />
+    <None Remove="Elf\helloworld.o" />
     <None Remove="Elf\helloworld_debug" />
+    <None Remove="Elf\libhelloworld.a" />
     <None Remove="Elf\lib_debug.so" />
     <None Remove="Elf\multiple_functions_debug.o" />
     <None Remove="Elf\small_debug.o" />
@@ -30,7 +32,13 @@
     <Content Include="Elf\helloworld">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Elf\helloworld.o">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Elf\helloworld_debug">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Elf\libhelloworld.a">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Elf\libstdc++.so">

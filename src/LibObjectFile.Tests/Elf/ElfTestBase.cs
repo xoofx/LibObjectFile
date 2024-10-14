@@ -73,16 +73,18 @@ public abstract class ElfTestBase : VerifyBase
 
     protected ElfFile LoadElf(string name)
     {
-        var file = Path.Combine(AppContext.BaseDirectory, "Elf", name);
+        var file = GetFile(name);
         using var stream = File.OpenRead(file);
         return ElfFile.Read(stream);
     }
 
     protected ElfFile LoadElf(string name, out byte[] originalBinary)
     {
-        var file = Path.Combine(AppContext.BaseDirectory, "Elf", name);
+        var file = GetFile(name);
         originalBinary = File.ReadAllBytes(file);
         using var stream = File.OpenRead(file);
         return ElfFile.Read(stream);
     }
+
+    protected string GetFile(string name) => Path.Combine(AppContext.BaseDirectory, "Elf", name);
 }

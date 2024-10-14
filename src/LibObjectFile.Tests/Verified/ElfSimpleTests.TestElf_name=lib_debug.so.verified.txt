@@ -10,7 +10,7 @@
   Version:                           0x1
   Entry point address:               0x0
   Start of program headers:          64 (bytes into file)
-  Start of section headers:          14600 (bytes into file)
+  Start of section headers:          14608 (bytes into file)
   Flags:                             0x0
   Size of this header:               64 (bytes)
   Size of program headers:           56 (bytes)
@@ -47,10 +47,10 @@ Section Headers:
   [23] .debug_info       PROGBITS        0000000000000000 0030ab 0000ec 00      0   0  1
   [24] .debug_abbrev     PROGBITS        0000000000000000 003197 00009c 00      0   0  1
   [25] .debug_line       PROGBITS        0000000000000000 003233 000089 00      0   0  1
-  [26] .debug_str        PROGBITS        0000000000000000 0032bc 000121 01  MS  0   0  1
-  [27] .symtab           SYMTAB          0000000000000000 0033e0 000288 18     28  21  8
-  [28] .strtab           STRTAB          0000000000000000 003668 000187 00      0   0  1
-  [29] .shstrtab         STRTAB          0000000000000000 0037ef 000116 00      0   0  1
+  [26] .debug_str        PROGBITS        0000000000000000 0032bc 000125 01  MS  0   0  1
+  [27] .symtab           SYMTAB          0000000000000000 0033e8 000288 18     28  21  8
+  [28] .strtab           STRTAB          0000000000000000 003670 000187 00      0   0  1
+  [29] .shstrtab         STRTAB          0000000000000000 0037f7 000116 00      0   0  1
 Key to Flags:
   W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
   L (link order), O (extra OS processing required), G (group), T (TLS),
@@ -148,4 +148,4 @@ Displaying notes found in: .note.gnu.property
 
 Displaying notes found in: .note.gnu.build-id
   Owner		Data size	Description
-  GNU		0x00000014	NT_GNU_BUILD_ID (unique build ID bitstring)		Build ID: 3134826394c155f82a73683e6a520648ebfe57eb
+  GNU		0x00000014	NT_GNU_BUILD_ID (unique build ID bitstring)		Build ID: 613aa3a0ee372ec5f201a0f9c375bbfcf5dd75e5

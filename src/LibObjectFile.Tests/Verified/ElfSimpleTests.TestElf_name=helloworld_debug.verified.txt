@@ -10,7 +10,7 @@
   Version:                           0x1
   Entry point address:               0x1060
   Start of program headers:          64 (bytes into file)
-  Start of section headers:          14824 (bytes into file)
+  Start of section headers:          14832 (bytes into file)
   Flags:                             0x0
   Size of this header:               64 (bytes)
   Size of program headers:           56 (bytes)
@@ -53,10 +53,10 @@ Section Headers:
   [29] .debug_info       PROGBITS        0000000000000000 00306b 0000dd 00      0   0  1
   [30] .debug_abbrev     PROGBITS        0000000000000000 003148 000060 00      0   0  1
   [31] .debug_line       PROGBITS        0000000000000000 0031a8 00004a 00      0   0  1
-  [32] .debug_str        PROGBITS        0000000000000000 0031f2 000156 01  MS  0   0  1
-  [33] .symtab           SYMTAB          0000000000000000 003348 000360 18     34  18  8
-  [34] .strtab           STRTAB          0000000000000000 0036a8 0001e2 00      0   0  1
-  [35] .shstrtab         STRTAB          0000000000000000 00388a 00015a 00      0   0  1
+  [32] .debug_str        PROGBITS        0000000000000000 0031f2 00015a 01  MS  0   0  1
+  [33] .symtab           SYMTAB          0000000000000000 003350 000360 18     34  18  8
+  [34] .strtab           STRTAB          0000000000000000 0036b0 0001e2 00      0   0  1
+  [35] .shstrtab         STRTAB          0000000000000000 003892 00015a 00      0   0  1
 Key to Flags:
   W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
   L (link order), O (extra OS processing required), G (group), T (TLS),
@@ -172,7 +172,7 @@ Displaying notes found in: .note.gnu.property
 
 Displaying notes found in: .note.gnu.build-id
   Owner		Data size	Description
-  GNU		0x00000014	NT_GNU_BUILD_ID (unique build ID bitstring)		Build ID: e24b02ce370f3d95023dc7feb6e8392f84879f73
+  GNU		0x00000014	NT_GNU_BUILD_ID (unique build ID bitstring)		Build ID: e1e668f3756a7fc90bd1a79a2017586b8ac2ab0b
 
 Displaying notes found in: .note.ABI-tag
   Owner		Data size	Description

@@ -7,11 +7,12 @@ using System.IO;
 using LibObjectFile.Diagnostics;
 using LibObjectFile.Dwarf;
 using LibObjectFile.Elf;
+using LibObjectFile.Tests.Elf;
 
 namespace LibObjectFile.Tests.Dwarf;
 
 [TestClass]
-public class DwarfTests
+public class DwarfTests : ElfTestBase
 {
     [DataTestMethod]
     [DataRow(0UL)]
@@ -81,17 +82,7 @@ public class DwarfTests
     [TestMethod]
     public void TestDebugLineHelloWorld()
     {
-        var cppName = "helloworld";
-        var cppExe = $"{cppName}_debug";
-        LinuxUtil.RunLinuxExe("gcc", $"{cppName}.cpp -gdwarf-4 -o {cppExe}");
-
-        ElfFile elf;
-        using (var inStream = File.OpenRead(cppExe))
-        {
-            Console.WriteLine($"ReadBack from {cppExe}");
-            elf = ElfFile.Read(inStream);
-            elf.Print(Console.Out);
-        }
+        ElfFile elf = LoadElf("helloworld_debug");
 
         var elfContext = new DwarfElfContext(elf);
         var inputContext = new DwarfReaderContext(elfContext);
@@ -140,17 +131,7 @@ public class DwarfTests
     [TestMethod]
     public void TestDebugLineLibMultipleObjs()
     {
-        var cppName = "lib";
-        var libShared = $"{cppName}_debug.so";
-        LinuxUtil.RunLinuxExe("gcc", $"{cppName}_a.cpp {cppName}_b.cpp -gdwarf-4 -shared -o {libShared}");
-
-        ElfFile elf;
-        using (var inStream = File.OpenRead(libShared))
-        {
-            Console.WriteLine($"ReadBack from {libShared}");
-            elf = ElfFile.Read(inStream);
-            elf.Print(Console.Out);
-        }
+        ElfFile elf = LoadElf("lib_debug.so");
 
         var elfContext = new DwarfElfContext(elf);
         var inputContext = new DwarfReaderContext(elfContext);
@@ -199,16 +180,7 @@ public class DwarfTests
     [TestMethod]
     public void TestDebugLineSmall()
     {
-        var cppName = "small";
-        var cppObj = $"{cppName}_debug.o";
-        LinuxUtil.RunLinuxExe("gcc", $"{cppName}.cpp -gdwarf-4 -c -o {cppObj}");
-        ElfFile elf;
-        using (var inStream = File.OpenRead(cppObj))
-        {
-            Console.WriteLine($"ReadBack from {cppObj}");
-            elf = ElfFile.Read(inStream);
-            elf.Print(Console.Out);
-        }
+        ElfFile elf = LoadElf("small_debug.o");
 
         var elfContext = new DwarfElfContext(elf);
         var inputContext = new DwarfReaderContext(elfContext);
@@ -257,17 +229,7 @@ public class DwarfTests
     [TestMethod]
     public void TestDebugLineMultipleFunctions()
     {
-        var cppName = "multiple_functions";
-        var cppObj = $"{cppName}_debug.o";
-        LinuxUtil.RunLinuxExe("gcc", $"{cppName}.cpp -gdwarf-4 -c -o {cppObj}");
-
-        ElfFile elf;
-        using (var inStream = File.OpenRead(cppObj))
-        {
-            Console.WriteLine($"ReadBack from {cppObj}");
-            elf = ElfFile.Read(inStream);
-            elf.Print(Console.Out);
-        }
+        ElfFile elf = LoadElf("multiple_functions_debug.o");
 
         var elfContext = new DwarfElfContext(elf);
         var inputContext = new DwarfReaderContext(elfContext);
@@ -315,16 +277,7 @@ public class DwarfTests
     [TestMethod]
     public void TestDebugInfoSmall()
     {
-        var cppName = "small";
-        var cppObj = $"{cppName}_debug.o";
-        LinuxUtil.RunLinuxExe("gcc", $"{cppName}.cpp -gdwarf-4 -c -o {cppObj}");
-
-        ElfFile elf;
-        using (var inStream = File.OpenRead(cppObj))
-        {
-            elf = ElfFile.Read(inStream);
-            elf.Print(Console.Out);
-        }
+        ElfFile elf = LoadElf("small_debug.o");
 
         var elfContext = new DwarfElfContext(elf);
         var inputContext = new DwarfReaderContext(elfContext);
@@ -361,13 +314,13 @@ public class DwarfTests
 
         dwarf.WriteToElf(elfContext);
 
-        var cppObj2 = $"{cppName}_debug2.o";
-        using (var outStream = new FileStream(cppObj2, FileMode.Create))
-        {
-            elf.Write(outStream);
-        }
+        //var cppObj2 = $"{cppName}_debug2.o";
+        //using (var outStream = new FileStream(cppObj2, FileMode.Create))
+        //{
+        //    elf.Write(outStream);
+        //}
 
-        PrintStreamLength(outputContext);
+        //PrintStreamLength(outputContext);
     }
 
 
@@ -516,9 +469,9 @@ public class DwarfTests
         Console.WriteLine();
         dwarfFile.InfoSection.Print(Console.Out);
 
-        Console.WriteLine("ReadBack --debug-dump=rawline");
-        var readelf = LinuxUtil.ReadElf(outputFileName, "--debug-dump=rawline").TrimEnd();
-        Console.WriteLine(readelf);
+        //Console.WriteLine("ReadBack --debug-dump=rawline");
+        //var readelf = LinuxUtil.ReadElf(outputFileName, "--debug-dump=rawline").TrimEnd();
+        //Console.WriteLine(readelf);
     }
 
     private static void PrintStreamLength(DwarfReaderWriterContext context)
