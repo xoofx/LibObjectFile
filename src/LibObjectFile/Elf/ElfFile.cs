@@ -317,9 +317,9 @@ public sealed partial class ElfFile : ElfObject, IEnumerable<ElfContent>
             var content = contentList[i];
             if (content is ElfNullSection) continue;
 
-            if (content is ElfNoBitsSection noBitsSection && noBitsSection.PositionOffsetFromPreviousContent.HasValue)
+            if (content is ElfNoBitsSection noBitsSection)
             {
-                content.Position = contentList[i-1].Position + noBitsSection.PositionOffsetFromPreviousContent.Value;
+                content.Position = contentList[i-1].Position + noBitsSection.PositionOffsetFromPreviousContent;
             }
             else
             {
