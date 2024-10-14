@@ -7,16 +7,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using LibObjectFile.Diagnostics;
 using LibObjectFile.Elf;
+using VerifyMSTest;
 
 namespace LibObjectFile.Tests.Elf;
 
 [TestClass]
 public class ElfSimpleTests : ElfTestBase
 {
-    public TestContext TestContext { get; set; }
-
     [DataTestMethod]
     [DynamicData(nameof(GetLinuxBins), DynamicDataSourceType.Method)]
     public void TestLinuxFile(string file)
@@ -124,26 +124,26 @@ public class ElfSimpleTests : ElfTestBase
 
 
     [TestMethod]
-    public void SimpleEmptyWithDefaultSections()
+    public async Task SimpleEmptyWithDefaultSections()
     {
         var elf = new ElfFile(ElfArch.X86_64);
         elf.Add(new ElfSectionHeaderTable());
-        AssertReadElf(elf, "empty_default.elf");
+        await AssertReadElf(elf, "empty_default.elf");
     }
 
     [TestMethod]
-    public void SimpleEmpty()
+    public async Task SimpleEmpty()
     {
         var elf = new ElfFile(ElfArch.X86_64);
         for (int i = elf.Content.Count - 1; i >= 1; i--)
         {
             elf.Content.RemoveAt(i);
         }
-        AssertReadElf(elf, "empty.elf");
+        await AssertReadElf(elf, "empty.elf");
     }
 
     [TestMethod]
-    public void SimpleCodeSection()
+    public async Task SimpleCodeSection()
     {
         var elf = new ElfFile(ElfArch.X86_64);
 
@@ -156,11 +156,11 @@ public class ElfSimpleTests : ElfTestBase
         elf.Add(new ElfSectionHeaderStringTable());
         elf.Add(new ElfSectionHeaderTable());
 
-        AssertReadElf(elf, "test.elf");
+        await AssertReadElf(elf, "test.elf");
     }
 
     [TestMethod]
-    public void TestBss()
+    public async Task TestBss()
     {
         var elf = new ElfFile(ElfArch.X86_64);
 
@@ -183,11 +183,11 @@ public class ElfSimpleTests : ElfTestBase
 
         Assert.AreEqual(1024U, bssSection.Position);
 
-        AssertReadElf(elf, "test_bss.elf");
+        await AssertReadElf(elf, "test_bss.elf");
     }
 
     [TestMethod]
-    public void SimpleCodeSectionAndSymbolSection()
+    public async Task SimpleCodeSectionAndSymbolSection()
     {
         var elf = new ElfFile(ElfArch.X86_64);
 
@@ -232,11 +232,11 @@ public class ElfSimpleTests : ElfTestBase
         elf.Add(new ElfSectionHeaderStringTable());
         elf.Add(new ElfSectionHeaderTable());
 
-        AssertReadElf(elf, "test2.elf");
+        await AssertReadElf(elf, "test2.elf");
     }
 
     [TestMethod]
-    public void SimpleProgramHeaderAndCodeSectionAndSymbolSection()
+    public async Task SimpleProgramHeaderAndCodeSectionAndSymbolSection()
     {
         var elf = new ElfFile(ElfArch.X86_64);
 
@@ -319,12 +319,12 @@ public class ElfSimpleTests : ElfTestBase
             VirtualAddressAlignment = 4096,
         });
 
-        AssertReadElf(elf, "test3.elf");
+        await AssertReadElf(elf, "test3.elf");
     }
 
 
     [TestMethod]
-    public void SimpleProgramHeaderAndCodeSectionAndSymbolSectionAndRelocation()
+    public async Task SimpleProgramHeaderAndCodeSectionAndSymbolSectionAndRelocation()
     {
         var elf = new ElfFile(ElfArch.X86_64);
 
@@ -434,46 +434,12 @@ public class ElfSimpleTests : ElfTestBase
         elf.Add(new ElfSectionHeaderStringTable());
         elf.Add(new ElfSectionHeaderTable());
 
-        AssertReadElf(elf, "test4.elf");
+        await AssertReadElf(elf, "test4.elf");
     }
 
 
     [TestMethod]
-    public void TestHelloWorld()
-    {
-        var cppName = "helloworld";
-        LinuxUtil.RunLinuxExe("gcc", $"{cppName}.cpp -o {cppName}");
-
-        ElfFile elf;
-        using (var inStream = File.OpenRead(cppName))
-        {
-            Console.WriteLine($"ReadBack from {cppName}");
-            elf = ElfFile.Read(inStream);
-            elf.Print(Console.Out);
-        }
-
-        using (var outStream = File.OpenWrite($"{cppName}_copy"))
-        {
-            elf.Write(outStream);
-            outStream.Flush();
-        }
-
-        var expected = LinuxUtil.ReadElf(cppName);
-        var result = LinuxUtil.ReadElf($"{cppName}_copy");
-        if (expected != result)
-        {
-            Console.WriteLine("=== Result:");
-            Console.WriteLine(result);
-
-            Console.WriteLine("=== Expected:");
-            Console.WriteLine(expected);
-
-            Assert.AreEqual(expected, result);
-        }
-    }
-
-    [TestMethod]
-    public void TestAlignedSection()
+    public async Task TestAlignedSection()
     {
         var elf = new ElfFile(ElfArch.X86_64);
 
@@ -497,9 +463,9 @@ public class ElfSimpleTests : ElfTestBase
         elf.UpdateLayout(diagnostics);
         Assert.IsFalse(diagnostics.HasErrors);
 
-        elf.Print(Console.Out);
-
         Assert.AreEqual(0x1000ul, codeSection.Position, "Invalid alignment");
+
+        await VerifyElf(elf);
     }
 
     [TestMethod]
@@ -560,33 +526,15 @@ public class ElfSimpleTests : ElfTestBase
         }
     }
 
-    [TestMethod]
-    public void TestReadLibStdc()
+    [DataTestMethod]
+    [DataRow("helloworld")]
+    [DataRow("libstdc++.so")]
+    [DataRow("helloworld_debug")]
+    [DataRow("lib_debug.so")]
+    [DataRow("multiple_functions_debug.o")]
+    [DataRow("small_debug.o")]
+    public async Task TestElf(string name)
     {
-        ElfFile elf;
-        {
-            using var stream = File.OpenRead("libstdc++.so");
-            elf = ElfFile.Read(stream);
-        }
-
-        var writer = new StringWriter();
-
-        writer.WriteLine($"There are {elf.Sections.Count} section headers, starting at offset 0x{elf.Layout.OffsetOfSectionHeaderTable:x}:");
-        ElfPrinter.PrintSectionHeaders(elf, writer);
-
-        var result = writer.ToString().Replace("\r\n", "\n").TrimEnd();
-        var readelf = LinuxUtil.ReadElf("libstdc++.so", "-W -S").TrimEnd();
-
-        // Remove the R (retain), that is not present in out implementation.
-        readelf = readelf.Replace("R (retain), ", string.Empty);
-
-        if (readelf != result)
-        {
-            Console.WriteLine("=== Expected:");
-            Console.WriteLine(readelf);
-            Console.WriteLine("=== Result:");
-            Console.WriteLine(result);
-            Assert.AreEqual(readelf, result);
-        }
+        await LoadAndVerifyElf(name);
     }
 }
