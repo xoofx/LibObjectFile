@@ -95,7 +95,7 @@ public static class ElfPrinter
         for (int i = 0; i < elf.Sections.Count; i++)
         {
             var section = elf.Sections[i];
-            writer.WriteLine($"  [{section.SectionIndex,2:#0}] {GetElfSectionName(section),-17} {GetElfSectionType(section.Type),-15} {section.VirtualAddress:x16} {section.Position:x6} {section.Size:x6} {section.TableEntrySize:x2} {GetElfSectionFlags(section.Flags),3} {section.Link.GetIndex(),2} {section.Info.GetIndex(),3} {section.Alignment,2}");
+            writer.WriteLine($"  [{section.SectionIndex,2:#0}] {GetElfSectionName(section),-17} {GetElfSectionType(section.Type),-15} {section.VirtualAddress:x16} {section.Position:x6} {section.Size:x6} {section.TableEntrySize:x2} {GetElfSectionFlags(section.Flags),3} {section.Link.GetIndex(),2} {section.Info.GetIndex(),3} {section.VirtualAddressAlignment,2}");
         }
         writer.WriteLine(@"Key to Flags:
   W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
@@ -138,7 +138,7 @@ public static class ElfPrinter
         for (int i = 0; i < elf.Segments.Count; i++)
         {
             var phdr = elf.Segments[i];
-            writer.WriteLine($"  {GetElfSegmentType(phdr.Type),-14} 0x{phdr.Position:x6} 0x{phdr.VirtualAddress:x16} 0x{phdr.PhysicalAddress:x16} 0x{phdr.Size:x6} 0x{phdr.SizeInMemory:x6} {GetElfSegmentFlags(phdr.Flags),3} 0x{phdr.Alignment:x}");
+            writer.WriteLine($"  {GetElfSegmentType(phdr.Type),-14} 0x{phdr.Position:x6} 0x{phdr.VirtualAddress:x16} 0x{phdr.PhysicalAddress:x16} 0x{phdr.Size:x6} 0x{phdr.SizeInMemory:x6} {GetElfSegmentFlags(phdr.Flags),3} 0x{phdr.VirtualAddressAlignment:x}");
         }
 
         if (elf.Segments.Count > 0 && elf.Sections.Count > 0 && elf.SectionHeaderStringTable != null)

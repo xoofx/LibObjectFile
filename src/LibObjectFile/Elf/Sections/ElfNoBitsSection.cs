@@ -10,6 +10,8 @@ public sealed class ElfNoBitsSection : ElfSection
     {
     }
 
+    public ulong? PositionOffsetIntoPreviousSection { get; set; }
+    
     public override void Read(ElfReader reader)
     {
     }

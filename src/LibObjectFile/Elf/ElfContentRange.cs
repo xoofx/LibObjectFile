@@ -9,15 +9,15 @@ namespace LibObjectFile.Elf;
 /// <summary>
 /// Defines the range of content a segment is bound to.
 /// </summary>
-public readonly struct ElfSegmentRange : IEquatable<ElfSegmentRange>
+public readonly struct ElfContentRange : IEquatable<ElfContentRange>
 {
-    public static readonly ElfSegmentRange Empty = new ElfSegmentRange();
+    public static readonly ElfContentRange Empty = new ElfContentRange();
 
     /// <summary>
     /// Creates a new instance that is bound to an entire content/
     /// </summary>
     /// <param name="content">The content to be bound to</param>
-    public ElfSegmentRange(ElfContent content)
+    public ElfContentRange(ElfContent content)
     {
         BeginContent = content ?? throw new ArgumentNullException(nameof(content));
         BeginOffset = 0;
@@ -32,7 +32,7 @@ public readonly struct ElfSegmentRange : IEquatable<ElfSegmentRange>
     /// <param name="beginOffset">The offset inside the first content.</param>
     /// <param name="endContent">The last content.</param>
     /// <param name="offsetFromEnd">The offset in the last content</param>
-    public ElfSegmentRange(ElfContent beginContent, ulong beginOffset, ElfContent endContent, ulong offsetFromEnd)
+    public ElfContentRange(ElfContent beginContent, ulong beginOffset, ElfContent endContent, ulong offsetFromEnd)
     {
         BeginContent = beginContent ?? throw new ArgumentNullException(nameof(beginContent));
         BeginOffset = beginOffset;
@@ -72,7 +72,7 @@ public readonly struct ElfSegmentRange : IEquatable<ElfSegmentRange>
     /// <summary>
     /// Returns the absolute offset of this range taking into account the <see cref="BeginContent"/>.<see cref="ObjectFileElement.Position"/>.
     /// </summary>
-    public ulong Offset
+    public ulong Position
     {
         get
         {
@@ -106,14 +106,14 @@ public readonly struct ElfSegmentRange : IEquatable<ElfSegmentRange>
         }
     }
         
-    public bool Equals(ElfSegmentRange other)
+    public bool Equals(ElfContentRange other)
     {
         return Equals(BeginContent, other.BeginContent) && BeginOffset == other.BeginOffset && Equals(EndContent, other.EndContent) && OffsetFromEnd == other.OffsetFromEnd;
     }
 
     public override bool Equals(object? obj)
     {
-        return obj is ElfSegmentRange other && Equals(other);
+        return obj is ElfContentRange other && Equals(other);
     }
 
     public override int GetHashCode()
@@ -128,18 +128,18 @@ public readonly struct ElfSegmentRange : IEquatable<ElfSegmentRange>
         }
     }
 
-    public static bool operator ==(ElfSegmentRange left, ElfSegmentRange right)
+    public static bool operator ==(ElfContentRange left, ElfContentRange right)
     {
         return left.Equals(right);
     }
 
-    public static bool operator !=(ElfSegmentRange left, ElfSegmentRange right)
+    public static bool operator !=(ElfContentRange left, ElfContentRange right)
     {
         return !left.Equals(right);
     }
 
-    public static implicit operator ElfSegmentRange(ElfContent? content)
+    public static implicit operator ElfContentRange(ElfContent? content)
     {
-        return content is null ? Empty : new ElfSegmentRange(content);
+        return content is null ? Empty : new ElfContentRange(content);
     }
 }

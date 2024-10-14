@@ -4,6 +4,7 @@
 
 using System;
 using System.Buffers;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -20,7 +21,7 @@ using static ElfNative;
 /// <summary>
 /// Defines an ELF object file that can be manipulated in memory.
 /// </summary>
-public sealed partial class ElfFile : ElfObject
+public sealed partial class ElfFile : ElfObject, IEnumerable<ElfContent>
 {
     private readonly ObjectList<ElfContent> _content;
     private readonly List<ElfSection> _sections;
@@ -206,6 +207,18 @@ public sealed partial class ElfFile : ElfObject
     /// </summary>
     public ElfFileLayout Layout { get; }
 
+    /// <summary>
+    /// Adds a new content to this ELF object file.
+    /// </summary>
+    /// <typeparam name="TContent">Type of the content to add</typeparam>
+    /// <param name="content">The content to add</param>
+    /// <returns>The added content</returns>
+    public TContent Add<TContent>(TContent content) where TContent : ElfContent
+    {
+        _content.Add(content);
+        return content;
+    }
+
     public DiagnosticBag Verify()
     {
         var diagnostics = new DiagnosticBag();
@@ -285,7 +298,7 @@ public sealed partial class ElfFile : ElfObject
         Layout.TotalSize = 0;
 
         bool programHeaderTableFoundAndUpdated = false;
-        //bool sectionHeaderTableFoundAndUpdated = false;
+        bool sectionHeaderTableFoundAndUpdated = false;
 
         // If we have any sections, prepare their offsets
         var contentList = CollectionsMarshal.AsSpan(_content.UnsafeList);
@@ -304,29 +317,31 @@ public sealed partial class ElfFile : ElfObject
             var content = contentList[i];
             if (content is ElfNullSection) continue;
 
-            var align = content.Alignment == 0 ? 1 : content.Alignment;
-            offset = AlignHelper.AlignUp(offset, align);
-            content.Position = offset;
+            if (content is ElfNoBitsSection noBitsSection && noBitsSection.PositionOffsetIntoPreviousSection.HasValue)
+            {
+                content.Position = contentList[i-1].Position + noBitsSection.PositionOffsetIntoPreviousSection.Value;
+            }
+            else
+            {
+                var align = content.FileAlignment == 0 ? 1 : content.FileAlignment;
+                offset = AlignHelper.AlignUp(offset, align);
+                content.Position = offset;
+            }
             content.UpdateLayout(context);
 
-            if (content is ElfProgramHeaderTable programHeaderTable)
+            if (content is ElfProgramHeaderTable programHeaderTable && Segments.Count > 0)
             {
-                if (Segments.Count > 0)
-                {
-                    Layout.SizeOfProgramHeaderEntry = FileClass == ElfFileClass.Is32 ? (ushort)sizeof(ElfNative.Elf32_Phdr) : (ushort)sizeof(ElfNative.Elf64_Phdr);
-                    Layout.OffsetOfProgramHeaderTable = content.Position;
-                    Layout.SizeOfProgramHeaderEntry += (ushort)programHeaderTable.AdditionalEntrySize;
-                    programHeaderTableFoundAndUpdated = true;
-                }
+                Layout.OffsetOfProgramHeaderTable = content.Position;
+                Layout.SizeOfProgramHeaderEntry = FileClass == ElfFileClass.Is32 ? (ushort)sizeof(ElfNative.Elf32_Phdr) : (ushort)sizeof(ElfNative.Elf64_Phdr);
+                Layout.SizeOfProgramHeaderEntry += (ushort)programHeaderTable.AdditionalEntrySize;
+                programHeaderTableFoundAndUpdated = true;
             }
 
-            if (content is ElfSectionHeaderTable sectionHeaderTable)
+            if (content is ElfSectionHeaderTable sectionHeaderTable && Sections.Count > 0)
             {
-                if (Sections.Count > 0)
-                {
-                    Layout.OffsetOfSectionHeaderTable = content.Position;
-                    Layout.SizeOfSectionHeaderEntry = FileClass == ElfFileClass.Is32 ? (ushort)sizeof(ElfNative.Elf32_Shdr) : (ushort)sizeof(ElfNative.Elf64_Shdr);
-                }
+                Layout.OffsetOfSectionHeaderTable = content.Position;
+                Layout.SizeOfSectionHeaderEntry = FileClass == ElfFileClass.Is32 ? (ushort)sizeof(ElfNative.Elf32_Shdr) : (ushort)sizeof(ElfNative.Elf64_Shdr);
+                sectionHeaderTableFoundAndUpdated = true;
             }
 
             // A section without content doesn't count with its size
@@ -338,21 +353,39 @@ public sealed partial class ElfFile : ElfObject
             offset += content.Size;
         }
 
+        // Order sections by OrderInHeader
+        if (Sections.Count > 0)
+        {
+            // If OrderInHeader is equal, we sort by SectionIndex to keep the list stable
+            _sections.Sort((left, right) => left.OrderInSectionHeaderTable == right.OrderInSectionHeaderTable ? left.SectionIndex.CompareTo(right.SectionIndex) : left.OrderInSectionHeaderTable.CompareTo(right.OrderInSectionHeaderTable));
 
+            // Update the section index
+            for(int i = 0; i < _sections.Count; i++)
+            {
+                _sections[i].SectionIndex = i;
+            }
+        }
+        
         // Update program headers with offsets from auto layout
         if (Segments.Count > 0)
         {
             // Write program headers
             if (!programHeaderTableFoundAndUpdated)
             {
-                diagnostics.Error(DiagnosticId.ELF_ERR_MissingProgramHeaderTableSection, $"Missing {nameof(ElfProgramHeaderTable)} shadow section for writing program headers / segments from this object file");
+                diagnostics.Error(DiagnosticId.ELF_ERR_MissingProgramHeaderTableSection, $"Missing {nameof(ElfProgramHeaderTable)} for writing program headers / segments from this object file");
             }
-
+            
             for (int i = 0; i < Segments.Count; i++)
             {
                 var programHeader = Segments[i];
                 programHeader.UpdateLayout(context);
             }
+        }
+
+        // If we haven't found a proper section header table
+        if (Sections.Count > 0 && !sectionHeaderTableFoundAndUpdated)
+        {
+            diagnostics.Error(DiagnosticId.ELF_ERR_MissingSectionHeaderTableSection, $"Missing {nameof(ElfSectionHeaderTable)} for writing sections from this object file");
         }
 
         Layout.TotalSize = offset;
@@ -621,4 +654,10 @@ public sealed partial class ElfFile : ElfObject
             _sectionHeaderStringTable = sectionHeaderStringTable;
         }
     }
+
+    public List<ElfContent>.Enumerator GetEnumerator() => _content.GetEnumerator();
+
+    IEnumerator<ElfContent> IEnumerable<ElfContent>.GetEnumerator() => _content.GetEnumerator();
+
+    IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)_content).GetEnumerator();
 }

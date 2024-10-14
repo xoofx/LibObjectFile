@@ -78,7 +78,8 @@ public enum DiagnosticId
     ELF_ERR_SectionHeaderStringTableNotFound = 165,
     ELF_ERR_InvalidSectionEntrySize = 166,
     ELF_ERR_MissingSectionHeaderTable = 167,
-
+    ELF_ERR_MissingSectionHeaderTableSection = 168,
+    
     AR_ERR_InvalidMagicLength = 1000,
     AR_ERR_MagicNotFound = 1001,
     AR_ERR_ExpectingNewLineCharacter = 1002,

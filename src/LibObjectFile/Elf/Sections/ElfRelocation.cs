@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -8,7 +8,7 @@ namespace LibObjectFile.Elf;
 /// A relocation entry in the <see cref="ElfRelocationTable"/>
 /// This is the value seen in <see cref="ElfNative.Elf32_Rel"/> or <see cref="ElfNative.Elf64_Rel"/>
 /// </summary>
-public sealed class ElfRelocation
+public record ElfRelocation
 {
     public ElfRelocation()
     {
@@ -53,9 +53,4 @@ public sealed class ElfRelocation
     /// </summary>
     public ulong Info64 =>
         ((ulong)SymbolIndex << 32) | (Type.Value);
-
-    public override string ToString()
-    {
-        return $"{nameof(Offset)}: 0x{Offset:X16}, {nameof(Type)}: {Type}, {nameof(SymbolIndex)}: {SymbolIndex}, {nameof(Addend)}: 0x{Addend:X16}";
-    }
 }

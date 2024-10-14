@@ -42,6 +42,14 @@ public abstract class ElfSection : ElfContent
     public ulong VirtualAddress { get; set; }
 
     /// <summary>
+    /// Gets or sets the alignment requirement of this section.
+    /// </summary>
+    /// <remarks>
+    /// An alignment of zero or 1 means that the section or segment has no alignment constraints.
+    /// </remarks>
+    public ulong VirtualAddressAlignment { get; set; }
+
+    /// <summary>
     /// Gets or sets the link element of this section.
     /// </summary>
     public ElfSectionLink Link { get; set; }
@@ -62,7 +70,7 @@ public abstract class ElfSection : ElfContent
     /// <remarks>
     /// If this index is changed, you need to call <see cref="ElfFile.UpdateLayout(LibObjectFile.Diagnostics.DiagnosticBag)"/> to update the layout of the file.
     /// </remarks>
-    public uint SectionOrder { get; set; }
+    public uint OrderInSectionHeaderTable { get; set; }
 
     /// <summary>
     /// Gets the default size of the table entry size of this section.

@@ -18,8 +18,13 @@ public abstract class ElfContent : ElfObject
 {
     protected ElfContent()
     {
-        Alignment = 0;
+        FileAlignment = 1;
     }
+
+    /// <summary>
+    /// Gets or sets the alignment requirement of this content in the file.
+    /// </summary>
+    public uint FileAlignment { get; set; }
 
     protected override void ValidateParent(ObjectElement parent)
     {
@@ -41,14 +46,6 @@ public abstract class ElfContent : ElfObject
             throw new ArgumentException($"Parent must be an ELF file with class {fileClass}");
         }
     }
-
-    /// <summary>
-    /// Gets or sets the alignment requirement of this section.
-    /// </summary>
-    /// <remarks>
-    /// An alignment of zero or 1 means that the section or segment has no alignment constraints.
-    /// </remarks>
-    public ulong Alignment { get; set; }
 
     /// <summary>
     /// Gets the containing <see cref="ElfFile"/>. Might be null if this section or segment

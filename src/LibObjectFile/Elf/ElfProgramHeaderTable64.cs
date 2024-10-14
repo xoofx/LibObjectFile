@@ -70,7 +70,7 @@ partial class ElfProgramHeaderTable
             Size = reader.Decode(hdr.p_filesz),
             SizeInMemory = reader.Decode(hdr.p_memsz),
             Flags = new ElfSegmentFlags(reader.Decode(hdr.p_flags)),
-            Alignment = reader.Decode(hdr.p_align),
+            VirtualAddressAlignment = reader.Decode(hdr.p_align),
             AdditionalData = additionalData
         };
     }
@@ -86,7 +86,7 @@ partial class ElfProgramHeaderTable
         writer.Encode(out hdr.p_filesz, segment.Size);
         writer.Encode(out hdr.p_memsz, segment.SizeInMemory);
         writer.Encode(out hdr.p_flags, segment.Flags.Value);
-        writer.Encode(out hdr.p_align, segment.Alignment);
+        writer.Encode(out hdr.p_align, segment.VirtualAddressAlignment);
 
         writer.Write(hdr);
 

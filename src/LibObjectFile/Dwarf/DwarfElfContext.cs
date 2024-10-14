@@ -303,7 +303,7 @@ public class DwarfElfContext : VisitorContextBase<ElfFile>
         var newSection = new ElfStreamSection(ElfSectionType.ProgBits)
         {
             Name = name,
-            Alignment = 1,
+            VirtualAddressAlignment = 1,
             Stream = new MemoryStream(),
         };
 
@@ -328,7 +328,7 @@ public class DwarfElfContext : VisitorContextBase<ElfFile>
         var newSection = new ElfRelocationTable(true)
         {
             Name = $".rela{section.Name}",
-            Alignment = (ulong)AddressSize,
+            VirtualAddressAlignment = (ulong)AddressSize,
             Flags = ElfSectionFlags.InfoLink,
             Info = section,
             Link = _symbolTable,

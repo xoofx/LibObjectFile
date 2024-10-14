@@ -29,7 +29,7 @@ public sealed class ElfSegment : ElfObject
     /// Gets or sets the range of section this segment applies to.
     /// It can applies to <see cref="ElfContentData"/>.
     /// </summary>
-    public ElfSegmentRange Range { get; set; }
+    public ElfContentRange Range { get; set; }
 
     /// <summary>
     /// Gets or sets the virtual address.
@@ -54,7 +54,7 @@ public sealed class ElfSegment : ElfObject
     /// <summary>
     /// Gets the alignment requirement of this section.
     /// </summary>
-    public ulong Alignment { get; set; }
+    public ulong VirtualAddressAlignment { get; set; }
 
     /// <summary>
     /// Gets or sets the additional data stored in the header.
@@ -67,7 +67,7 @@ public sealed class ElfSegment : ElfObject
 
         if (OffsetCalculationMode == ElfOffsetCalculationMode.Auto)
         {
-            Position = Range.Offset;
+            Position = Range.Position;
         }
             
         if (Range.IsEmpty)
@@ -79,7 +79,7 @@ public sealed class ElfSegment : ElfObject
             Size = Range.Size;
 
             // TODO: Add checks that Alignment is Power Of 2
-            var alignment = Alignment == 0 ? Alignment = 1 : Alignment;
+            var alignment = VirtualAddressAlignment == 0 ? VirtualAddressAlignment = 1 : VirtualAddressAlignment;
             if (!BitOperations.IsPow2(alignment))
             {
                 diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentAlignmentForLoad, $"Invalid segment alignment requirements: Alignment = {alignment} must be a power of 2");
@@ -119,7 +119,7 @@ public sealed class ElfSegment : ElfObject
                 {
                     diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeBeginSectionParent, $"Invalid null {nameof(Range)}.{nameof(Range.BeginContent)} in {this}. The section must be attached to the same {nameof(ElfFile)} than this instance");
                 }
-                else if (range.BeginOffset >= range.BeginContent.Size)
+                else if (range.BeginOffset != 0 && range.BeginOffset >= range.BeginContent.Size)
                 {
                     diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeBeginOffset, $"Invalid {nameof(Range)}.{nameof(Range.BeginOffset)}: {Range.BeginOffset} cannot be >= {nameof(Range.BeginContent)}.{nameof(ElfSection.Size)}: {range.BeginContent.Size} in {this}. The offset must be within the section");
                 }
@@ -130,7 +130,7 @@ public sealed class ElfSegment : ElfObject
                 }
                 else if ((ulong)Range.OffsetFromEnd > range.EndContent.Size)
                 {
-                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeEndOffset, $"Invalid {nameof(Range)}.{nameof(Range.OffsetFromEnd)}: {Range.OffsetFromEnd} cannot be >= {nameof(Range)}.{nameof(ElfSegmentRange.EndContent)}.{nameof(ElfSection.Size)}: {range.EndContent.Size} in {this}. The offset must be within the section");
+                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeEndOffset, $"Invalid {nameof(Range)}.{nameof(Range.OffsetFromEnd)}: {Range.OffsetFromEnd} cannot be >= {nameof(Range)}.{nameof(ElfContentRange.EndContent)}.{nameof(ElfSection.Size)}: {range.EndContent.Size} in {this}. The offset must be within the section");
                 }
             }
 
@@ -138,7 +138,7 @@ public sealed class ElfSegment : ElfObject
             {
                 if (Range.BeginContent.Index > Range.EndContent.Index)
                 {
-                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeIndices, $"Invalid index order between {nameof(Range)}.{nameof(ElfSegmentRange.BeginContent)}.{nameof(ElfSegment.Index)}: {Range.BeginContent.Index} and {nameof(Range)}.{nameof(ElfSegmentRange.EndContent)}.{nameof(ElfSegment.Index)}: {Range.EndContent.Index} in {this}. The from index must be <= to the end index.");
+                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSegmentRangeIndices, $"Invalid index order between {nameof(Range)}.{nameof(ElfContentRange.BeginContent)}.{nameof(ElfSegment.Index)}: {Range.BeginContent.Index} and {nameof(Range)}.{nameof(ElfContentRange.EndContent)}.{nameof(ElfSegment.Index)}: {Range.EndContent.Index} in {this}. The from index must be <= to the end index.");
                 }
             }
         }

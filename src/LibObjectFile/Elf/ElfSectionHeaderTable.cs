@@ -112,7 +112,7 @@ public sealed partial class ElfSectionHeaderTable : ElfContentData
         base.ValidateParent(parent);
         var elf = (ElfFile)parent;
         _is32 = elf.FileClass == ElfFileClass.Is32;
-        Alignment = _is32 ? 4u : 8u;
+        FileAlignment = _is32 ? 4u : 8u;
     }
 
     private static ElfSection CreateElfSection(ElfReader reader, uint sectionIndex, ElfSectionType sectionType)
@@ -156,7 +156,7 @@ public sealed partial class ElfSectionHeaderTable : ElfContentData
         section.Flags = (ElfSectionFlags)reader.Decode(rawSection.sh_flags);
         section.VirtualAddress = reader.Decode(rawSection.sh_addr);
         section.Position = reader.Decode(rawSection.sh_offset);
-        section.Alignment = reader.Decode(rawSection.sh_addralign);
+        section.VirtualAddressAlignment = reader.Decode(rawSection.sh_addralign);
         section.Link = new ElfSectionLink((int)reader.Decode(rawSection.sh_link));
         section.Info = new ElfSectionLink((int)reader.Decode(rawSection.sh_info));
         section.Size = reader.Decode(rawSection.sh_size);
@@ -185,7 +185,7 @@ public sealed partial class ElfSectionHeaderTable : ElfContentData
             writer.Encode(out rawSection.sh_link, (uint)section.Link.GetIndex());
         }
         writer.Encode(out rawSection.sh_info, (uint)section.Info.GetIndex());
-        writer.Encode(out rawSection.sh_addralign, (uint)section.Alignment);
+        writer.Encode(out rawSection.sh_addralign, (uint)section.VirtualAddressAlignment);
         writer.Encode(out rawSection.sh_entsize, (uint)section.TableEntrySize);
     }
 
@@ -200,7 +200,7 @@ public sealed partial class ElfSectionHeaderTable : ElfContentData
         section.Flags = (ElfSectionFlags)reader.Decode(rawSection.sh_flags);
         section.VirtualAddress = reader.Decode(rawSection.sh_addr);
         section.Position = reader.Decode(rawSection.sh_offset);
-        section.Alignment = reader.Decode(rawSection.sh_addralign);
+        section.VirtualAddressAlignment = reader.Decode(rawSection.sh_addralign);
         section.Link = new ElfSectionLink((int)reader.Decode(rawSection.sh_link));
         section.Info = new ElfSectionLink((int)reader.Decode(rawSection.sh_info));
         section.Size = reader.Decode(rawSection.sh_size);
@@ -229,7 +229,7 @@ public sealed partial class ElfSectionHeaderTable : ElfContentData
             writer.Encode(out rawSection.sh_link, (uint)section.Link.GetIndex());
         }
         writer.Encode(out rawSection.sh_info, (uint)section.Info.GetIndex());
-        writer.Encode(out rawSection.sh_addralign, (uint)section.Alignment);
+        writer.Encode(out rawSection.sh_addralign, (uint)section.VirtualAddressAlignment);
         writer.Encode(out rawSection.sh_entsize, (uint)section.TableEntrySize);
     }
 }

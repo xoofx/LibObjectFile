@@ -67,6 +67,6 @@ public sealed partial class ElfProgramHeaderTable : ElfContentData
         base.ValidateParent(parent);
         var elf = (ElfFile)parent;
         _is32 = elf.FileClass == ElfFileClass.Is32;
-        Alignment = _is32 ? 4u : 8u;
+        FileAlignment = _is32 ? 4u : 8u;
     }
 }

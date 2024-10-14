@@ -62,7 +62,7 @@ partial class ElfFile
         for (var i = 0; i < Sections.Count; i++)
         {
             var section = Sections[i];
-            section.SectionOrder = (uint)i;
+            section.OrderInSectionHeaderTable = (uint)i;
 
             if (section is ElfNullSection) continue;
 
@@ -105,7 +105,18 @@ partial class ElfFile
 
         // Order the content per position
         var contentList = Content.UnsafeList;
-        contentList.Sort(static (left, right) => left.Position.CompareTo(right.Position));
+        contentList.Sort(static (left, right) =>
+        {
+            if (left.Position == right.Position)
+            {
+                if (left is ElfSection leftSection && right is ElfSection rightSection)
+                {
+                    return leftSection.OrderInSectionHeaderTable.CompareTo(rightSection.OrderInSectionHeaderTable);
+                }
+            }
+
+            return left.Position.CompareTo(right.Position);
+        });
         for (int i = 0; i < contentList.Count; i++)
         {
             contentList[i].Index = i;
@@ -127,8 +138,17 @@ partial class ElfFile
                 };
                 streamContent.Read(reader);
                 Content.Insert(i, streamContent);
-                currentPosition += streamContent.Size;
+                currentPosition = part.Position;
                 i++;
+            }
+            else if (part.Position < currentPosition && part is ElfNoBitsSection notBitsSection)
+            {
+                notBitsSection.PositionOffsetIntoPreviousSection = part.Position - contentList[i-1].Position;
+            }
+
+            if (part is ElfSection section && !section.HasContent)
+            {
+                continue;
             }
 
             currentPosition += part.Size;
@@ -152,7 +172,7 @@ partial class ElfFile
 
         foreach (var segment in Segments)
         {
-            if (segment.Size == 0) continue;
+            if (segment.SizeInMemory == 0) continue;
 
             var startSegmentPosition = segment.Position;
             var endSegmentPosition = segment.Position + segment.Size;
@@ -161,7 +181,7 @@ partial class ElfFile
 
             foreach (var content in Content)
             {
-                if (content.Contains(startSegmentPosition))
+                if (content.Contains(startSegmentPosition, 0))
                 {
                     startContent = content;
                 }
@@ -179,7 +199,7 @@ partial class ElfFile
             }
             else
             {
-                segment.Range = new ElfSegmentRange(startContent, startSegmentPosition - startContent.Position, endContent, endContent.Size - (endSegmentPosition - endContent.Position));
+                segment.Range = new ElfContentRange(startContent, startSegmentPosition - startContent.Position, endContent, endContent.Size - (endSegmentPosition - endContent.Position));
             }
         }
     }

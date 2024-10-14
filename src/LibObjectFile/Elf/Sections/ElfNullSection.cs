@@ -17,7 +17,7 @@ public sealed class ElfNullSection() : ElfSection(ElfSectionType.Null)
             Flags != ElfSectionFlags.None ||
             !Name.IsEmpty ||
             VirtualAddress != 0 ||
-            Alignment != 0 ||
+            VirtualAddressAlignment != 0 ||
             !Link.IsEmpty ||
             !Info.IsEmpty ||
             Position != 0 ||
