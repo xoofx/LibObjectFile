@@ -40,7 +40,7 @@ elf.Write(outStream);
   - `PEFile.Relocate` to relocate the image base of a PE file
   - `PEFile.Print` to print the content of a PE file to a textual representation
   - Support for calculating the checksum of a PE file
-- - Good support for the **ELF file format**:
+- Good support for the **ELF file format**:
   - Support byte-to-byte roundtrip
   - Read and write from/to a `System.IO.Stream`
   - Handling of LSB/MSB
