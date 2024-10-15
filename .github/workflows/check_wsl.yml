@@ -6,5 +6,8 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
+    - uses: Vampire/setup-wsl@v3
+      with:
+        distribution: Ubuntu
     - name: List installed WSL distributions
       run: wsl -l -v
