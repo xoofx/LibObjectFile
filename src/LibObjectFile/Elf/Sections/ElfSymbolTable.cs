@@ -4,7 +4,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using LibObjectFile.Diagnostics;
+using LibObjectFile.IO;
 
 namespace LibObjectFile.Elf;
 
@@ -36,13 +39,17 @@ public sealed class ElfSymbolTable : ElfSection
         reader.Position = Position;
         Entries.Clear();
 
+        var numberOfEntries = (int)(base.Size / base.TableEntrySize);
+        var entries = Entries;
+        CollectionsMarshal.SetCount(entries, numberOfEntries);
+
         if (_is32)
         {
-            Read32(reader);
+            Read32(reader, numberOfEntries);
         }
         else
         {
-            Read64(reader);
+            Read64(reader, numberOfEntries);
         }
     }
 
@@ -58,20 +65,15 @@ public sealed class ElfSymbolTable : ElfSection
         }
     }
 
-    private void Read32(ElfReader reader)
+    private void Read32(ElfReader reader, int numberOfEntries)
     {
-        var numberOfEntries = base.Size / base.TableEntrySize;
-        Entries.Capacity = (int)numberOfEntries;
-        for (ulong i = 0; i < numberOfEntries; i++)
+        using var batch = new BatchDataReader<ElfNative.Elf32_Sym>(reader.Stream, numberOfEntries);
+        var span = CollectionsMarshal.AsSpan(Entries);
+        ref var entry = ref MemoryMarshal.GetReference(span);
+        while (batch.HasNext())
         {
-            ElfNative.Elf32_Sym sym;
-            ulong streamOffset = (ulong)reader.Stream.Position;
-            if (!reader.TryReadData((int)base.TableEntrySize, out sym))
-            {
-                reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteSymbolEntry32Size, $"Unable to read entirely the symbol entry [{i}] from {Type} section [{Index}]. Not enough data (size: {base.TableEntrySize}) read at offset {streamOffset} from the stream");
-            }
+            ref var sym = ref batch.ReadNext();
 
-            var entry = new ElfSymbol();
             entry.Name = new ElfString(reader.Decode(sym.st_name));
             entry.Value = reader.Decode(sym.st_value);
             entry.Size = reader.Decode(sym.st_size);
@@ -81,25 +83,19 @@ public sealed class ElfSymbolTable : ElfSection
             entry.Bind = (ElfSymbolBind)(st_info >> 4);
             entry.Visibility = (ElfSymbolVisibility) sym.st_other;
             entry.SectionLink = new ElfSectionLink(reader.Decode(sym.st_shndx));
-
-            Entries.Add(entry);
+            entry = ref Unsafe.Add(ref entry, 1);
         }
     }
 
-    private void Read64(ElfReader reader)
+    private void Read64(ElfReader reader, int numberOfEntries)
     {
-        var numberOfEntries = base.Size / base.TableEntrySize;
-        Entries.Capacity = (int)numberOfEntries;
-        for (ulong i = 0; i < numberOfEntries; i++)
+        using var batch = new BatchDataReader<ElfNative.Elf64_Sym>(reader.Stream, numberOfEntries);
+        var span = CollectionsMarshal.AsSpan(Entries);
+        ref var entry = ref MemoryMarshal.GetReference(span);
+        while (batch.HasNext())
         {
-            ElfNative.Elf64_Sym sym;
-            ulong streamOffset = (ulong)reader.Stream.Position;
-            if (!reader.TryReadData((int)base.TableEntrySize, out sym))
-            {
-                reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteSymbolEntry64Size, $"Unable to read entirely the symbol entry [{i}] from {Type} section [{Index}]. Not enough data (size: {base.TableEntrySize}) read at offset {streamOffset} from the stream");
-            }
+            ref var sym = ref batch.ReadNext();
 
-            var entry = new ElfSymbol();
             entry.Name = new ElfString(reader.Decode(sym.st_name));
             entry.Value = reader.Decode(sym.st_value);
             entry.Size = reader.Decode(sym.st_size);
@@ -109,12 +105,10 @@ public sealed class ElfSymbolTable : ElfSection
             entry.Bind = (ElfSymbolBind)(st_info >> 4);
             entry.Visibility = (ElfSymbolVisibility)sym.st_other;
             entry.SectionLink = new ElfSectionLink(reader.Decode(sym.st_shndx));
-
-            Entries.Add(entry);
+            entry = ref Unsafe.Add(ref entry, 1);
         }
     }
-
-
+    
     private void Write32(ElfWriter writer)
     {
         var stringTable = (ElfStringTable)Link.Section!;

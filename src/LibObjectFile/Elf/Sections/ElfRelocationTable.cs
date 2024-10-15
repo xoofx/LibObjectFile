@@ -4,7 +4,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using LibObjectFile.Diagnostics;
+using LibObjectFile.IO;
 
 namespace LibObjectFile.Elf;
 
@@ -63,47 +66,38 @@ public sealed class ElfRelocationTable : ElfSection
     private unsafe void Read32(ElfReader reader)
     {
         var numberOfEntries = base.Size / base.TableEntrySize;
-        _entries.Capacity = (int)numberOfEntries;
+        var entries = _entries;
+        CollectionsMarshal.SetCount(entries, (int)numberOfEntries);
+        var span = CollectionsMarshal.AsSpan(entries);
+
         if (IsRelocationWithAddends)
         {
-            for (ulong i = 0; i < numberOfEntries; i++)
+            using var batch = new BatchDataReader<ElfNative.Elf32_Rela>(reader.Stream, (int)numberOfEntries);
+            ref var entry = ref MemoryMarshal.GetReference(span);
+            while (batch.HasNext())
             {
-                ElfNative.Elf32_Rela rel;
-                ulong streamOffset = (ulong)reader.Stream.Position;
-                if (!reader.TryReadData(sizeof(ElfNative.Elf32_Rela), out rel))
-                {
-                    reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteRelocationAddendsEntry32Size, $"Unable to read entirely the relocation entry [{i}] from {Type} section [{Index}]. Not enough data (size: {base.TableEntrySize}) read at offset {streamOffset} from the stream");
-                }
-
-                var offset = reader.Decode(rel.r_offset);
+                ref var rel = ref batch.ReadNext();
+                entry.Offset = reader.Decode(rel.r_offset);
                 var r_info = reader.Decode(rel.r_info);
-                var type = new ElfRelocationType(Parent!.Arch, r_info & 0xFF);
-                var symbolIndex = r_info >> 8;
-                var addend = reader.Decode(rel.r_addend);
-
-                var entry = new ElfRelocation(offset, type, symbolIndex, addend);
-                _entries.Add(entry);
+                entry.Type = new ElfRelocationType(Parent!.Arch, r_info & 0xFF);
+                entry.SymbolIndex = r_info >> 8;
+                entry.Addend = reader.Decode(rel.r_addend);
+                entry = ref Unsafe.Add(ref entry, 1);
             }
         }
         else
         {
-            for (ulong i = 0; i < numberOfEntries; i++)
+            using var batch = new BatchDataReader<ElfNative.Elf32_Rel>(reader.Stream, (int)numberOfEntries);
+            ref var entry = ref MemoryMarshal.GetReference(span);
+            while (batch.HasNext())
             {
-                ElfNative.Elf32_Rel rel;
-                ulong streamOffset = (ulong)reader.Stream.Position;
-                if (!reader.TryReadData(sizeof(ElfNative.Elf32_Rel), out rel))
-                {
-                    reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteRelocationEntry32Size, $"Unable to read entirely the relocation entry [{i}] from {Type} section [{Index}]. Not enough data (size: {base.TableEntrySize}) read at offset {streamOffset} from the stream");
-                }
-
-                var offset = reader.Decode(rel.r_offset);
-
+                ref var rel = ref batch.ReadNext();
+                entry.Offset = reader.Decode(rel.r_offset);
                 var r_info = reader.Decode(rel.r_info);
-                var type = new ElfRelocationType(Parent!.Arch, r_info & 0xFF);
-                var symbolIndex = r_info >> 8;
-
-                var entry = new ElfRelocation(offset, type, symbolIndex, 0);
-                _entries.Add(entry);
+                entry.Type = new ElfRelocationType(Parent!.Arch, r_info & 0xFF);
+                entry.SymbolIndex = r_info >> 8;
+                entry.Addend = 0;
+                entry = ref Unsafe.Add(ref entry, 1);
             }
         }
     }
@@ -111,47 +105,38 @@ public sealed class ElfRelocationTable : ElfSection
     private unsafe void Read64(ElfReader reader)
     {
         var numberOfEntries = base.Size / base.TableEntrySize;
+        var entries = _entries;
+        CollectionsMarshal.SetCount(entries, (int)numberOfEntries);
+        var span = CollectionsMarshal.AsSpan(entries);
+
         if (IsRelocationWithAddends)
         {
-            for (ulong i = 0; i < numberOfEntries; i++)
+            using var batch = new BatchDataReader<ElfNative.Elf64_Rela>(reader.Stream, (int)numberOfEntries);
+            ref var entry = ref MemoryMarshal.GetReference(span);
+            while (batch.HasNext())
             {
-                ElfNative.Elf64_Rela rel;
-                ulong streamOffset = (ulong)reader.Stream.Position;
-                if (!reader.TryReadData(sizeof(ElfNative.Elf64_Rela), out rel))
-                {
-                    reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteRelocationAddendsEntry64Size, $"Unable to read entirely the relocation entry [{i}] from {Type} section [{Index}]. Not enough data (size: {base.TableEntrySize}) read at offset {streamOffset} from the stream");
-                }
-
-                var offset = reader.Decode(rel.r_offset);
-
+                ref var rel = ref batch.ReadNext();
+                entry.Offset = reader.Decode(rel.r_offset);
                 var r_info = reader.Decode(rel.r_info);
-                var type = new ElfRelocationType(Parent!.Arch, (uint)(r_info & 0xFFFFFFFF));
-                var symbolIndex = (uint)(r_info >> 32);
-                var addend = reader.Decode(rel.r_addend);
-
-                var entry = new ElfRelocation(offset, type, symbolIndex, addend);
-                _entries.Add(entry);
+                entry.Type = new ElfRelocationType(Parent!.Arch, (uint)(r_info & 0xFFFFFFFF));
+                entry.SymbolIndex = (uint)(r_info >> 32);
+                entry.Addend = reader.Decode(rel.r_addend);
+                entry = ref Unsafe.Add(ref entry, 1);
             }
         }
         else
         {
-            for (ulong i = 0; i < numberOfEntries; i++)
+            using var batch = new BatchDataReader<ElfNative.Elf64_Rel>(reader.Stream, (int)numberOfEntries);
+            ref var entry = ref MemoryMarshal.GetReference(span);
+            while (batch.HasNext())
             {
-                ElfNative.Elf64_Rel rel;
-                ulong streamOffset = (ulong)reader.Stream.Position;
-                if (!reader.TryReadData(sizeof(ElfNative.Elf64_Rel), out rel))
-                {
-                    reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteRelocationEntry64Size, $"Unable to read entirely the relocation entry [{i}] from {Type} section [{Index}]. Not enough data (size: {base.TableEntrySize}) read at offset {streamOffset} from the stream");
-                }
-
-                var offset = reader.Decode(rel.r_offset);
-
+                ref var rel = ref batch.ReadNext();
+                entry.Offset = reader.Decode(rel.r_offset);
                 var r_info = reader.Decode(rel.r_info);
-                var type = new ElfRelocationType(Parent!.Arch, (uint)(r_info & 0xFFFFFFFF));
-                var symbolIndex = (uint)(r_info >> 32);
-
-                var entry = new ElfRelocation(offset, type, symbolIndex, 0);
-                _entries.Add(entry);
+                entry.Type = new ElfRelocationType(Parent!.Arch, (uint)(r_info & 0xFFFFFFFF));
+                entry.SymbolIndex = (uint)(r_info >> 32);
+                entry.Addend = 0;
+                entry = ref Unsafe.Add(ref entry, 1);
             }
         }
     }

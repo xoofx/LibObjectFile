@@ -10,7 +10,7 @@ namespace LibObjectFile.Elf;
 /// A symbol entry in the <see cref="ElfSymbolTable"/>
 /// This is the value seen in <see cref="ElfNative.Elf32_Sym"/> or <see cref="ElfNative.Elf64_Sym"/>
 /// </summary>
-public record ElfSymbol
+public record struct ElfSymbol
 {
     /// <summary>
     /// Gets or sets the value associated to this symbol.

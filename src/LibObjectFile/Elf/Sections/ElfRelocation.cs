@@ -8,7 +8,7 @@ namespace LibObjectFile.Elf;
 /// A relocation entry in the <see cref="ElfRelocationTable"/>
 /// This is the value seen in <see cref="ElfNative.Elf32_Rel"/> or <see cref="ElfNative.Elf64_Rel"/>
 /// </summary>
-public record ElfRelocation
+public record struct ElfRelocation
 {
     public ElfRelocation()
     {
