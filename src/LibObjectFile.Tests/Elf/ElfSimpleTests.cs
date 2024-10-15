@@ -93,7 +93,7 @@ public class ElfSimpleTests : ElfTestBase
         {
             testContext.WriteLine($"TestThrows ReadOnly: {isReadOnly}");
             using var stream = File.OpenRead("TestFiles/cmnlib.b00");
-            Assert.IsFalse(ElfFile.TryRead(stream, out var elf, out var diagnostics, new ElfReaderOptions() { ReadOnly = isReadOnly }));
+            Assert.IsFalse(ElfFile.TryRead(stream, out var elf, out var diagnostics, new ElfReaderOptions() { UseSubStream = isReadOnly }));
             Assert.IsNotNull(elf);
             foreach (var message in diagnostics.Messages)
             {

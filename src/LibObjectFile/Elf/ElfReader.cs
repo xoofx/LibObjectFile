@@ -28,7 +28,7 @@ public abstract class ElfReader : ObjectFileReaderWriter, IElfDecoder
     /// </summary>
     public ElfReaderOptions Options { get; }
 
-    public override bool KeepOriginalStreamForSubStreams => Options.ReadOnly;
+    public override bool KeepOriginalStreamForSubStreams => Options.UseSubStream;
 
     public ElfSectionLink ResolveLink(ElfSectionLink link, string errorMessageFormat)
     {

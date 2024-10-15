@@ -56,7 +56,7 @@ public class ObjDisasmApp
             }
             else if (ElfFile.IsElf(stream))
             {
-                var elfObjectFile = ElfFile.Read(stream, new ElfReaderOptions() {ReadOnly = true});
+                var elfObjectFile = ElfFile.Read(stream, new ElfReaderOptions() {UseSubStream = true});
                 ProcessElf(Path.GetFileName(file), elfObjectFile);
             }
         }

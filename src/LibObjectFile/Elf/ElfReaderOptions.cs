@@ -15,7 +15,7 @@ public class ElfReaderOptions
     /// Gets or sets a boolean indicating if the stream can be used in read-only mode, or <c>false</c> the resulting
     /// <see cref="ElfFile"/> will be modified.
     /// </summary>
-    public bool ReadOnly { get; set; }
+    public bool UseSubStream { get; set; }
 
     /// <summary>
     /// Gets or sets a delegate that can be used to replace the creation of <see cref="ElfNote"/> when
