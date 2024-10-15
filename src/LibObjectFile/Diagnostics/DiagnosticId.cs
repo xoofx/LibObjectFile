@@ -18,15 +18,15 @@ public enum DiagnosticId
     ELF_ERR_InvalidHeaderFileClassNone = 105,
     ELF_ERR_InvalidHeaderIdentLength = 106,
     ELF_ERR_InvalidHeaderMagic = 107,
-    //ELF_ERR_InvalidHeaderFileClass = 8,
-    //ELF_ERR_InvalidHeaderEncoding = 9,
+    ELF_ERR_InvalidElfHeaderSize = 108,
+    ELF_ERR_InvalidProgramHeaderSize = 109,
     ELF_ERR_MissingProgramHeaderTableSection = 110,
     ELF_ERR_InvalidSectionHeaderCount = 111,
     ELF_ERR_IncompleteHeader32Size = 112,
     ELF_ERR_IncompleteHeader64Size = 113,
     ELF_ERR_InvalidZeroProgramHeaderTableEntrySize = 114,
     ELF_ERR_InvalidProgramHeaderStreamOffset = 115,
-    ELF_ERR_IncompleteProgramHeader32Size = 116,
+    ELF_ERR_IncompleteProgramHeaderSize = 116,
     ELF_ERR_IncompleteProgramHeader64Size = 117,
     ELF_ERR_InvalidZeroSectionHeaderTableEntrySize = 118,
     ELF_ERR_InvalidSectionHeaderStreamOffset = 119,
@@ -70,8 +70,16 @@ public enum DiagnosticId
     ELF_ERR_InvalidNullSection = 157,
     ELF_ERR_InvalidAlignmentOutOfRange = 158,
     ELF_ERR_MissingSectionHeaderIndices = 159,
-    ELF_ERR_MissingNullSection = 159,
-
+    ELF_ERR_MissingNullSection = 160,
+    ELF_ERR_InvalidProgramHeaderAdditionalDataSize = 161,
+    ELF_ERR_InvalidProgramHeaderTableClass = 162,
+    ELF_ERR_IncompleteSessionHeaderSize = 163,
+    ELF_ERR_InvalidSectionHeaderTableClass = 164,
+    ELF_ERR_SectionHeaderStringTableNotFound = 165,
+    ELF_ERR_InvalidSectionEntrySize = 166,
+    ELF_ERR_MissingSectionHeaderTable = 167,
+    ELF_ERR_MissingSectionHeaderTableSection = 168,
+    
     AR_ERR_InvalidMagicLength = 1000,
     AR_ERR_MagicNotFound = 1001,
     AR_ERR_ExpectingNewLineCharacter = 1002,
@@ -90,7 +98,6 @@ public enum DiagnosticId
     AR_ERR_InvalidNullParentFileForSymbol = 1015,
     AR_ERR_InvalidParentFileForSymbol = 1016,
     AR_ERR_InvalidFileEntrySize = 1017,
-
 
     DWARF_ERR_AttributeLEB128OutOfRange = 2000,
     DWARF_ERR_VersionNotSupported = 2001,
@@ -169,7 +176,7 @@ public enum DiagnosticId
     PE_ERR_InvalidDebugDataRSDSSignature = 3603,
     PE_ERR_InvalidDebugDataRSDSPdbPath = 3604,
     PE_ERR_DebugDirectoryExtraData = 3605,
-    
+
     // PE BaseRelocation
     PE_ERR_BaseRelocationDirectoryInvalidEndOfStream = 3700,
     PE_ERR_BaseRelocationDirectoryInvalidSection = 3701,

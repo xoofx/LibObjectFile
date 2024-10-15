@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -214,6 +214,15 @@ partial class Program
                         break;
                     case "960":
                         csFieldName = "I960";
+                        break;
+                    case "8051":
+                        csFieldName = "I8051";
+                        break;
+                    case "78KOR":
+                        csFieldName = "R78KOR";
+                        break;
+                    case "56800EX":
+                        csFieldName = "F56800EX";
                         break;
                     default:
                         // assume Motorola

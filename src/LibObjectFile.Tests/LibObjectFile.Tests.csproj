@@ -9,6 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Elf\helloworld" />
+    <None Remove="Elf\helloworld.o" />
+    <None Remove="Elf\helloworld_debug" />
+    <None Remove="Elf\libhelloworld.a" />
+    <None Remove="Elf\lib_debug.so" />
+    <None Remove="Elf\multiple_functions_debug.o" />
+    <None Remove="Elf\small_debug.o" />
     <None Remove="helloworld.cpp" />
     <None Remove="libstdc++.so" />
     <None Remove="lib_a.cpp" />
@@ -22,16 +29,37 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="libstdc++.so">
+    <Content Include="Elf\helloworld">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="multiple_functions.cpp">
+    <Content Include="Elf\helloworld.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="lib_b.cpp">
+    <Content Include="Elf\helloworld_debug">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="lib_a.cpp">
+    <Content Include="Elf\libhelloworld.a">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Elf\libstdc++.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Elf\lib_debug.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Elf\multiple_functions.cpp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Elf\lib_b.cpp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Elf\lib_a.cpp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Elf\multiple_functions_debug.o">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Elf\small_debug.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="PE\NativeConsole2Win64.exe">
@@ -46,10 +74,10 @@
     <Content Include="PE\RawNativeConsoleWin64.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="small.cpp">
+    <Content Include="Elf\small.cpp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="helloworld.cpp">
+    <Content Include="Elf\helloworld.cpp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -6,8 +6,10 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using LibObjectFile.Ar;
 using LibObjectFile.Diagnostics;
+using VerifyTests;
 
 namespace LibObjectFile.Tests.Ar;
 
@@ -272,13 +274,8 @@ public class ArTests : ArTestBase
     [TestMethod]
     public void CheckLibraryWithELF()
     {
-        var cppName = "helloworld";
-        var cppObj = $"{cppName}.o";
-        var cppLib = $"lib{cppName}.a";
-        File.Delete(cppObj);
-        File.Delete(cppLib);
-        LinuxUtil.RunLinuxExe("gcc", $"{cppName}.cpp -c -o {cppObj}");
-        LinuxUtil.RunLinuxExe("ar", $"rcs {cppLib} {cppObj}");
+        var cppObj = "helloworld.o";
+        var cppLib = GetFile("libhelloworld.a");
 
         using (var stream = new FileStream(cppLib, FileMode.Open, FileAccess.Read))
         {
@@ -301,23 +298,23 @@ public class ArTests : ArTestBase
             var newArray = outStream.ToArray();
             outStream.Position = 0;
 
-            var cppLibCopy = $"lib{cppName}_copy.a";
-            using (var copyStream = new FileStream(cppLibCopy, FileMode.Create, FileAccess.Write))
-            {
-                outStream.CopyTo(copyStream);
-            }
+            //var cppLibCopy = $"lib{cppName}_copy.a";
+            //using (var copyStream = new FileStream(cppLibCopy, FileMode.Create, FileAccess.Write))
+            //{
+            //    outStream.CopyTo(copyStream);
+            //}
 
             var originalStream = new MemoryStream();
             stream.Position = 0;
             stream.CopyTo(originalStream);
             var originalArray = originalStream.ToArray();
 
-            ByteArrayAssert.AreEqual(originalArray, newArray, $"Non binary matching between file {cppLib} and {cppLibCopy}");
+            ByteArrayAssert.AreEqual(originalArray, newArray, $"Non binary matching for file {cppLib} ");
         }
     }
 
     [TestMethod]
-    public void CheckCreateArLibrary()
+    public async Task CheckCreateArLibrary()
     {
         var libName = "libcustom.a";
 
@@ -343,6 +340,8 @@ public class ArTests : ArTestBase
             stream.Flush();
         }
 
+        Recording.Start();
+
         // Check that AR is able to read back what we just serialized
         {
             var fileNameBuilder = new StringBuilder();
@@ -353,8 +352,7 @@ public class ArTests : ArTestBase
             }
 
             var fileNameList = fileNameBuilder.ToString().Trim();
-            var fileNameListFromAr = LinuxUtil.RunLinuxExe("ar", $"t {libName}").Trim();
-            Assert.AreEqual(fileNameListFromAr, fileNameList);
+            Recording.Add("filenames", fileNameList);
         }
 
         // Display the content of each file via AR
@@ -369,9 +367,10 @@ public class ArTests : ArTestBase
             }
 
             var content = contentBuilder.ToString().Trim();
-            var contentFromAr = LinuxUtil.RunLinuxExe("ar", $"p {libName}").Trim();
-            Assert.AreEqual(contentFromAr, content);
+            Recording.Add("filecontent", content);
         }
+
+        await Verify();
 
         ArArchiveFile file2;
         using (var stream = new FileStream(libName, FileMode.Open, FileAccess.Read))

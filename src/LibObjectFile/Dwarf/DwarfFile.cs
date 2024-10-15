@@ -435,7 +435,7 @@ public class DwarfFile : DwarfContainer
         return Read(new DwarfReaderContext(elfContext));
     }
 
-    public static DwarfFile ReadFromElf(ElfObjectFile elf)
+    public static DwarfFile ReadFromElf(ElfFile elf)
     {
         return ReadFromElf(new DwarfElfContext(elf));
     }

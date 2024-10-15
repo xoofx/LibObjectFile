@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -10,7 +10,7 @@ namespace LibObjectFile.Elf;
 using static ElfNative;
 
 /// <summary>
-/// Extensions for <see cref="ElfObjectFile"/>
+/// Extensions for <see cref="ElfFile"/>
 /// </summary>
 public static class ElfObjectFileExtensions
 {
@@ -18,11 +18,11 @@ public static class ElfObjectFileExtensions
     /// Copy to an array buffer the ident array as found in ELF header <see cref="Elf32_Ehdr.e_ident"/>
     /// or <see cref="Elf64_Ehdr.e_ident"/>.
     /// </summary>
-    /// <param name="objectFile">The object file to copy the ident from.</param>
+    /// <param name="file">The object file to copy the ident from.</param>
     /// <param name="ident">A span receiving the ident. Must be >= 16 bytes length</param>
-    public static void CopyIdentTo(this ElfObjectFile objectFile, Span<byte> ident)
+    public static void CopyIdentTo(this ElfFile file, Span<byte> ident)
     {
-        if (objectFile == null) throw new ArgumentNullException(nameof(objectFile));
+        if (file == null) throw new ArgumentNullException(nameof(file));
         if (ident.Length < EI_NIDENT)
         {
             throw new ArgumentException($"Expecting span length to be >= {EI_NIDENT}");
@@ -38,24 +38,24 @@ public static class ElfObjectFileExtensions
         ident[EI_MAG1] = ELFMAG1;
         ident[EI_MAG2] = ELFMAG2;
         ident[EI_MAG3] = ELFMAG3;
-        ident[EI_CLASS] = (byte) objectFile.FileClass;
-        ident[EI_DATA] = (byte) objectFile.Encoding;
-        ident[EI_VERSION] = (byte)objectFile.Version;
-        ident[EI_OSABI] = (byte)objectFile.OSABI.Value;
-        ident[EI_ABIVERSION] = objectFile.AbiVersion;
+        ident[EI_CLASS] = (byte) file.FileClass;
+        ident[EI_DATA] = (byte) file.Encoding;
+        ident[EI_VERSION] = (byte)file.Version;
+        ident[EI_OSABI] = (byte)file.OSABI.Value;
+        ident[EI_ABIVERSION] = file.AbiVersion;
     }
 
     /// <summary>
     /// Tries to copy from an ident array as found in ELF header <see cref="Elf32_Ehdr.e_ident"/> to this ELF object file instance.
     /// or <see cref="Elf64_Ehdr.e_ident"/>.
     /// </summary>
-    /// <param name="objectFile">The object file to receive the ident from.</param>
+    /// <param name="file">The object file to receive the ident from.</param>
     /// <param name="ident">A span to read from. Must be >= 16 bytes length</param>
     /// <param name="diagnostics">The diagnostics</param>
     /// <returns><c>true</c> if copying the ident was successful. <c>false</c> otherwise</returns>
-    public static bool TryCopyIdentFrom(this ElfObjectFile objectFile, ReadOnlySpan<byte> ident, DiagnosticBag diagnostics)
+    public static bool TryCopyIdentFrom(this ElfFile file, ReadOnlySpan<byte> ident, DiagnosticBag diagnostics)
     {
-        if (objectFile == null) throw new ArgumentNullException(nameof(objectFile));
+        if (file == null) throw new ArgumentNullException(nameof(file));
         if (ident.Length < EI_NIDENT)
         {
             diagnostics.Error(DiagnosticId.ELF_ERR_InvalidHeaderIdentLength, $"Invalid ELF Ident length found. Must be >= {EI_NIDENT}");
@@ -68,16 +68,16 @@ public static class ElfObjectFileExtensions
             return false;
         }
 
-        CopyIndentFrom(objectFile, ident);
+        CopyIndentFrom(file, ident);
         return true;
     }
 
-    internal static void CopyIndentFrom(this ElfObjectFile objectFile, ReadOnlySpan<byte> ident)
+    internal static void CopyIndentFrom(this ElfFile file, ReadOnlySpan<byte> ident)
     {
-        objectFile.FileClass = (ElfFileClass)ident[EI_CLASS];
-        objectFile.Encoding = (ElfEncoding)ident[EI_DATA];
-        objectFile.Version = ident[EI_VERSION];
-        objectFile.OSABI = new ElfOSABIEx(ident[EI_OSABI]);
-        objectFile.AbiVersion = ident[EI_ABIVERSION];
+        file.FileClass = (ElfFileClass)ident[EI_CLASS];
+        file.Encoding = (ElfEncoding)ident[EI_DATA];
+        file.Version = ident[EI_VERSION];
+        file.OSABI = new ElfOSABIEx(ident[EI_OSABI]);
+        file.AbiVersion = ident[EI_ABIVERSION];
     }
 }

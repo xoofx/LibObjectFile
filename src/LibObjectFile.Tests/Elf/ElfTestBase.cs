@@ -4,94 +4,87 @@
 
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using LibObjectFile.Elf;
+using VerifyMSTest;
+using VerifyTests;
 
 namespace LibObjectFile.Tests.Elf;
 
-public abstract class ElfTestBase
+public abstract class ElfTestBase : VerifyBase
 {
-    protected static void AssertReadElf(ElfObjectFile elf, string fileName)
+    protected async Task AssertReadElf(ElfFile elf, string fileName)
     {
-        AssertReadElfInternal(elf, fileName);
-        AssertReadBack(elf, fileName, readAsReadOnly: false);
-        AssertReadBack(elf, fileName, readAsReadOnly: true);
-        AssertLsbMsb(elf, fileName);
-    }
-        
-    protected static void AssertReadElfInternal(ElfObjectFile elf, string fileName, bool writeFile = true, string? context = null, string? readElfParams = null)
-    {
-        if (writeFile)
+        await VerifyElf(elf, fileName);
+
         {
-            using (var stream = new FileStream(Path.Combine(Environment.CurrentDirectory, fileName), FileMode.Create))
-            {
-                elf.Write(stream);
-                stream.Flush(); 
-                Assert.AreEqual(stream.Length, (long)elf.Layout.TotalSize);
-            }
-        }
+            var originalStream = new MemoryStream();
+            elf.Write(originalStream);
+            
 
-        var stringWriter = new StringWriter();
-        elf.Print(stringWriter);
+            elf.Encoding = ElfEncoding.Msb;
+            var stream = new MemoryStream();
+            elf.Write(stream);
+            stream.Position = 0;
 
-        var result = stringWriter.ToString().Replace("\r\n", "\n").TrimEnd();
-        Console.WriteLine(result);
-        readElfParams ??= "-W -a";
-        var readelf = LinuxUtil.ReadElf(fileName, readElfParams).TrimEnd();
-        if (readelf != result)
-        {
-            Console.WriteLine("=== Expected:");
-            Console.WriteLine(readelf);
-            Console.WriteLine("=== Result:");
-            Console.WriteLine(result);
-            if (context != null)
-            {
-                Assert.AreEqual(readelf, result, context);
-            }
-            else
-            {
-                Assert.AreEqual(readelf, result);
-            }
-        }
-    }
-        
-    protected static void AssertReadBack(ElfObjectFile elf, string fileName, bool readAsReadOnly)
-    {
-        ElfObjectFile newObjectFile;
+            var msbElf = ElfFile.Read(stream);
+            msbElf.Encoding = ElfEncoding.Lsb;
+            stream.SetLength(0);
+            msbElf.Write(stream);
+            var newData = stream.ToArray();
 
-        var filePath = Path.Combine(Environment.CurrentDirectory, fileName);
-        using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-        {
-            newObjectFile = ElfObjectFile.Read(stream, new ElfReaderOptions() {ReadOnly = readAsReadOnly});
-
-            Console.WriteLine();
-            Console.WriteLine("=============================================================================");
-            Console.WriteLine($"readback {(readAsReadOnly ? "as readonly" : "as readwrite")}");
-            Console.WriteLine("=============================================================================");
-            Console.WriteLine();
-
-            AssertReadElfInternal(newObjectFile, fileName, false, $"Unexpected error while reading back {fileName}");
-
-            var originalBuffer = File.ReadAllBytes(filePath);
-            var memoryStream = new MemoryStream();
-            newObjectFile.Write(memoryStream);
-            var newBuffer = memoryStream.ToArray();
-
-            ByteArrayAssert.AreEqual(originalBuffer, newBuffer, "Invalid binary diff between write -> (original) -> read -> write -> (new)");
+            ByteArrayAssert.AreEqual(originalStream.ToArray(), newData, "Invalid binary diff between LSB/MSB write -> read -> write");
         }
     }
 
-    private static void AssertLsbMsb(ElfObjectFile elf, string fileName)
+    protected async Task VerifyElf(ElfFile elf)
     {
-        Console.WriteLine();
-        Console.WriteLine("*****************************************************************************");
-        Console.WriteLine("LSB to MSB");
-        Console.WriteLine("*****************************************************************************");
-        Console.WriteLine();
+        var writer = new StringWriter();
+        elf.Print(writer);
+        var text = writer.ToString();
 
-        elf.Encoding = ElfEncoding.Msb;
-        var newFileName = Path.GetFileNameWithoutExtension(fileName) + "_msb.elf";
-        AssertReadElfInternal(elf, newFileName);
-        AssertReadBack(elf, newFileName, readAsReadOnly: false);
-        AssertReadBack(elf, newFileName, readAsReadOnly: true);
+        await Verifier.Verify(text);
     }
+
+    protected async Task VerifyElf(ElfFile elf, string name)
+    {
+        var writer = new StringWriter();
+        elf.Print(writer);
+        var text = writer.ToString();
+
+        await Verifier.Verify(text).UseParameters(name);
+    }
+
+    protected async Task LoadAndVerifyElf(string name)
+    {
+        var elf = LoadElf(name, out var originalBinary);
+        var writer = new StringWriter();
+        elf.Print(writer);
+        var text = writer.ToString();
+
+        await Verifier.Verify(text).UseParameters(name);
+
+        var memoryStream = new MemoryStream();
+        elf.Write(memoryStream);
+        var newBinary = memoryStream.ToArray();
+
+        ByteArrayAssert.AreEqual(originalBinary, newBinary, "Invalid binary diff between write -> read -> write");
+    }
+
+    protected ElfFile LoadElf(string name)
+    {
+        var file = GetFile(name);
+        using var stream = File.OpenRead(file);
+        return ElfFile.Read(stream);
+    }
+
+    protected ElfFile LoadElf(string name, out byte[] originalBinary)
+    {
+        var file = GetFile(name);
+        originalBinary = File.ReadAllBytes(file);
+        using var stream = File.OpenRead(file);
+        return ElfFile.Read(stream);
+    }
+
+    protected string GetFile(string name) => Path.Combine(AppContext.BaseDirectory, "Elf", name);
 }

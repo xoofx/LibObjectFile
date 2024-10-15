@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -16,29 +16,29 @@ public sealed class ArElfFile : ArFile
     {
     }
 
-    public ArElfFile(ElfObjectFile elfObjectFile)
+    public ArElfFile(ElfFile elfFile)
     {
-        ElfObjectFile = elfObjectFile;
+        ElfFile = elfFile;
     }
         
     /// <summary>
     /// Gets or sets the ELF object file.
     /// </summary>
-    public ElfObjectFile? ElfObjectFile { get; set; }
+    public ElfFile? ElfFile { get; set; }
 
     public override void Read(ArArchiveFileReader reader)
     {
         var startPosition = reader.Stream.Position;
         var endPosition = startPosition + (long) Size;
-        ElfObjectFile = ElfObjectFile.Read(new SubStream(reader.Stream, reader.Stream.Position, (long)Size));
+        ElfFile = ElfFile.Read(new SubStream(reader.Stream, reader.Stream.Position, (long)Size));
         reader.Stream.Position = endPosition;
     }
 
     public override void Write(ArArchiveFileWriter writer)
     {
-        if (ElfObjectFile != null)
+        if (ElfFile != null)
         {
-            ElfObjectFile.TryWrite(writer.Stream, out var diagnostics);
+            ElfFile.TryWrite(writer.Stream, out var diagnostics);
             diagnostics.CopyTo(writer.Diagnostics);
         }
     }
@@ -47,12 +47,12 @@ public sealed class ArElfFile : ArFile
     {
         Size = 0;
             
-        if (ElfObjectFile != null)
+        if (ElfFile != null)
         {
-            ElfObjectFile.UpdateLayout(context.Diagnostics);
+            ElfFile.UpdateLayout(context.Diagnostics);
             if (!context.HasErrors)
             {
-                Size = ElfObjectFile.Layout.TotalSize;
+                Size = ElfFile.Layout.TotalSize;
             }
         }
     }

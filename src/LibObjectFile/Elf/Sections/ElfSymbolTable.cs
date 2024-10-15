@@ -1,10 +1,14 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
 using System;
 using System.Collections.Generic;
+using System.Reflection.PortableExecutable;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using LibObjectFile.Diagnostics;
+using LibObjectFile.IO;
 
 namespace LibObjectFile.Elf;
 
@@ -14,51 +18,45 @@ namespace LibObjectFile.Elf;
 public sealed class ElfSymbolTable : ElfSection
 {
     public const string DefaultName = ".symtab";
+    private bool _is32;
 
-    public ElfSymbolTable() : base(ElfSectionType.SymbolTable)
+    public ElfSymbolTable() : this(true)
+    {
+    }
+
+    public ElfSymbolTable(bool isDynamic) : base(isDynamic ? ElfSectionType.DynamicLinkerSymbolTable : ElfSectionType.SymbolTable)
     {
         Name = DefaultName;
-        Entries = new List<ElfSymbol>();
-        Entries.Add(new ElfSymbol());
+        Entries = [new ElfSymbol()];
     }
 
-    public override ElfSectionType Type
-    {
-        get => base.Type;
-        set
-        {
-            if (value != ElfSectionType.SymbolTable && value != ElfSectionType.DynamicLinkerSymbolTable)
-            {
-                throw new ArgumentException($"Invalid type `{Type}` of the section [{Index}] `{nameof(ElfSymbolTable)}`. Only `{ElfSectionType.SymbolTable}` or `{ElfSectionType.DynamicLinkerSymbolTable}` are valid");
-            }
-            base.Type = value;
-        }
-    }
-        
     /// <summary>
     /// Gets a list of <see cref="ElfSymbol"/> entries.
     /// </summary>
     public List<ElfSymbol> Entries { get;  }
 
-    public override unsafe ulong TableEntrySize =>
-        Parent == null || Parent.FileClass == ElfFileClass.None ? 0 :
-        Parent.FileClass == ElfFileClass.Is32 ? (ulong) sizeof(ElfNative.Elf32_Sym) : (ulong) sizeof(ElfNative.Elf64_Sym);
-
     public override void Read(ElfReader reader)
     {
-        if (Parent!.FileClass == ElfFileClass.Is32)
+        reader.Position = Position;
+        Entries.Clear();
+
+        var numberOfEntries = (int)(base.Size / base.TableEntrySize);
+        var entries = Entries;
+        CollectionsMarshal.SetCount(entries, numberOfEntries);
+
+        if (_is32)
         {
-            Read32(reader);
+            Read32(reader, numberOfEntries);
         }
         else
         {
-            Read64(reader);
+            Read64(reader, numberOfEntries);
         }
     }
 
     public override void Write(ElfWriter writer)
     {
-        if (Parent!.FileClass == ElfFileClass.Is32)
+        if (_is32)
         {
             Write32(writer);
         }
@@ -68,19 +66,15 @@ public sealed class ElfSymbolTable : ElfSection
         }
     }
 
-    private void Read32(ElfReader reader)
+    private void Read32(ElfReader reader, int numberOfEntries)
     {
-        var numberOfEntries = base.Size / OriginalTableEntrySize;
-        for (ulong i = 0; i < numberOfEntries; i++)
+        using var batch = new BatchDataReader<ElfNative.Elf32_Sym>(reader.Stream, numberOfEntries);
+        var span = CollectionsMarshal.AsSpan(Entries);
+        ref var entry = ref MemoryMarshal.GetReference(span);
+        while (batch.HasNext())
         {
-            ElfNative.Elf32_Sym sym;
-            ulong streamOffset = (ulong)reader.Stream.Position;
-            if (!reader.TryReadData((int)OriginalTableEntrySize, out sym))
-            {
-                reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteSymbolEntry32Size, $"Unable to read entirely the symbol entry [{i}] from {Type} section [{Index}]. Not enough data (size: {OriginalTableEntrySize}) read at offset {streamOffset} from the stream");
-            }
+            ref var sym = ref batch.Read();
 
-            var entry = new ElfSymbol();
             entry.Name = new ElfString(reader.Decode(sym.st_name));
             entry.Value = reader.Decode(sym.st_value);
             entry.Size = reader.Decode(sym.st_size);
@@ -89,31 +83,20 @@ public sealed class ElfSymbolTable : ElfSection
             entry.Type = (ElfSymbolType) (st_info & 0xF);
             entry.Bind = (ElfSymbolBind)(st_info >> 4);
             entry.Visibility = (ElfSymbolVisibility) sym.st_other;
-            entry.Section = new ElfSectionLink(reader.Decode(sym.st_shndx));
-
-            // If the entry 0 was validated
-            if (i == 0 && entry == ElfSymbol.Empty)
-            {
-                continue;
-            }
-
-            Entries.Add(entry);
+            entry.SectionLink = new ElfSectionLink(reader.Decode(sym.st_shndx));
+            entry = ref Unsafe.Add(ref entry, 1);
         }
     }
 
-    private void Read64(ElfReader reader)
+    private void Read64(ElfReader reader, int numberOfEntries)
     {
-        var numberOfEntries = base.Size / OriginalTableEntrySize;
-        for (ulong i = 0; i < numberOfEntries; i++)
+        using var batch = new BatchDataReader<ElfNative.Elf64_Sym>(reader.Stream, numberOfEntries);
+        var span = CollectionsMarshal.AsSpan(Entries);
+        ref var entry = ref MemoryMarshal.GetReference(span);
+        while (batch.HasNext())
         {
-            ElfNative.Elf64_Sym sym;
-            ulong streamOffset = (ulong)reader.Stream.Position;
-            if (!reader.TryReadData((int)OriginalTableEntrySize, out sym))
-            {
-                reader.Diagnostics.Error(DiagnosticId.ELF_ERR_IncompleteSymbolEntry64Size, $"Unable to read entirely the symbol entry [{i}] from {Type} section [{Index}]. Not enough data (size: {OriginalTableEntrySize}) read at offset {streamOffset} from the stream");
-            }
+            ref var sym = ref batch.Read();
 
-            var entry = new ElfSymbol();
             entry.Name = new ElfString(reader.Decode(sym.st_name));
             entry.Value = reader.Decode(sym.st_value);
             entry.Size = reader.Decode(sym.st_size);
@@ -122,38 +105,32 @@ public sealed class ElfSymbolTable : ElfSection
             entry.Type = (ElfSymbolType)(st_info & 0xF);
             entry.Bind = (ElfSymbolBind)(st_info >> 4);
             entry.Visibility = (ElfSymbolVisibility)sym.st_other;
-            entry.Section = new ElfSectionLink(reader.Decode(sym.st_shndx));
-
-            // If the entry 0 was validated
-            if (i == 0 && entry == ElfSymbol.Empty)
-            {
-                continue;
-            }
-
-            Entries.Add(entry);
+            entry.SectionLink = new ElfSectionLink(reader.Decode(sym.st_shndx));
+            entry = ref Unsafe.Add(ref entry, 1);
         }
     }
-
-        
+    
     private void Write32(ElfWriter writer)
     {
         var stringTable = (ElfStringTable)Link.Section!;
 
         // Write all entries
-        for (int i = 0; i < Entries.Count; i++)
+        var entries = CollectionsMarshal.AsSpan(Entries);
+        using var batch = new BatchDataWriter<ElfNative.Elf32_Sym>(writer.Stream, entries.Length);
+        var sym = new ElfNative.Elf32_Sym();
+        for (int i = 0; i < entries.Length; i++)
         {
-            var entry = Entries[i];
+            ref var entry = ref entries[i];
 
-            var sym = new ElfNative.Elf32_Sym();
-            writer.Encode(out sym.st_name, (ushort)stringTable.GetOrCreateIndex(entry.Name!));
+            writer.Encode(out sym.st_name, (ushort)stringTable.Resolve(entry.Name!).Index);
             writer.Encode(out sym.st_value, (uint)entry.Value);
             writer.Encode(out sym.st_size, (uint)entry.Size);
             sym.st_info = (byte)(((byte) entry.Bind << 4) | (byte) entry.Type);
             sym.st_other = (byte) ((byte) entry.Visibility & 3);
-            var sectionIndex = entry.Section.GetIndex();
-            writer.Encode(out sym.st_shndx, sectionIndex < ElfNative.SHN_LORESERVE || entry.Section.IsSpecial ? (ElfNative.Elf32_Half)sectionIndex : (ElfNative.Elf32_Half)ElfNative.SHN_XINDEX);
+            var sectionIndex = entry.SectionLink.GetIndex();
+            writer.Encode(out sym.st_shndx, sectionIndex < ElfNative.SHN_LORESERVE || entry.SectionLink.IsSpecial ? (ElfNative.Elf32_Half)sectionIndex : (ElfNative.Elf32_Half)ElfNative.SHN_XINDEX);
 
-            writer.Write(sym);
+            batch.Write(sym);
         }
     }
 
@@ -161,20 +138,23 @@ public sealed class ElfSymbolTable : ElfSection
     {
         var stringTable = (ElfStringTable)Link.Section!;
 
-        for (int i = 0; i < Entries.Count; i++)
+        // Write all entries
+        var entries = CollectionsMarshal.AsSpan(Entries);
+        using var batch = new BatchDataWriter<ElfNative.Elf64_Sym>(writer.Stream, entries.Length);
+        var sym = new ElfNative.Elf64_Sym();
+        for (int i = 0; i < entries.Length; i++)
         {
-            var entry = Entries[i];
+            ref var entry = ref entries[i];
 
-            var sym = new ElfNative.Elf64_Sym();
-            writer.Encode(out sym.st_name, stringTable.GetOrCreateIndex(entry.Name!));
+            writer.Encode(out sym.st_name, stringTable.Resolve(entry.Name!).Index);
             writer.Encode(out sym.st_value, entry.Value);
             writer.Encode(out sym.st_size, entry.Size);
             sym.st_info = (byte)(((byte)entry.Bind << 4) | (byte)entry.Type);
             sym.st_other = (byte)((byte)entry.Visibility & 3);
-            var sectionIndex = entry.Section.GetIndex();
-            writer.Encode(out sym.st_shndx, sectionIndex < ElfNative.SHN_LORESERVE || entry.Section.IsSpecial ? (ElfNative.Elf64_Half)sectionIndex : (ElfNative.Elf64_Half)ElfNative.SHN_XINDEX);
+            var sectionIndex = entry.SectionLink.GetIndex();
+            writer.Encode(out sym.st_shndx, sectionIndex < ElfNative.SHN_LORESERVE || entry.SectionLink.IsSpecial ? (ElfNative.Elf64_Half)sectionIndex : (ElfNative.Elf64_Half)ElfNative.SHN_XINDEX);
 
-            writer.Write(sym);
+            batch.Write(sym);
         }
     }
 
@@ -183,9 +163,10 @@ public sealed class ElfSymbolTable : ElfSection
         // Verify that the link is safe and configured as expected
         Link.TryGetSectionSafe<ElfStringTable>(nameof(ElfSymbolTable), nameof(Link), this, reader.Diagnostics, out var stringTable, ElfSectionType.StringTable);
 
-        for (int i = 0; i < Entries.Count; i++)
+        var entries = CollectionsMarshal.AsSpan(Entries);
+        for (int i = 0; i < entries.Length; i++)
         {
-            var entry = Entries[i];
+            ref var entry = ref entries[i];
 
             if (stringTable != null)
             {
@@ -199,12 +180,18 @@ public sealed class ElfSymbolTable : ElfSection
                 }
             }
 
-            if (entry.Section.SpecialIndex < ElfNative.SHN_LORESERVE)
+            if (entry.SectionLink.SpecialIndex < ElfNative.SHN_LORESERVE)
             {
-                entry.Section = reader.ResolveLink(entry.Section, $"Invalid link section index {entry.Section.SpecialIndex} for  symbol table entry [{i}] from symbol table section [{this}]");
+                var link = entry.SectionLink;
+                if (!reader.TryResolveLink(ref link))
+                {
+                    reader.Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidResolvedLink, $"Invalid link section index [{entry.SectionLink.SpecialIndex}] for  symbol table entry [{i}] from symbol table section [{this}]");
+                }
+                else
+                {
+                    entry.SectionLink = link;
+                }
             }
-
-            Entries[i] = entry;
         }
     }
 
@@ -212,49 +199,25 @@ public sealed class ElfSymbolTable : ElfSection
     {
         var diagnostics = context.Diagnostics;
 
-        // Verify that the link is safe and configured as expected
-        if (!Link.TryGetSectionSafe<ElfStringTable>(nameof(ElfSymbolTable), nameof(Link), this, diagnostics, out var stringTable, ElfSectionType.StringTable))
-        {
-            return;
-        }
-
-        bool isAllowingLocal = true;
         bool needsSectionHeaderIndices = false;
 
         for (int i = 0; i < Entries.Count; i++)
         {
             var entry = Entries[i];
 
-            if (i == 0 && entry != ElfSymbol.Empty)
+            if (i == 0 && !entry.IsEmpty)
             {
                 diagnostics.Error(DiagnosticId.ELF_ERR_InvalidFirstSymbolEntryNonNull, $"Invalid entry #{i} in the {nameof(ElfSymbolTable)} section [{Index}]. The first entry must be null/undefined");
             }
 
-            if (entry.Section.Section != null)
+            if (entry.SectionLink.Section != null)
             {
-                if (entry.Section.Section.Parent != Parent)
+                if (entry.SectionLink.Section.Parent != Parent)
                 {
                     diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSymbolEntrySectionParent, $"Invalid section for the symbol entry #{i} in the {nameof(ElfSymbolTable)} section [{Index}]. The section of the entry `{entry}` must the same than this symbol table section");
                 }
 
-                needsSectionHeaderIndices |= entry.Section.GetIndex() >= ElfNative.SHN_LORESERVE;
-            }
-
-            stringTable.ReserveString(entry.Name);
-
-            // Update the last local index
-            if (entry.Bind == ElfSymbolBind.Local)
-            {
-                // + 1 For the plus one
-                Info = new ElfSectionLink((uint)(i + 1));
-                if (!isAllowingLocal)
-                {
-                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSymbolEntryLocalPosition, $"Invalid position for the LOCAL symbol entry #{i} in the {nameof(ElfSymbolTable)} section [{Index}]. A LOCAL symbol entry must be before any other symbol entry");
-                }
-            }
-            else
-            {
-                isAllowingLocal = false;
+                needsSectionHeaderIndices |= entry.SectionLink.GetIndex() >= ElfNative.SHN_LORESERVE;
             }
         }
 
@@ -279,7 +242,80 @@ public sealed class ElfSymbolTable : ElfSection
 
     protected override unsafe void UpdateLayoutCore(ElfVisitorContext context)
     {
-        Size = Parent == null || Parent.FileClass == ElfFileClass.None ? 0 :
-            Parent.FileClass == ElfFileClass.Is32 ? (ulong)(Entries.Count * sizeof(ElfNative.Elf32_Sym)) : (ulong)(Entries.Count * sizeof(ElfNative.Elf64_Sym));
+        var diagnostics = context.Diagnostics;
+
+        // Verify that the link is safe and configured as expected
+        if (!Link.TryGetSectionSafe<ElfStringTable>(nameof(ElfSymbolTable), nameof(Link), this, diagnostics, out var stringTable, ElfSectionType.StringTable))
+        {
+            return;
+        }
+
+        bool isAllowingLocal = true;
+
+        var entries = CollectionsMarshal.AsSpan(Entries);
+        for (int i = 0; i < entries.Length; i++)
+        {
+            ref var entry = ref entries[i];
+            entry.Name = stringTable.Resolve(entry.Name);
+            
+            // Update the last local index
+            if (entry.Bind == ElfSymbolBind.Local)
+            {
+                // + 1 For the plus one
+                Info = new ElfSectionLink(i + 1);
+                if (!isAllowingLocal)
+                {
+                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSymbolEntryLocalPosition,
+                        $"Invalid position for the LOCAL symbol entry #{i} in the {nameof(ElfSymbolTable)} section [{Index}]. A LOCAL symbol entry must be before any other symbol entry");
+                }
+            }
+            else
+            {
+                isAllowingLocal = false;
+            }
+        }
+
+
+        Size = (uint)entries.Length * TableEntrySize;
+    }
+
+    protected override unsafe void ValidateParent(ObjectElement parent)
+    {
+        base.ValidateParent(parent);
+        var elf = (ElfFile)parent;
+        _is32 = elf.FileClass == ElfFileClass.Is32;
+
+        BaseTableEntrySize = (uint)(_is32 ? sizeof(ElfNative.Elf32_Sym) : sizeof(ElfNative.Elf64_Sym));
+        AdditionalTableEntrySize = 0;
+    }
+
+    internal override unsafe void InitializeEntrySizeFromRead(DiagnosticBag diagnostics, ulong entrySize, bool is32)
+    {
+        _is32 = is32;
+
+        if (is32)
+        {
+            if (entrySize != (ulong)sizeof(ElfNative.Elf32_Sym))
+            {
+                diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSectionEntrySize, $"Invalid size [{entrySize}] for symbol entry. Expecting to be equal to [{sizeof(ElfNative.Elf32_Sym)}] bytes");
+            }
+            else
+            {
+                BaseTableEntrySize = (uint)sizeof(ElfNative.Elf32_Sym);
+                AdditionalTableEntrySize = (uint)(entrySize - AdditionalTableEntrySize);
+            }
+        }
+        else
+        {
+            if (entrySize != (ulong)sizeof(ElfNative.Elf64_Sym))
+            {
+                diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSectionEntrySize, $"Invalid size [{entrySize}] for symbol entry. Expecting to be equal to [{sizeof(ElfNative.Elf64_Sym)}] bytes");
+            }
+            else
+            {
+                BaseTableEntrySize = (uint)sizeof(ElfNative.Elf64_Sym);
+                AdditionalTableEntrySize = (uint)(entrySize - AdditionalTableEntrySize);
+            }
+        }
     }
 }

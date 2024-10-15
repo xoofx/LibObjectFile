@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -71,27 +71,28 @@ public static class StreamExtensions
         {
             while (true)
             {
-                // TODO: Optimize this by reading a block of bytes
-                int nextByte = stream.ReadByte();
-                if (nextByte < 0)
-                {
-                    throw new EndOfStreamException("Unexpected end of stream while trying to read a null terminated UTF8 string");
-                }
-
-                if (nextByte == 0)
+                var span = new Span<byte>(buffer, textLength, buffer.Length - textLength);
+                int read = stream.Read(span);
+                if (read <= 0)
                 {
                     break;
                 }
 
-                if (textLength >= buffer.Length)
+                span = span.Slice(0, read);
+                var nullIndex = span.IndexOf((byte)0);
+                if (nullIndex >= 0)
                 {
-                    var newBuffer = ArrayPool<byte>.Shared.Rent((int)textLength * 2);
-                    Array.Copy(buffer, 0, newBuffer, 0, buffer.Length);
-                    ArrayPool<byte>.Shared.Return(buffer);
-                    buffer = newBuffer;
+                    textLength += nullIndex;
+                    // Seek back to after the null character
+                    stream.Position = stream.Position - read + nullIndex + 1;
+                    break;
                 }
+                textLength += read;
 
-                buffer[textLength++] = (byte)nextByte;
+                var newBuffer = ArrayPool<byte>.Shared.Rent(buffer.Length + 128);
+                Array.Copy(buffer, 0, newBuffer, 0, textLength);
+                ArrayPool<byte>.Shared.Return(buffer);
+                buffer = newBuffer;
             }
 
             return Encoding.UTF8.GetString(buffer, 0, textLength);

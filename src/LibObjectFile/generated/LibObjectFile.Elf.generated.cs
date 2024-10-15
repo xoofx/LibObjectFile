@@ -1065,7 +1065,7 @@ namespace LibObjectFile.Elf
         }
         
         /// <summary>
-        /// Auxialiary version information.
+        /// Auxiliary version information.
         /// </summary>
         [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public partial struct Elf32_Verdaux
@@ -1739,6 +1739,57 @@ namespace LibObjectFile.Elf
         }
         
         /// <summary>
+        /// RELR relocation table entry
+        /// </summary>
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        public readonly partial struct Elf32_Relr : IEquatable<ElfNative.Elf32_Relr>
+        {
+            public Elf32_Relr(ElfNative.Elf32_Word value) => this.Value = value;
+            
+            public ElfNative.Elf32_Word Value { get; }
+            
+            public override bool Equals(object obj) => obj is Elf32_Relr other && Equals(other);
+            
+            public bool Equals(Elf32_Relr other) => Value.Equals(other.Value);
+            
+            public override int GetHashCode() => Value.GetHashCode();
+            
+            public override string ToString() => Value.ToString();
+            
+            public static implicit operator ElfNative.Elf32_Word (ElfNative.Elf32_Relr from) => from.Value;
+            
+            public static implicit operator ElfNative.Elf32_Relr (ElfNative.Elf32_Word from) => new ElfNative.Elf32_Relr(from);
+            
+            public static bool operator ==(Elf32_Relr left, Elf32_Relr right) => left.Equals(right);
+            
+            public static bool operator !=(Elf32_Relr left, Elf32_Relr right) => !left.Equals(right);
+        }
+        
+        [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        public readonly partial struct Elf64_Relr : IEquatable<ElfNative.Elf64_Relr>
+        {
+            public Elf64_Relr(ElfNative.Elf64_Xword value) => this.Value = value;
+            
+            public ElfNative.Elf64_Xword Value { get; }
+            
+            public override bool Equals(object obj) => obj is Elf64_Relr other && Equals(other);
+            
+            public bool Equals(Elf64_Relr other) => Value.Equals(other.Value);
+            
+            public override int GetHashCode() => Value.GetHashCode();
+            
+            public override string ToString() => Value.ToString();
+            
+            public static implicit operator ElfNative.Elf64_Xword (ElfNative.Elf64_Relr from) => from.Value;
+            
+            public static implicit operator ElfNative.Elf64_Relr (ElfNative.Elf64_Xword from) => new ElfNative.Elf64_Relr(from);
+            
+            public static bool operator ==(Elf64_Relr left, Elf64_Relr right) => left.Equals(right);
+            
+            public static bool operator !=(Elf64_Relr left, Elf64_Relr right) => !left.Equals(right);
+        }
+        
+        /// <summary>
         /// Entries found in sections of type SHT_MIPS_CONFLICT.
         /// </summary>
         [global::System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
@@ -1867,7 +1918,7 @@ namespace LibObjectFile.Elf
         public const byte ELFOSABI_NONE = 0;
         
         /// <summary>
-        /// UNIX System V ABI
+        /// Alias.
         /// </summary>
         public const byte ELFOSABI_SYSV = 0;
         
@@ -1887,7 +1938,7 @@ namespace LibObjectFile.Elf
         public const byte ELFOSABI_GNU = 3;
         
         /// <summary>
-        /// Object uses GNU ELF extensions.
+        /// Compatibility alias.
         /// </summary>
         public const byte ELFOSABI_LINUX = 3;
         
@@ -2034,6 +2085,11 @@ namespace LibObjectFile.Elf
         public const ushort EM_88K = 5;
         
         /// <summary>
+        /// Intel MCU
+        /// </summary>
+        public const ushort EM_IAMCU = 6;
+        
+        /// <summary>
         /// Intel 80860
         /// </summary>
         public const ushort EM_860 = 7;
@@ -2087,6 +2143,11 @@ namespace LibObjectFile.Elf
         /// IBM S390
         /// </summary>
         public const ushort EM_S390 = 22;
+        
+        /// <summary>
+        /// IBM SPU/SPC
+        /// </summary>
+        public const ushort EM_SPU = 23;
         
         /// <summary>
         /// NEC V800 series
@@ -2189,7 +2250,7 @@ namespace LibObjectFile.Elf
         public const ushort EM_PCP = 55;
         
         /// <summary>
-        /// Sony nCPU embeeded RISC
+        /// Sony nCPU embedded RISC
         /// </summary>
         public const ushort EM_NCPU = 56;
         
@@ -2227,6 +2288,16 @@ namespace LibObjectFile.Elf
         /// Sony DSP Processor
         /// </summary>
         public const ushort EM_PDSP = 63;
+        
+        /// <summary>
+        /// Digital PDP-10
+        /// </summary>
+        public const ushort EM_PDP10 = 64;
+        
+        /// <summary>
+        /// Digital PDP-11
+        /// </summary>
+        public const ushort EM_PDP11 = 65;
         
         /// <summary>
         /// Siemens FX66 microcontroller
@@ -2279,12 +2350,12 @@ namespace LibObjectFile.Elf
         public const ushort EM_VAX = 75;
         
         /// <summary>
-        /// Axis Communications 32-bit embedded processor
+        /// Axis Communications 32-bit emb.proc
         /// </summary>
         public const ushort EM_CRIS = 76;
         
         /// <summary>
-        /// Infineon Technologies 32-bit embedded processor
+        /// Infineon Technologies 32-bit emb.proc
         /// </summary>
         public const ushort EM_JAVELIN = 77;
         
@@ -2299,7 +2370,7 @@ namespace LibObjectFile.Elf
         public const ushort EM_ZSP = 79;
         
         /// <summary>
-        /// Donald Knuth's educational 64-bit processor
+        /// Donald Knuth's educational 64-bit proc
         /// </summary>
         public const ushort EM_MMIX = 80;
         
@@ -2364,9 +2435,9 @@ namespace LibObjectFile.Elf
         public const ushort EM_OPENRISC = 92;
         
         /// <summary>
-        /// ARC Cores Tangent-A5
+        /// ARC International ARCompact
         /// </summary>
-        public const ushort EM_ARC_A5 = 93;
+        public const ushort EM_ARC_COMPACT = 93;
         
         /// <summary>
         /// Tensilica Xtensa Architecture
@@ -2374,14 +2445,336 @@ namespace LibObjectFile.Elf
         public const ushort EM_XTENSA = 94;
         
         /// <summary>
+        /// Alphamosaic VideoCore
+        /// </summary>
+        public const ushort EM_VIDEOCORE = 95;
+        
+        /// <summary>
+        /// Thompson Multimedia General Purpose Proc
+        /// </summary>
+        public const ushort EM_TMM_GPP = 96;
+        
+        /// <summary>
+        /// National Semi. 32000
+        /// </summary>
+        public const ushort EM_NS32K = 97;
+        
+        /// <summary>
+        /// Tenor Network TPC
+        /// </summary>
+        public const ushort EM_TPC = 98;
+        
+        /// <summary>
+        /// Trebia SNP 1000
+        /// </summary>
+        public const ushort EM_SNP1K = 99;
+        
+        /// <summary>
+        /// STMicroelectronics ST200
+        /// </summary>
+        public const ushort EM_ST200 = 100;
+        
+        /// <summary>
+        /// Ubicom IP2xxx
+        /// </summary>
+        public const ushort EM_IP2K = 101;
+        
+        /// <summary>
+        /// MAX processor
+        /// </summary>
+        public const ushort EM_MAX = 102;
+        
+        /// <summary>
+        /// National Semi. CompactRISC
+        /// </summary>
+        public const ushort EM_CR = 103;
+        
+        /// <summary>
+        /// Fujitsu F2MC16
+        /// </summary>
+        public const ushort EM_F2MC16 = 104;
+        
+        /// <summary>
+        /// Texas Instruments msp430
+        /// </summary>
+        public const ushort EM_MSP430 = 105;
+        
+        /// <summary>
+        /// Analog Devices Blackfin DSP
+        /// </summary>
+        public const ushort EM_BLACKFIN = 106;
+        
+        /// <summary>
+        /// Seiko Epson S1C33 family
+        /// </summary>
+        public const ushort EM_SE_C33 = 107;
+        
+        /// <summary>
+        /// Sharp embedded microprocessor
+        /// </summary>
+        public const ushort EM_SEP = 108;
+        
+        /// <summary>
+        /// Arca RISC
+        /// </summary>
+        public const ushort EM_ARCA = 109;
+        
+        /// <summary>
+        /// PKU-Unity 
+        /// &amp;
+        /// MPRC Peking Uni. mc series
+        /// </summary>
+        public const ushort EM_UNICORE = 110;
+        
+        /// <summary>
+        /// eXcess configurable cpu
+        /// </summary>
+        public const ushort EM_EXCESS = 111;
+        
+        /// <summary>
+        /// Icera Semi. Deep Execution Processor
+        /// </summary>
+        public const ushort EM_DXP = 112;
+        
+        /// <summary>
         /// Altera Nios II
         /// </summary>
         public const ushort EM_ALTERA_NIOS2 = 113;
         
         /// <summary>
+        /// National Semi. CompactRISC CRX
+        /// </summary>
+        public const ushort EM_CRX = 114;
+        
+        /// <summary>
+        /// Motorola XGATE
+        /// </summary>
+        public const ushort EM_XGATE = 115;
+        
+        /// <summary>
+        /// Infineon C16x/XC16x
+        /// </summary>
+        public const ushort EM_C166 = 116;
+        
+        /// <summary>
+        /// Renesas M16C
+        /// </summary>
+        public const ushort EM_M16C = 117;
+        
+        /// <summary>
+        /// Microchip Technology dsPIC30F
+        /// </summary>
+        public const ushort EM_DSPIC30F = 118;
+        
+        /// <summary>
+        /// Freescale Communication Engine RISC
+        /// </summary>
+        public const ushort EM_CE = 119;
+        
+        /// <summary>
+        /// Renesas M32C
+        /// </summary>
+        public const ushort EM_M32C = 120;
+        
+        /// <summary>
+        /// Altium TSK3000
+        /// </summary>
+        public const ushort EM_TSK3000 = 131;
+        
+        /// <summary>
+        /// Freescale RS08
+        /// </summary>
+        public const ushort EM_RS08 = 132;
+        
+        /// <summary>
+        /// Analog Devices SHARC family
+        /// </summary>
+        public const ushort EM_SHARC = 133;
+        
+        /// <summary>
+        /// Cyan Technology eCOG2
+        /// </summary>
+        public const ushort EM_ECOG2 = 134;
+        
+        /// <summary>
+        /// Sunplus S+core7 RISC
+        /// </summary>
+        public const ushort EM_SCORE7 = 135;
+        
+        /// <summary>
+        /// New Japan Radio (NJR) 24-bit DSP
+        /// </summary>
+        public const ushort EM_DSP24 = 136;
+        
+        /// <summary>
+        /// Broadcom VideoCore III
+        /// </summary>
+        public const ushort EM_VIDEOCORE3 = 137;
+        
+        /// <summary>
+        /// RISC for Lattice FPGA
+        /// </summary>
+        public const ushort EM_LATTICEMICO32 = 138;
+        
+        /// <summary>
+        /// Seiko Epson C17
+        /// </summary>
+        public const ushort EM_SE_C17 = 139;
+        
+        /// <summary>
+        /// Texas Instruments TMS320C6000 DSP
+        /// </summary>
+        public const ushort EM_TI_C6000 = 140;
+        
+        /// <summary>
+        /// Texas Instruments TMS320C2000 DSP
+        /// </summary>
+        public const ushort EM_TI_C2000 = 141;
+        
+        /// <summary>
+        /// Texas Instruments TMS320C55x DSP
+        /// </summary>
+        public const ushort EM_TI_C5500 = 142;
+        
+        /// <summary>
+        /// Texas Instruments App. Specific RISC
+        /// </summary>
+        public const ushort EM_TI_ARP32 = 143;
+        
+        /// <summary>
+        /// Texas Instruments Prog. Realtime Unit
+        /// </summary>
+        public const ushort EM_TI_PRU = 144;
+        
+        /// <summary>
+        /// STMicroelectronics 64bit VLIW DSP
+        /// </summary>
+        public const ushort EM_MMDSP_PLUS = 160;
+        
+        /// <summary>
+        /// Cypress M8C
+        /// </summary>
+        public const ushort EM_CYPRESS_M8C = 161;
+        
+        /// <summary>
+        /// Renesas R32C
+        /// </summary>
+        public const ushort EM_R32C = 162;
+        
+        /// <summary>
+        /// NXP Semi. TriMedia
+        /// </summary>
+        public const ushort EM_TRIMEDIA = 163;
+        
+        /// <summary>
+        /// QUALCOMM DSP6
+        /// </summary>
+        public const ushort EM_QDSP6 = 164;
+        
+        /// <summary>
+        /// Intel 8051 and variants
+        /// </summary>
+        public const ushort EM_8051 = 165;
+        
+        /// <summary>
+        /// STMicroelectronics STxP7x
+        /// </summary>
+        public const ushort EM_STXP7X = 166;
+        
+        /// <summary>
+        /// Andes Tech. compact code emb. RISC
+        /// </summary>
+        public const ushort EM_NDS32 = 167;
+        
+        /// <summary>
+        /// Cyan Technology eCOG1X
+        /// </summary>
+        public const ushort EM_ECOG1X = 168;
+        
+        /// <summary>
+        /// Dallas Semi. MAXQ30 mc
+        /// </summary>
+        public const ushort EM_MAXQ30 = 169;
+        
+        /// <summary>
+        /// New Japan Radio (NJR) 16-bit DSP
+        /// </summary>
+        public const ushort EM_XIMO16 = 170;
+        
+        /// <summary>
+        /// M2000 Reconfigurable RISC
+        /// </summary>
+        public const ushort EM_MANIK = 171;
+        
+        /// <summary>
+        /// Cray NV2 vector architecture
+        /// </summary>
+        public const ushort EM_CRAYNV2 = 172;
+        
+        /// <summary>
+        /// Renesas RX
+        /// </summary>
+        public const ushort EM_RX = 173;
+        
+        /// <summary>
+        /// Imagination Tech. META
+        /// </summary>
+        public const ushort EM_METAG = 174;
+        
+        /// <summary>
+        /// MCST Elbrus
+        /// </summary>
+        public const ushort EM_MCST_ELBRUS = 175;
+        
+        /// <summary>
+        /// Cyan Technology eCOG16
+        /// </summary>
+        public const ushort EM_ECOG16 = 176;
+        
+        /// <summary>
+        /// National Semi. CompactRISC CR16
+        /// </summary>
+        public const ushort EM_CR16 = 177;
+        
+        /// <summary>
+        /// Freescale Extended Time Processing Unit
+        /// </summary>
+        public const ushort EM_ETPU = 178;
+        
+        /// <summary>
+        /// Infineon Tech. SLE9X
+        /// </summary>
+        public const ushort EM_SLE9X = 179;
+        
+        /// <summary>
+        /// Intel L10M
+        /// </summary>
+        public const ushort EM_L10M = 180;
+        
+        /// <summary>
+        /// Intel K10M
+        /// </summary>
+        public const ushort EM_K10M = 181;
+        
+        /// <summary>
         /// ARM AARCH64
         /// </summary>
         public const ushort EM_AARCH64 = 183;
+        
+        /// <summary>
+        /// Amtel 32-bit microprocessor
+        /// </summary>
+        public const ushort EM_AVR32 = 185;
+        
+        /// <summary>
+        /// STMicroelectronics STM8
+        /// </summary>
+        public const ushort EM_STM8 = 186;
+        
+        /// <summary>
+        /// Tilera TILE64
+        /// </summary>
+        public const ushort EM_TILE64 = 187;
         
         /// <summary>
         /// Tilera TILEPro
@@ -2394,11 +2787,183 @@ namespace LibObjectFile.Elf
         public const ushort EM_MICROBLAZE = 189;
         
         /// <summary>
+        /// NVIDIA CUDA
+        /// </summary>
+        public const ushort EM_CUDA = 190;
+        
+        /// <summary>
         /// Tilera TILE-Gx
         /// </summary>
         public const ushort EM_TILEGX = 191;
         
-        public const ushort EM_NUM = 192;
+        /// <summary>
+        /// CloudShield
+        /// </summary>
+        public const ushort EM_CLOUDSHIELD = 192;
+        
+        /// <summary>
+        /// KIPO-KAIST Core-A 1st gen.
+        /// </summary>
+        public const ushort EM_COREA_1ST = 193;
+        
+        /// <summary>
+        /// KIPO-KAIST Core-A 2nd gen.
+        /// </summary>
+        public const ushort EM_COREA_2ND = 194;
+        
+        /// <summary>
+        /// Synopsys ARCv2 ISA.
+        /// </summary>
+        public const ushort EM_ARCV2 = 195;
+        
+        /// <summary>
+        /// Open8 RISC
+        /// </summary>
+        public const ushort EM_OPEN8 = 196;
+        
+        /// <summary>
+        /// Renesas RL78
+        /// </summary>
+        public const ushort EM_RL78 = 197;
+        
+        /// <summary>
+        /// Broadcom VideoCore V
+        /// </summary>
+        public const ushort EM_VIDEOCORE5 = 198;
+        
+        /// <summary>
+        /// Renesas 78KOR
+        /// </summary>
+        public const ushort EM_78KOR = 199;
+        
+        /// <summary>
+        /// Freescale 56800EX DSC
+        /// </summary>
+        public const ushort EM_56800EX = 200;
+        
+        /// <summary>
+        /// Beyond BA1
+        /// </summary>
+        public const ushort EM_BA1 = 201;
+        
+        /// <summary>
+        /// Beyond BA2
+        /// </summary>
+        public const ushort EM_BA2 = 202;
+        
+        /// <summary>
+        /// XMOS xCORE
+        /// </summary>
+        public const ushort EM_XCORE = 203;
+        
+        /// <summary>
+        /// Microchip 8-bit PIC(r)
+        /// </summary>
+        public const ushort EM_MCHP_PIC = 204;
+        
+        /// <summary>
+        /// Intel Graphics Technology
+        /// </summary>
+        public const ushort EM_INTELGT = 205;
+        
+        /// <summary>
+        /// KM211 KM32
+        /// </summary>
+        public const ushort EM_KM32 = 210;
+        
+        /// <summary>
+        /// KM211 KMX32
+        /// </summary>
+        public const ushort EM_KMX32 = 211;
+        
+        /// <summary>
+        /// KM211 KMX16
+        /// </summary>
+        public const ushort EM_EMX16 = 212;
+        
+        /// <summary>
+        /// KM211 KMX8
+        /// </summary>
+        public const ushort EM_EMX8 = 213;
+        
+        /// <summary>
+        /// KM211 KVARC
+        /// </summary>
+        public const ushort EM_KVARC = 214;
+        
+        /// <summary>
+        /// Paneve CDP
+        /// </summary>
+        public const ushort EM_CDP = 215;
+        
+        /// <summary>
+        /// Cognitive Smart Memory Processor
+        /// </summary>
+        public const ushort EM_COGE = 216;
+        
+        /// <summary>
+        /// Bluechip CoolEngine
+        /// </summary>
+        public const ushort EM_COOL = 217;
+        
+        /// <summary>
+        /// Nanoradio Optimized RISC
+        /// </summary>
+        public const ushort EM_NORC = 218;
+        
+        /// <summary>
+        /// CSR Kalimba
+        /// </summary>
+        public const ushort EM_CSR_KALIMBA = 219;
+        
+        /// <summary>
+        /// Zilog Z80
+        /// </summary>
+        public const ushort EM_Z80 = 220;
+        
+        /// <summary>
+        /// Controls and Data Services VISIUMcore
+        /// </summary>
+        public const ushort EM_VISIUM = 221;
+        
+        /// <summary>
+        /// FTDI Chip FT32
+        /// </summary>
+        public const ushort EM_FT32 = 222;
+        
+        /// <summary>
+        /// Moxie processor
+        /// </summary>
+        public const ushort EM_MOXIE = 223;
+        
+        /// <summary>
+        /// AMD GPU
+        /// </summary>
+        public const ushort EM_AMDGPU = 224;
+        
+        /// <summary>
+        /// RISC-V
+        /// </summary>
+        public const ushort EM_RISCV = 243;
+        
+        /// <summary>
+        /// Linux BPF -- in-kernel virtual machine
+        /// </summary>
+        public const ushort EM_BPF = 247;
+        
+        /// <summary>
+        /// C-SKY
+        /// </summary>
+        public const ushort EM_CSKY = 252;
+        
+        /// <summary>
+        /// LoongArch
+        /// </summary>
+        public const ushort EM_LOONGARCH = 258;
+        
+        public const ushort EM_NUM = 259;
+        
+        public const ushort EM_ARC_A5 = 93;
         
         public const ushort EM_ALPHA = 36902;
         
@@ -2420,18 +2985,24 @@ namespace LibObjectFile.Elf
         public const uint SHN_UNDEF = 0;
         
         /// <summary>
-        /// Start of reserved indices *k/
-        /// #define SHN_LOPROC	0xff00		/* Start of processor-specific
+        /// Start of reserved indices
         /// </summary>
         public const uint SHN_LORESERVE = 65280;
         
         /// <summary>
-        /// Order section before all others (Solaris).
+        /// Start of processor-specific
+        /// </summary>
+        public const uint SHN_LOPROC = 65280;
+        
+        /// <summary>
+        /// Order section before all others
+        /// (Solaris).
         /// </summary>
         public const uint SHN_BEFORE = 65280;
         
         /// <summary>
-        /// Order section after all others (Solaris).
+        /// Order section after all others
+        /// (Solaris).
         /// </summary>
         public const uint SHN_AFTER = 65281;
         
@@ -2551,14 +3122,19 @@ namespace LibObjectFile.Elf
         public const uint SHT_GROUP = 17;
         
         /// <summary>
-        /// Extended section indeces
+        /// Extended section indices
         /// </summary>
         public const uint SHT_SYMTAB_SHNDX = 18;
         
         /// <summary>
+        /// RELR relative relocations
+        /// </summary>
+        public const uint SHT_RELR = 19;
+        
+        /// <summary>
         /// Number of defined types.
         /// </summary>
-        public const uint SHT_NUM = 19;
+        public const uint SHT_NUM = 20;
         
         /// <summary>
         /// Start OS-specific.
@@ -2677,7 +3253,8 @@ namespace LibObjectFile.Elf
         public const uint SHF_LINK_ORDER = 128;
         
         /// <summary>
-        /// Non-standard OS specific handling required
+        /// Non-standard OS specific handling
+        /// required
         /// </summary>
         public const uint SHF_OS_NONCONFORMING = 256;
         
@@ -2707,12 +3284,19 @@ namespace LibObjectFile.Elf
         public const uint SHF_MASKPROC = 4026531840;
         
         /// <summary>
-        /// Special ordering requirement (Solaris).
+        /// Not to be GCed by linker.
+        /// </summary>
+        public const uint SHF_GNU_RETAIN = 2097152;
+        
+        /// <summary>
+        /// Special ordering requirement
+        /// (Solaris).
         /// </summary>
         public const uint SHF_ORDERED = 1073741824;
         
         /// <summary>
-        /// Section is excluded unless referenced or allocated (Solaris).
+        /// Section is excluded unless
+        /// referenced or allocated (Solaris).
         /// </summary>
         public const uint SHF_EXCLUDE = 2147483648;
         
@@ -2720,6 +3304,11 @@ namespace LibObjectFile.Elf
         /// ZLIB/DEFLATE algorithm.
         /// </summary>
         public const int ELFCOMPRESS_ZLIB = 1;
+        
+        /// <summary>
+        /// Zstandard algorithm.
+        /// </summary>
+        public const int ELFCOMPRESS_ZSTD = 2;
         
         /// <summary>
         /// Start of OS-specific.
@@ -2762,7 +3351,7 @@ namespace LibObjectFile.Elf
         public const ushort SYMINFO_FLG_DIRECT = 1;
         
         /// <summary>
-        /// Pass-thru symbol for translator
+        /// Pass-through symbol for translator
         /// </summary>
         public const ushort SYMINFO_FLG_PASSTHRU = 2;
         
@@ -2772,7 +3361,8 @@ namespace LibObjectFile.Elf
         public const ushort SYMINFO_FLG_COPY = 4;
         
         /// <summary>
-        /// Symbol bound to object to be lazy loaded
+        /// Symbol bound to object to be lazy
+        /// loaded
         /// </summary>
         public const ushort SYMINFO_FLG_LAZYLOAD = 8;
         
@@ -2982,6 +3572,16 @@ namespace LibObjectFile.Elf
         /// </summary>
         public const uint PT_GNU_RELRO = 1685382482;
         
+        /// <summary>
+        /// GNU property
+        /// </summary>
+        public const uint PT_GNU_PROPERTY = 1685382483;
+        
+        /// <summary>
+        /// SFrame segment.
+        /// </summary>
+        public const uint PT_GNU_SFRAME = 1685382484;
+        
         public const uint PT_LOSUNW = 1879048186;
         
         /// <summary>
@@ -3040,6 +3640,12 @@ namespace LibObjectFile.Elf
         /// Contains copy of prstatus struct
         /// </summary>
         public const uint NT_PRSTATUS = 1;
+        
+        /// <summary>
+        /// Contains copy of fpregset
+        /// struct.
+        /// </summary>
+        public const uint NT_PRFPREG = 2;
         
         /// <summary>
         /// Contains copy of fpregset struct
@@ -3117,12 +3723,14 @@ namespace LibObjectFile.Elf
         public const uint NT_PRFPXREG = 20;
         
         /// <summary>
-        /// Contains copy of siginfo_t, size might increase
+        /// Contains copy of siginfo_t,
+        /// size might increase
         /// </summary>
         public const uint NT_SIGINFO = 1397311305;
         
         /// <summary>
-        /// Contains information about mapped files
+        /// Contains information about mapped
+        /// files
         /// </summary>
         public const uint NT_FILE = 1179208773;
         
@@ -3147,6 +3755,90 @@ namespace LibObjectFile.Elf
         public const uint NT_PPC_VSX = 258;
         
         /// <summary>
+        /// Target Address Register
+        /// </summary>
+        public const uint NT_PPC_TAR = 259;
+        
+        /// <summary>
+        /// Program Priority Register
+        /// </summary>
+        public const uint NT_PPC_PPR = 260;
+        
+        /// <summary>
+        /// Data Stream Control Register
+        /// </summary>
+        public const uint NT_PPC_DSCR = 261;
+        
+        /// <summary>
+        /// Event Based Branch Registers
+        /// </summary>
+        public const uint NT_PPC_EBB = 262;
+        
+        /// <summary>
+        /// Performance Monitor Registers
+        /// </summary>
+        public const uint NT_PPC_PMU = 263;
+        
+        /// <summary>
+        /// TM checkpointed GPR Registers
+        /// </summary>
+        public const uint NT_PPC_TM_CGPR = 264;
+        
+        /// <summary>
+        /// TM checkpointed FPR Registers
+        /// </summary>
+        public const uint NT_PPC_TM_CFPR = 265;
+        
+        /// <summary>
+        /// TM checkpointed VMX Registers
+        /// </summary>
+        public const uint NT_PPC_TM_CVMX = 266;
+        
+        /// <summary>
+        /// TM checkpointed VSX Registers
+        /// </summary>
+        public const uint NT_PPC_TM_CVSX = 267;
+        
+        /// <summary>
+        /// TM Special Purpose Registers
+        /// </summary>
+        public const uint NT_PPC_TM_SPR = 268;
+        
+        /// <summary>
+        /// TM checkpointed Target Address
+        /// Register
+        /// </summary>
+        public const uint NT_PPC_TM_CTAR = 269;
+        
+        /// <summary>
+        /// TM checkpointed Program Priority
+        /// Register
+        /// </summary>
+        public const uint NT_PPC_TM_CPPR = 270;
+        
+        /// <summary>
+        /// TM checkpointed Data Stream Control
+        /// Register
+        /// </summary>
+        public const uint NT_PPC_TM_CDSCR = 271;
+        
+        /// <summary>
+        /// Memory Protection Keys
+        /// registers.
+        /// </summary>
+        public const uint NT_PPC_PKEY = 272;
+        
+        /// <summary>
+        /// PowerPC DEXCR registers.
+        /// </summary>
+        public const uint NT_PPC_DEXCR = 273;
+        
+        /// <summary>
+        /// PowerPC HASHKEYR register.
+        /// </summary>
+        public const uint NT_PPC_HASHKEYR = 274;
+        
+        /// <summary>
         /// i386 TLS slots (struct user_desc)
         /// </summary>
         public const uint NT_386_TLS = 512;
@@ -3160,6 +3852,11 @@ namespace LibObjectFile.Elf
         /// x86 extended state using xsave
         /// </summary>
         public const uint NT_X86_XSTATE = 514;
+        
+        /// <summary>
+        /// x86 SHSTK state
+        /// </summary>
+        public const uint NT_X86_SHSTK = 516;
         
         /// <summary>
         /// s390 upper register halves
@@ -3207,6 +3904,38 @@ namespace LibObjectFile.Elf
         public const uint NT_S390_TDB = 776;
         
         /// <summary>
+        /// s390 vector registers 0-15
+        /// upper half.
+        /// </summary>
+        public const uint NT_S390_VXRS_LOW = 777;
+        
+        /// <summary>
+        /// s390 vector registers 16-31.
+        /// </summary>
+        public const uint NT_S390_VXRS_HIGH = 778;
+        
+        /// <summary>
+        /// s390 guarded storage registers.
+        /// </summary>
+        public const uint NT_S390_GS_CB = 779;
+        
+        /// <summary>
+        /// s390 guarded storage
+        /// broadcast control block.
+        /// </summary>
+        public const uint NT_S390_GS_BC = 780;
+        
+        /// <summary>
+        /// s390 runtime instrumentation.
+        /// </summary>
+        public const uint NT_S390_RI_CB = 781;
+        
+        /// <summary>
+        /// s390 protvirt cpu dump data.
+        /// </summary>
+        public const uint NT_S390_PV_CPU_DATA = 782;
+        
+        /// <summary>
         /// ARM VFP/NEON registers
         /// </summary>
         public const uint NT_ARM_VFP = 1024;
@@ -3225,6 +3954,136 @@ namespace LibObjectFile.Elf
         /// ARM hardware watchpoint registers
         /// </summary>
         public const uint NT_ARM_HW_WATCH = 1027;
+        
+        /// <summary>
+        /// ARM system call number
+        /// </summary>
+        public const uint NT_ARM_SYSTEM_CALL = 1028;
+        
+        /// <summary>
+        /// ARM Scalable Vector Extension
+        /// registers
+        /// </summary>
+        public const uint NT_ARM_SVE = 1029;
+        
+        /// <summary>
+        /// ARM pointer authentication
+        /// code masks.
+        /// </summary>
+        public const uint NT_ARM_PAC_MASK = 1030;
+        
+        /// <summary>
+        /// ARM pointer authentication
+        /// address keys.
+        /// </summary>
+        public const uint NT_ARM_PACA_KEYS = 1031;
+        
+        /// <summary>
+        /// ARM pointer authentication
+        /// generic key.
+        /// </summary>
+        public const uint NT_ARM_PACG_KEYS = 1032;
+        
+        /// <summary>
+        /// AArch64 tagged address
+        /// control.
+        /// </summary>
+        public const uint NT_ARM_TAGGED_ADDR_CTRL = 1033;
+        
+        /// <summary>
+        /// AArch64 pointer authentication
+        /// enabled keys.
+        /// </summary>
+        public const uint NT_ARM_PAC_ENABLED_KEYS = 1034;
+        
+        /// <summary>
+        /// ARM Streaming SVE registers.
+        /// </summary>
+        public const uint NT_ARM_SSVE = 1035;
+        
+        /// <summary>
+        /// ARM SME ZA registers.
+        /// </summary>
+        public const uint NT_ARM_ZA = 1036;
+        
+        /// <summary>
+        /// ARM SME ZT registers.
+        /// </summary>
+        public const uint NT_ARM_ZT = 1037;
+        
+        /// <summary>
+        /// ARM floating point mode register.
+        /// </summary>
+        public const uint NT_ARM_FPMR = 1038;
+        
+        /// <summary>
+        /// Vmcore Device Dump Note.
+        /// </summary>
+        public const uint NT_VMCOREDD = 1792;
+        
+        /// <summary>
+        /// MIPS DSP ASE registers.
+        /// </summary>
+        public const uint NT_MIPS_DSP = 2048;
+        
+        /// <summary>
+        /// MIPS floating-point mode.
+        /// </summary>
+        public const uint NT_MIPS_FP_MODE = 2049;
+        
+        /// <summary>
+        /// MIPS SIMD registers.
+        /// </summary>
+        public const uint NT_MIPS_MSA = 2050;
+        
+        /// <summary>
+        /// RISC-V Control and Status Registers
+        /// </summary>
+        public const uint NT_RISCV_CSR = 2304;
+        
+        /// <summary>
+        /// RISC-V vector registers
+        /// </summary>
+        public const uint NT_RISCV_VECTOR = 2305;
+        
+        /// <summary>
+        /// LoongArch CPU config registers.
+        /// </summary>
+        public const uint NT_LOONGARCH_CPUCFG = 2560;
+        
+        /// <summary>
+        /// LoongArch control and
+        /// status registers.
+        /// </summary>
+        public const uint NT_LOONGARCH_CSR = 2561;
+        
+        /// <summary>
+        /// LoongArch Loongson SIMD
+        /// Extension registers.
+        /// </summary>
+        public const uint NT_LOONGARCH_LSX = 2562;
+        
+        /// <summary>
+        /// LoongArch Loongson Advanced
+        /// SIMD Extension registers.
+        /// </summary>
+        public const uint NT_LOONGARCH_LASX = 2563;
+        
+        /// <summary>
+        /// LoongArch Loongson Binary
+        /// Translation registers.
+        /// </summary>
+        public const uint NT_LOONGARCH_LBT = 2564;
+        
+        /// <summary>
+        /// LoongArch hardware breakpoint registers
+        /// </summary>
+        public const uint NT_LOONGARCH_HW_BREAK = 2565;
+        
+        /// <summary>
+        /// LoongArch hardware watchpoint registers
+        /// </summary>
+        public const uint NT_LOONGARCH_HW_WATCH = 2566;
         
         /// <summary>
         /// Contains a version string.
@@ -3402,9 +4261,29 @@ namespace LibObjectFile.Elf
         public const int DT_PREINIT_ARRAYSZ = 33;
         
         /// <summary>
+        /// Address of SYMTAB_SHNDX section
+        /// </summary>
+        public const int DT_SYMTAB_SHNDX = 34;
+        
+        /// <summary>
+        /// Total size of RELR relative relocations
+        /// </summary>
+        public const int DT_RELRSZ = 35;
+        
+        /// <summary>
+        /// Address of RELR relative relocations
+        /// </summary>
+        public const int DT_RELR = 36;
+        
+        /// <summary>
+        /// Size of one RELR relative relocaction
+        /// </summary>
+        public const int DT_RELRENT = 37;
+        
+        /// <summary>
         /// Number used
         /// </summary>
-        public const int DT_NUM = 34;
+        public const int DT_NUM = 38;
         
         /// <summary>
         /// Start of OS-specific
@@ -3429,7 +4308,7 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// Most used by any processor
         /// </summary>
-        public const int DT_PROCNUM = 54;
+        public const int DT_PROCNUM = 55;
         
         public const int DT_VALRNGLO = 1879047424;
         
@@ -3462,7 +4341,8 @@ namespace LibObjectFile.Elf
         public const int DT_FEATURE_1 = 1879047676;
         
         /// <summary>
-        /// Flags for DT_* entries, effecting the following DT_* entry.
+        /// Flags for DT_* entries, effecting
+        /// the following DT_* entry.
         /// </summary>
         public const int DT_POSFLAG_1 = 1879047677;
         
@@ -3547,7 +4427,8 @@ namespace LibObjectFile.Elf
         public const int DT_FLAGS_1 = 1879048187;
         
         /// <summary>
-        /// Address of version definition table
+        /// Address of version definition
+        /// table
         /// </summary>
         public const int DT_VERDEF = 1879048188;
         
@@ -3557,7 +4438,8 @@ namespace LibObjectFile.Elf
         public const int DT_VERDEFNUM = 1879048189;
         
         /// <summary>
-        /// Address of table with needed versions
+        /// Address of table with needed
+        /// versions
         /// </summary>
         public const int DT_VERNEED = 1879048190;
         
@@ -3720,6 +4602,16 @@ namespace LibObjectFile.Elf
         /// </summary>
         public const uint DF_1_SINGLETON = 33554432;
         
+        public const uint DF_1_STUB = 67108864;
+        
+        public const uint DF_1_PIE = 134217728;
+        
+        public const uint DF_1_KMOD = 268435456;
+        
+        public const uint DF_1_WEAKFILTER = 536870912;
+        
+        public const uint DF_1_NOCOMMON = 1073741824;
+        
         public const uint DTF_1_PARINIT = 1;
         
         public const uint DTF_1_CONFEXP = 2;
@@ -3730,7 +4622,8 @@ namespace LibObjectFile.Elf
         public const uint DF_P1_LAZYLOAD = 1;
         
         /// <summary>
-        /// Symbols from next object are not generally available.
+        /// Symbols from next object are not
+        /// generally available.
         /// </summary>
         public const uint DF_P1_GROUPPERM = 2;
         
@@ -3755,7 +4648,8 @@ namespace LibObjectFile.Elf
         public const ushort VER_FLG_BASE = 1;
         
         /// <summary>
-        /// Weak version identifier
+        /// Weak version identifier.  Also
+        /// used by vna_flags below.
         /// </summary>
         public const ushort VER_FLG_WEAK = 2;
         
@@ -3809,6 +4703,12 @@ namespace LibObjectFile.Elf
         public const uint NT_GNU_BUILD_ID = 3;
         
         public const uint NT_GNU_GOLD_VERSION = 4;
+        
+        public const uint NT_GNU_PROPERTY_TYPE_0 = 5;
+        
+        public const uint NT_FDO_PACKAGING_METADATA = 3405650558;
+        
+        public const uint NT_FDO_DLOPEN_METADATA = 1081871370;
         
         public const uint EF_CPU32 = 8454144;
         
@@ -3988,17 +4888,20 @@ namespace LibObjectFile.Elf
         public const uint R_68K_TLS_IE8 = 36;
         
         /// <summary>
-        /// 32 bit offset relative to static TLS block
+        /// 32 bit offset relative to
+        /// static TLS block
         /// </summary>
         public const uint R_68K_TLS_LE32 = 37;
         
         /// <summary>
-        /// 16 bit offset relative to static TLS block
+        /// 16 bit offset relative to
+        /// static TLS block
         /// </summary>
         public const uint R_68K_TLS_LE16 = 38;
         
         /// <summary>
-        /// 8 bit offset relative to static TLS block
+        /// 8 bit offset relative to
+        /// static TLS block
         /// </summary>
         public const uint R_68K_TLS_LE8 = 39;
         
@@ -4082,27 +4985,33 @@ namespace LibObjectFile.Elf
         public const uint R_386_TLS_TPOFF = 14;
         
         /// <summary>
-        /// Address of GOT entry for static TLS block offset
+        /// Address of GOT entry for static TLS
+        /// block offset
         /// </summary>
         public const uint R_386_TLS_IE = 15;
         
         /// <summary>
-        /// GOT entry for static TLS block offset
+        /// GOT entry for static TLS block
+        /// offset
         /// </summary>
         public const uint R_386_TLS_GOTIE = 16;
         
         /// <summary>
-        /// Offset relative to static TLS block
+        /// Offset relative to static TLS
+        /// block
         /// </summary>
         public const uint R_386_TLS_LE = 17;
         
         /// <summary>
-        /// Direct 32 bit for GNU version of general dynamic thread local data
+        /// Direct 32 bit for GNU version of
+        /// general dynamic thread local data
         /// </summary>
         public const uint R_386_TLS_GD = 18;
         
         /// <summary>
-        /// Direct 32 bit for GNU version of local dynamic thread local data in LE code
+        /// Direct 32 bit for GNU version of
+        /// local dynamic thread local data
+        /// in LE code
         /// </summary>
         public const uint R_386_TLS_LDM = 19;
         
@@ -4220,7 +5129,13 @@ namespace LibObjectFile.Elf
         /// </summary>
         public const uint R_386_IRELATIVE = 42;
         
-        public const uint R_386_NUM = 43;
+        /// <summary>
+        /// Load from 32 bit GOT entry,
+        /// relaxable.
+        /// </summary>
+        public const uint R_386_GOT32X = 43;
+        
+        public const uint R_386_NUM = 44;
         
         /// <summary>
         /// Global register reserved to app.
@@ -4641,11 +5556,25 @@ namespace LibObjectFile.Elf
         
         public const uint EF_MIPS_XGOT = 8;
         
-        public const uint EF_MIPS_64BIT_WHIRL = 16;
+        public const uint EF_MIPS_UCODE = 16;
         
         public const uint EF_MIPS_ABI2 = 32;
         
         public const uint EF_MIPS_ABI_ON32 = 64;
+        
+        /// <summary>
+        /// Process the .MIPS.options
+        /// section first by ld.
+        /// </summary>
+        public const uint EF_MIPS_OPTIONS_FIRST = 128;
+        
+        /// <summary>
+        /// Indicates code compiled for
+        /// a 64-bit machine in 32-bit
+        /// mode (regs are 32-bits
+        /// wide).
+        /// </summary>
+        public const uint EF_MIPS_32BITMODE = 256;
         
         /// <summary>
         /// Uses FP64 (12 callee-saved).
@@ -4656,6 +5585,30 @@ namespace LibObjectFile.Elf
         /// Uses IEEE 754-2008 NaN encoding.
         /// </summary>
         public const uint EF_MIPS_NAN2008 = 1024;
+        
+        /// <summary>
+        /// Architectural Extensions
+        /// used by this file.
+        /// </summary>
+        public const uint EF_MIPS_ARCH_ASE = 251658240;
+        
+        /// <summary>
+        /// Use MDMX multimedia
+        /// extensions.
+        /// </summary>
+        public const uint EF_MIPS_ARCH_ASE_MDMX = 134217728;
+        
+        /// <summary>
+        /// Use MIPS-16 ISA
+        /// extensions.
+        /// </summary>
+        public const uint EF_MIPS_ARCH_ASE_M16 = 67108864;
+        
+        /// <summary>
+        /// Use MICROMIPS ISA
+        /// extensions.
+        /// </summary>
+        public const uint EF_MIPS_ARCH_ASE_MICROMIPS = 33554432;
         
         /// <summary>
         /// MIPS architecture level.
@@ -4706,6 +5659,89 @@ namespace LibObjectFile.Elf
         /// MIPS64r2 code.
         /// </summary>
         public const uint EF_MIPS_ARCH_64R2 = 2147483648;
+        
+        /// <summary>
+        /// MIPS32r6 code.
+        /// </summary>
+        public const uint EF_MIPS_ARCH_32R6 = 2415919104;
+        
+        /// <summary>
+        /// MIPS64r6 code.
+        /// </summary>
+        public const uint EF_MIPS_ARCH_64R6 = 2684354560;
+        
+        /// <summary>
+        /// The ABI of the file.  Also
+        /// see EF_MIPS_ABI2 above.
+        /// </summary>
+        public const uint EF_MIPS_ABI = 61440;
+        
+        /// <summary>
+        /// The original o32 abi.
+        /// </summary>
+        public const uint EF_MIPS_ABI_O32 = 4096;
+        
+        /// <summary>
+        /// O32 extended to work on
+        /// 64 bit architectures.
+        /// </summary>
+        public const uint EF_MIPS_ABI_O64 = 8192;
+        
+        /// <summary>
+        /// EABI in 32 bit mode.
+        /// </summary>
+        public const uint EF_MIPS_ABI_EABI32 = 12288;
+        
+        /// <summary>
+        /// EABI in 64 bit mode.
+        /// </summary>
+        public const uint EF_MIPS_ABI_EABI64 = 16384;
+        
+        public const uint EF_MIPS_MACH = 16711680;
+        
+        public const uint EF_MIPS_MACH_3900 = 8454144;
+        
+        public const uint EF_MIPS_MACH_4010 = 8519680;
+        
+        public const uint EF_MIPS_MACH_4100 = 8585216;
+        
+        public const uint EF_MIPS_MACH_ALLEGREX = 8650752;
+        
+        public const uint EF_MIPS_MACH_4650 = 8716288;
+        
+        public const uint EF_MIPS_MACH_4120 = 8847360;
+        
+        public const uint EF_MIPS_MACH_4111 = 8912896;
+        
+        public const uint EF_MIPS_MACH_SB1 = 9043968;
+        
+        public const uint EF_MIPS_MACH_OCTEON = 9109504;
+        
+        public const uint EF_MIPS_MACH_XLR = 9175040;
+        
+        public const uint EF_MIPS_MACH_OCTEON2 = 9240576;
+        
+        public const uint EF_MIPS_MACH_OCTEON3 = 9306112;
+        
+        public const uint EF_MIPS_MACH_5400 = 9502720;
+        
+        public const uint EF_MIPS_MACH_5900 = 9568256;
+        
+        public const uint EF_MIPS_MACH_IAMR2 = 9633792;
+        
+        public const uint EF_MIPS_MACH_5500 = 9961472;
+        
+        public const uint EF_MIPS_MACH_9000 = 10027008;
+        
+        public const uint EF_MIPS_MACH_LS2E = 10485760;
+        
+        public const uint EF_MIPS_MACH_LS2F = 10551296;
+        
+        public const uint EF_MIPS_MACH_GS464 = 10616832;
+        
+        public const uint EF_MIPS_MACH_GS464E = 10682368;
+        
+        public const uint EF_MIPS_MACH_GS264E = 10747904;
         
         /// <summary>
         /// Allocated common symbols.
@@ -4836,6 +5872,10 @@ namespace LibObjectFile.Elf
         public const uint SHT_MIPS_XLATE_OLD = 1879048232;
         
         public const uint SHT_MIPS_PDR_EXCEPTION = 1879048233;
+        
+        public const uint SHT_MIPS_ABIFLAGS = 1879048234;
+        
+        public const uint SHT_MIPS_XHASH = 1879048235;
         
         /// <summary>
         /// Must be in global data area.
@@ -5034,11 +6074,127 @@ namespace LibObjectFile.Elf
         
         public const uint R_MIPS_GLOB_DAT = 51;
         
+        public const uint R_MIPS_PC21_S2 = 60;
+        
+        public const uint R_MIPS_PC26_S2 = 61;
+        
+        public const uint R_MIPS_PC18_S3 = 62;
+        
+        public const uint R_MIPS_PC19_S2 = 63;
+        
+        public const uint R_MIPS_PCHI16 = 64;
+        
+        public const uint R_MIPS_PCLO16 = 65;
+        
+        public const uint R_MIPS16_26 = 100;
+        
+        public const uint R_MIPS16_GPREL = 101;
+        
+        public const uint R_MIPS16_GOT16 = 102;
+        
+        public const uint R_MIPS16_CALL16 = 103;
+        
+        public const uint R_MIPS16_HI16 = 104;
+        
+        public const uint R_MIPS16_LO16 = 105;
+        
+        public const uint R_MIPS16_TLS_GD = 106;
+        
+        public const uint R_MIPS16_TLS_LDM = 107;
+        
+        public const uint R_MIPS16_TLS_DTPREL_HI16 = 108;
+        
+        public const uint R_MIPS16_TLS_DTPREL_LO16 = 109;
+        
+        public const uint R_MIPS16_TLS_GOTTPREL = 110;
+        
+        public const uint R_MIPS16_TLS_TPREL_HI16 = 111;
+        
+        public const uint R_MIPS16_TLS_TPREL_LO16 = 112;
+        
+        public const uint R_MIPS16_PC16_S1 = 113;
+        
         public const uint R_MIPS_COPY = 126;
         
         public const uint R_MIPS_JUMP_SLOT = 127;
         
-        public const uint R_MIPS_NUM = 128;
+        public const uint R_MIPS_RELATIVE = 128;
+        
+        public const uint R_MICROMIPS_26_S1 = 133;
+        
+        public const uint R_MICROMIPS_HI16 = 134;
+        
+        public const uint R_MICROMIPS_LO16 = 135;
+        
+        public const uint R_MICROMIPS_GPREL16 = 136;
+        
+        public const uint R_MICROMIPS_LITERAL = 137;
+        
+        public const uint R_MICROMIPS_GOT16 = 138;
+        
+        public const uint R_MICROMIPS_PC7_S1 = 139;
+        
+        public const uint R_MICROMIPS_PC10_S1 = 140;
+        
+        public const uint R_MICROMIPS_PC16_S1 = 141;
+        
+        public const uint R_MICROMIPS_CALL16 = 142;
+        
+        public const uint R_MICROMIPS_GOT_DISP = 145;
+        
+        public const uint R_MICROMIPS_GOT_PAGE = 146;
+        
+        public const uint R_MICROMIPS_GOT_OFST = 147;
+        
+        public const uint R_MICROMIPS_GOT_HI16 = 148;
+        
+        public const uint R_MICROMIPS_GOT_LO16 = 149;
+        
+        public const uint R_MICROMIPS_SUB = 150;
+        
+        public const uint R_MICROMIPS_HIGHER = 151;
+        
+        public const uint R_MICROMIPS_HIGHEST = 152;
+        
+        public const uint R_MICROMIPS_CALL_HI16 = 153;
+        
+        public const uint R_MICROMIPS_CALL_LO16 = 154;
+        
+        public const uint R_MICROMIPS_SCN_DISP = 155;
+        
+        public const uint R_MICROMIPS_JALR = 156;
+        
+        public const uint R_MICROMIPS_HI0_LO16 = 157;
+        
+        public const uint R_MICROMIPS_TLS_GD = 162;
+        
+        public const uint R_MICROMIPS_TLS_LDM = 163;
+        
+        public const uint R_MICROMIPS_TLS_DTPREL_HI16 = 164;
+        
+        public const uint R_MICROMIPS_TLS_DTPREL_LO16 = 165;
+        
+        public const uint R_MICROMIPS_TLS_GOTTPREL = 166;
+        
+        public const uint R_MICROMIPS_TLS_TPREL_HI16 = 169;
+        
+        public const uint R_MICROMIPS_TLS_TPREL_LO16 = 170;
+        
+        public const uint R_MICROMIPS_GPREL7_S2 = 172;
+        
+        public const uint R_MICROMIPS_PC23_S2 = 173;
+        
+        public const uint R_MIPS_PC32 = 248;
+        
+        public const uint R_MIPS_EH = 249;
+        
+        public const uint R_MIPS_GNU_REL16_S2 = 250;
+        
+        public const uint R_MIPS_GNU_VTINHERIT = 253;
+        
+        public const uint R_MIPS_GNU_VTENTRY = 254;
+        
+        public const uint R_MIPS_NUM = 255;
         
         /// <summary>
         /// Register usage information.
@@ -5265,7 +6421,9 @@ namespace LibObjectFile.Elf
         
         public const int DT_MIPS_RLD_MAP_REL = 1879048245;
         
-        public const int DT_MIPS_NUM = 54;
+        public const int DT_MIPS_XHASH = 1879048246;
+        
+        public const int DT_MIPS_NUM = 55;
         
         /// <summary>
         /// Trap nil pointer dereference.
@@ -5304,7 +6462,7 @@ namespace LibObjectFile.Elf
         public const uint EF_PARISC_ARCH = 65535;
         
         /// <summary>
-        /// Section for tenatively declared
+        /// Section for tentatively declared
         /// symbols in ANSI C.
         /// </summary>
         public const uint SHN_PARISC_ANSI_COMMON = 65280;
@@ -7886,13 +9044,24 @@ namespace LibObjectFile.Elf
         /// </summary>
         public const uint R_AARCH64_IRELATIVE = 1032;
         
+        public const uint PT_AARCH64_MEMTAG_MTE = 1879048194;
+        
+        public const int DT_AARCH64_BTI_PLT = 1879048193;
+        
+        public const int DT_AARCH64_PAC_PLT = 1879048195;
+        
+        public const int DT_AARCH64_VARIANT_PCS = 1879048197;
+        
+        public const int DT_AARCH64_NUM = 6;
+        
         /// <summary>
         /// No reloc
         /// </summary>
         public const uint R_ARM_NONE = 0;
         
         /// <summary>
-        /// Deprecated PC relative 26 bit branch.
+        /// Deprecated PC relative 26
+        /// bit branch.
         /// </summary>
         public const uint R_ARM_PC24 = 1;
         
@@ -7940,7 +9109,8 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// PC relative 
         /// &amp;
-        /// 0x3FC (Thumb16 LDR, ADD, ADR).
+        /// 0x3FC
+        /// (Thumb16 LDR, ADD, ADR).
         /// </summary>
         public const uint R_ARM_THM_PC8 = 11;
         
@@ -8032,7 +9202,8 @@ namespace LibObjectFile.Elf
         public const uint R_ARM_CALL = 28;
         
         /// <summary>
-        /// PC relative 24 bit (B, BL
+        /// PC relative 24 bit
+        /// (B, BL
         /// &lt;cond
         /// &gt;).
         /// </summary>
@@ -8120,22 +9291,26 @@ namespace LibObjectFile.Elf
         public const uint R_ARM_THM_MOVW_ABS_NC = 47;
         
         /// <summary>
-        /// Direct high 16 bit (Thumb32 MOVT).
+        /// Direct high 16 bit
+        /// (Thumb32 MOVT).
         /// </summary>
         public const uint R_ARM_THM_MOVT_ABS = 48;
         
         /// <summary>
-        /// PC relative 16 bit (Thumb32 MOVW).
+        /// PC relative 16 bit
+        /// (Thumb32 MOVW).
         /// </summary>
         public const uint R_ARM_THM_MOVW_PREL_NC = 49;
         
         /// <summary>
-        /// PC relative high 16 bit (Thumb32 MOVT).
+        /// PC relative high 16 bit
+        /// (Thumb32 MOVT).
         /// </summary>
         public const uint R_ARM_THM_MOVT_PREL = 50;
         
         /// <summary>
-        /// PC relative 20 bit (Thumb32 B
+        /// PC relative 20 bit
+        /// (Thumb32 B
         /// &lt;cond
         /// &gt;.W).
         /// </summary>
@@ -8144,17 +9319,20 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// PC relative X 
         /// &amp;
-        /// 0x7E (Thumb16 CBZ, CBNZ).
+        /// 0x7E
+        /// (Thumb16 CBZ, CBNZ).
         /// </summary>
         public const uint R_ARM_THM_JUMP6 = 52;
         
         /// <summary>
-        /// PC relative 12 bit (Thumb32 ADR.W).
+        /// PC relative 12 bit
+        /// (Thumb32 ADR.W).
         /// </summary>
         public const uint R_ARM_THM_ALU_PREL_11_0 = 53;
         
         /// <summary>
-        /// PC relative 12 bit (Thumb32 LDR{D,SB,H,SH}).
+        /// PC relative 12 bit
+        /// (Thumb32 LDR{D,SB,H,SH}).
         /// </summary>
         public const uint R_ARM_THM_PC12 = 54;
         
@@ -8204,17 +9382,20 @@ namespace LibObjectFile.Elf
         public const uint R_ARM_LDR_PC_G2 = 63;
         
         /// <summary>
-        /// PC relative (STR{D,H}, LDR{D,SB,H,SH}).
+        /// PC relative (STR{D,H},
+        /// LDR{D,SB,H,SH}).
         /// </summary>
         public const uint R_ARM_LDRS_PC_G0 = 64;
         
         /// <summary>
-        /// PC relative (STR{D,H}, LDR{D,SB,H,SH}).
+        /// PC relative (STR{D,H},
+        /// LDR{D,SB,H,SH}).
         /// </summary>
         public const uint R_ARM_LDRS_PC_G1 = 65;
         
         /// <summary>
-        /// PC relative (STR{D,H}, LDR{D,SB,H,SH}).
+        /// PC relative (STR{D,H},
+        /// LDR{D,SB,H,SH}).
         /// </summary>
         public const uint R_ARM_LDRS_PC_G2 = 66;
         
@@ -8259,32 +9440,38 @@ namespace LibObjectFile.Elf
         public const uint R_ARM_ALU_SB_G2 = 74;
         
         /// <summary>
-        /// Program base relative (LDR, STR, LDRB, STRB).
+        /// Program base relative (LDR,
+        /// STR, LDRB, STRB).
         /// </summary>
         public const uint R_ARM_LDR_SB_G0 = 75;
         
         /// <summary>
-        /// Program base relative (LDR, STR, LDRB, STRB).
+        /// Program base relative
+        /// (LDR, STR, LDRB, STRB).
         /// </summary>
         public const uint R_ARM_LDR_SB_G1 = 76;
         
         /// <summary>
-        /// Program base relative (LDR, STR, LDRB, STRB).
+        /// Program base relative
+        /// (LDR, STR, LDRB, STRB).
         /// </summary>
         public const uint R_ARM_LDR_SB_G2 = 77;
         
         /// <summary>
-        /// Program base relative (LDR, STR, LDRB, STRB).
+        /// Program base relative
+        /// (LDR, STR, LDRB, STRB).
         /// </summary>
         public const uint R_ARM_LDRS_SB_G0 = 78;
         
         /// <summary>
-        /// Program base relative (LDR, STR, LDRB, STRB).
+        /// Program base relative
+        /// (LDR, STR, LDRB, STRB).
         /// </summary>
         public const uint R_ARM_LDRS_SB_G1 = 79;
         
         /// <summary>
-        /// Program base relative (LDR, STR, LDRB, STRB).
+        /// Program base relative
+        /// (LDR, STR, LDRB, STRB).
         /// </summary>
         public const uint R_ARM_LDRS_SB_G2 = 80;
         
@@ -8304,32 +9491,38 @@ namespace LibObjectFile.Elf
         public const uint R_ARM_LDC_SB_G2 = 83;
         
         /// <summary>
-        /// Program base relative 16 bit (MOVW).
+        /// Program base relative 16
+        /// bit (MOVW).
         /// </summary>
         public const uint R_ARM_MOVW_BREL_NC = 84;
         
         /// <summary>
-        /// Program base relative high 16 bit (MOVT).
+        /// Program base relative high
+        /// 16 bit (MOVT).
         /// </summary>
         public const uint R_ARM_MOVT_BREL = 85;
         
         /// <summary>
-        /// Program base relative 16 bit (MOVW).
+        /// Program base relative 16
+        /// bit (MOVW).
         /// </summary>
         public const uint R_ARM_MOVW_BREL = 86;
         
         /// <summary>
-        /// Program base relative 16 bit (Thumb32 MOVW).
+        /// Program base relative 16
+        /// bit (Thumb32 MOVW).
         /// </summary>
         public const uint R_ARM_THM_MOVW_BREL_NC = 87;
         
         /// <summary>
-        /// Program base relative high 16 bit (Thumb32 MOVT).
+        /// Program base relative high
+        /// 16 bit (Thumb32 MOVT).
         /// </summary>
         public const uint R_ARM_THM_MOVT_BREL = 88;
         
         /// <summary>
-        /// Program base relative 16 bit (Thumb32 MOVW).
+        /// Program base relative 16
+        /// bit (Thumb32 MOVW).
         /// </summary>
         public const uint R_ARM_THM_MOVW_BREL = 89;
         
@@ -8357,12 +9550,14 @@ namespace LibObjectFile.Elf
         public const uint R_ARM_GOT_PREL = 96;
         
         /// <summary>
-        /// GOT entry relative to GOT origin (LDR).
+        /// GOT entry relative to GOT
+        /// origin (LDR).
         /// </summary>
         public const uint R_ARM_GOT_BREL12 = 97;
         
         /// <summary>
-        /// 12 bit, GOT entry relative to GOT origin (LDR, STR).
+        /// 12 bit, GOT entry relative
+        /// to GOT origin (LDR, STR).
         /// </summary>
         public const uint R_ARM_GOTOFF12 = 98;
         
@@ -8382,49 +9577,58 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// PC relative 
         /// &amp;
-        /// 0x1FE (Thumb16 B/B
+        /// 0x1FE
+        /// (Thumb16 B/B
         /// &lt;cond
         /// &gt;).
         /// </summary>
         public const uint R_ARM_THM_PC9 = 103;
         
         /// <summary>
-        /// PC-rel 32 bit for global dynamic thread local data
+        /// PC-rel 32 bit for global dynamic
+        /// thread local data
         /// </summary>
         public const uint R_ARM_TLS_GD32 = 104;
         
         /// <summary>
-        /// PC-rel 32 bit for local dynamic thread local data
+        /// PC-rel 32 bit for local dynamic
+        /// thread local data
         /// </summary>
         public const uint R_ARM_TLS_LDM32 = 105;
         
         /// <summary>
-        /// 32 bit offset relative to TLS block
+        /// 32 bit offset relative to TLS
+        /// block
         /// </summary>
         public const uint R_ARM_TLS_LDO32 = 106;
         
         /// <summary>
-        /// PC-rel 32 bit for GOT entry of static TLS block offset
+        /// PC-rel 32 bit for GOT entry of
+        /// static TLS block offset
         /// </summary>
         public const uint R_ARM_TLS_IE32 = 107;
         
         /// <summary>
-        /// 32 bit offset relative to static TLS block
+        /// 32 bit offset relative to static
+        /// TLS block
         /// </summary>
         public const uint R_ARM_TLS_LE32 = 108;
         
         /// <summary>
-        /// 12 bit relative to TLS block (LDR, STR).
+        /// 12 bit relative to TLS
+        /// block (LDR, STR).
         /// </summary>
         public const uint R_ARM_TLS_LDO12 = 109;
         
         /// <summary>
-        /// 12 bit relative to static TLS block (LDR, STR).
+        /// 12 bit relative to static
+        /// TLS block (LDR, STR).
         /// </summary>
         public const uint R_ARM_TLS_LE12 = 110;
         
         /// <summary>
-        /// 12 bit GOT entry relative to GOT origin (LDR).
+        /// 12 bit GOT entry relative
+        /// to GOT origin (LDR).
         /// </summary>
         public const uint R_ARM_TLS_IE12GP = 111;
         
@@ -8440,7 +9644,8 @@ namespace LibObjectFile.Elf
         public const uint R_ARM_THM_TLS_DESCSEQ32 = 130;
         
         /// <summary>
-        /// GOT entry relative to GOT origin, 12 bit (Thumb32 LDR).
+        /// GOT entry relative to GOT
+        /// origin, 12 bit (Thumb32 LDR).
         /// </summary>
         public const uint R_ARM_THM_GOT_BREL12 = 131;
         
@@ -8461,6 +9666,332 @@ namespace LibObjectFile.Elf
         public const uint R_ARM_RBASE = 255;
         
         public const uint R_ARM_NUM = 256;
+        
+        /// <summary>
+        /// no reloc
+        /// </summary>
+        public const uint R_CKCORE_NONE = 0;
+        
+        /// <summary>
+        /// direct 32 bit (S + A)
+        /// </summary>
+        public const uint R_CKCORE_ADDR32 = 1;
+        
+        /// <summary>
+        /// disp ((S + A - P) &gt;&gt; 2) 
+        /// &amp;
+        /// 0xff
+        /// </summary>
+        public const uint R_CKCORE_PCRELIMM8BY4 = 2;
+        
+        /// <summary>
+        /// disp ((S + A - P) &gt;&gt; 1) 
+        /// &amp;
+        /// 0x7ff
+        /// </summary>
+        public const uint R_CKCORE_PCRELIMM11BY2 = 3;
+        
+        /// <summary>
+        /// 32-bit rel (S + A - P)
+        /// </summary>
+        public const uint R_CKCORE_PCREL32 = 5;
+        
+        /// <summary>
+        /// disp ((S + A - P) &gt;&gt;1) 
+        /// &amp;
+        /// 0x7ff
+        /// </summary>
+        public const uint R_CKCORE_PCRELJSR_IMM11BY2 = 6;
+        
+        /// <summary>
+        /// 32 bit adjust program base(B + A)
+        /// </summary>
+        public const uint R_CKCORE_RELATIVE = 9;
+        
+        /// <summary>
+        /// 32 bit adjust by program base
+        /// </summary>
+        public const uint R_CKCORE_COPY = 10;
+        
+        /// <summary>
+        /// off between got and sym (S)
+        /// </summary>
+        public const uint R_CKCORE_GLOB_DAT = 11;
+        
+        /// <summary>
+        /// PLT entry (S)
+        /// </summary>
+        public const uint R_CKCORE_JUMP_SLOT = 12;
+        
+        /// <summary>
+        /// offset to GOT (S + A - GOT)
+        /// </summary>
+        public const uint R_CKCORE_GOTOFF = 13;
+        
+        /// <summary>
+        /// PC offset to GOT (GOT + A - P)
+        /// </summary>
+        public const uint R_CKCORE_GOTPC = 14;
+        
+        /// <summary>
+        /// 32 bit GOT entry (G)
+        /// </summary>
+        public const uint R_CKCORE_GOT32 = 15;
+        
+        /// <summary>
+        /// 32 bit PLT entry (G)
+        /// </summary>
+        public const uint R_CKCORE_PLT32 = 16;
+        
+        /// <summary>
+        /// GOT entry in GLOB_DAT (GOT + G)
+        /// </summary>
+        public const uint R_CKCORE_ADDRGOT = 17;
+        
+        /// <summary>
+        /// PLT entry in GLOB_DAT (GOT + G)
+        /// </summary>
+        public const uint R_CKCORE_ADDRPLT = 18;
+        
+        /// <summary>
+        /// ((S + A - P) &gt;&gt; 1) 
+        /// &amp;
+        /// 0x3ffffff
+        /// </summary>
+        public const uint R_CKCORE_PCREL_IMM26BY2 = 19;
+        
+        /// <summary>
+        /// disp ((S + A - P) &gt;&gt; 1) 
+        /// &amp;
+        /// 0xffff
+        /// </summary>
+        public const uint R_CKCORE_PCREL_IMM16BY2 = 20;
+        
+        /// <summary>
+        /// disp ((S + A - P) &gt;&gt; 2) 
+        /// &amp;
+        /// 0xffff
+        /// </summary>
+        public const uint R_CKCORE_PCREL_IMM16BY4 = 21;
+        
+        /// <summary>
+        /// disp ((S + A - P) &gt;&gt; 1) 
+        /// &amp;
+        /// 0x3ff
+        /// </summary>
+        public const uint R_CKCORE_PCREL_IMM10BY2 = 22;
+        
+        /// <summary>
+        /// disp ((S + A - P) &gt;&gt; 2) 
+        /// &amp;
+        /// 0x3ff
+        /// </summary>
+        public const uint R_CKCORE_PCREL_IMM10BY4 = 23;
+        
+        /// <summary>
+        /// high 
+        /// &amp;
+        /// low 16 bit ADDR
+        /// </summary>
+        public const uint R_CKCORE_ADDR_HI16 = 24;
+        
+        /// <summary>
+        /// (S + A) 
+        /// &amp;
+        /// 0xffff
+        /// </summary>
+        public const uint R_CKCORE_ADDR_LO16 = 25;
+        
+        /// <summary>
+        /// high 
+        /// &amp;
+        /// low 16 bit GOTPC
+        /// </summary>
+        public const uint R_CKCORE_GOTPC_HI16 = 26;
+        
+        /// <summary>
+        /// (GOT + A - P) 
+        /// &amp;
+        /// 0xffff
+        /// </summary>
+        public const uint R_CKCORE_GOTPC_LO16 = 27;
+        
+        /// <summary>
+        /// high 
+        /// &amp;
+        /// low 16 bit GOTOFF
+        /// </summary>
+        public const uint R_CKCORE_GOTOFF_HI16 = 28;
+        
+        /// <summary>
+        /// (S + A - GOT) 
+        /// &amp;
+        /// 0xffff
+        /// </summary>
+        public const uint R_CKCORE_GOTOFF_LO16 = 29;
+        
+        /// <summary>
+        /// 12 bit disp GOT entry (G)
+        /// </summary>
+        public const uint R_CKCORE_GOT12 = 30;
+        
+        /// <summary>
+        /// high 
+        /// &amp;
+        /// low 16 bit GOT
+        /// </summary>
+        public const uint R_CKCORE_GOT_HI16 = 31;
+        
+        /// <summary>
+        /// (G 
+        /// &amp;
+        /// 0xffff)
+        /// </summary>
+        public const uint R_CKCORE_GOT_LO16 = 32;
+        
+        /// <summary>
+        /// 12 bit disp PLT entry (G)
+        /// </summary>
+        public const uint R_CKCORE_PLT12 = 33;
+        
+        /// <summary>
+        /// high 
+        /// &amp;
+        /// low 16 bit PLT
+        /// </summary>
+        public const uint R_CKCORE_PLT_HI16 = 34;
+        
+        /// <summary>
+        /// G 
+        /// &amp;
+        /// 0xffff
+        /// </summary>
+        public const uint R_CKCORE_PLT_LO16 = 35;
+        
+        /// <summary>
+        /// high 
+        /// &amp;
+        /// low 16 bit ADDRGOT
+        /// </summary>
+        public const uint R_CKCORE_ADDRGOT_HI16 = 36;
+        
+        /// <summary>
+        /// (GOT + G * 4) 
+        /// &amp;
+        /// 0xffff
+        /// </summary>
+        public const uint R_CKCORE_ADDRGOT_LO16 = 37;
+        
+        /// <summary>
+        /// high 
+        /// &amp;
+        /// low 16 bit ADDRPLT
+        /// </summary>
+        public const uint R_CKCORE_ADDRPLT_HI16 = 38;
+        
+        /// <summary>
+        /// (GOT+G*4) 
+        /// &amp;
+        /// 0xffff
+        /// </summary>
+        public const uint R_CKCORE_ADDRPLT_LO16 = 39;
+        
+        /// <summary>
+        /// disp ((S+A-P) &gt;&gt;1) 
+        /// &amp;
+        /// x3ffffff
+        /// </summary>
+        public const uint R_CKCORE_PCREL_JSR_IMM26BY2 = 40;
+        
+        /// <summary>
+        /// (S+A-BTEXT) 
+        /// &amp;
+        /// 0xffff
+        /// </summary>
+        public const uint R_CKCORE_TOFFSET_LO16 = 41;
+        
+        /// <summary>
+        /// (S+A-BTEXT) 
+        /// &amp;
+        /// 0xffff
+        /// </summary>
+        public const uint R_CKCORE_DOFFSET_LO16 = 42;
+        
+        /// <summary>
+        /// disp ((S+A-P) &gt;&gt;1) 
+        /// &amp;
+        /// 0x3ffff
+        /// </summary>
+        public const uint R_CKCORE_PCREL_IMM18BY2 = 43;
+        
+        /// <summary>
+        /// disp (S+A-BDATA) 
+        /// &amp;
+        /// 0x3ffff
+        /// </summary>
+        public const uint R_CKCORE_DOFFSET_IMM18 = 44;
+        
+        /// <summary>
+        /// disp ((S+A-BDATA)&gt;&gt;1) 
+        /// &amp;
+        /// 0x3ffff
+        /// </summary>
+        public const uint R_CKCORE_DOFFSET_IMM18BY2 = 45;
+        
+        /// <summary>
+        /// disp ((S+A-BDATA)&gt;&gt;2) 
+        /// &amp;
+        /// 0x3ffff
+        /// </summary>
+        public const uint R_CKCORE_DOFFSET_IMM18BY4 = 46;
+        
+        /// <summary>
+        /// disp (G &gt;&gt; 2)
+        /// </summary>
+        public const uint R_CKCORE_GOT_IMM18BY4 = 48;
+        
+        /// <summary>
+        /// disp (G &gt;&gt; 2)
+        /// </summary>
+        public const uint R_CKCORE_PLT_IMM18BY4 = 49;
+        
+        /// <summary>
+        /// disp ((S+A-P) &gt;&gt;2) 
+        /// &amp;
+        /// 0x7f
+        /// </summary>
+        public const uint R_CKCORE_PCREL_IMM7BY4 = 50;
+        
+        /// <summary>
+        /// 32 bit offset to TLS block
+        /// </summary>
+        public const uint R_CKCORE_TLS_LE32 = 51;
+        
+        public const uint R_CKCORE_TLS_IE32 = 52;
+        
+        public const uint R_CKCORE_TLS_GD32 = 53;
+        
+        public const uint R_CKCORE_TLS_LDM32 = 54;
+        
+        public const uint R_CKCORE_TLS_LDO32 = 55;
+        
+        public const uint R_CKCORE_TLS_DTPMOD32 = 56;
+        
+        public const uint R_CKCORE_TLS_DTPOFF32 = 57;
+        
+        public const uint R_CKCORE_TLS_TPOFF32 = 58;
+        
+        public const uint EF_CSKY_ABIMASK = 4026531840;
+        
+        public const uint EF_CSKY_OTHER = 268369920;
+        
+        public const uint EF_CSKY_PROCESSOR = 65535;
+        
+        public const uint EF_CSKY_ABIV1 = 268435456;
+        
+        public const uint EF_CSKY_ABIV2 = 536870912;
+        
+        public const uint SHT_CSKY_ATTRIBUTES = 1879048193;
         
         /// <summary>
         /// os-specific flags
@@ -9243,82 +10774,98 @@ namespace LibObjectFile.Elf
         public const uint R_390_TLS_LOAD = 37;
         
         /// <summary>
-        /// Tag for function call in general dynamic TLS code.
+        /// Tag for function call in general
+        /// dynamic TLS code.
         /// </summary>
         public const uint R_390_TLS_GDCALL = 38;
         
         /// <summary>
-        /// Tag for function call in local dynamic TLS code.
+        /// Tag for function call in local
+        /// dynamic TLS code.
         /// </summary>
         public const uint R_390_TLS_LDCALL = 39;
         
         /// <summary>
-        /// Direct 32 bit for general dynamic thread local data.
+        /// Direct 32 bit for general dynamic
+        /// thread local data.
         /// </summary>
         public const uint R_390_TLS_GD32 = 40;
         
         /// <summary>
-        /// Direct 64 bit for general dynamic thread local data.
+        /// Direct 64 bit for general dynamic
+        /// thread local data.
         /// </summary>
         public const uint R_390_TLS_GD64 = 41;
         
         /// <summary>
-        /// 12 bit GOT offset for static TLS block offset.
+        /// 12 bit GOT offset for static TLS
+        /// block offset.
         /// </summary>
         public const uint R_390_TLS_GOTIE12 = 42;
         
         /// <summary>
-        /// 32 bit GOT offset for static TLS block offset.
+        /// 32 bit GOT offset for static TLS
+        /// block offset.
         /// </summary>
         public const uint R_390_TLS_GOTIE32 = 43;
         
         /// <summary>
-        /// 64 bit GOT offset for static TLS block offset.
+        /// 64 bit GOT offset for static TLS
+        /// block offset.
         /// </summary>
         public const uint R_390_TLS_GOTIE64 = 44;
         
         /// <summary>
-        /// Direct 32 bit for local dynamic thread local data in LE code.
+        /// Direct 32 bit for local dynamic
+        /// thread local data in LE code.
         /// </summary>
         public const uint R_390_TLS_LDM32 = 45;
         
         /// <summary>
-        /// Direct 64 bit for local dynamic thread local data in LE code.
+        /// Direct 64 bit for local dynamic
+        /// thread local data in LE code.
         /// </summary>
         public const uint R_390_TLS_LDM64 = 46;
         
         /// <summary>
-        /// 32 bit address of GOT entry for negated static TLS block offset.
+        /// 32 bit address of GOT entry for
+        /// negated static TLS block offset.
         /// </summary>
         public const uint R_390_TLS_IE32 = 47;
         
         /// <summary>
-        /// 64 bit address of GOT entry for negated static TLS block offset.
+        /// 64 bit address of GOT entry for
+        /// negated static TLS block offset.
         /// </summary>
         public const uint R_390_TLS_IE64 = 48;
         
         /// <summary>
-        /// 32 bit rel. offset to GOT entry for negated static TLS block offset.
+        /// 32 bit rel. offset to GOT entry for
+        /// negated static TLS block offset.
         /// </summary>
         public const uint R_390_TLS_IEENT = 49;
         
         /// <summary>
-        /// 32 bit negated offset relative to static TLS block.
+        /// 32 bit negated offset relative to
+        /// static TLS block.
         /// </summary>
         public const uint R_390_TLS_LE32 = 50;
         
         /// <summary>
-        /// 64 bit negated offset relative to static TLS block.
+        /// 64 bit negated offset relative to
+        /// static TLS block.
         /// </summary>
         public const uint R_390_TLS_LE64 = 51;
         
         /// <summary>
-        /// 32 bit offset relative to TLS block.
+        /// 32 bit offset relative to TLS
+        /// block.
         /// </summary>
         public const uint R_390_TLS_LDO32 = 52;
         
         /// <summary>
-        /// 64 bit offset relative to TLS block.
+        /// 64 bit offset relative to TLS
+        /// block.
         /// </summary>
         public const uint R_390_TLS_LDO64 = 53;
         
@@ -9333,7 +10880,8 @@ namespace LibObjectFile.Elf
         public const uint R_390_TLS_DTPOFF = 55;
         
         /// <summary>
-        /// Negated offset in static TLS block.
+        /// Negated offset in static TLS
+        /// block.
         /// </summary>
         public const uint R_390_TLS_TPOFF = 56;
         
@@ -9353,7 +10901,8 @@ namespace LibObjectFile.Elf
         public const uint R_390_GOTPLT20 = 59;
         
         /// <summary>
-        /// 20 bit GOT offset for static TLS block offset.
+        /// 20 bit GOT offset for static TLS
+        /// block offset.
         /// </summary>
         public const uint R_390_TLS_GOTIE20 = 60;
         
@@ -9452,7 +11001,8 @@ namespace LibObjectFile.Elf
         public const uint R_X86_64_RELATIVE = 8;
         
         /// <summary>
-        /// 32 bit signed PC relative offset to GOT
+        /// 32 bit signed PC relative
+        /// offset to GOT
         /// </summary>
         public const uint R_X86_64_GOTPCREL = 9;
         
@@ -9502,12 +11052,14 @@ namespace LibObjectFile.Elf
         public const uint R_X86_64_TPOFF64 = 18;
         
         /// <summary>
-        /// 32 bit signed PC relative offset to two GOT entries for GD symbol
+        /// 32 bit signed PC relative offset
+        /// to two GOT entries for GD symbol
         /// </summary>
         public const uint R_X86_64_TLSGD = 19;
         
         /// <summary>
-        /// 32 bit signed PC relative offset to two GOT entries for LD symbol
+        /// 32 bit signed PC relative offset
+        /// to two GOT entries for LD symbol
         /// </summary>
         public const uint R_X86_64_TLSLD = 20;
         
@@ -9517,7 +11069,8 @@ namespace LibObjectFile.Elf
         public const uint R_X86_64_DTPOFF32 = 21;
         
         /// <summary>
-        /// 32 bit signed PC relative offset to GOT entry for IE symbol
+        /// 32 bit signed PC relative offset
+        /// to GOT entry for IE symbol
         /// </summary>
         public const uint R_X86_64_GOTTPOFF = 22;
         
@@ -9537,7 +11090,8 @@ namespace LibObjectFile.Elf
         public const uint R_X86_64_GOTOFF64 = 25;
         
         /// <summary>
-        /// 32 bit signed pc relative offset to GOT
+        /// 32 bit signed pc relative
+        /// offset to GOT
         /// </summary>
         public const uint R_X86_64_GOTPC32 = 26;
         
@@ -9547,7 +11101,8 @@ namespace LibObjectFile.Elf
         public const uint R_X86_64_GOT64 = 27;
         
         /// <summary>
-        /// 64-bit PC relative offset to GOT entry
+        /// 64-bit PC relative offset
+        /// to GOT entry
         /// </summary>
         public const uint R_X86_64_GOTPCREL64 = 28;
         
@@ -9562,7 +11117,8 @@ namespace LibObjectFile.Elf
         public const uint R_X86_64_GOTPLT64 = 30;
         
         /// <summary>
-        /// 64-bit GOT relative offset to PLT entry
+        /// 64-bit GOT relative offset
+        /// to PLT entry
         /// </summary>
         public const uint R_X86_64_PLTOFF64 = 31;
         
@@ -9582,7 +11138,8 @@ namespace LibObjectFile.Elf
         public const uint R_X86_64_GOTPC32_TLSDESC = 34;
         
         /// <summary>
-        /// Marker for call through TLS descriptor.
+        /// Marker for call through TLS
+        /// descriptor.
         /// </summary>
         public const uint R_X86_64_TLSDESC_CALL = 35;
         
@@ -9601,7 +11158,34 @@ namespace LibObjectFile.Elf
         /// </summary>
         public const uint R_X86_64_RELATIVE64 = 38;
         
-        public const uint R_X86_64_NUM = 39;
+        /// <summary>
+        /// Load from 32 bit signed pc relative
+        /// offset to GOT entry without REX
+        /// prefix, relaxable.
+        /// </summary>
+        public const uint R_X86_64_GOTPCRELX = 41;
+        
+        /// <summary>
+        /// Load from 32 bit signed pc relative
+        /// offset to GOT entry with REX prefix,
+        /// relaxable.
+        /// </summary>
+        public const uint R_X86_64_REX_GOTPCRELX = 42;
+        
+        public const uint R_X86_64_NUM = 43;
+        
+        /// <summary>
+        /// Unwind information.
+        /// </summary>
+        public const uint SHT_X86_64_UNWIND = 1879048193;
+        
+        public const int DT_X86_64_PLT = 1879048192;
+        
+        public const int DT_X86_64_PLTSZ = 1879048193;
+        
+        public const int DT_X86_64_PLTENT = 1879048195;
+        
+        public const int DT_X86_64_NUM = 4;
         
         /// <summary>
         /// No reloc.
@@ -9739,17 +11323,20 @@ namespace LibObjectFile.Elf
         public const uint R_MN10300_TLS_LDO = 26;
         
         /// <summary>
-        /// GOT offset for static TLS block offset.
+        /// GOT offset for static TLS block
+        /// offset.
         /// </summary>
         public const uint R_MN10300_TLS_GOTIE = 27;
         
         /// <summary>
-        /// GOT address for static TLS block offset.
+        /// GOT address for static TLS block
+        /// offset.
         /// </summary>
         public const uint R_MN10300_TLS_IE = 28;
         
         /// <summary>
-        /// Offset relative to static TLS block.
+        /// Offset relative to static TLS
+        /// block.
         /// </summary>
         public const uint R_MN10300_TLS_LE = 29;
         
@@ -9769,12 +11356,14 @@ namespace LibObjectFile.Elf
         public const uint R_MN10300_TLS_TPOFF = 32;
         
         /// <summary>
-        /// Adjustment for next reloc as needed by linker relaxation.
+        /// Adjustment for next reloc as needed
+        /// by linker relaxation.
         /// </summary>
         public const uint R_MN10300_SYM_DIFF = 33;
         
         /// <summary>
-        /// Alignment requirement for linker relaxation.
+        /// Alignment requirement for linker
+        /// relaxation.
         /// </summary>
         public const uint R_MN10300_ALIGN = 34;
         
@@ -9939,12 +11528,14 @@ namespace LibObjectFile.Elf
         public const uint R_M32R_GOTPC24 = 55;
         
         /// <summary>
-        /// High 16 bit GOT entry with unsigned low
+        /// High 16 bit GOT entry with unsigned
+        /// low
         /// </summary>
         public const uint R_M32R_GOT16_HI_ULO = 56;
         
         /// <summary>
-        /// High 16 bit GOT entry with signed low
+        /// High 16 bit GOT entry with signed
+        /// low
         /// </summary>
         public const uint R_M32R_GOT16_HI_SLO = 57;
         
@@ -9954,27 +11545,32 @@ namespace LibObjectFile.Elf
         public const uint R_M32R_GOT16_LO = 58;
         
         /// <summary>
-        /// High 16 bit PC relative offset to GOT with unsigned low
+        /// High 16 bit PC relative offset to
+        /// GOT with unsigned low
         /// </summary>
         public const uint R_M32R_GOTPC_HI_ULO = 59;
         
         /// <summary>
-        /// High 16 bit PC relative offset to GOT with signed low
+        /// High 16 bit PC relative offset to
+        /// GOT with signed low
         /// </summary>
         public const uint R_M32R_GOTPC_HI_SLO = 60;
         
         /// <summary>
-        /// Low 16 bit PC relative offset to GOT
+        /// Low 16 bit PC relative offset to
+        /// GOT
         /// </summary>
         public const uint R_M32R_GOTPC_LO = 61;
         
         /// <summary>
-        /// High 16 bit offset to GOT with unsigned low
+        /// High 16 bit offset to GOT
+        /// with unsigned low
         /// </summary>
         public const uint R_M32R_GOTOFF_HI_ULO = 62;
         
         /// <summary>
-        /// High 16 bit offset to GOT with signed low
+        /// High 16 bit offset to GOT
+        /// with signed low
         /// </summary>
         public const uint R_M32R_GOTOFF_HI_SLO = 63;
         
@@ -10249,7 +11845,8 @@ namespace LibObjectFile.Elf
         public const uint R_NIOS2_CALLR = 20;
         
         /// <summary>
-        /// Alignment requirement for linker relaxation.
+        /// Alignment requirement for
+        /// linker relaxation.
         /// </summary>
         public const uint R_NIOS2_ALIGN = 21;
         
@@ -11431,6 +13028,746 @@ namespace LibObjectFile.Elf
         public const uint R_TILEGX_GNU_VTENTRY = 129;
         
         public const uint R_TILEGX_NUM = 130;
+        
+        public const uint EF_RISCV_RVC = 1;
+        
+        public const uint EF_RISCV_FLOAT_ABI = 6;
+        
+        public const uint EF_RISCV_FLOAT_ABI_SOFT = 0;
+        
+        public const uint EF_RISCV_FLOAT_ABI_SINGLE = 2;
+        
+        public const uint EF_RISCV_FLOAT_ABI_DOUBLE = 4;
+        
+        public const uint EF_RISCV_FLOAT_ABI_QUAD = 6;
+        
+        public const uint EF_RISCV_RVE = 8;
+        
+        public const uint EF_RISCV_TSO = 16;
+        
+        public const uint R_RISCV_NONE = 0;
+        
+        public const uint R_RISCV_32 = 1;
+        
+        public const uint R_RISCV_64 = 2;
+        
+        public const uint R_RISCV_RELATIVE = 3;
+        
+        public const uint R_RISCV_COPY = 4;
+        
+        public const uint R_RISCV_JUMP_SLOT = 5;
+        
+        public const uint R_RISCV_TLS_DTPMOD32 = 6;
+        
+        public const uint R_RISCV_TLS_DTPMOD64 = 7;
+        
+        public const uint R_RISCV_TLS_DTPREL32 = 8;
+        
+        public const uint R_RISCV_TLS_DTPREL64 = 9;
+        
+        public const uint R_RISCV_TLS_TPREL32 = 10;
+        
+        public const uint R_RISCV_TLS_TPREL64 = 11;
+        
+        public const uint R_RISCV_BRANCH = 16;
+        
+        public const uint R_RISCV_JAL = 17;
+        
+        public const uint R_RISCV_CALL = 18;
+        
+        public const uint R_RISCV_CALL_PLT = 19;
+        
+        public const uint R_RISCV_GOT_HI20 = 20;
+        
+        public const uint R_RISCV_TLS_GOT_HI20 = 21;
+        
+        public const uint R_RISCV_TLS_GD_HI20 = 22;
+        
+        public const uint R_RISCV_PCREL_HI20 = 23;
+        
+        public const uint R_RISCV_PCREL_LO12_I = 24;
+        
+        public const uint R_RISCV_PCREL_LO12_S = 25;
+        
+        public const uint R_RISCV_HI20 = 26;
+        
+        public const uint R_RISCV_LO12_I = 27;
+        
+        public const uint R_RISCV_LO12_S = 28;
+        
+        public const uint R_RISCV_TPREL_HI20 = 29;
+        
+        public const uint R_RISCV_TPREL_LO12_I = 30;
+        
+        public const uint R_RISCV_TPREL_LO12_S = 31;
+        
+        public const uint R_RISCV_TPREL_ADD = 32;
+        
+        public const uint R_RISCV_ADD8 = 33;
+        
+        public const uint R_RISCV_ADD16 = 34;
+        
+        public const uint R_RISCV_ADD32 = 35;
+        
+        public const uint R_RISCV_ADD64 = 36;
+        
+        public const uint R_RISCV_SUB8 = 37;
+        
+        public const uint R_RISCV_SUB16 = 38;
+        
+        public const uint R_RISCV_SUB32 = 39;
+        
+        public const uint R_RISCV_SUB64 = 40;
+        
+        public const uint R_RISCV_GNU_VTINHERIT = 41;
+        
+        public const uint R_RISCV_GNU_VTENTRY = 42;
+        
+        public const uint R_RISCV_ALIGN = 43;
+        
+        public const uint R_RISCV_RVC_BRANCH = 44;
+        
+        public const uint R_RISCV_RVC_JUMP = 45;
+        
+        public const uint R_RISCV_RVC_LUI = 46;
+        
+        public const uint R_RISCV_GPREL_I = 47;
+        
+        public const uint R_RISCV_GPREL_S = 48;
+        
+        public const uint R_RISCV_TPREL_I = 49;
+        
+        public const uint R_RISCV_TPREL_S = 50;
+        
+        public const uint R_RISCV_RELAX = 51;
+        
+        public const uint R_RISCV_SUB6 = 52;
+        
+        public const uint R_RISCV_SET6 = 53;
+        
+        public const uint R_RISCV_SET8 = 54;
+        
+        public const uint R_RISCV_SET16 = 55;
+        
+        public const uint R_RISCV_SET32 = 56;
+        
+        public const uint R_RISCV_32_PCREL = 57;
+        
+        public const uint R_RISCV_IRELATIVE = 58;
+        
+        public const uint R_RISCV_PLT32 = 59;
+        
+        public const uint R_RISCV_SET_ULEB128 = 60;
+        
+        public const uint R_RISCV_SUB_ULEB128 = 61;
+        
+        public const uint R_RISCV_NUM = 62;
+        
+        public const uint SHT_RISCV_ATTRIBUTES = 1879048195;
+        
+        public const uint PT_RISCV_ATTRIBUTES = 1879048195;
+        
+        public const int DT_RISCV_VARIANT_CC = 1879048193;
+        
+        /// <summary>
+        /// No reloc
+        /// </summary>
+        public const uint R_BPF_NONE = 0;
+        
+        public const uint R_BPF_64_64 = 1;
+        
+        public const uint R_BPF_64_32 = 10;
+        
+        public const uint R_METAG_HIADDR16 = 0;
+        
+        public const uint R_METAG_LOADDR16 = 1;
+        
+        /// <summary>
+        /// 32bit absolute address
+        /// </summary>
+        public const uint R_METAG_ADDR32 = 2;
+        
+        /// <summary>
+        /// No reloc
+        /// </summary>
+        public const uint R_METAG_NONE = 3;
+        
+        public const uint R_METAG_RELBRANCH = 4;
+        
+        public const uint R_METAG_GETSETOFF = 5;
+        
+        public const uint R_METAG_REG32OP1 = 6;
+        
+        public const uint R_METAG_REG32OP2 = 7;
+        
+        public const uint R_METAG_REG32OP3 = 8;
+        
+        public const uint R_METAG_REG16OP1 = 9;
+        
+        public const uint R_METAG_REG16OP2 = 10;
+        
+        public const uint R_METAG_REG16OP3 = 11;
+        
+        public const uint R_METAG_REG32OP4 = 12;
+        
+        public const uint R_METAG_HIOG = 13;
+        
+        public const uint R_METAG_LOOG = 14;
+        
+        public const uint R_METAG_REL8 = 15;
+        
+        public const uint R_METAG_REL16 = 16;
+        
+        public const uint R_METAG_GNU_VTINHERIT = 30;
+        
+        public const uint R_METAG_GNU_VTENTRY = 31;
+        
+        public const uint R_METAG_HI16_GOTOFF = 32;
+        
+        public const uint R_METAG_LO16_GOTOFF = 33;
+        
+        public const uint R_METAG_GETSET_GOTOFF = 34;
+        
+        public const uint R_METAG_GETSET_GOT = 35;
+        
+        public const uint R_METAG_HI16_GOTPC = 36;
+        
+        public const uint R_METAG_LO16_GOTPC = 37;
+        
+        public const uint R_METAG_HI16_PLT = 38;
+        
+        public const uint R_METAG_LO16_PLT = 39;
+        
+        public const uint R_METAG_RELBRANCH_PLT = 40;
+        
+        public const uint R_METAG_GOTOFF = 41;
+        
+        public const uint R_METAG_PLT = 42;
+        
+        public const uint R_METAG_COPY = 43;
+        
+        public const uint R_METAG_JMP_SLOT = 44;
+        
+        public const uint R_METAG_RELATIVE = 45;
+        
+        public const uint R_METAG_GLOB_DAT = 46;
+        
+        public const uint R_METAG_TLS_GD = 47;
+        
+        public const uint R_METAG_TLS_LDM = 48;
+        
+        public const uint R_METAG_TLS_LDO_HI16 = 49;
+        
+        public const uint R_METAG_TLS_LDO_LO16 = 50;
+        
+        public const uint R_METAG_TLS_LDO = 51;
+        
+        public const uint R_METAG_TLS_IE = 52;
+        
+        public const uint R_METAG_TLS_IENONPIC = 53;
+        
+        public const uint R_METAG_TLS_IENONPIC_HI16 = 54;
+        
+        public const uint R_METAG_TLS_IENONPIC_LO16 = 55;
+        
+        public const uint R_METAG_TLS_TPOFF = 56;
+        
+        public const uint R_METAG_TLS_DTPMOD = 57;
+        
+        public const uint R_METAG_TLS_DTPOFF = 58;
+        
+        public const uint R_METAG_TLS_LE = 59;
+        
+        public const uint R_METAG_TLS_LE_HI16 = 60;
+        
+        public const uint R_METAG_TLS_LE_LO16 = 61;
+        
+        public const uint R_NDS32_NONE = 0;
+        
+        public const uint R_NDS32_32_RELA = 20;
+        
+        public const uint R_NDS32_COPY = 39;
+        
+        public const uint R_NDS32_GLOB_DAT = 40;
+        
+        public const uint R_NDS32_JMP_SLOT = 41;
+        
+        public const uint R_NDS32_RELATIVE = 42;
+        
+        public const uint R_NDS32_TLS_TPOFF = 102;
+        
+        public const uint R_NDS32_TLS_DESC = 119;
+        
+        public const uint EF_LARCH_ABI_MODIFIER_MASK = 7;
+        
+        public const uint EF_LARCH_ABI_SOFT_FLOAT = 1;
+        
+        public const uint EF_LARCH_ABI_SINGLE_FLOAT = 2;
+        
+        public const uint EF_LARCH_ABI_DOUBLE_FLOAT = 3;
+        
+        public const uint EF_LARCH_OBJABI_V1 = 64;
+        
+        public const uint R_LARCH_NONE = 0;
+        
+        public const uint R_LARCH_32 = 1;
+        
+        public const uint R_LARCH_64 = 2;
+        
+        public const uint R_LARCH_RELATIVE = 3;
+        
+        public const uint R_LARCH_COPY = 4;
+        
+        public const uint R_LARCH_JUMP_SLOT = 5;
+        
+        public const uint R_LARCH_TLS_DTPMOD32 = 6;
+        
+        public const uint R_LARCH_TLS_DTPMOD64 = 7;
+        
+        public const uint R_LARCH_TLS_DTPREL32 = 8;
+        
+        public const uint R_LARCH_TLS_DTPREL64 = 9;
+        
+        public const uint R_LARCH_TLS_TPREL32 = 10;
+        
+        public const uint R_LARCH_TLS_TPREL64 = 11;
+        
+        public const uint R_LARCH_IRELATIVE = 12;
+        
+        public const uint R_LARCH_TLS_DESC32 = 13;
+        
+        public const uint R_LARCH_TLS_DESC64 = 14;
+        
+        public const uint R_LARCH_MARK_LA = 20;
+        
+        public const uint R_LARCH_MARK_PCREL = 21;
+        
+        public const uint R_LARCH_SOP_PUSH_PCREL = 22;
+        
+        public const uint R_LARCH_SOP_PUSH_ABSOLUTE = 23;
+        
+        public const uint R_LARCH_SOP_PUSH_DUP = 24;
+        
+        public const uint R_LARCH_SOP_PUSH_GPREL = 25;
+        
+        public const uint R_LARCH_SOP_PUSH_TLS_TPREL = 26;
+        
+        public const uint R_LARCH_SOP_PUSH_TLS_GOT = 27;
+        
+        public const uint R_LARCH_SOP_PUSH_TLS_GD = 28;
+        
+        public const uint R_LARCH_SOP_PUSH_PLT_PCREL = 29;
+        
+        public const uint R_LARCH_SOP_ASSERT = 30;
+        
+        public const uint R_LARCH_SOP_NOT = 31;
+        
+        public const uint R_LARCH_SOP_SUB = 32;
+        
+        public const uint R_LARCH_SOP_SL = 33;
+        
+        public const uint R_LARCH_SOP_SR = 34;
+        
+        public const uint R_LARCH_SOP_ADD = 35;
+        
+        public const uint R_LARCH_SOP_AND = 36;
+        
+        public const uint R_LARCH_SOP_IF_ELSE = 37;
+        
+        public const uint R_LARCH_SOP_POP_32_S_10_5 = 38;
+        
+        public const uint R_LARCH_SOP_POP_32_U_10_12 = 39;
+        
+        public const uint R_LARCH_SOP_POP_32_S_10_12 = 40;
+        
+        public const uint R_LARCH_SOP_POP_32_S_10_16 = 41;
+        
+        public const uint R_LARCH_SOP_POP_32_S_10_16_S2 = 42;
+        
+        public const uint R_LARCH_SOP_POP_32_S_5_20 = 43;
+        
+        public const uint R_LARCH_SOP_POP_32_S_0_5_10_16_S2 = 44;
+        
+        public const uint R_LARCH_SOP_POP_32_S_0_10_10_16_S2 = 45;
+        
+        public const uint R_LARCH_SOP_POP_32_U = 46;
+        
+        public const uint R_LARCH_ADD8 = 47;
+        
+        public const uint R_LARCH_ADD16 = 48;
+        
+        public const uint R_LARCH_ADD24 = 49;
+        
+        public const uint R_LARCH_ADD32 = 50;
+        
+        public const uint R_LARCH_ADD64 = 51;
+        
+        public const uint R_LARCH_SUB8 = 52;
+        
+        public const uint R_LARCH_SUB16 = 53;
+        
+        public const uint R_LARCH_SUB24 = 54;
+        
+        public const uint R_LARCH_SUB32 = 55;
+        
+        public const uint R_LARCH_SUB64 = 56;
+        
+        public const uint R_LARCH_GNU_VTINHERIT = 57;
+        
+        public const uint R_LARCH_GNU_VTENTRY = 58;
+        
+        public const uint R_LARCH_B16 = 64;
+        
+        public const uint R_LARCH_B21 = 65;
+        
+        public const uint R_LARCH_B26 = 66;
+        
+        public const uint R_LARCH_ABS_HI20 = 67;
+        
+        public const uint R_LARCH_ABS_LO12 = 68;
+        
+        public const uint R_LARCH_ABS64_LO20 = 69;
+        
+        public const uint R_LARCH_ABS64_HI12 = 70;
+        
+        public const uint R_LARCH_PCALA_HI20 = 71;
+        
+        public const uint R_LARCH_PCALA_LO12 = 72;
+        
+        public const uint R_LARCH_PCALA64_LO20 = 73;
+        
+        public const uint R_LARCH_PCALA64_HI12 = 74;
+        
+        public const uint R_LARCH_GOT_PC_HI20 = 75;
+        
+        public const uint R_LARCH_GOT_PC_LO12 = 76;
+        
+        public const uint R_LARCH_GOT64_PC_LO20 = 77;
+        
+        public const uint R_LARCH_GOT64_PC_HI12 = 78;
+        
+        public const uint R_LARCH_GOT_HI20 = 79;
+        
+        public const uint R_LARCH_GOT_LO12 = 80;
+        
+        public const uint R_LARCH_GOT64_LO20 = 81;
+        
+        public const uint R_LARCH_GOT64_HI12 = 82;
+        
+        public const uint R_LARCH_TLS_LE_HI20 = 83;
+        
+        public const uint R_LARCH_TLS_LE_LO12 = 84;
+        
+        public const uint R_LARCH_TLS_LE64_LO20 = 85;
+        
+        public const uint R_LARCH_TLS_LE64_HI12 = 86;
+        
+        public const uint R_LARCH_TLS_IE_PC_HI20 = 87;
+        
+        public const uint R_LARCH_TLS_IE_PC_LO12 = 88;
+        
+        public const uint R_LARCH_TLS_IE64_PC_LO20 = 89;
+        
+        public const uint R_LARCH_TLS_IE64_PC_HI12 = 90;
+        
+        public const uint R_LARCH_TLS_IE_HI20 = 91;
+        
+        public const uint R_LARCH_TLS_IE_LO12 = 92;
+        
+        public const uint R_LARCH_TLS_IE64_LO20 = 93;
+        
+        public const uint R_LARCH_TLS_IE64_HI12 = 94;
+        
+        public const uint R_LARCH_TLS_LD_PC_HI20 = 95;
+        
+        public const uint R_LARCH_TLS_LD_HI20 = 96;
+        
+        public const uint R_LARCH_TLS_GD_PC_HI20 = 97;
+        
+        public const uint R_LARCH_TLS_GD_HI20 = 98;
+        
+        public const uint R_LARCH_32_PCREL = 99;
+        
+        public const uint R_LARCH_RELAX = 100;
+        
+        public const uint R_LARCH_DELETE = 101;
+        
+        public const uint R_LARCH_ALIGN = 102;
+        
+        public const uint R_LARCH_PCREL20_S2 = 103;
+        
+        public const uint R_LARCH_CFA = 104;
+        
+        public const uint R_LARCH_ADD6 = 105;
+        
+        public const uint R_LARCH_SUB6 = 106;
+        
+        public const uint R_LARCH_ADD_ULEB128 = 107;
+        
+        public const uint R_LARCH_SUB_ULEB128 = 108;
+        
+        public const uint R_LARCH_64_PCREL = 109;
+        
+        public const uint R_LARCH_CALL36 = 110;
+        
+        public const uint R_LARCH_TLS_DESC_PC_HI20 = 111;
+        
+        public const uint R_LARCH_TLS_DESC_PC_LO12 = 112;
+        
+        public const uint R_LARCH_TLS_DESC64_PC_LO20 = 113;
+        
+        public const uint R_LARCH_TLS_DESC64_PC_HI12 = 114;
+        
+        public const uint R_LARCH_TLS_DESC_HI20 = 115;
+        
+        public const uint R_LARCH_TLS_DESC_LO12 = 116;
+        
+        public const uint R_LARCH_TLS_DESC64_LO20 = 117;
+        
+        public const uint R_LARCH_TLS_DESC64_HI12 = 118;
+        
+        public const uint R_LARCH_TLS_DESC_LD = 119;
+        
+        public const uint R_LARCH_TLS_DESC_CALL = 120;
+        
+        public const uint R_LARCH_TLS_LE_HI20_R = 121;
+        
+        public const uint R_LARCH_TLS_LE_ADD_R = 122;
+        
+        public const uint R_LARCH_TLS_LE_LO12_R = 123;
+        
+        public const uint R_LARCH_TLS_LD_PCREL20_S2 = 124;
+        
+        public const uint R_LARCH_TLS_GD_PCREL20_S2 = 125;
+        
+        public const uint R_LARCH_TLS_DESC_PCREL20_S2 = 126;
+        
+        public const uint EF_ARC_MACH_MSK = 255;
+        
+        public const uint EF_ARC_OSABI_MSK = 3840;
+        
+        public const uint EF_ARC_ALL_MSK = 4095;
+        
+        /// <summary>
+        /// ARC attributes section.
+        /// </summary>
+        public const uint SHT_ARC_ATTRIBUTES = 1879048193;
+        
+        public const uint R_ARC_NONE = 0;
+        
+        public const uint R_ARC_8 = 1;
+        
+        public const uint R_ARC_16 = 2;
+        
+        public const uint R_ARC_24 = 3;
+        
+        public const uint R_ARC_32 = 4;
+        
+        public const uint R_ARC_B22_PCREL = 6;
+        
+        public const uint R_ARC_H30 = 7;
+        
+        public const uint R_ARC_N8 = 8;
+        
+        public const uint R_ARC_N16 = 9;
+        
+        public const uint R_ARC_N24 = 10;
+        
+        public const uint R_ARC_N32 = 11;
+        
+        public const uint R_ARC_SDA = 12;
+        
+        public const uint R_ARC_SECTOFF = 13;
+        
+        public const uint R_ARC_S21H_PCREL = 14;
+        
+        public const uint R_ARC_S21W_PCREL = 15;
+        
+        public const uint R_ARC_S25H_PCREL = 16;
+        
+        public const uint R_ARC_S25W_PCREL = 17;
+        
+        public const uint R_ARC_SDA32 = 18;
+        
+        public const uint R_ARC_SDA_LDST = 19;
+        
+        public const uint R_ARC_SDA_LDST1 = 20;
+        
+        public const uint R_ARC_SDA_LDST2 = 21;
+        
+        public const uint R_ARC_SDA16_LD = 22;
+        
+        public const uint R_ARC_SDA16_LD1 = 23;
+        
+        public const uint R_ARC_SDA16_LD2 = 24;
+        
+        public const uint R_ARC_S13_PCREL = 25;
+        
+        public const uint R_ARC_W = 26;
+        
+        public const uint R_ARC_32_ME = 27;
+        
+        public const uint R_ARC_N32_ME = 28;
+        
+        public const uint R_ARC_SECTOFF_ME = 29;
+        
+        public const uint R_ARC_SDA32_ME = 30;
+        
+        public const uint R_ARC_W_ME = 31;
+        
+        public const uint R_ARC_H30_ME = 32;
+        
+        public const uint R_ARC_SECTOFF_U8 = 33;
+        
+        public const uint R_ARC_SECTOFF_S9 = 34;
+        
+        public const uint R_AC_SECTOFF_U8 = 35;
+        
+        public const uint R_AC_SECTOFF_U8_1 = 36;
+        
+        public const uint R_AC_SECTOFF_U8_2 = 37;
+        
+        public const uint R_AC_SECTOFF_S9 = 38;
+        
+        public const uint R_AC_SECTOFF_S9_1 = 39;
+        
+        public const uint R_AC_SECTOFF_S9_2 = 40;
+        
+        public const uint R_ARC_SECTOFF_ME_1 = 41;
+        
+        public const uint R_ARC_SECTOFF_ME_2 = 42;
+        
+        public const uint R_ARC_SECTOFF_1 = 43;
+        
+        public const uint R_ARC_SECTOFF_2 = 44;
+        
+        public const uint R_ARC_SDA_12 = 45;
+        
+        public const uint R_ARC_SDA16_ST2 = 48;
+        
+        public const uint R_ARC_32_PCREL = 49;
+        
+        public const uint R_ARC_PC32 = 50;
+        
+        public const uint R_ARC_GOTPC32 = 51;
+        
+        public const uint R_ARC_PLT32 = 52;
+        
+        public const uint R_ARC_COPY = 53;
+        
+        public const uint R_ARC_GLOB_DAT = 54;
+        
+        public const uint R_ARC_JMP_SLOT = 55;
+        
+        public const uint R_ARC_RELATIVE = 56;
+        
+        public const uint R_ARC_GOTOFF = 57;
+        
+        public const uint R_ARC_GOTPC = 58;
+        
+        public const uint R_ARC_GOT32 = 59;
+        
+        public const uint R_ARC_S21W_PCREL_PLT = 60;
+        
+        public const uint R_ARC_S25H_PCREL_PLT = 61;
+        
+        public const uint R_ARC_JLI_SECTOFF = 63;
+        
+        public const uint R_ARC_TLS_DTPMOD = 66;
+        
+        public const uint R_ARC_TLS_DTPOFF = 67;
+        
+        public const uint R_ARC_TLS_TPOFF = 68;
+        
+        public const uint R_ARC_TLS_GD_GOT = 69;
+        
+        public const uint R_ARC_TLS_GD_LD = 70;
+        
+        public const uint R_ARC_TLS_GD_CALL = 71;
+        
+        public const uint R_ARC_TLS_IE_GOT = 72;
+        
+        public const uint R_ARC_TLS_DTPOFF_S9 = 73;
+        
+        public const uint R_ARC_TLS_LE_S9 = 74;
+        
+        public const uint R_ARC_TLS_LE_32 = 75;
+        
+        public const uint R_ARC_S25W_PCREL_PLT = 76;
+        
+        public const uint R_ARC_S21H_PCREL_PLT = 77;
+        
+        public const uint R_ARC_NPS_CMEM16 = 78;
+        
+        public const uint R_OR1K_NONE = 0;
+        
+        public const uint R_OR1K_32 = 1;
+        
+        public const uint R_OR1K_16 = 2;
+        
+        public const uint R_OR1K_8 = 3;
+        
+        public const uint R_OR1K_LO_16_IN_INSN = 4;
+        
+        public const uint R_OR1K_HI_16_IN_INSN = 5;
+        
+        public const uint R_OR1K_INSN_REL_26 = 6;
+        
+        public const uint R_OR1K_GNU_VTENTRY = 7;
+        
+        public const uint R_OR1K_GNU_VTINHERIT = 8;
+        
+        public const uint R_OR1K_32_PCREL = 9;
+        
+        public const uint R_OR1K_16_PCREL = 10;
+        
+        public const uint R_OR1K_8_PCREL = 11;
+        
+        public const uint R_OR1K_GOTPC_HI16 = 12;
+        
+        public const uint R_OR1K_GOTPC_LO16 = 13;
+        
+        public const uint R_OR1K_GOT16 = 14;
+        
+        public const uint R_OR1K_PLT26 = 15;
+        
+        public const uint R_OR1K_GOTOFF_HI16 = 16;
+        
+        public const uint R_OR1K_GOTOFF_LO16 = 17;
+        
+        public const uint R_OR1K_COPY = 18;
+        
+        public const uint R_OR1K_GLOB_DAT = 19;
+        
+        public const uint R_OR1K_JMP_SLOT = 20;
+        
+        public const uint R_OR1K_RELATIVE = 21;
+        
+        public const uint R_OR1K_TLS_GD_HI16 = 22;
+        
+        public const uint R_OR1K_TLS_GD_LO16 = 23;
+        
+        public const uint R_OR1K_TLS_LDM_HI16 = 24;
+        
+        public const uint R_OR1K_TLS_LDM_LO16 = 25;
+        
+        public const uint R_OR1K_TLS_LDO_HI16 = 26;
+        
+        public const uint R_OR1K_TLS_LDO_LO16 = 27;
+        
+        public const uint R_OR1K_TLS_IE_HI16 = 28;
+        
+        public const uint R_OR1K_TLS_IE_LO16 = 29;
+        
+        public const uint R_OR1K_TLS_LE_HI16 = 30;
+        
+        public const uint R_OR1K_TLS_LE_LO16 = 31;
+        
+        public const uint R_OR1K_TLS_TPOFF = 32;
+        
+        public const uint R_OR1K_TLS_DTPOFF = 33;
+        
+        public const uint R_OR1K_TLS_DTPMOD = 34;
     }
     
     public readonly partial struct ElfArchEx
@@ -11466,6 +13803,11 @@ namespace LibObjectFile.Elf
         /// Motorola m88k family
         /// </summary>
         public static readonly ElfArchEx M88K = new ElfArchEx(ElfNative.EM_88K);
+        
+        /// <summary>
+        /// Intel MCU
+        /// </summary>
+        public static readonly ElfArchEx IAMCU = new ElfArchEx(ElfNative.EM_IAMCU);
         
         /// <summary>
         /// Intel 80860
@@ -11521,6 +13863,11 @@ namespace LibObjectFile.Elf
         /// IBM S390
         /// </summary>
         public static readonly ElfArchEx S390 = new ElfArchEx(ElfNative.EM_S390);
+        
+        /// <summary>
+        /// IBM SPU/SPC
+        /// </summary>
+        public static readonly ElfArchEx SPU = new ElfArchEx(ElfNative.EM_SPU);
         
         /// <summary>
         /// NEC V800 series
@@ -11623,7 +13970,7 @@ namespace LibObjectFile.Elf
         public static readonly ElfArchEx PCP = new ElfArchEx(ElfNative.EM_PCP);
         
         /// <summary>
-        /// Sony nCPU embeeded RISC
+        /// Sony nCPU embedded RISC
         /// </summary>
         public static readonly ElfArchEx NCPU = new ElfArchEx(ElfNative.EM_NCPU);
         
@@ -11661,6 +14008,16 @@ namespace LibObjectFile.Elf
         /// Sony DSP Processor
         /// </summary>
         public static readonly ElfArchEx PDSP = new ElfArchEx(ElfNative.EM_PDSP);
+        
+        /// <summary>
+        /// Digital PDP-10
+        /// </summary>
+        public static readonly ElfArchEx PDP10 = new ElfArchEx(ElfNative.EM_PDP10);
+        
+        /// <summary>
+        /// Digital PDP-11
+        /// </summary>
+        public static readonly ElfArchEx PDP11 = new ElfArchEx(ElfNative.EM_PDP11);
         
         /// <summary>
         /// Siemens FX66 microcontroller
@@ -11713,12 +14070,12 @@ namespace LibObjectFile.Elf
         public static readonly ElfArchEx VAX = new ElfArchEx(ElfNative.EM_VAX);
         
         /// <summary>
-        /// Axis Communications 32-bit embedded processor
+        /// Axis Communications 32-bit emb.proc
         /// </summary>
         public static readonly ElfArchEx CRIS = new ElfArchEx(ElfNative.EM_CRIS);
         
         /// <summary>
-        /// Infineon Technologies 32-bit embedded processor
+        /// Infineon Technologies 32-bit emb.proc
         /// </summary>
         public static readonly ElfArchEx JAVELIN = new ElfArchEx(ElfNative.EM_JAVELIN);
         
@@ -11733,7 +14090,7 @@ namespace LibObjectFile.Elf
         public static readonly ElfArchEx ZSP = new ElfArchEx(ElfNative.EM_ZSP);
         
         /// <summary>
-        /// Donald Knuth's educational 64-bit processor
+        /// Donald Knuth's educational 64-bit proc
         /// </summary>
         public static readonly ElfArchEx MMIX = new ElfArchEx(ElfNative.EM_MMIX);
         
@@ -11798,9 +14155,9 @@ namespace LibObjectFile.Elf
         public static readonly ElfArchEx OPENRISC = new ElfArchEx(ElfNative.EM_OPENRISC);
         
         /// <summary>
-        /// ARC Cores Tangent-A5
+        /// ARC International ARCompact
         /// </summary>
-        public static readonly ElfArchEx ARC_A5 = new ElfArchEx(ElfNative.EM_ARC_A5);
+        public static readonly ElfArchEx ARC_COMPACT = new ElfArchEx(ElfNative.EM_ARC_COMPACT);
         
         /// <summary>
         /// Tensilica Xtensa Architecture
@@ -11808,14 +14165,336 @@ namespace LibObjectFile.Elf
         public static readonly ElfArchEx XTENSA = new ElfArchEx(ElfNative.EM_XTENSA);
         
         /// <summary>
+        /// Alphamosaic VideoCore
+        /// </summary>
+        public static readonly ElfArchEx VIDEOCORE = new ElfArchEx(ElfNative.EM_VIDEOCORE);
+        
+        /// <summary>
+        /// Thompson Multimedia General Purpose Proc
+        /// </summary>
+        public static readonly ElfArchEx TMM_GPP = new ElfArchEx(ElfNative.EM_TMM_GPP);
+        
+        /// <summary>
+        /// National Semi. 32000
+        /// </summary>
+        public static readonly ElfArchEx NS32K = new ElfArchEx(ElfNative.EM_NS32K);
+        
+        /// <summary>
+        /// Tenor Network TPC
+        /// </summary>
+        public static readonly ElfArchEx TPC = new ElfArchEx(ElfNative.EM_TPC);
+        
+        /// <summary>
+        /// Trebia SNP 1000
+        /// </summary>
+        public static readonly ElfArchEx SNP1K = new ElfArchEx(ElfNative.EM_SNP1K);
+        
+        /// <summary>
+        /// STMicroelectronics ST200
+        /// </summary>
+        public static readonly ElfArchEx ST200 = new ElfArchEx(ElfNative.EM_ST200);
+        
+        /// <summary>
+        /// Ubicom IP2xxx
+        /// </summary>
+        public static readonly ElfArchEx IP2K = new ElfArchEx(ElfNative.EM_IP2K);
+        
+        /// <summary>
+        /// MAX processor
+        /// </summary>
+        public static readonly ElfArchEx MAX = new ElfArchEx(ElfNative.EM_MAX);
+        
+        /// <summary>
+        /// National Semi. CompactRISC
+        /// </summary>
+        public static readonly ElfArchEx CR = new ElfArchEx(ElfNative.EM_CR);
+        
+        /// <summary>
+        /// Fujitsu F2MC16
+        /// </summary>
+        public static readonly ElfArchEx F2MC16 = new ElfArchEx(ElfNative.EM_F2MC16);
+        
+        /// <summary>
+        /// Texas Instruments msp430
+        /// </summary>
+        public static readonly ElfArchEx MSP430 = new ElfArchEx(ElfNative.EM_MSP430);
+        
+        /// <summary>
+        /// Analog Devices Blackfin DSP
+        /// </summary>
+        public static readonly ElfArchEx BLACKFIN = new ElfArchEx(ElfNative.EM_BLACKFIN);
+        
+        /// <summary>
+        /// Seiko Epson S1C33 family
+        /// </summary>
+        public static readonly ElfArchEx SE_C33 = new ElfArchEx(ElfNative.EM_SE_C33);
+        
+        /// <summary>
+        /// Sharp embedded microprocessor
+        /// </summary>
+        public static readonly ElfArchEx SEP = new ElfArchEx(ElfNative.EM_SEP);
+        
+        /// <summary>
+        /// Arca RISC
+        /// </summary>
+        public static readonly ElfArchEx ARCA = new ElfArchEx(ElfNative.EM_ARCA);
+        
+        /// <summary>
+        /// PKU-Unity 
+        /// &amp;
+        /// MPRC Peking Uni. mc series
+        /// </summary>
+        public static readonly ElfArchEx UNICORE = new ElfArchEx(ElfNative.EM_UNICORE);
+        
+        /// <summary>
+        /// eXcess configurable cpu
+        /// </summary>
+        public static readonly ElfArchEx EXCESS = new ElfArchEx(ElfNative.EM_EXCESS);
+        
+        /// <summary>
+        /// Icera Semi. Deep Execution Processor
+        /// </summary>
+        public static readonly ElfArchEx DXP = new ElfArchEx(ElfNative.EM_DXP);
+        
+        /// <summary>
         /// Altera Nios II
         /// </summary>
         public static readonly ElfArchEx ALTERA_NIOS2 = new ElfArchEx(ElfNative.EM_ALTERA_NIOS2);
         
         /// <summary>
+        /// National Semi. CompactRISC CRX
+        /// </summary>
+        public static readonly ElfArchEx CRX = new ElfArchEx(ElfNative.EM_CRX);
+        
+        /// <summary>
+        /// Motorola XGATE
+        /// </summary>
+        public static readonly ElfArchEx XGATE = new ElfArchEx(ElfNative.EM_XGATE);
+        
+        /// <summary>
+        /// Infineon C16x/XC16x
+        /// </summary>
+        public static readonly ElfArchEx C166 = new ElfArchEx(ElfNative.EM_C166);
+        
+        /// <summary>
+        /// Renesas M16C
+        /// </summary>
+        public static readonly ElfArchEx M16C = new ElfArchEx(ElfNative.EM_M16C);
+        
+        /// <summary>
+        /// Microchip Technology dsPIC30F
+        /// </summary>
+        public static readonly ElfArchEx DSPIC30F = new ElfArchEx(ElfNative.EM_DSPIC30F);
+        
+        /// <summary>
+        /// Freescale Communication Engine RISC
+        /// </summary>
+        public static readonly ElfArchEx CE = new ElfArchEx(ElfNative.EM_CE);
+        
+        /// <summary>
+        /// Renesas M32C
+        /// </summary>
+        public static readonly ElfArchEx M32C = new ElfArchEx(ElfNative.EM_M32C);
+        
+        /// <summary>
+        /// Altium TSK3000
+        /// </summary>
+        public static readonly ElfArchEx TSK3000 = new ElfArchEx(ElfNative.EM_TSK3000);
+        
+        /// <summary>
+        /// Freescale RS08
+        /// </summary>
+        public static readonly ElfArchEx RS08 = new ElfArchEx(ElfNative.EM_RS08);
+        
+        /// <summary>
+        /// Analog Devices SHARC family
+        /// </summary>
+        public static readonly ElfArchEx SHARC = new ElfArchEx(ElfNative.EM_SHARC);
+        
+        /// <summary>
+        /// Cyan Technology eCOG2
+        /// </summary>
+        public static readonly ElfArchEx ECOG2 = new ElfArchEx(ElfNative.EM_ECOG2);
+        
+        /// <summary>
+        /// Sunplus S+core7 RISC
+        /// </summary>
+        public static readonly ElfArchEx SCORE7 = new ElfArchEx(ElfNative.EM_SCORE7);
+        
+        /// <summary>
+        /// New Japan Radio (NJR) 24-bit DSP
+        /// </summary>
+        public static readonly ElfArchEx DSP24 = new ElfArchEx(ElfNative.EM_DSP24);
+        
+        /// <summary>
+        /// Broadcom VideoCore III
+        /// </summary>
+        public static readonly ElfArchEx VIDEOCORE3 = new ElfArchEx(ElfNative.EM_VIDEOCORE3);
+        
+        /// <summary>
+        /// RISC for Lattice FPGA
+        /// </summary>
+        public static readonly ElfArchEx LATTICEMICO32 = new ElfArchEx(ElfNative.EM_LATTICEMICO32);
+        
+        /// <summary>
+        /// Seiko Epson C17
+        /// </summary>
+        public static readonly ElfArchEx SE_C17 = new ElfArchEx(ElfNative.EM_SE_C17);
+        
+        /// <summary>
+        /// Texas Instruments TMS320C6000 DSP
+        /// </summary>
+        public static readonly ElfArchEx TI_C6000 = new ElfArchEx(ElfNative.EM_TI_C6000);
+        
+        /// <summary>
+        /// Texas Instruments TMS320C2000 DSP
+        /// </summary>
+        public static readonly ElfArchEx TI_C2000 = new ElfArchEx(ElfNative.EM_TI_C2000);
+        
+        /// <summary>
+        /// Texas Instruments TMS320C55x DSP
+        /// </summary>
+        public static readonly ElfArchEx TI_C5500 = new ElfArchEx(ElfNative.EM_TI_C5500);
+        
+        /// <summary>
+        /// Texas Instruments App. Specific RISC
+        /// </summary>
+        public static readonly ElfArchEx TI_ARP32 = new ElfArchEx(ElfNative.EM_TI_ARP32);
+        
+        /// <summary>
+        /// Texas Instruments Prog. Realtime Unit
+        /// </summary>
+        public static readonly ElfArchEx TI_PRU = new ElfArchEx(ElfNative.EM_TI_PRU);
+        
+        /// <summary>
+        /// STMicroelectronics 64bit VLIW DSP
+        /// </summary>
+        public static readonly ElfArchEx MMDSP_PLUS = new ElfArchEx(ElfNative.EM_MMDSP_PLUS);
+        
+        /// <summary>
+        /// Cypress M8C
+        /// </summary>
+        public static readonly ElfArchEx CYPRESS_M8C = new ElfArchEx(ElfNative.EM_CYPRESS_M8C);
+        
+        /// <summary>
+        /// Renesas R32C
+        /// </summary>
+        public static readonly ElfArchEx R32C = new ElfArchEx(ElfNative.EM_R32C);
+        
+        /// <summary>
+        /// NXP Semi. TriMedia
+        /// </summary>
+        public static readonly ElfArchEx TRIMEDIA = new ElfArchEx(ElfNative.EM_TRIMEDIA);
+        
+        /// <summary>
+        /// QUALCOMM DSP6
+        /// </summary>
+        public static readonly ElfArchEx QDSP6 = new ElfArchEx(ElfNative.EM_QDSP6);
+        
+        /// <summary>
+        /// Intel 8051 and variants
+        /// </summary>
+        public static readonly ElfArchEx I8051 = new ElfArchEx(ElfNative.EM_8051);
+        
+        /// <summary>
+        /// STMicroelectronics STxP7x
+        /// </summary>
+        public static readonly ElfArchEx STXP7X = new ElfArchEx(ElfNative.EM_STXP7X);
+        
+        /// <summary>
+        /// Andes Tech. compact code emb. RISC
+        /// </summary>
+        public static readonly ElfArchEx NDS32 = new ElfArchEx(ElfNative.EM_NDS32);
+        
+        /// <summary>
+        /// Cyan Technology eCOG1X
+        /// </summary>
+        public static readonly ElfArchEx ECOG1X = new ElfArchEx(ElfNative.EM_ECOG1X);
+        
+        /// <summary>
+        /// Dallas Semi. MAXQ30 mc
+        /// </summary>
+        public static readonly ElfArchEx MAXQ30 = new ElfArchEx(ElfNative.EM_MAXQ30);
+        
+        /// <summary>
+        /// New Japan Radio (NJR) 16-bit DSP
+        /// </summary>
+        public static readonly ElfArchEx XIMO16 = new ElfArchEx(ElfNative.EM_XIMO16);
+        
+        /// <summary>
+        /// M2000 Reconfigurable RISC
+        /// </summary>
+        public static readonly ElfArchEx MANIK = new ElfArchEx(ElfNative.EM_MANIK);
+        
+        /// <summary>
+        /// Cray NV2 vector architecture
+        /// </summary>
+        public static readonly ElfArchEx CRAYNV2 = new ElfArchEx(ElfNative.EM_CRAYNV2);
+        
+        /// <summary>
+        /// Renesas RX
+        /// </summary>
+        public static readonly ElfArchEx RX = new ElfArchEx(ElfNative.EM_RX);
+        
+        /// <summary>
+        /// Imagination Tech. META
+        /// </summary>
+        public static readonly ElfArchEx METAG = new ElfArchEx(ElfNative.EM_METAG);
+        
+        /// <summary>
+        /// MCST Elbrus
+        /// </summary>
+        public static readonly ElfArchEx MCST_ELBRUS = new ElfArchEx(ElfNative.EM_MCST_ELBRUS);
+        
+        /// <summary>
+        /// Cyan Technology eCOG16
+        /// </summary>
+        public static readonly ElfArchEx ECOG16 = new ElfArchEx(ElfNative.EM_ECOG16);
+        
+        /// <summary>
+        /// National Semi. CompactRISC CR16
+        /// </summary>
+        public static readonly ElfArchEx CR16 = new ElfArchEx(ElfNative.EM_CR16);
+        
+        /// <summary>
+        /// Freescale Extended Time Processing Unit
+        /// </summary>
+        public static readonly ElfArchEx ETPU = new ElfArchEx(ElfNative.EM_ETPU);
+        
+        /// <summary>
+        /// Infineon Tech. SLE9X
+        /// </summary>
+        public static readonly ElfArchEx SLE9X = new ElfArchEx(ElfNative.EM_SLE9X);
+        
+        /// <summary>
+        /// Intel L10M
+        /// </summary>
+        public static readonly ElfArchEx L10M = new ElfArchEx(ElfNative.EM_L10M);
+        
+        /// <summary>
+        /// Intel K10M
+        /// </summary>
+        public static readonly ElfArchEx K10M = new ElfArchEx(ElfNative.EM_K10M);
+        
+        /// <summary>
         /// ARM AARCH64
         /// </summary>
         public static readonly ElfArchEx AARCH64 = new ElfArchEx(ElfNative.EM_AARCH64);
+        
+        /// <summary>
+        /// Amtel 32-bit microprocessor
+        /// </summary>
+        public static readonly ElfArchEx AVR32 = new ElfArchEx(ElfNative.EM_AVR32);
+        
+        /// <summary>
+        /// STMicroelectronics STM8
+        /// </summary>
+        public static readonly ElfArchEx STM8 = new ElfArchEx(ElfNative.EM_STM8);
+        
+        /// <summary>
+        /// Tilera TILE64
+        /// </summary>
+        public static readonly ElfArchEx TILE64 = new ElfArchEx(ElfNative.EM_TILE64);
         
         /// <summary>
         /// Tilera TILEPro
@@ -11828,9 +14507,181 @@ namespace LibObjectFile.Elf
         public static readonly ElfArchEx MICROBLAZE = new ElfArchEx(ElfNative.EM_MICROBLAZE);
         
         /// <summary>
+        /// NVIDIA CUDA
+        /// </summary>
+        public static readonly ElfArchEx CUDA = new ElfArchEx(ElfNative.EM_CUDA);
+        
+        /// <summary>
         /// Tilera TILE-Gx
         /// </summary>
         public static readonly ElfArchEx TILEGX = new ElfArchEx(ElfNative.EM_TILEGX);
+        
+        /// <summary>
+        /// CloudShield
+        /// </summary>
+        public static readonly ElfArchEx CLOUDSHIELD = new ElfArchEx(ElfNative.EM_CLOUDSHIELD);
+        
+        /// <summary>
+        /// KIPO-KAIST Core-A 1st gen.
+        /// </summary>
+        public static readonly ElfArchEx COREA_1ST = new ElfArchEx(ElfNative.EM_COREA_1ST);
+        
+        /// <summary>
+        /// KIPO-KAIST Core-A 2nd gen.
+        /// </summary>
+        public static readonly ElfArchEx COREA_2ND = new ElfArchEx(ElfNative.EM_COREA_2ND);
+        
+        /// <summary>
+        /// Synopsys ARCv2 ISA.
+        /// </summary>
+        public static readonly ElfArchEx ARCV2 = new ElfArchEx(ElfNative.EM_ARCV2);
+        
+        /// <summary>
+        /// Open8 RISC
+        /// </summary>
+        public static readonly ElfArchEx OPEN8 = new ElfArchEx(ElfNative.EM_OPEN8);
+        
+        /// <summary>
+        /// Renesas RL78
+        /// </summary>
+        public static readonly ElfArchEx RL78 = new ElfArchEx(ElfNative.EM_RL78);
+        
+        /// <summary>
+        /// Broadcom VideoCore V
+        /// </summary>
+        public static readonly ElfArchEx VIDEOCORE5 = new ElfArchEx(ElfNative.EM_VIDEOCORE5);
+        
+        /// <summary>
+        /// Renesas 78KOR
+        /// </summary>
+        public static readonly ElfArchEx R78KOR = new ElfArchEx(ElfNative.EM_78KOR);
+        
+        /// <summary>
+        /// Freescale 56800EX DSC
+        /// </summary>
+        public static readonly ElfArchEx F56800EX = new ElfArchEx(ElfNative.EM_56800EX);
+        
+        /// <summary>
+        /// Beyond BA1
+        /// </summary>
+        public static readonly ElfArchEx BA1 = new ElfArchEx(ElfNative.EM_BA1);
+        
+        /// <summary>
+        /// Beyond BA2
+        /// </summary>
+        public static readonly ElfArchEx BA2 = new ElfArchEx(ElfNative.EM_BA2);
+        
+        /// <summary>
+        /// XMOS xCORE
+        /// </summary>
+        public static readonly ElfArchEx XCORE = new ElfArchEx(ElfNative.EM_XCORE);
+        
+        /// <summary>
+        /// Microchip 8-bit PIC(r)
+        /// </summary>
+        public static readonly ElfArchEx MCHP_PIC = new ElfArchEx(ElfNative.EM_MCHP_PIC);
+        
+        /// <summary>
+        /// Intel Graphics Technology
+        /// </summary>
+        public static readonly ElfArchEx INTELGT = new ElfArchEx(ElfNative.EM_INTELGT);
+        
+        /// <summary>
+        /// KM211 KM32
+        /// </summary>
+        public static readonly ElfArchEx KM32 = new ElfArchEx(ElfNative.EM_KM32);
+        
+        /// <summary>
+        /// KM211 KMX32
+        /// </summary>
+        public static readonly ElfArchEx KMX32 = new ElfArchEx(ElfNative.EM_KMX32);
+        
+        /// <summary>
+        /// KM211 KMX16
+        /// </summary>
+        public static readonly ElfArchEx EMX16 = new ElfArchEx(ElfNative.EM_EMX16);
+        
+        /// <summary>
+        /// KM211 KMX8
+        /// </summary>
+        public static readonly ElfArchEx EMX8 = new ElfArchEx(ElfNative.EM_EMX8);
+        
+        /// <summary>
+        /// KM211 KVARC
+        /// </summary>
+        public static readonly ElfArchEx KVARC = new ElfArchEx(ElfNative.EM_KVARC);
+        
+        /// <summary>
+        /// Paneve CDP
+        /// </summary>
+        public static readonly ElfArchEx CDP = new ElfArchEx(ElfNative.EM_CDP);
+        
+        /// <summary>
+        /// Cognitive Smart Memory Processor
+        /// </summary>
+        public static readonly ElfArchEx COGE = new ElfArchEx(ElfNative.EM_COGE);
+        
+        /// <summary>
+        /// Bluechip CoolEngine
+        /// </summary>
+        public static readonly ElfArchEx COOL = new ElfArchEx(ElfNative.EM_COOL);
+        
+        /// <summary>
+        /// Nanoradio Optimized RISC
+        /// </summary>
+        public static readonly ElfArchEx NORC = new ElfArchEx(ElfNative.EM_NORC);
+        
+        /// <summary>
+        /// CSR Kalimba
+        /// </summary>
+        public static readonly ElfArchEx CSR_KALIMBA = new ElfArchEx(ElfNative.EM_CSR_KALIMBA);
+        
+        /// <summary>
+        /// Zilog Z80
+        /// </summary>
+        public static readonly ElfArchEx Z80 = new ElfArchEx(ElfNative.EM_Z80);
+        
+        /// <summary>
+        /// Controls and Data Services VISIUMcore
+        /// </summary>
+        public static readonly ElfArchEx VISIUM = new ElfArchEx(ElfNative.EM_VISIUM);
+        
+        /// <summary>
+        /// FTDI Chip FT32
+        /// </summary>
+        public static readonly ElfArchEx FT32 = new ElfArchEx(ElfNative.EM_FT32);
+        
+        /// <summary>
+        /// Moxie processor
+        /// </summary>
+        public static readonly ElfArchEx MOXIE = new ElfArchEx(ElfNative.EM_MOXIE);
+        
+        /// <summary>
+        /// AMD GPU
+        /// </summary>
+        public static readonly ElfArchEx AMDGPU = new ElfArchEx(ElfNative.EM_AMDGPU);
+        
+        /// <summary>
+        /// RISC-V
+        /// </summary>
+        public static readonly ElfArchEx RISCV = new ElfArchEx(ElfNative.EM_RISCV);
+        
+        /// <summary>
+        /// Linux BPF -- in-kernel virtual machine
+        /// </summary>
+        public static readonly ElfArchEx BPF = new ElfArchEx(ElfNative.EM_BPF);
+        
+        /// <summary>
+        /// C-SKY
+        /// </summary>
+        public static readonly ElfArchEx CSKY = new ElfArchEx(ElfNative.EM_CSKY);
+        
+        /// <summary>
+        /// LoongArch
+        /// </summary>
+        public static readonly ElfArchEx LOONGARCH = new ElfArchEx(ElfNative.EM_LOONGARCH);
+        
+        public static readonly ElfArchEx ARC_A5 = new ElfArchEx(ElfNative.EM_ARC_A5);
         
         public static readonly ElfArchEx ALPHA = new ElfArchEx(ElfNative.EM_ALPHA);
         
@@ -11844,6 +14695,7 @@ namespace LibObjectFile.Elf
                 case ElfNative.EM_386: return "EM_386";
                 case ElfNative.EM_68K: return "EM_68K";
                 case ElfNative.EM_88K: return "EM_88K";
+                case ElfNative.EM_IAMCU: return "EM_IAMCU";
                 case ElfNative.EM_860: return "EM_860";
                 case ElfNative.EM_MIPS: return "EM_MIPS";
                 case ElfNative.EM_S370: return "EM_S370";
@@ -11855,6 +14707,7 @@ namespace LibObjectFile.Elf
                 case ElfNative.EM_PPC: return "EM_PPC";
                 case ElfNative.EM_PPC64: return "EM_PPC64";
                 case ElfNative.EM_S390: return "EM_S390";
+                case ElfNative.EM_SPU: return "EM_SPU";
                 case ElfNative.EM_V800: return "EM_V800";
                 case ElfNative.EM_FR20: return "EM_FR20";
                 case ElfNative.EM_RH32: return "EM_RH32";
@@ -11883,6 +14736,8 @@ namespace LibObjectFile.Elf
                 case ElfNative.EM_TINYJ: return "EM_TINYJ";
                 case ElfNative.EM_X86_64: return "EM_X86_64";
                 case ElfNative.EM_PDSP: return "EM_PDSP";
+                case ElfNative.EM_PDP10: return "EM_PDP10";
+                case ElfNative.EM_PDP11: return "EM_PDP11";
                 case ElfNative.EM_FX66: return "EM_FX66";
                 case ElfNative.EM_ST9PLUS: return "EM_ST9PLUS";
                 case ElfNative.EM_ST7: return "EM_ST7";
@@ -11910,13 +14765,111 @@ namespace LibObjectFile.Elf
                 case ElfNative.EM_MN10200: return "EM_MN10200";
                 case ElfNative.EM_PJ: return "EM_PJ";
                 case ElfNative.EM_OPENRISC: return "EM_OPENRISC";
-                case ElfNative.EM_ARC_A5: return "EM_ARC_A5";
+                case ElfNative.EM_ARC_COMPACT: return "EM_ARC_COMPACT";
                 case ElfNative.EM_XTENSA: return "EM_XTENSA";
+                case ElfNative.EM_VIDEOCORE: return "EM_VIDEOCORE";
+                case ElfNative.EM_TMM_GPP: return "EM_TMM_GPP";
+                case ElfNative.EM_NS32K: return "EM_NS32K";
+                case ElfNative.EM_TPC: return "EM_TPC";
+                case ElfNative.EM_SNP1K: return "EM_SNP1K";
+                case ElfNative.EM_ST200: return "EM_ST200";
+                case ElfNative.EM_IP2K: return "EM_IP2K";
+                case ElfNative.EM_MAX: return "EM_MAX";
+                case ElfNative.EM_CR: return "EM_CR";
+                case ElfNative.EM_F2MC16: return "EM_F2MC16";
+                case ElfNative.EM_MSP430: return "EM_MSP430";
+                case ElfNative.EM_BLACKFIN: return "EM_BLACKFIN";
+                case ElfNative.EM_SE_C33: return "EM_SE_C33";
+                case ElfNative.EM_SEP: return "EM_SEP";
+                case ElfNative.EM_ARCA: return "EM_ARCA";
+                case ElfNative.EM_UNICORE: return "EM_UNICORE";
+                case ElfNative.EM_EXCESS: return "EM_EXCESS";
+                case ElfNative.EM_DXP: return "EM_DXP";
                 case ElfNative.EM_ALTERA_NIOS2: return "EM_ALTERA_NIOS2";
+                case ElfNative.EM_CRX: return "EM_CRX";
+                case ElfNative.EM_XGATE: return "EM_XGATE";
+                case ElfNative.EM_C166: return "EM_C166";
+                case ElfNative.EM_M16C: return "EM_M16C";
+                case ElfNative.EM_DSPIC30F: return "EM_DSPIC30F";
+                case ElfNative.EM_CE: return "EM_CE";
+                case ElfNative.EM_M32C: return "EM_M32C";
+                case ElfNative.EM_TSK3000: return "EM_TSK3000";
+                case ElfNative.EM_RS08: return "EM_RS08";
+                case ElfNative.EM_SHARC: return "EM_SHARC";
+                case ElfNative.EM_ECOG2: return "EM_ECOG2";
+                case ElfNative.EM_SCORE7: return "EM_SCORE7";
+                case ElfNative.EM_DSP24: return "EM_DSP24";
+                case ElfNative.EM_VIDEOCORE3: return "EM_VIDEOCORE3";
+                case ElfNative.EM_LATTICEMICO32: return "EM_LATTICEMICO32";
+                case ElfNative.EM_SE_C17: return "EM_SE_C17";
+                case ElfNative.EM_TI_C6000: return "EM_TI_C6000";
+                case ElfNative.EM_TI_C2000: return "EM_TI_C2000";
+                case ElfNative.EM_TI_C5500: return "EM_TI_C5500";
+                case ElfNative.EM_TI_ARP32: return "EM_TI_ARP32";
+                case ElfNative.EM_TI_PRU: return "EM_TI_PRU";
+                case ElfNative.EM_MMDSP_PLUS: return "EM_MMDSP_PLUS";
+                case ElfNative.EM_CYPRESS_M8C: return "EM_CYPRESS_M8C";
+                case ElfNative.EM_R32C: return "EM_R32C";
+                case ElfNative.EM_TRIMEDIA: return "EM_TRIMEDIA";
+                case ElfNative.EM_QDSP6: return "EM_QDSP6";
+                case ElfNative.EM_8051: return "EM_8051";
+                case ElfNative.EM_STXP7X: return "EM_STXP7X";
+                case ElfNative.EM_NDS32: return "EM_NDS32";
+                case ElfNative.EM_ECOG1X: return "EM_ECOG1X";
+                case ElfNative.EM_MAXQ30: return "EM_MAXQ30";
+                case ElfNative.EM_XIMO16: return "EM_XIMO16";
+                case ElfNative.EM_MANIK: return "EM_MANIK";
+                case ElfNative.EM_CRAYNV2: return "EM_CRAYNV2";
+                case ElfNative.EM_RX: return "EM_RX";
+                case ElfNative.EM_METAG: return "EM_METAG";
+                case ElfNative.EM_MCST_ELBRUS: return "EM_MCST_ELBRUS";
+                case ElfNative.EM_ECOG16: return "EM_ECOG16";
+                case ElfNative.EM_CR16: return "EM_CR16";
+                case ElfNative.EM_ETPU: return "EM_ETPU";
+                case ElfNative.EM_SLE9X: return "EM_SLE9X";
+                case ElfNative.EM_L10M: return "EM_L10M";
+                case ElfNative.EM_K10M: return "EM_K10M";
                 case ElfNative.EM_AARCH64: return "EM_AARCH64";
+                case ElfNative.EM_AVR32: return "EM_AVR32";
+                case ElfNative.EM_STM8: return "EM_STM8";
+                case ElfNative.EM_TILE64: return "EM_TILE64";
                 case ElfNative.EM_TILEPRO: return "EM_TILEPRO";
                 case ElfNative.EM_MICROBLAZE: return "EM_MICROBLAZE";
+                case ElfNative.EM_CUDA: return "EM_CUDA";
                 case ElfNative.EM_TILEGX: return "EM_TILEGX";
+                case ElfNative.EM_CLOUDSHIELD: return "EM_CLOUDSHIELD";
+                case ElfNative.EM_COREA_1ST: return "EM_COREA_1ST";
+                case ElfNative.EM_COREA_2ND: return "EM_COREA_2ND";
+                case ElfNative.EM_ARCV2: return "EM_ARCV2";
+                case ElfNative.EM_OPEN8: return "EM_OPEN8";
+                case ElfNative.EM_RL78: return "EM_RL78";
+                case ElfNative.EM_VIDEOCORE5: return "EM_VIDEOCORE5";
+                case ElfNative.EM_78KOR: return "EM_78KOR";
+                case ElfNative.EM_56800EX: return "EM_56800EX";
+                case ElfNative.EM_BA1: return "EM_BA1";
+                case ElfNative.EM_BA2: return "EM_BA2";
+                case ElfNative.EM_XCORE: return "EM_XCORE";
+                case ElfNative.EM_MCHP_PIC: return "EM_MCHP_PIC";
+                case ElfNative.EM_INTELGT: return "EM_INTELGT";
+                case ElfNative.EM_KM32: return "EM_KM32";
+                case ElfNative.EM_KMX32: return "EM_KMX32";
+                case ElfNative.EM_EMX16: return "EM_EMX16";
+                case ElfNative.EM_EMX8: return "EM_EMX8";
+                case ElfNative.EM_KVARC: return "EM_KVARC";
+                case ElfNative.EM_CDP: return "EM_CDP";
+                case ElfNative.EM_COGE: return "EM_COGE";
+                case ElfNative.EM_COOL: return "EM_COOL";
+                case ElfNative.EM_NORC: return "EM_NORC";
+                case ElfNative.EM_CSR_KALIMBA: return "EM_CSR_KALIMBA";
+                case ElfNative.EM_Z80: return "EM_Z80";
+                case ElfNative.EM_VISIUM: return "EM_VISIUM";
+                case ElfNative.EM_FT32: return "EM_FT32";
+                case ElfNative.EM_MOXIE: return "EM_MOXIE";
+                case ElfNative.EM_AMDGPU: return "EM_AMDGPU";
+                case ElfNative.EM_RISCV: return "EM_RISCV";
+                case ElfNative.EM_BPF: return "EM_BPF";
+                case ElfNative.EM_CSKY: return "EM_CSKY";
+                case ElfNative.EM_LOONGARCH: return "EM_LOONGARCH";
                 case ElfNative.EM_ALPHA: return "EM_ALPHA";
                 default: return null;
             }
@@ -11936,6 +14889,8 @@ namespace LibObjectFile.Elf
         M68K = ElfNative.EM_68K,
         
         M88K = ElfNative.EM_88K,
+        
+        IAMCU = ElfNative.EM_IAMCU,
         
         I860 = ElfNative.EM_860,
         
@@ -11958,6 +14913,8 @@ namespace LibObjectFile.Elf
         PPC64 = ElfNative.EM_PPC64,
         
         S390 = ElfNative.EM_S390,
+        
+        SPU = ElfNative.EM_SPU,
         
         V800 = ElfNative.EM_V800,
         
@@ -12015,6 +14972,10 @@ namespace LibObjectFile.Elf
         
         PDSP = ElfNative.EM_PDSP,
         
+        PDP10 = ElfNative.EM_PDP10,
+        
+        PDP11 = ElfNative.EM_PDP11,
+        
         FX66 = ElfNative.EM_FX66,
         
         ST9PLUS = ElfNative.EM_ST9PLUS,
@@ -12069,19 +15030,217 @@ namespace LibObjectFile.Elf
         
         OPENRISC = ElfNative.EM_OPENRISC,
         
-        ARC_A5 = ElfNative.EM_ARC_A5,
+        ARC_COMPACT = ElfNative.EM_ARC_COMPACT,
         
         XTENSA = ElfNative.EM_XTENSA,
         
+        VIDEOCORE = ElfNative.EM_VIDEOCORE,
+        
+        TMM_GPP = ElfNative.EM_TMM_GPP,
+        
+        NS32K = ElfNative.EM_NS32K,
+        
+        TPC = ElfNative.EM_TPC,
+        
+        SNP1K = ElfNative.EM_SNP1K,
+        
+        ST200 = ElfNative.EM_ST200,
+        
+        IP2K = ElfNative.EM_IP2K,
+        
+        MAX = ElfNative.EM_MAX,
+        
+        CR = ElfNative.EM_CR,
+        
+        F2MC16 = ElfNative.EM_F2MC16,
+        
+        MSP430 = ElfNative.EM_MSP430,
+        
+        BLACKFIN = ElfNative.EM_BLACKFIN,
+        
+        SE_C33 = ElfNative.EM_SE_C33,
+        
+        SEP = ElfNative.EM_SEP,
+        
+        ARCA = ElfNative.EM_ARCA,
+        
+        UNICORE = ElfNative.EM_UNICORE,
+        
+        EXCESS = ElfNative.EM_EXCESS,
+        
+        DXP = ElfNative.EM_DXP,
+        
         ALTERA_NIOS2 = ElfNative.EM_ALTERA_NIOS2,
         
+        CRX = ElfNative.EM_CRX,
+        
+        XGATE = ElfNative.EM_XGATE,
+        
+        C166 = ElfNative.EM_C166,
+        
+        M16C = ElfNative.EM_M16C,
+        
+        DSPIC30F = ElfNative.EM_DSPIC30F,
+        
+        CE = ElfNative.EM_CE,
+        
+        M32C = ElfNative.EM_M32C,
+        
+        TSK3000 = ElfNative.EM_TSK3000,
+        
+        RS08 = ElfNative.EM_RS08,
+        
+        SHARC = ElfNative.EM_SHARC,
+        
+        ECOG2 = ElfNative.EM_ECOG2,
+        
+        SCORE7 = ElfNative.EM_SCORE7,
+        
+        DSP24 = ElfNative.EM_DSP24,
+        
+        VIDEOCORE3 = ElfNative.EM_VIDEOCORE3,
+        
+        LATTICEMICO32 = ElfNative.EM_LATTICEMICO32,
+        
+        SE_C17 = ElfNative.EM_SE_C17,
+        
+        TI_C6000 = ElfNative.EM_TI_C6000,
+        
+        TI_C2000 = ElfNative.EM_TI_C2000,
+        
+        TI_C5500 = ElfNative.EM_TI_C5500,
+        
+        TI_ARP32 = ElfNative.EM_TI_ARP32,
+        
+        TI_PRU = ElfNative.EM_TI_PRU,
+        
+        MMDSP_PLUS = ElfNative.EM_MMDSP_PLUS,
+        
+        CYPRESS_M8C = ElfNative.EM_CYPRESS_M8C,
+        
+        R32C = ElfNative.EM_R32C,
+        
+        TRIMEDIA = ElfNative.EM_TRIMEDIA,
+        
+        QDSP6 = ElfNative.EM_QDSP6,
+        
+        I8051 = ElfNative.EM_8051,
+        
+        STXP7X = ElfNative.EM_STXP7X,
+        
+        NDS32 = ElfNative.EM_NDS32,
+        
+        ECOG1X = ElfNative.EM_ECOG1X,
+        
+        MAXQ30 = ElfNative.EM_MAXQ30,
+        
+        XIMO16 = ElfNative.EM_XIMO16,
+        
+        MANIK = ElfNative.EM_MANIK,
+        
+        CRAYNV2 = ElfNative.EM_CRAYNV2,
+        
+        RX = ElfNative.EM_RX,
+        
+        METAG = ElfNative.EM_METAG,
+        
+        MCST_ELBRUS = ElfNative.EM_MCST_ELBRUS,
+        
+        ECOG16 = ElfNative.EM_ECOG16,
+        
+        CR16 = ElfNative.EM_CR16,
+        
+        ETPU = ElfNative.EM_ETPU,
+        
+        SLE9X = ElfNative.EM_SLE9X,
+        
+        L10M = ElfNative.EM_L10M,
+        
+        K10M = ElfNative.EM_K10M,
+        
         AARCH64 = ElfNative.EM_AARCH64,
+        
+        AVR32 = ElfNative.EM_AVR32,
+        
+        STM8 = ElfNative.EM_STM8,
+        
+        TILE64 = ElfNative.EM_TILE64,
         
         TILEPRO = ElfNative.EM_TILEPRO,
         
         MICROBLAZE = ElfNative.EM_MICROBLAZE,
         
+        CUDA = ElfNative.EM_CUDA,
+        
         TILEGX = ElfNative.EM_TILEGX,
+        
+        CLOUDSHIELD = ElfNative.EM_CLOUDSHIELD,
+        
+        COREA_1ST = ElfNative.EM_COREA_1ST,
+        
+        COREA_2ND = ElfNative.EM_COREA_2ND,
+        
+        ARCV2 = ElfNative.EM_ARCV2,
+        
+        OPEN8 = ElfNative.EM_OPEN8,
+        
+        RL78 = ElfNative.EM_RL78,
+        
+        VIDEOCORE5 = ElfNative.EM_VIDEOCORE5,
+        
+        R78KOR = ElfNative.EM_78KOR,
+        
+        F56800EX = ElfNative.EM_56800EX,
+        
+        BA1 = ElfNative.EM_BA1,
+        
+        BA2 = ElfNative.EM_BA2,
+        
+        XCORE = ElfNative.EM_XCORE,
+        
+        MCHP_PIC = ElfNative.EM_MCHP_PIC,
+        
+        INTELGT = ElfNative.EM_INTELGT,
+        
+        KM32 = ElfNative.EM_KM32,
+        
+        KMX32 = ElfNative.EM_KMX32,
+        
+        EMX16 = ElfNative.EM_EMX16,
+        
+        EMX8 = ElfNative.EM_EMX8,
+        
+        KVARC = ElfNative.EM_KVARC,
+        
+        CDP = ElfNative.EM_CDP,
+        
+        COGE = ElfNative.EM_COGE,
+        
+        COOL = ElfNative.EM_COOL,
+        
+        NORC = ElfNative.EM_NORC,
+        
+        CSR_KALIMBA = ElfNative.EM_CSR_KALIMBA,
+        
+        Z80 = ElfNative.EM_Z80,
+        
+        VISIUM = ElfNative.EM_VISIUM,
+        
+        FT32 = ElfNative.EM_FT32,
+        
+        MOXIE = ElfNative.EM_MOXIE,
+        
+        AMDGPU = ElfNative.EM_AMDGPU,
+        
+        RISCV = ElfNative.EM_RISCV,
+        
+        BPF = ElfNative.EM_BPF,
+        
+        CSKY = ElfNative.EM_CSKY,
+        
+        LOONGARCH = ElfNative.EM_LOONGARCH,
+        
+        ARC_A5 = ElfNative.EM_ARC_A5,
         
         ALPHA = ElfNative.EM_ALPHA,
     }
@@ -12094,7 +15253,7 @@ namespace LibObjectFile.Elf
         public static readonly ElfOSABIEx NONE = new ElfOSABIEx(ElfNative.ELFOSABI_NONE);
         
         /// <summary>
-        /// UNIX System V ABI
+        /// Alias.
         /// </summary>
         public static readonly ElfOSABIEx SYSV = new ElfOSABIEx(ElfNative.ELFOSABI_SYSV);
         
@@ -12114,7 +15273,7 @@ namespace LibObjectFile.Elf
         public static readonly ElfOSABIEx GNU = new ElfOSABIEx(ElfNative.ELFOSABI_GNU);
         
         /// <summary>
-        /// Object uses GNU ELF extensions.
+        /// Compatibility alias.
         /// </summary>
         public static readonly ElfOSABIEx LINUX = new ElfOSABIEx(ElfNative.ELFOSABI_LINUX);
         
@@ -12291,27 +15450,33 @@ namespace LibObjectFile.Elf
         public static readonly ElfRelocationType R_386_TLS_TPOFF = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_TPOFF);
         
         /// <summary>
-        /// Address of GOT entry for static TLS block offset
+        /// Address of GOT entry for static TLS
+        /// block offset
         /// </summary>
         public static readonly ElfRelocationType R_386_TLS_IE = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_IE);
         
         /// <summary>
-        /// GOT entry for static TLS block offset
+        /// GOT entry for static TLS block
+        /// offset
         /// </summary>
         public static readonly ElfRelocationType R_386_TLS_GOTIE = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_GOTIE);
         
         /// <summary>
-        /// Offset relative to static TLS block
+        /// Offset relative to static TLS
+        /// block
         /// </summary>
         public static readonly ElfRelocationType R_386_TLS_LE = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_LE);
         
         /// <summary>
-        /// Direct 32 bit for GNU version of general dynamic thread local data
+        /// Direct 32 bit for GNU version of
+        /// general dynamic thread local data
         /// </summary>
         public static readonly ElfRelocationType R_386_TLS_GD = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_GD);
         
         /// <summary>
-        /// Direct 32 bit for GNU version of local dynamic thread local data in LE code
+        /// Direct 32 bit for GNU version of
+        /// local dynamic thread local data
+        /// in LE code
         /// </summary>
         public static readonly ElfRelocationType R_386_TLS_LDM = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_TLS_LDM);
         
@@ -12428,6 +15593,12 @@ namespace LibObjectFile.Elf
         /// Adjust indirectly by program base
         /// </summary>
         public static readonly ElfRelocationType R_386_IRELATIVE = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_IRELATIVE);
+        
+        /// <summary>
+        /// Load from 32 bit GOT entry,
+        /// relaxable.
+        /// </summary>
+        public static readonly ElfRelocationType R_386_GOT32X = new ElfRelocationType(ElfArch.I386, ElfNative.R_386_GOT32X);
         
         /// <summary>
         /// No relocation.
@@ -13100,7 +16271,8 @@ namespace LibObjectFile.Elf
         public static readonly ElfRelocationType R_ARM_NONE = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_NONE);
         
         /// <summary>
-        /// Deprecated PC relative 26 bit branch.
+        /// Deprecated PC relative 26
+        /// bit branch.
         /// </summary>
         public static readonly ElfRelocationType R_ARM_PC24 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_PC24);
         
@@ -13148,7 +16320,8 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// PC relative 
         /// &amp;
-        /// 0x3FC (Thumb16 LDR, ADD, ADR).
+        /// 0x3FC
+        /// (Thumb16 LDR, ADD, ADR).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_THM_PC8 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_PC8);
         
@@ -13240,7 +16413,8 @@ namespace LibObjectFile.Elf
         public static readonly ElfRelocationType R_ARM_CALL = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_CALL);
         
         /// <summary>
-        /// PC relative 24 bit (B, BL
+        /// PC relative 24 bit
+        /// (B, BL
         /// &lt;cond
         /// &gt;).
         /// </summary>
@@ -13328,22 +16502,26 @@ namespace LibObjectFile.Elf
         public static readonly ElfRelocationType R_ARM_THM_MOVW_ABS_NC = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_MOVW_ABS_NC);
         
         /// <summary>
-        /// Direct high 16 bit (Thumb32 MOVT).
+        /// Direct high 16 bit
+        /// (Thumb32 MOVT).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_THM_MOVT_ABS = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_MOVT_ABS);
         
         /// <summary>
-        /// PC relative 16 bit (Thumb32 MOVW).
+        /// PC relative 16 bit
+        /// (Thumb32 MOVW).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_THM_MOVW_PREL_NC = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_MOVW_PREL_NC);
         
         /// <summary>
-        /// PC relative high 16 bit (Thumb32 MOVT).
+        /// PC relative high 16 bit
+        /// (Thumb32 MOVT).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_THM_MOVT_PREL = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_MOVT_PREL);
         
         /// <summary>
-        /// PC relative 20 bit (Thumb32 B
+        /// PC relative 20 bit
+        /// (Thumb32 B
         /// &lt;cond
         /// &gt;.W).
         /// </summary>
@@ -13352,17 +16530,20 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// PC relative X 
         /// &amp;
-        /// 0x7E (Thumb16 CBZ, CBNZ).
+        /// 0x7E
+        /// (Thumb16 CBZ, CBNZ).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_THM_JUMP6 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_JUMP6);
         
         /// <summary>
-        /// PC relative 12 bit (Thumb32 ADR.W).
+        /// PC relative 12 bit
+        /// (Thumb32 ADR.W).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_THM_ALU_PREL_11_0 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_ALU_PREL_11_0);
         
         /// <summary>
-        /// PC relative 12 bit (Thumb32 LDR{D,SB,H,SH}).
+        /// PC relative 12 bit
+        /// (Thumb32 LDR{D,SB,H,SH}).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_THM_PC12 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_PC12);
         
@@ -13412,17 +16593,20 @@ namespace LibObjectFile.Elf
         public static readonly ElfRelocationType R_ARM_LDR_PC_G2 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDR_PC_G2);
         
         /// <summary>
-        /// PC relative (STR{D,H}, LDR{D,SB,H,SH}).
+        /// PC relative (STR{D,H},
+        /// LDR{D,SB,H,SH}).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_LDRS_PC_G0 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDRS_PC_G0);
         
         /// <summary>
-        /// PC relative (STR{D,H}, LDR{D,SB,H,SH}).
+        /// PC relative (STR{D,H},
+        /// LDR{D,SB,H,SH}).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_LDRS_PC_G1 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDRS_PC_G1);
         
         /// <summary>
-        /// PC relative (STR{D,H}, LDR{D,SB,H,SH}).
+        /// PC relative (STR{D,H},
+        /// LDR{D,SB,H,SH}).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_LDRS_PC_G2 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDRS_PC_G2);
         
@@ -13467,32 +16651,38 @@ namespace LibObjectFile.Elf
         public static readonly ElfRelocationType R_ARM_ALU_SB_G2 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_ALU_SB_G2);
         
         /// <summary>
-        /// Program base relative (LDR, STR, LDRB, STRB).
+        /// Program base relative (LDR,
+        /// STR, LDRB, STRB).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_LDR_SB_G0 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDR_SB_G0);
         
         /// <summary>
-        /// Program base relative (LDR, STR, LDRB, STRB).
+        /// Program base relative
+        /// (LDR, STR, LDRB, STRB).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_LDR_SB_G1 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDR_SB_G1);
         
         /// <summary>
-        /// Program base relative (LDR, STR, LDRB, STRB).
+        /// Program base relative
+        /// (LDR, STR, LDRB, STRB).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_LDR_SB_G2 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDR_SB_G2);
         
         /// <summary>
-        /// Program base relative (LDR, STR, LDRB, STRB).
+        /// Program base relative
+        /// (LDR, STR, LDRB, STRB).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_LDRS_SB_G0 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDRS_SB_G0);
         
         /// <summary>
-        /// Program base relative (LDR, STR, LDRB, STRB).
+        /// Program base relative
+        /// (LDR, STR, LDRB, STRB).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_LDRS_SB_G1 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDRS_SB_G1);
         
         /// <summary>
-        /// Program base relative (LDR, STR, LDRB, STRB).
+        /// Program base relative
+        /// (LDR, STR, LDRB, STRB).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_LDRS_SB_G2 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDRS_SB_G2);
         
@@ -13512,32 +16702,38 @@ namespace LibObjectFile.Elf
         public static readonly ElfRelocationType R_ARM_LDC_SB_G2 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_LDC_SB_G2);
         
         /// <summary>
-        /// Program base relative 16 bit (MOVW).
+        /// Program base relative 16
+        /// bit (MOVW).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_MOVW_BREL_NC = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_MOVW_BREL_NC);
         
         /// <summary>
-        /// Program base relative high 16 bit (MOVT).
+        /// Program base relative high
+        /// 16 bit (MOVT).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_MOVT_BREL = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_MOVT_BREL);
         
         /// <summary>
-        /// Program base relative 16 bit (MOVW).
+        /// Program base relative 16
+        /// bit (MOVW).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_MOVW_BREL = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_MOVW_BREL);
         
         /// <summary>
-        /// Program base relative 16 bit (Thumb32 MOVW).
+        /// Program base relative 16
+        /// bit (Thumb32 MOVW).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_THM_MOVW_BREL_NC = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_MOVW_BREL_NC);
         
         /// <summary>
-        /// Program base relative high 16 bit (Thumb32 MOVT).
+        /// Program base relative high
+        /// 16 bit (Thumb32 MOVT).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_THM_MOVT_BREL = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_MOVT_BREL);
         
         /// <summary>
-        /// Program base relative 16 bit (Thumb32 MOVW).
+        /// Program base relative 16
+        /// bit (Thumb32 MOVW).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_THM_MOVW_BREL = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_MOVW_BREL);
         
@@ -13565,12 +16761,14 @@ namespace LibObjectFile.Elf
         public static readonly ElfRelocationType R_ARM_GOT_PREL = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_GOT_PREL);
         
         /// <summary>
-        /// GOT entry relative to GOT origin (LDR).
+        /// GOT entry relative to GOT
+        /// origin (LDR).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_GOT_BREL12 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_GOT_BREL12);
         
         /// <summary>
-        /// 12 bit, GOT entry relative to GOT origin (LDR, STR).
+        /// 12 bit, GOT entry relative
+        /// to GOT origin (LDR, STR).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_GOTOFF12 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_GOTOFF12);
         
@@ -13590,49 +16788,58 @@ namespace LibObjectFile.Elf
         /// <summary>
         /// PC relative 
         /// &amp;
-        /// 0x1FE (Thumb16 B/B
+        /// 0x1FE
+        /// (Thumb16 B/B
         /// &lt;cond
         /// &gt;).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_THM_PC9 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_PC9);
         
         /// <summary>
-        /// PC-rel 32 bit for global dynamic thread local data
+        /// PC-rel 32 bit for global dynamic
+        /// thread local data
         /// </summary>
         public static readonly ElfRelocationType R_ARM_TLS_GD32 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_TLS_GD32);
         
         /// <summary>
-        /// PC-rel 32 bit for local dynamic thread local data
+        /// PC-rel 32 bit for local dynamic
+        /// thread local data
         /// </summary>
         public static readonly ElfRelocationType R_ARM_TLS_LDM32 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_TLS_LDM32);
         
         /// <summary>
-        /// 32 bit offset relative to TLS block
+        /// 32 bit offset relative to TLS
+        /// block
         /// </summary>
         public static readonly ElfRelocationType R_ARM_TLS_LDO32 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_TLS_LDO32);
         
         /// <summary>
-        /// PC-rel 32 bit for GOT entry of static TLS block offset
+        /// PC-rel 32 bit for GOT entry of
+        /// static TLS block offset
         /// </summary>
         public static readonly ElfRelocationType R_ARM_TLS_IE32 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_TLS_IE32);
         
         /// <summary>
-        /// 32 bit offset relative to static TLS block
+        /// 32 bit offset relative to static
+        /// TLS block
         /// </summary>
         public static readonly ElfRelocationType R_ARM_TLS_LE32 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_TLS_LE32);
         
         /// <summary>
-        /// 12 bit relative to TLS block (LDR, STR).
+        /// 12 bit relative to TLS
+        /// block (LDR, STR).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_TLS_LDO12 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_TLS_LDO12);
         
         /// <summary>
-        /// 12 bit relative to static TLS block (LDR, STR).
+        /// 12 bit relative to static
+        /// TLS block (LDR, STR).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_TLS_LE12 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_TLS_LE12);
         
         /// <summary>
-        /// 12 bit GOT entry relative to GOT origin (LDR).
+        /// 12 bit GOT entry relative
+        /// to GOT origin (LDR).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_TLS_IE12GP = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_TLS_IE12GP);
         
@@ -13648,7 +16855,8 @@ namespace LibObjectFile.Elf
         public static readonly ElfRelocationType R_ARM_THM_TLS_DESCSEQ32 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_TLS_DESCSEQ32);
         
         /// <summary>
-        /// GOT entry relative to GOT origin, 12 bit (Thumb32 LDR).
+        /// GOT entry relative to GOT
+        /// origin, 12 bit (Thumb32 LDR).
         /// </summary>
         public static readonly ElfRelocationType R_ARM_THM_GOT_BREL12 = new ElfRelocationType(ElfArch.ARM, ElfNative.R_ARM_THM_GOT_BREL12);
         
@@ -13714,7 +16922,8 @@ namespace LibObjectFile.Elf
         public static readonly ElfRelocationType R_X86_64_RELATIVE = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_RELATIVE);
         
         /// <summary>
-        /// 32 bit signed PC relative offset to GOT
+        /// 32 bit signed PC relative
+        /// offset to GOT
         /// </summary>
         public static readonly ElfRelocationType R_X86_64_GOTPCREL = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_GOTPCREL);
         
@@ -13764,12 +16973,14 @@ namespace LibObjectFile.Elf
         public static readonly ElfRelocationType R_X86_64_TPOFF64 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_TPOFF64);
         
         /// <summary>
-        /// 32 bit signed PC relative offset to two GOT entries for GD symbol
+        /// 32 bit signed PC relative offset
+        /// to two GOT entries for GD symbol
         /// </summary>
         public static readonly ElfRelocationType R_X86_64_TLSGD = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_TLSGD);
         
         /// <summary>
-        /// 32 bit signed PC relative offset to two GOT entries for LD symbol
+        /// 32 bit signed PC relative offset
+        /// to two GOT entries for LD symbol
         /// </summary>
         public static readonly ElfRelocationType R_X86_64_TLSLD = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_TLSLD);
         
@@ -13779,7 +16990,8 @@ namespace LibObjectFile.Elf
         public static readonly ElfRelocationType R_X86_64_DTPOFF32 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_DTPOFF32);
         
         /// <summary>
-        /// 32 bit signed PC relative offset to GOT entry for IE symbol
+        /// 32 bit signed PC relative offset
+        /// to GOT entry for IE symbol
         /// </summary>
         public static readonly ElfRelocationType R_X86_64_GOTTPOFF = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_GOTTPOFF);
         
@@ -13799,7 +17011,8 @@ namespace LibObjectFile.Elf
         public static readonly ElfRelocationType R_X86_64_GOTOFF64 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_GOTOFF64);
         
         /// <summary>
-        /// 32 bit signed pc relative offset to GOT
+        /// 32 bit signed pc relative
+        /// offset to GOT
         /// </summary>
         public static readonly ElfRelocationType R_X86_64_GOTPC32 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_GOTPC32);
         
@@ -13809,7 +17022,8 @@ namespace LibObjectFile.Elf
         public static readonly ElfRelocationType R_X86_64_GOT64 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_GOT64);
         
         /// <summary>
-        /// 64-bit PC relative offset to GOT entry
+        /// 64-bit PC relative offset
+        /// to GOT entry
         /// </summary>
         public static readonly ElfRelocationType R_X86_64_GOTPCREL64 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_GOTPCREL64);
         
@@ -13824,7 +17038,8 @@ namespace LibObjectFile.Elf
         public static readonly ElfRelocationType R_X86_64_GOTPLT64 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_GOTPLT64);
         
         /// <summary>
-        /// 64-bit GOT relative offset to PLT entry
+        /// 64-bit GOT relative offset
+        /// to PLT entry
         /// </summary>
         public static readonly ElfRelocationType R_X86_64_PLTOFF64 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_PLTOFF64);
         
@@ -13844,7 +17059,8 @@ namespace LibObjectFile.Elf
         public static readonly ElfRelocationType R_X86_64_GOTPC32_TLSDESC = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_GOTPC32_TLSDESC);
         
         /// <summary>
-        /// Marker for call through TLS descriptor.
+        /// Marker for call through TLS
+        /// descriptor.
         /// </summary>
         public static readonly ElfRelocationType R_X86_64_TLSDESC_CALL = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_TLSDESC_CALL);
         
@@ -13862,6 +17078,20 @@ namespace LibObjectFile.Elf
         /// 64-bit adjust by program base
         /// </summary>
         public static readonly ElfRelocationType R_X86_64_RELATIVE64 = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_RELATIVE64);
+        
+        /// <summary>
+        /// Load from 32 bit signed pc relative
+        /// offset to GOT entry without REX
+        /// prefix, relaxable.
+        /// </summary>
+        public static readonly ElfRelocationType R_X86_64_GOTPCRELX = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_GOTPCRELX);
+        
+        /// <summary>
+        /// Load from 32 bit signed pc relative
+        /// offset to GOT entry with REX prefix,
+        /// relaxable.
+        /// </summary>
+        public static readonly ElfRelocationType R_X86_64_REX_GOTPCRELX = new ElfRelocationType(ElfArch.X86_64, ElfNative.R_X86_64_REX_GOTPCRELX);
         
         private string? ToStringInternal()
         {
@@ -13908,6 +17138,7 @@ namespace LibObjectFile.Elf
                 case ((ulong)ElfNative.R_386_TLS_DESC_CALL << 16) | ElfNative.EM_386 : return "R_386_TLS_DESC_CALL";
                 case ((ulong)ElfNative.R_386_TLS_DESC << 16) | ElfNative.EM_386 : return "R_386_TLS_DESC";
                 case ((ulong)ElfNative.R_386_IRELATIVE << 16) | ElfNative.EM_386 : return "R_386_IRELATIVE";
+                case ((ulong)ElfNative.R_386_GOT32X << 16) | ElfNative.EM_386 : return "R_386_GOT32X";
                 case ((ulong)ElfNative.R_AARCH64_NONE << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_NONE";
                 case ((ulong)ElfNative.R_AARCH64_P32_ABS32 << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_P32_ABS32";
                 case ((ulong)ElfNative.R_AARCH64_P32_COPY << 16) | ElfNative.EM_AARCH64 : return "R_AARCH64_P32_COPY";
@@ -14204,6 +17435,8 @@ namespace LibObjectFile.Elf
                 case ((ulong)ElfNative.R_X86_64_TLSDESC << 16) | ElfNative.EM_X86_64 : return "R_X86_64_TLSDESC";
                 case ((ulong)ElfNative.R_X86_64_IRELATIVE << 16) | ElfNative.EM_X86_64 : return "R_X86_64_IRELATIVE";
                 case ((ulong)ElfNative.R_X86_64_RELATIVE64 << 16) | ElfNative.EM_X86_64 : return "R_X86_64_RELATIVE64";
+                case ((ulong)ElfNative.R_X86_64_GOTPCRELX << 16) | ElfNative.EM_X86_64 : return "R_X86_64_GOTPCRELX";
+                case ((ulong)ElfNative.R_X86_64_REX_GOTPCRELX << 16) | ElfNative.EM_X86_64 : return "R_X86_64_REX_GOTPCRELX";
                 default: return null;
             }
         }
@@ -14215,6 +17448,12 @@ namespace LibObjectFile.Elf
         /// Contains copy of prstatus struct
         /// </summary>
         public static readonly ElfNoteTypeEx PRSTATUS = new ElfNoteTypeEx(ElfNative.NT_PRSTATUS);
+        
+        /// <summary>
+        /// Contains copy of fpregset
+        /// struct.
+        /// </summary>
+        public static readonly ElfNoteTypeEx PRFPREG = new ElfNoteTypeEx(ElfNative.NT_PRFPREG);
         
         /// <summary>
         /// Contains copy of fpregset struct
@@ -14292,12 +17531,14 @@ namespace LibObjectFile.Elf
         public static readonly ElfNoteTypeEx PRFPXREG = new ElfNoteTypeEx(ElfNative.NT_PRFPXREG);
         
         /// <summary>
-        /// Contains copy of siginfo_t, size might increase
+        /// Contains copy of siginfo_t,
+        /// size might increase
         /// </summary>
         public static readonly ElfNoteTypeEx SIGINFO = new ElfNoteTypeEx(ElfNative.NT_SIGINFO);
         
         /// <summary>
-        /// Contains information about mapped files
+        /// Contains information about mapped
+        /// files
         /// </summary>
         public static readonly ElfNoteTypeEx FILE = new ElfNoteTypeEx(ElfNative.NT_FILE);
         
@@ -14322,6 +17563,90 @@ namespace LibObjectFile.Elf
         public static readonly ElfNoteTypeEx PPC_VSX = new ElfNoteTypeEx(ElfNative.NT_PPC_VSX);
         
         /// <summary>
+        /// Target Address Register
+        /// </summary>
+        public static readonly ElfNoteTypeEx PPC_TAR = new ElfNoteTypeEx(ElfNative.NT_PPC_TAR);
+        
+        /// <summary>
+        /// Program Priority Register
+        /// </summary>
+        public static readonly ElfNoteTypeEx PPC_PPR = new ElfNoteTypeEx(ElfNative.NT_PPC_PPR);
+        
+        /// <summary>
+        /// Data Stream Control Register
+        /// </summary>
+        public static readonly ElfNoteTypeEx PPC_DSCR = new ElfNoteTypeEx(ElfNative.NT_PPC_DSCR);
+        
+        /// <summary>
+        /// Event Based Branch Registers
+        /// </summary>
+        public static readonly ElfNoteTypeEx PPC_EBB = new ElfNoteTypeEx(ElfNative.NT_PPC_EBB);
+        
+        /// <summary>
+        /// Performance Monitor Registers
+        /// </summary>
+        public static readonly ElfNoteTypeEx PPC_PMU = new ElfNoteTypeEx(ElfNative.NT_PPC_PMU);
+        
+        /// <summary>
+        /// TM checkpointed GPR Registers
+        /// </summary>
+        public static readonly ElfNoteTypeEx PPC_TM_CGPR = new ElfNoteTypeEx(ElfNative.NT_PPC_TM_CGPR);
+        
+        /// <summary>
+        /// TM checkpointed FPR Registers
+        /// </summary>
+        public static readonly ElfNoteTypeEx PPC_TM_CFPR = new ElfNoteTypeEx(ElfNative.NT_PPC_TM_CFPR);
+        
+        /// <summary>
+        /// TM checkpointed VMX Registers
+        /// </summary>
+        public static readonly ElfNoteTypeEx PPC_TM_CVMX = new ElfNoteTypeEx(ElfNative.NT_PPC_TM_CVMX);
+        
+        /// <summary>
+        /// TM checkpointed VSX Registers
+        /// </summary>
+        public static readonly ElfNoteTypeEx PPC_TM_CVSX = new ElfNoteTypeEx(ElfNative.NT_PPC_TM_CVSX);
+        
+        /// <summary>
+        /// TM Special Purpose Registers
+        /// </summary>
+        public static readonly ElfNoteTypeEx PPC_TM_SPR = new ElfNoteTypeEx(ElfNative.NT_PPC_TM_SPR);
+        
+        /// <summary>
+        /// TM checkpointed Target Address
+        /// Register
+        /// </summary>
+        public static readonly ElfNoteTypeEx PPC_TM_CTAR = new ElfNoteTypeEx(ElfNative.NT_PPC_TM_CTAR);
+        
+        /// <summary>
+        /// TM checkpointed Program Priority
+        /// Register
+        /// </summary>
+        public static readonly ElfNoteTypeEx PPC_TM_CPPR = new ElfNoteTypeEx(ElfNative.NT_PPC_TM_CPPR);
+        
+        /// <summary>
+        /// TM checkpointed Data Stream Control
+        /// Register
+        /// </summary>
+        public static readonly ElfNoteTypeEx PPC_TM_CDSCR = new ElfNoteTypeEx(ElfNative.NT_PPC_TM_CDSCR);
+        
+        /// <summary>
+        /// Memory Protection Keys
+        /// registers.
+        /// </summary>
+        public static readonly ElfNoteTypeEx PPC_PKEY = new ElfNoteTypeEx(ElfNative.NT_PPC_PKEY);
+        
+        /// <summary>
+        /// PowerPC DEXCR registers.
+        /// </summary>
+        public static readonly ElfNoteTypeEx PPC_DEXCR = new ElfNoteTypeEx(ElfNative.NT_PPC_DEXCR);
+        
+        /// <summary>
+        /// PowerPC HASHKEYR register.
+        /// </summary>
+        public static readonly ElfNoteTypeEx PPC_HASHKEYR = new ElfNoteTypeEx(ElfNative.NT_PPC_HASHKEYR);
+        
+        /// <summary>
         /// i386 TLS slots (struct user_desc)
         /// </summary>
         public static readonly ElfNoteTypeEx I386_TLS = new ElfNoteTypeEx(ElfNative.NT_386_TLS);
@@ -14335,6 +17660,11 @@ namespace LibObjectFile.Elf
         /// x86 extended state using xsave
         /// </summary>
         public static readonly ElfNoteTypeEx X86_XSTATE = new ElfNoteTypeEx(ElfNative.NT_X86_XSTATE);
+        
+        /// <summary>
+        /// x86 SHSTK state
+        /// </summary>
+        public static readonly ElfNoteTypeEx X86_SHSTK = new ElfNoteTypeEx(ElfNative.NT_X86_SHSTK);
         
         /// <summary>
         /// s390 upper register halves
@@ -14382,6 +17712,38 @@ namespace LibObjectFile.Elf
         public static readonly ElfNoteTypeEx S390_TDB = new ElfNoteTypeEx(ElfNative.NT_S390_TDB);
         
         /// <summary>
+        /// s390 vector registers 0-15
+        /// upper half.
+        /// </summary>
+        public static readonly ElfNoteTypeEx S390_VXRS_LOW = new ElfNoteTypeEx(ElfNative.NT_S390_VXRS_LOW);
+        
+        /// <summary>
+        /// s390 vector registers 16-31.
+        /// </summary>
+        public static readonly ElfNoteTypeEx S390_VXRS_HIGH = new ElfNoteTypeEx(ElfNative.NT_S390_VXRS_HIGH);
+        
+        /// <summary>
+        /// s390 guarded storage registers.
+        /// </summary>
+        public static readonly ElfNoteTypeEx S390_GS_CB = new ElfNoteTypeEx(ElfNative.NT_S390_GS_CB);
+        
+        /// <summary>
+        /// s390 guarded storage
+        /// broadcast control block.
+        /// </summary>
+        public static readonly ElfNoteTypeEx S390_GS_BC = new ElfNoteTypeEx(ElfNative.NT_S390_GS_BC);
+        
+        /// <summary>
+        /// s390 runtime instrumentation.
+        /// </summary>
+        public static readonly ElfNoteTypeEx S390_RI_CB = new ElfNoteTypeEx(ElfNative.NT_S390_RI_CB);
+        
+        /// <summary>
+        /// s390 protvirt cpu dump data.
+        /// </summary>
+        public static readonly ElfNoteTypeEx S390_PV_CPU_DATA = new ElfNoteTypeEx(ElfNative.NT_S390_PV_CPU_DATA);
+        
+        /// <summary>
         /// ARM VFP/NEON registers
         /// </summary>
         public static readonly ElfNoteTypeEx ARM_VFP = new ElfNoteTypeEx(ElfNative.NT_ARM_VFP);
@@ -14402,6 +17764,136 @@ namespace LibObjectFile.Elf
         public static readonly ElfNoteTypeEx ARM_HW_WATCH = new ElfNoteTypeEx(ElfNative.NT_ARM_HW_WATCH);
         
         /// <summary>
+        /// ARM system call number
+        /// </summary>
+        public static readonly ElfNoteTypeEx ARM_SYSTEM_CALL = new ElfNoteTypeEx(ElfNative.NT_ARM_SYSTEM_CALL);
+        
+        /// <summary>
+        /// ARM Scalable Vector Extension
+        /// registers
+        /// </summary>
+        public static readonly ElfNoteTypeEx ARM_SVE = new ElfNoteTypeEx(ElfNative.NT_ARM_SVE);
+        
+        /// <summary>
+        /// ARM pointer authentication
+        /// code masks.
+        /// </summary>
+        public static readonly ElfNoteTypeEx ARM_PAC_MASK = new ElfNoteTypeEx(ElfNative.NT_ARM_PAC_MASK);
+        
+        /// <summary>
+        /// ARM pointer authentication
+        /// address keys.
+        /// </summary>
+        public static readonly ElfNoteTypeEx ARM_PACA_KEYS = new ElfNoteTypeEx(ElfNative.NT_ARM_PACA_KEYS);
+        
+        /// <summary>
+        /// ARM pointer authentication
+        /// generic key.
+        /// </summary>
+        public static readonly ElfNoteTypeEx ARM_PACG_KEYS = new ElfNoteTypeEx(ElfNative.NT_ARM_PACG_KEYS);
+        
+        /// <summary>
+        /// AArch64 tagged address
+        /// control.
+        /// </summary>
+        public static readonly ElfNoteTypeEx ARM_TAGGED_ADDR_CTRL = new ElfNoteTypeEx(ElfNative.NT_ARM_TAGGED_ADDR_CTRL);
+        
+        /// <summary>
+        /// AArch64 pointer authentication
+        /// enabled keys.
+        /// </summary>
+        public static readonly ElfNoteTypeEx ARM_PAC_ENABLED_KEYS = new ElfNoteTypeEx(ElfNative.NT_ARM_PAC_ENABLED_KEYS);
+        
+        /// <summary>
+        /// ARM Streaming SVE registers.
+        /// </summary>
+        public static readonly ElfNoteTypeEx ARM_SSVE = new ElfNoteTypeEx(ElfNative.NT_ARM_SSVE);
+        
+        /// <summary>
+        /// ARM SME ZA registers.
+        /// </summary>
+        public static readonly ElfNoteTypeEx ARM_ZA = new ElfNoteTypeEx(ElfNative.NT_ARM_ZA);
+        
+        /// <summary>
+        /// ARM SME ZT registers.
+        /// </summary>
+        public static readonly ElfNoteTypeEx ARM_ZT = new ElfNoteTypeEx(ElfNative.NT_ARM_ZT);
+        
+        /// <summary>
+        /// ARM floating point mode register.
+        /// </summary>
+        public static readonly ElfNoteTypeEx ARM_FPMR = new ElfNoteTypeEx(ElfNative.NT_ARM_FPMR);
+        
+        /// <summary>
+        /// Vmcore Device Dump Note.
+        /// </summary>
+        public static readonly ElfNoteTypeEx VMCOREDD = new ElfNoteTypeEx(ElfNative.NT_VMCOREDD);
+        
+        /// <summary>
+        /// MIPS DSP ASE registers.
+        /// </summary>
+        public static readonly ElfNoteTypeEx MIPS_DSP = new ElfNoteTypeEx(ElfNative.NT_MIPS_DSP);
+        
+        /// <summary>
+        /// MIPS floating-point mode.
+        /// </summary>
+        public static readonly ElfNoteTypeEx MIPS_FP_MODE = new ElfNoteTypeEx(ElfNative.NT_MIPS_FP_MODE);
+        
+        /// <summary>
+        /// MIPS SIMD registers.
+        /// </summary>
+        public static readonly ElfNoteTypeEx MIPS_MSA = new ElfNoteTypeEx(ElfNative.NT_MIPS_MSA);
+        
+        /// <summary>
+        /// RISC-V Control and Status Registers
+        /// </summary>
+        public static readonly ElfNoteTypeEx RISCV_CSR = new ElfNoteTypeEx(ElfNative.NT_RISCV_CSR);
+        
+        /// <summary>
+        /// RISC-V vector registers
+        /// </summary>
+        public static readonly ElfNoteTypeEx RISCV_VECTOR = new ElfNoteTypeEx(ElfNative.NT_RISCV_VECTOR);
+        
+        /// <summary>
+        /// LoongArch CPU config registers.
+        /// </summary>
+        public static readonly ElfNoteTypeEx LOONGARCH_CPUCFG = new ElfNoteTypeEx(ElfNative.NT_LOONGARCH_CPUCFG);
+        
+        /// <summary>
+        /// LoongArch control and
+        /// status registers.
+        /// </summary>
+        public static readonly ElfNoteTypeEx LOONGARCH_CSR = new ElfNoteTypeEx(ElfNative.NT_LOONGARCH_CSR);
+        
+        /// <summary>
+        /// LoongArch Loongson SIMD
+        /// Extension registers.
+        /// </summary>
+        public static readonly ElfNoteTypeEx LOONGARCH_LSX = new ElfNoteTypeEx(ElfNative.NT_LOONGARCH_LSX);
+        
+        /// <summary>
+        /// LoongArch Loongson Advanced
+        /// SIMD Extension registers.
+        /// </summary>
+        public static readonly ElfNoteTypeEx LOONGARCH_LASX = new ElfNoteTypeEx(ElfNative.NT_LOONGARCH_LASX);
+        
+        /// <summary>
+        /// LoongArch Loongson Binary
+        /// Translation registers.
+        /// </summary>
+        public static readonly ElfNoteTypeEx LOONGARCH_LBT = new ElfNoteTypeEx(ElfNative.NT_LOONGARCH_LBT);
+        
+        /// <summary>
+        /// LoongArch hardware breakpoint registers
+        /// </summary>
+        public static readonly ElfNoteTypeEx LOONGARCH_HW_BREAK = new ElfNoteTypeEx(ElfNative.NT_LOONGARCH_HW_BREAK);
+        
+        /// <summary>
+        /// LoongArch hardware watchpoint registers
+        /// </summary>
+        public static readonly ElfNoteTypeEx LOONGARCH_HW_WATCH = new ElfNoteTypeEx(ElfNative.NT_LOONGARCH_HW_WATCH);
+        
+        /// <summary>
         /// Contains a version string.
         /// </summary>
         public static readonly ElfNoteTypeEx VERSION = new ElfNoteTypeEx(ElfNative.NT_VERSION);
@@ -14414,12 +17906,18 @@ namespace LibObjectFile.Elf
         
         public static readonly ElfNoteTypeEx GNU_GOLD_VERSION = new ElfNoteTypeEx(ElfNative.NT_GNU_GOLD_VERSION);
         
+        public static readonly ElfNoteTypeEx GNU_PROPERTY_TYPE_0 = new ElfNoteTypeEx(ElfNative.NT_GNU_PROPERTY_TYPE_0);
+        
+        public static readonly ElfNoteTypeEx FDO_PACKAGING_METADATA = new ElfNoteTypeEx(ElfNative.NT_FDO_PACKAGING_METADATA);
+        
+        public static readonly ElfNoteTypeEx FDO_DLOPEN_METADATA = new ElfNoteTypeEx(ElfNative.NT_FDO_DLOPEN_METADATA);
+        
         private string? ToStringInternal()
         {
             switch ((uint)Value)
             {
                 case ElfNative.NT_PRSTATUS: return "NT_PRSTATUS";
-                case ElfNative.NT_FPREGSET: return "NT_FPREGSET";
+                case ElfNative.NT_PRFPREG: return "NT_PRFPREG";
                 case ElfNative.NT_PRPSINFO: return "NT_PRPSINFO";
                 case ElfNative.NT_PRXREG: return "NT_PRXREG";
                 case ElfNative.NT_PLATFORM: return "NT_PLATFORM";
@@ -14439,9 +17937,26 @@ namespace LibObjectFile.Elf
                 case ElfNative.NT_PPC_VMX: return "NT_PPC_VMX";
                 case ElfNative.NT_PPC_SPE: return "NT_PPC_SPE";
                 case ElfNative.NT_PPC_VSX: return "NT_PPC_VSX";
+                case ElfNative.NT_PPC_TAR: return "NT_PPC_TAR";
+                case ElfNative.NT_PPC_PPR: return "NT_PPC_PPR";
+                case ElfNative.NT_PPC_DSCR: return "NT_PPC_DSCR";
+                case ElfNative.NT_PPC_EBB: return "NT_PPC_EBB";
+                case ElfNative.NT_PPC_PMU: return "NT_PPC_PMU";
+                case ElfNative.NT_PPC_TM_CGPR: return "NT_PPC_TM_CGPR";
+                case ElfNative.NT_PPC_TM_CFPR: return "NT_PPC_TM_CFPR";
+                case ElfNative.NT_PPC_TM_CVMX: return "NT_PPC_TM_CVMX";
+                case ElfNative.NT_PPC_TM_CVSX: return "NT_PPC_TM_CVSX";
+                case ElfNative.NT_PPC_TM_SPR: return "NT_PPC_TM_SPR";
+                case ElfNative.NT_PPC_TM_CTAR: return "NT_PPC_TM_CTAR";
+                case ElfNative.NT_PPC_TM_CPPR: return "NT_PPC_TM_CPPR";
+                case ElfNative.NT_PPC_TM_CDSCR: return "NT_PPC_TM_CDSCR";
+                case ElfNative.NT_PPC_PKEY: return "NT_PPC_PKEY";
+                case ElfNative.NT_PPC_DEXCR: return "NT_PPC_DEXCR";
+                case ElfNative.NT_PPC_HASHKEYR: return "NT_PPC_HASHKEYR";
                 case ElfNative.NT_386_TLS: return "NT_386_TLS";
                 case ElfNative.NT_386_IOPERM: return "NT_386_IOPERM";
                 case ElfNative.NT_X86_XSTATE: return "NT_X86_XSTATE";
+                case ElfNative.NT_X86_SHSTK: return "NT_X86_SHSTK";
                 case ElfNative.NT_S390_HIGH_GPRS: return "NT_S390_HIGH_GPRS";
                 case ElfNative.NT_S390_TIMER: return "NT_S390_TIMER";
                 case ElfNative.NT_S390_TODCMP: return "NT_S390_TODCMP";
@@ -14451,10 +17966,42 @@ namespace LibObjectFile.Elf
                 case ElfNative.NT_S390_LAST_BREAK: return "NT_S390_LAST_BREAK";
                 case ElfNative.NT_S390_SYSTEM_CALL: return "NT_S390_SYSTEM_CALL";
                 case ElfNative.NT_S390_TDB: return "NT_S390_TDB";
+                case ElfNative.NT_S390_VXRS_LOW: return "NT_S390_VXRS_LOW";
+                case ElfNative.NT_S390_VXRS_HIGH: return "NT_S390_VXRS_HIGH";
+                case ElfNative.NT_S390_GS_CB: return "NT_S390_GS_CB";
+                case ElfNative.NT_S390_GS_BC: return "NT_S390_GS_BC";
+                case ElfNative.NT_S390_RI_CB: return "NT_S390_RI_CB";
+                case ElfNative.NT_S390_PV_CPU_DATA: return "NT_S390_PV_CPU_DATA";
                 case ElfNative.NT_ARM_VFP: return "NT_ARM_VFP";
                 case ElfNative.NT_ARM_TLS: return "NT_ARM_TLS";
                 case ElfNative.NT_ARM_HW_BREAK: return "NT_ARM_HW_BREAK";
                 case ElfNative.NT_ARM_HW_WATCH: return "NT_ARM_HW_WATCH";
+                case ElfNative.NT_ARM_SYSTEM_CALL: return "NT_ARM_SYSTEM_CALL";
+                case ElfNative.NT_ARM_SVE: return "NT_ARM_SVE";
+                case ElfNative.NT_ARM_PAC_MASK: return "NT_ARM_PAC_MASK";
+                case ElfNative.NT_ARM_PACA_KEYS: return "NT_ARM_PACA_KEYS";
+                case ElfNative.NT_ARM_PACG_KEYS: return "NT_ARM_PACG_KEYS";
+                case ElfNative.NT_ARM_TAGGED_ADDR_CTRL: return "NT_ARM_TAGGED_ADDR_CTRL";
+                case ElfNative.NT_ARM_PAC_ENABLED_KEYS: return "NT_ARM_PAC_ENABLED_KEYS";
+                case ElfNative.NT_ARM_SSVE: return "NT_ARM_SSVE";
+                case ElfNative.NT_ARM_ZA: return "NT_ARM_ZA";
+                case ElfNative.NT_ARM_ZT: return "NT_ARM_ZT";
+                case ElfNative.NT_ARM_FPMR: return "NT_ARM_FPMR";
+                case ElfNative.NT_VMCOREDD: return "NT_VMCOREDD";
+                case ElfNative.NT_MIPS_DSP: return "NT_MIPS_DSP";
+                case ElfNative.NT_MIPS_FP_MODE: return "NT_MIPS_FP_MODE";
+                case ElfNative.NT_MIPS_MSA: return "NT_MIPS_MSA";
+                case ElfNative.NT_RISCV_CSR: return "NT_RISCV_CSR";
+                case ElfNative.NT_RISCV_VECTOR: return "NT_RISCV_VECTOR";
+                case ElfNative.NT_LOONGARCH_CPUCFG: return "NT_LOONGARCH_CPUCFG";
+                case ElfNative.NT_LOONGARCH_CSR: return "NT_LOONGARCH_CSR";
+                case ElfNative.NT_LOONGARCH_LSX: return "NT_LOONGARCH_LSX";
+                case ElfNative.NT_LOONGARCH_LASX: return "NT_LOONGARCH_LASX";
+                case ElfNative.NT_LOONGARCH_LBT: return "NT_LOONGARCH_LBT";
+                case ElfNative.NT_LOONGARCH_HW_BREAK: return "NT_LOONGARCH_HW_BREAK";
+                case ElfNative.NT_LOONGARCH_HW_WATCH: return "NT_LOONGARCH_HW_WATCH";
+                case ElfNative.NT_FDO_PACKAGING_METADATA: return "NT_FDO_PACKAGING_METADATA";
+                case ElfNative.NT_FDO_DLOPEN_METADATA: return "NT_FDO_DLOPEN_METADATA";
                 default: return null;
             }
         }
@@ -14463,6 +18010,8 @@ namespace LibObjectFile.Elf
     public enum ElfNoteType : uint
     {
         PRSTATUS = ElfNative.NT_PRSTATUS,
+        
+        PRFPREG = ElfNative.NT_PRFPREG,
         
         FPREGSET = ElfNative.NT_FPREGSET,
         
@@ -14506,11 +18055,45 @@ namespace LibObjectFile.Elf
         
         PPC_VSX = ElfNative.NT_PPC_VSX,
         
+        PPC_TAR = ElfNative.NT_PPC_TAR,
+        
+        PPC_PPR = ElfNative.NT_PPC_PPR,
+        
+        PPC_DSCR = ElfNative.NT_PPC_DSCR,
+        
+        PPC_EBB = ElfNative.NT_PPC_EBB,
+        
+        PPC_PMU = ElfNative.NT_PPC_PMU,
+        
+        PPC_TM_CGPR = ElfNative.NT_PPC_TM_CGPR,
+        
+        PPC_TM_CFPR = ElfNative.NT_PPC_TM_CFPR,
+        
+        PPC_TM_CVMX = ElfNative.NT_PPC_TM_CVMX,
+        
+        PPC_TM_CVSX = ElfNative.NT_PPC_TM_CVSX,
+        
+        PPC_TM_SPR = ElfNative.NT_PPC_TM_SPR,
+        
+        PPC_TM_CTAR = ElfNative.NT_PPC_TM_CTAR,
+        
+        PPC_TM_CPPR = ElfNative.NT_PPC_TM_CPPR,
+        
+        PPC_TM_CDSCR = ElfNative.NT_PPC_TM_CDSCR,
+        
+        PPC_PKEY = ElfNative.NT_PPC_PKEY,
+        
+        PPC_DEXCR = ElfNative.NT_PPC_DEXCR,
+        
+        PPC_HASHKEYR = ElfNative.NT_PPC_HASHKEYR,
+        
         I386_TLS = ElfNative.NT_386_TLS,
         
         I386_IOPERM = ElfNative.NT_386_IOPERM,
         
         X86_XSTATE = ElfNative.NT_X86_XSTATE,
+        
+        X86_SHSTK = ElfNative.NT_X86_SHSTK,
         
         S390_HIGH_GPRS = ElfNative.NT_S390_HIGH_GPRS,
         
@@ -14530,6 +18113,18 @@ namespace LibObjectFile.Elf
         
         S390_TDB = ElfNative.NT_S390_TDB,
         
+        S390_VXRS_LOW = ElfNative.NT_S390_VXRS_LOW,
+        
+        S390_VXRS_HIGH = ElfNative.NT_S390_VXRS_HIGH,
+        
+        S390_GS_CB = ElfNative.NT_S390_GS_CB,
+        
+        S390_GS_BC = ElfNative.NT_S390_GS_BC,
+        
+        S390_RI_CB = ElfNative.NT_S390_RI_CB,
+        
+        S390_PV_CPU_DATA = ElfNative.NT_S390_PV_CPU_DATA,
+        
         ARM_VFP = ElfNative.NT_ARM_VFP,
         
         ARM_TLS = ElfNative.NT_ARM_TLS,
@@ -14537,6 +18132,54 @@ namespace LibObjectFile.Elf
         ARM_HW_BREAK = ElfNative.NT_ARM_HW_BREAK,
         
         ARM_HW_WATCH = ElfNative.NT_ARM_HW_WATCH,
+        
+        ARM_SYSTEM_CALL = ElfNative.NT_ARM_SYSTEM_CALL,
+        
+        ARM_SVE = ElfNative.NT_ARM_SVE,
+        
+        ARM_PAC_MASK = ElfNative.NT_ARM_PAC_MASK,
+        
+        ARM_PACA_KEYS = ElfNative.NT_ARM_PACA_KEYS,
+        
+        ARM_PACG_KEYS = ElfNative.NT_ARM_PACG_KEYS,
+        
+        ARM_TAGGED_ADDR_CTRL = ElfNative.NT_ARM_TAGGED_ADDR_CTRL,
+        
+        ARM_PAC_ENABLED_KEYS = ElfNative.NT_ARM_PAC_ENABLED_KEYS,
+        
+        ARM_SSVE = ElfNative.NT_ARM_SSVE,
+        
+        ARM_ZA = ElfNative.NT_ARM_ZA,
+        
+        ARM_ZT = ElfNative.NT_ARM_ZT,
+        
+        ARM_FPMR = ElfNative.NT_ARM_FPMR,
+        
+        VMCOREDD = ElfNative.NT_VMCOREDD,
+        
+        MIPS_DSP = ElfNative.NT_MIPS_DSP,
+        
+        MIPS_FP_MODE = ElfNative.NT_MIPS_FP_MODE,
+        
+        MIPS_MSA = ElfNative.NT_MIPS_MSA,
+        
+        RISCV_CSR = ElfNative.NT_RISCV_CSR,
+        
+        RISCV_VECTOR = ElfNative.NT_RISCV_VECTOR,
+        
+        LOONGARCH_CPUCFG = ElfNative.NT_LOONGARCH_CPUCFG,
+        
+        LOONGARCH_CSR = ElfNative.NT_LOONGARCH_CSR,
+        
+        LOONGARCH_LSX = ElfNative.NT_LOONGARCH_LSX,
+        
+        LOONGARCH_LASX = ElfNative.NT_LOONGARCH_LASX,
+        
+        LOONGARCH_LBT = ElfNative.NT_LOONGARCH_LBT,
+        
+        LOONGARCH_HW_BREAK = ElfNative.NT_LOONGARCH_HW_BREAK,
+        
+        LOONGARCH_HW_WATCH = ElfNative.NT_LOONGARCH_HW_WATCH,
         
         VERSION = ElfNative.NT_VERSION,
         
@@ -14547,5 +18190,11 @@ namespace LibObjectFile.Elf
         GNU_BUILD_ID = ElfNative.NT_GNU_BUILD_ID,
         
         GNU_GOLD_VERSION = ElfNative.NT_GNU_GOLD_VERSION,
+        
+        GNU_PROPERTY_TYPE_0 = ElfNative.NT_GNU_PROPERTY_TYPE_0,
+        
+        FDO_PACKAGING_METADATA = ElfNative.NT_FDO_PACKAGING_METADATA,
+        
+        FDO_DLOPEN_METADATA = ElfNative.NT_FDO_DLOPEN_METADATA,
     }
 }

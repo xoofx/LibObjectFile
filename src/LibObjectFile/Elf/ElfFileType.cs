@@ -1,11 +1,11 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
 namespace LibObjectFile.Elf;
 
 /// <summary>
-/// Defines the file type of an <see cref="ElfObjectFile"/>.
+/// Defines the file type of an <see cref="ElfFile"/>.
 /// This is the value seen in <see cref="ElfNative.Elf32_Ehdr.e_type"/> or <see cref="ElfNative.Elf64_Ehdr.e_type"/>
 /// as well as the various machine defines (e.g <see cref="ElfNative.ET_REL"/>).
 /// </summary>

@@ -19,14 +19,14 @@ LibObjectFile is a .NET library to read, manipulate and write linker and executa
 ```C#
 // Reads an ELF file
 using var inStream = File.OpenRead("helloworld");
-var elf = ElfObjectFile.Read(inStream);
+var elf = ElfFile.Read(inStream);
 foreach(var section in elf.Sections)
 {
     Console.WriteLine(section.Name);
 }
 // Print the content of the ELF as readelf output
 elf.Print(Console.Out);
-// Write the ElfObjectFile to another file on the disk
+// Write the ElfFile to another file on the disk
 using var outStream = File.OpenWrite("helloworld2");
 elf.Write(outStream);
 ```
@@ -34,12 +34,14 @@ elf.Write(outStream);
 ## Features
 - Full support of **Archive `ar` file format** including Common, GNU and BSD variants.
 - Full support for the **PE file format**
+  - Support byte-to-byte roundtrip
   - Read and write from/to a `System.IO.Stream`
   - All PE Directories are supported
   - `PEFile.Relocate` to relocate the image base of a PE file
   - `PEFile.Print` to print the content of a PE file to a textual representation
   - Support for calculating the checksum of a PE file
 - - Good support for the **ELF file format**:
+  - Support byte-to-byte roundtrip
   - Read and write from/to a `System.IO.Stream`
   - Handling of LSB/MSB
   - Support the following sections: 

@@ -4,10 +4,11 @@
 
 using System;
 using LibObjectFile.Diagnostics;
+using LibObjectFile.Tests.Elf;
 
 namespace LibObjectFile.Tests.Ar;
 
-public abstract class ArTestBase
+public abstract class ArTestBase : ElfTestBase
 {
     protected static void ExpectNoDiagnostics(DiagnosticBag diagnostics)
     {

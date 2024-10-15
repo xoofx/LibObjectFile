@@ -1,9 +1,11 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using LibObjectFile.Diagnostics;
 
 namespace LibObjectFile.Elf;
 
@@ -20,25 +22,12 @@ public sealed class ElfSymbolTableSectionHeaderIndices : ElfSection
     {
         Name = DefaultName;
         _entries = new List<uint>();
+        BaseTableEntrySize = sizeof(uint);
     }
-
-    public override ElfSectionType Type
-    {
-        get => base.Type;
-        set
-        {
-            if (value != ElfSectionType.SymbolTableSectionHeaderIndices)
-            {
-                throw new ArgumentException($"Invalid type `{Type}` of the section [{Index}] `{nameof(ElfSymbolTableSectionHeaderIndices)}`. Only `{ElfSectionType.SymbolTableSectionHeaderIndices}` is valid");
-            }
-            base.Type = value;
-        }
-    }
-
-    public override unsafe ulong TableEntrySize => sizeof(uint);
 
     public override void Read(ElfReader reader)
     {
+        reader.Position = Position;
         var numberOfEntries = base.Size / TableEntrySize;
         _entries.Clear();
         _entries.Capacity = (int)numberOfEntries;
@@ -67,17 +56,20 @@ public sealed class ElfSymbolTableSectionHeaderIndices : ElfSection
             return;
         }
 
+        var symbolEntries = CollectionsMarshal.AsSpan(symbolTable.Entries);
         for (int i = 0; i < _entries.Count; i++)
         {
             var entry = _entries[i];
             if (entry != 0)
             {
-                var resolvedLink = reader.ResolveLink(new ElfSectionLink(entry), $"Invalid link section index {entry} for symbol table entry [{i}] from symbol table section [{this}]");
+                var resolvedLink = new ElfSectionLink((int)entry);
+                if (!reader.TryResolveLink(ref resolvedLink))
+                {
+                    reader.Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidResolvedLink, $"Invalid link section index {entry} for symbol table entry [{i}] from symbol table section .symtab_shndx");
+                }
 
                 // Update the link in symbol table
-                var symbolTableEntry = symbolTable.Entries[i];
-                symbolTableEntry.Section = resolvedLink;
-                symbolTable.Entries[i] = symbolTableEntry;
+                symbolEntries[i].SectionLink = resolvedLink;
             }
         }
     }
@@ -102,7 +94,8 @@ public sealed class ElfSymbolTableSectionHeaderIndices : ElfSection
         {
             for (int i = 0; i < symbolTable.Entries.Count; i++)
             {
-                if (symbolTable.Entries[i].Section.Section is { SectionIndex: >= ElfNative.SHN_LORESERVE })
+                var section = symbolTable.Entries[i].SectionLink.Section;
+                if (section is { SectionIndex: >= (int)ElfNative.SHN_LORESERVE })
                 {
                     numberOfEntries = i + 1;
                 }
@@ -116,10 +109,10 @@ public sealed class ElfSymbolTableSectionHeaderIndices : ElfSection
         {
             for (int i = 0; i < numberOfEntries; i++)
             {
-                var section = symbolTable.Entries[i].Section.Section;
-                if (section is { SectionIndex: >= ElfNative.SHN_LORESERVE })
+                var section = symbolTable.Entries[i].SectionLink.Section;
+                if (section is { SectionIndex: >= (int)ElfNative.SHN_LORESERVE })
                 {
-                    _entries.Add(section.SectionIndex);
+                    _entries.Add((uint)section.SectionIndex);
                 }
                 else
                 {
@@ -129,5 +122,17 @@ public sealed class ElfSymbolTableSectionHeaderIndices : ElfSection
         }
 
         Size = Parent == null || Parent.FileClass == ElfFileClass.None ? 0 : (ulong)numberOfEntries * sizeof(uint);
+    }
+
+    internal override void InitializeEntrySizeFromRead(DiagnosticBag diagnostics, ulong entrySize, bool is32)
+    {
+        if (entrySize != sizeof(uint))
+        {
+            diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSectionEntrySize, $"Invalid entry size `{entrySize}` for section [{this}]. The entry size must be at least `{sizeof(uint)}`");
+            return;
+        }
+
+        BaseTableEntrySize = sizeof(uint);
+        AdditionalTableEntrySize = 0;
     }
 }

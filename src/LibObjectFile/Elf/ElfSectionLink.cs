@@ -1,4 +1,4 @@
-﻿// Copyright (c) Alexandre Mutel. All rights reserved.
+// Copyright (c) Alexandre Mutel. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 
@@ -13,14 +13,15 @@ namespace LibObjectFile.Elf;
 /// </summary>
 public readonly struct ElfSectionLink : IEquatable<ElfSectionLink>
 {
-    public static readonly ElfSectionLink Empty = new ElfSectionLink(ElfNative.SHN_UNDEF);
+    public static readonly ElfSectionLink Empty = new ElfSectionLink((int)ElfNative.SHN_UNDEF);
 
-    public static readonly ElfSectionLink SectionAbsolute = new ElfSectionLink(ElfNative.SHN_ABS);
+    public static readonly ElfSectionLink SectionAbsolute = new ElfSectionLink((int)ElfNative.SHN_ABS);
 
-    public static readonly ElfSectionLink SectionCommon = new ElfSectionLink(ElfNative.SHN_COMMON);
+    public static readonly ElfSectionLink SectionCommon = new ElfSectionLink((int)ElfNative.SHN_COMMON);
         
-    public ElfSectionLink(uint index)
+    public ElfSectionLink(int index)
     {
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
         Section = null;
         SpecialIndex = index;
     }
@@ -33,7 +34,7 @@ public readonly struct ElfSectionLink : IEquatable<ElfSectionLink>
 
     public readonly ElfSection? Section;
 
-    public readonly uint SpecialIndex;
+    public readonly int SpecialIndex;
 
     public bool IsEmpty => Section == null && SpecialIndex == 0;
 
@@ -42,7 +43,7 @@ public readonly struct ElfSectionLink : IEquatable<ElfSectionLink>
     /// </summary>
     public bool IsSpecial => Section == null && (SpecialIndex == ElfNative.SHN_UNDEF || SpecialIndex >= ElfNative.SHN_LORESERVE);
         
-    public uint GetIndex()
+    public int GetIndex()
     {
         return Section?.SectionIndex ?? SpecialIndex;
     }
