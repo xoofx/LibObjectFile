@@ -8,6 +8,6 @@ jobs:
     steps:
     - uses: Vampire/setup-wsl@v3
       with:
-        distribution: Ubuntu
+        distribution: Ubuntu-22.04
     - name: List installed WSL distributions
       run: wsl -l -v
