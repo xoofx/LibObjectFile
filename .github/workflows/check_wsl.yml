@@ -1,0 +1,10 @@
+name: check_wsl
+on:
+  # Run this workflow only manually
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - name: List installed WSL distributions
+      run: wsl -l -v
