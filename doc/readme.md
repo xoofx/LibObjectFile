@@ -2,14 +2,15 @@
 
 This is the manual of LibObjectFile with the following API covered:
 
-- [ELF Object File Format](#elf-object-file-format) via the `ElfObjectFile` API
+- [ELF Object File Format](#elf-object-file-format) via the `ElfFile` API
 - [Archive ar File Format](#archive-ar-file-format) via the `ArArchiveFile` API
+- [PE File Format](#pe-object-file-format) via the `PEFile` API
 
 ## ELF Object File Format
 
 ### Overview
 
-The main entry-point for reading/writing ELF Object file is the [`ElfObjectFile`](https://github.com/xoofx/LibObjectFile/blob/master/src/LibObjectFile/Elf/ElfObjectFile.cs) class.
+The main entry-point for reading/writing ELF Object file is the [`ElfFile`](https://github.com/xoofx/LibObjectFile/blob/master/src/LibObjectFile/Elf/ElfFile.cs) class.
 
 This class is the equivalent of the ELF Header and contains also sections and segments (program headers)
 
@@ -17,10 +18,10 @@ This class is the equivalent of the ELF Header and contains also sections and se
 
 ### ELF Reading
 
-The ELF API allows to read from a `System.IO.Stream` via the method `ElfObjectFile.Read`:
+The ELF API allows to read from a `System.IO.Stream` via the method `ElfFile.Read`:
 
 ```C#
-ElfObjectFile elf = ElfObjectFile.Read(inputStream);
+ElfFile elf = ElfFile.Read(inputStream);
 ``` 
 
 ### ELF Writing
@@ -28,7 +29,7 @@ ElfObjectFile elf = ElfObjectFile.Read(inputStream);
 You can create an ELF object in memory and save it to the disk:
 
 ```c#
-var elf = new ElfObjectFile();
+var elf = new ElfFile();
 
 var codeStream = new MemoryStream();
 codeStream.Write(Encoding.UTF8.GetBytes("This is a text"));
@@ -36,10 +37,13 @@ codeStream.Position = 0;
 
 // Create a .text code section
 var codeSection = new ElfCustomSection(codeStream).ConfigureAs(ElfSectionSpecialType.Text);
-elf.AddSection(codeSection);
+elf.Add(codeSection);
 
 // Always required if sections are added
-elf.AddSection(new ElfSectionHeaderStringTable());
+elf.Add(new ElfSectionHeaderStringTable());
+
+// Always required if sections are added
+elf.Add(new ElfSectionHeaderTable());
 
 using var outputStream = File.OpenWrite("test.out");
 elf.Write(outputStream);
@@ -49,7 +53,7 @@ elf.Write(outputStream);
 
 #### Print
 
-You can print an object to a similar textual format than `readelf` by using the extension method `ElfObjectFile.Print(TextWriter)`:
+You can print an object to a similar textual format than `readelf` by using the extension method `ElfFile.Print(TextWriter)`:
 
 ```c#
 // Using the previous code to create an ELF with a code section
@@ -108,13 +112,13 @@ The `Print` is trying to follow `readelf` from as compiled on `Ubuntu 18.04`. It
 
 #### Section Header String Table
 
-When sections are added to an `ElfObjectFile.Sections`, it is required to store their names in a Section Header String Table (`.shstrtab`)
+When sections are added to an `ElfFile.Sections`, it is required to store their names in a Section Header String Table (`.shstrtab`)
 
 In that case, you need to add explicitly an `ElfSectionHeaderStringTable` to the sections:
 
 ```C#
 // Always required if sections are added
-elf.AddSection(new ElfSectionHeaderStringTable());
+elf.Add(new ElfSectionHeaderStringTable());
 ```
 
 This section can be put at any places in the sections, but is usually put at the end.
@@ -125,43 +129,43 @@ There is a type of section called `ElfShadowSection` which are only valid at run
 
 A shadow section is used by an `ElfSegment` for which a region of data might not be associated with an existing section. In that case, you still want to associate data with the segment.
 
-This is specially required when working with executable that don't have any sections but have only segments/program headers. In that case, `ElfObjectFile.Read` will create `ElfCustomShadowSection` for each part of the file that are being referenced by an `ElfSegment`.
+This is specially required when working with executable that don't have any sections but have only segments/program headers. In that case, `ElfFile.Read` will create `ElfCustomShadowSection` for each part of the file that are being referenced by an `ElfSegment`.
 
 #### Null section and Program Header Table
 
-The null section `ElfNullSection` must be put as the first section of an `ElfObjectFile`. It is the default when creating an `ElfObjectFile`.
+The null section `ElfNullSection` must be put as the first section of an `ElfFile`. It is the default when creating an `ElfFile`.
 
 The Program Header Table is implemented as the `ElfProgramHeaderTable` shadow section and is added right after the `NullSection`. This is required because a segment of type `PHDR` will reference it while it is not an actual section in the original ELF file.
 
 #### ELF Layout
 
-An `ElfObjectFile` represents an ELF Object File in memory that can be freely modified. Unlike its serialized version on the disk, the offsets and size of the sections and segments references can be changed dynamically.
+An `ElfFile` represents an ELF Object File in memory that can be freely modified. Unlike its serialized version on the disk, the offsets and size of the sections and segments references can be changed dynamically.
 
-You can force the computation of the layout of an ELF object file before saving it to the disk by using the method `ElfObjectFile.UpdateLayout`:
+You can force the computation of the layout of an ELF object file before saving it to the disk by using the method `ElfFile.UpdateLayout`:
 
 ```C#
-ElfObjectFile elf = ...;
+ElfFile elf = ...;
 
 // Update layout (ObjectFile.Layout, all offsets of Sections and Segments)
 elf.UpdateLayout();
 
 foreach(var section in elf.Sections)
 {
-    // Section.Offset is now calculated as it was on the disk
-    Console.WriteLine($"Section {section} Offset: 0x{section.Offset:x16}");
+    // Section.Position is now calculated as it was on the disk
+    Console.WriteLine($"Section {section} Offset: 0x{section.Position:x16}");
 }
 ```
 
 #### Diagnostics and verification
 
-An `ElfObjectFile` can be created in memory with an invalid configuration (e.g missing a link between a symbol table and a string table).
+An `ElfFile` can be created in memory with an invalid configuration (e.g missing a link between a symbol table and a string table).
 
-You can verify the validity of an `ElfObjectFile` by calling `ElfObjectFile.Verify`
+You can verify the validity of an `ElfFile` by calling `ElfFile.Verify`
 
 ```C#
-ElfObjectFile elf = ...;
+ElfFile elf = ...;
 
-// Verify the validity of an ElfObjectFile instance
+// Verify the validity of an ElfFile instance
 var diagnostics = elf.Verify();
 
 // If we have any errors, we can iterate on diagnostic messages
@@ -215,7 +219,7 @@ arFile.Write(outputStream);
 
 Although the example above is storing a text, one of the main usage of an `ar` archive is to store object-file format (e.g `ELF`)
 
-If you want to store direct an `ElfObjectFile` you can use the `ArElfFile` to add an ELF object-file directly to an archive.
+If you want to store direct an `ElfFile` you can use the `ArElfFile` to add an ELF object-file directly to an archive.
 
 ### Symbol Table
 
@@ -231,7 +235,7 @@ var arFile = new ArArchiveFile();
 var symbolTable = new ArSymbolTable();
 arFile.AddFile(symbolTable);
 // Create an ELF
-var elf = new ElfObjectFile();
+var elf = new ElfFile();
 // ... fill elf, add symbols
 arFile.AddFile(elf);
 // Add a symbol entry
