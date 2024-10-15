@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="SuperluminalPerf" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\LibObjectFile\LibObjectFile.csproj" />
   </ItemGroup>
 

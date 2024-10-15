@@ -11,18 +11,46 @@ internal class Program
 {
     static void Main(string[] args)
     {
+        Console.WriteLine("Loading files into memory");
         var clock = Stopwatch.StartNew();
-        //var memoryStream = new MemoryStream();
+        var streams = new List<MemoryStream>();
+        int biggestCapacity = 0;
         foreach (var file in GetLinuxBins())
         {
-            //memoryStream.SetLength(0);
             using var stream = File.OpenRead((string)file[0]);
-            //stream.CopyTo(memoryStream);
-
             if (ElfFile.IsElf(stream))
             {
-                ElfFile.Read(stream);
+                stream.Position = 0;
+                var localStream = new MemoryStream((int)stream.Length);
+                stream.CopyTo(localStream);
+                localStream.Position = 0;
+                streams.Add(localStream);
+                if (localStream.Capacity > biggestCapacity)
+                {
+                    biggestCapacity = localStream.Capacity;
+                }
             }
+        }
+
+        clock.Stop();
+        Console.WriteLine($"End reading in {clock.Elapsed.TotalMilliseconds}ms");
+        Console.ReadLine();
+
+        Console.WriteLine("Processing");
+        var memoryStream = new MemoryStream(biggestCapacity);
+        clock.Restart();
+        //SuperluminalPerf.Initialize();
+        for (int i = 0; i < 10; i++)
+        {
+            //SuperluminalPerf.BeginEvent($"Round{i}");
+            foreach (var stream in streams)
+            {
+                stream.Position = 0;
+                var elf = ElfFile.Read(stream);
+                memoryStream.SetLength(0);
+                elf.Write(memoryStream);
+            }
+            //SuperluminalPerf.EndEvent();
         }
         clock.Stop();
         Console.WriteLine($"{clock.Elapsed.TotalMilliseconds}ms");

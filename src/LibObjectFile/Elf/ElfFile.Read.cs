@@ -84,12 +84,28 @@ partial class ElfFile
             }
 
             // Connect section Link instance
-            section.Link = reader.ResolveLink(section.Link, $"Invalid section Link [{{0}}] for section [{i}]");
+            var link = section.Link;
+            if (!reader.TryResolveLink(ref link))
+            {
+                reader.Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidResolvedLink, $"Invalid section Link [{link.SpecialIndex}] for section [{i}]");
+            }
+            else
+            {
+                section.Link = link;
+            }
 
             // Connect section Info instance
             if (section.Type != ElfSectionType.DynamicLinkerSymbolTable && section.Type != ElfSectionType.SymbolTable && (section.Flags & ElfSectionFlags.InfoLink) != 0)
             {
-                section.Info = reader.ResolveLink(section.Info, $"Invalid section Info [{{0}}] for section [{i}]");
+                link = section.Info;
+                if (!reader.TryResolveLink(ref link))
+                {
+                    reader.Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidResolvedLink, $"Invalid section Info [{link.SpecialIndex}] for section [{i}]");
+                }
+                else
+                {
+                    section.Info = link;
+                }
             }
 
             if (section != SectionHeaderStringTable && section.HasContent)

@@ -76,7 +76,7 @@ public sealed class ElfRelocationTable : ElfSection
             ref var entry = ref MemoryMarshal.GetReference(span);
             while (batch.HasNext())
             {
-                ref var rel = ref batch.ReadNext();
+                ref var rel = ref batch.Read();
                 entry.Offset = reader.Decode(rel.r_offset);
                 var r_info = reader.Decode(rel.r_info);
                 entry.Type = new ElfRelocationType(Parent!.Arch, r_info & 0xFF);
@@ -91,7 +91,7 @@ public sealed class ElfRelocationTable : ElfSection
             ref var entry = ref MemoryMarshal.GetReference(span);
             while (batch.HasNext())
             {
-                ref var rel = ref batch.ReadNext();
+                ref var rel = ref batch.Read();
                 entry.Offset = reader.Decode(rel.r_offset);
                 var r_info = reader.Decode(rel.r_info);
                 entry.Type = new ElfRelocationType(Parent!.Arch, r_info & 0xFF);
@@ -115,7 +115,7 @@ public sealed class ElfRelocationTable : ElfSection
             ref var entry = ref MemoryMarshal.GetReference(span);
             while (batch.HasNext())
             {
-                ref var rel = ref batch.ReadNext();
+                ref var rel = ref batch.Read();
                 entry.Offset = reader.Decode(rel.r_offset);
                 var r_info = reader.Decode(rel.r_info);
                 entry.Type = new ElfRelocationType(Parent!.Arch, (uint)(r_info & 0xFFFFFFFF));
@@ -130,7 +130,7 @@ public sealed class ElfRelocationTable : ElfSection
             ref var entry = ref MemoryMarshal.GetReference(span);
             while (batch.HasNext())
             {
-                ref var rel = ref batch.ReadNext();
+                ref var rel = ref batch.Read();
                 entry.Offset = reader.Decode(rel.r_offset);
                 var r_info = reader.Decode(rel.r_info);
                 entry.Type = new ElfRelocationType(Parent!.Arch, (uint)(r_info & 0xFFFFFFFF));
@@ -143,66 +143,76 @@ public sealed class ElfRelocationTable : ElfSection
 
     private void Write32(ElfWriter writer)
     {
+        var entries = CollectionsMarshal.AsSpan(_entries);
         if (IsRelocationWithAddends)
         {
+            using var batch = new BatchDataWriter<ElfNative.Elf32_Rela>(writer.Stream, entries.Length);
             // Write all entries
-            for (int i = 0; i < Entries.Count; i++)
+            var rel = new ElfNative.Elf32_Rela();
+            for (int i = 0; i < entries.Length; i++)
             {
-                var entry = Entries[i];
+                ref var entry = ref entries[i];
 
-                var rel = new ElfNative.Elf32_Rela();
                 writer.Encode(out rel.r_offset, (uint)entry.Offset);
                 uint r_info = entry.Info32;
                 writer.Encode(out rel.r_info, r_info);
                 writer.Encode(out rel.r_addend, (int)entry.Addend);
-                writer.Write(rel);
+
+                batch.Write(rel);
             }
         }
         else
         {
+            using var batch = new BatchDataWriter<ElfNative.Elf32_Rel>(writer.Stream, entries.Length);
             // Write all entries
-            for (int i = 0; i < Entries.Count; i++)
+            var rel = new ElfNative.Elf32_Rel();
+            for (int i = 0; i < entries.Length; i++)
             {
-                var entry = Entries[i];
+                ref var entry = ref entries[i];
 
-                var rel = new ElfNative.Elf32_Rel();
                 writer.Encode(out rel.r_offset, (uint)entry.Offset);
                 uint r_info = entry.Info32;
                 writer.Encode(out rel.r_info, r_info);
-                writer.Write(rel);
+
+                batch.Write(rel);
             }
         }
     }
 
     private void Write64(ElfWriter writer)
     {
+        var entries = CollectionsMarshal.AsSpan(_entries);
         if (IsRelocationWithAddends)
         {
+            using var batch = new BatchDataWriter<ElfNative.Elf64_Rela>(writer.Stream, entries.Length);
+            var rel = new ElfNative.Elf64_Rela();
             // Write all entries
-            for (int i = 0; i < Entries.Count; i++)
+            for (int i = 0; i < entries.Length; i++)
             {
-                var entry = Entries[i];
+                ref var entry = ref entries[i];
 
-                var rel = new ElfNative.Elf64_Rela();
                 writer.Encode(out rel.r_offset, entry.Offset);
                 ulong r_info = entry.Info64;
                 writer.Encode(out rel.r_info, r_info);
                 writer.Encode(out rel.r_addend, entry.Addend);
-                writer.Write(rel);
+
+                batch.Write(rel);
             }
         }
         else
         {
+            using var batch = new BatchDataWriter<ElfNative.Elf64_Rel>(writer.Stream, entries.Length);
+            var rel = new ElfNative.Elf64_Rel();
             // Write all entries
-            for (int i = 0; i < Entries.Count; i++)
+            for (int i = 0; i < entries.Length; i++)
             {
-                var entry = Entries[i];
+                ref var entry = ref entries[i];
 
-                var rel = new ElfNative.Elf64_Rel();
                 writer.Encode(out rel.r_offset, (uint)entry.Offset);
                 ulong r_info = entry.Info64;
                 writer.Encode(out rel.r_info, r_info);
-                writer.Write(rel);
+
+                batch.Write(rel);
             }
         }
     }

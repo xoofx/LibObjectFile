@@ -21,6 +21,7 @@ public readonly struct ElfSectionLink : IEquatable<ElfSectionLink>
         
     public ElfSectionLink(int index)
     {
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
         Section = null;
         SpecialIndex = index;
     }

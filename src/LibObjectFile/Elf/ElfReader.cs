@@ -30,24 +30,18 @@ public abstract class ElfReader : ObjectFileReaderWriter, IElfDecoder
 
     public override bool KeepOriginalStreamForSubStreams => Options.UseSubStream;
 
-    public ElfSectionLink ResolveLink(ElfSectionLink link, string errorMessageFormat)
+    public bool TryResolveLink(ref ElfSectionLink link)
     {
-        ArgumentNullException.ThrowIfNull(errorMessageFormat);
-
-        // Connect section Link instance
         if (!link.IsEmpty)
         {
             if (link.SpecialIndex >= File.Sections.Count)
             {
-                Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidResolvedLink, string.Format(errorMessageFormat, link.SpecialIndex));
+                return false;
             }
-            else
-            {
-                link = new ElfSectionLink(File.Sections[link.SpecialIndex]);
-            }
-        }
 
-        return link;
+            link = new ElfSectionLink(File.Sections[link.SpecialIndex]);
+        }
+        return true;
     }
 
     internal static ElfReader Create(ElfFile file, Stream stream, ElfReaderOptions options)

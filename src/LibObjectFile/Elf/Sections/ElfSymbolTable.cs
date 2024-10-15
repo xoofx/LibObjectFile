@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection.PortableExecutable;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using LibObjectFile.Diagnostics;
@@ -72,7 +73,7 @@ public sealed class ElfSymbolTable : ElfSection
         ref var entry = ref MemoryMarshal.GetReference(span);
         while (batch.HasNext())
         {
-            ref var sym = ref batch.ReadNext();
+            ref var sym = ref batch.Read();
 
             entry.Name = new ElfString(reader.Decode(sym.st_name));
             entry.Value = reader.Decode(sym.st_value);
@@ -94,7 +95,7 @@ public sealed class ElfSymbolTable : ElfSection
         ref var entry = ref MemoryMarshal.GetReference(span);
         while (batch.HasNext())
         {
-            ref var sym = ref batch.ReadNext();
+            ref var sym = ref batch.Read();
 
             entry.Name = new ElfString(reader.Decode(sym.st_name));
             entry.Value = reader.Decode(sym.st_value);
@@ -114,11 +115,13 @@ public sealed class ElfSymbolTable : ElfSection
         var stringTable = (ElfStringTable)Link.Section!;
 
         // Write all entries
-        for (int i = 0; i < Entries.Count; i++)
+        var entries = CollectionsMarshal.AsSpan(Entries);
+        using var batch = new BatchDataWriter<ElfNative.Elf32_Sym>(writer.Stream, entries.Length);
+        var sym = new ElfNative.Elf32_Sym();
+        for (int i = 0; i < entries.Length; i++)
         {
-            var entry = Entries[i];
+            ref var entry = ref entries[i];
 
-            var sym = new ElfNative.Elf32_Sym();
             writer.Encode(out sym.st_name, (ushort)stringTable.Resolve(entry.Name!).Index);
             writer.Encode(out sym.st_value, (uint)entry.Value);
             writer.Encode(out sym.st_size, (uint)entry.Size);
@@ -127,7 +130,7 @@ public sealed class ElfSymbolTable : ElfSection
             var sectionIndex = entry.SectionLink.GetIndex();
             writer.Encode(out sym.st_shndx, sectionIndex < ElfNative.SHN_LORESERVE || entry.SectionLink.IsSpecial ? (ElfNative.Elf32_Half)sectionIndex : (ElfNative.Elf32_Half)ElfNative.SHN_XINDEX);
 
-            writer.Write(sym);
+            batch.Write(sym);
         }
     }
 
@@ -135,11 +138,14 @@ public sealed class ElfSymbolTable : ElfSection
     {
         var stringTable = (ElfStringTable)Link.Section!;
 
-        for (int i = 0; i < Entries.Count; i++)
+        // Write all entries
+        var entries = CollectionsMarshal.AsSpan(Entries);
+        using var batch = new BatchDataWriter<ElfNative.Elf64_Sym>(writer.Stream, entries.Length);
+        var sym = new ElfNative.Elf64_Sym();
+        for (int i = 0; i < entries.Length; i++)
         {
-            var entry = Entries[i];
+            ref var entry = ref entries[i];
 
-            var sym = new ElfNative.Elf64_Sym();
             writer.Encode(out sym.st_name, stringTable.Resolve(entry.Name!).Index);
             writer.Encode(out sym.st_value, entry.Value);
             writer.Encode(out sym.st_size, entry.Size);
@@ -148,7 +154,7 @@ public sealed class ElfSymbolTable : ElfSection
             var sectionIndex = entry.SectionLink.GetIndex();
             writer.Encode(out sym.st_shndx, sectionIndex < ElfNative.SHN_LORESERVE || entry.SectionLink.IsSpecial ? (ElfNative.Elf64_Half)sectionIndex : (ElfNative.Elf64_Half)ElfNative.SHN_XINDEX);
 
-            writer.Write(sym);
+            batch.Write(sym);
         }
     }
 
@@ -157,9 +163,10 @@ public sealed class ElfSymbolTable : ElfSection
         // Verify that the link is safe and configured as expected
         Link.TryGetSectionSafe<ElfStringTable>(nameof(ElfSymbolTable), nameof(Link), this, reader.Diagnostics, out var stringTable, ElfSectionType.StringTable);
 
-        for (int i = 0; i < Entries.Count; i++)
+        var entries = CollectionsMarshal.AsSpan(Entries);
+        for (int i = 0; i < entries.Length; i++)
         {
-            var entry = Entries[i];
+            ref var entry = ref entries[i];
 
             if (stringTable != null)
             {
@@ -175,10 +182,16 @@ public sealed class ElfSymbolTable : ElfSection
 
             if (entry.SectionLink.SpecialIndex < ElfNative.SHN_LORESERVE)
             {
-                entry.SectionLink = reader.ResolveLink(entry.SectionLink, $"Invalid link section index {{0}} for  symbol table entry [{i}] from symbol table section [{this}]");
+                var link = entry.SectionLink;
+                if (!reader.TryResolveLink(ref link))
+                {
+                    reader.Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidResolvedLink, $"Invalid link section index [{entry.SectionLink.SpecialIndex}] for  symbol table entry [{i}] from symbol table section [{this}]");
+                }
+                else
+                {
+                    entry.SectionLink = link;
+                }
             }
-
-            Entries[i] = entry;
         }
     }
 
@@ -239,12 +252,12 @@ public sealed class ElfSymbolTable : ElfSection
 
         bool isAllowingLocal = true;
 
-        for (int i = 0; i < Entries.Count; i++)
+        var entries = CollectionsMarshal.AsSpan(Entries);
+        for (int i = 0; i < entries.Length; i++)
         {
-            var entry = Entries[i];
+            ref var entry = ref entries[i];
             entry.Name = stringTable.Resolve(entry.Name);
-
-
+            
             // Update the last local index
             if (entry.Bind == ElfSymbolBind.Local)
             {
@@ -263,7 +276,7 @@ public sealed class ElfSymbolTable : ElfSection
         }
 
 
-        Size = (uint)Entries.Count * TableEntrySize;
+        Size = (uint)entries.Length * TableEntrySize;
     }
 
     protected override unsafe void ValidateParent(ObjectElement parent)

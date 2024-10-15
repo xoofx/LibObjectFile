@@ -32,7 +32,7 @@ public unsafe ref struct BatchDataReader<TData> where TData : unmanaged
     {
         _stream = stream;
         _count = count;
-        var size = sizeof(TData) * BatchSize;
+        var size = sizeof(TData) * Math.Min(count, BatchSize);
         var buffer = ArrayPool<byte>.Shared.Rent(size);
         _firstValue = ref Unsafe.As<byte, TData>(ref MemoryMarshal.GetArrayDataReference(buffer));
         _buffer = buffer;
@@ -49,26 +49,28 @@ public unsafe ref struct BatchDataReader<TData> where TData : unmanaged
     /// </summary>
     /// <returns>A reference to the next element.</returns>
     /// <exception cref="InvalidOperationException">Thrown when there are no more elements to read.</exception>
-    public ref TData ReadNext()
+    public ref TData Read()
     {
-        if (_index >= _count)
+        var index = _index;
+        var count = _count;
+        if (index >= count)
         {
             throw new InvalidOperationException("No more elements to read");
         }
 
-        var remaining = _index & (BatchSize - 1);
+        var remaining = index & (BatchSize - 1);
+        _index = index + 1;
         if (remaining == 0)
         {
-            var sizeToRead = Math.Min(_count - _index, BatchSize) * sizeof(TData);
+            var sizeToRead = Math.Min(count - index, BatchSize) * sizeof(TData);
             int read = _stream.Read(_buffer, 0, sizeToRead);
             if (read != sizeToRead)
             {
-                throw new InvalidOperationException($"Not enough data to read at position {_stream.Position}");
+                throw new EndOfStreamException($"Not enough data to read at position {_stream.Position}");
             }
         }
 
         ref var value = ref Unsafe.Add(ref _firstValue, remaining);
-        _index++;
         return ref value;
     }
 

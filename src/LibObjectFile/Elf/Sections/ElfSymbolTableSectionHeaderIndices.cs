@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using LibObjectFile.Diagnostics;
 
 namespace LibObjectFile.Elf;
@@ -55,17 +56,20 @@ public sealed class ElfSymbolTableSectionHeaderIndices : ElfSection
             return;
         }
 
+        var symbolEntries = CollectionsMarshal.AsSpan(symbolTable.Entries);
         for (int i = 0; i < _entries.Count; i++)
         {
             var entry = _entries[i];
             if (entry != 0)
             {
-                var resolvedLink = reader.ResolveLink(new ElfSectionLink((int)entry), $"Invalid link section index {{0}} for symbol table entry [{i}] from symbol table section .symtab_shndx");
+                var resolvedLink = new ElfSectionLink((int)entry);
+                if (!reader.TryResolveLink(ref resolvedLink))
+                {
+                    reader.Diagnostics.Error(DiagnosticId.ELF_ERR_InvalidResolvedLink, $"Invalid link section index {entry} for symbol table entry [{i}] from symbol table section .symtab_shndx");
+                }
 
                 // Update the link in symbol table
-                var symbolTableEntry = symbolTable.Entries[i];
-                symbolTableEntry.SectionLink = resolvedLink;
-                symbolTable.Entries[i] = symbolTableEntry;
+                symbolEntries[i].SectionLink = resolvedLink;
             }
         }
     }
