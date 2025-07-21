@@ -59,6 +59,11 @@ public sealed partial class ElfProgramHeaderTable : ElfContentData
 
     protected override unsafe void UpdateLayoutCore(ElfVisitorContext context)
     {
+        var elf = Parent;
+        if (elf != null)
+        {
+            _is32 = elf.FileClass == ElfFileClass.Is32;
+        }
         Size = (ulong)(Parent!.Segments.Count * (AdditionalEntrySize + (_is32 ? sizeof(ElfNative.Elf32_Phdr) : sizeof(ElfNative.Elf64_Phdr))));
     }
 
