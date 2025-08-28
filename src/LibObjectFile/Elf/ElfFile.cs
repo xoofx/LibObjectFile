@@ -33,14 +33,14 @@ public sealed partial class ElfFile : ElfObject, IEnumerable<ElfContent>
     /// <summary>
     /// Creates a new instance with the default sections (null and a shadow program header table).
     /// </summary>
-    public ElfFile(ElfArch arch) : this(arch, ElfFileClass.None, ElfEncoding.None)
+    public ElfFile(ElfArch arch, bool addDefaultSections=true) : this(arch, ElfFileClass.None, ElfEncoding.None, addDefaultSections)
     {
     }
 
     /// <summary>
     /// Creates a new instance with the default sections (null and a shadow program header table).
     /// </summary>
-    public ElfFile(ElfArch arch, ElfFileClass fileClass, ElfEncoding encoding) : this(true)
+    public ElfFile(ElfArch arch, ElfFileClass fileClass, ElfEncoding encoding,bool addDefaultSections=true) : this(addDefaultSections)
     {
         Arch = arch;
         switch (arch)
