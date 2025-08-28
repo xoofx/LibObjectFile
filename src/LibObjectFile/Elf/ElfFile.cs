@@ -33,14 +33,37 @@ public sealed partial class ElfFile : ElfObject, IEnumerable<ElfContent>
     /// <summary>
     /// Creates a new instance with the default sections (null and a shadow program header table).
     /// </summary>
-    public ElfFile(ElfArch arch, bool addDefaultSections=true) : this(arch, ElfFileClass.None, ElfEncoding.None, addDefaultSections)
+    public ElfFile(ElfArch arch) : this(arch, true)
+    {
+    }
+
+    /// <summary>
+    /// Creates a new instance with optional default sections (null and a shadow program header table).
+    /// </summary>
+    /// <param name="arch">The machine architecture for the ELF file.</param>
+    /// <param name="addDefaultSections">If <c>true</c>, adds default sections (null and a shadow program header table).</param>
+    public ElfFile(ElfArch arch, bool addDefaultSections) : this(arch, ElfFileClass.None, ElfEncoding.None, addDefaultSections)
     {
     }
 
     /// <summary>
     /// Creates a new instance with the default sections (null and a shadow program header table).
     /// </summary>
-    public ElfFile(ElfArch arch, ElfFileClass fileClass, ElfEncoding encoding,bool addDefaultSections=true) : this(addDefaultSections)
+    /// <param name="arch">The machine architecture for the ELF file.</param>
+    /// <param name="fileClass">The file class (32 or 64 bits) for the ELF file.</param>
+    /// <param name="encoding">The encoding (LSB or MSB) for the ELF file.</param>
+    public ElfFile(ElfArch arch, ElfFileClass fileClass, ElfEncoding encoding) : this(arch, fileClass, encoding, true)
+    {
+    }
+
+    /// <summary>
+    /// Creates a new instance with optional default sections (null and a shadow program header table).
+    /// </summary>
+    /// <param name="arch">The machine architecture for the ELF file.</param>
+    /// <param name="fileClass">The file class (32 or 64 bits) for the ELF file.</param>
+    /// <param name="encoding">The encoding (LSB or MSB) for the ELF file.</param>
+    /// <param name="addDefaultSections">If <c>true</c>, adds default sections (null and a shadow program header table).</param>
+    public ElfFile(ElfArch arch, ElfFileClass fileClass, ElfEncoding encoding, bool addDefaultSections) : this(addDefaultSections)
     {
         Arch = arch;
         switch (arch)
