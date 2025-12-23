@@ -133,6 +133,7 @@ public sealed partial class ElfSectionHeaderTable : ElfContentData
             ElfSectionType.Note => new ElfNoteTable(),
             ElfSectionType.SymbolTableSectionHeaderIndices => new ElfSymbolTableSectionHeaderIndices(),
             ElfSectionType.NoBits => new ElfNoBitsSection(),
+            ElfSectionType.DynamicLinking => new ElfDynamicLinkingTable(),
             _ => new ElfStreamSection(sectionType)
         };
     }
