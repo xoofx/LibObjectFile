@@ -142,7 +142,15 @@ namespace LibObjectFile.Elf
             _is32 = is32;
 
             if (is32)
-                throw new NotImplementedException();
+            {
+                if (entrySize != (ulong)sizeof(ElfNative.Elf32_Dyn))
+                    diagnostics.Error(DiagnosticId.ELF_ERR_InvalidSectionEntrySize, $"Invalid size [{entrySize}] for dynamic entry. Expecting to be equal to [{sizeof(ElfNative.Elf32_Dyn)}] bytes.");
+                else
+                {
+                    BaseTableEntrySize = (uint)sizeof(ElfNative.Elf32_Dyn);
+                    AdditionalTableEntrySize = (uint)(entrySize - AdditionalTableEntrySize);
+                }
+            }
             else
             {
                 if (entrySize != (ulong)sizeof(ElfNative.Elf64_Dyn))
