@@ -39,6 +39,15 @@ namespace LibObjectFile.Elf
             Entries = [];
         }
 
+        protected override void UpdateLayoutCore(ElfVisitorContext context)
+        {
+            base.UpdateLayoutCore(context);
+
+            var numberOfEntries = Entries.Count;
+
+            base.Size = (ulong)numberOfEntries * base.TableEntrySize;
+        }
+
         public override void Read(ElfReader reader)
         {
             reader.Position = Position;
