@@ -759,7 +759,7 @@ namespace LibObjectFile.Dwarf
         public const ushort DW_AT_byte_stride = 81;
         
         /// <summary>
-        /// DWARF3 (do not use)
+        /// DWARF2 (do not use)
         /// </summary>
         public const ushort DW_AT_stride = 81;
         
@@ -4183,9 +4183,15 @@ namespace LibObjectFile.Dwarf
         ReturnAddr = DwarfNative.DW_AT_return_addr,
         
         StartScope = DwarfNative.DW_AT_start_scope,
-        
+
+        /// <summary>
+        /// DWARF3 name
+        /// </summary>
         BitStride = DwarfNative.DW_AT_bit_stride,
-        
+
+        /// <summary>
+        /// DWARF2 name
+        /// </summary>
         StrideSize = DwarfNative.DW_AT_stride_size,
         
         UpperBound = DwarfNative.DW_AT_upper_bound,
@@ -4253,9 +4259,15 @@ namespace LibObjectFile.Dwarf
         Associated = DwarfNative.DW_AT_associated,
         
         DataLocation = DwarfNative.DW_AT_data_location,
-        
+
+        /// <summary>
+        /// DWARF3f
+        /// </summary>
         ByteStride = DwarfNative.DW_AT_byte_stride,
-        
+
+        /// <summary>
+        /// DWARF2
+        /// </summary>
         Stride = DwarfNative.DW_AT_stride,
         
         EntryPC = DwarfNative.DW_AT_entry_pc,
