@@ -4,7 +4,6 @@
     <TargetFramework>net10.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <IsPackable>false</IsPackable>
-    <EnableMSTestRunner>true</EnableMSTestRunner>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
