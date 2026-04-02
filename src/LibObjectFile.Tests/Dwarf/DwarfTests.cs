@@ -28,7 +28,7 @@ public class DwarfTests : ElfTestBase
         Assert.IsNotNull(dwarf);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0UL)]
     [DataRow(1UL)]
     [DataRow(50UL)]
