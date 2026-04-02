@@ -16,7 +16,7 @@ namespace LibObjectFile.Tests.IO;
 [TestClass]
 public class TestBatchDataReaderWriter
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(100)]
@@ -39,7 +39,7 @@ public class TestBatchDataReaderWriter
         Assert.AreEqual(count, i);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(100)]

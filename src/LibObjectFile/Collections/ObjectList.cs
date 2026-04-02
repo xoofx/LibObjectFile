@@ -224,7 +224,6 @@ public readonly struct ObjectList<TObject> : IList<TObject>
 
         public ObjectListDebuggerView(ObjectList<TObject> collection)
         {
-            ArgumentNullException.ThrowIfNull(collection, nameof(collection));
             _collection = collection.UnsafeList;
         }
 

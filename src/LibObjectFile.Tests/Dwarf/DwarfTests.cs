@@ -17,7 +17,7 @@ public class DwarfTests : ElfTestBase
     [TestMethod]
     public void ReadDwarf_version2_should_be_successfull()
     {
-        const string ResourceName = @".\TestFiles\TestDwarf2.elf";
+        string ResourceName = Path.Combine(AppContext.BaseDirectory, "TestFiles", "TestDwarf2.elf");
 
         ElfFile elf = OpenAndLoadElf(ResourceName);
         var elfContext = new DwarfElfContext(elf);
@@ -27,7 +27,6 @@ public class DwarfTests : ElfTestBase
 
         Assert.IsNotNull(dwarf);
     }
-
 
     [DataTestMethod]
     [DataRow(0UL)]
@@ -54,7 +53,7 @@ public class DwarfTests : ElfTestBase
         Assert.AreEqual(value, readbackValue);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0L)]
     [DataRow(1L)]
     [DataRow(50L)]

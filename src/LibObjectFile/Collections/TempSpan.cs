@@ -35,7 +35,7 @@ public readonly ref struct TempSpan<T> where T : unmanaged
     /// <param name="size">The size of the span in bytes.</param>
     private TempSpan(byte[] buffer, int size)
     {
-        _span = MemoryMarshal.Cast<byte, T>(new(buffer, 0, size));
+        _span = MemoryMarshal.Cast<byte, T>(new Span<byte>(buffer, 0, size));
         _buffer = buffer;
     }
 

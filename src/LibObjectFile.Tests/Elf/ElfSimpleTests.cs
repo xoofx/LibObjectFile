@@ -17,8 +17,8 @@ namespace LibObjectFile.Tests.Elf;
 [TestClass]
 public class ElfSimpleTests : ElfTestBase
 {
-    [DataTestMethod]
-    [DynamicData(nameof(GetLinuxBins), DynamicDataSourceType.Method)]
+    [TestMethod]
+    [DynamicData(nameof(GetLinuxBins))]
     public void TestLinuxFile(string file)
     {
         if (string.IsNullOrEmpty(file))
@@ -526,7 +526,7 @@ public class ElfSimpleTests : ElfTestBase
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("helloworld")]
     [DataRow("libstdc++.so")]
     [DataRow("helloworld_debug")]
