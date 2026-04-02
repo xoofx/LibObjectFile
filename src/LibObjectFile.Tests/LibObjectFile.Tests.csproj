@@ -102,7 +102,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="D:\ALAIN\GitHub\LibObjectFile\src\LibObjectFile.Tests\TestFiles\TestDwarf2.elf">
+    <None Update=".\src\LibObjectFile.Tests\TestFiles\TestDwarf2.elf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
