@@ -1,6 +1,6 @@
 # configuration file for dotnet-releaser
 [msbuild]
-project = "LibObjectFile.sln"
+project = "LibObjectFile.slnx"
 build_debug = true
 [test]
 run_tests_for_debug = true
