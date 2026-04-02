@@ -199,7 +199,6 @@ public sealed partial class PEFile : PEObjectBase
 
     public void RemoveSection(PESectionName name)
     {
-        ArgumentNullException.ThrowIfNull(name);
         if (!TryGetSection(name, out var section))
         {
             throw new KeyNotFoundException($"Cannot find section with name `{name}`");
@@ -212,7 +211,6 @@ public sealed partial class PEFile : PEObjectBase
 
     public PESection GetSection(PESectionName name)
     {
-        ArgumentNullException.ThrowIfNull(name);
         if (!TryGetSection(name, out var section))
         {
             throw new KeyNotFoundException($"Cannot find section with name `{name}`");
@@ -223,7 +221,6 @@ public sealed partial class PEFile : PEObjectBase
 
     public bool TryGetSection(PESectionName name, [NotNullWhen(true)] out PESection? section)
     {
-        ArgumentNullException.ThrowIfNull(name);
         var sections = CollectionsMarshal.AsSpan(_sections.UnsafeList);
         foreach (var trySection in sections)
         {

@@ -3,6 +3,7 @@
 // See the license.txt file in the project root for more information.
 
 using System.Diagnostics;
+using JetBrains.Profiler.Api;
 using LibObjectFile.Elf;
 
 namespace LibObjectFile.Bench;
@@ -11,6 +12,9 @@ internal class Program
 {
     static void Main(string[] args)
     {
+        //Console.WriteLine($"Press enter to start benchmarking - pid: {Process.GetCurrentProcess().Id}");
+        //Console.ReadLine();
+
         Console.WriteLine("Loading files into memory");
         var clock = Stopwatch.StartNew();
         var streams = new List<MemoryStream>();
@@ -34,12 +38,14 @@ internal class Program
 
         clock.Stop();
         Console.WriteLine($"End reading in {clock.Elapsed.TotalMilliseconds}ms");
-        Console.ReadLine();
-
+        //Console.ReadLine();
+        //MeasureProfiler.StartCollectingData();
+        //MeasureProfiler.StartCollectingData();
         Console.WriteLine("Processing");
         var memoryStream = new MemoryStream(biggestCapacity);
         clock.Restart();
         //SuperluminalPerf.Initialize();
+        //MeasureProfiler.StartCollectingData("Loading");
         for (int i = 0; i < 10; i++)
         {
             //SuperluminalPerf.BeginEvent($"Round{i}");
@@ -52,6 +58,7 @@ internal class Program
             }
             //SuperluminalPerf.EndEvent();
         }
+        //MeasureProfiler.SaveData();
         clock.Stop();
         Console.WriteLine($"{clock.Elapsed.TotalMilliseconds}ms");
     }

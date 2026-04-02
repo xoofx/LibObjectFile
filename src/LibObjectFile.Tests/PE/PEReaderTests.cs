@@ -18,7 +18,7 @@ namespace LibObjectFile.Tests.PE;
 [UsesVerify]
 public partial class PEReaderTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("NativeConsoleWin64.exe")]
     [DataRow("NativeConsole2Win64.exe")]
     [DataRow("NativeLibraryWin64.dll")]
@@ -163,8 +163,8 @@ public partial class PEReaderTests
         }
     }
     
-    [DataTestMethod]
-    [DynamicData(nameof(GetWindowsExeAndDlls), DynamicDataSourceType.Method)]
+    [TestMethod]
+    [DynamicData(nameof(GetWindowsExeAndDlls))]
     public async Task TestWindows(string sourceFile)
     {
         if (!OperatingSystem.IsWindows())

@@ -109,7 +109,7 @@ public class ObjDisasmApp
     {
         var buffer = ArrayPool<byte>.Shared.Rent((int)size);
         var startPosition = stream.Position;
-        stream.Read(buffer, 0, (int) size);
+        stream.ReadExactly(buffer, 0, (int) size);
         stream.Position = startPosition;
 
         // You can also pass in a hex string, eg. "90 91 929394", or you can use your own CodeReader
