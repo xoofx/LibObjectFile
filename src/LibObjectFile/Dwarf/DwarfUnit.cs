@@ -171,7 +171,7 @@ public abstract class DwarfUnit : DwarfContainer
 
         DwarfUnitKindEx unitKind = reader.DefaultUnitKind;
 
-        if (version <= 2 || version > 5)
+        if (version < 2 || version > 5)
         {
             reader.Diagnostics.Error(DiagnosticId.DWARF_ERR_VersionNotSupported, $"Version {version} is not supported");
             return null;

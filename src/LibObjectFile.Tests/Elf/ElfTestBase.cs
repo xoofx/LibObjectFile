@@ -71,6 +71,12 @@ public abstract class ElfTestBase : VerifyBase
         ByteArrayAssert.AreEqual(originalBinary, newBinary, "Invalid binary diff between write -> read -> write");
     }
 
+    protected ElfFile OpenAndLoadElf(string absolutePath)
+    {
+        using var stream = File.OpenRead(absolutePath);
+        return ElfFile.Read(stream);
+    }
+
     protected ElfFile LoadElf(string name)
     {
         var file = GetFile(name);

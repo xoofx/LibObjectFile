@@ -100,4 +100,10 @@
     <Folder Include="Verified\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update=".\src\LibObjectFile.Tests\TestFiles\TestDwarf2.elf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

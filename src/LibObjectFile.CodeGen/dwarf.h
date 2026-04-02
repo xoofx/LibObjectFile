@@ -338,7 +338,7 @@ extern "C" {
 #define DW_AT_associated                        0x4f /* DWARF3 */
 #define DW_AT_data_location                     0x50 /* DWARF3 */
 #define DW_AT_byte_stride                       0x51 /* DWARF3f */
-#define DW_AT_stride                            0x51 /* DWARF3 (do not use) */
+#define DW_AT_stride                            0x51 /* DWARF2 (do not use) */
 #define DW_AT_entry_pc                          0x52 /* DWARF3 */
 #define DW_AT_use_UTF8                          0x53 /* DWARF3 */
 #define DW_AT_extension                         0x54 /* DWARF3 */

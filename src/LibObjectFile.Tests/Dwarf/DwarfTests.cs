@@ -15,6 +15,20 @@ namespace LibObjectFile.Tests.Dwarf;
 public class DwarfTests : ElfTestBase
 {
     [TestMethod]
+    public void ReadDwarf_version2_should_be_successfull()
+    {
+        string ResourceName = Path.Combine(AppContext.BaseDirectory, "TestFiles", "TestDwarf2.elf");
+
+        ElfFile elf = OpenAndLoadElf(ResourceName);
+        var elfContext = new DwarfElfContext(elf);
+        var inputContext = new DwarfReaderContext(elfContext);
+        inputContext.DebugLinePrinter = Console.Out;
+        var dwarf = DwarfFile.Read(inputContext);
+
+        Assert.IsNotNull(dwarf);
+    }
+
+    [DataTestMethod]
     [DataRow(0UL)]
     [DataRow(1UL)]
     [DataRow(50UL)]
@@ -301,7 +315,7 @@ public class DwarfTests : ElfTestBase
             DebugAbbrevStream = new MemoryStream(),
             DebugLineStream = new MemoryStream(),
             DebugInfoStream = new MemoryStream(),
-            DebugStringStream =  new MemoryStream(),
+            DebugStringStream = new MemoryStream(),
             DebugAddressRangeStream = new MemoryStream()
         };
         dwarf.Write(outputContext);
