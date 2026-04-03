@@ -127,7 +127,7 @@ public class ElfStringTable : ElfSection
         return newName;
     }
 
-    internal bool TryGetString(uint index, out string text)
+    public bool TryGetString(uint index, out string text)
     {
         if (index == 0)
         {
