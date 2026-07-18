@@ -92,6 +92,23 @@ public class ElfStringTable : ElfSection
         return new(index);
     }
 
+    /// <summary>
+    /// Adds a string to the table (or returns the offset of an existing copy) and
+    /// returns its byte offset. Lets callers append entries such as a new
+    /// <c>DT_NEEDED</c> library name whose dynamic entry stores a raw string offset.
+    /// </summary>
+    public uint GetOrCreateString(string text)
+    {
+        if (string.IsNullOrEmpty(text)) return 0;
+
+        if (!_mapStringToIndex.TryGetValue(text, out uint index))
+        {
+            index = CreateIndex(text);
+        }
+
+        return index;
+    }
+
     public bool TryResolve(ElfString name, out ElfString resolvedName)
     {
         string text = name.Value;
