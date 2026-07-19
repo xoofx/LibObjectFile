@@ -14,19 +14,7 @@ namespace LibObjectFile.Elf
 {
     public class ElfDynamicLinkingTable : ElfSection
     {
-        private Stream _stream;
         private bool _is32;
-
-        public Stream Stream
-        {
-            get => _stream;
-            set
-            {
-                ArgumentNullException.ThrowIfNull(value);
-                _stream = value;
-                Size = (ulong)_stream.Length;
-            }
-        }
 
         public List<ElfDynamic> Entries { get; }
 
@@ -34,9 +22,130 @@ namespace LibObjectFile.Elf
         {
             Name = ElfSectionSpecialType.Dynamic.GetDefaultName();
             Flags = ElfSectionSpecialType.Dynamic.GetSectionFlags();
-            _stream = new MemoryStream();
 
             Entries = [];
+        }
+
+        /// <summary>
+        /// Gets the dynamic string table (<c>.dynstr</c>) referenced by <see cref="ElfSection.Link"/>,
+        /// or <c>null</c> when the link does not point to an <see cref="ElfStringTable"/>. Tags such as
+        /// <see cref="ElfDynamicTag.Needed"/> store an offset into this table rather than the string itself.
+        /// </summary>
+        public ElfStringTable? StringTable => Link.Section as ElfStringTable;
+
+        /// <summary>
+        /// Returns <c>true</c> when the value of an entry with the given <paramref name="tag"/> is an offset
+        /// into the linked string table (<see cref="StringTable"/>) rather than an address, size, or flag set.
+        /// </summary>
+        public static bool IsStringValueTag(ElfDynamicTag tag) => tag switch
+        {
+            ElfDynamicTag.Needed
+                or ElfDynamicTag.SoName
+                or ElfDynamicTag.RPath
+                or ElfDynamicTag.RunPath
+                or ElfDynamicTag.Config
+                or ElfDynamicTag.DepAudit
+                or ElfDynamicTag.Audit => true,
+            _ => false,
+        };
+
+        /// <summary>
+        /// Resolves the string referenced by a string-valued entry (e.g. <see cref="ElfDynamicTag.Needed"/>)
+        /// through the linked string table. Returns <c>false</c> when the entry is not string-valued or the
+        /// linked string table is missing.
+        /// </summary>
+        public bool TryGetString(ElfDynamic entry, out string value)
+        {
+            if (IsStringValueTag(entry.TagType) && StringTable is { } stringTable)
+            {
+                return stringTable.TryGetString((uint)entry.Value, out value);
+            }
+
+            value = string.Empty;
+            return false;
+        }
+
+        /// <summary>
+        /// Enumerates the shared library names referenced by <see cref="ElfDynamicTag.Needed"/> entries,
+        /// resolved through the linked string table. Yields nothing when the string table is missing.
+        /// </summary>
+        public IEnumerable<string> GetNeededLibraries()
+        {
+            if (StringTable is not { } stringTable)
+            {
+                yield break;
+            }
+
+            foreach (var entry in Entries)
+            {
+                if (entry.TagType == ElfDynamicTag.Needed && stringTable.TryGetString((uint)entry.Value, out var name))
+                {
+                    yield return name;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Appends a <see cref="ElfDynamicTag.Needed"/> entry for <paramref name="libraryName"/>, adding the
+        /// name to the linked string table. The entry is inserted before any trailing
+        /// <see cref="ElfDynamicTag.Null"/> terminator so the table stays valid.
+        /// </summary>
+        /// <exception cref="InvalidOperationException"><see cref="ElfSection.Link"/> is not an <see cref="ElfStringTable"/>.</exception>
+        public void AddNeededLibrary(string libraryName)
+        {
+            ArgumentNullException.ThrowIfNull(libraryName);
+            var stringTable = StringTable ?? throw new InvalidOperationException($"The {nameof(Link)} of this dynamic section must be set to an {nameof(ElfStringTable)} before adding a needed library");
+
+            var offset = stringTable.GetOrCreateString(libraryName);
+
+            int insertIndex = Entries.Count;
+            while (insertIndex > 0 && Entries[insertIndex - 1].TagType == ElfDynamicTag.Null)
+            {
+                insertIndex--;
+            }
+
+            Entries.Insert(insertIndex, new ElfDynamic { Tag = (long)ElfDynamicTag.Needed, Value = offset });
+        }
+
+        /// <summary>
+        /// Serializes <see cref="Entries"/> as raw <c>Elf32_Dyn</c>/<c>Elf64_Dyn</c> records to <paramref name="stream"/>,
+        /// using the file class and byte order of the parent <see cref="ElfFile"/>. Standalone counterpart to the
+        /// full-file write path, mirroring <see cref="ElfFile.Write(Stream)"/> at the section level.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">The section is not attached to an <see cref="ElfFile"/>.</exception>
+        public void Write(Stream stream)
+        {
+            ArgumentNullException.ThrowIfNull(stream);
+            var elf = Parent ?? throw new InvalidOperationException($"The {nameof(ElfDynamicLinkingTable)} must be attached to an {nameof(ElfFile)} to determine the file class and byte order");
+
+            var writer = ElfWriter.Create(elf, stream);
+            Write(writer);
+        }
+
+        /// <summary>
+        /// Replaces <see cref="Entries"/> by reading raw <c>Elf32_Dyn</c>/<c>Elf64_Dyn</c> records from the whole of
+        /// <paramref name="stream"/>, using the file class and byte order of the parent <see cref="ElfFile"/>.
+        /// Standalone counterpart to the full-file read path, mirroring <see cref="ElfFile.Read(Stream, ElfReaderOptions)"/>.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">The section is not attached to an <see cref="ElfFile"/>.</exception>
+        public void Read(Stream stream)
+        {
+            ArgumentNullException.ThrowIfNull(stream);
+            var elf = Parent ?? throw new InvalidOperationException($"The {nameof(ElfDynamicLinkingTable)} must be attached to an {nameof(ElfFile)} to determine the file class and byte order");
+
+            var reader = ElfReader.Create(elf, stream, new ElfReaderOptions());
+            reader.Position = 0;
+
+            var entrySize = _is32 ? Unsafe.SizeOf<ElfNative.Elf32_Dyn>() : Unsafe.SizeOf<ElfNative.Elf64_Dyn>();
+            var numberOfEntries = (int)((ulong)stream.Length / (ulong)entrySize);
+
+            Entries.Clear();
+            CollectionsMarshal.SetCount(Entries, numberOfEntries);
+
+            if (_is32)
+                Read32(reader, numberOfEntries);
+            else
+                Read64(reader, numberOfEntries);
         }
 
         protected override void UpdateLayoutCore(ElfVisitorContext context)
