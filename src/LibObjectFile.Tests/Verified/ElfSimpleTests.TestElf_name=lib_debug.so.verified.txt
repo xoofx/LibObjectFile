@@ -87,7 +87,25 @@ Program Headers:
    09      
    10     .init_array .fini_array .dynamic .got 
 
-There is no dynamic section in this file.
+Dynamic section at offset 0x2e90 contains 17 entries:
+  Tag        Type                         Name/Value
+ 0x000000000000000c (INIT)               0x1000
+ 0x000000000000000d (FINI)               0x1130
+ 0x0000000000000019 (INIT_ARRAY)         0x3e80
+ 0x000000000000001b (INIT_ARRAYSZ)       8 (bytes)
+ 0x000000000000001a (FINI_ARRAY)         0x3e88
+ 0x000000000000001c (FINI_ARRAYSZ)       8 (bytes)
+ 0x000000006ffffef5 (GNU_HASH)           0x2f0
+ 0x0000000000000005 (STRTAB)             0x3c0
+ 0x0000000000000006 (SYMTAB)             0x318
+ 0x000000000000000a (STRSZ)              122 (bytes)
+ 0x000000000000000b (SYMENT)             24 (bytes)
+ 0x0000000000000003 (PLTGOT)             0x4000
+ 0x0000000000000007 (RELA)               0x440
+ 0x0000000000000008 (RELASZ)             168 (bytes)
+ 0x0000000000000009 (RELAENT)            24 (bytes)
+ 0x000000006ffffff9 (RELACOUNT)          3
+ 0x0000000000000000 (NULL)               0x0
 
 Relocation section '.rela.dyn' at offset 0x440 contains 7 entries:
     Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
