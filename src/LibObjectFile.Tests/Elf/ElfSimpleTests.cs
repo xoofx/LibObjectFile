@@ -536,6 +536,34 @@ public class ElfSimpleTests : ElfTestBase
     }
 
     [TestMethod]
+    public void SectionHeader64BitFieldsNotTruncated()
+    {
+        // Regression: the 64-bit section header writer cast sh_addr/sh_offset/sh_size/etc. to uint,
+        // truncating any value >= 4 GiB. A NOBITS section declares a huge address/size with no file bytes.
+        var elf = new ElfFile(ElfArch.X86_64);
+
+        var bss = new ElfNoBitsSection
+        {
+            Name = ".hugebss",
+            VirtualAddress = 0x1_0000_2000UL, // > 4 GiB
+            Size = 0x2_0000_1000UL,           // > 4 GiB
+            VirtualAddressAlignment = 0x1000,
+        };
+        elf.Add(bss);
+        elf.Add(new ElfSectionHeaderStringTable());
+        elf.Add(new ElfSectionHeaderTable());
+
+        var stream = new MemoryStream();
+        elf.Write(stream);
+        stream.Position = 0;
+        var roundTrip = ElfFile.Read(stream);
+
+        var bss2 = roundTrip.Sections.OfType<ElfNoBitsSection>().Single();
+        Assert.AreEqual(0x1_0000_2000UL, bss2.VirtualAddress);
+        Assert.AreEqual(0x2_0000_1000UL, bss2.Size);
+    }
+
+    [TestMethod]
     public async Task TestAlignedSection()
     {
         var elf = new ElfFile(ElfArch.X86_64);

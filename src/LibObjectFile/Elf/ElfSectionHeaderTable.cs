@@ -216,21 +216,23 @@ public sealed partial class ElfSectionHeaderTable : ElfContentData
         writer.Encode(out rawSection.sh_name, section.Name.Index);
         writer.Encode(out rawSection.sh_type, (uint)section.Type);
         writer.Encode(out rawSection.sh_flags, (uint)section.Flags);
-        writer.Encode(out rawSection.sh_addr, (uint)section.VirtualAddress);
-        writer.Encode(out rawSection.sh_offset, (uint)section.Position);
+        // sh_addr/sh_offset/sh_size/sh_addralign/sh_entsize are 64-bit in Elf64_Shdr. Casting to
+        // uint here truncated any value >= 4 GiB (high load addresses, large NOBITS sections).
+        writer.Encode(out rawSection.sh_addr, section.VirtualAddress);
+        writer.Encode(out rawSection.sh_offset, section.Position);
         if (section.SectionIndex == 0 && writer.File.Sections.Count >= ElfNative.SHN_LORESERVE)
         {
-            writer.Encode(out rawSection.sh_size, (uint)writer.File.Sections.Count);
+            writer.Encode(out rawSection.sh_size, (ulong)writer.File.Sections.Count);
             var shstrSectionIndex = (uint)(writer.File.SectionHeaderStringTable?.SectionIndex ?? 0);
             writer.Encode(out rawSection.sh_link, shstrSectionIndex >= ElfNative.SHN_LORESERVE ? shstrSectionIndex : 0);
         }
         else
         {
-            writer.Encode(out rawSection.sh_size, (uint)section.Size);
+            writer.Encode(out rawSection.sh_size, section.Size);
             writer.Encode(out rawSection.sh_link, (uint)section.Link.GetIndex());
         }
         writer.Encode(out rawSection.sh_info, (uint)section.Info.GetIndex());
-        writer.Encode(out rawSection.sh_addralign, (uint)section.VirtualAddressAlignment);
-        writer.Encode(out rawSection.sh_entsize, (uint)section.TableEntrySize);
+        writer.Encode(out rawSection.sh_addralign, section.VirtualAddressAlignment);
+        writer.Encode(out rawSection.sh_entsize, section.TableEntrySize);
     }
 }
