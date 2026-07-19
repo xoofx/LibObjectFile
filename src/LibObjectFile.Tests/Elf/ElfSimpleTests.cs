@@ -439,6 +439,103 @@ public class ElfSimpleTests : ElfTestBase
 
 
     [TestMethod]
+    public async Task SimpleDynamicSection()
+    {
+        var elf = new ElfFile(ElfArch.X86_64);
+
+        var dynstr = new ElfStringTable() { Name = ".dynstr" };
+        elf.Add(dynstr);
+
+        var dynamic = new ElfDynamicLinkingTable() { Link = dynstr };
+        dynamic.AddNeededLibrary("libc.so.6");
+        dynamic.AddNeededLibrary("libm.so.6");
+        dynamic.Entries.Add(new ElfDynamic { Tag = (long)ElfDynamicTag.Flags1, Value = 0x08000001 });
+        dynamic.Entries.Add(new ElfDynamic { Tag = (long)ElfDynamicTag.Null });
+        elf.Add(dynamic);
+
+        elf.Add(new ElfSectionHeaderStringTable());
+        elf.Add(new ElfSectionHeaderTable());
+
+        // The read helpers resolve DT_NEEDED offsets through the linked .dynstr.
+        CollectionAssert.AreEqual(new[] { "libc.so.6", "libm.so.6" }, dynamic.GetNeededLibraries().ToList());
+
+        await AssertReadElf(elf, "test_dynamic.elf");
+
+        // Round-trip the entries and confirm the resolved library names survive write -> read.
+        var memoryStream = new MemoryStream();
+        elf.Write(memoryStream);
+        memoryStream.Position = 0;
+        var roundTrip = ElfFile.Read(memoryStream);
+        var roundTripDynamic = roundTrip.Sections.OfType<ElfDynamicLinkingTable>().Single();
+        Assert.AreEqual(dynamic.Entries.Count, roundTripDynamic.Entries.Count);
+        CollectionAssert.AreEqual(new[] { "libc.so.6", "libm.so.6" }, roundTripDynamic.GetNeededLibraries().ToList());
+    }
+
+    [TestMethod]
+    public void DynamicSectionStreamRoundTrip()
+    {
+        var elf = new ElfFile(ElfArch.X86_64);
+        var dynstr = new ElfStringTable() { Name = ".dynstr" };
+        elf.Add(dynstr);
+
+        var dynamic = new ElfDynamicLinkingTable() { Link = dynstr };
+        dynamic.AddNeededLibrary("libc.so.6");
+        dynamic.Entries.Add(new ElfDynamic { Tag = (long)ElfDynamicTag.Flags1, Value = 0x08000001 });
+        dynamic.Entries.Add(new ElfDynamic { Tag = (long)ElfDynamicTag.Null });
+        elf.Add(dynamic);
+
+        // Serialize just the .dynamic entries to a standalone stream (64-bit -> 16 bytes each).
+        var stream = new MemoryStream();
+        dynamic.Write(stream);
+        Assert.AreEqual(dynamic.Entries.Count * 16, stream.Length);
+
+        // Read them back into a fresh table attached to another file and confirm value equality.
+        var elf2 = new ElfFile(ElfArch.X86_64);
+        var dynamic2 = new ElfDynamicLinkingTable();
+        elf2.Add(dynamic2);
+        stream.Position = 0;
+        dynamic2.Read(stream);
+
+        CollectionAssert.AreEqual(dynamic.Entries, dynamic2.Entries);
+    }
+
+    [TestMethod]
+    public void DynamicSection32Bit()
+    {
+        var elf = new ElfFile(ElfArch.I386);
+        var dynstr = new ElfStringTable() { Name = ".dynstr" };
+        elf.Add(dynstr);
+
+        var dynamic = new ElfDynamicLinkingTable() { Link = dynstr };
+        dynamic.AddNeededLibrary("libc.so.6");
+        dynamic.Entries.Add(new ElfDynamic { Tag = (long)ElfDynamicTag.Flags, Value = 0x8 }); // DF_BIND_NOW
+        dynamic.Entries.Add(new ElfDynamic { Tag = (long)ElfDynamicTag.Null });
+        elf.Add(dynamic);
+
+        // The printer uses 8-digit tag hex for 32-bit files.
+        var writer = new StringWriter();
+        ElfPrinter.PrintDynamicSections(elf, writer);
+        var text = writer.ToString();
+        StringAssert.Contains(text, " 0x00000001 (NEEDED)");
+        StringAssert.Contains(text, "Shared library: [libc.so.6]");
+        StringAssert.Contains(text, " 0x0000001e (FLAGS)");
+        StringAssert.Contains(text, "BIND_NOW");
+
+        // The Read32/Write32 path uses 8-byte Elf32_Dyn records.
+        var stream = new MemoryStream();
+        dynamic.Write(stream);
+        Assert.AreEqual(dynamic.Entries.Count * 8, stream.Length);
+
+        var elf2 = new ElfFile(ElfArch.I386);
+        var dynamic2 = new ElfDynamicLinkingTable();
+        elf2.Add(dynamic2);
+        stream.Position = 0;
+        dynamic2.Read(stream);
+
+        CollectionAssert.AreEqual(dynamic.Entries, dynamic2.Entries);
+    }
+
+    [TestMethod]
     public async Task TestAlignedSection()
     {
         var elf = new ElfFile(ElfArch.X86_64);
