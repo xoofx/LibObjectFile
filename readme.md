@@ -49,6 +49,7 @@ elf.Write(outStream);
     - Symbol Table
     - Relocation Table: supported I386, X86_64, ARM and AARCH64 relocations (others can be exposed by adding some mappings)
     - Note Table
+    - Dynamic Linking Table (`SHT_DYNAMIC`)
     - Other sections fallback to `ElfCustomSection`
   - Program headers with or without sections
   - Print with `readelf` similar output
