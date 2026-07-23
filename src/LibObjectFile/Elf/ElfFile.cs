@@ -419,6 +419,7 @@ public sealed partial class ElfFile : ElfObject, IEnumerable<ElfContent>
     /// Writes this ELF object file to the specified stream.
     /// </summary>
     /// <param name="stream">The stream to write to.</param>
+    /// <remarks>The stream is flushed before this method returns but is not disposed.</remarks>
     public void Write(Stream stream)
     {
         if (!TryWrite(stream, out var diagnostics))
@@ -433,6 +434,7 @@ public sealed partial class ElfFile : ElfObject, IEnumerable<ElfContent>
     /// <param name="stream">The stream to write to.</param>
     /// <param name="diagnostics">The output diagnostics</param>
     /// <returns><c>true</c> if writing was successful. otherwise <c>false</c></returns>
+    /// <remarks>The stream is flushed after a successful write but is not disposed.</remarks>
     public bool TryWrite(Stream stream, out DiagnosticBag diagnostics)
     {
         if (stream == null) throw new ArgumentNullException(nameof(stream));
@@ -452,6 +454,7 @@ public sealed partial class ElfFile : ElfObject, IEnumerable<ElfContent>
         }
 
         Write(elfWriter);
+        stream.Flush();
 
         return !diagnostics.HasErrors;
     }

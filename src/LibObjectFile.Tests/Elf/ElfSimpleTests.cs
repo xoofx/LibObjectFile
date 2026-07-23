@@ -58,6 +58,17 @@ public class ElfSimpleTests : ElfTestBase
         ByteArrayAssert.AreEqual(originalBuffer, copyStream.ToArray());
     }
 
+    [TestMethod]
+    public void TestWriteFlushesOutputStream()
+    {
+        var elf = LoadElf("helloworld");
+        using var output = new FlushTrackingStream();
+
+        elf.Write(output);
+
+        Assert.IsTrue(output.WasFlushed);
+    }
+
     public static IEnumerable<object[]> GetLinuxBins()
     {
         var wslDirectory = @"\\wsl$\Ubuntu\usr\bin";
@@ -661,5 +672,16 @@ public class ElfSimpleTests : ElfTestBase
     public async Task TestElf(string name)
     {
         await LoadAndVerifyElf(name);
+    }
+
+    private sealed class FlushTrackingStream : MemoryStream
+    {
+        public bool WasFlushed { get; private set; }
+
+        public override void Flush()
+        {
+            WasFlushed = true;
+            base.Flush();
+        }
     }
 }
