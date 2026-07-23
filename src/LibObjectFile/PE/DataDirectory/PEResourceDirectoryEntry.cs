@@ -7,6 +7,7 @@ using LibObjectFile.PE.Internal;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -254,7 +255,7 @@ public sealed class PEResourceDirectoryEntry : PEResourceEntry
             builder.Append(", ");
         }
 
-        builder.Append($"ByNames[{ByNames.Count}], ByIds[{ByIds.Count}] , TimeDateStamp = {TimeDateStamp}, MajorVersion = {MajorVersion}, MinorVersion = {MinorVersion}");
+        builder.Append($"ByNames[{ByNames.Count}], ByIds[{ByIds.Count}] , TimeDateStamp = {TimeDateStamp.ToString("MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture)}, MajorVersion = {MajorVersion}, MinorVersion = {MinorVersion}");
 
         return true;
     }

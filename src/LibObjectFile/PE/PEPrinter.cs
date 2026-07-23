@@ -3,6 +3,7 @@
 // See the license.txt file in the project root for more information.
 
 using System;
+using System.Globalization;
 using System.IO;
 using LibObjectFile.IO;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -413,7 +414,7 @@ public static class PEPrinter
 
     private static void Print(PEExportDirectory data, ref TextWriterIndenter writer)
     {
-        writer.WriteLine($"{nameof(PEExportDirectory.TimeStamp)} = {data.TimeStamp}");
+        writer.WriteLine($"{nameof(PEExportDirectory.TimeStamp)} = {FormatTimestamp(data.TimeStamp)}");
         writer.WriteLine($"{nameof(PEExportDirectory.MajorVersion)} = {data.MajorVersion}");
         writer.WriteLine($"{nameof(PEExportDirectory.MinorVersion)} = {data.MinorVersion}");
         writer.WriteLine($"{nameof(PEExportDirectory.OrdinalBase)} = 0x{data.OrdinalBase:X}");
@@ -575,7 +576,7 @@ public static class PEPrinter
                 writer.WriteLine($"> CodePage = {resourceFile.CodePage?.EncodingName ?? "null"}, Data = {resourceFile.Data}");
                 break;
             case PEResourceDirectoryEntry dir:
-                writer.WriteLine($"> ByNames[{dir.ByNames.Count}], ByIds[{dir.ByIds.Count}] , TimeDateStamp = {dir.TimeDateStamp}, Version = {dir.MajorVersion}.{dir.MinorVersion}");
+                writer.WriteLine($"> ByNames[{dir.ByNames.Count}], ByIds[{dir.ByIds.Count}] , TimeDateStamp = {FormatTimestamp(dir.TimeDateStamp)}, Version = {dir.MajorVersion}.{dir.MinorVersion}");
                 writer.Indent();
 
                 for (var i = 0; i < dir.ByNames.Count; i++)
@@ -740,4 +741,6 @@ public static class PEPrinter
             return "";
         }
     }
+
+    private static string FormatTimestamp(DateTime timestamp) => timestamp.ToString("MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
 }

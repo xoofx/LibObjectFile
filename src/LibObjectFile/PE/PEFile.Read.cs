@@ -91,10 +91,13 @@ partial class PEFile
             // Read the DOS stub
             var dosStubSize = DosHeader.SizeOfParagraphsHeader * 16;
 
-            if (dosStubSize + sizeof(PEDosHeader) > pePosition)
+            // e_cparhdr describes the DOS header rather than the space available before
+            // the PE header. Some Windows binaries have less than e_cparhdr * 16 bytes
+            // available for the stub, so limit the stub to the actual available space.
+            var availableDosStubSize = pePosition - sizeof(PEDosHeader);
+            if (dosStubSize > availableDosStubSize)
             {
-                diagnostics.Error(DiagnosticId.PE_ERR_InvalidDosStubSize, $"Invalid DOS stub size {dosStubSize} going beyond the PE header");
-                return;
+                dosStubSize = (int)availableDosStubSize;
             }
             
             if (dosStubSize > 0)

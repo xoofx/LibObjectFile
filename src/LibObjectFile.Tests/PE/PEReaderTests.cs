@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -161,6 +162,45 @@ public partial class PEReaderTests
             process.WaitForExit();
             Assert.AreEqual(156, process.ExitCode);
         }
+    }
+
+    [TestMethod]
+    public void TestReadShortDosStub()
+    {
+        var pe = new PEFile
+        {
+            // Some Windows binaries use a stub shorter than e_cparhdr * 16.
+            DosStub = new byte[56]
+        };
+        using var stream = new MemoryStream();
+        pe.Write(stream);
+
+        stream.Position = 0;
+        var readPE = PEFile.Read(stream);
+
+        Assert.AreEqual(56, readPE.DosStub.Length);
+    }
+
+    [TestMethod]
+    public void TestPrinterUsesStableDateFormat()
+    {
+        var sourceFile = Path.Combine(AppContext.BaseDirectory, "PE", "NativeLibraryWin64.dll");
+        using var stream = File.OpenRead(sourceFile);
+        var peImage = PEFile.Read(stream);
+        var writer = new StringWriter();
+        var previousCulture = CultureInfo.CurrentCulture;
+
+        try
+        {
+            CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("fr-FR");
+            peImage.Print(writer);
+        }
+        finally
+        {
+            CultureInfo.CurrentCulture = previousCulture;
+        }
+
+        StringAssert.Contains(writer.ToString(), "TimeStamp = 02/07/2106 06:28:15");
     }
     
     [TestMethod]
