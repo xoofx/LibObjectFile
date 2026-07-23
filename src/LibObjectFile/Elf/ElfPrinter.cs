@@ -538,9 +538,253 @@ public static class ElfPrinter
 
     public static void PrintDynamicSections(ElfFile elf, TextWriter writer)
     {
-        writer.WriteLine();
-        writer.WriteLine("There is no dynamic section in this file.");
-        // TODO
+        if (elf == null) throw new ArgumentNullException(nameof(elf));
+        if (writer == null) throw new ArgumentNullException(nameof(writer));
+
+        bool is32 = elf.FileClass == ElfFileClass.Is32;
+        bool foundDynamic = false;
+
+        foreach (var section in elf.Sections)
+        {
+            if (section is not ElfDynamicLinkingTable dynamic) continue;
+            foundDynamic = true;
+
+            // readelf lists entries up to and including the first DT_NULL terminator, ignoring any
+            // trailing padding entries the section may reserve for later editing.
+            int count = dynamic.Entries.Count;
+            for (int i = 0; i < dynamic.Entries.Count; i++)
+            {
+                if (dynamic.Entries[i].TagType == ElfDynamicTag.Null)
+                {
+                    count = i + 1;
+                    break;
+                }
+            }
+
+            writer.WriteLine();
+            writer.WriteLine(count == 1
+                ? $"Dynamic section at offset 0x{dynamic.Position:x} contains {count} entry:"
+                : $"Dynamic section at offset 0x{dynamic.Position:x} contains {count} entries:");
+            writer.WriteLine("  Tag        Type                         Name/Value");
+
+            for (int i = 0; i < count; i++)
+            {
+                var entry = dynamic.Entries[i];
+                var tagHex = is32 ? $"0x{(uint)entry.Tag:x8}" : $"0x{(ulong)entry.Tag:x16}";
+                var typeField = $" ({GetElfDynamicTagName(entry.Tag)})";
+                writer.WriteLine($" {tagHex}{typeField,-22}{GetElfDynamicValue(dynamic, entry)}");
+            }
+        }
+
+        if (!foundDynamic)
+        {
+            writer.WriteLine();
+            writer.WriteLine("There is no dynamic section in this file.");
+        }
+    }
+
+    private static string GetElfDynamicValue(ElfDynamicLinkingTable dynamic, ElfDynamic entry)
+    {
+        var tag = entry.TagType;
+        var value = entry.Value;
+
+        if (ElfDynamicLinkingTable.IsStringValueTag(tag) && dynamic.TryGetString(entry, out var name))
+        {
+            return tag switch
+            {
+                ElfDynamicTag.Needed => $"Shared library: [{name}]",
+                ElfDynamicTag.SoName => $"Library soname: [{name}]",
+                ElfDynamicTag.RPath => $"Library rpath: [{name}]",
+                ElfDynamicTag.RunPath => $"Library runpath: [{name}]",
+                ElfDynamicTag.Config => $"Configuration file: [{name}]",
+                ElfDynamicTag.DepAudit => $"Dependency audit library: [{name}]",
+                ElfDynamicTag.Audit => $"Audit library: [{name}]",
+                _ => $"0x{value:x}",
+            };
+        }
+
+        switch (tag)
+        {
+            case ElfDynamicTag.PltRelSz:
+            case ElfDynamicTag.RelaSz:
+            case ElfDynamicTag.RelaEnt:
+            case ElfDynamicTag.StrSz:
+            case ElfDynamicTag.SymEnt:
+            case ElfDynamicTag.RelSz:
+            case ElfDynamicTag.RelEnt:
+            case ElfDynamicTag.InitArraySz:
+            case ElfDynamicTag.FiniArraySz:
+            case ElfDynamicTag.PreInitArraySz:
+            case ElfDynamicTag.RelrSz:
+            case ElfDynamicTag.RelrEnt:
+            case ElfDynamicTag.GnuConflictSz:
+            case ElfDynamicTag.GnuLibListSz:
+            case ElfDynamicTag.PltPadSz:
+            case ElfDynamicTag.MoveSz:
+            case ElfDynamicTag.MoveEnt:
+            case ElfDynamicTag.SymInSz:
+            case ElfDynamicTag.SymInEnt:
+                return $"{value} (bytes)";
+
+            case ElfDynamicTag.RelaCount:
+            case ElfDynamicTag.RelCount:
+            case ElfDynamicTag.VerDefNum:
+            case ElfDynamicTag.VerNeedNum:
+                return value.ToString();
+
+            case ElfDynamicTag.PltRel:
+                return value == (ulong)ElfNative.DT_RELA ? "RELA" : value == (ulong)ElfNative.DT_REL ? "REL" : $"0x{value:x}";
+
+            case ElfDynamicTag.Flags:
+                return GetElfDynamicFlags(value);
+
+            case ElfDynamicTag.Flags1:
+                return $"Flags:{GetElfDynamicFlags1(value)}";
+
+            default:
+                return $"0x{value:x}";
+        }
+    }
+
+    private static string GetElfDynamicFlags(ulong flags)
+    {
+        // DF_* flags. Not exposed by ElfNative, so the bit values are inlined here.
+        (ulong Bit, string Name)[] known =
+        [
+            (0x1, "ORIGIN"),
+            (0x2, "SYMBOLIC"),
+            (0x4, "TEXTREL"),
+            (0x8, "BIND_NOW"),
+            (0x10, "STATIC_TLS"),
+        ];
+
+        var builder = new StringBuilder();
+        foreach (var (bit, flagName) in known)
+        {
+            if ((flags & bit) == 0) continue;
+            if (builder.Length > 0) builder.Append(' ');
+            builder.Append(flagName);
+            flags &= ~bit;
+        }
+
+        if (flags != 0)
+        {
+            if (builder.Length > 0) builder.Append(' ');
+            builder.Append($"0x{flags:x}");
+        }
+
+        return builder.ToString();
+    }
+
+    private static string GetElfDynamicFlags1(ulong flags)
+    {
+        // DF_1_* flags, in readelf order. Each match is emitted as " NAME" so the caller can prefix "Flags:".
+        (ulong Bit, string Name)[] known =
+        [
+            (0x00000001, "NOW"), (0x00000002, "GLOBAL"), (0x00000004, "GROUP"), (0x00000008, "NODELETE"),
+            (0x00000010, "LOADFLTR"), (0x00000020, "INITFIRST"), (0x00000040, "NOOPEN"), (0x00000080, "ORIGIN"),
+            (0x00000100, "DIRECT"), (0x00000200, "TRANS"), (0x00000400, "INTERPOSE"), (0x00000800, "NODEFLIB"),
+            (0x00001000, "NODUMP"), (0x00002000, "CONFALT"), (0x00004000, "ENDFILTEE"), (0x00008000, "DISPRELDNE"),
+            (0x00010000, "DISPRELPND"), (0x00020000, "NODIRECT"), (0x00040000, "IGNMULDEF"), (0x00080000, "NOKSYMS"),
+            (0x00100000, "NOHDR"), (0x00200000, "EDITED"), (0x00400000, "NORELOC"), (0x00800000, "SYMINTPOSE"),
+            (0x01000000, "GLOBAUDIT"), (0x02000000, "SINGLETON"), (0x04000000, "STUB"), (0x08000000, "PIE"),
+            (0x10000000, "KMOD"), (0x20000000, "WEAKFILTER"), (0x40000000, "NOCOMMON"),
+        ];
+
+        var builder = new StringBuilder();
+        foreach (var (bit, flagName) in known)
+        {
+            if ((flags & bit) == 0) continue;
+            builder.Append(' ');
+            builder.Append(flagName);
+            flags &= ~bit;
+        }
+
+        if (flags != 0)
+        {
+            builder.Append($" 0x{flags:x}");
+        }
+
+        return builder.ToString();
+    }
+
+    private static string GetElfDynamicTagName(long tag)
+    {
+        switch ((ElfDynamicTag)tag)
+        {
+            case ElfDynamicTag.Null: return "NULL";
+            case ElfDynamicTag.Needed: return "NEEDED";
+            case ElfDynamicTag.PltRelSz: return "PLTRELSZ";
+            case ElfDynamicTag.PltGot: return "PLTGOT";
+            case ElfDynamicTag.Hash: return "HASH";
+            case ElfDynamicTag.StrTab: return "STRTAB";
+            case ElfDynamicTag.SymTab: return "SYMTAB";
+            case ElfDynamicTag.Rela: return "RELA";
+            case ElfDynamicTag.RelaSz: return "RELASZ";
+            case ElfDynamicTag.RelaEnt: return "RELAENT";
+            case ElfDynamicTag.StrSz: return "STRSZ";
+            case ElfDynamicTag.SymEnt: return "SYMENT";
+            case ElfDynamicTag.Init: return "INIT";
+            case ElfDynamicTag.Fini: return "FINI";
+            case ElfDynamicTag.SoName: return "SONAME";
+            case ElfDynamicTag.RPath: return "RPATH";
+            case ElfDynamicTag.Symbolic: return "SYMBOLIC";
+            case ElfDynamicTag.Rel: return "REL";
+            case ElfDynamicTag.RelSz: return "RELSZ";
+            case ElfDynamicTag.RelEnt: return "RELENT";
+            case ElfDynamicTag.PltRel: return "PLTREL";
+            case ElfDynamicTag.Debug: return "DEBUG";
+            case ElfDynamicTag.TextRel: return "TEXTREL";
+            case ElfDynamicTag.JmpRel: return "JMPREL";
+            case ElfDynamicTag.BindNow: return "BIND_NOW";
+            case ElfDynamicTag.InitArray: return "INIT_ARRAY";
+            case ElfDynamicTag.FiniArray: return "FINI_ARRAY";
+            case ElfDynamicTag.InitArraySz: return "INIT_ARRAYSZ";
+            case ElfDynamicTag.FiniArraySz: return "FINI_ARRAYSZ";
+            case ElfDynamicTag.RunPath: return "RUNPATH";
+            case ElfDynamicTag.Flags: return "FLAGS";
+            // DT_ENCODING (32) aliases DT_PREINIT_ARRAY; readelf reports 32 as PREINIT_ARRAY.
+            case ElfDynamicTag.PreInitArray: return "PREINIT_ARRAY";
+            case ElfDynamicTag.PreInitArraySz: return "PREINIT_ARRAYSZ";
+            case ElfDynamicTag.SymtabShndx: return "SYMTAB_SHNDX";
+            case ElfDynamicTag.RelrSz: return "RELRSZ";
+            case ElfDynamicTag.Relr: return "RELR";
+            case ElfDynamicTag.RelrEnt: return "RELRENT";
+            case ElfDynamicTag.GnuPrelinked: return "GNU_PRELINKED";
+            case ElfDynamicTag.GnuConflictSz: return "GNU_CONFLICTSZ";
+            case ElfDynamicTag.GnuLibListSz: return "GNU_LIBLISTSZ";
+            case ElfDynamicTag.Checksum: return "CHECKSUM";
+            case ElfDynamicTag.PltPadSz: return "PLTPADSZ";
+            case ElfDynamicTag.MoveEnt: return "MOVEENT";
+            case ElfDynamicTag.MoveSz: return "MOVESZ";
+            case ElfDynamicTag.Feature1: return "FEATURE_1";
+            case ElfDynamicTag.PosFlag1: return "POSFLAG_1";
+            case ElfDynamicTag.SymInSz: return "SYMINSZ";
+            case ElfDynamicTag.SymInEnt: return "SYMINENT";
+            case ElfDynamicTag.GnuHash: return "GNU_HASH";
+            case ElfDynamicTag.TlsDescPlt: return "TLSDESC_PLT";
+            case ElfDynamicTag.TlsDescGot: return "TLSDESC_GOT";
+            case ElfDynamicTag.GnuConflict: return "GNU_CONFLICT";
+            case ElfDynamicTag.GnuLibList: return "GNU_LIBLIST";
+            case ElfDynamicTag.Config: return "CONFIG";
+            case ElfDynamicTag.DepAudit: return "DEPAUDIT";
+            case ElfDynamicTag.Audit: return "AUDIT";
+            case ElfDynamicTag.PltPad: return "PLTPAD";
+            case ElfDynamicTag.MoveTab: return "MOVETAB";
+            case ElfDynamicTag.SymInfo: return "SYMINFO";
+            case ElfDynamicTag.VerSym: return "VERSYM";
+            case ElfDynamicTag.RelaCount: return "RELACOUNT";
+            case ElfDynamicTag.RelCount: return "RELCOUNT";
+            case ElfDynamicTag.Flags1: return "FLAGS_1";
+            case ElfDynamicTag.VerDef: return "VERDEF";
+            case ElfDynamicTag.VerDefNum: return "VERDEFNUM";
+            case ElfDynamicTag.VerNeed: return "VERNEED";
+            case ElfDynamicTag.VerNeedNum: return "VERNEEDNUM";
+            default:
+                if (tag >= ElfNative.DT_LOOS && tag <= ElfNative.DT_HIOS) return $"<OS specific: 0x{tag:x}>";
+                if (tag >= ElfNative.DT_LOPROC && tag <= ElfNative.DT_HIPROC) return $"<processor specific: 0x{tag:x}>";
+                return $"<unknown>: 0x{tag:x}";
+        }
     }
 
     private static string GetElfSegmentFlags(ElfSegmentFlags flags)
