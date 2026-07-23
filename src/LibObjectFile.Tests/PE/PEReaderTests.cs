@@ -182,6 +182,17 @@ public partial class PEReaderTests
     }
 
     [TestMethod]
+    public void TestWriteFlushesOutputStream()
+    {
+        var pe = new PEFile();
+        using var output = new FlushTrackingStream();
+
+        pe.Write(output);
+
+        Assert.IsTrue(output.WasFlushed);
+    }
+
+    [TestMethod]
     public void TestPrinterUsesStableDateFormat()
     {
         var sourceFile = Path.Combine(AppContext.BaseDirectory, "PE", "NativeLibraryWin64.dll");

@@ -21,6 +21,7 @@ partial class PEFile
     /// Writes this PE file to the specified stream.
     /// </summary>
     /// <param name="stream">The stream to write to.</param>
+    /// <remarks>The stream is flushed before this method returns but is not disposed.</remarks>
     public void Write(Stream stream, PEImageWriterOptions? options = null)
     {
         if (!TryWrite(stream, out var diagnostics, options))
@@ -35,6 +36,7 @@ partial class PEFile
     /// <param name="stream">The stream to write to.</param>
     /// <param name="diagnostics">The output diagnostics</param>
     /// <returns><c>true</c> if writing was successful. otherwise <c>false</c></returns>
+    /// <remarks>The stream is flushed after a successful write but is not disposed.</remarks>
     public bool TryWrite(Stream stream, out DiagnosticBag diagnostics, PEImageWriterOptions? options = null)
     {
         if (stream == null) throw new ArgumentNullException(nameof(stream));
@@ -67,6 +69,7 @@ partial class PEFile
 
         // Write the PE file
         Write(peWriter);
+        stream.Flush();
         
         return !diagnostics.HasErrors;
     }

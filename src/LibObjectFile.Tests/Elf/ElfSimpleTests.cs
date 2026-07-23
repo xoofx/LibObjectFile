@@ -673,15 +673,4 @@ public class ElfSimpleTests : ElfTestBase
     {
         await LoadAndVerifyElf(name);
     }
-
-    private sealed class FlushTrackingStream : MemoryStream
-    {
-        public bool WasFlushed { get; private set; }
-
-        public override void Flush()
-        {
-            WasFlushed = true;
-            base.Flush();
-        }
-    }
 }

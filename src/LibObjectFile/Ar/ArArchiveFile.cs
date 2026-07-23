@@ -318,11 +318,13 @@ public sealed class ArArchiveFile : ArObjectBase
     /// Writes this 'ar' archive file to the specified stream.
     /// </summary>
     /// <param name="stream">The stream to write to.</param>
+    /// <remarks>The stream is flushed before this method returns but is not disposed.</remarks>
     public void Write(Stream stream)
     {
         if (stream == null) throw new ArgumentNullException(nameof(stream));
         var writer = new ArArchiveFileWriter(this, stream);
         writer.Write();
+        stream.Flush();
     }
 
     protected override void UpdateLayoutCore(ArVisitorContext context)

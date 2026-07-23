@@ -314,6 +314,22 @@ public class ArTests : ArTestBase
     }
 
     [TestMethod]
+    public void TestWriteFlushesOutputStream()
+    {
+        var archive = new ArArchiveFile();
+        archive.AddFile(new ArBinaryFile
+        {
+            Name = "file.txt",
+            Stream = new MemoryStream(Encoding.UTF8.GetBytes("content"))
+        });
+        using var output = new FlushTrackingStream();
+
+        archive.Write(output);
+
+        Assert.IsTrue(output.WasFlushed);
+    }
+
+    [TestMethod]
     public async Task CheckCreateArLibrary()
     {
         var libName = "libcustom.a";
