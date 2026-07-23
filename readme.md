@@ -52,6 +52,7 @@ elf.Write(outStream);
     - Dynamic Linking Table (`SHT_DYNAMIC`)
     - Other sections fallback to `ElfCustomSection`
   - Program headers with or without sections
+  - `ElfFile.AddNeededLibrary` injects a `DT_NEEDED` dependency into an existing image without moving any section (address-preserving, `patchelf`-style)
   - Print with `readelf` similar output
 - Support for **DWARF debugging format**:
   - Partial support of Version 4 (currently still the default for GCC)
