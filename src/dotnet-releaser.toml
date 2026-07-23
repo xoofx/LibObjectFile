@@ -7,3 +7,6 @@ run_tests_for_debug = true
 [github]
 user = "xoofx"
 repo = "LibObjectFile"
+[nuget]
+user = "xoofx"
+trusted_publishing = true

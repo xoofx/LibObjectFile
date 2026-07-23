@@ -4,12 +4,16 @@ on:
   push:
     paths-ignore:
     - 'doc/**'
-    - 'changelog.md'
-    - 'readme.md'
+    - '*.md'
+    - '*.txt'
   pull_request:
 
 jobs:
   build:
+    permissions:
+      id-token: write
+      actions: write
+      contents: write
     runs-on: ubuntu-22.04
     steps:
       - name: "Build, Test, Pack and Publish"
