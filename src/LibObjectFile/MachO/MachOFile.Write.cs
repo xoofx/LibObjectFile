@@ -40,15 +40,28 @@ partial class MachOFile
 
         var writer = new MachOWriter(this, stream, new DiagnosticBag());
         diagnostics = writer.Diagnostics;
+
+        Verify(writer.VisitorContext);
+        if (diagnostics.HasErrors)
+        {
+            return false;
+        }
+
+        UpdateLayout(writer.VisitorContext);
+        if (diagnostics.HasErrors)
+        {
+            return false;
+        }
+
         Write(writer);
+        stream.Flush();
+
         return !diagnostics.HasErrors;
     }
 
     /// <inheritdoc />
     public override void Write(MachOWriter writer)
     {
-        UpdateLayout(writer.VisitorContext);
-
         if (IsCodeSignatureStale)
         {
             writer.Diagnostics.Error(

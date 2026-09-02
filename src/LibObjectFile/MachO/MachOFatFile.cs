@@ -254,6 +254,8 @@ public sealed class MachOFatFile
         {
             stream.SetLength(basePosition + end);
         }
+
+        stream.Flush();
     }
 
     /// <summary>

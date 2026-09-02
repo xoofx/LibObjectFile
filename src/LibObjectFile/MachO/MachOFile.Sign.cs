@@ -84,6 +84,16 @@ partial class MachOFile
         linkEdit.FileSize = signatureOffset + signatureSize - linkEdit.FileOffset;
         linkEdit.VmSize = Math.Max(linkEdit.VmSize, linkEdit.FileSize);
 
+        // Aligning the signature can leave a gap, and every byte of the file has to belong to
+        // some content, so the padding is added rather than left as a hole in the list.
+        if (signatureOffset > contentEnd)
+        {
+            Content.Add(new MachOStreamContent(new MemoryStream(new byte[signatureOffset - contentEnd]))
+            {
+                Position = contentEnd,
+            });
+        }
+
         var placeholder = new MachOStreamContent(new MemoryStream(new byte[signatureSize])) { Position = signatureOffset };
         Content.Add(placeholder);
 
