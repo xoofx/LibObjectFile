@@ -4,8 +4,10 @@
 
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using LibObjectFile.MachO;
 using VerifyMSTest;
+using VerifyTests;
 
 namespace LibObjectFile.Tests.MachO;
 
@@ -22,4 +24,10 @@ public abstract class MachOTestBase : VerifyBase
         return stream.ToArray();
     }
 
+    protected async Task VerifyMachO(MachOFile file, string name)
+    {
+        var writer = new StringWriter();
+        file.Print(writer);
+        await Verifier.Verify(writer.ToString()).UseParameters(name);
+    }
 }

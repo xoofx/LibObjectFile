@@ -1,0 +1,247 @@
+﻿Mach header:
+                 magic MH_MAGIC_64
+               cputype Arm64
+            cpusubtype 0x00000000
+              filetype Execute
+                 ncmds 17
+            sizeofcmds 1384
+                 flags 0x200085 NoUndefs, DyldLink, TwoLevel, PositionIndependent
+
+Load command 0
+                   cmd LC_SEGMENT_64
+               cmdsize 72
+               segname __PAGEZERO
+                vmaddr 0x00000000
+                vmsize 0x100000000
+               fileoff 0
+              filesize 0
+               maxprot ---
+              initprot ---
+                nsects 0
+                 flags 0x0
+Load command 1
+                   cmd LC_SEGMENT_64
+               cmdsize 472
+               segname __TEXT
+                vmaddr 0x100000000
+                vmsize 0x00004000
+               fileoff 0
+              filesize 16384
+               maxprot r-x
+              initprot r-x
+                nsects 5
+                 flags 0x0
+Section
+              sectname __text
+               segname __TEXT
+                  addr 0x100003f0c
+                  size 0x00000064
+                offset 16140
+                 align 2^2 (4)
+                reloff 0
+                nreloc 0
+                  type Regular
+            attributes SomeInstructions, PureInstructions
+             reserved1 0
+             reserved2 0
+Section
+              sectname __stubs
+               segname __TEXT
+                  addr 0x100003f70
+                  size 0x0000000c
+                offset 16240
+                 align 2^2 (4)
+                reloff 0
+                nreloc 0
+                  type SymbolStubs
+            attributes SomeInstructions, PureInstructions
+             reserved1 0
+             reserved2 12
+Section
+              sectname __stub_helper
+               segname __TEXT
+                  addr 0x100003f7c
+                  size 0x00000024
+                offset 16252
+                 align 2^2 (4)
+                reloff 0
+                nreloc 0
+                  type Regular
+            attributes SomeInstructions, PureInstructions
+             reserved1 0
+             reserved2 0
+Section
+              sectname __cstring
+               segname __TEXT
+                  addr 0x100003fa0
+                  size 0x00000010
+                offset 16288
+                 align 2^0 (1)
+                reloff 0
+                nreloc 0
+                  type CStringLiterals
+            attributes (none)
+             reserved1 0
+             reserved2 0
+Section
+              sectname __unwind_info
+               segname __TEXT
+                  addr 0x100003fb0
+                  size 0x00000050
+                offset 16304
+                 align 2^2 (4)
+                reloff 0
+                nreloc 0
+                  type Regular
+            attributes (none)
+             reserved1 0
+             reserved2 0
+Load command 2
+                   cmd LC_SEGMENT_64
+               cmdsize 152
+               segname __DATA_CONST
+                vmaddr 0x100004000
+                vmsize 0x00004000
+               fileoff 16384
+              filesize 16384
+               maxprot rw-
+              initprot rw-
+                nsects 1
+                 flags 0x10
+Section
+              sectname __got
+               segname __DATA_CONST
+                  addr 0x100004000
+                  size 0x00000008
+                offset 16384
+                 align 2^3 (8)
+                reloff 0
+                nreloc 0
+                  type NonLazySymbolPointers
+            attributes (none)
+             reserved1 1
+             reserved2 0
+Load command 3
+                   cmd LC_SEGMENT_64
+               cmdsize 232
+               segname __DATA
+                vmaddr 0x100008000
+                vmsize 0x00004000
+               fileoff 32768
+              filesize 16384
+               maxprot rw-
+              initprot rw-
+                nsects 2
+                 flags 0x0
+Section
+              sectname __la_symbol_ptr
+               segname __DATA
+                  addr 0x100008000
+                  size 0x00000008
+                offset 32768
+                 align 2^3 (8)
+                reloff 0
+                nreloc 0
+                  type LazySymbolPointers
+            attributes (none)
+             reserved1 2
+             reserved2 0
+Section
+              sectname __data
+               segname __DATA
+                  addr 0x100008008
+                  size 0x0000000c
+                offset 32776
+                 align 2^3 (8)
+                reloff 0
+                nreloc 0
+                  type Regular
+            attributes (none)
+             reserved1 0
+             reserved2 0
+Load command 4
+                   cmd LC_SEGMENT_64
+               cmdsize 72
+               segname __LINKEDIT
+                vmaddr 0x10000c000
+                vmsize 0x00004000
+               fileoff 49152
+              filesize 925
+               maxprot r--
+              initprot r--
+                nsects 0
+                 flags 0x0
+Load command 5
+                   cmd LC_DYLD_INFO_ONLY
+               cmdsize 48
+            rebase_off 49152
+           rebase_size 8
+              bind_off 49160
+             bind_size 24
+         lazy_bind_off 49184
+        lazy_bind_size 16
+            export_off 49200
+           export_size 88
+Load command 6
+                   cmd LC_SYMTAB
+               cmdsize 24
+                symoff 49296
+                 nsyms 7
+                stroff 49424
+               strsize 104
+Load command 7
+                   cmd LC_DYSYMTAB
+               cmdsize 80
+             nlocalsym 1
+            nextdefsym 4
+             nundefsym 2
+        indirectsymoff 49408
+         nindirectsyms 3
+Load command 8
+                   cmd LC_LOAD_DYLINKER
+               cmdsize 32
+                  path /usr/lib/dyld
+Load command 9
+                   cmd LC_UUID
+               cmdsize 24
+                  uuid CCF0B44A-CF74-3987-962B-B2EB1FD51B9A
+Load command 10
+                   cmd LC_BUILD_VERSION
+               cmdsize 32
+              platform MacOS
+                 minos 11.0.0
+                   sdk 14.2.0
+                ntools 1
+                  tool Ld
+               version 711.0.0
+Load command 11
+                   cmd LC_SOURCE_VERSION
+               cmdsize 16
+               version 0.0.0.0
+Load command 12
+                   cmd LC_MAIN
+               cmdsize 24
+              entryoff 16164
+             stacksize 0
+Load command 13
+                   cmd LC_LOAD_DYLIB
+               cmdsize 56
+                  name /usr/lib/libSystem.B.dylib
+             timestamp 2
+       current version 1336.61.1
+ compatibility version 1.0.0
+Load command 14
+                   cmd LC_FUNCTION_STARTS
+               cmdsize 16
+               dataoff 49288
+              datasize 8
+Load command 15
+                   cmd LC_DATA_IN_CODE
+               cmdsize 16
+               dataoff 49296
+              datasize 0
+Load command 16
+                   cmd LC_CODE_SIGNATURE
+               cmdsize 16
+               dataoff 49536
+              datasize 541

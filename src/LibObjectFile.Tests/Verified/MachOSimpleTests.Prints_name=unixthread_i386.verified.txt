@@ -1,0 +1,125 @@
+﻿Mach header:
+                 magic MH_MAGIC
+               cputype X86
+            cpusubtype 0x00000003
+              filetype Execute
+                 ncmds 11
+            sizeofcmds 700
+                 flags 0x12085 NoUndefs, DyldLink, TwoLevel, SubsectionsViaSymbols, BindsToWeak
+
+Load command 0
+                   cmd LC_SEGMENT
+               cmdsize 56
+               segname __PAGEZERO
+                vmaddr 0x00000000
+                vmsize 0x00001000
+               fileoff 0
+              filesize 0
+               maxprot ---
+              initprot ---
+                nsects 0
+                 flags 0x4
+Load command 1
+                   cmd LC_SEGMENT
+               cmdsize 124
+               segname __TEXT
+                vmaddr 0x00001000
+                vmsize 0x00001000
+               fileoff 0
+              filesize 4096
+               maxprot rwx
+              initprot r-x
+                nsects 1
+                 flags 0x0
+Section
+              sectname __text
+               segname __TEXT
+                  addr 0x00001800
+                  size 0x00000010
+                offset 2048
+                 align 2^2 (4)
+                reloff 0
+                nreloc 0
+                  type Regular
+            attributes SomeInstructions, PureInstructions
+             reserved1 0
+             reserved2 0
+Load command 2
+                   cmd LC_SEGMENT
+               cmdsize 124
+               segname __DATA
+                vmaddr 0x00002000
+                vmsize 0x00001000
+               fileoff 4096
+              filesize 4096
+               maxprot rwx
+              initprot rw-
+                nsects 1
+                 flags 0x0
+Section
+              sectname __data
+               segname __DATA
+                  addr 0x00002000
+                  size 0x00000004
+                offset 4096
+                 align 2^2 (4)
+                reloff 0
+                nreloc 0
+                  type Regular
+            attributes (none)
+             reserved1 0
+             reserved2 0
+Load command 3
+                   cmd LC_SEGMENT
+               cmdsize 56
+               segname __LINKEDIT
+                vmaddr 0x00003000
+                vmsize 0x00001000
+               fileoff 8192
+              filesize 56
+               maxprot rwx
+              initprot r--
+                nsects 0
+                 flags 0x0
+Load command 4
+                   cmd LC_SYMTAB
+               cmdsize 24
+                symoff 8192
+                 nsyms 2
+                stroff 8216
+               strsize 32
+Load command 5
+                   cmd LC_DYSYMTAB
+               cmdsize 80
+             nlocalsym 0
+            nextdefsym 2
+             nundefsym 0
+        indirectsymoff 0
+         nindirectsyms 0
+Load command 6
+                   cmd LC_LOAD_DYLINKER
+               cmdsize 28
+                  path /usr/lib/dyld
+Load command 7
+                   cmd LC_UUID
+               cmdsize 24
+                  uuid 4B4F544F-5231-4D41-4300-000000000001
+Load command 8
+                   cmd LC_UNIXTHREAD
+               cmdsize 80
+                flavor 1
+                 count 16
+Load command 9
+                   cmd LC_LOAD_DYLIB
+               cmdsize 52
+                  name /usr/lib/libSystem.B.dylib
+             timestamp 2
+       current version 7.208.1
+ compatibility version 1.0.0
+Load command 10
+                   cmd LC_LOAD_DYLIB
+               cmdsize 52
+                  name /usr/lib/libstdc++.6.dylib
+             timestamp 2
+       current version 7.0.0
+ compatibility version 7.0.0
