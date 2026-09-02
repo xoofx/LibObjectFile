@@ -380,4 +380,33 @@ public class MachOSimpleTests : MachOTestBase
         Assert.IsFalse(scattered.IsExternal);
         Assert.AreEqual((MachORelocation.ScatteredMask | (2u << 28) | (1u << 24) | 0x123, 0x4567u), scattered.Encode());
     }
+
+    /// <summary>
+    /// A universal binary stores its header big-endian whatever the architectures inside are,
+    /// which is the one place the format departs from the image's own byte order.
+    /// </summary>
+    [TestMethod]
+    public void ReadsAndWritesAUniversalBinary()
+    {
+        var original = File.ReadAllBytes(GetFile("helloworld_fat"));
+
+        using var input = new MemoryStream(original);
+        Assert.IsTrue(MachOFatFile.IsFat(input));
+        Assert.IsFalse(MachOFile.IsMachO(input), "a universal binary is not itself a Mach-O image");
+
+        var fat = MachOFatFile.Read(input);
+        Assert.IsFalse(fat.Is64BitOffsets);
+        CollectionAssert.AreEqual(new[] { MachOCpuType.X86_64, MachOCpuType.Arm64 }, fat.Slices.Select(s => s.CpuType).ToArray());
+
+        foreach (var slice in fat.Slices)
+        {
+            Assert.IsNotNull(slice.File);
+            Assert.AreEqual(slice.CpuType, slice.File.CpuType, "the slice table has to agree with the image it points at");
+            Assert.AreEqual(0ul, slice.FileOffset % slice.Alignment, "a slice is mapped directly, so it has to be page aligned");
+        }
+
+        var output = new MemoryStream();
+        fat.Write(output);
+        ByteArrayAssert.AreEqual(original, output.ToArray(), "Invalid binary diff for helloworld_fat after read -> write");
+    }
 }

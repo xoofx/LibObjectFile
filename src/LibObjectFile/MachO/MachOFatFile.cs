@@ -1,0 +1,289 @@
+// Copyright (c) Alexandre Mutel. All rights reserved.
+// This file is licensed under the BSD-Clause 2 license.
+// See the license.txt file in the project root for more information.
+
+using System;
+using System.Buffers.Binary;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Linq;
+using LibObjectFile.Diagnostics;
+using LibObjectFile.IO;
+using LibObjectFile.MachO.Internal;
+using LibObjectFile.Utils;
+
+namespace LibObjectFile.MachO;
+
+/// <summary>
+/// A universal binary, holding one <see cref="MachOFile"/> per architecture.
+/// </summary>
+/// <remarks>
+/// The header and its slice table are stored big-endian whatever the architectures inside are,
+/// which is the one place the format does not follow the image's own byte order.
+/// <para>
+/// Slices are aligned to the page size of their architecture so the loader can map one straight
+/// out of the containing file, which is why a universal binary is larger than its slices put
+/// together.
+/// </para>
+/// </remarks>
+public sealed class MachOFatFile
+{
+    /// <summary>
+    /// The size of the header preceding the slice table (<c>fat_header</c>).
+    /// </summary>
+    public static unsafe int HeaderSize => sizeof(RawFatHeader);
+
+    /// <summary>
+    /// Gets the size of one slice table entry for the given offset width.
+    /// </summary>
+    /// <param name="is64BitOffsets">Whether slice offsets are stored as 64-bit values.</param>
+    /// <returns>The size of a <c>fat_arch_64</c> or a <c>fat_arch</c>.</returns>
+    public static unsafe int GetSliceEntrySize(bool is64BitOffsets)
+        => is64BitOffsets ? sizeof(RawFatArch64) : sizeof(RawFatArch);
+
+    /// <summary>
+    /// Gets the slices of this universal binary, in the order the header lists them.
+    /// </summary>
+    public List<MachOFatSlice> Slices { get; } = [];
+
+    /// <summary>
+    /// Gets or sets whether slice offsets are stored as 64-bit values, which is needed once a
+    /// slice starts beyond 4GB.
+    /// </summary>
+    public bool Is64BitOffsets { get; set; }
+
+    /// <summary>
+    /// Checks whether a stream starts with a universal binary magic, without consuming it.
+    /// </summary>
+    /// <param name="stream">The stream to inspect.</param>
+    /// <returns><c>true</c> if the stream starts with a universal binary magic.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="stream"/> is null.</exception>
+    public static bool IsFat(Stream stream)
+    {
+        ArgumentNullException.ThrowIfNull(stream);
+
+        var position = stream.Position;
+        try
+        {
+            Span<byte> magic = stackalloc byte[4];
+            if (stream.Read(magic) != 4) return false;
+            var value = BinaryPrimitives.ReadUInt32BigEndian(magic);
+            return value is MachOMagic.FatMagic or MachOMagic.FatMagic64;
+        }
+        finally
+        {
+            stream.Position = position;
+        }
+    }
+
+    /// <summary>
+    /// Reads a universal binary from a stream.
+    /// </summary>
+    /// <param name="stream">The stream positioned at the start of the file.</param>
+    /// <param name="options">Options controlling how each slice is read, or null for the defaults.</param>
+    /// <returns>The universal binary read.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="stream"/> is null.</exception>
+    /// <exception cref="ObjectFileException">The stream does not contain a readable universal binary.</exception>
+    public static MachOFatFile Read(Stream stream, MachOReaderOptions? options = null)
+    {
+        if (!TryRead(stream, out var file, out var diagnostics, options))
+        {
+            throw new ObjectFileException($"Unexpected error while reading the Mach-O universal binary", diagnostics);
+        }
+        return file;
+    }
+
+    /// <summary>
+    /// Tries to read a universal binary from a stream.
+    /// </summary>
+    /// <param name="stream">The stream positioned at the start of the file.</param>
+    /// <param name="file">The universal binary read, if reading succeeded.</param>
+    /// <param name="diagnostics">The diagnostics collected, if reading failed.</param>
+    /// <param name="options">Options controlling how each slice is read, or null for the defaults.</param>
+    /// <returns><c>true</c> if the file was read; otherwise <c>false</c>.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="stream"/> is null.</exception>
+    public static bool TryRead(Stream stream, [NotNullWhen(true)] out MachOFatFile? file, [NotNullWhen(false)] out DiagnosticBag? diagnostics, MachOReaderOptions? options = null)
+    {
+        ArgumentNullException.ThrowIfNull(stream);
+
+        var bag = new DiagnosticBag();
+        file = new MachOFatFile();
+        diagnostics = bag;
+
+        var basePosition = stream.Position;
+        Span<byte> header = stackalloc byte[HeaderSize];
+        stream.Position = basePosition;
+        if (stream.Read(header) != HeaderSize)
+        {
+            bag.Error(DiagnosticId.MACHO_ERR_InvalidFatHeader, "The stream is too short to hold a universal binary header");
+            file = null;
+            return false;
+        }
+
+        var magic = BinaryPrimitives.ReadUInt32BigEndian(header);
+        if (magic is not (MachOMagic.FatMagic or MachOMagic.FatMagic64))
+        {
+            bag.Error(DiagnosticId.MACHO_ERR_InvalidFatHeader, $"Invalid universal binary magic 0x{magic:X8}");
+            file = null;
+            return false;
+        }
+
+        file.Is64BitOffsets = magic == MachOMagic.FatMagic64;
+        var count = BinaryPrimitives.ReadUInt32BigEndian(header.Slice(4));
+
+        var entrySize = GetSliceEntrySize(file.Is64BitOffsets);
+        var entries = new byte[count * (uint)entrySize];
+        try
+        {
+            stream.ReadExactly(entries);
+        }
+        catch (EndOfStreamException)
+        {
+            bag.Error(DiagnosticId.MACHO_ERR_InvalidFatHeader, $"The universal binary header claims {count} architectures, which do not fit in the file");
+            file = null;
+            return false;
+        }
+
+        for (var i = 0; i < count; i++)
+        {
+            var entry = entries.AsSpan(i * entrySize);
+            var slice = new MachOFatSlice
+            {
+                CpuType = (MachOCpuType)BinaryPrimitives.ReadUInt32BigEndian(entry),
+                CpuSubType = BinaryPrimitives.ReadUInt32BigEndian(entry.Slice(4)),
+            };
+
+            if (file.Is64BitOffsets)
+            {
+                slice.FileOffset = BinaryPrimitives.ReadUInt64BigEndian(entry.Slice(8));
+                slice.Size = BinaryPrimitives.ReadUInt64BigEndian(entry.Slice(16));
+                slice.AlignLog2 = BinaryPrimitives.ReadUInt32BigEndian(entry.Slice(24));
+            }
+            else
+            {
+                slice.FileOffset = BinaryPrimitives.ReadUInt32BigEndian(entry.Slice(8));
+                slice.Size = BinaryPrimitives.ReadUInt32BigEndian(entry.Slice(12));
+                slice.AlignLog2 = BinaryPrimitives.ReadUInt32BigEndian(entry.Slice(16));
+            }
+
+            if (slice.FileOffset + slice.Size > (ulong)stream.Length)
+            {
+                bag.Error(DiagnosticId.MACHO_ERR_InvalidFatArchRange, $"Slice {i} spans [0x{slice.FileOffset:X}, 0x{slice.FileOffset + slice.Size:X}) which extends past the end of the file");
+                file = null;
+                return false;
+            }
+
+            // Each slice is a complete image, so it is read through a view bounded to the slice.
+            // Handing it the whole stream would let a malformed slice read its neighbours.
+            var sliceStream = new SubStream(stream, basePosition + (long)slice.FileOffset, (long)slice.Size);
+            if (!MachOFile.TryRead(sliceStream, out var sliceFile, out var sliceDiagnostics, options))
+            {
+                foreach (var message in sliceDiagnostics.Messages)
+                {
+                    bag.Log(message);
+                }
+                file = null;
+                return false;
+            }
+
+            slice.File = sliceFile;
+            file.Slices.Add(slice);
+        }
+
+        diagnostics = null;
+        return true;
+    }
+
+    /// <summary>
+    /// Writes this universal binary to a stream.
+    /// </summary>
+    /// <param name="stream">The stream to write to.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="stream"/> is null.</exception>
+    /// <exception cref="ObjectFileException">A slice could not be written.</exception>
+    /// <remarks>
+    /// The slices are laid out first, so a slice that changed size since it was read is placed
+    /// and recorded correctly rather than overrunning the one after it. The space between them
+    /// is left zeroed: every universal binary examined pads with zeros, and slices are aligned
+    /// rather than packed, so the gaps hold nothing worth preserving.
+    /// </remarks>
+    public void Write(Stream stream)
+    {
+        ArgumentNullException.ThrowIfNull(stream);
+
+        UpdateLayout();
+        var basePosition = stream.Position;
+        var entrySize = GetSliceEntrySize(Is64BitOffsets);
+
+        var header = new byte[HeaderSize + Slices.Count * entrySize];
+        BinaryPrimitives.WriteUInt32BigEndian(header, Is64BitOffsets ? MachOMagic.FatMagic64 : MachOMagic.FatMagic);
+        BinaryPrimitives.WriteUInt32BigEndian(header.AsSpan(4), (uint)Slices.Count);
+
+        for (var i = 0; i < Slices.Count; i++)
+        {
+            var slice = Slices[i];
+            var entry = header.AsSpan(HeaderSize + i * entrySize);
+            BinaryPrimitives.WriteUInt32BigEndian(entry, (uint)slice.CpuType);
+            BinaryPrimitives.WriteUInt32BigEndian(entry.Slice(4), slice.CpuSubType);
+
+            if (Is64BitOffsets)
+            {
+                BinaryPrimitives.WriteUInt64BigEndian(entry.Slice(8), slice.FileOffset);
+                BinaryPrimitives.WriteUInt64BigEndian(entry.Slice(16), slice.Size);
+                BinaryPrimitives.WriteUInt32BigEndian(entry.Slice(24), slice.AlignLog2);
+            }
+            else
+            {
+                BinaryPrimitives.WriteUInt32BigEndian(entry.Slice(8), (uint)slice.FileOffset);
+                BinaryPrimitives.WriteUInt32BigEndian(entry.Slice(12), (uint)slice.Size);
+                BinaryPrimitives.WriteUInt32BigEndian(entry.Slice(16), slice.AlignLog2);
+            }
+        }
+
+        stream.Write(header);
+
+        foreach (var slice in Slices)
+        {
+            if (slice.File is null) continue;
+            stream.Position = basePosition + (long)slice.FileOffset;
+            slice.File.Write(stream);
+        }
+
+        var end = Slices.Count == 0 ? 0 : Slices.Max(s => (long)(s.FileOffset + s.Size));
+        if (stream.Length < basePosition + end)
+        {
+            stream.SetLength(basePosition + end);
+        }
+    }
+
+    /// <summary>
+    /// Recomputes where each slice sits and how large it is.
+    /// </summary>
+    /// <remarks>
+    /// A slice is mapped straight out of the containing file, so it has to start on a page
+    /// boundary for its architecture. Sizes are computed from each slice rather than taken from
+    /// what it was read as, since an edited slice no longer matches that, and the header would
+    /// otherwise point the loader at a slice that overruns the one after it.
+    /// </remarks>
+    public void UpdateLayout()
+    {
+        var cursor = (ulong)(HeaderSize + Slices.Count * GetSliceEntrySize(Is64BitOffsets));
+
+        foreach (var slice in Slices)
+        {
+            if (slice.File is null)
+            {
+                slice.Size = 0;
+                continue;
+            }
+
+            var alignment = slice.Alignment;
+            slice.FileOffset = AlignHelper.AlignUp(cursor, alignment);
+            slice.Size = slice.File.ComputeFileSize();
+            cursor = slice.FileOffset + slice.Size;
+        }
+    }
+
+    /// <inheritdoc />
+    public override string ToString() => $"{nameof(MachOFatFile)} {{ Slices = {Slices.Count} }}";
+}
