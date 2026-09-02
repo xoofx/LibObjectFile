@@ -30,7 +30,7 @@ partial class MachOFile
 
         if (section.NumberOfRelocations == 0) return [];
 
-        var bytes = ReadFileBytes(section.RelocationOffset, section.NumberOfRelocations * MachORelocation.EntrySize, $"relocations of {section.SegmentName},{section.Name}");
+        var bytes = ReadFileBytes(section.RelocationOffset, (ulong)section.NumberOfRelocations * MachORelocation.EntrySize, $"relocations of {section.SegmentName},{section.Name}");
         var relocations = new MachORelocation[section.NumberOfRelocations];
         for (var i = 0; i < relocations.Length; i++)
         {

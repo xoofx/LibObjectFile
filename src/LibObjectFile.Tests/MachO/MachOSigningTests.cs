@@ -209,6 +209,23 @@ public class MachOSigningTests : MachOTestBase
         // An object file has no __LINKEDIT, so there is nowhere for a signature to live.
         Assert.ThrowsExactly<InvalidOperationException>(() => LoadMachO("helloworld_x86_64.o").AdHocSign("helloworld"));
         Assert.ThrowsExactly<ArgumentException>(() => LoadMachO("unixthread_i386").AdHocSign(string.Empty));
+
+        // Signing changes a good deal before it can fail, and a half-signed image is worse than
+        // an unsigned one, so a failure has to leave the image exactly as it was.
+        var file = LoadMachO("unixthread_i386");
+        var before = WriteToArray(file);
+        var contents = file.Content.Count;
+        var commands = file.LoadCommands.Count;
+
+        var section = file.FindSegment("__TEXT")!.Sections[0];
+        section.Address += 4;
+        Assert.ThrowsExactly<ObjectFileException>(() => file.AdHocSign("swkotor"));
+        section.Address -= 4;
+
+        Assert.AreEqual(contents, file.Content.Count, "a failed signing left content behind");
+        Assert.AreEqual(commands, file.LoadCommands.Count, "a failed signing left its load command behind");
+        Assert.IsFalse(file.IsCodeSignatureStale, "a failed signing left the image marked stale");
+        ByteArrayAssert.AreEqual(before, WriteToArray(file), "a failed signing changed the image");
     }
 
     private static Span<byte> FindCodeDirectory(byte[] image, uint signatureOffset)

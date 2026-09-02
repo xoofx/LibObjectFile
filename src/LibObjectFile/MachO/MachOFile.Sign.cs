@@ -4,6 +4,7 @@
 
 using System;
 using System.IO;
+using System.Collections.Generic;
 using System.Linq;
 using LibObjectFile.MachO.CodeSign;
 using LibObjectFile.Utils;
@@ -41,72 +42,121 @@ partial class MachOFile
         var text = FindSegment("__TEXT")
             ?? throw new InvalidOperationException("The image has no __TEXT segment, so the signature cannot describe its executable range.");
 
-        var command = CodeSignature;
-        if (command is null)
-        {
-            command = new MachOLinkEditDataCommand
-            {
-                Type = MachOLoadCommandType.CodeSignature,
-                Size = MachOLinkEditDataCommand.CommandSize,
-            };
-            AppendCommand(command);
-        }
+        // Everything below can fail, and a half-signed image is worse than an unsigned one, so
+        // what changes is remembered first and put back if it does. The state is captured before
+        // the command is added, since adding one is itself a change to undo.
+        var previousFileSize = linkEdit.FileSize;
+        var previousVmSize = linkEdit.VmSize;
+        var previousStale = IsCodeSignatureStale;
+        var added = new List<MachOContent>();
+        MachOContent? removed = null;
+        var removedIndex = -1;
+        MachOLinkEditDataCommand? addedCommand = null;
 
-        // A signature covers everything before it, so it has to be the last thing in the file.
-        // Whatever occupied that place before, including a previous signature, is replaced.
-        if (command.DataOffset != 0)
+        var command = CodeSignature;
+        var previousOffset = command?.DataOffset ?? 0;
+        var previousSize = command?.DataSize ?? 0;
+
+        try
         {
-            for (var i = Content.Count - 1; i >= 0; i--)
+            if (command is null)
             {
-                if (Content[i].Position == command.DataOffset)
+                command = new MachOLinkEditDataCommand
                 {
-                    Content.RemoveAt(i);
-                    break;
+                    Type = MachOLoadCommandType.CodeSignature,
+                    Size = MachOLinkEditDataCommand.CommandSize,
+                };
+                AppendCommand(command);
+                addedCommand = command;
+            }
+            // A signature covers everything before it, so it has to be the last thing in the file.
+            // Whatever occupied that place before, including a previous signature, is replaced.
+            if (command.DataOffset != 0)
+            {
+                for (var i = Content.Count - 1; i >= 0; i--)
+                {
+                    if (Content[i].Position == command.DataOffset)
+                    {
+                        removed = Content[i];
+                        removedIndex = i;
+                        Content.RemoveAt(i);
+                        break;
+                    }
                 }
             }
-        }
 
-        var contentEnd = ComputeFileSize();
-        var signatureOffset = AlignHelper.AlignUp((uint)contentEnd, (uint)MachOCodeSignatureConstants.SignatureAlignment);
+            var contentEnd = ComputeFileSize();
+            var signatureOffset = AlignHelper.AlignUp((uint)contentEnd, (uint)MachOCodeSignatureConstants.SignatureAlignment);
 
-        var builder = new MachOAdHocSignatureBuilder(identifier)
-        {
-            CodeLimit = signatureOffset,
-            ExecSegmentBase = text.FileOffset,
-            ExecSegmentLimit = text.FileSize,
-            ExecSegmentFlags = FileType == MachOFileType.Execute ? MachOCodeSignatureConstants.ExecSegMainBinary : 0,
-        };
-        var signatureSize = builder.ComputeSize();
-
-        command.DataOffset = signatureOffset;
-        command.DataSize = signatureSize;
-
-        linkEdit.FileSize = signatureOffset + signatureSize - linkEdit.FileOffset;
-        linkEdit.VmSize = Math.Max(linkEdit.VmSize, linkEdit.FileSize);
-
-        // Aligning the signature can leave a gap, and every byte of the file has to belong to
-        // some content, so the padding is added rather than left as a hole in the list.
-        if (signatureOffset > contentEnd)
-        {
-            Content.Add(new MachOStreamContent(new MemoryStream(new byte[signatureOffset - contentEnd]))
+            var builder = new MachOAdHocSignatureBuilder(identifier)
             {
-                Position = contentEnd,
-            });
+                CodeLimit = signatureOffset,
+                ExecSegmentBase = text.FileOffset,
+                ExecSegmentLimit = text.FileSize,
+                ExecSegmentFlags = FileType == MachOFileType.Execute ? MachOCodeSignatureConstants.ExecSegMainBinary : 0,
+            };
+            var signatureSize = builder.ComputeSize();
+
+            command.DataOffset = signatureOffset;
+            command.DataSize = signatureSize;
+
+            linkEdit.FileSize = signatureOffset + signatureSize - linkEdit.FileOffset;
+            linkEdit.VmSize = Math.Max(linkEdit.VmSize, linkEdit.FileSize);
+
+            // Aligning the signature can leave a gap, and every byte of the file has to belong to
+            // some content, so the padding is added rather than left as a hole in the list.
+            if (signatureOffset > contentEnd)
+            {
+                var gap = new MachOStreamContent(new MemoryStream(new byte[signatureOffset - contentEnd]))
+                {
+                    Position = contentEnd,
+                };
+                Content.Add(gap);
+                added.Add(gap);
+            }
+
+            var placeholder = new MachOStreamContent(new MemoryStream(new byte[signatureSize])) { Position = signatureOffset };
+            Content.Add(placeholder);
+            added.Add(placeholder);
+
+            // Signing is what makes the image match its signature again, so the edit is settled here
+            // rather than after the digests are taken. Writing checks this, and the digests are taken
+            // by writing the image out.
+            IsCodeSignatureStale = false;
+
+            // The digests cover the image as it will finally be written, so the header, the command
+            // table and the signature's own offsets all have to be settled before they are taken.
+            var image = new MemoryStream();
+            Write(image);
+            placeholder.Content = new MemoryStream(builder.Build(image.GetBuffer().AsSpan(0, (int)signatureOffset)));
         }
+        catch
+        {
+            foreach (var content in added)
+            {
+                Content.Remove(content);
+            }
 
-        var placeholder = new MachOStreamContent(new MemoryStream(new byte[signatureSize])) { Position = signatureOffset };
-        Content.Add(placeholder);
+            if (removed is not null)
+            {
+                Content.Insert(removedIndex, removed);
+            }
 
-        // Signing is what makes the image match its signature again, so the edit is settled here
-        // rather than after the digests are taken. Writing checks this, and the digests are taken
-        // by writing the image out.
-        IsCodeSignatureStale = false;
+            if (addedCommand is not null)
+            {
+                LoadCommands.Remove(addedCommand);
+            }
+            else if (command is not null)
+            {
+                command.DataOffset = previousOffset;
+                command.DataSize = previousSize;
+            }
 
-        // The digests cover the image as it will finally be written, so the header, the command
-        // table and the signature's own offsets all have to be settled before they are taken.
-        var image = new MemoryStream();
-        Write(image);
-        placeholder.Content = new MemoryStream(builder.Build(image.GetBuffer().AsSpan(0, (int)signatureOffset)));
+            linkEdit.FileSize = previousFileSize;
+            linkEdit.VmSize = previousVmSize;
+            IsCodeSignatureStale = previousStale;
+            throw;
+        }
     }
 
 }

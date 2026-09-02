@@ -496,6 +496,19 @@ public class MachOSimpleTests : MachOTestBase
         var tooManySections = Patch(b => Write(b, 28 + 56 + 48, 40));
         Assert.IsFalse(MachOFile.TryRead(new MemoryStream(tooManySections), out _, out var d3));
         Assert.IsTrue(d3.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_InvalidLoadCommandSize), string.Join("; ", d3.Messages));
+
+        // A count large enough that multiplying it by an entry size wraps a 32-bit product would
+        // otherwise pass a length check as a small number and then be read past.
+        var overflowing = LoadMachO("helloworld_x86_64");
+        overflowing.LoadCommands.OfType<MachOSymbolTableCommand>().Single().SymbolCount = 0x10000001;
+        Assert.ThrowsExactly<ObjectFileException>(() => overflowing.ReadSymbolTable());
+
+        // A universal binary header claiming more slices than the file holds must not be trusted
+        // to size anything before that is checked.
+        var fat = File.ReadAllBytes(GetFile("helloworld_fat"));
+        BitConverter.GetBytes(0x10000000u).Reverse().ToArray().CopyTo(fat, 4);
+        Assert.IsFalse(MachOFatFile.TryRead(new MemoryStream(fat), out _, out var d4));
+        Assert.IsTrue(d4.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_InvalidFatHeader), string.Join("; ", d4.Messages));
     }
 
     [TestMethod]

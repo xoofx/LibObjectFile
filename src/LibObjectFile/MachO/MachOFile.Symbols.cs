@@ -33,7 +33,7 @@ partial class MachOFile
         if (command is null || command.SymbolCount == 0) return [];
 
         var entrySize = MachOSymbolTableCommand.GetSymbolSize(Is64Bit);
-        var entries = ReadFileBytes(command.SymbolOffset, command.SymbolCount * entrySize, "symbol table");
+        var entries = ReadFileBytes(command.SymbolOffset, (ulong)command.SymbolCount * entrySize, "symbol table");
         var strings = ReadFileBytes(command.StringOffset, command.StringSize, "string table");
 
         var symbols = new List<MachOSymbol>((int)command.SymbolCount);
@@ -63,7 +63,7 @@ partial class MachOFile
         var command = LoadCommands.OfType<MachODynamicSymbolTableCommand>().FirstOrDefault();
         if (command is null || command.IndirectSymbolCount == 0) return [];
 
-        var bytes = ReadFileBytes(command.IndirectSymbolOffset, command.IndirectSymbolCount * MachODynamicSymbolTableCommand.IndirectSymbolEntrySize, "indirect symbol table");
+        var bytes = ReadFileBytes(command.IndirectSymbolOffset, (ulong)command.IndirectSymbolCount * MachODynamicSymbolTableCommand.IndirectSymbolEntrySize, "indirect symbol table");
         var indices = new uint[command.IndirectSymbolCount];
         for (var i = 0; i < indices.Length; i++)
         {
@@ -118,9 +118,17 @@ partial class MachOFile
     /// <summary>
     /// Reads a run of bytes at a file offset out of whichever content covers it.
     /// </summary>
-    private byte[] ReadFileBytes(uint offset, uint length, string what)
+    private byte[] ReadFileBytes(uint offset, ulong length, string what)
     {
         if (length == 0) return [];
+
+        // The length is a count from the file multiplied by an entry size, so it is computed in
+        // 64 bits: a count large enough to wrap a 32-bit product would otherwise pass this check
+        // as a small length and then be read past.
+        if (length > int.MaxValue || offset + length > uint.MaxValue)
+        {
+            Throw(offset, length, what);
+        }
 
         foreach (var content in Content)
         {
@@ -135,8 +143,16 @@ partial class MachOFile
             return buffer;
         }
 
+        Throw(offset, length, what);
+        return [];
+    }
+
+    [System.Diagnostics.CodeAnalysis.DoesNotReturn]
+    private static void Throw(uint offset, ulong length, string what)
+    {
+        var message = $"The {what} at 0x{offset:X} for 0x{length:X} bytes is not covered by any content of this image.";
         var diagnostics = new DiagnosticBag();
-        diagnostics.Error(DiagnosticId.MACHO_ERR_DataOutsideImage, $"The {what} at 0x{offset:X} for 0x{length:X} bytes is not covered by any content of this image.");
-        throw new ObjectFileException($"The {what} at 0x{offset:X} for 0x{length:X} bytes is not covered by any content of this image.", diagnostics);
+        diagnostics.Error(DiagnosticId.MACHO_ERR_DataOutsideImage, message);
+        throw new ObjectFileException(message, diagnostics);
     }
 }

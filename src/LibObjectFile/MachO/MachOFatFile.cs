@@ -133,7 +133,14 @@ public sealed class MachOFatFile
         var count = BinaryPrimitives.ReadUInt32BigEndian(header.Slice(4));
 
         var entrySize = GetSliceEntrySize(file.Is64BitOffsets);
-        var entries = new byte[count * (uint)entrySize];
+        if ((ulong)count * (ulong)entrySize > (ulong)(stream.Length - stream.Position))
+        {
+            bag.Error(DiagnosticId.MACHO_ERR_InvalidFatHeader, $"The universal binary header claims {count} architectures, which do not fit in the file");
+            file = null;
+            return false;
+        }
+
+        var entries = new byte[count * entrySize];
         try
         {
             stream.ReadExactly(entries);
