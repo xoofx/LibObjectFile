@@ -214,4 +214,40 @@ public class MachOSimpleTests : MachOTestBase
         identity.Write(stream);
         ByteArrayAssert.AreEqual(File.ReadAllBytes(GetFile(name)), stream.ToArray(), "an identity remap changed the image");
     }
+
+    /// <summary>
+    /// Verification exists to catch the invariants nothing else does. The address check is the
+    /// one the format rests on: break it and the loader maps a section somewhere other than
+    /// where the code expects, which no round-trip test would notice.
+    /// </summary>
+    [TestMethod]
+    public void VerifyAcceptsRealImagesAndCatchesABrokenOne()
+    {
+        foreach (var name in new[] { "helloworld_x86_64", "helloworld_arm64", "unixthread_i386", "helloworld_x86_64.o" })
+        {
+            var diagnostics = new DiagnosticBag();
+            LoadMachO(name).Verify(diagnostics);
+            Assert.IsFalse(diagnostics.HasErrors, $"{name} should verify: {string.Join("; ", diagnostics.Messages)}");
+        }
+
+        var moved = LoadMachO("unixthread_i386");
+        moved.FindSegment("__TEXT")!.Sections[0].Address += 4;
+        var broken = new DiagnosticBag();
+        moved.Verify(broken);
+        Assert.IsTrue(broken.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_SectionAddressMismatch));
+
+        var overlong = LoadMachO("unixthread_i386");
+        overlong.LoadCommands[0].Size += 1;
+        var misaligned = new DiagnosticBag();
+        overlong.Verify(misaligned);
+        Assert.IsTrue(misaligned.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_InvalidCommandAlignment));
+
+        // A header edited on its own describes a section that is not there, and the round-trip
+        // would still match because the header and the bytes are written from what each holds.
+        var resized = LoadMachO("unixthread_i386");
+        resized.FindSegment("__TEXT")!.Sections[0].Size += 8;
+        var mismatched = new DiagnosticBag();
+        resized.Verify(mismatched);
+        Assert.IsTrue(mismatched.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_SectionContentMismatch));
+    }
 }
