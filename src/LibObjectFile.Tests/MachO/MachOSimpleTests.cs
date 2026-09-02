@@ -250,4 +250,37 @@ public class MachOSimpleTests : MachOTestBase
         resized.Verify(mismatched);
         Assert.IsTrue(mismatched.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_SectionContentMismatch));
     }
+
+    /// <summary>
+    /// The padding after the load command table is the only elastic thing in the file, so it has
+    /// to absorb exactly what the table gains and nothing else may shift. This is what an
+    /// install_name_tool-style edit depends on.
+    /// </summary>
+    [TestMethod]
+    public void GrowingTheCommandTableConsumesOnlyThePadding()
+    {
+        var file = LoadMachO("unixthread_i386");
+
+        var paddingBefore = file.LoadCommandPadding!.Size;
+        var tableEndBefore = file.LoadCommandsEndOffset;
+        var contentStart = file.ContentStartOffset;
+        var positionsBefore = file.Content.Select(c => (c.GetType().Name, c.Position)).ToArray();
+
+        var added = file.AddRPath("@executable_path/../Frameworks");
+        var image = WriteToArray(file);
+
+        Assert.AreEqual(tableEndBefore + added.Size, file.LoadCommandsEndOffset);
+        Assert.AreEqual(paddingBefore - added.Size, file.LoadCommandPadding!.Size, "the padding did not absorb the new command");
+        Assert.AreEqual(contentStart, file.ContentStartOffset, "content after the padding moved");
+
+        // Only the padding may have moved; everything after it stays exactly where it was.
+        var positionsAfter = file.Content.Select(c => (c.GetType().Name, c.Position)).ToArray();
+        for (var i = 0; i < positionsBefore.Length; i++)
+        {
+            if (positionsBefore[i].Name == nameof(MachOLoadCommandPadding)) continue;
+            Assert.AreEqual(positionsBefore[i], positionsAfter[i], $"content {i} moved");
+        }
+
+        Assert.AreEqual(new FileInfo(GetFile("unixthread_i386")).Length, image.Length, "the file changed size");
+    }
 }
