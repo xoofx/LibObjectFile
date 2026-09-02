@@ -95,10 +95,37 @@ public sealed class MachOSegment : MachOLoadCommand
     /// <param name="is64Bit">Whether the segment uses the 64-bit layout.</param>
     /// <param name="sectionCount">The number of sections in the segment.</param>
     /// <returns>The value to store in <c>cmdsize</c>.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// <paramref name="sectionCount"/> is negative, or so large that the command would not fit
+    /// in the 32-bit <c>cmdsize</c> field.
+    /// </exception>
     public static unsafe uint ComputeCommandSize(bool is64Bit, int sectionCount)
-        => is64Bit
-            ? (uint)(sizeof(RawSegmentCommand64) + sectionCount * sizeof(RawSection64))
-            : (uint)(sizeof(RawSegmentCommand32) + sectionCount * sizeof(RawSection32));
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(sectionCount);
+
+        // Computed wide so that a count large enough to overflow is rejected rather than
+        // wrapping to a small, plausible-looking size.
+        var total = GetFixedCommandSize(is64Bit) + (ulong)sectionCount * GetSectionSize(is64Bit);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(total, uint.MaxValue, nameof(sectionCount));
+
+        return (uint)total;
+    }
+
+    /// <summary>
+    /// Gets the size of a segment command excluding its section headers.
+    /// </summary>
+    /// <param name="is64Bit">Whether the segment uses the 64-bit layout.</param>
+    /// <returns>The size of a <c>segment_command_64</c> or a <c>segment_command</c>.</returns>
+    public static unsafe uint GetFixedCommandSize(bool is64Bit)
+        => is64Bit ? (uint)sizeof(RawSegmentCommand64) : (uint)sizeof(RawSegmentCommand32);
+
+    /// <summary>
+    /// Gets the size of one section header.
+    /// </summary>
+    /// <param name="is64Bit">Whether the containing segment uses the 64-bit layout.</param>
+    /// <returns>The size of a <c>section_64</c> or a <c>section</c>.</returns>
+    public static unsafe uint GetSectionSize(bool is64Bit)
+        => is64Bit ? (uint)sizeof(RawSection64) : (uint)sizeof(RawSection32);
 
     /// <inheritdoc />
     public override unsafe uint MinimumCommandSize
@@ -171,8 +198,10 @@ public sealed class MachOSegment : MachOLoadCommand
         Sections.Clear();
 
         // The section headers follow the fixed part inside this command, so a count that does not
-        // fit would read whatever comes after it.
-        if (ComputeCommandSize(Is64Bit, (int)count) > Size)
+        // fit would read whatever comes after it. The largest count that fits is derived by
+        // division: multiplying the declared count out could wrap and pass a check it should not.
+        var fixedSize = GetFixedCommandSize(Is64Bit);
+        if (Size < fixedSize || count > (Size - fixedSize) / GetSectionSize(Is64Bit))
         {
             reader.Diagnostics.Error(
                 DiagnosticId.MACHO_ERR_InvalidLoadCommandSize,

@@ -339,6 +339,9 @@ partial class MachOFile
     {
         var regions = new List<KnownRegion>();
 
+        // Sizes are counts from the file times an entry size, computed wide: a count large enough
+        // to wrap a 32-bit product would otherwise name a small region and leave the rest of the
+        // table looking like padding.
         void Add(ulong offset, ulong size, MachOSection? section = null)
         {
             // An offset of zero means the data is absent rather than at the start of the file.
@@ -364,7 +367,7 @@ partial class MachOFile
                     Add(section.FileOffset, section.Size, section);
                 }
 
-                Add(section.RelocationOffset, section.NumberOfRelocations * (ulong)MachORelocation.EntrySize);
+                Add(section.RelocationOffset, (ulong)section.NumberOfRelocations * MachORelocation.EntrySize);
             }
         }
 
@@ -377,12 +380,12 @@ partial class MachOFile
                     Add(symtab.StringOffset, symtab.StringSize);
                     break;
                 case MachODynamicSymbolTableCommand dysymtab:
-                    Add(dysymtab.TableOfContentsOffset, dysymtab.TableOfContentsCount * MachODynamicSymbolTableCommand.TableOfContentsEntrySize);
-                    Add(dysymtab.ModuleTableOffset, dysymtab.ModuleTableCount * MachODynamicSymbolTableCommand.GetModuleTableEntrySize(Is64Bit));
-                    Add(dysymtab.ExternalReferenceOffset, dysymtab.ExternalReferenceCount * MachODynamicSymbolTableCommand.ExternalReferenceEntrySize);
-                    Add(dysymtab.IndirectSymbolOffset, dysymtab.IndirectSymbolCount * MachODynamicSymbolTableCommand.IndirectSymbolEntrySize);
-                    Add(dysymtab.ExternalRelocationOffset, dysymtab.ExternalRelocationCount * MachORelocation.EntrySize);
-                    Add(dysymtab.LocalRelocationOffset, dysymtab.LocalRelocationCount * MachORelocation.EntrySize);
+                    Add(dysymtab.TableOfContentsOffset, (ulong)dysymtab.TableOfContentsCount * MachODynamicSymbolTableCommand.TableOfContentsEntrySize);
+                    Add(dysymtab.ModuleTableOffset, (ulong)dysymtab.ModuleTableCount * MachODynamicSymbolTableCommand.GetModuleTableEntrySize(Is64Bit));
+                    Add(dysymtab.ExternalReferenceOffset, (ulong)dysymtab.ExternalReferenceCount * MachODynamicSymbolTableCommand.ExternalReferenceEntrySize);
+                    Add(dysymtab.IndirectSymbolOffset, (ulong)dysymtab.IndirectSymbolCount * MachODynamicSymbolTableCommand.IndirectSymbolEntrySize);
+                    Add(dysymtab.ExternalRelocationOffset, (ulong)dysymtab.ExternalRelocationCount * MachORelocation.EntrySize);
+                    Add(dysymtab.LocalRelocationOffset, (ulong)dysymtab.LocalRelocationCount * MachORelocation.EntrySize);
                     break;
                 case MachODyldInfoCommand dyldInfo:
                     Add(dyldInfo.RebaseOffset, dyldInfo.RebaseSize);
@@ -395,7 +398,7 @@ partial class MachOFile
                     Add(data.DataOffset, data.DataSize);
                     break;
                 case MachOTwoLevelHintsCommand hints:
-                    Add(hints.Offset, hints.HintCount * MachOTwoLevelHintsCommand.HintSize);
+                    Add(hints.Offset, (ulong)hints.HintCount * MachOTwoLevelHintsCommand.HintSize);
                     break;
             }
         }

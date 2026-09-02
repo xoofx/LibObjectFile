@@ -81,7 +81,9 @@ public sealed class MachOBuildVersionCommand : MachOLoadCommand
 
         Tools.Clear();
 
-        if (HeaderSize + raw.ToolCount * ToolSize > Size)
+        // Derived by division for the same reason as the section count: multiplying the declared
+        // count out could wrap past the 32-bit field and pass a check it should not.
+        if (Size < HeaderSize || raw.ToolCount > (Size - HeaderSize) / ToolSize)
         {
             reader.Diagnostics.Error(
                 DiagnosticId.MACHO_ERR_InvalidLoadCommandSize,

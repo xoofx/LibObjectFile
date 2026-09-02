@@ -478,6 +478,21 @@ public class MachOSimpleTests : MachOTestBase
         static uint Read(byte[] b, int offset) => BitConverter.ToUInt32(b, offset);
         static void Write(byte[] b, int offset, uint value) => BitConverter.GetBytes(value).CopyTo(b, offset);
 
+        // Finds where a load command starts, so the patches below do not depend on offsets that
+        // would silently point at the wrong field if a fixture were regenerated.
+        static int FindCommand(byte[] b, uint type, int skip)
+        {
+            var is64 = Read(b, 0) == 0xfeedfacf;
+            var offset = is64 ? 32 : 28;
+            for (var i = 0; i < Read(b, 16); i++)
+            {
+                if (Read(b, offset) == type && skip-- == 0) return offset;
+                offset += (int)Read(b, offset + 4);
+            }
+
+            throw new InvalidOperationException($"No load command of type 0x{type:X} in the fixture");
+        }
+
         // The first command is LC_SEGMENT at offset 28. Shrinking its cmdsize below its fixed
         // part would have it read fields out of the command after it.
         var tooSmall = Patch(b => Write(b, 32, 8));
@@ -496,6 +511,19 @@ public class MachOSimpleTests : MachOTestBase
         var tooManySections = Patch(b => Write(b, 28 + 56 + 48, 40));
         Assert.IsFalse(MachOFile.TryRead(new MemoryStream(tooManySections), out _, out var d3));
         Assert.IsTrue(d3.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_InvalidLoadCommandSize), string.Join("; ", d3.Messages));
+
+        // A count chosen so that multiplying it out wraps: 0x40000001 sections at 68 bytes each
+        // comes back to 124, the size of the command being checked, so a check that multiplies
+        // would let it through and the section headers would be read out of the commands after it.
+        var wrappingSections = Patch(b => Write(b, FindCommand(b, 0x1, skip: 1) + 48, 0x40000001));
+        Assert.IsFalse(MachOFile.TryRead(new MemoryStream(wrappingSections), out _, out var d5));
+        Assert.IsTrue(d5.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_InvalidLoadCommandSize), string.Join("; ", d5.Messages));
+
+        // The same for a tool count: 0x20000000 tools at 8 bytes each wraps to nothing at all.
+        var arm64 = File.ReadAllBytes(GetFile("helloworld_arm64"));
+        Write(arm64, FindCommand(arm64, 0x32, skip: 0) + 20, 0x20000000);
+        Assert.IsFalse(MachOFile.TryRead(new MemoryStream(arm64), out _, out var d6));
+        Assert.IsTrue(d6.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_InvalidLoadCommandSize), string.Join("; ", d6.Messages));
 
         // A count large enough that multiplying it by an entry size wraps a 32-bit product would
         // otherwise pass a length check as a small number and then be read past.
