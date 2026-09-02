@@ -283,4 +283,101 @@ public class MachOSimpleTests : MachOTestBase
 
         Assert.AreEqual(new FileInfo(GetFile("unixthread_i386")).Length, image.Length, "the file changed size");
     }
+
+    /// <summary>
+    /// Names and values cross-checked against llvm-nm. The object file is included because it
+    /// keeps its tables past the end of its only segment, so they belong to no segment and are
+    /// reached by a different path than a linked image's __LINKEDIT.
+    /// </summary>
+    [TestMethod]
+    public void ReadsTheSymbolTable()
+    {
+        var symbols = LoadMachO("helloworld_x86_64").ReadSymbolTable();
+
+        CollectionAssert.AreEqual(
+            new[] { "__mh_execute_header", "_helloworld_data", "_helloworld_twice", "_main", "_printf", "dyld_stub_binder" },
+            symbols.Select(s => s.Name).ToArray());
+
+        var main = symbols.Single(s => s.Name == "_main");
+        Assert.AreEqual(MachOSymbolKind.Section, main.Kind);
+        Assert.IsTrue(main.IsExternal);
+        Assert.IsFalse(main.IsDebug);
+        Assert.AreEqual(1, main.SectionIndex, "__text is the first section");
+        Assert.AreEqual(0x100000f50ul, main.Value);
+
+        var printf = symbols.Single(s => s.Name == "_printf");
+        Assert.AreEqual(MachOSymbolKind.Undefined, printf.Kind);
+        Assert.IsTrue(printf.IsExternal);
+        Assert.AreEqual(0, printf.SectionIndex);
+        Assert.AreEqual(0ul, printf.Value);
+        Assert.AreEqual(1, printf.LibraryOrdinal, "resolved from the first dylib, libSystem");
+
+        var fromObject = LoadMachO("helloworld_x86_64.o").ReadSymbolTable();
+        CollectionAssert.AreEqual(
+            new[] { "_helloworld_data", "_helloworld_twice", "_main", "_printf" },
+            fromObject.Select(s => s.Name).ToArray());
+        Assert.AreEqual(MachOSymbolKind.Undefined, fromObject.Single(s => s.Name == "_printf").Kind);
+
+        // The stub sections index into the indirect table through reserved1, and not every entry
+        // there is an index: the sentinels mark slots the loader has nothing to bind.
+        var file = LoadMachO("helloworld_x86_64");
+        var indirect = file.ReadIndirectSymbolTable();
+        Assert.AreEqual(4, indirect.Count);
+        CollectionAssert.Contains(indirect.ToArray(), MachOFile.IndirectSymbolAbsolute);
+
+        var stubs = file.Segments.SelectMany(s => s.Sections).Single(s => s.Name == "__stubs");
+        Assert.AreEqual(MachOSectionType.SymbolStubs, stubs.SectionType);
+        Assert.AreEqual("_printf", symbols[(int)indirect[(int)stubs.Reserved1]].Name);
+    }
+
+    /// <summary>
+    /// Values cross-checked against llvm-objdump. The two forms of entry pack their fields into
+    /// the same eight bytes in different orders, so encoding is checked to round-trip as well:
+    /// a field unpacked from the wrong bit still reads back consistently on its own.
+    /// </summary>
+    [TestMethod]
+    public void ReadsRelocations()
+    {
+        var file = LoadMachO("helloworld_x86_64.o");
+        var text = file.Segments.SelectMany(s => s.Sections).Single(s => s.Name == "__text");
+        var symbols = file.ReadSymbolTable();
+
+        var relocations = file.ReadRelocations(text);
+        Assert.AreEqual(4, relocations.Count);
+
+        var branch = relocations[0];
+        Assert.AreEqual(0x36, branch.Address);
+        Assert.AreEqual((byte)MachOX86_64RelocationType.Branch, branch.RawType);
+        Assert.IsTrue(branch.IsPcRelative);
+        Assert.IsTrue(branch.IsExternal);
+        Assert.AreEqual(4, branch.LengthInBytes);
+        Assert.IsFalse(branch.IsScattered);
+        Assert.AreEqual("_printf", symbols[(int)branch.SymbolOrSectionNumber].Name);
+
+        // A local entry numbers a section instead of a symbol.
+        var signed = relocations[1];
+        Assert.AreEqual((byte)MachOX86_64RelocationType.Signed, signed.RawType);
+        Assert.IsFalse(signed.IsExternal);
+        Assert.AreEqual(3u, signed.SymbolOrSectionNumber);
+
+        Assert.AreEqual("_helloworld_data", symbols[(int)relocations[3].SymbolOrSectionNumber].Name);
+
+        foreach (var relocation in relocations)
+        {
+            var (word0, word1) = relocation.Encode();
+            var again = MachORelocation.Decode(word0, word1);
+            Assert.AreEqual(relocation.ToString(), again.ToString());
+            Assert.AreEqual(relocation.SymbolOrSectionNumber, again.SymbolOrSectionNumber);
+        }
+
+        // The scattered form has no external flag and carries a target address instead.
+        var scattered = MachORelocation.Decode(MachORelocation.ScatteredMask | (2u << 28) | (1u << 24) | 0x123, 0x4567);
+        Assert.IsTrue(scattered.IsScattered);
+        Assert.AreEqual(0x123, scattered.Address);
+        Assert.AreEqual(1, scattered.RawType);
+        Assert.AreEqual(4, scattered.LengthInBytes);
+        Assert.AreEqual(0x4567, scattered.Value);
+        Assert.IsFalse(scattered.IsExternal);
+        Assert.AreEqual((MachORelocation.ScatteredMask | (2u << 28) | (1u << 24) | 0x123, 0x4567u), scattered.Encode());
+    }
 }
