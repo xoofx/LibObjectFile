@@ -14,4 +14,12 @@ public abstract class MachOTestBase : VerifyBase
     protected static string GetFile(string name) => Path.Combine(AppContext.BaseDirectory, "MachO", name);
 
     protected static MachOFile LoadMachO(string name) => MachOFile.Read(new MemoryStream(File.ReadAllBytes(GetFile(name))));
+
+    protected static byte[] WriteToArray(MachOFile file)
+    {
+        var stream = new MemoryStream();
+        file.Write(stream);
+        return stream.ToArray();
+    }
+
 }
