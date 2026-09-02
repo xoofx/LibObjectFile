@@ -84,6 +84,10 @@
   <ItemGroup>
     <None Include="$(ProjectDir)TestFiles\**" CopyToOutputDirectory="PreserveNewest" LinkBase="TestFiles\" />
   </ItemGroup>
+  <ItemGroup>
+    <!-- The Mach-O fixtures are committed binaries; generate_files.sh only documents how to rebuild them. -->
+    <Content Include="MachO\**" Exclude="MachO\*.c;MachO\*.sh;MachO\*.yaml" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MSTest" />

@@ -1,0 +1,147 @@
+# Models a pre-10.8 i386 executable: LC_UNIXTHREAD instead of LC_MAIN, and
+# padding between the end of the load commands and the first section so that
+# in-place load-command injection has somewhere to go. The first section sits
+# at 0x800 while the load commands end at 728.
+--- !mach-o
+FileHeader:
+  magic:      0xFEEDFACE
+  cputype:    0x00000007
+  cpusubtype: 0x00000003
+  filetype:   0x00000002
+  ncmds:      11
+  sizeofcmds: 700
+  flags:      0x00012085
+LoadCommands:
+  - cmd:      LC_SEGMENT
+    cmdsize:  56
+    segname:  __PAGEZERO
+    vmaddr:   0
+    vmsize:   4096
+    fileoff:  0
+    filesize: 0
+    maxprot:  0
+    initprot: 0
+    nsects:   0
+    flags:    4
+  - cmd:      LC_SEGMENT
+    cmdsize:  124
+    segname:  __TEXT
+    vmaddr:   4096
+    vmsize:   4096
+    fileoff:  0
+    filesize: 4096
+    maxprot:  7
+    initprot: 5
+    nsects:   1
+    flags:    0
+    Sections:
+      - sectname:  __text
+        segname:   __TEXT
+        addr:      0x1800
+        size:      16
+        offset:    0x800
+        align:     2
+        reloff:    0
+        nreloc:    0
+        flags:     0x80000400
+        reserved1: 0
+        reserved2: 0
+        content:   'B800000000C3'
+  - cmd:      LC_SEGMENT
+    cmdsize:  124
+    segname:  __DATA
+    vmaddr:   8192
+    vmsize:   4096
+    fileoff:  4096
+    filesize: 4096
+    maxprot:  7
+    initprot: 3
+    nsects:   1
+    flags:    0
+    Sections:
+      - sectname:  __data
+        segname:   __DATA
+        addr:      0x2000
+        size:      4
+        offset:    0x1000
+        align:     2
+        reloff:    0
+        nreloc:    0
+        flags:     0x00000000
+        reserved1: 0
+        reserved2: 0
+        content:   '2A000000'
+  - cmd:      LC_SEGMENT
+    cmdsize:  56
+    segname:  __LINKEDIT
+    vmaddr:   12288
+    vmsize:   4096
+    fileoff:  8192
+    filesize: 56
+    maxprot:  7
+    initprot: 1
+    nsects:   0
+    flags:    0
+  - cmd:      LC_SYMTAB
+    cmdsize:  24
+    symoff:   8192
+    nsyms:    2
+    stroff:   8216
+    strsize:  32
+  - cmd:            LC_DYSYMTAB
+    cmdsize:        80
+    ilocalsym:      0
+    nlocalsym:      0
+    iextdefsym:     0
+    nextdefsym:     2
+    iundefsym:      2
+    nundefsym:      0
+    tocoff:         0
+    ntoc:           0
+    modtaboff:      0
+    nmodtab:        0
+    extrefsymoff:   0
+    nextrefsyms:    0
+    indirectsymoff: 0
+    nindirectsyms:  0
+    extreloff:      0
+    nextrel:        0
+    locreloff:      0
+    nlocrel:        0
+  - cmd:     LC_LOAD_DYLINKER
+    cmdsize: 28
+    name:    12
+    Content: '/usr/lib/dyld'
+    ZeroPadBytes: 1
+  - cmd:     LC_UUID
+    cmdsize: 24
+    uuid:    4B4F544F-5231-4D41-4300-000000000001
+  - cmd:     LC_UNIXTHREAD
+    cmdsize: 80
+    PayloadBytes: [ 0x01, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00,
+                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                    0x00, 0x18, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ]
+  - cmd:                LC_LOAD_DYLIB
+    cmdsize:            52
+    dylib:
+      name:             24
+      timestamp:        2
+      current_version:  0x0007D001
+      compatibility_version: 0x00010000
+    Content:            '/usr/lib/libSystem.B.dylib'
+    ZeroPadBytes:       2
+  - cmd:                LC_LOAD_DYLIB
+    cmdsize:            52
+    dylib:
+      name:             24
+      timestamp:        2
+      current_version:  0x00070000
+      compatibility_version: 0x00070000
+    Content:            '/usr/lib/libstdc++.6.dylib'
+    ZeroPadBytes:       2
