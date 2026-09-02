@@ -651,6 +651,29 @@ An ad-hoc signature carries no certificate. It states only that the image hashes
 
 Signing has to be the last thing done before writing. Editing afterwards leaves the signature covering bytes that are no longer there, so `MachOFile.IsCodeSignatureStale` records it and writing fails until the image is signed again.
 
+#### Gatekeeper
+
+There are two checks on the way to running a binary, and an ad-hoc signature only gets past one of them.
+
+The kernel is the first. On Apple Silicon it will not execute an unsigned image, and an ad-hoc signature is enough to satisfy it. That is the check an edited `arm64` binary needs signing for.
+
+Gatekeeper is the second, and ad-hoc will not get past it. There is no Developer ID behind the signature and it cannot be notarized. Anything downloaded carries a quarantine attribute, and Gatekeeper refuses it however it was signed here. Clearing the attribute is what lets it launch:
+
+```sh
+xattr -d com.apple.quarantine MyApp.app
+```
+
+One thing worth knowing before reaching for this on a shipping app: re-signing throws away any notarization it came with, and signing it again will not bring that back.
+
+#### Sealing a bundle
+
+`AdHocSign` signs a single Mach-O image. A bundle seals the rest of its files separately, in `Contents/_CodeSignature/CodeResources`, and this library does not touch that seal.
+
+Whether that matters depends on what you edited.
+
+- **The main executable.** It is not in the seal, because its own signature already covers it. Re-sign it and the bundle stays consistent.
+- **A nested framework or dylib.** These are in the seal, by hash. Edit one and the seal goes stale, and the bundle will fail verification until Apple's `codesign` reseals it.
+
 ### Printing a Mach-O File
 
 `MachOFile.Print` writes the header and every load command in a form close to `otool -h -l`:
