@@ -128,16 +128,19 @@ partial class MachOFile
         var matches = LoadCommands.OfType<MachODylibCommand>().Where(c => c.Name == oldName).ToArray();
         if (matches.Length == 0) return 0;
 
+        // Work out what the new name costs before assigning it, so an edit that does not fit
+        // leaves the image exactly as it was rather than half renamed.
         long extra = 0;
         foreach (var command in matches)
         {
-            command.Name = newName;
-            extra += Math.Max(0, (long)command.MinimumSize - (long)command.Size);
+            extra += Math.Max(0, (long)command.ComputeMinimumSize(newName) - (long)command.Size);
         }
 
         EnsureLoadCommandSpace(extra);
+
         foreach (var command in matches)
         {
+            command.Name = newName;
             command.Size = Math.Max(command.Size, command.MinimumSize);
         }
 
@@ -161,20 +164,21 @@ partial class MachOFile
         var command = IdDylib
             ?? throw new InvalidOperationException("This image has no LC_ID_DYLIB command, so it is not a dylib and has no install name.");
 
+        EnsureLoadCommandSpace(Math.Max(0, (long)command.ComputeMinimumSize(name) - (long)command.Size));
+
         command.Name = name;
-        EnsureLoadCommandSpace(Math.Max(0, (long)command.MinimumSize - (long)command.Size));
         command.Size = Math.Max(command.Size, command.MinimumSize);
         MarkCodeSignatureStale();
     }
 
     private void AppendCommand(MachOLoadCommand command)
     {
-        MarkCodeSignatureStale();
-
         command.Size = command is MachOPathLoadCommand path ? path.MinimumSize : command.Size;
         EnsureLoadCommandSpace((long)command.Size);
 
+        // Only once the command is known to fit, since a signature is not stale if nothing changed.
         LoadCommands.Add(command);
+        MarkCodeSignatureStale();
     }
 
     /// <summary>

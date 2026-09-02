@@ -105,6 +105,36 @@ public class MachOEditingTests : MachOTestBase
         StringAssert.Contains(exception.Message, "free before the first section");
     }
 
+    /// <summary>
+    /// An edit that does not fit has to leave the image exactly as it was. Assigning the new name
+    /// before checking there is room would leave the command renamed but not resized, describing
+    /// a string longer than it has space for.
+    /// </summary>
+    [TestMethod]
+    public void AnEditThatDoesNotFitChangesNothing()
+    {
+        var file = LoadMachO("unixthread_i386");
+
+        // Use up the room so that any growth fails.
+        while (file.AvailableLoadCommandSpace >= 64)
+        {
+            file.AddRPath("/" + new string('a', 40) + file.LoadCommands.Count);
+        }
+
+        var before = WriteToArray(file);
+        var namesBefore = file.LinkedLibraries.Select(d => d.Name).ToArray();
+        var sizesBefore = file.LinkedLibraries.Select(d => d.Size).ToArray();
+        var space = file.AvailableLoadCommandSpace;
+
+        var longName = "/" + new string('b', 200);
+        Assert.ThrowsExactly<InvalidOperationException>(() => file.ChangeDylibName("/usr/lib/libSystem.B.dylib", longName));
+
+        CollectionAssert.AreEqual(namesBefore, file.LinkedLibraries.Select(d => d.Name).ToArray(), "a name was changed by a failed edit");
+        CollectionAssert.AreEqual(sizesBefore, file.LinkedLibraries.Select(d => d.Size).ToArray(), "a size was changed by a failed edit");
+        Assert.AreEqual(space, file.AvailableLoadCommandSpace);
+        ByteArrayAssert.AreEqual(before, WriteToArray(file), "a failed edit changed the image");
+    }
+
     [TestMethod]
     public void ChangeDylibNameRepointsTheReference()
     {
