@@ -52,6 +52,9 @@ public sealed class MachOSymbolTableCommand : MachOLoadCommand
     public static uint GetSymbolSize(bool is64Bit) => is64Bit ? 16u : 12u;
 
     /// <inheritdoc />
+    public override uint MinimumCommandSize => CommandSize;
+
+    /// <inheritdoc />
     protected override void UpdateLayoutCore(MachOVisitorContext context) => Size = CommandSize;
 
     /// <inheritdoc />

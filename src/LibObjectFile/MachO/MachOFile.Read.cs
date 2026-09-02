@@ -117,6 +117,7 @@ partial class MachOFile
         }
 
         uint numberOfCommands;
+        uint sizeOfCommands;
         if (Is64Bit)
         {
             if (!reader.TryReadData(sizeof(RawMachHeader64), out RawMachHeader64 header))
@@ -130,6 +131,7 @@ partial class MachOFile
             Flags = (MachOHeaderFlags)header.Flags;
             Reserved = header.Reserved;
             numberOfCommands = header.NumberOfCommands;
+            sizeOfCommands = header.SizeOfCommands;
         }
         else
         {
@@ -143,24 +145,39 @@ partial class MachOFile
             FileType = (MachOFileType)header.FileType;
             Flags = (MachOHeaderFlags)header.Flags;
             numberOfCommands = header.NumberOfCommands;
+            sizeOfCommands = header.SizeOfCommands;
         }
 
-        ReadLoadCommands(reader, numberOfCommands);
+        ReadLoadCommands(reader, numberOfCommands, sizeOfCommands);
         if (reader.Diagnostics.HasErrors) return;
 
         ReadContent(reader);
     }
 
-    private void ReadLoadCommands(MachOReader reader, uint numberOfCommands)
+    /// <summary>
+    /// Walks the load command table. The table is bounded by the <c>sizeofcmds</c> the header
+    /// declares, each command by its own <c>cmdsize</c>, so a command cannot reach into the one
+    /// after it or into the content beyond the table.
+    /// </summary>
+    private void ReadLoadCommands(MachOReader reader, uint numberOfCommands, uint sizeOfCommands)
     {
         var commandAlignment = MachOLoadCommand.GetSizeAlignment(Is64Bit);
+        var tableEnd = HeaderSize + (ulong)sizeOfCommands;
+
+        if (tableEnd > reader.Length)
+        {
+            reader.Diagnostics.Error(
+                DiagnosticId.MACHO_ERR_TruncatedLoadCommand,
+                $"The header declares {sizeOfCommands} bytes of load commands, which extend past the end of the file");
+            return;
+        }
 
         for (uint i = 0; i < numberOfCommands; i++)
         {
             var commandPosition = reader.Position;
-            if (commandPosition + 8 > reader.Length)
+            if (commandPosition + 8 > tableEnd)
             {
-                reader.Diagnostics.Error(DiagnosticId.MACHO_ERR_TruncatedLoadCommand, $"Load command {i} starts past the end of the file");
+                reader.Diagnostics.Error(DiagnosticId.MACHO_ERR_TruncatedLoadCommand, $"Load command {i} starts past the end of the load command table");
                 return;
             }
 
@@ -174,9 +191,9 @@ partial class MachOFile
                 return;
             }
 
-            if (commandPosition + commandSize > reader.Length)
+            if (commandPosition + commandSize > tableEnd)
             {
-                reader.Diagnostics.Error(DiagnosticId.MACHO_ERR_TruncatedLoadCommand, $"Load command {i} of size {commandSize} extends past the end of the file");
+                reader.Diagnostics.Error(DiagnosticId.MACHO_ERR_TruncatedLoadCommand, $"Load command {i} of size {commandSize} extends past the end of the load command table");
                 return;
             }
 
@@ -221,12 +238,38 @@ partial class MachOFile
             command.Type = type;
             command.Position = commandPosition;
             command.Size = commandSize;
+
+            if (commandSize < command.MinimumCommandSize)
+            {
+                reader.Diagnostics.Error(
+                    DiagnosticId.MACHO_ERR_InvalidLoadCommandSize,
+                    $"Load command {i} of type {type} has a cmdsize of {commandSize}, which is smaller than the {command.MinimumCommandSize} bytes its fixed part needs");
+                return;
+            }
+
             LoadCommands.Add(command);
 
             command.Read(reader);
             if (reader.Diagnostics.HasErrors) return;
 
+            // A command that read past its own cmdsize took bytes belonging to the next one, so
+            // whatever it decoded is not what the file says.
+            if (reader.Position > commandPosition + commandSize)
+            {
+                reader.Diagnostics.Error(
+                    DiagnosticId.MACHO_ERR_LoadCommandOverread,
+                    $"Load command {i} of type {type} read to 0x{reader.Position:X}, past the 0x{commandPosition + commandSize:X} its cmdsize allows");
+                return;
+            }
+
             reader.Position = commandPosition + commandSize;
+        }
+
+        if (reader.Position != tableEnd)
+        {
+            reader.Diagnostics.Error(
+                DiagnosticId.MACHO_ERR_LoadCommandTableSizeMismatch,
+                $"The load commands end at 0x{reader.Position:X} but the header declares the table ends at 0x{tableEnd:X}");
         }
     }
 

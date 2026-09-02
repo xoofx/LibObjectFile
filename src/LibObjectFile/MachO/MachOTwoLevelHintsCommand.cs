@@ -38,6 +38,9 @@ public sealed class MachOTwoLevelHintsCommand : MachOLoadCommand
     public uint HintCount { get; set; }
 
     /// <inheritdoc />
+    public override uint MinimumCommandSize => CommandSize;
+
+    /// <inheritdoc />
     protected override void UpdateLayoutCore(MachOVisitorContext context) => Size = CommandSize;
 
     /// <inheritdoc />

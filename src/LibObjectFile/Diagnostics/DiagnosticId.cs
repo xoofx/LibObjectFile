@@ -233,4 +233,6 @@ public enum DiagnosticId
     MACHO_ERR_SectionOutsideSegment = 5015,
     MACHO_ERR_StaleCodeSignature = 5016,
     MACHO_ERR_SectionContentMismatch = 5017,
+    MACHO_ERR_LoadCommandTableSizeMismatch = 5018,
+    MACHO_ERR_LoadCommandOverread = 5019,
 }

@@ -98,6 +98,9 @@ public sealed class MachODynamicSymbolTableCommand : MachOLoadCommand
     public uint LocalRelocationCount { get; set; }
 
     /// <inheritdoc />
+    public override uint MinimumCommandSize => CommandSize;
+
+    /// <inheritdoc />
     protected override void UpdateLayoutCore(MachOVisitorContext context) => Size = CommandSize;
 
     /// <inheritdoc />

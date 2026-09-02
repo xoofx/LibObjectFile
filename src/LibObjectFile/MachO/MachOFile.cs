@@ -178,14 +178,21 @@ public sealed partial class MachOFile : MachOObject
     public long AvailableLoadCommandSpace => (long)ContentStartOffset - LoadCommandsEndOffset;
 
     /// <summary>
-    /// Rewrites every file offset recorded by the load commands, so content in
-    /// <c>__LINKEDIT</c> can be moved without each caller knowing which commands carry offsets.
+    /// Rewrites the file offsets that point at relocatable data: the tables in <c>__LINKEDIT</c>
+    /// and the relocations of each section. This lets that data be moved without each caller
+    /// knowing which commands record where it is.
     /// </summary>
     /// <param name="mapper">Maps an old file offset to its new one.</param>
     /// <remarks>
-    /// This does not move any bytes, and it does not touch section offsets, which are fixed by
-    /// their segment: a section's address is its segment's address plus its distance from the
-    /// segment's file offset, so moving a section moves its address with it.
+    /// Placement is deliberately not included. A segment's file offset and a section's file
+    /// offset say where something is mapped, not merely where it is stored: a section's address
+    /// is its segment's address plus its distance from the segment's file offset, so changing
+    /// either moves the thing in memory and invalidates what refers to it. Moving a segment or a
+    /// section is a different operation from relocating a blob nothing addresses, and this is
+    /// only the second one.
+    /// <para>
+    /// No bytes are moved here; only the offsets recording where they are.
+    /// </para>
     /// </remarks>
     /// <exception cref="ArgumentNullException"><paramref name="mapper"/> is null.</exception>
     public void UpdateFileOffsets(Func<uint, uint> mapper)

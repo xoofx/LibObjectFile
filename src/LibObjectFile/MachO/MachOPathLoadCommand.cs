@@ -46,17 +46,32 @@ public abstract class MachOPathLoadCommand : MachOLoadCommand
     /// </summary>
     protected abstract uint FixedSize { get; }
 
+    /// <inheritdoc />
+    public override uint MinimumCommandSize => FixedSize + 1;
+
     /// <summary>
     /// Gets the smallest valid <c>cmdsize</c> for the current <see cref="Value"/>.
     /// </summary>
-    public uint MinimumSize
+    public uint MinimumSize => ComputeMinimumSize(Value);
+
+    /// <summary>
+    /// Gets the smallest valid <c>cmdsize</c> this command would need to hold
+    /// <paramref name="value"/>.
+    /// </summary>
+    /// <param name="value">The string to size for.</param>
+    /// <returns>The <c>cmdsize</c> required.</returns>
+    /// <remarks>
+    /// This lets a caller find out whether a new value fits before assigning it, so an edit that
+    /// turns out not to fit does not leave the command half changed.
+    /// </remarks>
+    /// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
+    public uint ComputeMinimumSize(string value)
     {
-        get
-        {
-            // The string is stored NUL-terminated, hence the extra byte.
-            var unaligned = FixedSize + (uint)Encoding.UTF8.GetByteCount(Value) + 1;
-            return AlignHelper.AlignUp(unaligned, GetSizeAlignment(Is64Bit));
-        }
+        ArgumentNullException.ThrowIfNull(value);
+
+        // The string is stored NUL-terminated, hence the extra byte.
+        var unaligned = FixedSize + (uint)Encoding.UTF8.GetByteCount(value) + 1;
+        return AlignHelper.AlignUp(unaligned, GetSizeAlignment(Is64Bit));
     }
 
     /// <inheritdoc />

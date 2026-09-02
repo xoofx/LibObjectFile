@@ -101,8 +101,29 @@ public sealed class MachOSegment : MachOLoadCommand
             : (uint)(sizeof(RawSegmentCommand32) + sectionCount * sizeof(RawSection32));
 
     /// <inheritdoc />
+    public override unsafe uint MinimumCommandSize
+        => Is64Bit ? (uint)sizeof(RawSegmentCommand64) : (uint)sizeof(RawSegmentCommand32);
+
+    /// <inheritdoc />
     protected override void UpdateLayoutCore(MachOVisitorContext context)
         => Size = ComputeCommandSize(Is64Bit, Sections.Count);
+
+    /// <inheritdoc />
+    /// <remarks>
+    /// A section's relocations are a run of bytes elsewhere in the file, so their offset moves
+    /// with them. The section's own file offset is not mapped here: it is placement, fixed by
+    /// the address the section is mapped at, and cannot be changed without moving the section in
+    /// memory too.
+    /// </remarks>
+    public override void UpdateFileOffsets(Func<uint, uint> mapper)
+    {
+        ArgumentNullException.ThrowIfNull(mapper);
+
+        foreach (var section in Sections)
+        {
+            if (section.RelocationOffset != 0) section.RelocationOffset = mapper(section.RelocationOffset);
+        }
+    }
 
     /// <inheritdoc />
     public override unsafe void Read(MachOReader reader)
@@ -148,6 +169,17 @@ public sealed class MachOSegment : MachOLoadCommand
     private unsafe void ReadSections(MachOReader reader, uint count)
     {
         Sections.Clear();
+
+        // The section headers follow the fixed part inside this command, so a count that does not
+        // fit would read whatever comes after it.
+        if (ComputeCommandSize(Is64Bit, (int)count) > Size)
+        {
+            reader.Diagnostics.Error(
+                DiagnosticId.MACHO_ERR_InvalidLoadCommandSize,
+                $"Segment {Name} declares {count} sections, which do not fit in its cmdsize of {Size}");
+            return;
+        }
+
         for (uint i = 0; i < count; i++)
         {
             var section = new MachOSection();

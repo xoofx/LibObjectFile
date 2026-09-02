@@ -35,6 +35,9 @@ public sealed class MachOMainCommand : MachOLoadCommand
     public ulong StackSize { get; set; }
 
     /// <inheritdoc />
+    public override uint MinimumCommandSize => CommandSize;
+
+    /// <inheritdoc />
     protected override void UpdateLayoutCore(MachOVisitorContext context) => Size = CommandSize;
 
     /// <inheritdoc />

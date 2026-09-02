@@ -31,6 +31,9 @@ public sealed class MachOSourceVersionCommand : MachOLoadCommand
     public Version Version => MachOVersion.DecodeSource(SourceVersion);
 
     /// <inheritdoc />
+    public override uint MinimumCommandSize => CommandSize;
+
+    /// <inheritdoc />
     protected override void UpdateLayoutCore(MachOVisitorContext context) => Size = CommandSize;
 
     /// <inheritdoc />

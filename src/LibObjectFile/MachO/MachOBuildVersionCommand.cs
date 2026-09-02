@@ -60,6 +60,9 @@ public sealed class MachOBuildVersionCommand : MachOLoadCommand
     public Version Sdk => MachOVersion.Decode(SdkVersion);
 
     /// <inheritdoc />
+    public override uint MinimumCommandSize => HeaderSize;
+
+    /// <inheritdoc />
     protected override void UpdateLayoutCore(MachOVisitorContext context)
         => Size = HeaderSize + (uint)Tools.Count * ToolSize;
 
@@ -77,6 +80,15 @@ public sealed class MachOBuildVersionCommand : MachOLoadCommand
         SdkVersion = raw.Sdk;
 
         Tools.Clear();
+
+        if (HeaderSize + raw.ToolCount * ToolSize > Size)
+        {
+            reader.Diagnostics.Error(
+                DiagnosticId.MACHO_ERR_InvalidLoadCommandSize,
+                $"LC_BUILD_VERSION declares {raw.ToolCount} tools, which do not fit in its cmdsize of {Size}");
+            return;
+        }
+
         for (uint i = 0; i < raw.ToolCount; i++)
         {
             if (!reader.TryReadData(sizeof(RawBuildToolVersion), out RawBuildToolVersion tool))

@@ -22,6 +22,17 @@ public abstract class MachOLoadCommand : MachOObject
     public MachOLoadCommandType Type { get; set; }
 
     /// <summary>
+    /// Gets the smallest <c>cmdsize</c> this kind of command can legally have, which is the size
+    /// of its fixed part.
+    /// </summary>
+    /// <remarks>
+    /// A command declaring less than this cannot hold the fields its type is defined to have, so
+    /// reading it would consume bytes belonging to whatever follows. This is checked before a
+    /// command is read rather than after, since by then the damage is done.
+    /// </remarks>
+    public virtual uint MinimumCommandSize => 8;
+
+    /// <summary>
     /// Rewrites every file offset this command records, so a layout can move the data they point
     /// at without each caller having to know which commands carry offsets.
     /// </summary>

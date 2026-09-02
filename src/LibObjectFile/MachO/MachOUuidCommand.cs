@@ -35,6 +35,9 @@ public sealed class MachOUuidCommand : MachOLoadCommand
     public Guid Uuid { get; set; }
 
     /// <inheritdoc />
+    public override uint MinimumCommandSize => CommandSize;
+
+    /// <inheritdoc />
     protected override void UpdateLayoutCore(MachOVisitorContext context) => Size = CommandSize;
 
     /// <inheritdoc />

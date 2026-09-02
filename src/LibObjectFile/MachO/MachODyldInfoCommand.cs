@@ -66,6 +66,9 @@ public sealed class MachODyldInfoCommand : MachOLoadCommand
     public bool IsOnly => Type == MachOLoadCommandType.DyldInfoOnly;
 
     /// <inheritdoc />
+    public override uint MinimumCommandSize => CommandSize;
+
+    /// <inheritdoc />
     protected override void UpdateLayoutCore(MachOVisitorContext context) => Size = CommandSize;
 
     /// <inheritdoc />

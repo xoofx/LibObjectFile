@@ -76,18 +76,6 @@ public class MachOSimpleTests : MachOTestBase
     }
 
     /// <summary>
-    /// Packing is not visible in a printed image, since only the decoded version is shown.
-    /// </summary>
-    [TestMethod]
-    public void VersionPackingRoundTrips()
-    {
-        Assert.AreEqual(new Version(10, 13, 0), MachOVersion.Decode(0x000A0D00));
-        Assert.AreEqual(0x000A0D00u, MachOVersion.Encode(new Version(10, 13, 0)));
-        Assert.AreEqual(0x0001000Au, MachOVersion.Encode(new Version(1, 0, 10)));
-        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => MachOVersion.Encode(new Version(1, 256, 0)));
-    }
-
-    /// <summary>
     /// The snapshot shows the thread state's flavour and length, but not that the eleventh word
     /// is the entry point, nor that the symbol table runs straight into the string table.
     /// </summary>
@@ -102,6 +90,229 @@ public class MachOSimpleTests : MachOTestBase
 
         var symtab = file.LoadCommands.OfType<MachOSymbolTableCommand>().Single();
         Assert.AreEqual(symtab.StringOffset, symtab.SymbolOffset + symtab.SymbolCount * MachOSymbolTableCommand.GetSymbolSize(file.Is64Bit));
+    }
+
+    /// <summary>
+    /// Packing is not visible in a printed image, since only the decoded version is shown.
+    /// </summary>
+    [TestMethod]
+    public void VersionPackingRoundTrips()
+    {
+        Assert.AreEqual(new Version(10, 13, 0), MachOVersion.Decode(0x000A0D00));
+        Assert.AreEqual(0x000A0D00u, MachOVersion.Encode(new Version(10, 13, 0)));
+        Assert.AreEqual(0x0001000Au, MachOVersion.Encode(new Version(1, 0, 10)));
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => MachOVersion.Encode(new Version(1, 256, 0)));
+    }
+
+    [TestMethod]
+    [DataRow("helloworld_x86_64")]
+    [DataRow("helloworld_arm64")]
+    [DataRow("chainedfixups_arm64")]
+    [DataRow("libhelloworld_x86_64.dylib")]
+    [DataRow("helloworld_x86_64.o")]
+    [DataRow("unixthread_i386")]
+    [DataRow("dyldinfo_i386")]
+    public void ReadWriteIsByteExact(string name)
+    {
+        var original = File.ReadAllBytes(GetFile(name));
+
+        using var input = new MemoryStream(original);
+        var file = MachOFile.Read(input);
+
+        var output = new MemoryStream();
+        file.Write(output);
+
+        ByteArrayAssert.AreEqual(original, output.ToArray(), $"Invalid binary diff for {name} after read -> write");
+    }
+
+    /// <summary>
+    /// Commands this code does not model have to survive verbatim, which is what keeps the reader
+    /// usable against images from a newer linker. The type used here is a made-up one, so that
+    /// modelling more real commands later cannot quietly void the test.
+    /// </summary>
+    [TestMethod]
+    public void KeepsUnmodelledLoadCommandsVerbatim()
+    {
+        var payload = new byte[] { 0xDE, 0xAD, 0xBE, 0xEF, 0x01, 0x02, 0x03, 0x04 };
+
+        var file = LoadMachO("unixthread_i386");
+        file.LoadCommands.Add(new MachOUnknownLoadCommand
+        {
+            Type = (MachOLoadCommandType)0x7F000001,
+            Size = 16,
+            Payload = payload,
+        });
+        file.LoadCommands.Add(new MachOTwoLevelHintsCommand
+        {
+            Type = MachOLoadCommandType.TwoLevelHints,
+            Size = MachOTwoLevelHintsCommand.CommandSize,
+            Offset = 0x2000,
+            HintCount = 7,
+        });
+
+        var stream = new MemoryStream();
+        file.Write(stream);
+        var reread = MachOFile.Read(new MemoryStream(stream.ToArray()));
+
+        var survivor = reread.LoadCommands.OfType<MachOUnknownLoadCommand>().Single(c => c.Type == (MachOLoadCommandType)0x7F000001);
+        CollectionAssert.AreEqual(payload, survivor.Payload);
+
+        var hints = reread.LoadCommands.OfType<MachOTwoLevelHintsCommand>().Single();
+        Assert.AreEqual(0x2000u, hints.Offset);
+        Assert.AreEqual(7u, hints.HintCount);
+    }
+    /// <summary>
+    /// Every offset pointing at relocatable data has to move when the map says so. The offsets
+    /// are read back through the typed properties rather than through the same walk being tested,
+    /// so a field the walk does not reach shows up here as one that failed to move.
+    /// </summary>
+    [TestMethod]
+    [DataRow("helloworld_x86_64")]
+    [DataRow("chainedfixups_arm64")]
+    [DataRow("unixthread_i386")]
+    [DataRow("dyldinfo_i386")]
+    [DataRow("helloworld_x86_64.o")]
+    public void EveryRecordedFileOffsetIsReachable(string name)
+    {
+        const uint delta = 0x1000;
+
+        var before = ReadOffsets(LoadMachO(name));
+        Assert.AreNotEqual(0, before.Count, "the fixture records no file offsets at all");
+
+        var file = LoadMachO(name);
+        var placementBefore = file.Segments.Select(s => (s.FileOffset, Sections: s.Sections.Select(x => x.FileOffset).ToArray())).ToArray();
+
+        file.UpdateFileOffsets(offset => offset + delta);
+
+        var after = ReadOffsets(file);
+        CollectionAssert.AreEqual(before.Select(o => o + delta).ToArray(), after.ToArray(), "an offset the walk should reach did not move");
+
+        // Placement is outside the contract: moving a segment or a section moves it in memory.
+        var placementAfter = file.Segments.Select(s => (s.FileOffset, Sections: s.Sections.Select(x => x.FileOffset).ToArray())).ToArray();
+        for (var i = 0; i < placementBefore.Length; i++)
+        {
+            Assert.AreEqual(placementBefore[i].FileOffset, placementAfter[i].FileOffset, "a segment was moved");
+            CollectionAssert.AreEqual(placementBefore[i].Sections, placementAfter[i].Sections, "a section was moved");
+        }
+
+        // An identity remap has to leave the image untouched.
+        var identity = LoadMachO(name);
+        identity.UpdateFileOffsets(offset => offset);
+        ByteArrayAssert.AreEqual(File.ReadAllBytes(GetFile(name)), WriteToArray(identity), "an identity remap changed the image");
+    }
+
+    /// <summary>
+    /// Reads the relocatable offsets straight off the commands, independently of the walk.
+    /// </summary>
+    private static List<uint> ReadOffsets(MachOFile file)
+    {
+        var offsets = new List<uint>();
+        void Add(uint value)
+        {
+            if (value != 0) offsets.Add(value);
+        }
+
+        foreach (var segment in file.Segments)
+        {
+            foreach (var section in segment.Sections) Add(section.RelocationOffset);
+        }
+
+        foreach (var command in file.LoadCommands)
+        {
+            switch (command)
+            {
+                case MachOSymbolTableCommand symtab:
+                    Add(symtab.SymbolOffset); Add(symtab.StringOffset);
+                    break;
+                case MachODynamicSymbolTableCommand dysymtab:
+                    Add(dysymtab.TableOfContentsOffset); Add(dysymtab.ModuleTableOffset);
+                    Add(dysymtab.ExternalReferenceOffset); Add(dysymtab.IndirectSymbolOffset);
+                    Add(dysymtab.ExternalRelocationOffset); Add(dysymtab.LocalRelocationOffset);
+                    break;
+                case MachODyldInfoCommand dyldInfo:
+                    Add(dyldInfo.RebaseOffset); Add(dyldInfo.BindOffset); Add(dyldInfo.WeakBindOffset);
+                    Add(dyldInfo.LazyBindOffset); Add(dyldInfo.ExportOffset);
+                    break;
+                case MachOLinkEditDataCommand data:
+                    Add(data.DataOffset);
+                    break;
+                case MachOTwoLevelHintsCommand hints:
+                    Add(hints.Offset);
+                    break;
+            }
+        }
+
+        return offsets;
+    }
+
+
+    /// <summary>
+    /// Verification exists to catch the invariants nothing else does. The address check is the
+    /// one the format rests on: break it and the loader maps a section somewhere other than
+    /// where the code expects, which no round-trip test would notice.
+    /// </summary>
+    [TestMethod]
+    public void VerifyAcceptsRealImagesAndCatchesABrokenOne()
+    {
+        foreach (var name in new[] { "helloworld_x86_64", "helloworld_arm64", "unixthread_i386", "helloworld_x86_64.o" })
+        {
+            var diagnostics = new DiagnosticBag();
+            LoadMachO(name).Verify(diagnostics);
+            Assert.IsFalse(diagnostics.HasErrors, $"{name} should verify: {string.Join("; ", diagnostics.Messages)}");
+        }
+
+        var moved = LoadMachO("unixthread_i386");
+        moved.FindSegment("__TEXT")!.Sections[0].Address += 4;
+        var broken = new DiagnosticBag();
+        moved.Verify(broken);
+        Assert.IsTrue(broken.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_SectionAddressMismatch));
+
+        var overlong = LoadMachO("unixthread_i386");
+        overlong.LoadCommands[0].Size += 1;
+        var misaligned = new DiagnosticBag();
+        overlong.Verify(misaligned);
+        Assert.IsTrue(misaligned.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_InvalidCommandAlignment));
+
+        // A header edited on its own describes a section that is not there, and the round-trip
+        // would still match because the header and the bytes are written from what each holds.
+        var resized = LoadMachO("unixthread_i386");
+        resized.FindSegment("__TEXT")!.Sections[0].Size += 8;
+        var mismatched = new DiagnosticBag();
+        resized.Verify(mismatched);
+        Assert.IsTrue(mismatched.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_SectionContentMismatch));
+    }
+
+    /// <summary>
+    /// The padding after the load command table is the only elastic thing in the file, so it has
+    /// to absorb exactly what the table gains and nothing else may shift. This is what an
+    /// install_name_tool-style edit depends on.
+    /// </summary>
+    [TestMethod]
+    public void GrowingTheCommandTableConsumesOnlyThePadding()
+    {
+        var file = LoadMachO("unixthread_i386");
+
+        var paddingBefore = file.LoadCommandPadding!.Size;
+        var tableEndBefore = file.LoadCommandsEndOffset;
+        var contentStart = file.ContentStartOffset;
+        var positionsBefore = file.Content.Select(c => (c.GetType().Name, c.Position)).ToArray();
+
+        var added = file.AddRPath("@executable_path/../Frameworks");
+        var image = WriteToArray(file);
+
+        Assert.AreEqual(tableEndBefore + added.Size, file.LoadCommandsEndOffset);
+        Assert.AreEqual(paddingBefore - added.Size, file.LoadCommandPadding!.Size, "the padding did not absorb the new command");
+        Assert.AreEqual(contentStart, file.ContentStartOffset, "content after the padding moved");
+
+        // Only the padding may have moved; everything after it stays exactly where it was.
+        var positionsAfter = file.Content.Select(c => (c.GetType().Name, c.Position)).ToArray();
+        for (var i = 0; i < positionsBefore.Length; i++)
+        {
+            if (positionsBefore[i].Name == nameof(MachOLoadCommandPadding)) continue;
+            Assert.AreEqual(positionsBefore[i], positionsAfter[i], $"content {i} moved");
+        }
+
+        Assert.AreEqual(new FileInfo(GetFile("unixthread_i386")).Length, image.Length, "the file changed size");
     }
 
     /// <summary>
@@ -231,186 +442,6 @@ public class MachOSimpleTests : MachOTestBase
     }
 
     /// <summary>
-    /// The padding after the load command table is the only elastic thing in the file, so it has
-    /// to absorb exactly what the table gains and nothing else may shift. This is what an
-    /// install_name_tool-style edit depends on.
-    /// </summary>
-    [TestMethod]
-    public void GrowingTheCommandTableConsumesOnlyThePadding()
-    {
-        var file = LoadMachO("unixthread_i386");
-
-        var paddingBefore = file.LoadCommandPadding!.Size;
-        var tableEndBefore = file.LoadCommandsEndOffset;
-        var contentStart = file.ContentStartOffset;
-        var positionsBefore = file.Content.Select(c => (c.GetType().Name, c.Position)).ToArray();
-
-        var added = file.AddRPath("@executable_path/../Frameworks");
-        var image = WriteToArray(file);
-
-        Assert.AreEqual(tableEndBefore + added.Size, file.LoadCommandsEndOffset);
-        Assert.AreEqual(paddingBefore - added.Size, file.LoadCommandPadding!.Size, "the padding did not absorb the new command");
-        Assert.AreEqual(contentStart, file.ContentStartOffset, "content after the padding moved");
-
-        // Only the padding may have moved; everything after it stays exactly where it was.
-        var positionsAfter = file.Content.Select(c => (c.GetType().Name, c.Position)).ToArray();
-        for (var i = 0; i < positionsBefore.Length; i++)
-        {
-            if (positionsBefore[i].Name == nameof(MachOLoadCommandPadding)) continue;
-            Assert.AreEqual(positionsBefore[i], positionsAfter[i], $"content {i} moved");
-        }
-
-        Assert.AreEqual(new FileInfo(GetFile("unixthread_i386")).Length, image.Length, "the file changed size");
-    }
-
-    /// <summary>
-    /// Verification exists to catch the invariants nothing else does. The address check is the
-    /// one the format rests on: break it and the loader maps a section somewhere other than
-    /// where the code expects, which no round-trip test would notice.
-    /// </summary>
-    [TestMethod]
-    public void VerifyAcceptsRealImagesAndCatchesABrokenOne()
-    {
-        foreach (var name in new[] { "helloworld_x86_64", "helloworld_arm64", "unixthread_i386", "helloworld_x86_64.o" })
-        {
-            var diagnostics = new DiagnosticBag();
-            LoadMachO(name).Verify(diagnostics);
-            Assert.IsFalse(diagnostics.HasErrors, $"{name} should verify: {string.Join("; ", diagnostics.Messages)}");
-        }
-
-        var moved = LoadMachO("unixthread_i386");
-        moved.FindSegment("__TEXT")!.Sections[0].Address += 4;
-        var broken = new DiagnosticBag();
-        moved.Verify(broken);
-        Assert.IsTrue(broken.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_SectionAddressMismatch));
-
-        var overlong = LoadMachO("unixthread_i386");
-        overlong.LoadCommands[0].Size += 1;
-        var misaligned = new DiagnosticBag();
-        overlong.Verify(misaligned);
-        Assert.IsTrue(misaligned.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_InvalidCommandAlignment));
-
-        // A header edited on its own describes a section that is not there, and the round-trip
-        // would still match because the header and the bytes are written from what each holds.
-        var resized = LoadMachO("unixthread_i386");
-        resized.FindSegment("__TEXT")!.Sections[0].Size += 8;
-        var mismatched = new DiagnosticBag();
-        resized.Verify(mismatched);
-        Assert.IsTrue(mismatched.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_SectionContentMismatch));
-    }
-
-    [TestMethod]
-    public void RejectsANonMachOStream()
-    {
-        using var input = new MemoryStream("not a mach-o file at all"u8.ToArray());
-
-        Assert.IsFalse(MachOFile.IsMachO(input));
-        Assert.IsFalse(MachOFile.TryRead(input, out _, out var diagnostics));
-        Assert.IsTrue(diagnostics.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_InvalidMagic));
-    }
-
-    [TestMethod]
-    [DataRow("helloworld_x86_64")]
-    [DataRow("helloworld_arm64")]
-    [DataRow("chainedfixups_arm64")]
-    [DataRow("libhelloworld_x86_64.dylib")]
-    [DataRow("helloworld_x86_64.o")]
-    [DataRow("unixthread_i386")]
-    [DataRow("dyldinfo_i386")]
-    public void ReadWriteIsByteExact(string name)
-    {
-        var original = File.ReadAllBytes(GetFile(name));
-
-        using var input = new MemoryStream(original);
-        var file = MachOFile.Read(input);
-
-        var output = new MemoryStream();
-        file.Write(output);
-
-        ByteArrayAssert.AreEqual(original, output.ToArray(), $"Invalid binary diff for {name} after read -> write");
-    }
-
-    /// <summary>
-    /// Commands this code does not model have to survive verbatim, which is what keeps the reader
-    /// usable against images from a newer linker. The type used here is a made-up one, so that
-    /// modelling more real commands later cannot quietly void the test.
-    /// </summary>
-    [TestMethod]
-    public void KeepsUnmodelledLoadCommandsVerbatim()
-    {
-        var payload = new byte[] { 0xDE, 0xAD, 0xBE, 0xEF, 0x01, 0x02, 0x03, 0x04 };
-
-        var file = LoadMachO("unixthread_i386");
-        file.LoadCommands.Add(new MachOUnknownLoadCommand
-        {
-            Type = (MachOLoadCommandType)0x7F000001,
-            Size = 16,
-            Payload = payload,
-        });
-        file.LoadCommands.Add(new MachOTwoLevelHintsCommand
-        {
-            Type = MachOLoadCommandType.TwoLevelHints,
-            Size = MachOTwoLevelHintsCommand.CommandSize,
-            Offset = 0x2000,
-            HintCount = 7,
-        });
-
-        var stream = new MemoryStream();
-        file.Write(stream);
-        var reread = MachOFile.Read(new MemoryStream(stream.ToArray()));
-
-        var survivor = reread.LoadCommands.OfType<MachOUnknownLoadCommand>().Single(c => c.Type == (MachOLoadCommandType)0x7F000001);
-        CollectionAssert.AreEqual(payload, survivor.Payload);
-
-        var hints = reread.LoadCommands.OfType<MachOTwoLevelHintsCommand>().Single();
-        Assert.AreEqual(0x2000u, hints.Offset);
-        Assert.AreEqual(7u, hints.HintCount);
-    }
-
-    /// <summary>
-    /// A layout has to be able to move everything in <c>__LINKEDIT</c>, so no command may keep a
-    /// file offset the walk does not reach. Shifting them all and reading them back catches a
-    /// missed field, which would otherwise still point at where the data used to be.
-    /// </summary>
-    [TestMethod]
-    [DataRow("helloworld_x86_64")]
-    [DataRow("chainedfixups_arm64")]
-    [DataRow("unixthread_i386")]
-    [DataRow("dyldinfo_i386")]
-    public void EveryRecordedFileOffsetIsReachable(string name)
-    {
-        const uint delta = 0x1000;
-
-        var originals = CollectOffsets(LoadMachO(name));
-        Assert.AreNotEqual(0, originals.Count, "the fixture records no file offsets at all");
-
-        var shiftedFile = LoadMachO(name);
-        shiftedFile.UpdateFileOffsets(offset => offset + delta);
-        CollectionAssert.AreEqual(originals.Select(o => o + delta).ToArray(), CollectOffsets(shiftedFile).ToArray());
-
-        // An identity remap has to leave the image untouched.
-        var identity = LoadMachO(name);
-        identity.UpdateFileOffsets(offset => offset);
-        var stream = new MemoryStream();
-        identity.Write(stream);
-        ByteArrayAssert.AreEqual(File.ReadAllBytes(GetFile(name)), stream.ToArray(), "an identity remap changed the image");
-    }
-
-    private static List<uint> CollectOffsets(MachOFile file)
-    {
-        var offsets = new List<uint>();
-        foreach (var command in file.LoadCommands)
-        {
-            command.UpdateFileOffsets(offset =>
-            {
-                offsets.Add(offset);
-                return offset;
-            });
-        }
-        return offsets;
-    }
-
-    /// <summary>
     /// Snapshots the decoded form of each fixture. This covers every field of every command at
     /// once, so decoding a new command extends the snapshot rather than needing another test,
     /// and a change to how anything is read shows up as a diff rather than passing unnoticed.
@@ -426,5 +457,54 @@ public class MachOSimpleTests : MachOTestBase
     public async Task Prints(string name)
     {
         await VerifyMachO(LoadMachO(name), name);
+    }
+
+
+    /// <summary>
+    /// A command is bounded by its own cmdsize and the table by the header's sizeofcmds. Without
+    /// that, a command declaring a size too small for its own fields still reads them, taking
+    /// bytes that belong to whatever follows and decoding something the file does not say.
+    /// </summary>
+    [TestMethod]
+    public void RejectsMalformedLoadCommands()
+    {
+        static byte[] Patch(Action<byte[]> corrupt)
+        {
+            var bytes = File.ReadAllBytes(GetFile("unixthread_i386"));
+            corrupt(bytes);
+            return bytes;
+        }
+
+        static uint Read(byte[] b, int offset) => BitConverter.ToUInt32(b, offset);
+        static void Write(byte[] b, int offset, uint value) => BitConverter.GetBytes(value).CopyTo(b, offset);
+
+        // The first command is LC_SEGMENT at offset 28. Shrinking its cmdsize below its fixed
+        // part would have it read fields out of the command after it.
+        var tooSmall = Patch(b => Write(b, 32, 8));
+        Assert.IsFalse(MachOFile.TryRead(new MemoryStream(tooSmall), out _, out var d1));
+        Assert.IsTrue(d1.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_InvalidLoadCommandSize), string.Join("; ", d1.Messages));
+
+        // A table that does not end where the header says means the walk and the header disagree
+        // about which bytes are commands.
+        var shortTable = Patch(b => Write(b, 20, Read(b, 20) - 8));
+        Assert.IsFalse(MachOFile.TryRead(new MemoryStream(shortTable), out _, out var d2));
+        Assert.IsTrue(d2.Messages.Any(m => m.Id is DiagnosticId.MACHO_ERR_LoadCommandTableSizeMismatch
+            or DiagnosticId.MACHO_ERR_TruncatedLoadCommand), string.Join("; ", d2.Messages));
+
+        // A section count that does not fit the command would read section headers out of the
+        // commands after it.
+        var tooManySections = Patch(b => Write(b, 28 + 56 + 48, 40));
+        Assert.IsFalse(MachOFile.TryRead(new MemoryStream(tooManySections), out _, out var d3));
+        Assert.IsTrue(d3.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_InvalidLoadCommandSize), string.Join("; ", d3.Messages));
+    }
+
+    [TestMethod]
+    public void RejectsANonMachOStream()
+    {
+        using var input = new MemoryStream("not a mach-o file at all"u8.ToArray());
+
+        Assert.IsFalse(MachOFile.IsMachO(input));
+        Assert.IsFalse(MachOFile.TryRead(input, out _, out var diagnostics));
+        Assert.IsTrue(diagnostics.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_InvalidMagic));
     }
 }
