@@ -71,9 +71,18 @@ public class MachOSigningTests : MachOTestBase
         var file = MachOFile.Read(new MemoryStream(image));
         var command = file.CodeSignature!;
 
+        // Three blobs, which is what codesign produces for an ad-hoc signature: a code directory,
+        // an empty requirement set and an empty CMS wrapper. The wrapper is present and empty
+        // rather than omitted, matching a shipping ad-hoc signed dylib byte for byte in shape.
         var superBlob = image.AsSpan((int)command.DataOffset);
         Assert.AreEqual(EmbeddedSignatureMagic, BinaryPrimitives.ReadUInt32BigEndian(superBlob));
         Assert.AreEqual(3u, BinaryPrimitives.ReadUInt32BigEndian(superBlob.Slice(8)), "code directory, requirements and CMS slots");
+
+        var emptyRequirements = FindBlob(image, command.DataOffset, RequirementsSlot);
+        Assert.AreEqual(12, emptyRequirements.Length, "an empty requirement set");
+        var cms = FindBlob(image, command.DataOffset, SignatureSlot);
+        Assert.AreEqual(BlobWrapperMagic, BinaryPrimitives.ReadUInt32BigEndian(cms));
+        Assert.AreEqual(8, cms.Length, "an empty CMS wrapper, as codesign writes for ad-hoc");
 
         var codeDirectory = FindCodeDirectory(image, command.DataOffset);
         Assert.AreEqual(CodeDirectoryMagic, BinaryPrimitives.ReadUInt32BigEndian(codeDirectory));

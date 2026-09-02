@@ -161,9 +161,15 @@ public sealed class MachOAdHocSignatureBuilder
     }
 
     /// <summary>
-    /// Writes the empty wrapper that would hold a CMS signature. It stays empty for an ad-hoc
-    /// signature, which is exactly what marks the signature as ad-hoc to a verifier.
+    /// Writes the empty wrapper that would hold a CMS signature.
     /// </summary>
+    /// <remarks>
+    /// The slot is present and empty rather than omitted, which is what <c>codesign</c> produces
+    /// when it signs ad-hoc: a shipping ad-hoc signed dylib has exactly these three blobs, a code
+    /// directory, a twelve byte empty requirement set and this eight byte wrapper. A linker
+    /// writes something smaller still, a lone code directory flagged <c>LINKER_SIGNED</c>, but
+    /// that is a different thing from what signing a finished image produces.
+    /// </remarks>
     private static void WriteBlobWrapper(Span<byte> span)
     {
         BinaryPrimitives.WriteUInt32BigEndian(span, BlobWrapperMagic);
