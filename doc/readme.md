@@ -5,6 +5,7 @@ This is the manual of LibObjectFile with the following API covered:
 - [ELF Object File Format](#elf-object-file-format) via the `ElfFile` API
 - [Archive ar File Format](#archive-ar-file-format) via the `ArArchiveFile` API
 - [PE File Format](#pe-object-file-format) via the `PEFile` API
+- [Mach-O File Format](#mach-o-object-file-format) via the `MachOFile` API
 
 ## ELF Object File Format
 
@@ -545,3 +546,119 @@ Assert.AreEqual(156, process.ExitCode);
 ### Links
 
 - [PE and COFF Specification](https://docs.microsoft.com/en-us/windows/win32/debug/pe-format)
+
+## Mach-O Object File Format
+
+### Overview
+
+The main entry-point for reading/writing a Mach-O file is the [`MachOFile`](https://github.com/xoofx/LibObjectFile/blob/master/src/LibObjectFile/MachO/MachOFile.cs) class.
+
+This class is the equivalent of the Mach-O header and contains the load commands, which describe everything else in the image, along with the content those commands point at.
+
+#### Content
+
+Everything in a Mach-O image is a `MachOContent` in the ordered `MachOFile.Content` list: the header, the load command table, the padding after it, the bytes of each section, each table in `__LINKEDIT`, and any alignment padding in between. Every byte of the file belongs to one of them, so writing the list back out reproduces the file.
+
+Padding is kept as the bytes that were read rather than regenerated, because a linker pads executable sections with `nop` rather than zeros.
+
+#### Addresses and what a layout may move
+
+A section's address is its segment's address plus the section's distance from the segment's file offset:
+
+```
+section.Address - segment.VmAddress == section.FileOffset - segment.FileOffset
+```
+
+Moving a section in the file therefore moves it in memory, and every instruction and relocation referring to it becomes wrong. Content carrying an address is `IsPositionPinned` and a layout leaves it where it is. Only what nothing addresses, which in practice is `__LINKEDIT` and the file tail, is free to move.
+
+This is why a `MachOSegment` describes a mapping rather than owning bytes, and why adding a load command is bounded by the padding the linker left after the command table. `MachOFile.AvailableLoadCommandSpace` reports how much of it is left.
+
+#### Universal binaries
+
+A universal binary holds one image per architecture and is read with [`MachOFatFile`](https://github.com/xoofx/LibObjectFile/blob/master/src/LibObjectFile/MachO/MachOFatFile.cs). Use `MachOFatFile.IsFat` to tell the two apart:
+
+```csharp
+if (MachOFatFile.IsFat(inputStream))
+{
+    var fat = MachOFatFile.Read(inputStream);
+    foreach (var slice in fat.Slices)
+    {
+        Console.WriteLine($"{slice.CpuType}: {slice.File!.FileType}");
+    }
+}
+```
+
+Its header and slice table are stored big-endian whatever the architectures inside are, which is the one place the format departs from the image's own byte order.
+
+### Reading a Mach-O File
+
+The Mach-O API allows to read from a `System.IO.Stream` via the method `MachOFile.Read`:
+
+```csharp
+MachOFile machO = MachOFile.Read(inputStream);
+foreach (var segment in machO.Segments)
+{
+    Console.WriteLine($"{segment.Name} at 0x{segment.VmAddress:X}");
+}
+```
+
+Load commands this library does not model are kept as a `MachOUnknownLoadCommand` and written back verbatim, so an image built by a newer linker still round-trips.
+
+The symbol table, the indirect symbol table and the relocations of a section are decoded on demand:
+
+```csharp
+foreach (var symbol in machO.ReadSymbolTable())
+{
+    Console.WriteLine($"{symbol.Name} {symbol.Kind}");
+}
+```
+
+### Writing a Mach-O File
+
+A `MachOFile` is written back with `MachOFile.Write`:
+
+```csharp
+machO.Write(outputStream);
+```
+
+Content is written at the offset recorded for it, so an image that has not been edited comes back byte for byte. Use `MachOFile.Verify` to check an image before writing it.
+
+### Editing load commands
+
+`MachOFile` offers the operations `install_name_tool` provides, appending to the padding the linker left so that no content moves:
+
+```csharp
+machO.AddLoadDylib("@executable_path/../Frameworks/mylib.dylib");
+machO.AddRPath("@executable_path/../Frameworks");
+machO.ChangeDylibName("/usr/lib/libfoo.dylib", "@rpath/libfoo.dylib");
+```
+
+A dependency is appended rather than inserted, because dyld identifies a library by the position of its command among the others and the symbol table binds against that number. Removing a dependency is not offered for the same reason.
+
+When the padding runs out these throw, naming the shortfall, rather than moving content and invalidating the image. There is no way around that short of relinking with `-headerpad_max_install_names`, which is also why `install_name_tool` fails in the same situation.
+
+### Code signing
+
+Apple Silicon refuses to execute an unsigned image, so an edited `arm64` binary has to be signed again to stay runnable:
+
+```csharp
+machO.AddRPath("@executable_path/../Frameworks");
+machO.AdHocSign("mytool");
+machO.Write(outputStream);
+```
+
+An ad-hoc signature carries no certificate. It states only that the image hashes to what its code directory says, which is what lets the kernel give the process a stable identity.
+
+Signing has to be the last thing done before writing. Editing afterwards leaves the signature covering bytes that are no longer there, so `MachOFile.IsCodeSignatureStale` records it and writing fails until the image is signed again.
+
+### Printing a Mach-O File
+
+`MachOFile.Print` writes the header and every load command in a form close to `otool -h -l`:
+
+```csharp
+machO.Print(Console.Out);
+```
+
+### Links
+
+- [OS X ABI Mach-O File Format Reference](https://github.com/aidansteele/osx-abi-macho-file-format-reference)
