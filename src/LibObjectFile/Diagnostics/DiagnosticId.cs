@@ -235,4 +235,8 @@ public enum DiagnosticId
     MACHO_ERR_SectionContentMismatch = 5017,
     MACHO_ERR_LoadCommandTableSizeMismatch = 5018,
     MACHO_ERR_LoadCommandOverread = 5019,
+    MACHO_ERR_InvalidFatSliceAlignment = 5020,
+    MACHO_ERR_OverlappingFatSlices = 5021,
+    MACHO_ERR_DuplicateFatSlice = 5022,
+    MACHO_ERR_MissingFatSliceImage = 5023,
 }

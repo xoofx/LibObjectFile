@@ -436,9 +436,26 @@ public class MachOSimpleTests : MachOTestBase
             Assert.AreEqual(0ul, slice.FileOffset % slice.Alignment, "a slice is mapped directly, so it has to be page aligned");
         }
 
+        Assert.IsFalse(fat.Verify().HasErrors, "a real universal binary has to verify");
+
         var output = new MemoryStream();
         fat.Write(output);
         ByteArrayAssert.AreEqual(original, output.ToArray(), "Invalid binary diff for helloworld_fat after read -> write");
+
+        // Two slices claiming the same architecture leave the loader picking the first and the
+        // other unreachable, so the write reports it rather than producing a file lipo rejects.
+        var duplicated = MachOFatFile.Read(new MemoryStream(original));
+        duplicated.Slices[1].CpuType = duplicated.Slices[0].CpuType;
+        duplicated.Slices[1].CpuSubType = duplicated.Slices[0].CpuSubType;
+        Assert.IsFalse(duplicated.TryWrite(new MemoryStream(), out var duplicateDiagnostics));
+        Assert.IsTrue(duplicateDiagnostics.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_DuplicateFatSlice), string.Join("; ", duplicateDiagnostics.Messages));
+
+        // A slice that no longer fits the 32-bit slice table has to be reported, since casting it
+        // out would record a different slice than the one written.
+        var tooFar = MachOFatFile.Read(new MemoryStream(original));
+        tooFar.Slices[1].FileOffset = 0x1_0000_0000;
+        tooFar.Slices[1].Size = 0x10;
+        Assert.IsTrue(tooFar.Verify().Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_ValueTooLargeFor32Bit));
     }
 
     /// <summary>
@@ -537,6 +554,14 @@ public class MachOSimpleTests : MachOTestBase
         BitConverter.GetBytes(0x10000000u).Reverse().ToArray().CopyTo(fat, 4);
         Assert.IsFalse(MachOFatFile.TryRead(new MemoryStream(fat), out _, out var d4));
         Assert.IsTrue(d4.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_InvalidFatHeader), string.Join("; ", d4.Messages));
+
+        // A shift count is masked to the width of what it shifts, so an alignment exponent past
+        // 63 would alias to a different alignment rather than being rejected. The align field of
+        // the first slice sits at the end of its 20-byte entry, and the slice table is big-endian.
+        var badAlign = File.ReadAllBytes(GetFile("helloworld_fat"));
+        BitConverter.GetBytes(64u).Reverse().ToArray().CopyTo(badAlign, MachOFatFile.HeaderSize + 16);
+        Assert.IsFalse(MachOFatFile.TryRead(new MemoryStream(badAlign), out _, out var d7));
+        Assert.IsTrue(d7.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_InvalidFatSliceAlignment), string.Join("; ", d7.Messages));
     }
 
     [TestMethod]

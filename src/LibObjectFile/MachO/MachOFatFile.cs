@@ -27,7 +27,7 @@ namespace LibObjectFile.MachO;
 /// together.
 /// </para>
 /// </remarks>
-public sealed class MachOFatFile
+public sealed partial class MachOFatFile
 {
     /// <summary>
     /// The size of the header preceding the slice table (<c>fat_header</c>).
@@ -174,6 +174,13 @@ public sealed class MachOFatFile
                 slice.AlignLog2 = BinaryPrimitives.ReadUInt32BigEndian(entry.Slice(16));
             }
 
+            if (slice.AlignLog2 > MachOFatSlice.MaxAlignLog2)
+            {
+                bag.Error(DiagnosticId.MACHO_ERR_InvalidFatSliceAlignment, $"Slice {i} has an alignment exponent of {slice.AlignLog2}, past the {MachOFatSlice.MaxAlignLog2} a shift can express");
+                file = null;
+                return false;
+            }
+
             if (slice.FileOffset + slice.Size > (ulong)stream.Length)
             {
                 bag.Error(DiagnosticId.MACHO_ERR_InvalidFatArchRange, $"Slice {i} spans [0x{slice.FileOffset:X}, 0x{slice.FileOffset + slice.Size:X}) which extends past the end of the file");
@@ -207,18 +214,62 @@ public sealed class MachOFatFile
     /// </summary>
     /// <param name="stream">The stream to write to.</param>
     /// <exception cref="ArgumentNullException"><paramref name="stream"/> is null.</exception>
-    /// <exception cref="ObjectFileException">A slice could not be written.</exception>
+    /// <exception cref="ObjectFileException">The universal binary or one of its slices is not writable.</exception>
     /// <remarks>
-    /// The slices are laid out first, so a slice that changed size since it was read is placed
-    /// and recorded correctly rather than overrunning the one after it. The space between them
-    /// is left zeroed: every universal binary examined pads with zeros, and slices are aligned
-    /// rather than packed, so the gaps hold nothing worth preserving.
+    /// The stream is grown to hold the last slice if it is shorter, and is flushed before this
+    /// method returns but is not disposed.
     /// </remarks>
     public void Write(Stream stream)
     {
+        if (!TryWrite(stream, out var diagnostics))
+        {
+            throw new ObjectFileException($"Unexpected error while writing the Mach-O universal binary", diagnostics);
+        }
+    }
+
+    /// <summary>
+    /// Tries to write this universal binary to a stream.
+    /// </summary>
+    /// <param name="stream">The stream to write to.</param>
+    /// <param name="diagnostics">The diagnostics collected while writing.</param>
+    /// <returns><c>true</c> if the file was written without errors; otherwise <c>false</c>.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="stream"/> is null.</exception>
+    /// <remarks>
+    /// Each slice is laid out before the slices are placed, so a slice that changed size since it
+    /// was read is recorded at the size it actually writes rather than overrunning the one after
+    /// it. The space between slices is left zeroed: every universal binary examined pads with
+    /// zeros, and slices are aligned rather than packed, so the gaps hold nothing worth
+    /// preserving.
+    /// <para>
+    /// The stream is grown to hold the last slice if it is shorter, and is flushed before this
+    /// method returns but is not disposed.
+    /// </para>
+    /// </remarks>
+    public bool TryWrite(Stream stream, out DiagnosticBag diagnostics)
+    {
         ArgumentNullException.ThrowIfNull(stream);
 
+        diagnostics = new DiagnosticBag();
+
+        // Each slice is verified and laid out before the containing file is, because the size
+        // recorded for a slice has to be the size that slice goes on to write.
+        foreach (var slice in Slices)
+        {
+            if (slice.File is null) continue;
+
+            var context = new MachOVisitorContext(slice.File, diagnostics);
+            slice.File.Verify(context);
+            if (diagnostics.HasErrors) return false;
+
+            slice.File.UpdateLayout(context);
+            if (diagnostics.HasErrors) return false;
+        }
+
         UpdateLayout();
+
+        Verify(diagnostics);
+        if (diagnostics.HasErrors) return false;
+
         var basePosition = stream.Position;
         var entrySize = GetSliceEntrySize(Is64BitOffsets);
 
@@ -253,7 +304,9 @@ public sealed class MachOFatFile
         {
             if (slice.File is null) continue;
             stream.Position = basePosition + (long)slice.FileOffset;
-            slice.File.Write(stream);
+            var writer = new MachOWriter(slice.File, stream, diagnostics);
+            slice.File.Write(writer);
+            if (diagnostics.HasErrors) return false;
         }
 
         var end = Slices.Count == 0 ? 0 : Slices.Max(s => (long)(s.FileOffset + s.Size));
@@ -263,6 +316,8 @@ public sealed class MachOFatFile
         }
 
         stream.Flush();
+
+        return !diagnostics.HasErrors;
     }
 
     /// <summary>
