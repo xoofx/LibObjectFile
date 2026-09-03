@@ -25,6 +25,15 @@
     <None Remove="PE\NativeLibraryWin64.dll" />
     <None Remove="PE\RawNativeConsoleWin64.exe" />
     <None Remove="small.cpp" />
+    <None Remove="MachO\chainedfixups_arm64" />
+    <None Remove="MachO\dyldinfo_i386" />
+    <None Remove="MachO\helloworld_arm64" />
+    <None Remove="MachO\helloworld_fat" />
+    <None Remove="MachO\helloworld_x86_64" />
+    <None Remove="MachO\helloworld_x86_64.o" />
+    <None Remove="MachO\libhelloworld_x86_64.dylib" />
+    <None Remove="MachO\unixthread_i386" />
+    <None Remove="MachO\unixthread_i386_rpath" />
   </ItemGroup>
 
   <ItemGroup>
@@ -85,8 +94,33 @@
     <None Include="$(ProjectDir)TestFiles\**" CopyToOutputDirectory="PreserveNewest" LinkBase="TestFiles\" />
   </ItemGroup>
   <ItemGroup>
-    <!-- The Mach-O fixtures are committed binaries; generate_files.sh only documents how to rebuild them. -->
-    <Content Include="MachO\**" Exclude="MachO\*.c;MachO\*.sh;MachO\*.yaml" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="MachO\chainedfixups_arm64">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MachO\dyldinfo_i386">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MachO\helloworld_arm64">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MachO\helloworld_fat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MachO\helloworld_x86_64">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MachO\helloworld_x86_64.o">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MachO\libhelloworld_x86_64.dylib">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MachO\unixthread_i386">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MachO\unixthread_i386_rpath">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
