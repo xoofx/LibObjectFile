@@ -113,7 +113,7 @@ partial class MachOFile
             if (segment.Is64Bit != Is64Bit)
             {
                 context.Diagnostics.Error(
-                    DiagnosticId.MACHO_ERR_ValueTooLargeFor32Bit,
+                    DiagnosticId.MACHO_ERR_InvalidImageBitness,
                     $"Segment {segment.Name} is {(segment.Is64Bit ? "64" : "32")}-bit in a {(Is64Bit ? "64" : "32")}-bit image");
             }
 

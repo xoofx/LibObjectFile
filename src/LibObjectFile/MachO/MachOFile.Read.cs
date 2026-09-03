@@ -350,7 +350,7 @@ partial class MachOFile
             if (offset + size > fileLength)
             {
                 reader.Diagnostics.Error(
-                    DiagnosticId.MACHO_ERR_InvalidSectionFileRange,
+                    DiagnosticId.MACHO_ERR_InvalidContentFileRange,
                     $"Content at 0x{offset:X} for 0x{size:X} bytes extends past the end of the file");
                 return;
             }
