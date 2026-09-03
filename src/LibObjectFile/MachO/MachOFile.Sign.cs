@@ -94,7 +94,12 @@ partial class MachOFile
                 throw new InvalidOperationException($"The image is 0x{contentEnd:X} bytes, too large for the 32-bit offset LC_CODE_SIGNATURE records.");
             }
 
-            var signatureOffset = AlignHelper.AlignUp((uint)contentEnd, (uint)MachOCodeSignatureConstants.SignatureAlignment);
+            var alignedSignatureOffset = AlignHelper.AlignUp(contentEnd, (ulong)MachOCodeSignatureConstants.SignatureAlignment);
+            if (alignedSignatureOffset > uint.MaxValue)
+            {
+                throw new InvalidOperationException($"The image ends at 0x{contentEnd:X}, which cannot be aligned for the 32-bit offset LC_CODE_SIGNATURE records.");
+            }
+            var signatureOffset = (uint)alignedSignatureOffset;
 
             var builder = new MachOAdHocSignatureBuilder(identifier)
             {
@@ -108,7 +113,7 @@ partial class MachOFile
             command.DataOffset = signatureOffset;
             command.DataSize = signatureSize;
 
-            linkEdit.FileSize = signatureOffset + signatureSize - linkEdit.FileOffset;
+            linkEdit.FileSize = (ulong)signatureOffset + signatureSize - linkEdit.FileOffset;
 
             // The signature is far larger than the slack the linker left, so __LINKEDIT grows and
             // has to be rounded to a segment boundary the way codesign rounds it. Without this it

@@ -3,6 +3,7 @@
 // See the license.txt file in the project root for more information.
 
 using System;
+using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -497,6 +498,13 @@ public class MachOSimpleTests : MachOTestBase
         tooFar.Slices[1].FileOffset = 0x1_0000_0000;
         tooFar.Slices[1].Size = 0x10;
         Assert.IsTrue(tooFar.Verify().Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_ValueTooLargeFor32Bit));
+
+        // The table is what the loader uses to select a slice, so it has to describe the image
+        // that will actually be found there.
+        var mismatched = MachOFatFile.Read(new MemoryStream(original));
+        mismatched.Slices[0].CpuType = MachOCpuType.X86;
+        Assert.IsFalse(mismatched.TryWrite(new MemoryStream(), out var mismatchDiagnostics));
+        Assert.IsTrue(mismatchDiagnostics.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_FatSliceArchitectureMismatch), string.Join("; ", mismatchDiagnostics.Messages));
     }
 
     /// <summary>
@@ -646,5 +654,35 @@ public class MachOSimpleTests : MachOTestBase
         BitConverter.GetBytes(0u).Reverse().ToArray().CopyTo(fat, MachOFatFile.HeaderSize + 12);
         Assert.IsFalse(MachOFatFile.TryRead(new MemoryStream(fat), out _, out var emptySlice));
         Assert.IsTrue(emptySlice.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_InvalidFatArchRange), string.Join("; ", emptySlice.Messages));
+
+        // FAT64 offsets and sizes are unsigned 64-bit fields. An end that wraps must be rejected
+        // before either value is narrowed for SubStream.
+        var wrappingFatRange = new byte[MachOFatFile.HeaderSize + MachOFatFile.GetSliceEntrySize(true)];
+        BinaryPrimitives.WriteUInt32BigEndian(wrappingFatRange, MachOMagic.FatMagic64);
+        BinaryPrimitives.WriteUInt32BigEndian(wrappingFatRange.AsSpan(4), 1);
+        BinaryPrimitives.WriteUInt64BigEndian(wrappingFatRange.AsSpan(MachOFatFile.HeaderSize + 8), ulong.MaxValue - 15);
+        BinaryPrimitives.WriteUInt64BigEndian(wrappingFatRange.AsSpan(MachOFatFile.HeaderSize + 16), MachOFile.MinHeaderSize);
+        Assert.IsFalse(MachOFatFile.TryRead(new MemoryStream(wrappingFatRange), out _, out var wrappingFatSlice));
+        Assert.IsTrue(wrappingFatSlice.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_InvalidFatArchRange), string.Join("; ", wrappingFatSlice.Messages));
+
+        // The same overflow is possible in a 64-bit section size. Build the smallest image with
+        // one LC_SEGMENT_64 and one section whose declared end wraps back into the file.
+        const int machHeaderSize = 32;
+        const int segmentCommandSize = 72;
+        const int sectionSize = 80;
+        var wrappingSectionRange = new byte[machHeaderSize + segmentCommandSize + sectionSize];
+        BinaryPrimitives.WriteUInt32LittleEndian(wrappingSectionRange, MachOMagic.Magic64);
+        BinaryPrimitives.WriteUInt32LittleEndian(wrappingSectionRange.AsSpan(4), (uint)MachOCpuType.X86_64);
+        BinaryPrimitives.WriteUInt32LittleEndian(wrappingSectionRange.AsSpan(12), (uint)MachOFileType.Object);
+        BinaryPrimitives.WriteUInt32LittleEndian(wrappingSectionRange.AsSpan(16), 1);
+        BinaryPrimitives.WriteUInt32LittleEndian(wrappingSectionRange.AsSpan(20), segmentCommandSize + sectionSize);
+        BinaryPrimitives.WriteUInt32LittleEndian(wrappingSectionRange.AsSpan(machHeaderSize), (uint)MachOLoadCommandType.Segment64);
+        BinaryPrimitives.WriteUInt32LittleEndian(wrappingSectionRange.AsSpan(machHeaderSize + 4), segmentCommandSize + sectionSize);
+        BinaryPrimitives.WriteUInt32LittleEndian(wrappingSectionRange.AsSpan(machHeaderSize + 64), 1);
+        var sectionOffset = machHeaderSize + segmentCommandSize;
+        BinaryPrimitives.WriteUInt64LittleEndian(wrappingSectionRange.AsSpan(sectionOffset + 40), unchecked(ulong.MaxValue - (ulong)wrappingSectionRange.Length + 11));
+        BinaryPrimitives.WriteUInt32LittleEndian(wrappingSectionRange.AsSpan(sectionOffset + 48), (uint)wrappingSectionRange.Length);
+        Assert.IsFalse(MachOFile.TryRead(new MemoryStream(wrappingSectionRange), out _, out var wrappingSection));
+        Assert.IsTrue(wrappingSection.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_InvalidContentFileRange), string.Join("; ", wrappingSection.Messages));
     }
 }

@@ -73,7 +73,7 @@ public sealed class MachOAdHocSignatureBuilder
     /// <summary>
     /// Gets the number of page hashes the code directory will hold for the current <see cref="CodeLimit"/>.
     /// </summary>
-    public uint CodeSlotCount => (CodeLimit + PageSize - 1) / PageSize;
+    public uint CodeSlotCount => (uint)(((ulong)CodeLimit + PageSize - 1) / PageSize);
 
     /// <summary>
     /// Gets the total size of the signature for the current <see cref="CodeLimit"/> and identifier.

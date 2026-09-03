@@ -88,6 +88,13 @@ partial class MachOFatFile
                     $"Slice {i} repeats the architecture {slice.CpuType} (subtype 0x{slice.CpuSubType:X}) of an earlier slice");
             }
 
+            if (slice.CpuType != slice.File.CpuType || slice.CpuSubType != slice.File.CpuSubType)
+            {
+                diagnostics.Error(
+                    DiagnosticId.MACHO_ERR_FatSliceArchitectureMismatch,
+                    $"Slice {i} is recorded as {slice.CpuType} (subtype 0x{slice.CpuSubType:X}) but contains {slice.File.CpuType} (subtype 0x{slice.File.CpuSubType:X})");
+            }
+
             ranges.Add((slice.FileOffset, slice.FileOffset + slice.Size, i));
             slice.File.Verify(diagnostics);
         }

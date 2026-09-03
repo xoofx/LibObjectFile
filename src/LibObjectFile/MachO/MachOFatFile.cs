@@ -112,6 +112,7 @@ public sealed partial class MachOFatFile
         diagnostics = bag;
 
         var basePosition = stream.Position;
+        var availableLength = (ulong)(stream.Length - basePosition);
         Span<byte> header = stackalloc byte[HeaderSize];
         stream.Position = basePosition;
         if (stream.Read(header) != HeaderSize)
@@ -188,9 +189,11 @@ public sealed partial class MachOFatFile
                 return false;
             }
 
-            if (slice.FileOffset + slice.Size > (ulong)stream.Length)
+            // Offsets are relative to the universal binary, not the underlying stream. Compare
+            // by subtraction so FAT64 values cannot wrap and then be narrowed to invalid longs.
+            if (slice.FileOffset > availableLength || slice.Size > availableLength - slice.FileOffset)
             {
-                bag.Error(DiagnosticId.MACHO_ERR_InvalidFatArchRange, $"Slice {i} spans [0x{slice.FileOffset:X}, 0x{slice.FileOffset + slice.Size:X}) which extends past the end of the file");
+                bag.Error(DiagnosticId.MACHO_ERR_InvalidFatArchRange, $"Slice {i} starts at 0x{slice.FileOffset:X} and spans 0x{slice.Size:X} bytes, which extends past the end of the file");
                 file = null;
                 return false;
             }

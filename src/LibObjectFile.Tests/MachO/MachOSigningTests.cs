@@ -254,6 +254,27 @@ public class MachOSigningTests : MachOTestBase
         ByteArrayAssert.AreEqual(before, WriteToArray(file), "a failed signing changed the image");
     }
 
+    [TestMethod]
+    public void RejectsSigningOffsetsThatCannotBeAligned()
+    {
+        var file = LoadMachO("unixthread_i386");
+        var trailing = file.Content[^1];
+        trailing.Position = uint.MaxValue - trailing.Size;
+        var commandCount = file.LoadCommands.Count;
+
+        var exception = Assert.ThrowsExactly<InvalidOperationException>(() => file.AdHocSign("swkotor"));
+        StringAssert.Contains(exception.Message, "cannot be aligned");
+        Assert.AreEqual(commandCount, file.LoadCommands.Count, "failed signing left its load command behind");
+    }
+
+    [TestMethod]
+    public void ComputesCodeSlotsWithoutOverflow()
+    {
+        var builder = new MachOAdHocSignatureBuilder("swkotor") { CodeLimit = uint.MaxValue };
+
+        Assert.AreEqual(1_048_576u, builder.CodeSlotCount);
+    }
+
     private static Span<byte> FindCodeDirectory(byte[] image, uint signatureOffset)
         => FindBlob(image, signatureOffset, CodeDirectorySlot);
 

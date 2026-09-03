@@ -241,4 +241,5 @@ public enum DiagnosticId
     MACHO_ERR_MissingFatSliceImage = 5023,
     MACHO_ERR_UnexpectedEndOfStream = 5024,
     MACHO_ERR_UnexpectedArchive = 5025,
+    MACHO_ERR_FatSliceArchitectureMismatch = 5026,
 }

@@ -372,7 +372,9 @@ partial class MachOFile
             // An offset of zero means the data is absent rather than at the start of the file.
             if (offset < commandsEnd || size == 0) return;
 
-            if (offset + size > fileLength)
+            // Compare by subtraction so an untrusted 64-bit size cannot wrap the end back into
+            // the file and reach the stream reader as a very large allocation.
+            if (offset > fileLength || size > fileLength - offset)
             {
                 reader.Diagnostics.Error(
                     DiagnosticId.MACHO_ERR_InvalidContentFileRange,
