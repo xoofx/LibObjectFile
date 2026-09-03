@@ -280,6 +280,20 @@ public class MachOSimpleTests : MachOTestBase
         moved.Verify(broken);
         Assert.IsTrue(broken.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_SectionAddressMismatch));
 
+        // An object file's sections carry addresses the linker has still to assign, so they do
+        // not track file offsets and the check above does not apply to them. Apple's own crt1.o
+        // breaks it. The committed object fixture happens to satisfy it, so the case is made
+        // rather than found.
+        var relocatable = LoadMachO("helloworld_x86_64.o");
+        relocatable.Segments.Single().Sections[1].Address += 0x1000;
+        Assert.IsFalse(relocatable.Verify().HasErrors, "an object file is not laid out at its final addresses");
+
+        var linked = LoadMachO("helloworld_x86_64");
+        Assert.AreEqual(MachOFileType.Execute, linked.FileType);
+        linked.FindSegment("__TEXT")!.Sections[1].Address += 0x1000;
+        Assert.IsTrue(linked.Verify().Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_SectionAddressMismatch),
+            "the same edit in a linked image is what the check is for");
+
         var overlong = LoadMachO("unixthread_i386");
         overlong.LoadCommands[0].Size += 1;
         var misaligned = new DiagnosticBag();

@@ -119,6 +119,11 @@ partial class MachOFile
 
     private void VerifySegments(MachOVisitorContext context)
     {
+        // An object file holds its sections in one unnamed segment and gives them addresses the
+        // linker has yet to assign for real, so they do not track file offsets the way a linked
+        // image's do. Apple's own crt1.o breaks the invariant below.
+        var isLinkedImage = FileType != MachOFileType.Object;
+
         foreach (var segment in Segments)
         {
             if (segment.Is64Bit != Is64Bit)
@@ -135,7 +140,7 @@ partial class MachOFile
                 // This is the invariant the whole format rests on: a section's address is its
                 // segment's address plus its distance from the segment's file offset. Break it
                 // and the loader maps the section somewhere other than where the code expects.
-                if (section.Address - segment.VmAddress != section.FileOffset - segment.FileOffset)
+                if (isLinkedImage && section.Address - segment.VmAddress != section.FileOffset - segment.FileOffset)
                 {
                     context.Diagnostics.Error(
                         DiagnosticId.MACHO_ERR_SectionAddressMismatch,
