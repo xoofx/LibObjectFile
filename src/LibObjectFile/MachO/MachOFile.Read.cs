@@ -47,7 +47,19 @@ partial class MachOFile
         var reader = new MachOReader(file, stream, options ?? new MachOReaderOptions());
         diagnostics = reader.Diagnostics;
 
-        file.Read(reader);
+        try
+        {
+            file.Read(reader);
+        }
+        catch (EndOfStreamException)
+        {
+            // Every read in the walk is bounded before it is taken, so arriving here means one of
+            // those bounds was missed rather than that the caller passed a short stream. Either
+            // way a Try method owes the caller a diagnostic rather than an exception.
+            reader.Diagnostics.Error(
+                DiagnosticId.MACHO_ERR_UnexpectedEndOfStream,
+                "The image ends inside a structure the file declares, so it is truncated or malformed");
+        }
 
         if (reader.Diagnostics.HasErrors)
         {
@@ -87,7 +99,12 @@ partial class MachOFile
     {
         Position = reader.Position;
 
-        var magic = reader.ReadU32();
+        if (!reader.TryReadData(sizeof(uint), out uint magic))
+        {
+            reader.Diagnostics.Error(DiagnosticId.MACHO_ERR_InvalidMagic, "The stream is too short to hold a Mach-O magic");
+            return;
+        }
+
         reader.Position -= 4;
 
         switch (magic)

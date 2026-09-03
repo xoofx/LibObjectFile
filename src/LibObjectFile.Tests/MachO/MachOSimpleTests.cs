@@ -564,13 +564,40 @@ public class MachOSimpleTests : MachOTestBase
         Assert.IsTrue(d7.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_InvalidFatSliceAlignment), string.Join("; ", d7.Messages));
     }
 
+    /// <summary>
+    /// A Try method owes the caller diagnostics rather than an exception, whatever it is handed.
+    /// The magic was read without a bound, so anything shorter than four bytes escaped as an
+    /// <see cref="EndOfStreamException"/>, as did a universal binary slice with no room for a
+    /// header.
+    /// </summary>
     [TestMethod]
-    public void RejectsANonMachOStream()
+    public void ReportsRatherThanThrowsOnUnreadableInput()
     {
         using var input = new MemoryStream("not a mach-o file at all"u8.ToArray());
 
         Assert.IsFalse(MachOFile.IsMachO(input));
         Assert.IsFalse(MachOFile.TryRead(input, out _, out var diagnostics));
         Assert.IsTrue(diagnostics.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_InvalidMagic));
+
+        foreach (var length in new[] { 0, 1, 3 })
+        {
+            Assert.IsFalse(MachOFile.TryRead(new MemoryStream(new byte[length]), out _, out var tooShort), $"a {length}-byte stream cannot be an image");
+            Assert.IsTrue(tooShort.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_InvalidMagic), string.Join("; ", tooShort.Messages));
+        }
+
+        // Every truncation of a real image, which is what walks each bounded read up to its
+        // limit. Anything that throws here fails the test by escaping.
+        var image = File.ReadAllBytes(GetFile("unixthread_i386"));
+        for (var length = 0; length < image.Length; length += 7)
+        {
+            MachOFile.TryRead(new MemoryStream(image.AsSpan(0, length).ToArray()), out _, out _);
+        }
+
+        // The size of the first slice sits 12 bytes into its entry, and the slice table is
+        // big-endian. A slice with no room for a header must be rejected, not descended into.
+        var fat = File.ReadAllBytes(GetFile("helloworld_fat"));
+        BitConverter.GetBytes(0u).Reverse().ToArray().CopyTo(fat, MachOFatFile.HeaderSize + 12);
+        Assert.IsFalse(MachOFatFile.TryRead(new MemoryStream(fat), out _, out var emptySlice));
+        Assert.IsTrue(emptySlice.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_InvalidFatArchRange), string.Join("; ", emptySlice.Messages));
     }
 }

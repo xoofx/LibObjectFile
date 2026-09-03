@@ -181,6 +181,13 @@ public sealed partial class MachOFatFile
                 return false;
             }
 
+            if (slice.Size < MachOFile.MinHeaderSize)
+            {
+                bag.Error(DiagnosticId.MACHO_ERR_InvalidFatArchRange, $"Slice {i} is {slice.Size} bytes, too short to hold a Mach-O header");
+                file = null;
+                return false;
+            }
+
             if (slice.FileOffset + slice.Size > (ulong)stream.Length)
             {
                 bag.Error(DiagnosticId.MACHO_ERR_InvalidFatArchRange, $"Slice {i} spans [0x{slice.FileOffset:X}, 0x{slice.FileOffset + slice.Size:X}) which extends past the end of the file");

@@ -239,4 +239,5 @@ public enum DiagnosticId
     MACHO_ERR_OverlappingFatSlices = 5021,
     MACHO_ERR_DuplicateFatSlice = 5022,
     MACHO_ERR_MissingFatSliceImage = 5023,
+    MACHO_ERR_UnexpectedEndOfStream = 5024,
 }

@@ -113,6 +113,12 @@ public sealed partial class MachOFile : MachOObject
     public uint HeaderSize => Is64Bit ? 32u : 28u;
 
     /// <summary>
+    /// The smallest a Mach-O header can be, which is the 32-bit one. Nothing shorter than this
+    /// can hold an image.
+    /// </summary>
+    internal const uint MinHeaderSize = 28;
+
+    /// <summary>
     /// Gets the total size of the load commands, the value stored in <c>sizeofcmds</c>.
     /// </summary>
     public uint SizeOfCommands
