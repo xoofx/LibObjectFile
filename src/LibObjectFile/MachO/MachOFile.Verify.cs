@@ -119,9 +119,12 @@ partial class MachOFile
 
     private void VerifySegments(MachOVisitorContext context)
     {
-        // An object file holds its sections in one unnamed segment and gives them addresses the
-        // linker has yet to assign for real, so they do not track file offsets the way a linked
-        // image's do. Apple's own crt1.o breaks the invariant below.
+        // loader.h draws the line here: non-MH_OBJECT files have "all of their segments with the
+        // proper sections in each, and padded to the specified segment alignment", while
+        // "the MH_OBJECT format has all of its sections in one segment for compactness. There is
+        // no padding to a specified segment boundary". Packed for compactness means a section's
+        // address does not track its file offset, so the invariant below is for linked images
+        // only. Apple's own crt1.o breaks it.
         var isLinkedImage = FileType != MachOFileType.Object;
 
         foreach (var segment in Segments)
