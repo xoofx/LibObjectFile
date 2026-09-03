@@ -372,6 +372,20 @@ public class MachOSimpleTests : MachOTestBase
         var stubs = file.Segments.SelectMany(s => s.Sections).Single(s => s.Name == "__stubs");
         Assert.AreEqual(MachOSectionType.SymbolStubs, stubs.SectionType);
         Assert.AreEqual("_printf", symbols[(int)indirect[(int)stubs.Reserved1]].Name);
+
+        // A 32-bit nlist packs into 12 bytes rather than 16, so it is a separate decode.
+        var i386 = LoadMachO("dyldinfo_i386").ReadSymbolTable();
+        CollectionAssert.AreEqual(new[] { "_main", "_dyldinfo_data" }, i386.Select(s => s.Name).ToArray());
+        Assert.AreEqual(0x800ul, i386[0].Value);
+        Assert.AreEqual(1, i386[0].SectionIndex);
+        Assert.AreEqual(0x2000ul, i386[1].Value);
+        Assert.AreEqual(2, i386[1].SectionIndex);
+
+        // arm64 shares the 64-bit decode with x86_64, so this covers the fixture rather than
+        // another path through the reader.
+        var arm64 = LoadMachO("helloworld_arm64").ReadSymbolTable();
+        Assert.AreEqual(0x100003F24ul, arm64.Single(s => s.Name == "_main").Value);
+        Assert.AreEqual(MachOSymbolKind.Undefined, arm64.Single(s => s.Name == "_printf").Kind);
     }
 
     /// <summary>

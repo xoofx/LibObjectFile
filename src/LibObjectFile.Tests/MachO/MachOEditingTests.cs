@@ -101,7 +101,11 @@ public class MachOEditingTests : MachOTestBase
         }
 
         Assert.IsTrue(file.AvailableLoadCommandSpace < space);
-        var exception = Assert.ThrowsExactly<InvalidOperationException>(() => file.AddRPath("/" + path));
+
+        // Sized against the space actually left rather than the loop's threshold. A fixed path
+        // could still fit whatever padding the fill happened to stop on.
+        var tooLong = new string('a', (int)file.AvailableLoadCommandSpace + 16);
+        var exception = Assert.ThrowsExactly<InvalidOperationException>(() => file.AddRPath("/" + tooLong));
         StringAssert.Contains(exception.Message, "free before the first section");
     }
 

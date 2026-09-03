@@ -90,15 +90,15 @@ Load command 4
              bind_size 0
          lazy_bind_off 0
         lazy_bind_size 0
-            export_off 0
-           export_size 0
+            export_off 8192
+           export_size 2
 Load command 5
                    cmd LC_SYMTAB
                cmdsize 24
-                symoff 8192
+                symoff 8194
                  nsyms 2
-                stroff 8216
-               strsize 32
+                stroff 8218
+               strsize 24
 Load command 6
                    cmd LC_DYSYMTAB
                cmdsize 80
