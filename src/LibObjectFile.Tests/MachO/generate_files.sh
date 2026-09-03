@@ -15,7 +15,22 @@
 # models a pre-10.8 executable, which uses LC_UNIXTHREAD for the entry point;
 # dyldinfo_i386 models a 10.7-era one, which pairs 32-bit segments with LC_MAIN
 # and LC_DYLD_INFO_ONLY. No linker still emits either combination.
+#
+# The committed fixtures were produced with LLVM 22.1.8 and the OSXCross
+# MacOSX14 SDK. Another version will not necessarily lay them out the same way,
+# so regenerating with one is expected to move offsets and will show up as a
+# diff in the byte-exact and snapshot tests. Check such a diff rather than
+# accepting it: the fixtures exist to pin what a real toolchain emits.
 set -e
+
+# Locate the SDK rather than assuming a version, so a toolchain built against a
+# different one still works.
+SDK="$(dirname "$(command -v oa64-clang)")/../SDK"
+SDK="$(ls -d "$SDK"/MacOSX*.sdk 2>/dev/null | sort -V | tail -1)"
+if [ -z "$SDK" ]; then
+    echo "No macOS SDK found next to oa64-clang; see the OSXCross README." >&2
+    exit 1
+fi
 
 o64-clang helloworld.c -o helloworld_x86_64
 oa64-clang helloworld.c -o helloworld_arm64
@@ -32,7 +47,6 @@ lipo -create helloworld_x86_64 helloworld_arm64 -output helloworld_fat
 # cctools ld64 predates chained fixups, so this one fixture comes from lld,
 # which emits LC_DYLD_CHAINED_FIXUPS when the deployment target is macOS 12+.
 # That is a separate read path from the LC_DYLD_INFO_ONLY opcode streams above.
-SDK="$(dirname "$(command -v oa64-clang)")/../SDK/MacOSX14.sdk"
 oa64-clang -mmacosx-version-min=12.0 -c helloworld.c -o chained.o
 ld64.lld -arch arm64 -platform_version macos 12.0 12.0 -syslibroot "$SDK" \
     -lSystem -e _main -fixup_chains -o chainedfixups_arm64 chained.o

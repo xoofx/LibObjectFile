@@ -621,7 +621,11 @@ A `MachOFile` is written back with `MachOFile.Write`:
 machO.Write(outputStream);
 ```
 
-Content is written at the offset recorded for it, so an image that has not been edited comes back byte for byte. Use `MachOFile.Verify` to check an image before writing it.
+Content is written at the offset recorded for it, so an image that has not been edited comes back byte for byte. `Write` verifies first and throws if anything is wrong; `TryWrite` reports through a `DiagnosticBag` instead. `MachOFile.Verify` checks an image on its own.
+
+A universal binary is written the same way through `MachOFatFile.Write` or `MachOFatFile.TryWrite`, which lay out each slice before placing it, so a slice that changed size is recorded at the size it actually writes.
+
+The reader requires the load commands to end exactly where the header's `sizeofcmds` says. dyld is looser, stopping once it has walked `ncmds` commands and ignoring any slack after them. The stricter reading is deliberate: writing an image back means reproducing that slack, and an image whose two counts disagree is one where it is not clear which the loader will believe.
 
 ### Editing load commands
 
@@ -630,10 +634,14 @@ Content is written at the offset recorded for it, so an image that has not been 
 ```csharp
 machO.AddLoadDylib("@executable_path/../Frameworks/mylib.dylib");
 machO.AddRPath("@executable_path/../Frameworks");
+machO.RemoveRPath("@loader_path/../Frameworks");
 machO.ChangeDylibName("/usr/lib/libfoo.dylib", "@rpath/libfoo.dylib");
+machO.SetInstallName("@rpath/libmylib.dylib");
 ```
 
-A dependency is appended rather than inserted, because dyld identifies a library by the position of its command among the others and the symbol table binds against that number. Removing a dependency is not offered for the same reason.
+`SetInstallName` writes the `LC_ID_DYLIB` name a library reports for itself, which is what the images linking against it record. It applies to a dylib rather than an executable.
+
+A dependency is appended rather than inserted, because dyld identifies a library by the position of its command among the others and the symbol table binds against that number. Removing a dependency is not offered for the same reason. A run path carries no such numbering, so `RemoveRPath` is available.
 
 When the padding runs out these throw, naming the shortfall, rather than moving content and invalidating the image. There is no way around that short of relinking with `-headerpad_max_install_names`, which is also why `install_name_tool` fails in the same situation.
 

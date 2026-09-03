@@ -60,9 +60,9 @@ elf.Write(outStream);
   - Read and write from/to a `System.IO.Stream`
   - 32 and 64 bit, `i386`, `x86_64` and `arm64`
   - Universal (fat) binaries via `MachOFatFile`
-  - All load commands are decoded, and commands this library does not model round-trip verbatim
+  - The load commands a linked image is built from are decoded; the rest round-trip verbatim
   - Symbol table, indirect symbol table and relocations
-  - `MachOFile.AddLoadDylib`, `AddRPath` and `ChangeDylibName` edit an existing image without moving any section (address-preserving, `install_name_tool`-style)
+  - `MachOFile.AddLoadDylib`, `AddRPath`, `RemoveRPath`, `ChangeDylibName` and `SetInstallName` edit an existing image without moving any section (address-preserving, `install_name_tool`-style)
   - `MachOFile.AdHocSign` writes an ad-hoc code signature, which Apple Silicon requires in order to execute an image
   - `MachOFile.Print` to print the content of a Mach-O file with `otool` similar output
 - Support for **DWARF debugging format**:
