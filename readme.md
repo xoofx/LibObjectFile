@@ -8,10 +8,11 @@ LibObjectFile is a .NET library to read, manipulate and write linker and executa
 >
 > - **PE** image file format (Portable Executable / DLL)
 > - **ELF** object-file format
+> - **Mach-O** object-file format, including universal binaries
 > - **DWARF** debugging format (version 4)
 > - **Archive `ar`** file format (Common, GNU and BSD variants)
 >
-> There is a longer term plan to support other file formats (e.g COFF, MACH-O, .lib) but as I don't 
+> There is a longer term plan to support other file formats (e.g COFF, .lib) but as I don't 
 > have a need for them right now, it is left as an exercise for PR contributors! ;)
 
 ## Usage
@@ -54,6 +55,16 @@ elf.Write(outStream);
   - Program headers with or without sections
   - `ElfFile.AddNeededLibrary` injects a `DT_NEEDED` dependency into an existing image without moving any section (address-preserving, `patchelf`-style)
   - Print with `readelf` similar output
+- Good support for the **Mach-O file format**:
+  - Support byte-to-byte roundtrip
+  - Read and write from/to a `System.IO.Stream`
+  - 32 and 64 bit, `i386`, `x86_64` and `arm64`
+  - Universal (fat) binaries via `MachOFatFile`
+  - The load commands a linked image is built from are decoded; the rest round-trip verbatim
+  - Symbol table, indirect symbol table and relocations
+  - `MachOFile.AddLoadDylib`, `AddRPath`, `RemoveRPath`, `ChangeDylibName` and `SetInstallName` edit an existing image without moving any section (address-preserving, `install_name_tool`-style)
+  - `MachOFile.AdHocSign` writes an ad-hoc code signature, which Apple Silicon requires in order to execute an image
+  - `MachOFile.Print` to print the content of a Mach-O file with `otool` similar output
 - Support for **DWARF debugging format**:
   - Partial support of Version 4 (currently still the default for GCC)
   - Support for the sections: `.debug_info`, `.debug_line`, `.debug_aranges`, `.debug_abbrev` and `.debug_str` 
