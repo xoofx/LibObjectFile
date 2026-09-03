@@ -13,6 +13,17 @@ partial class MachOFile
     /// <summary>
     /// Checks this image for inconsistencies.
     /// </summary>
+    /// <returns>What was found. Empty if nothing was.</returns>
+    public DiagnosticBag Verify()
+    {
+        var diagnostics = new DiagnosticBag();
+        Verify(diagnostics);
+        return diagnostics;
+    }
+
+    /// <summary>
+    /// Checks this image for inconsistencies.
+    /// </summary>
     /// <param name="diagnostics">Receives what was found.</param>
     /// <exception cref="ArgumentNullException"><paramref name="diagnostics"/> is null.</exception>
     public void Verify(DiagnosticBag diagnostics)

@@ -17,10 +17,6 @@ partial class MachOFile
     /// The install name of the library. It is resolved by dyld rather than opened as a path, so
     /// it may start with <c>@rpath</c>, <c>@executable_path</c> or <c>@loader_path</c>.
     /// </param>
-    /// <param name="type">
-    /// Which dylib command to add. <see cref="MachOLoadCommandType.LoadWeakDylib"/> makes the
-    /// library optional at runtime.
-    /// </param>
     /// <returns>The command that was added.</returns>
     /// <remarks>
     /// The command is appended, never inserted, because dyld numbers libraries by their command
@@ -28,11 +24,20 @@ partial class MachOFile
     /// leaves the existing numbering alone.
     /// </remarks>
     /// <exception cref="ArgumentNullException"><paramref name="name"/> is null.</exception>
-    /// <exception cref="ArgumentException"><paramref name="name"/> is empty, or <paramref name="type"/> is not a dylib command.</exception>
+    /// <exception cref="ArgumentException"><paramref name="name"/> is empty, or the type is not a dylib command.</exception>
     /// <exception cref="InvalidOperationException">
     /// The image has no room left before its first section. The message states the shortfall.
     /// </exception>
-    public MachODylibCommand AddLoadDylib(string name, MachOLoadCommandType type = MachOLoadCommandType.LoadDylib)
+    public MachODylibCommand AddLoadDylib(string name)
+        => AddLoadDylib(name, MachOLoadCommandType.LoadDylib);
+
+    /// <inheritdoc cref="AddLoadDylib(string)"/>
+    /// <param name="name">The install name to record, as it will appear to dyld.</param>
+    /// <param name="type">
+    /// Which dylib command to add. <see cref="MachOLoadCommandType.LoadWeakDylib"/> makes the
+    /// library optional at runtime.
+    /// </param>
+    public MachODylibCommand AddLoadDylib(string name, MachOLoadCommandType type)
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
 
