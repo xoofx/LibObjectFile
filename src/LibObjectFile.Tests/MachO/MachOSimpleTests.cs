@@ -50,7 +50,13 @@ public class MachOSimpleTests : MachOTestBase
         Assert.AreEqual(is64Bit, file.Is64Bit);
         Assert.AreEqual(cpuType, file.CpuType);
         Assert.AreEqual(fileType, file.FileType);
-        Assert.AreEqual(file.HeaderSize + file.SizeOfCommands, file.LoadCommandsEndOffset);
+
+        // ncmds and sizeofcmds sit at the same offsets in both header layouts. Comparing the
+        // decoded table against them catches a walk that read a different number of commands
+        // than the file declares.
+        var raw = File.ReadAllBytes(GetFile(name));
+        Assert.AreEqual(BitConverter.ToUInt32(raw, 16), (uint)file.LoadCommands.Count, "ncmds");
+        Assert.AreEqual(BitConverter.ToUInt32(raw, 20), file.SizeOfCommands, "sizeofcmds");
     }
 
     /// <summary>
@@ -73,6 +79,13 @@ public class MachOSimpleTests : MachOTestBase
         Assert.AreEqual(28ul, dylinker.Size);
         Assert.AreEqual(28u, dylinker.MinimumSize);
         Assert.IsTrue(file.LoadCommands.OfType<MachODylibCommand>().All(d => d.Size >= d.MinimumSize));
+
+        // A table too large for sizeofcmds must not wrap into a small value, which would offer
+        // room that does not exist and let an edit write over the content after it.
+        dylinker.Size = 0x1_0000_0000;
+        Assert.AreEqual(uint.MaxValue, file.SizeOfCommands, "sizeofcmds saturates rather than wrapping");
+        Assert.IsTrue(file.AvailableLoadCommandSpace < 0, "a table that cannot be recorded leaves no room");
+        Assert.IsTrue(file.Verify().Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_ValueTooLargeFor32Bit));
     }
 
     /// <summary>

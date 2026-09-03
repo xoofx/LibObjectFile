@@ -121,23 +121,39 @@ public sealed partial class MachOFile : MachOObject
     /// <summary>
     /// Gets the total size of the load commands, the value stored in <c>sizeofcmds</c>.
     /// </summary>
+    /// <remarks>
+    /// Saturates instead of wrapping when the commands do not fit the 32-bit field. A wrap here
+    /// would report a large table as a small one, and <see cref="AvailableLoadCommandSpace"/>
+    /// would then offer room that does not exist.
+    /// <see cref="Verify(DiagnosticBag)"/> reports the condition.
+    /// </remarks>
     public uint SizeOfCommands
     {
         get
         {
-            uint total = 0;
-            foreach (var command in LoadCommands)
-            {
-                total += (uint)command.Size;
-            }
-            return total;
+            var total = ComputeSizeOfCommands();
+            return total > uint.MaxValue ? uint.MaxValue : (uint)total;
         }
+    }
+
+    /// <summary>
+    /// Totals the load commands without narrowing, so a table that overruns <c>sizeofcmds</c> can
+    /// be told from one that exactly fills it.
+    /// </summary>
+    internal ulong ComputeSizeOfCommands()
+    {
+        ulong total = 0;
+        foreach (var command in LoadCommands)
+        {
+            total += command.Size;
+        }
+        return total;
     }
 
     /// <summary>
     /// Gets the file offset one past the end of the load command table.
     /// </summary>
-    public uint LoadCommandsEndOffset => HeaderSize + SizeOfCommands;
+    public ulong LoadCommandsEndOffset => HeaderSize + ComputeSizeOfCommands();
 
     /// <summary>
     /// Gets the command locating this image's code signature, or null if it is unsigned.
@@ -181,7 +197,17 @@ public sealed partial class MachOFile : MachOObject
     /// Gets the number of bytes the load command table can still grow by without moving any
     /// content. A negative value means the current commands no longer fit.
     /// </summary>
-    public long AvailableLoadCommandSpace => (long)ContentStartOffset - LoadCommandsEndOffset;
+    public long AvailableLoadCommandSpace
+    {
+        get
+        {
+            // Both ends are clamped so that a model carrying nonsensical offsets reports no room
+            // rather than wrapping into a large positive number and letting an edit through.
+            var start = (long)Math.Min(ContentStartOffset, long.MaxValue);
+            var end = (long)Math.Min(LoadCommandsEndOffset, long.MaxValue);
+            return start - end;
+        }
+    }
 
     /// <summary>
     /// Rewrites the file offsets that point at relocatable data: the tables in <c>__LINKEDIT</c>

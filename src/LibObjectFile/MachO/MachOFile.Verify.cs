@@ -166,6 +166,14 @@ partial class MachOFile
             }
         }
 
+        var sizeOfCommands = ComputeSizeOfCommands();
+        if (sizeOfCommands > uint.MaxValue)
+        {
+            context.Diagnostics.Error(
+                DiagnosticId.MACHO_ERR_ValueTooLargeFor32Bit,
+                $"The load commands total 0x{sizeOfCommands:X} bytes, which the 32-bit sizeofcmds field cannot record");
+        }
+
         if (AvailableLoadCommandSpace < 0)
         {
             context.Diagnostics.Error(

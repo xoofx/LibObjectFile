@@ -86,6 +86,14 @@ partial class MachOFile
             }
 
             var contentEnd = ComputeFileSize();
+
+            // LC_CODE_SIGNATURE records where the signature is in a 32-bit dataoff, so an image
+            // this large cannot carry one. Casting would point the offset back into the image.
+            if (contentEnd > uint.MaxValue)
+            {
+                throw new InvalidOperationException($"The image is 0x{contentEnd:X} bytes, too large for the 32-bit offset LC_CODE_SIGNATURE records.");
+            }
+
             var signatureOffset = AlignHelper.AlignUp((uint)contentEnd, (uint)MachOCodeSignatureConstants.SignatureAlignment);
 
             var builder = new MachOAdHocSignatureBuilder(identifier)
