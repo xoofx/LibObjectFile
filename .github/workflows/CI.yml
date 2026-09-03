@@ -18,5 +18,3 @@ jobs:
     steps:
       - name: "Build, Test, Pack and Publish"
         uses: xoofx/.github/.github/actions/dotnet-releaser-action@main
-        with:
-          NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
