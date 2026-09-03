@@ -78,6 +78,15 @@ public class MachOSigningTests : MachOTestBase
         Assert.AreEqual(EmbeddedSignatureMagic, BinaryPrimitives.ReadUInt32BigEndian(superBlob));
         Assert.AreEqual(3u, BinaryPrimitives.ReadUInt32BigEndian(superBlob.Slice(8)), "code directory, requirements and CMS slots");
 
+        // The length field is the SuperBlob's own, so it ends at the last blob rather than
+        // covering the padding the signature is rounded up to. codesign reports it that way and
+        // so does Apple's own ad-hoc output; the slack belongs to the load command's datasize.
+        var declaredLength = BinaryPrimitives.ReadUInt32BigEndian(superBlob.Slice(4));
+        var lastBlobEnd = FindBlob(image, command.DataOffset, SignatureSlot).Length
+            + (int)BinaryPrimitives.ReadUInt32BigEndian(superBlob.Slice(12 + 2 * 8 + 4));
+        Assert.AreEqual((uint)lastBlobEnd, declaredLength, "the SuperBlob length excludes the alignment padding");
+        Assert.IsTrue(declaredLength <= command.DataSize, "the reserved region covers the blobs");
+
         var emptyRequirements = FindBlob(image, command.DataOffset, RequirementsSlot);
         Assert.AreEqual(12, emptyRequirements.Length, "an empty requirement set");
         var cms = FindBlob(image, command.DataOffset, SignatureSlot);
@@ -103,7 +112,7 @@ public class MachOSigningTests : MachOTestBase
         Assert.AreEqual(text.FileSize, BinaryPrimitives.ReadUInt64BigEndian(codeDirectory.Slice(72)));
         Assert.AreEqual(ExecSegMainBinary, BinaryPrimitives.ReadUInt64BigEndian(codeDirectory.Slice(80)));
 
-                                var hashOffset = (int)BinaryPrimitives.ReadUInt32BigEndian(codeDirectory.Slice(16));
+        var hashOffset = (int)BinaryPrimitives.ReadUInt32BigEndian(codeDirectory.Slice(16));
 
         var info = codeDirectory.Slice(hashOffset - Sha256Size, Sha256Size);
         Assert.IsTrue(info.ToArray().All(b => b == 0), "the Info.plist slot should be zero");

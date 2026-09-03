@@ -83,10 +83,15 @@ public sealed class MachOAdHocSignatureBuilder
     /// lay out the image before any hash has been computed.
     /// </remarks>
     public uint ComputeSize()
-    {
-        var total = SuperBlobSize + CodeDirectorySize + RequirementsSize + BlobWrapperSize;
-        return AlignHelper.AlignUp((uint)total, (uint)SignatureAlignment);
-    }
+        => AlignHelper.AlignUp((uint)ContentSize, (uint)SignatureAlignment);
+
+    /// <summary>
+    /// The size of the blobs themselves, which is what the SuperBlob header records. The room
+    /// reserved for the signature is rounded up from this, and the padding is not part of the
+    /// SuperBlob: codesign reports the length field as the blob's own, and Apple's ad-hoc output
+    /// leaves the slack to the load command's datasize.
+    /// </summary>
+    private int ContentSize => SuperBlobSize + CodeDirectorySize + RequirementsSize + BlobWrapperSize;
 
     // Header plus one index entry for each of the code directory, requirements and CMS slots.
     private const int SuperBlobSize = 12 + 3 * 8;
@@ -127,7 +132,7 @@ public sealed class MachOAdHocSignatureBuilder
         WriteRequirements(span.Slice(requirementsOffset, RequirementsSize));
         WriteBlobWrapper(span.Slice(blobWrapperOffset, BlobWrapperSize));
         WriteCodeDirectory(span.Slice(codeDirectoryOffset, CodeDirectorySize), image, span.Slice(requirementsOffset, RequirementsSize));
-        WriteSuperBlob(span, codeDirectoryOffset, requirementsOffset, blobWrapperOffset, result.Length);
+        WriteSuperBlob(span, codeDirectoryOffset, requirementsOffset, blobWrapperOffset, ContentSize);
 
         return result;
     }
