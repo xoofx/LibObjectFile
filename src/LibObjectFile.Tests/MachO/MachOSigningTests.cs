@@ -185,6 +185,23 @@ public class MachOSigningTests : MachOTestBase
         Assert.IsNull(before.CodeSignature);
         Assert.AreEqual(before.LoadCommands.Count + 1, after.LoadCommands.Count);
         Assert.AreEqual(0u, after.CodeSignature.DataOffset % SignatureAlignment, "the signature must be 16-byte aligned");
+
+        // A segment is sized in whole units of the architecture's segment alignment, and codesign
+        // rounds __LINKEDIT up when it grows. The fixtures leave enough slack that the signature
+        // fits inside the existing size, so the slack is removed to make the segment grow. A real
+        // image reaches this on its own: signing the 8MB i386 one adds about 65KB to a segment
+        // with 0x7CC to spare.
+        foreach (var name in new[] { "unixthread_i386", "helloworld_x86_64", "helloworld_arm64" })
+        {
+            var file = LoadMachO(name);
+            var segment = file.FindSegment("__LINKEDIT")!;
+            segment.VmSize = segment.FileSize;
+            file.AdHocSign("swkotor");
+
+            Assert.IsTrue(segment.VmSize >= segment.FileSize, $"{name} __LINKEDIT does not cover its content");
+            Assert.AreEqual(0ul, segment.VmSize % file.SegmentAlignment,
+                $"{name} __LINKEDIT ends mid-page at 0x{segment.VmSize:X} for a 0x{file.SegmentAlignment:X} alignment");
+        }
     }
 
     /// <summary>

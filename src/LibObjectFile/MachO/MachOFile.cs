@@ -119,6 +119,23 @@ public sealed partial class MachOFile : MachOObject
     internal const uint MinHeaderSize = 28;
 
     /// <summary>
+    /// Gets the segment alignment of this image's architecture, which segment sizes are rounded
+    /// up to.
+    /// </summary>
+    /// <remarks>
+    /// loader.h calls this "the specified segment alignment", a link time choice rather than
+    /// anything the header records, so it is taken from what the toolchain does per
+    /// architecture: signing an arm64 image rounds __LINKEDIT from 0x4A50 to 0x8000, which only
+    /// 16KB explains, while the linker's own x86 and x86_64 images carry sizes such as 0x30D000
+    /// that are not 16KB multiples at all.
+    /// <para>
+    /// This is not the page size a code signature hashes in, which is 4KB on every architecture
+    /// including arm64.
+    /// </para>
+    /// </remarks>
+    public ulong SegmentAlignment => CpuType == MachOCpuType.Arm64 ? 0x4000ul : 0x1000ul;
+
+    /// <summary>
     /// Gets the total size of the load commands, the value stored in <c>sizeofcmds</c>.
     /// </summary>
     /// <remarks>

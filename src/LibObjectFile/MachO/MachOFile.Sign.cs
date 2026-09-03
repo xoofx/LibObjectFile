@@ -109,7 +109,11 @@ partial class MachOFile
             command.DataSize = signatureSize;
 
             linkEdit.FileSize = signatureOffset + signatureSize - linkEdit.FileOffset;
-            linkEdit.VmSize = Math.Max(linkEdit.VmSize, linkEdit.FileSize);
+
+            // The signature is far larger than the slack the linker left, so __LINKEDIT grows and
+            // has to be rounded to a segment boundary the way codesign rounds it. Without this it
+            // ends mid-page, which is a shape no linker and no signing tool produces.
+            linkEdit.VmSize = AlignHelper.AlignUp(Math.Max(linkEdit.VmSize, linkEdit.FileSize), SegmentAlignment);
 
             // Aligning the signature can leave a gap, and every byte of the file has to belong to
             // some content, so the padding is added rather than left as a hole in the list.
