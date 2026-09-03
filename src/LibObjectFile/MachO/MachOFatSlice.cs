@@ -27,11 +27,15 @@ public sealed class MachOFatSlice
     /// The largest alignment exponent a slice can carry.
     /// </summary>
     /// <remarks>
-    /// A shift count is masked to the width of the value it shifts, so an exponent past this
-    /// would quietly alias to a different alignment instead of being rejected. Real images use
-    /// 12 to 14, the page size of the architecture.
+    /// This is the limit lipo enforces, which reports that <c>-segalign</c> "must be equal to or
+    /// less than 8000 (hex)". Real images use 12 to 14, the page size of the architecture.
+    /// <para>
+    /// The bound matters beyond matching the tooling: a shift count is masked to the width of
+    /// the value it shifts, so an unchecked exponent would quietly alias to a different
+    /// alignment rather than being rejected.
+    /// </para>
     /// </remarks>
-    public const uint MaxAlignLog2 = 63;
+    public const uint MaxAlignLog2 = 15;
 
     /// <summary>
     /// Gets or sets the alignment of this slice as a power of two. It is the page size of the

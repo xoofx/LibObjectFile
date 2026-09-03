@@ -52,7 +52,7 @@ partial class MachOFatFile
             {
                 diagnostics.Error(
                     DiagnosticId.MACHO_ERR_InvalidFatSliceAlignment,
-                    $"Slice {i} ({slice.CpuType}) has an alignment exponent of {slice.AlignLog2}, past the {MachOFatSlice.MaxAlignLog2} a shift can express");
+                    $"Slice {i} ({slice.CpuType}) has an alignment exponent of {slice.AlignLog2}, past the {MachOFatSlice.MaxAlignLog2} a universal binary allows");
             }
             else if ((slice.FileOffset & (slice.Alignment - 1)) != 0)
             {

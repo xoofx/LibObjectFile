@@ -176,7 +176,7 @@ public sealed partial class MachOFatFile
 
             if (slice.AlignLog2 > MachOFatSlice.MaxAlignLog2)
             {
-                bag.Error(DiagnosticId.MACHO_ERR_InvalidFatSliceAlignment, $"Slice {i} has an alignment exponent of {slice.AlignLog2}, past the {MachOFatSlice.MaxAlignLog2} a shift can express");
+                bag.Error(DiagnosticId.MACHO_ERR_InvalidFatSliceAlignment, $"Slice {i} has an alignment exponent of {slice.AlignLog2}, past the {MachOFatSlice.MaxAlignLog2} a universal binary allows");
                 file = null;
                 return false;
             }

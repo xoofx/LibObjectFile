@@ -596,11 +596,12 @@ public class MachOSimpleTests : MachOTestBase
         Assert.IsFalse(MachOFatFile.TryRead(new MemoryStream(fat), out _, out var d4));
         Assert.IsTrue(d4.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_InvalidFatHeader), string.Join("; ", d4.Messages));
 
-        // A shift count is masked to the width of what it shifts, so an alignment exponent past
-        // 63 would alias to a different alignment rather than being rejected. The align field of
-        // the first slice sits at the end of its 20-byte entry, and the slice table is big-endian.
+        // lipo refuses an alignment past 2^15, and a shift count is masked to the width of what
+        // it shifts, so an unchecked exponent would alias to a different alignment rather than
+        // being rejected. The align field of the first slice sits at the end of its 20-byte
+        // entry, and the slice table is big-endian.
         var badAlign = File.ReadAllBytes(GetFile("helloworld_fat"));
-        BitConverter.GetBytes(64u).Reverse().ToArray().CopyTo(badAlign, MachOFatFile.HeaderSize + 16);
+        BitConverter.GetBytes(MachOFatSlice.MaxAlignLog2 + 1).Reverse().ToArray().CopyTo(badAlign, MachOFatFile.HeaderSize + 16);
         Assert.IsFalse(MachOFatFile.TryRead(new MemoryStream(badAlign), out _, out var d7));
         Assert.IsTrue(d7.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_InvalidFatSliceAlignment), string.Join("; ", d7.Messages));
     }
