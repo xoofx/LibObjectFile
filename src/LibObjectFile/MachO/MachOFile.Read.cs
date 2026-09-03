@@ -128,6 +128,11 @@ partial class MachOFile
                 // universal binary sees the swapped spelling.
                 reader.Diagnostics.Error(DiagnosticId.MACHO_ERR_UnexpectedFatFile, "This is a universal binary rather than a single Mach-O image. Read it with MachOFatFile and pick a slice.");
                 return;
+            case ArchiveMagic:
+                // A universal static library is a fat file whose slices are ar archives rather
+                // than images, so this is what reading one slice by slice arrives at.
+                reader.Diagnostics.Error(DiagnosticId.MACHO_ERR_UnexpectedArchive, "This is an ar archive rather than a Mach-O image. Read it with ArArchiveFile.");
+                return;
             default:
                 reader.Diagnostics.Error(DiagnosticId.MACHO_ERR_InvalidMagic, $"Invalid Mach-O magic 0x{magic:X8}");
                 return;
@@ -170,6 +175,9 @@ partial class MachOFile
 
         ReadContent(reader);
     }
+
+    // The first four bytes of "!<arch>\n", read the way the magic above is.
+    private const uint ArchiveMagic = 0x72613C21;
 
     /// <summary>
     /// Walks the load command table. The table is bounded by the <c>sizeofcmds</c> the header

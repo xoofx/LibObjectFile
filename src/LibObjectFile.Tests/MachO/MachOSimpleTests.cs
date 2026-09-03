@@ -620,6 +620,11 @@ public class MachOSimpleTests : MachOTestBase
         Assert.IsFalse(MachOFile.TryRead(input, out _, out var diagnostics));
         Assert.IsTrue(diagnostics.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_InvalidMagic));
 
+        // A universal static library is a fat file of ar archives rather than images, which is
+        // a real thing to be handed and worth naming instead of reporting a stray magic.
+        Assert.IsFalse(MachOFile.TryRead(new MemoryStream("!<arch>\n"u8.ToArray()), out _, out var archive));
+        Assert.IsTrue(archive.Messages.Any(m => m.Id == DiagnosticId.MACHO_ERR_UnexpectedArchive), string.Join("; ", archive.Messages));
+
         foreach (var length in new[] { 0, 1, 3 })
         {
             Assert.IsFalse(MachOFile.TryRead(new MemoryStream(new byte[length]), out _, out var tooShort), $"a {length}-byte stream cannot be an image");
